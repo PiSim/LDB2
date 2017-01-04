@@ -1,0 +1,1650 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="LabDBModel.Store" Provider="System.Data.SQLite.EF6" ProviderManifestToken="data source=C:\Pietro\Source\Repos\LabDB2\LabDB2\LabDB.db" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="aspects">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="integer" Nullable="false" />
+          <Property Name="deletion_flag" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="code" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="name" Type="nvarchar" MaxLength="2147483647" />
+        </EntityType>
+        <EntityType Name="batches">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="integer" Nullable="false" />
+          <Property Name="deletion_flag" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="number" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="trial_area" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="notes_1" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="notes_2" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="structure" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="actions" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="conclusion" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="materialID" Type="integer" />
+          <Property Name="fileID" Type="integer" />
+        </EntityType>
+        <EntityType Name="colours">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="integer" Nullable="false" />
+          <Property Name="deletion_flag" Type="integer" />
+          <Property Name="name" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="code" Type="nvarchar" MaxLength="2147483647" />
+        </EntityType>
+        <EntityType Name="constructions">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="integer" Nullable="false" />
+          <Property Name="deletion_flag" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="aspectID" Type="integer" />
+          <Property Name="external_constructionID" Type="integer" />
+          <Property Name="line" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="projectID" Type="integer" />
+          <Property Name="type" Type="nvarchar" MaxLength="2147483647" />
+        </EntityType>
+        <EntityType Name="control_plans">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="integer" Nullable="false" />
+          <Property Name="deletion_flag" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="name" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="specificationID" Type="integer" />
+          <Property Name="test_plan" Type="nvarchar" MaxLength="2147483647" />
+        </EntityType>
+        <EntityType Name="external_constructions">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="integer" Nullable="false" />
+          <Property Name="deletion_flag" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="name" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="oemID" Type="integer" />
+        </EntityType>
+        <EntityType Name="external_reports">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="integer" Nullable="false" />
+          <Property Name="deletion_flag" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="date" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="description" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="external_number" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="internal_number" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="external_labID" Type="integer" />
+          <Property Name="material_sent" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="request_done" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="purchase_order" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="price" Type="real" />
+          <Property Name="samples" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="currency" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="report_received" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="fileID" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="projectID" Type="integer" />
+        </EntityType>
+        <EntityType Name="files">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="integer" Nullable="false" />
+          <Property Name="deletion_flag" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="description" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="path" Type="nvarchar" MaxLength="2147483647" />
+        </EntityType>
+        <EntityType Name="masters">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="integer" Nullable="false" />
+          <Property Name="deletion_flag" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="name" Type="nvarchar" MaxLength="2147483647" />
+        </EntityType>
+        <EntityType Name="materials">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="integer" Nullable="false" />
+          <Property Name="deletion_flag" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="recipeID" Type="integer" />
+          <Property Name="constructionID" Type="integer" />
+        </EntityType>
+        <EntityType Name="methods">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="integer" Nullable="false" />
+          <Property Name="deletion_flag" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="standardID" Type="integer" />
+          <Property Name="measurements" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="propertyID" Type="integer" />
+          <Property Name="label" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="description" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="um" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="cost_units" Type="integer" />
+          <Property Name="old_flag" Type="nvarchar" MaxLength="2147483647" />
+        </EntityType>
+        <EntityType Name="organizations">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="integer" Nullable="false" />
+          <Property Name="deletion_flag" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="name" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="category" Type="nvarchar" MaxLength="2147483647" />
+        </EntityType>
+        <EntityType Name="pending_tests">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="integer" Nullable="false" />
+          <Property Name="deletion_flag" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="requestID" Type="integer" />
+          <Property Name="requirementID" Type="integer" />
+          <Property Name="notes" Type="nvarchar" MaxLength="2147483647" />
+        </EntityType>
+        <EntityType Name="people">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="integer" Nullable="false" />
+          <Property Name="deletion_flag" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="name" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="role" Type="nvarchar" MaxLength="2147483647" />
+        </EntityType>
+        <EntityType Name="projects">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="integer" Nullable="false" />
+          <Property Name="deletion_flag" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="name" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="description" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="project_leaderID" Type="integer" />
+          <Property Name="oemID" Type="integer" />
+          <Property Name="total_internal_cost" Type="integer" />
+          <Property Name="total_external_cost" Type="real" />
+        </EntityType>
+        <EntityType Name="properties">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="integer" Nullable="false" />
+          <Property Name="deletion_flag" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="name" Type="nvarchar" MaxLength="2147483647" />
+        </EntityType>
+        <EntityType Name="recipes">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="integer" Nullable="false" />
+          <Property Name="deletion_flag" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="code" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="colourID" Type="integer" />
+          <Property Name="masterID" Type="integer" />
+        </EntityType>
+        <EntityType Name="reports">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="integer" Nullable="false" />
+          <Property Name="deletion_flag" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="authorID" Type="integer" />
+          <Property Name="batchID" Type="integer" />
+          <Property Name="category" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="description" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="end_date" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="number" Type="integer" />
+          <Property Name="projectID" Type="integer" />
+          <Property Name="specificationID" Type="integer" />
+          <Property Name="specification_versionID" Type="integer" />
+          <Property Name="start_date" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="requestID" Type="integer" />
+          <Property Name="fileID" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="label" Type="nvarchar" MaxLength="2147483647" />
+        </EntityType>
+        <EntityType Name="requested_reports">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="integer" Nullable="false" />
+          <Property Name="deletion_flag" Type="integer" />
+          <Property Name="requesterID" Type="integer" />
+          <Property Name="projectID" Type="integer" />
+          <Property Name="specificationID" Type="integer" />
+          <Property Name="batchID" Type="integer" />
+          <Property Name="reportID" Type="integer" />
+          <Property Name="notes" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="progress" Type="integer" />
+          <Property Name="priority_modifier" Type="integer" />
+          <Property Name="pipeline_order" Type="integer" />
+        </EntityType>
+        <EntityType Name="requirements">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="integer" Nullable="false" />
+          <Property Name="deletion_flag" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="description" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="methodID" Type="integer" />
+          <Property Name="name" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="position" Type="integer" />
+          <Property Name="specificationID" Type="integer" />
+          <Property Name="specification_versionID" Type="integer" />
+          <Property Name="sub_requirementID" Type="nvarchar" MaxLength="2147483647" />
+        </EntityType>
+        <EntityType Name="samples_log">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="integer" Nullable="false" />
+          <Property Name="batch" Type="integer" />
+          <Property Name="code" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="date" Type="nvarchar" MaxLength="2147483647" />
+        </EntityType>
+        <EntityType Name="spec_versions">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="integer" Nullable="false" />
+          <Property Name="deletion_flag" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="main_flag" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="name" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="overrideID" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="specificationID" Type="integer" />
+        </EntityType>
+        <EntityType Name="specifications">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="integer" Nullable="false" />
+          <Property Name="deletion_flag" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="standardID" Type="integer" />
+          <Property Name="label" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="description" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="old_flag" Type="nvarchar" MaxLength="2147483647" />
+        </EntityType>
+        <EntityType Name="standards">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="integer" Nullable="false" />
+          <Property Name="deletion_flag" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="name" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="issue" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="organizationID" Type="integer" />
+          <Property Name="old_flag" Type="integer" />
+          <Property Name="fileID" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="previous_issueID" Type="integer" />
+          <Property Name="next_issueID" Type="integer" />
+        </EntityType>
+        <EntityType Name="sub_requirements">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="integer" Nullable="false" />
+          <Property Name="deletion_flag" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="name" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="requirement" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="requirementID" Type="integer" />
+        </EntityType>
+        <EntityType Name="sub_tests">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="integer" Nullable="false" />
+          <Property Name="deletion_flag" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="sub_requirementID" Type="integer" />
+          <Property Name="result" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="testID" Type="integer" />
+        </EntityType>
+        <EntityType Name="tests">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="integer" Nullable="false" />
+          <Property Name="deletion_flag" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="batchID" Type="integer" />
+          <Property Name="methodID" Type="integer" />
+          <Property Name="reportID" Type="integer" />
+          <Property Name="external_reportID" Type="integer" />
+          <Property Name="notes" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="operatorID" Type="integer" />
+          <Property Name="date" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="meets_requirements" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="stat_skip" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="sub_testID" Type="nvarchar" MaxLength="2147483647" />
+        </EntityType>
+        <EntityType Name="users">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="integer" Nullable="false" />
+          <Property Name="full_name" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="hashed_password" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="role_list" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="user_name" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="personID" Type="integer" />
+        </EntityType>
+        <EntityContainer Name="LabDBModelStoreContainer">
+          <EntitySet Name="aspects" EntityType="Self.aspects" store:Type="Tables" />
+          <EntitySet Name="batches" EntityType="Self.batches" store:Type="Tables" />
+          <EntitySet Name="colours" EntityType="Self.colours" store:Type="Tables" />
+          <EntitySet Name="constructions" EntityType="Self.constructions" store:Type="Tables" />
+          <EntitySet Name="control_plans" EntityType="Self.control_plans" store:Type="Tables" />
+          <EntitySet Name="external_constructions" EntityType="Self.external_constructions" store:Type="Tables" />
+          <EntitySet Name="external_reports" EntityType="Self.external_reports" store:Type="Tables" />
+          <EntitySet Name="files" EntityType="Self.files" store:Type="Tables" />
+          <EntitySet Name="masters" EntityType="Self.masters" store:Type="Tables" />
+          <EntitySet Name="materials" EntityType="Self.materials" store:Type="Tables" />
+          <EntitySet Name="methods" EntityType="Self.methods" store:Type="Tables" />
+          <EntitySet Name="organizations" EntityType="Self.organizations" store:Type="Tables" />
+          <EntitySet Name="pending_tests" EntityType="Self.pending_tests" store:Type="Tables" />
+          <EntitySet Name="people" EntityType="Self.people" store:Type="Tables" />
+          <EntitySet Name="projects" EntityType="Self.projects" store:Type="Tables" />
+          <EntitySet Name="properties" EntityType="Self.properties" store:Type="Tables" />
+          <EntitySet Name="recipes" EntityType="Self.recipes" store:Type="Tables" />
+          <EntitySet Name="reports" EntityType="Self.reports" store:Type="Tables" />
+          <EntitySet Name="requested_reports" EntityType="Self.requested_reports" store:Type="Tables" />
+          <EntitySet Name="requirements" EntityType="Self.requirements" store:Type="Tables" />
+          <EntitySet Name="samples_log" EntityType="Self.samples_log" store:Type="Tables" />
+          <EntitySet Name="spec_versions" EntityType="Self.spec_versions" store:Type="Tables" />
+          <EntitySet Name="specifications" EntityType="Self.specifications" store:Type="Tables" />
+          <EntitySet Name="standards" EntityType="Self.standards" store:Type="Tables" />
+          <EntitySet Name="sub_requirements" EntityType="Self.sub_requirements" store:Type="Tables" />
+          <EntitySet Name="sub_tests" EntityType="Self.sub_tests" store:Type="Tables" />
+          <EntitySet Name="tests" EntityType="Self.tests" store:Type="Tables" />
+          <EntitySet Name="users" EntityType="Self.users" store:Type="Tables" />
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="LabDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Aspect">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" />
+          <Property Name="deletion_flag" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="code" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="name" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Constructions" Relationship="LabDBModel.AspectConstruction" FromRole="Aspect" ToRole="Construction" />
+        </EntityType>
+        <EntityType Name="Batch">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" />
+          <Property Name="deletion_flag" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="number" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="trial_area" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="notes_1" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="notes_2" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="structure" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="actions" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="conclusion" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="materialID" Type="Int64" Nullable="false" />
+          <Property Name="fileID" Type="Int64" />
+          <NavigationProperty Name="Material" Relationship="LabDBModel.MaterialBatch" FromRole="Batch" ToRole="Material" />
+          <NavigationProperty Name="Reports" Relationship="LabDBModel.BatchReport" FromRole="Batch" ToRole="Report" />
+          <NavigationProperty Name="SampleLogEntries" Relationship="LabDBModel.BatchSampleLogEntry" FromRole="Batch" ToRole="SampleLogEntry" />
+          <NavigationProperty Name="RequestedReports" Relationship="LabDBModel.BatchRequestedReports" FromRole="Batch" ToRole="RequestedReports" />
+        </EntityType>
+        <EntityType Name="Colour">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" />
+          <Property Name="deletion_flag" Type="Int64" />
+          <Property Name="name" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="code" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Recipes" Relationship="LabDBModel.ColourRecipe" FromRole="Colour" ToRole="Recipe" />
+        </EntityType>
+        <EntityType Name="Construction">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" />
+          <Property Name="deletion_flag" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="aspectID" Type="Int64" Nullable="false" />
+          <Property Name="external_constructionID" Type="Int64" />
+          <Property Name="line" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="projectID" Type="Int64" Nullable="false" />
+          <Property Name="type" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Aspect" Relationship="LabDBModel.AspectConstruction" FromRole="Construction" ToRole="Aspect" />
+          <NavigationProperty Name="Project" Relationship="LabDBModel.ProjectConstruction" FromRole="Construction" ToRole="Project" />
+          <NavigationProperty Name="Materials" Relationship="LabDBModel.ConstructionMaterial" FromRole="Construction" ToRole="Material" />
+        </EntityType>
+        <EntityType Name="ControlPlan">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" />
+          <Property Name="deletion_flag" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="name" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="specificationID" Type="Int64" Nullable="false" />
+          <Property Name="test_plan" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Specification" Relationship="LabDBModel.SpecificationControlPlan" FromRole="ControlPlan" ToRole="Specification" />
+        </EntityType>
+        <EntityType Name="external_constructions">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" />
+          <Property Name="deletion_flag" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="name" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="oemID" Type="Int64" />
+        </EntityType>
+        <EntityType Name="external_reports">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" />
+          <Property Name="deletion_flag" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="date" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="description" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="external_number" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="internal_number" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="external_labID" Type="Int64" />
+          <Property Name="material_sent" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="request_done" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="purchase_order" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="price" Type="Double" />
+          <Property Name="samples" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="currency" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="report_received" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="fileID" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="projectID" Type="Int64" />
+        </EntityType>
+        <EntityType Name="file">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" />
+          <Property Name="deletion_flag" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="description" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="path" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Master">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" />
+          <Property Name="deletion_flag" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="name" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Recipes" Relationship="LabDBModel.MasterRecipe" FromRole="Master" ToRole="Recipe" />
+        </EntityType>
+        <EntityType Name="Material">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" />
+          <Property Name="deletion_flag" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="recipeID" Type="Int64" Nullable="false" />
+          <Property Name="constructionID" Type="Int64" Nullable="false" />
+          <NavigationProperty Name="Construction" Relationship="LabDBModel.ConstructionMaterial" FromRole="Material" ToRole="Construction" />
+          <NavigationProperty Name="Recipe" Relationship="LabDBModel.RecipeMaterial" FromRole="Material" ToRole="Recipe" />
+          <NavigationProperty Name="Batches" Relationship="LabDBModel.MaterialBatch" FromRole="Material" ToRole="Batch" />
+        </EntityType>
+        <EntityType Name="Method">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" />
+          <Property Name="deletion_flag" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="standardID" Type="Int64" Nullable="false" />
+          <Property Name="measurements" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="propertyID" Type="Int64" Nullable="false" />
+          <Property Name="label" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="description" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="um" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="cost_units" Type="Int64" />
+          <Property Name="old_flag" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Requirements" Relationship="LabDBModel.MethodRequirement" FromRole="Method" ToRole="Requirement" />
+          <NavigationProperty Name="Property" Relationship="LabDBModel.PropertyMethod" FromRole="Method" ToRole="Property" />
+          <NavigationProperty Name="Standard" Relationship="LabDBModel.StandardMethod" FromRole="Method" ToRole="Standard" />
+        </EntityType>
+        <EntityType Name="organization">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" />
+          <Property Name="deletion_flag" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="name" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="category" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="PendingTest">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" />
+          <Property Name="deletion_flag" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="requestID" Type="Int64" Nullable="false" />
+          <Property Name="requirementID" Type="Int64" Nullable="false" />
+          <Property Name="notes" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="RequestedReport" Relationship="LabDBModel.RequestedReportsPendingTest" FromRole="PendingTest" ToRole="RequestedReports" />
+          <NavigationProperty Name="Requirement" Relationship="LabDBModel.RequirementPendingTest" FromRole="PendingTest" ToRole="Requirement" />
+        </EntityType>
+        <EntityType Name="Person">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" />
+          <Property Name="deletion_flag" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="name" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="role" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Projects" Relationship="LabDBModel.PersonProject" FromRole="Person" ToRole="Project" />
+          <NavigationProperty Name="Reports" Relationship="LabDBModel.PersonReport" FromRole="Person" ToRole="Report" />
+          <NavigationProperty Name="User" Relationship="LabDBModel.PersonUser" FromRole="Person" ToRole="User" />
+        </EntityType>
+        <EntityType Name="Project">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" />
+          <Property Name="deletion_flag" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="name" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="description" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="project_leaderID" Type="Int64" Nullable="false" />
+          <Property Name="oemID" Type="Int64" Nullable="false" />
+          <Property Name="total_internal_cost" Type="Int64" />
+          <Property Name="total_external_cost" Type="Double" />
+          <NavigationProperty Name="Constructions" Relationship="LabDBModel.ProjectConstruction" FromRole="Project" ToRole="Construction" />
+          <NavigationProperty Name="ProjectLeader" Relationship="LabDBModel.PersonProject" FromRole="Project" ToRole="Person" />
+          <NavigationProperty Name="Reports" Relationship="LabDBModel.ProjectReport" FromRole="Project" ToRole="Report" />
+          <NavigationProperty Name="RequestedReports" Relationship="LabDBModel.ProjectRequestedReports" FromRole="Project" ToRole="RequestedReports" />
+        </EntityType>
+        <EntityType Name="Property">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" />
+          <Property Name="deletion_flag" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="name" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Methods" Relationship="LabDBModel.PropertyMethod" FromRole="Property" ToRole="Method" />
+        </EntityType>
+        <EntityType Name="Recipe">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" />
+          <Property Name="deletion_flag" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="code" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="colourID" Type="Int64" Nullable="false" />
+          <Property Name="masterID" Type="Int64" Nullable="false" />
+          <NavigationProperty Name="Materials" Relationship="LabDBModel.RecipeMaterial" FromRole="Recipe" ToRole="Material" />
+          <NavigationProperty Name="Colour" Relationship="LabDBModel.ColourRecipe" FromRole="Recipe" ToRole="Colour" />
+          <NavigationProperty Name="Master" Relationship="LabDBModel.MasterRecipe" FromRole="Recipe" ToRole="Master" />
+        </EntityType>
+        <EntityType Name="Report">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" />
+          <Property Name="deletion_flag" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="authorID" Type="Int64" Nullable="false" />
+          <Property Name="batchID" Type="Int64" Nullable="false" />
+          <Property Name="category" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="description" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="end_date" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="number" Type="Int64" />
+          <Property Name="projectID" Type="Int64" Nullable="false" />
+          <Property Name="specificationID" Type="Int64" />
+          <Property Name="specification_versionID" Type="Int64" />
+          <Property Name="start_date" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="requestID" Type="Int64" Nullable="true" />
+          <Property Name="fileID" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="label" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Batch" Relationship="LabDBModel.BatchReport" FromRole="Report" ToRole="Batch" />
+          <NavigationProperty Name="Author" Relationship="LabDBModel.PersonReport" FromRole="Report" ToRole="Person" />
+          <NavigationProperty Name="Project" Relationship="LabDBModel.ProjectReport" FromRole="Report" ToRole="Project" />
+          <NavigationProperty Name="Tests" Relationship="LabDBModel.ReportTest" FromRole="Report" ToRole="Test" />
+          <NavigationProperty Name="RequestedReport" Relationship="LabDBModel.RequestedReportsReport" FromRole="Report" ToRole="RequestedReports" />
+        </EntityType>
+        <EntityType Name="RequestedReports">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" />
+          <Property Name="deletion_flag" Type="Int64" />
+          <Property Name="requesterID" Type="Int64" />
+          <Property Name="projectID" Type="Int64" Nullable="false" />
+          <Property Name="specification_versionID" Type="Int64" Nullable="false" />
+          <Property Name="batchID" Type="Int64" Nullable="false" />
+          <Property Name="reportID" Type="Int64" Nullable="true" />
+          <Property Name="notes" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="progress" Type="Int64" />
+          <Property Name="priority_modifier" Type="Int64" />
+          <Property Name="pipeline_order" Type="Int64" />
+          <NavigationProperty Name="Project" Relationship="LabDBModel.ProjectRequestedReports" FromRole="RequestedReports" ToRole="Project" />
+          <NavigationProperty Name="Batch" Relationship="LabDBModel.BatchRequestedReports" FromRole="RequestedReports" ToRole="Batch" />
+          <NavigationProperty Name="SpecificationVersion" Relationship="LabDBModel.SpecificationVersionRequestedReports" FromRole="RequestedReports" ToRole="SpecificationVersion" />
+          <NavigationProperty Name="PendingTests" Relationship="LabDBModel.RequestedReportsPendingTest" FromRole="RequestedReports" ToRole="PendingTest" />
+          <NavigationProperty Name="Reports" Relationship="LabDBModel.RequestedReportsReport" FromRole="RequestedReports" ToRole="Report" />
+        </EntityType>
+        <EntityType Name="Requirement">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" />
+          <Property Name="deletion_flag" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="description" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="methodID" Type="Int64" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="position" Type="Int64" />
+          <Property Name="specification_versionID" Type="Int64" Nullable="false" />
+          <NavigationProperty Name="SubRequirements" Relationship="LabDBModel.RequirementSubRequirement" FromRole="Requirement" ToRole="SubRequirement" />
+          <NavigationProperty Name="SpecificationVersion" Relationship="LabDBModel.SpecificationVersionRequirement" FromRole="Requirement" ToRole="SpecificationVersion" />
+          <NavigationProperty Name="Method" Relationship="LabDBModel.MethodRequirement" FromRole="Requirement" ToRole="Method" />
+          <NavigationProperty Name="PendingTests" Relationship="LabDBModel.RequirementPendingTest" FromRole="Requirement" ToRole="PendingTest" />
+        </EntityType>
+        <EntityType Name="SampleLogEntry">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" />
+          <Property Name="batchID" Type="Int64" Nullable="false" />
+          <Property Name="code" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="date" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Batch" Relationship="LabDBModel.BatchSampleLogEntry" FromRole="SampleLogEntry" ToRole="Batch" />
+        </EntityType>
+        <EntityType Name="SpecificationVersion">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" />
+          <Property Name="deletion_flag" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="main_flag" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="name" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="specificationID" Type="Int64" Nullable="false" />
+          <NavigationProperty Name="Requirements" Relationship="LabDBModel.SpecificationVersionRequirement" FromRole="SpecificationVersion" ToRole="Requirement" />
+          <NavigationProperty Name="RequestedReports" Relationship="LabDBModel.SpecificationVersionRequestedReports" FromRole="SpecificationVersion" ToRole="RequestedReports" />
+          <NavigationProperty Name="Specification" Relationship="LabDBModel.SpecificationSpecificationVersion" FromRole="SpecificationVersion" ToRole="Specification" />
+        </EntityType>
+        <EntityType Name="Specification">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" />
+          <Property Name="deletion_flag" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="standardID" Type="Int64" Nullable="false" />
+          <Property Name="label" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="description" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="old_flag" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="SpecificationVersions" Relationship="LabDBModel.SpecificationSpecificationVersion" FromRole="Specification" ToRole="SpecificationVersion" />
+          <NavigationProperty Name="Standard" Relationship="LabDBModel.StandardSpecification" FromRole="Specification" ToRole="Standard" />
+          <NavigationProperty Name="ControlPlans" Relationship="LabDBModel.SpecificationControlPlan" FromRole="Specification" ToRole="ControlPlan" />
+        </EntityType>
+        <EntityType Name="Standard">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" />
+          <Property Name="deletion_flag" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="name" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="issue" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="organizationID" Type="Int64" />
+          <Property Name="old_flag" Type="Int64" />
+          <Property Name="fileID" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="previous_issueID" Type="Int64" />
+          <Property Name="next_issueID" Type="Int64" />
+          <NavigationProperty Name="Specifications" Relationship="LabDBModel.StandardSpecification" FromRole="Standard" ToRole="Specification" />
+          <NavigationProperty Name="Methods" Relationship="LabDBModel.StandardMethod" FromRole="Standard" ToRole="Method" />
+        </EntityType>
+        <EntityType Name="SubRequirement">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" />
+          <Property Name="DeletionFlag" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="RequirementValue" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="SubTests" Relationship="LabDBModel.SubRequirementSubTest" FromRole="SubRequirement" ToRole="SubTest" />
+          <NavigationProperty Name="Requirement" Relationship="LabDBModel.RequirementSubRequirement" FromRole="SubRequirement" ToRole="Requirement" />
+          <Property Name="requirementID" Type="Int64" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SubTest">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" />
+          <Property Name="deletion_flag" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="sub_requirementID" Type="Int64" Nullable="false" />
+          <Property Name="result" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Test" Relationship="LabDBModel.TestSubTest" FromRole="SubTests" ToRole="Test" />
+          <NavigationProperty Name="SubRequirement" Relationship="LabDBModel.SubRequirementSubTest" FromRole="SubTest" ToRole="SubRequirement" />
+          <Property Name="testID" Type="Int64" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Test">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" />
+          <Property Name="deletion_flag" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="batchID" Type="Int64" Nullable="false" />
+          <Property Name="methodID" Type="Int64" Nullable="false" />
+          <Property Name="reportID" Type="Int64" Nullable="false" />
+          <Property Name="external_reportID" Type="Int64" Nullable="false" />
+          <Property Name="notes" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="operatorID" Type="Int64" Nullable="false" />
+          <Property Name="date" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="meets_requirements" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="stat_skip" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="sub_testID" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Report" Relationship="LabDBModel.ReportTest" FromRole="Test" ToRole="Report" />
+          <NavigationProperty Name="SubTests" Relationship="LabDBModel.TestSubTest" FromRole="Test" ToRole="SubTests" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" />
+          <Property Name="full_name" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="hashed_password" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="role_list" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="user_name" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="personID" Type="Int64" Nullable="false" />
+          <NavigationProperty Name="Person" Relationship="LabDBModel.PersonUser" FromRole="User" ToRole="Person" />
+        </EntityType>
+        <EntityContainer Name="LabDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Aspects1" EntityType="LabDBModel.Aspect" />
+          <EntitySet Name="Batches1" EntityType="LabDBModel.Batch" />
+          <EntitySet Name="Colours1" EntityType="LabDBModel.Colour" />
+          <EntitySet Name="Constructions1" EntityType="LabDBModel.Construction" />
+          <EntitySet Name="ControlPlans" EntityType="LabDBModel.ControlPlan" />
+          <EntitySet Name="external_constructions" EntityType="Self.external_constructions" />
+          <EntitySet Name="external_reports" EntityType="Self.external_reports" />
+          <EntitySet Name="files" EntityType="Self.file" />
+          <EntitySet Name="Masters1" EntityType="LabDBModel.Master" />
+          <EntitySet Name="Materials1" EntityType="LabDBModel.Material" />
+          <EntitySet Name="Methods1" EntityType="LabDBModel.Method" />
+          <EntitySet Name="organizations" EntityType="Self.organization" />
+          <EntitySet Name="PendingTests" EntityType="LabDBModel.PendingTest" />
+          <EntitySet Name="People" EntityType="LabDBModel.Person" />
+          <EntitySet Name="Projects" EntityType="LabDBModel.Project" />
+          <EntitySet Name="Properties" EntityType="LabDBModel.Property" />
+          <EntitySet Name="Recipes" EntityType="LabDBModel.Recipe" />
+          <EntitySet Name="Reports" EntityType="LabDBModel.Report" />
+          <EntitySet Name="RequestedReports" EntityType="LabDBModel.RequestedReports" />
+          <EntitySet Name="Requirements1" EntityType="LabDBModel.Requirement" />
+          <EntitySet Name="SampleLogEntries" EntityType="LabDBModel.SampleLogEntry" />
+          <EntitySet Name="SpecificationVersions" EntityType="LabDBModel.SpecificationVersion" />
+          <EntitySet Name="Specifications1" EntityType="LabDBModel.Specification" />
+          <EntitySet Name="Standards1" EntityType="LabDBModel.Standard" />
+          <EntitySet Name="SubRequirements" EntityType="LabDBModel.SubRequirement" />
+          <EntitySet Name="SubTests1" EntityType="LabDBModel.SubTest" />
+          <EntitySet Name="Tests1" EntityType="LabDBModel.Test" />
+          <EntitySet Name="Users1" EntityType="LabDBModel.User" />
+          <AssociationSet Name="AspectConstruction" Association="LabDBModel.AspectConstruction">
+            <End Role="Aspect" EntitySet="Aspects1" />
+            <End Role="Construction" EntitySet="Constructions1" />
+          </AssociationSet>
+          <AssociationSet Name="ProjectConstruction" Association="LabDBModel.ProjectConstruction">
+            <End Role="Project" EntitySet="Projects" />
+            <End Role="Construction" EntitySet="Constructions1" />
+          </AssociationSet>
+          <AssociationSet Name="ConstructionMaterial" Association="LabDBModel.ConstructionMaterial">
+            <End Role="Construction" EntitySet="Constructions1" />
+            <End Role="Material" EntitySet="Materials1" />
+          </AssociationSet>
+          <AssociationSet Name="RecipeMaterial" Association="LabDBModel.RecipeMaterial">
+            <End Role="Recipe" EntitySet="Recipes" />
+            <End Role="Material" EntitySet="Materials1" />
+          </AssociationSet>
+          <AssociationSet Name="ColourRecipe" Association="LabDBModel.ColourRecipe">
+            <End Role="Colour" EntitySet="Colours1" />
+            <End Role="Recipe" EntitySet="Recipes" />
+          </AssociationSet>
+          <AssociationSet Name="MasterRecipe" Association="LabDBModel.MasterRecipe">
+            <End Role="Master" EntitySet="Masters1" />
+            <End Role="Recipe" EntitySet="Recipes" />
+          </AssociationSet>
+          <AssociationSet Name="MaterialBatch" Association="LabDBModel.MaterialBatch">
+            <End Role="Material" EntitySet="Materials1" />
+            <End Role="Batch" EntitySet="Batches1" />
+          </AssociationSet>
+          <AssociationSet Name="BatchReport" Association="LabDBModel.BatchReport">
+            <End Role="Batch" EntitySet="Batches1" />
+            <End Role="Report" EntitySet="Reports" />
+          </AssociationSet>
+          <AssociationSet Name="PersonProject" Association="LabDBModel.PersonProject">
+            <End Role="Person" EntitySet="People" />
+            <End Role="Project" EntitySet="Projects" />
+          </AssociationSet>
+          <AssociationSet Name="PersonReport" Association="LabDBModel.PersonReport">
+            <End Role="Person" EntitySet="People" />
+            <End Role="Report" EntitySet="Reports" />
+          </AssociationSet>
+          <AssociationSet Name="BatchSampleLogEntry" Association="LabDBModel.BatchSampleLogEntry">
+            <End Role="Batch" EntitySet="Batches1" />
+            <End Role="SampleLogEntry" EntitySet="SampleLogEntries" />
+          </AssociationSet>
+          <AssociationSet Name="ProjectReport" Association="LabDBModel.ProjectReport">
+            <End Role="Project" EntitySet="Projects" />
+            <End Role="Report" EntitySet="Reports" />
+          </AssociationSet>
+          <AssociationSet Name="ProjectRequestedReports" Association="LabDBModel.ProjectRequestedReports">
+            <End Role="Project" EntitySet="Projects" />
+            <End Role="RequestedReports" EntitySet="RequestedReports" />
+          </AssociationSet>
+          <AssociationSet Name="BatchRequestedReports" Association="LabDBModel.BatchRequestedReports">
+            <End Role="Batch" EntitySet="Batches1" />
+            <End Role="RequestedReports" EntitySet="RequestedReports" />
+          </AssociationSet>
+          <AssociationSet Name="PersonUser" Association="LabDBModel.PersonUser">
+            <End Role="User" EntitySet="Users1" />
+            <End Role="Person" EntitySet="People" />
+          </AssociationSet>
+          <AssociationSet Name="ReportTest" Association="LabDBModel.ReportTest">
+            <End Role="Report" EntitySet="Reports" />
+            <End Role="Test" EntitySet="Tests1" />
+          </AssociationSet>
+          <AssociationSet Name="TestSubTest" Association="LabDBModel.TestSubTest">
+            <End Role="Test" EntitySet="Tests1" />
+            <End Role="SubTests" EntitySet="SubTests1" />
+          </AssociationSet>
+          <AssociationSet Name="SubRequirementSubTest" Association="LabDBModel.SubRequirementSubTest">
+            <End Role="SubRequirement" EntitySet="SubRequirements" />
+            <End Role="SubTest" EntitySet="SubTests1" />
+          </AssociationSet>
+          <AssociationSet Name="RequirementSubRequirement" Association="LabDBModel.RequirementSubRequirement">
+            <End Role="Requirement" EntitySet="Requirements1" />
+            <End Role="SubRequirement" EntitySet="SubRequirements" />
+          </AssociationSet>
+          <AssociationSet Name="SpecificationVersionRequirement" Association="LabDBModel.SpecificationVersionRequirement">
+            <End Role="SpecificationVersion" EntitySet="SpecificationVersions" />
+            <End Role="Requirement" EntitySet="Requirements1" />
+          </AssociationSet>
+          <AssociationSet Name="SpecificationVersionRequestedReports" Association="LabDBModel.SpecificationVersionRequestedReports">
+            <End Role="SpecificationVersion" EntitySet="SpecificationVersions" />
+            <End Role="RequestedReports" EntitySet="RequestedReports" />
+          </AssociationSet>
+          <AssociationSet Name="MethodRequirement" Association="LabDBModel.MethodRequirement">
+            <End Role="Method" EntitySet="Methods1" />
+            <End Role="Requirement" EntitySet="Requirements1" />
+          </AssociationSet>
+          <AssociationSet Name="SpecificationSpecificationVersion" Association="LabDBModel.SpecificationSpecificationVersion">
+            <End Role="Specification" EntitySet="Specifications1" />
+            <End Role="SpecificationVersion" EntitySet="SpecificationVersions" />
+          </AssociationSet>
+          <AssociationSet Name="PropertyMethod" Association="LabDBModel.PropertyMethod">
+            <End Role="Property" EntitySet="Properties" />
+            <End Role="Method" EntitySet="Methods1" />
+          </AssociationSet>
+          <AssociationSet Name="StandardSpecification" Association="LabDBModel.StandardSpecification">
+            <End Role="Standard" EntitySet="Standards1" />
+            <End Role="Specification" EntitySet="Specifications1" />
+          </AssociationSet>
+          <AssociationSet Name="StandardMethod" Association="LabDBModel.StandardMethod">
+            <End Role="Standard" EntitySet="Standards1" />
+            <End Role="Method" EntitySet="Methods1" />
+          </AssociationSet>
+          <AssociationSet Name="SpecificationControlPlan" Association="LabDBModel.SpecificationControlPlan">
+            <End Role="Specification" EntitySet="Specifications1" />
+            <End Role="ControlPlan" EntitySet="ControlPlans" />
+          </AssociationSet>
+          <AssociationSet Name="RequestedReportsPendingTest" Association="LabDBModel.RequestedReportsPendingTest">
+            <End Role="RequestedReports" EntitySet="RequestedReports" />
+            <End Role="PendingTest" EntitySet="PendingTests" />
+          </AssociationSet>
+          <AssociationSet Name="RequirementPendingTest" Association="LabDBModel.RequirementPendingTest">
+            <End Role="Requirement" EntitySet="Requirements1" />
+            <End Role="PendingTest" EntitySet="PendingTests" />
+          </AssociationSet>
+          <AssociationSet Name="RequestedReportsReport" Association="LabDBModel.RequestedReportsReport">
+            <End Role="RequestedReports" EntitySet="RequestedReports" />
+            <End Role="Report" EntitySet="Reports" />
+          </AssociationSet>
+        </EntityContainer>
+        <Association Name="AspectConstruction">
+          <End Type="LabDBModel.Aspect" Role="Aspect" Multiplicity="1" />
+          <End Type="LabDBModel.Construction" Role="Construction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Aspect">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Construction">
+              <PropertyRef Name="aspectID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ProjectConstruction">
+          <End Type="LabDBModel.Project" Role="Project" Multiplicity="1" />
+          <End Type="LabDBModel.Construction" Role="Construction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Project">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Construction">
+              <PropertyRef Name="projectID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ConstructionMaterial">
+          <End Type="LabDBModel.Construction" Role="Construction" Multiplicity="1" />
+          <End Type="LabDBModel.Material" Role="Material" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Construction">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Material">
+              <PropertyRef Name="constructionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="RecipeMaterial">
+          <End Type="LabDBModel.Recipe" Role="Recipe" Multiplicity="1" />
+          <End Type="LabDBModel.Material" Role="Material" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Recipe">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Material">
+              <PropertyRef Name="recipeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ColourRecipe">
+          <End Type="LabDBModel.Colour" Role="Colour" Multiplicity="1" />
+          <End Type="LabDBModel.Recipe" Role="Recipe" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Colour">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Recipe">
+              <PropertyRef Name="colourID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="MasterRecipe">
+          <End Type="LabDBModel.Master" Role="Master" Multiplicity="1" />
+          <End Type="LabDBModel.Recipe" Role="Recipe" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Master">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Recipe">
+              <PropertyRef Name="masterID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="MaterialBatch">
+          <End Type="LabDBModel.Material" Role="Material" Multiplicity="1" />
+          <End Type="LabDBModel.Batch" Role="Batch" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Material">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Batch">
+              <PropertyRef Name="materialID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="BatchReport">
+          <End Type="LabDBModel.Batch" Role="Batch" Multiplicity="1" />
+          <End Type="LabDBModel.Report" Role="Report" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Batch">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Report">
+              <PropertyRef Name="batchID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="PersonProject">
+          <End Type="LabDBModel.Person" Role="Person" Multiplicity="1" />
+          <End Type="LabDBModel.Project" Role="Project" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Person">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Project">
+              <PropertyRef Name="project_leaderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="PersonReport">
+          <End Type="LabDBModel.Person" Role="Person" Multiplicity="1" />
+          <End Type="LabDBModel.Report" Role="Report" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Person">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Report">
+              <PropertyRef Name="authorID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="BatchSampleLogEntry">
+          <End Type="LabDBModel.Batch" Role="Batch" Multiplicity="1" />
+          <End Type="LabDBModel.SampleLogEntry" Role="SampleLogEntry" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Batch">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="SampleLogEntry">
+              <PropertyRef Name="batchID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ProjectReport">
+          <End Type="LabDBModel.Project" Role="Project" Multiplicity="1" />
+          <End Type="LabDBModel.Report" Role="Report" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Project">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Report">
+              <PropertyRef Name="projectID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ProjectRequestedReports">
+          <End Type="LabDBModel.Project" Role="Project" Multiplicity="1" />
+          <End Type="LabDBModel.RequestedReports" Role="RequestedReports" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Project">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="RequestedReports">
+              <PropertyRef Name="projectID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="BatchRequestedReports">
+          <End Type="LabDBModel.Batch" Role="Batch" Multiplicity="1" />
+          <End Type="LabDBModel.RequestedReports" Role="RequestedReports" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Batch">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="RequestedReports">
+              <PropertyRef Name="batchID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="PersonUser">
+          <End Type="LabDBModel.User" Role="User" Multiplicity="0..1" />
+          <End Type="LabDBModel.Person" Role="Person" Multiplicity="1" />
+          <ReferentialConstraint>
+            <Principal Role="Person">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="User">
+              <PropertyRef Name="ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ReportTest">
+          <End Type="LabDBModel.Report" Role="Report" Multiplicity="1" />
+          <End Type="LabDBModel.Test" Role="Test" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Report">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Test">
+              <PropertyRef Name="reportID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="TestSubTest">
+          <End Type="LabDBModel.Test" Role="Test" Multiplicity="1" />
+          <End Type="LabDBModel.SubTest" Role="SubTests" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Test">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="SubTests">
+              <PropertyRef Name="testID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="SubRequirementSubTest">
+          <End Type="LabDBModel.SubRequirement" Role="SubRequirement" Multiplicity="1" />
+          <End Type="LabDBModel.SubTest" Role="SubTest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SubRequirement">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="SubTest">
+              <PropertyRef Name="sub_requirementID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="RequirementSubRequirement">
+          <End Type="LabDBModel.Requirement" Role="Requirement" Multiplicity="1" />
+          <End Type="LabDBModel.SubRequirement" Role="SubRequirement" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Requirement">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="SubRequirement">
+              <PropertyRef Name="requirementID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="SpecificationVersionRequirement">
+          <End Type="LabDBModel.SpecificationVersion" Role="SpecificationVersion" Multiplicity="1" />
+          <End Type="LabDBModel.Requirement" Role="Requirement" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SpecificationVersion">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Requirement">
+              <PropertyRef Name="specification_versionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="SpecificationVersionRequestedReports">
+          <End Type="LabDBModel.SpecificationVersion" Role="SpecificationVersion" Multiplicity="1" />
+          <End Type="LabDBModel.RequestedReports" Role="RequestedReports" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SpecificationVersion">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="RequestedReports">
+              <PropertyRef Name="specification_versionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="MethodRequirement">
+          <End Type="LabDBModel.Method" Role="Method" Multiplicity="1" />
+          <End Type="LabDBModel.Requirement" Role="Requirement" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Method">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Requirement">
+              <PropertyRef Name="methodID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="SpecificationSpecificationVersion">
+          <End Type="LabDBModel.Specification" Role="Specification" Multiplicity="1" />
+          <End Type="LabDBModel.SpecificationVersion" Role="SpecificationVersion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Specification">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="SpecificationVersion">
+              <PropertyRef Name="specificationID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="PropertyMethod">
+          <End Type="LabDBModel.Property" Role="Property" Multiplicity="1" />
+          <End Type="LabDBModel.Method" Role="Method" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Property">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Method">
+              <PropertyRef Name="propertyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="StandardSpecification">
+          <End Type="LabDBModel.Standard" Role="Standard" Multiplicity="1" />
+          <End Type="LabDBModel.Specification" Role="Specification" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Standard">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Specification">
+              <PropertyRef Name="standardID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="StandardMethod">
+          <End Type="LabDBModel.Standard" Role="Standard" Multiplicity="1" />
+          <End Type="LabDBModel.Method" Role="Method" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Standard">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Method">
+              <PropertyRef Name="standardID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="SpecificationControlPlan">
+          <End Type="LabDBModel.Specification" Role="Specification" Multiplicity="1" />
+          <End Type="LabDBModel.ControlPlan" Role="ControlPlan" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Specification">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ControlPlan">
+              <PropertyRef Name="specificationID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="RequestedReportsPendingTest">
+          <End Type="LabDBModel.RequestedReports" Role="RequestedReports" Multiplicity="1" />
+          <End Type="LabDBModel.PendingTest" Role="PendingTest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RequestedReports">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PendingTest">
+              <PropertyRef Name="requestID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="RequirementPendingTest">
+          <End Type="LabDBModel.Requirement" Role="Requirement" Multiplicity="1" />
+          <End Type="LabDBModel.PendingTest" Role="PendingTest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Requirement">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PendingTest">
+              <PropertyRef Name="requirementID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="RequestedReportsReport">
+          <End Type="LabDBModel.RequestedReports" Role="RequestedReports" Multiplicity="0..1" />
+          <End Type="LabDBModel.Report" Role="Report" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RequestedReports">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Report">
+              <PropertyRef Name="requestID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="LabDBModelStoreContainer" CdmEntityContainer="LabDBEntities">
+          <EntitySetMapping Name="Aspects1">
+            <EntityTypeMapping TypeName="LabDBModel.Aspect">
+              <MappingFragment StoreEntitySet="aspects">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="deletion_flag" ColumnName="deletion_flag" />
+                <ScalarProperty Name="code" ColumnName="code" />
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Batches1">
+            <EntityTypeMapping TypeName="LabDBModel.Batch">
+              <MappingFragment StoreEntitySet="batches">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="deletion_flag" ColumnName="deletion_flag" />
+                <ScalarProperty Name="number" ColumnName="number" />
+                <ScalarProperty Name="trial_area" ColumnName="trial_area" />
+                <ScalarProperty Name="notes_1" ColumnName="notes_1" />
+                <ScalarProperty Name="notes_2" ColumnName="notes_2" />
+                <ScalarProperty Name="structure" ColumnName="structure" />
+                <ScalarProperty Name="actions" ColumnName="actions" />
+                <ScalarProperty Name="conclusion" ColumnName="conclusion" />
+                <ScalarProperty Name="materialID" ColumnName="materialID" />
+                <ScalarProperty Name="fileID" ColumnName="fileID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Colours1">
+            <EntityTypeMapping TypeName="LabDBModel.Colour">
+              <MappingFragment StoreEntitySet="colours">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="deletion_flag" ColumnName="deletion_flag" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="code" ColumnName="code" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Constructions1">
+            <EntityTypeMapping TypeName="LabDBModel.Construction">
+              <MappingFragment StoreEntitySet="constructions">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="deletion_flag" ColumnName="deletion_flag" />
+                <ScalarProperty Name="aspectID" ColumnName="aspectID" />
+                <ScalarProperty Name="external_constructionID" ColumnName="external_constructionID" />
+                <ScalarProperty Name="line" ColumnName="line" />
+                <ScalarProperty Name="projectID" ColumnName="projectID" />
+                <ScalarProperty Name="type" ColumnName="type" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ControlPlans">
+            <EntityTypeMapping TypeName="LabDBModel.ControlPlan">
+              <MappingFragment StoreEntitySet="control_plans">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="deletion_flag" ColumnName="deletion_flag" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="specificationID" ColumnName="specificationID" />
+                <ScalarProperty Name="test_plan" ColumnName="test_plan" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="external_constructions">
+            <EntityTypeMapping TypeName="LabDBModel.external_constructions">
+              <MappingFragment StoreEntitySet="external_constructions">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="deletion_flag" ColumnName="deletion_flag" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="oemID" ColumnName="oemID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="external_reports">
+            <EntityTypeMapping TypeName="LabDBModel.external_reports">
+              <MappingFragment StoreEntitySet="external_reports">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="deletion_flag" ColumnName="deletion_flag" />
+                <ScalarProperty Name="date" ColumnName="date" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="external_number" ColumnName="external_number" />
+                <ScalarProperty Name="internal_number" ColumnName="internal_number" />
+                <ScalarProperty Name="external_labID" ColumnName="external_labID" />
+                <ScalarProperty Name="material_sent" ColumnName="material_sent" />
+                <ScalarProperty Name="request_done" ColumnName="request_done" />
+                <ScalarProperty Name="purchase_order" ColumnName="purchase_order" />
+                <ScalarProperty Name="price" ColumnName="price" />
+                <ScalarProperty Name="samples" ColumnName="samples" />
+                <ScalarProperty Name="currency" ColumnName="currency" />
+                <ScalarProperty Name="report_received" ColumnName="report_received" />
+                <ScalarProperty Name="fileID" ColumnName="fileID" />
+                <ScalarProperty Name="projectID" ColumnName="projectID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="files">
+            <EntityTypeMapping TypeName="LabDBModel.file">
+              <MappingFragment StoreEntitySet="files">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="deletion_flag" ColumnName="deletion_flag" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="path" ColumnName="path" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Masters1">
+            <EntityTypeMapping TypeName="LabDBModel.Master">
+              <MappingFragment StoreEntitySet="masters">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="deletion_flag" ColumnName="deletion_flag" />
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Materials1">
+            <EntityTypeMapping TypeName="LabDBModel.Material">
+              <MappingFragment StoreEntitySet="materials">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="deletion_flag" ColumnName="deletion_flag" />
+                <ScalarProperty Name="recipeID" ColumnName="recipeID" />
+                <ScalarProperty Name="constructionID" ColumnName="constructionID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Methods1">
+            <EntityTypeMapping TypeName="LabDBModel.Method">
+              <MappingFragment StoreEntitySet="methods">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="deletion_flag" ColumnName="deletion_flag" />
+                <ScalarProperty Name="standardID" ColumnName="standardID" />
+                <ScalarProperty Name="measurements" ColumnName="measurements" />
+                <ScalarProperty Name="propertyID" ColumnName="propertyID" />
+                <ScalarProperty Name="label" ColumnName="label" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="um" ColumnName="um" />
+                <ScalarProperty Name="cost_units" ColumnName="cost_units" />
+                <ScalarProperty Name="old_flag" ColumnName="old_flag" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="organizations">
+            <EntityTypeMapping TypeName="LabDBModel.organization">
+              <MappingFragment StoreEntitySet="organizations">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="deletion_flag" ColumnName="deletion_flag" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="category" ColumnName="category" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PendingTests">
+            <EntityTypeMapping TypeName="LabDBModel.PendingTest">
+              <MappingFragment StoreEntitySet="pending_tests">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="deletion_flag" ColumnName="deletion_flag" />
+                <ScalarProperty Name="requestID" ColumnName="requestID" />
+                <ScalarProperty Name="requirementID" ColumnName="requirementID" />
+                <ScalarProperty Name="notes" ColumnName="notes" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="People">
+            <EntityTypeMapping TypeName="LabDBModel.Person">
+              <MappingFragment StoreEntitySet="people">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="deletion_flag" ColumnName="deletion_flag" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="role" ColumnName="role" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Projects">
+            <EntityTypeMapping TypeName="LabDBModel.Project">
+              <MappingFragment StoreEntitySet="projects">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="deletion_flag" ColumnName="deletion_flag" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="project_leaderID" ColumnName="project_leaderID" />
+                <ScalarProperty Name="oemID" ColumnName="oemID" />
+                <ScalarProperty Name="total_internal_cost" ColumnName="total_internal_cost" />
+                <ScalarProperty Name="total_external_cost" ColumnName="total_external_cost" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Properties">
+            <EntityTypeMapping TypeName="LabDBModel.Property">
+              <MappingFragment StoreEntitySet="properties">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="deletion_flag" ColumnName="deletion_flag" />
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Recipes">
+            <EntityTypeMapping TypeName="LabDBModel.Recipe">
+              <MappingFragment StoreEntitySet="recipes">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="deletion_flag" ColumnName="deletion_flag" />
+                <ScalarProperty Name="code" ColumnName="code" />
+                <ScalarProperty Name="colourID" ColumnName="colourID" />
+                <ScalarProperty Name="masterID" ColumnName="masterID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Reports">
+            <EntityTypeMapping TypeName="LabDBModel.Report">
+              <MappingFragment StoreEntitySet="reports">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="deletion_flag" ColumnName="deletion_flag" />
+                <ScalarProperty Name="authorID" ColumnName="authorID" />
+                <ScalarProperty Name="batchID" ColumnName="batchID" />
+                <ScalarProperty Name="category" ColumnName="category" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="end_date" ColumnName="end_date" />
+                <ScalarProperty Name="number" ColumnName="number" />
+                <ScalarProperty Name="projectID" ColumnName="projectID" />
+                <ScalarProperty Name="specificationID" ColumnName="specificationID" />
+                <ScalarProperty Name="specification_versionID" ColumnName="specification_versionID" />
+                <ScalarProperty Name="start_date" ColumnName="start_date" />
+                <ScalarProperty Name="requestID" ColumnName="requestID" />
+                <ScalarProperty Name="fileID" ColumnName="fileID" />
+                <ScalarProperty Name="label" ColumnName="label" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RequestedReports">
+            <EntityTypeMapping TypeName="LabDBModel.RequestedReports">
+              <MappingFragment StoreEntitySet="requested_reports">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="deletion_flag" ColumnName="deletion_flag" />
+                <ScalarProperty Name="requesterID" ColumnName="requesterID" />
+                <ScalarProperty Name="projectID" ColumnName="projectID" />
+                <ScalarProperty Name="specification_versionID" ColumnName="specificationID" />
+                <ScalarProperty Name="batchID" ColumnName="batchID" />
+                <ScalarProperty Name="reportID" ColumnName="reportID" />
+                <ScalarProperty Name="notes" ColumnName="notes" />
+                <ScalarProperty Name="progress" ColumnName="progress" />
+                <ScalarProperty Name="priority_modifier" ColumnName="priority_modifier" />
+                <ScalarProperty Name="pipeline_order" ColumnName="pipeline_order" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Requirements1">
+            <EntityTypeMapping TypeName="LabDBModel.Requirement">
+              <MappingFragment StoreEntitySet="requirements">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="deletion_flag" ColumnName="deletion_flag" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="methodID" ColumnName="methodID" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="position" ColumnName="position" />
+                <ScalarProperty Name="specification_versionID" ColumnName="specification_versionID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SampleLogEntries">
+            <EntityTypeMapping TypeName="LabDBModel.SampleLogEntry">
+              <MappingFragment StoreEntitySet="samples_log">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="batchID" ColumnName="batch" />
+                <ScalarProperty Name="code" ColumnName="code" />
+                <ScalarProperty Name="date" ColumnName="date" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SpecificationVersions">
+            <EntityTypeMapping TypeName="LabDBModel.SpecificationVersion">
+              <MappingFragment StoreEntitySet="spec_versions">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="deletion_flag" ColumnName="deletion_flag" />
+                <ScalarProperty Name="main_flag" ColumnName="main_flag" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="specificationID" ColumnName="specificationID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Specifications1">
+            <EntityTypeMapping TypeName="LabDBModel.Specification">
+              <MappingFragment StoreEntitySet="specifications">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="deletion_flag" ColumnName="deletion_flag" />
+                <ScalarProperty Name="standardID" ColumnName="standardID" />
+                <ScalarProperty Name="label" ColumnName="label" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="old_flag" ColumnName="old_flag" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Standards1">
+            <EntityTypeMapping TypeName="LabDBModel.Standard">
+              <MappingFragment StoreEntitySet="standards">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="deletion_flag" ColumnName="deletion_flag" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="issue" ColumnName="issue" />
+                <ScalarProperty Name="organizationID" ColumnName="organizationID" />
+                <ScalarProperty Name="old_flag" ColumnName="old_flag" />
+                <ScalarProperty Name="fileID" ColumnName="fileID" />
+                <ScalarProperty Name="previous_issueID" ColumnName="previous_issueID" />
+                <ScalarProperty Name="next_issueID" ColumnName="next_issueID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SubRequirements">
+            <EntityTypeMapping TypeName="LabDBModel.SubRequirement">
+              <MappingFragment StoreEntitySet="sub_requirements">
+                <ScalarProperty Name="requirementID" ColumnName="requirementID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="DeletionFlag" ColumnName="deletion_flag" />
+                <ScalarProperty Name="Name" ColumnName="name" />
+                <ScalarProperty Name="RequirementValue" ColumnName="requirement" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SubTests1">
+            <EntityTypeMapping TypeName="LabDBModel.SubTest">
+              <MappingFragment StoreEntitySet="sub_tests">
+                <ScalarProperty Name="testID" ColumnName="testID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="deletion_flag" ColumnName="deletion_flag" />
+                <ScalarProperty Name="sub_requirementID" ColumnName="sub_requirementID" />
+                <ScalarProperty Name="result" ColumnName="result" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tests1">
+            <EntityTypeMapping TypeName="LabDBModel.Test">
+              <MappingFragment StoreEntitySet="tests">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="deletion_flag" ColumnName="deletion_flag" />
+                <ScalarProperty Name="batchID" ColumnName="batchID" />
+                <ScalarProperty Name="methodID" ColumnName="methodID" />
+                <ScalarProperty Name="reportID" ColumnName="reportID" />
+                <ScalarProperty Name="external_reportID" ColumnName="external_reportID" />
+                <ScalarProperty Name="notes" ColumnName="notes" />
+                <ScalarProperty Name="operatorID" ColumnName="operatorID" />
+                <ScalarProperty Name="date" ColumnName="date" />
+                <ScalarProperty Name="meets_requirements" ColumnName="meets_requirements" />
+                <ScalarProperty Name="stat_skip" ColumnName="stat_skip" />
+                <ScalarProperty Name="sub_testID" ColumnName="sub_testID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users1">
+            <EntityTypeMapping TypeName="LabDBModel.User">
+              <MappingFragment StoreEntitySet="users">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="full_name" ColumnName="full_name" />
+                <ScalarProperty Name="hashed_password" ColumnName="hashed_password" />
+                <ScalarProperty Name="role_list" ColumnName="role_list" />
+                <ScalarProperty Name="user_name" ColumnName="user_name" />
+                <ScalarProperty Name="personID" ColumnName="personID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Nessuno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
