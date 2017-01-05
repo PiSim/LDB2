@@ -20,6 +20,7 @@ namespace LabDB2
             this.Constructions = new HashSet<Construction>();
             this.Reports = new HashSet<Report>();
             this.RequestedReports = new HashSet<RequestedReports>();
+            this.ExternalReports = new HashSet<ExternalReport>();
         }
     
         public long ID { get; set; }
@@ -38,5 +39,7 @@ namespace LabDB2
         public virtual ICollection<Report> Reports { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<RequestedReports> RequestedReports { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ExternalReport> ExternalReports { get; set; }
     }
 }

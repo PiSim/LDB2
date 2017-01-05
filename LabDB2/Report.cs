@@ -18,6 +18,7 @@ namespace LabDB2
         public Report()
         {
             this.Tests = new HashSet<Test>();
+            this.ReportFiles = new HashSet<ReportFiles>();
         }
     
         public long ID { get; set; }
@@ -33,7 +34,6 @@ namespace LabDB2
         public Nullable<long> specification_versionID { get; set; }
         public string start_date { get; set; }
         public Nullable<long> requestID { get; set; }
-        public string fileID { get; set; }
         public string label { get; set; }
     
         public virtual Batch Batch { get; set; }
@@ -42,5 +42,7 @@ namespace LabDB2
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Test> Tests { get; set; }
         public virtual RequestedReports RequestedReport { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ReportFiles> ReportFiles { get; set; }
     }
 }

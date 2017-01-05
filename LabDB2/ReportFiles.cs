@@ -12,21 +12,14 @@ namespace LabDB2
     using System;
     using System.Collections.Generic;
     
-    public partial class Master
+    public partial class ReportFiles
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Master()
-        {
-            this.Recipes = new HashSet<Recipe>();
-        }
-    
         public long ID { get; set; }
         public string deletion_flag { get; set; }
-        public Nullable<long> number { get; set; }
-        public string date { get; set; }
-        public Nullable<long> batchID { get; set; }
+        public string description { get; set; }
+        public long reportID { get; set; }
+        public string path { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Recipe> Recipes { get; set; }
+        public virtual Report Report { get; set; }
     }
 }

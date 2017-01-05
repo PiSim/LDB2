@@ -31,7 +31,7 @@ namespace LabDB2
         public virtual DbSet<Construction> Constructions1 { get; set; }
         public virtual DbSet<ControlPlan> ControlPlans { get; set; }
         public virtual DbSet<external_constructions> external_constructions { get; set; }
-        public virtual DbSet<external_reports> external_reports { get; set; }
+        public virtual DbSet<ExternalReport> ExternalReports { get; set; }
         public virtual DbSet<file> files { get; set; }
         public virtual DbSet<Master> Masters1 { get; set; }
         public virtual DbSet<Material> Materials1 { get; set; }
@@ -53,5 +53,6 @@ namespace LabDB2
         public virtual DbSet<SubTest> SubTests1 { get; set; }
         public virtual DbSet<Test> Tests1 { get; set; }
         public virtual DbSet<User> Users1 { get; set; }
+        public virtual DbSet<ReportFiles> ReportFiles { get; set; }
     }
 }

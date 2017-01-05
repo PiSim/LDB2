@@ -106,7 +106,9 @@
           </Key>
           <Property Name="ID" Type="integer" Nullable="false" />
           <Property Name="deletion_flag" Type="nvarchar" MaxLength="2147483647" />
-          <Property Name="name" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="number" Type="integer" />
+          <Property Name="date" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="batchID" Type="integer" />
         </EntityType>
         <EntityType Name="materials">
           <Key>
@@ -191,6 +193,16 @@
           <Property Name="colourID" Type="integer" />
           <Property Name="masterID" Type="integer" />
         </EntityType>
+        <EntityType Name="report_files">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="integer" Nullable="false" />
+          <Property Name="deletion_flag" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="description" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="reportID" Type="integer" Nullable="false" />
+          <Property Name="path" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+        </EntityType>
         <EntityType Name="reports">
           <Key>
             <PropertyRef Name="ID" />
@@ -208,7 +220,6 @@
           <Property Name="specification_versionID" Type="integer" />
           <Property Name="start_date" Type="nvarchar" MaxLength="2147483647" />
           <Property Name="requestID" Type="integer" />
-          <Property Name="fileID" Type="nvarchar" MaxLength="2147483647" />
           <Property Name="label" Type="nvarchar" MaxLength="2147483647" />
         </EntityType>
         <EntityType Name="requested_reports">
@@ -239,7 +250,6 @@
           <Property Name="position" Type="integer" />
           <Property Name="specificationID" Type="integer" />
           <Property Name="specification_versionID" Type="integer" />
-          <Property Name="sub_requirementID" Type="nvarchar" MaxLength="2147483647" />
         </EntityType>
         <EntityType Name="samples_log">
           <Key>
@@ -293,7 +303,7 @@
           <Property Name="ID" Type="integer" Nullable="false" />
           <Property Name="deletion_flag" Type="nvarchar" MaxLength="2147483647" />
           <Property Name="name" Type="nvarchar" MaxLength="2147483647" />
-          <Property Name="requirement" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="required_value" Type="nvarchar" MaxLength="2147483647" />
           <Property Name="requirementID" Type="integer" />
         </EntityType>
         <EntityType Name="sub_tests">
@@ -321,7 +331,6 @@
           <Property Name="date" Type="nvarchar" MaxLength="2147483647" />
           <Property Name="meets_requirements" Type="nvarchar" MaxLength="2147483647" />
           <Property Name="stat_skip" Type="nvarchar" MaxLength="2147483647" />
-          <Property Name="sub_testID" Type="nvarchar" MaxLength="2147483647" />
         </EntityType>
         <EntityType Name="users">
           <Key>
@@ -352,6 +361,7 @@
           <EntitySet Name="projects" EntityType="Self.projects" store:Type="Tables" />
           <EntitySet Name="properties" EntityType="Self.properties" store:Type="Tables" />
           <EntitySet Name="recipes" EntityType="Self.recipes" store:Type="Tables" />
+          <EntitySet Name="report_files" EntityType="Self.report_files" store:Type="Tables" />
           <EntitySet Name="reports" EntityType="Self.reports" store:Type="Tables" />
           <EntitySet Name="requested_reports" EntityType="Self.requested_reports" store:Type="Tables" />
           <EntitySet Name="requirements" EntityType="Self.requirements" store:Type="Tables" />
@@ -443,7 +453,7 @@
           <Property Name="name" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
           <Property Name="oemID" Type="Int64" />
         </EntityType>
-        <EntityType Name="external_reports">
+        <EntityType Name="ExternalReport">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
@@ -462,7 +472,8 @@
           <Property Name="currency" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
           <Property Name="report_received" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
           <Property Name="fileID" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
-          <Property Name="projectID" Type="Int64" />
+          <Property Name="projectID" Type="Int64" Nullable="false" />
+          <NavigationProperty Name="Project" Relationship="LabDBModel.ProjectExternalReport" FromRole="ExternalReport" ToRole="Project" />
         </EntityType>
         <EntityType Name="file">
           <Key>
@@ -479,8 +490,10 @@
           </Key>
           <Property Name="ID" Type="Int64" Nullable="false" />
           <Property Name="deletion_flag" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
-          <Property Name="name" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Recipes" Relationship="LabDBModel.MasterRecipe" FromRole="Master" ToRole="Recipe" />
+          <Property Name="number" Type="Int64" />
+          <Property Name="date" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="batchID" Type="Int64" />
         </EntityType>
         <EntityType Name="Material">
           <Key>
@@ -561,6 +574,7 @@
           <NavigationProperty Name="ProjectLeader" Relationship="LabDBModel.PersonProject" FromRole="Project" ToRole="Person" />
           <NavigationProperty Name="Reports" Relationship="LabDBModel.ProjectReport" FromRole="Project" ToRole="Report" />
           <NavigationProperty Name="RequestedReports" Relationship="LabDBModel.ProjectRequestedReports" FromRole="Project" ToRole="RequestedReports" />
+          <NavigationProperty Name="ExternalReports" Relationship="LabDBModel.ProjectExternalReport" FromRole="Project" ToRole="ExternalReport" />
         </EntityType>
         <EntityType Name="Property">
           <Key>
@@ -601,13 +615,13 @@
           <Property Name="specification_versionID" Type="Int64" />
           <Property Name="start_date" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
           <Property Name="requestID" Type="Int64" Nullable="true" />
-          <Property Name="fileID" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
           <Property Name="label" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Batch" Relationship="LabDBModel.BatchReport" FromRole="Report" ToRole="Batch" />
           <NavigationProperty Name="Author" Relationship="LabDBModel.PersonReport" FromRole="Report" ToRole="Person" />
           <NavigationProperty Name="Project" Relationship="LabDBModel.ProjectReport" FromRole="Report" ToRole="Project" />
           <NavigationProperty Name="Tests" Relationship="LabDBModel.ReportTest" FromRole="Report" ToRole="Test" />
           <NavigationProperty Name="RequestedReport" Relationship="LabDBModel.RequestedReportsReport" FromRole="Report" ToRole="RequestedReports" />
+          <NavigationProperty Name="ReportFiles" Relationship="LabDBModel.ReportReportFiles" FromRole="Report" ToRole="ReportFiles" />
         </EntityType>
         <EntityType Name="RequestedReports">
           <Key>
@@ -706,10 +720,10 @@
           <Property Name="ID" Type="Int64" Nullable="false" />
           <Property Name="DeletionFlag" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
           <Property Name="Name" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
-          <Property Name="RequirementValue" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="SubTests" Relationship="LabDBModel.SubRequirementSubTest" FromRole="SubRequirement" ToRole="SubTest" />
           <NavigationProperty Name="Requirement" Relationship="LabDBModel.RequirementSubRequirement" FromRole="SubRequirement" ToRole="Requirement" />
           <Property Name="requirementID" Type="Int64" Nullable="false" />
+          <Property Name="RequiredValue" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="SubTest">
           <Key>
@@ -738,7 +752,6 @@
           <Property Name="date" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
           <Property Name="meets_requirements" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
           <Property Name="stat_skip" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
-          <Property Name="sub_testID" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Report" Relationship="LabDBModel.ReportTest" FromRole="Test" ToRole="Report" />
           <NavigationProperty Name="SubTests" Relationship="LabDBModel.TestSubTest" FromRole="Test" ToRole="SubTests" />
         </EntityType>
@@ -761,7 +774,7 @@
           <EntitySet Name="Constructions1" EntityType="LabDBModel.Construction" />
           <EntitySet Name="ControlPlans" EntityType="LabDBModel.ControlPlan" />
           <EntitySet Name="external_constructions" EntityType="Self.external_constructions" />
-          <EntitySet Name="external_reports" EntityType="Self.external_reports" />
+          <EntitySet Name="ExternalReports" EntityType="LabDBModel.ExternalReport" />
           <EntitySet Name="files" EntityType="Self.file" />
           <EntitySet Name="Masters1" EntityType="LabDBModel.Master" />
           <EntitySet Name="Materials1" EntityType="LabDBModel.Material" />
@@ -902,6 +915,15 @@
           <AssociationSet Name="RequestedReportsReport" Association="LabDBModel.RequestedReportsReport">
             <End Role="RequestedReports" EntitySet="RequestedReports" />
             <End Role="Report" EntitySet="Reports" />
+          </AssociationSet>
+          <EntitySet Name="ReportFiles" EntityType="LabDBModel.ReportFiles" />
+          <AssociationSet Name="ReportReportFiles" Association="LabDBModel.ReportReportFiles">
+            <End Role="Report" EntitySet="Reports" />
+            <End Role="ReportFiles" EntitySet="ReportFiles" />
+          </AssociationSet>
+          <AssociationSet Name="ProjectExternalReport" Association="LabDBModel.ProjectExternalReport">
+            <End Role="Project" EntitySet="Projects" />
+            <End Role="ExternalReport" EntitySet="ExternalReports" />
           </AssociationSet>
         </EntityContainer>
         <Association Name="AspectConstruction">
@@ -1264,6 +1286,41 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="ReportFiles">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" />
+          <Property Name="deletion_flag" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="description" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="reportID" Type="Int64" Nullable="false" />
+          <Property Name="path" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Report" Relationship="LabDBModel.ReportReportFiles" FromRole="ReportFiles" ToRole="Report" />
+        </EntityType>
+        <Association Name="ReportReportFiles">
+          <End Type="LabDBModel.Report" Role="Report" Multiplicity="1" />
+          <End Type="LabDBModel.ReportFiles" Role="ReportFiles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Report">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ReportFiles">
+              <PropertyRef Name="reportID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ProjectExternalReport">
+          <End Type="LabDBModel.Project" Role="Project" Multiplicity="1" />
+          <End Type="LabDBModel.ExternalReport" Role="ExternalReport" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Project">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ExternalReport">
+              <PropertyRef Name="projectID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1341,8 +1398,8 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="external_reports">
-            <EntityTypeMapping TypeName="LabDBModel.external_reports">
+          <EntitySetMapping Name="ExternalReports">
+            <EntityTypeMapping TypeName="LabDBModel.ExternalReport">
               <MappingFragment StoreEntitySet="external_reports">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="deletion_flag" ColumnName="deletion_flag" />
@@ -1376,9 +1433,11 @@
           <EntitySetMapping Name="Masters1">
             <EntityTypeMapping TypeName="LabDBModel.Master">
               <MappingFragment StoreEntitySet="masters">
+                <ScalarProperty Name="batchID" ColumnName="batchID" />
+                <ScalarProperty Name="date" ColumnName="date" />
+                <ScalarProperty Name="number" ColumnName="number" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="deletion_flag" ColumnName="deletion_flag" />
-                <ScalarProperty Name="name" ColumnName="name" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1489,7 +1548,6 @@
                 <ScalarProperty Name="specification_versionID" ColumnName="specification_versionID" />
                 <ScalarProperty Name="start_date" ColumnName="start_date" />
                 <ScalarProperty Name="requestID" ColumnName="requestID" />
-                <ScalarProperty Name="fileID" ColumnName="fileID" />
                 <ScalarProperty Name="label" ColumnName="label" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -1575,11 +1633,11 @@
           <EntitySetMapping Name="SubRequirements">
             <EntityTypeMapping TypeName="LabDBModel.SubRequirement">
               <MappingFragment StoreEntitySet="sub_requirements">
+                <ScalarProperty Name="RequiredValue" ColumnName="required_value" />
                 <ScalarProperty Name="requirementID" ColumnName="requirementID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="DeletionFlag" ColumnName="deletion_flag" />
                 <ScalarProperty Name="Name" ColumnName="name" />
-                <ScalarProperty Name="RequirementValue" ColumnName="requirement" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1608,7 +1666,6 @@
                 <ScalarProperty Name="date" ColumnName="date" />
                 <ScalarProperty Name="meets_requirements" ColumnName="meets_requirements" />
                 <ScalarProperty Name="stat_skip" ColumnName="stat_skip" />
-                <ScalarProperty Name="sub_testID" ColumnName="sub_testID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1621,6 +1678,17 @@
                 <ScalarProperty Name="role_list" ColumnName="role_list" />
                 <ScalarProperty Name="user_name" ColumnName="user_name" />
                 <ScalarProperty Name="personID" ColumnName="personID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ReportFiles">
+            <EntityTypeMapping TypeName="LabDBModel.ReportFiles">
+              <MappingFragment StoreEntitySet="report_files">
+                <ScalarProperty Name="path" ColumnName="path" />
+                <ScalarProperty Name="reportID" ColumnName="reportID" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="deletion_flag" ColumnName="deletion_flag" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

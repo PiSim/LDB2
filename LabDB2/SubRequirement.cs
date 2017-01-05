@@ -23,8 +23,8 @@ namespace LabDB2
         public long ID { get; set; }
         public string DeletionFlag { get; set; }
         public string Name { get; set; }
-        public string RequirementValue { get; set; }
         public long requirementID { get; set; }
+        public string RequiredValue { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SubTest> SubTests { get; set; }

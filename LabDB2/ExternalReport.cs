@@ -12,7 +12,7 @@ namespace LabDB2
     using System;
     using System.Collections.Generic;
     
-    public partial class external_reports
+    public partial class ExternalReport
     {
         public long ID { get; set; }
         public string deletion_flag { get; set; }
@@ -29,6 +29,8 @@ namespace LabDB2
         public string currency { get; set; }
         public string report_received { get; set; }
         public string fileID { get; set; }
-        public Nullable<long> projectID { get; set; }
+        public long projectID { get; set; }
+    
+        public virtual Project Project { get; set; }
     }
 }

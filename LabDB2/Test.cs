@@ -31,7 +31,6 @@ namespace LabDB2
         public string date { get; set; }
         public string meets_requirements { get; set; }
         public string stat_skip { get; set; }
-        public string sub_testID { get; set; }
     
         public virtual Report Report { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
