@@ -5,6 +5,7 @@ namespace LabDB2.ViewModels
     public class ShellViewModel : BindableBase
     {
         private string _title = "LabDB2";
+
         public string Title
         {
             get { return _title; }
