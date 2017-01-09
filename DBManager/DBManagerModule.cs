@@ -1,23 +1,25 @@
-﻿using Prism.Modularity;
+﻿using Microsoft.Practices.Unity;
+using Prism.Modularity;
 using Prism.Regions;
 using System;
+using System.Data.Entity;
 
 namespace DBManager
 {
     [Module(ModuleName = "DBManagerModule")]
     public class DBManagerModule : IModule
     {
-
-        IRegionManager _regionManager;
+        IUnityContainer _container;
          
-        public DBManagerModule(RegionManager regionManager)
+        public DBManagerModule(IUnityContainer container)
         {
-            _regionManager = regionManager;
+            _container = container;
         }
 
         public void Initialize()
         {
-            throw new NotImplementedException();
+            _container.RegisterType(typeof(Batch), "Batch");
+            _container.RegisterType<DbContext, LabDBEntities>(new ContainerControlledLifetimeManager());
         }
     }
 }

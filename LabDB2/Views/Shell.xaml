@@ -6,13 +6,18 @@
         Title="{Binding Title}" Height="700" Width="900">
     <Grid Background="LightGray">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition MaxWidth="150"/>
+            <ColumnDefinition MaxWidth="100"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <ListView ItemsSource="{Binding ViewList}"
-                  SelectedItem="{Binding SelectedView, Mode=TwoWay}"
-                  Grid.Column="0"/>
-        <ContentControl prism:RegionManager.RegionName="ContentRegion" 
-                        Grid.Column="1"/>
+        <Grid.RowDefinitions>
+            <RowDefinition MaxHeight="25"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <ContentControl prism:RegionManager.RegionName="ToolbarRegion"
+                        Grid.ColumnSpan="2"
+                        Grid.Row="0"/>
+        <ContentControl prism:RegionManager.RegionName="MainRegion"
+                        Grid.Column="1"
+                        Grid.Row="1"/>
     </Grid>
 </Window>

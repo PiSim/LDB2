@@ -768,15 +768,15 @@
           <NavigationProperty Name="Person" Relationship="LabDBModel.PersonUser" FromRole="User" ToRole="Person" />
         </EntityType>
         <EntityContainer Name="LabDBEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Aspects1" EntityType="LabDBModel.Aspect" />
-          <EntitySet Name="Batches1" EntityType="LabDBModel.Batch" />
+          <EntitySet Name="Aspects" EntityType="LabDBModel.Aspect" />
+          <EntitySet Name="Batches" EntityType="LabDBModel.Batch" />
           <EntitySet Name="Colours1" EntityType="LabDBModel.Colour" />
-          <EntitySet Name="Constructions1" EntityType="LabDBModel.Construction" />
+          <EntitySet Name="Constructions" EntityType="LabDBModel.Construction" />
           <EntitySet Name="ControlPlans" EntityType="LabDBModel.ControlPlan" />
           <EntitySet Name="external_constructions" EntityType="Self.external_constructions" />
           <EntitySet Name="ExternalReports" EntityType="LabDBModel.ExternalReport" />
           <EntitySet Name="files" EntityType="Self.file" />
-          <EntitySet Name="Masters1" EntityType="LabDBModel.Master" />
+          <EntitySet Name="Masters" EntityType="LabDBModel.Master" />
           <EntitySet Name="Materials1" EntityType="LabDBModel.Material" />
           <EntitySet Name="Methods1" EntityType="LabDBModel.Method" />
           <EntitySet Name="organizations" EntityType="Self.organization" />
@@ -797,15 +797,15 @@
           <EntitySet Name="Tests1" EntityType="LabDBModel.Test" />
           <EntitySet Name="Users1" EntityType="LabDBModel.User" />
           <AssociationSet Name="AspectConstruction" Association="LabDBModel.AspectConstruction">
-            <End Role="Aspect" EntitySet="Aspects1" />
-            <End Role="Construction" EntitySet="Constructions1" />
+            <End Role="Aspect" EntitySet="Aspects" />
+            <End Role="Construction" EntitySet="Constructions" />
           </AssociationSet>
           <AssociationSet Name="ProjectConstruction" Association="LabDBModel.ProjectConstruction">
             <End Role="Project" EntitySet="Projects" />
-            <End Role="Construction" EntitySet="Constructions1" />
+            <End Role="Construction" EntitySet="Constructions" />
           </AssociationSet>
           <AssociationSet Name="ConstructionMaterial" Association="LabDBModel.ConstructionMaterial">
-            <End Role="Construction" EntitySet="Constructions1" />
+            <End Role="Construction" EntitySet="Constructions" />
             <End Role="Material" EntitySet="Materials1" />
           </AssociationSet>
           <AssociationSet Name="RecipeMaterial" Association="LabDBModel.RecipeMaterial">
@@ -817,15 +817,15 @@
             <End Role="Recipe" EntitySet="Recipes" />
           </AssociationSet>
           <AssociationSet Name="MasterRecipe" Association="LabDBModel.MasterRecipe">
-            <End Role="Master" EntitySet="Masters1" />
+            <End Role="Master" EntitySet="Masters" />
             <End Role="Recipe" EntitySet="Recipes" />
           </AssociationSet>
           <AssociationSet Name="MaterialBatch" Association="LabDBModel.MaterialBatch">
             <End Role="Material" EntitySet="Materials1" />
-            <End Role="Batch" EntitySet="Batches1" />
+            <End Role="Batch" EntitySet="Batches" />
           </AssociationSet>
           <AssociationSet Name="BatchReport" Association="LabDBModel.BatchReport">
-            <End Role="Batch" EntitySet="Batches1" />
+            <End Role="Batch" EntitySet="Batches" />
             <End Role="Report" EntitySet="Reports" />
           </AssociationSet>
           <AssociationSet Name="PersonProject" Association="LabDBModel.PersonProject">
@@ -837,7 +837,7 @@
             <End Role="Report" EntitySet="Reports" />
           </AssociationSet>
           <AssociationSet Name="BatchSampleLogEntry" Association="LabDBModel.BatchSampleLogEntry">
-            <End Role="Batch" EntitySet="Batches1" />
+            <End Role="Batch" EntitySet="Batches" />
             <End Role="SampleLogEntry" EntitySet="SampleLogEntries" />
           </AssociationSet>
           <AssociationSet Name="ProjectReport" Association="LabDBModel.ProjectReport">
@@ -849,7 +849,7 @@
             <End Role="RequestedReports" EntitySet="RequestedReports" />
           </AssociationSet>
           <AssociationSet Name="BatchRequestedReports" Association="LabDBModel.BatchRequestedReports">
-            <End Role="Batch" EntitySet="Batches1" />
+            <End Role="Batch" EntitySet="Batches" />
             <End Role="RequestedReports" EntitySet="RequestedReports" />
           </AssociationSet>
           <AssociationSet Name="PersonUser" Association="LabDBModel.PersonUser">
@@ -1327,7 +1327,7 @@
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="LabDBModelStoreContainer" CdmEntityContainer="LabDBEntities">
-          <EntitySetMapping Name="Aspects1">
+          <EntitySetMapping Name="Aspects">
             <EntityTypeMapping TypeName="LabDBModel.Aspect">
               <MappingFragment StoreEntitySet="aspects">
                 <ScalarProperty Name="ID" ColumnName="ID" />
@@ -1337,7 +1337,7 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Batches1">
+          <EntitySetMapping Name="Batches">
             <EntityTypeMapping TypeName="LabDBModel.Batch">
               <MappingFragment StoreEntitySet="batches">
                 <ScalarProperty Name="ID" ColumnName="ID" />
@@ -1364,7 +1364,7 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Constructions1">
+          <EntitySetMapping Name="Constructions">
             <EntityTypeMapping TypeName="LabDBModel.Construction">
               <MappingFragment StoreEntitySet="constructions">
                 <ScalarProperty Name="ID" ColumnName="ID" />
@@ -1430,7 +1430,7 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Masters1">
+          <EntitySetMapping Name="Masters">
             <EntityTypeMapping TypeName="LabDBModel.Master">
               <MappingFragment StoreEntitySet="masters">
                 <ScalarProperty Name="batchID" ColumnName="batchID" />

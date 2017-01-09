@@ -113,6 +113,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ViewModels\ToolbarViewModel.cs" />
     <Page Include="Views\Shell.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -160,9 +161,25 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Batches\Batches.csproj">
+      <Project>{9cfe2583-7690-4d76-8b06-bf8d767f3b1f}</Project>
+      <Name>Batches</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Controls\Controls.csproj">
+      <Project>{315cd8ab-0509-4d45-aba5-b2cbd0f10f69}</Project>
+      <Name>Controls</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DBManager\DBManager.csproj">
       <Project>{ab8b448c-dd74-4d60-a041-3e5d03a32180}</Project>
       <Name>DBManager</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Infrastructure\Infrastructure.csproj">
+      <Project>{c432c3be-1051-45f1-95a1-9397bbf35923}</Project>
+      <Name>Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Navigation\Navigation.csproj">
+      <Project>{31368a5f-9770-4198-bc3d-4996917b4139}</Project>
+      <Name>Navigation</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

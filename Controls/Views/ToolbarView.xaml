@@ -1,0 +1,30 @@
+﻿<UserControl x:Class="Controls.Views.ToolbarView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Controls.Views"
+             xmlns:prism="http://prismlibrary.com/"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+
+        </Grid.ColumnDefinitions>
+        <ComboBox x:Name="MainNavigationComboBox"
+                  prism:RegionManager.RegionName="MainNavigationRegion"
+                  Grid.Column="0"
+                  SelectionChanged="OnSelectionChanged"/>
+        <Button Content="Indietro"
+                Grid.Column="2"/>
+        <Button Content="Avanti"
+                Grid.Column="3"/>
+        <Button Content="Salva"
+                Grid.Column="4"/>
+    </Grid>
+</UserControl>
