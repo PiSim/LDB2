@@ -16,18 +16,19 @@ namespace Batches.ViewModels
     class BatchQueryViewModel : BindableBase
     {
         private DelegateCommand _runQuery;
-        private DbContext _dbContext;
+        private LabDBEntities _dbContext;
         private IEventAggregator _eventAggregator;
         private ObservableCollection<Batch> _queryResults;
 
-        public BatchQueryViewModel(DbContext database, IEventAggregator eventAggregator) : base()
+        public BatchQueryViewModel(LabDBEntities database, IEventAggregator eventAggregator) : base()
         {
             _dbContext = database;
             _eventAggregator = eventAggregator;
             _runQuery = new DelegateCommand(
                 () =>
                 {
-
+                    _queryResults = new ObservableCollection<Batch>(_dbContext.Batches);
+                    OnPropertyChanged("QueryResults");
                 });
         }
 

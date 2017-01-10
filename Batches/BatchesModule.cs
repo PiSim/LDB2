@@ -13,16 +13,16 @@ namespace Batches
     [Module(ModuleName = "BatchesModule")]
     public class BatchesModule : IModule
     {
-        DbContext _dbContext;
+        LabDBEntities _entities;
         IEventAggregator _eventAggregator;
         IUnityContainer _container;
         IRegionManager _regionManager;
 
         public BatchesModule(RegionManager regionManager, IUnityContainer container, 
-            IEventAggregator eventAggregator, DbContext database)
+            IEventAggregator eventAggregator, LabDBEntities entities)
         {
             _container = container;
-            _dbContext = database;
+            _entities = entities;
             _eventAggregator = eventAggregator;
             _regionManager = regionManager;
         }

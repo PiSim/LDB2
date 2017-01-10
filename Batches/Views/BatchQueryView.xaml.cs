@@ -24,9 +24,9 @@ namespace Batches.Views
     /// </summary>
     public partial class BatchQueryView : UserControl
     {
-        public BatchQueryView(System.Data.Entity.DbContext database, IEventAggregator eventAggregator)
+        public BatchQueryView(LabDBEntities entities, IEventAggregator eventAggregator)
         {
-            DataContext = new ViewModels.BatchQueryViewModel(database, eventAggregator);
+            DataContext = new ViewModels.BatchQueryViewModel(entities, eventAggregator);
             InitializeComponent();
         }
     }
