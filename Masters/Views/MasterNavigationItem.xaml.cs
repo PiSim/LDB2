@@ -13,16 +13,21 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Reports.Views
+namespace Masters.Views
 {
     /// <summary>
-    /// Interaction logic for ReportsView.xaml
+    /// Interaction logic for MasterNavigationItem.xaml
     /// </summary>
-    public partial class ReportsView : UserControl
+    public partial class MasterNavigationItem : UserControl, Navigation.IModuleNavigationTag
     {
-        public ReportsView()
+        public MasterNavigationItem()
         {
             InitializeComponent();
+        }
+
+        public string ViewName
+        {
+            get { return MastersViewNames.MasterMainView; }
         }
     }
 }

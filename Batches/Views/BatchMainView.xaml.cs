@@ -20,11 +20,11 @@ namespace Batches.Views
     /// <summary>
     /// Interaction logic for BatchesView.xaml
     /// </summary>
-    public partial class BatchesView : UserControl
+    public partial class BatchMainView : UserControl
     {
         IEventAggregator _eventAggregator;
 
-        public BatchesView(IEventAggregator eventAggregator)
+        public BatchMainView(IEventAggregator eventAggregator)
         {
             _eventAggregator = eventAggregator;
             InitializeComponent();

@@ -8,5 +8,14 @@ namespace Tasks
 {
     class TasksViewNames
     {
+        public static string TaskMainView
+        {
+            get { return "TaskMainView"; }
+        }
+
+        public static string Pipeline
+        {
+            get { return "Pipeline"; }
+        }
     }
 }

@@ -18,7 +18,11 @@ namespace Standards
 
         public void Initialize()
         {
-            
+            _container.RegisterType<Object, Views.StandardMainView>
+                (StandardsViewNames.StandardMainView);
+
+            _regionManager.RegisterViewWithRegion
+                (Navigation.RegionNames.MainNavigationRegion, typeof(Views.StandardNavigationItem));
         }
     }
 }

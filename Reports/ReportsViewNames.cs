@@ -8,6 +8,7 @@ namespace Reports
 {
     public class ReportsViewNames
     {
-        public static String ReportsView { get { return "ReportsView"; } }
+        public static string ReportMainView { get { return "ReportsView"; } }
+        public static string ReportEditView { get { return "ReportEditView"; } }
     }
 }

@@ -109,11 +109,14 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="ReportsViewNames.cs" />
+    <Compile Include="Views\ReportEditView.xaml.cs">
+      <DependentUpon>ReportEditView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ReportMainView.xaml.cs">
+      <DependentUpon>ReportMainView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ReportsNavigationItem.xaml.cs">
       <DependentUpon>ReportsNavigationItem.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\ReportsView.xaml.cs">
-      <DependentUpon>ReportsView.xaml</DependentUpon>
     </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -149,11 +152,15 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Views\ReportsNavigationItem.xaml">
+    <Page Include="Views\ReportEditView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\ReportsView.xaml">
+    <Page Include="Views\ReportMainView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ReportsNavigationItem.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

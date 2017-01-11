@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Standards
 {
-    class StandardsViewNames
+    public class StandardsViewNames
     {
+        public static string StandardMainView { get { return "StandardMainView"; } }
     }
 }

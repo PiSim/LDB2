@@ -29,7 +29,8 @@ namespace Batches
 
         public void Initialize()
         {
-            _container.RegisterType<Object, Views.BatchesView>(BatchesViewNames.BatchesView);
+            _container.RegisterType<Object, Views.BatchInfoView>(BatchesViewNames.BatchInfoView);
+            _container.RegisterType<Object, Views.BatchMainView>(BatchesViewNames.BatchesView);
             _container.RegisterType<Object, Views.BatchQueryView>(BatchesViewNames.BatchQueryView);
             _regionManager.RegisterViewWithRegion("MainNavigationRegion", typeof(Views.BatchesNavigationItem));
         }

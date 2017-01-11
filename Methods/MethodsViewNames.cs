@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Methods
 {
-    class MethodsViewNames
+    public class MethodsViewNames
     {
+        public static string MethodMainView { get { return "MethodMainView"; } }
     }
 }

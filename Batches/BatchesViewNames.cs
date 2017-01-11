@@ -9,6 +9,7 @@ namespace Batches
     public class BatchesViewNames
     {
         public static string BatchesView { get { return "BatchesView"; } }
+        public static string BatchInfoView { get { return "BatchInfoView"; } }
         public static string BatchQueryView { get { return "BatchQueryView"; } }
     }
 }

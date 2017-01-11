@@ -18,7 +18,11 @@ namespace Projects
 
         public void Initialize()
         {
-            throw new NotImplementedException();
+            _container.RegisterType<Object, Views.ProjectMainView>
+                (ProjectsViewNames.ProjectMainView);
+
+            _regionManager.RegisterViewWithRegion
+                (Navigation.RegionNames.MainNavigationRegion , typeof(Views.ProjectsNavigationItem));
         }
     }
 }

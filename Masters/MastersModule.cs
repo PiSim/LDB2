@@ -18,7 +18,8 @@ namespace Masters
 
         public void Initialize()
         {
-            throw new NotImplementedException();
+            _regionManager.RegisterViewWithRegion
+                (Navigation.RegionNames.MainNavigationRegion, typeof(Views.MasterNavigationItem));
         }
     }
 }

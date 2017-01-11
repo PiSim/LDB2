@@ -8,5 +8,7 @@ namespace Masters
 {
     class MastersViewNames
     {
+        public static string MasterMainView { get { return "MasterMainView"; } }
+        public static string MasterQueryView { get { return "MasterQueryView"; } }
     }
 }

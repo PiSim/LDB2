@@ -18,7 +18,11 @@ namespace Admin
 
         public void Initialize()
         {
-            throw new NotImplementedException();
+            _container.RegisterType<Object, Views.AdminMainView>
+                (AdminViewNames.AdminMainView);
+
+            _regionManager.RegisterViewWithRegion
+                (Navigation.RegionNames.MainNavigationRegion, typeof(Views.AdminMainView));
         }
     }
 }

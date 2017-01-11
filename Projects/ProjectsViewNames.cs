@@ -8,5 +8,7 @@ namespace Projects
 {
     class ProjectsViewNames
     {
+        public static string ProjectInfoView { get { return "ProjectInfoView"; } }
+        public static string ProjectMainView { get { return "ProjectMainView"; } }
     }
 }

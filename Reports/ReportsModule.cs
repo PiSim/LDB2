@@ -22,7 +22,7 @@ namespace Reports
 
         public void Initialize()
         {
-            _container.RegisterType<Object, Views.ReportsView>(ReportsViewNames.ReportsView);
+            _container.RegisterType<Object, Views.ReportMainView>(ReportsViewNames.ReportMainView);
             _regionManager.RegisterViewWithRegion("MainNavigationRegion", typeof(Views.ReportsNavigationItem));
         }
     }

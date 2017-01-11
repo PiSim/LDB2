@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace Batches.Views
 {
     /// <summary>
-    /// Interaction logic for BatchEditView.xaml
+    /// Interaction logic for BatchInfoView.xaml
     /// </summary>
-    public partial class BatchEditView : UserControl
+    public partial class BatchInfoView : UserControl
     {
-        public BatchEditView()
+        public BatchInfoView()
         {
             InitializeComponent();
         }

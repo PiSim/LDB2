@@ -8,5 +8,7 @@ namespace Admin
 {
     class AdminViewNames
     {
+        public static string AdminMainView { get { return "AdminMainView"; } }
+        public static string UserView { get { return "UserView"; } }
     }
 }

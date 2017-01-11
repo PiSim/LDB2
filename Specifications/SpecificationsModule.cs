@@ -18,7 +18,7 @@ namespace Specifications
 
         public void Initialize()
         {
-            throw new NotImplementedException();
+            _regionManager.RegisterViewWithRegion("MainNavigationRegion", typeof(Views.SpecificationNavigationItem));
         }
     }
 }

@@ -1,0 +1,102 @@
+﻿<UserControl x:Class="Batches.Views.BatchInfoView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Batches.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Label Content="Batch N°:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,0,0"/>
+            <Label Content="{Binding Path=Number}" HorizontalAlignment="Left" VerticalAlignment="Top"
+               Margin="50,0,0,0"/>
+            <Grid DataContext="{Binding Path=CurrentInstance.Material}"
+                  Margin="0,25,0,0" 
+                  Height="50" 
+                  Width="200" 
+                  HorizontalAlignment="Left" 
+                  VerticalAlignment="Top">
+                <Label Content="Tipo" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,0,0"/>
+                <Label Content="{Binding Path=Construction.Type}" HorizontalAlignment="Left" 
+                        VerticalAlignment="Top" Margin="0,25,0,0" Width="35"/>
+                <Label Content="Linea" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="40,0,0,0"/>
+                <Label Content="{Binding Path=Construction.Line}" HorizontalAlignment="Left" 
+                        VerticalAlignment="Top" Margin="40,25,0,0" Width="35"/>
+                <Label Content="Aspetto" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="80,0,0,0"/>
+                <Label Content="{Binding Path=Construction.Aspect.Code}" HorizontalAlignment="Left" 
+                        VerticalAlignment="Top" Margin="90,25,0,0" Width="35"/>
+                <Label Content="Mescola" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="130,0,0,0"/>
+                <Label Content="{Binding Path=Recipe.Code}" HorizontalAlignment="Left" 
+                        VerticalAlignment="Top" Margin="140,25,0,0" Width="35"/>
+                <Label Content="Progetto" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,50,0,0"/>
+            </Grid>
+            <Button Content="Indietro" Command="{Binding Path=CloseCommand}" HorizontalAlignment="Right"
+                VerticalAlignment="Top" Margin="0,0,0,0"/>
+        </Grid>
+
+        <GroupBox Header="Rotoli" Grid.Row="1">
+            <ListView ItemsSource="{Binding Path=CurrentInstance.SamplesCollection}"
+                      Margin="0,0,100,0">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Action}"/>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Date}"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </GroupBox>
+        <GroupBox Header="Report" Grid.Row="2">
+            <Grid>
+                <Button Content="Apri" Command="{Binding Path=OpenReportCommand}"
+                            HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,0,0"/>
+                <Button Content="Crea Nuovo" 
+                            Command="{Binding Path=CreateReportCommand}"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Top"
+                            Margin="0,25,0,0"/>
+                <ListView ItemsSource="{Binding Path=CurrentInstance.ReportCollection}"
+                              SelectedItem="{Binding Path=SelectedReport, Mode=TwoWay}"
+                              Margin="0,0,100,0">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Categoria" DisplayMemberBinding="{Binding Path=Category}"/>
+                            <GridViewColumn Header="Numero" DisplayMemberBinding="{Binding Path=Number}"/>
+                            <GridViewColumn Header="Specifica" DisplayMemberBinding="{Binding Path=Specification.Standard.Name}"/>
+                            <GridViewColumn Header="Variante" DisplayMemberBinding="{Binding Path=Specification.Label}"/>
+                            <GridViewColumn Header="Descrizione" DisplayMemberBinding="{Binding Path=Specification.Description}"/>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </Grid>
+        </GroupBox>
+        <GroupBox Grid.Row="3" Header="Richieste">
+            <Grid>
+                <Button Content="Apri" Command="{Binding Path=OpenRequestCommand}"
+                        HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,0,0"/>
+                <Button Content="Crea Nuova"
+                        Command="{Binding Path=CreateRequestCommand}"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Top"
+                        Margin="0,25,0,0"/>
+                <ListView ItemsSource="{Binding Path=CurrentInstance.RequestCollection}"
+                              SelectedItem="{Binding Path=SelectedRequest, Mode=TwoWay}"
+                              Margin="0,0,100,0">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Specifica" DisplayMemberBinding="{Binding Path=Specification.Standard.Name}"/>
+                            <GridViewColumn Header="Versione" DisplayMemberBinding="{Binding Path=Specification.Label}"/>
+                            <GridViewColumn Header="Descrizione" DisplayMemberBinding="{Binding Path=Description}"/>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </Grid>
+        </GroupBox>
+    </Grid>
+</UserControl>

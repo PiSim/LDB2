@@ -25,13 +25,17 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <Button Content="Cerca"
-                    Command="{Binding ExecuteQueryCommand}"
+                    Command="{Binding RunQueryCommand}"
                     Grid.Column="0"
                     Grid.Row="0"/>
         </Grid>
         <ListView Grid.Row="1"
                   ItemsSource="{Binding QueryResults}">
-            
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Batch" DisplayMemberBinding="{Binding Number}"/>
+                </GridView>
+            </ListView.View>
         </ListView>    
     </Grid>
 </UserControl>

@@ -28,7 +28,7 @@ namespace Reports.Views
 
         public string ViewName
         {
-            get { return ReportsViewNames.ReportsView; }
+            get { return ReportsViewNames.ReportMainView; }
         }
     }
 }

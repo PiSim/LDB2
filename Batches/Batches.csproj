@@ -110,15 +110,16 @@
     </Compile>
     <Compile Include="ViewModels\BatchesNavigationItemViewModel.cs" />
     <Compile Include="BatchesViewNames.cs" />
+    <Compile Include="ViewModels\BatchInfoViewModel.cs" />
     <Compile Include="ViewModels\BatchQueryViewModel.cs" />
-    <Compile Include="Views\BatchEditView.xaml.cs">
-      <DependentUpon>BatchEditView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\BatchesNavigationItem.xaml.cs">
       <DependentUpon>BatchesNavigationItem.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\BatchesView.xaml.cs">
-      <DependentUpon>BatchesView.xaml</DependentUpon>
+    <Compile Include="Views\BatchInfoView.xaml.cs">
+      <DependentUpon>BatchInfoView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\BatchMainView.xaml.cs">
+      <DependentUpon>BatchMainView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\BatchQueryView.xaml.cs">
       <DependentUpon>BatchQueryView.xaml</DependentUpon>
@@ -154,15 +155,15 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Views\BatchEditView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\BatchesNavigationItem.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\BatchesView.xaml">
+    <Page Include="Views\BatchInfoView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\BatchMainView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
