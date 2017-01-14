@@ -28,12 +28,19 @@
                     Command="{Binding RunQueryCommand}"
                     Grid.Column="0"
                     Grid.Row="0"/>
+            <Button Content="Apri"
+                    Command="{Binding OpenResultCommand}"
+                    CommandParameter="{Binding SelectedResult}"
+                    Grid.Column="1"
+                    Grid.Row="0"/>
         </Grid>
-        <ListView Grid.Row="1"
-                  ItemsSource="{Binding QueryResults}">
+        <ListView x:Name="Results"
+                  Grid.Row="1"
+                  ItemsSource="{Binding QueryResults}"
+                  SelectedItem="{Binding SelectedResult}">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Batch" DisplayMemberBinding="{Binding Number}"/>
+                    <GridViewColumn Header="Batch" DisplayMemberBinding="{Binding number}"/>
                 </GridView>
             </ListView.View>
         </ListView>    

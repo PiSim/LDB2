@@ -1,5 +1,6 @@
 ﻿using DBManager;
 using Prism.Events;
+using Prism.Regions;
 using Prism.Unity;
 using System;
 using System.Collections.Generic;
@@ -24,9 +25,9 @@ namespace Batches.Views
     /// </summary>
     public partial class BatchQueryView : UserControl
     {
-        public BatchQueryView(LabDBEntities entities, IEventAggregator eventAggregator)
+        public BatchQueryView(LabDBEntities entities, IRegionManager regionManager)
         {
-            DataContext = new ViewModels.BatchQueryViewModel(entities, eventAggregator);
+            DataContext = new ViewModels.BatchQueryViewModel(entities, regionManager);
             InitializeComponent();
         }
     }

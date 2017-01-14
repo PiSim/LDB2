@@ -121,6 +121,7 @@
     <Compile Include="ControlPlan.cs">
       <DependentUpon>LabDB.tt</DependentUpon>
     </Compile>
+    <Compile Include="DBEntities.cs" />
     <Compile Include="DBManagerModule.cs" />
     <Compile Include="ExternalReport.cs">
       <DependentUpon>LabDB.tt</DependentUpon>

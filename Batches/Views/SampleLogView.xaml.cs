@@ -1,5 +1,4 @@
-﻿using DBManager;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,13 +16,13 @@ using System.Windows.Shapes;
 namespace Batches.Views
 {
     /// <summary>
-    /// Interaction logic for BatchInfoView.xaml
+    /// Interaction logic for SampleLogView.xaml
     /// </summary>
-    public partial class BatchInfoView : UserControl
+    public partial class SampleLogView : UserControl
     {
-        public BatchInfoView(Batch batchInstance)
+        public SampleLogView(DBManager.DBEntities entities)
         {
-            DataContext = new ViewModels.BatchInfoViewModel(batchInstance);
+            DataContext = new ViewModels.SampleLogViewModel(entities);
             InitializeComponent();
         }
     }

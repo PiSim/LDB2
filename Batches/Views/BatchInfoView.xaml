@@ -17,7 +17,7 @@
             <Label Content="Batch N°:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,0,0"/>
             <Label Content="{Binding Path=Number}" HorizontalAlignment="Left" VerticalAlignment="Top"
                Margin="50,0,0,0"/>
-            <Grid DataContext="{Binding Path=CurrentInstance.Material}"
+            <Grid DataContext="{Binding Path=Material}"
                   Margin="0,25,0,0" 
                   Height="50" 
                   Width="200" 
@@ -42,7 +42,7 @@
         </Grid>
 
         <GroupBox Header="Rotoli" Grid.Row="1">
-            <ListView ItemsSource="{Binding Path=CurrentInstance.SamplesCollection}"
+            <ListView ItemsSource="{Binding Path=Samples}"
                       Margin="0,0,100,0">
                 <ListView.View>
                     <GridView>
@@ -61,9 +61,9 @@
                             HorizontalAlignment="Right"
                             VerticalAlignment="Top"
                             Margin="0,25,0,0"/>
-                <ListView ItemsSource="{Binding Path=CurrentInstance.ReportCollection}"
-                              SelectedItem="{Binding Path=SelectedReport, Mode=TwoWay}"
-                              Margin="0,0,100,0">
+                <ListView ItemsSource="{Binding Path=Reports}"
+                          SelectedItem="{Binding Path=SelectedReport, Mode=TwoWay}"
+                          Margin="0,0,100,0">
                     <ListView.View>
                         <GridView>
                             <GridViewColumn Header="Categoria" DisplayMemberBinding="{Binding Path=Category}"/>
@@ -85,8 +85,8 @@
                         HorizontalAlignment="Right"
                         VerticalAlignment="Top"
                         Margin="0,25,0,0"/>
-                <ListView ItemsSource="{Binding Path=CurrentInstance.RequestCollection}"
-                              SelectedItem="{Binding Path=SelectedRequest, Mode=TwoWay}"
+                <ListView ItemsSource="{Binding Path=Tasks}"
+                              SelectedItem="{Binding Path=SelectedTask, Mode=TwoWay}"
                               Margin="0,0,100,0">
                     <ListView.View>
                         <GridView>

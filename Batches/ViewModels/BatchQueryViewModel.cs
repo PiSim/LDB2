@@ -3,6 +3,7 @@ using Microsoft.Practices.Unity;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
+using Prism.Regions;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -15,21 +16,40 @@ namespace Batches.ViewModels
 {
     class BatchQueryViewModel : BindableBase
     {
+        private Batch _selectedBatch;
         private DelegateCommand _runQuery;
+        private DelegateCommand<Batch> _openResult;
         private LabDBEntities _dbContext;
-        private IEventAggregator _eventAggregator;
+        private IRegionManager _regionManager;
         private ObservableCollection<Batch> _queryResults;
 
-        public BatchQueryViewModel(LabDBEntities database, IEventAggregator eventAggregator) : base()
+        public BatchQueryViewModel(LabDBEntities database, IRegionManager regions) : base()
         {
             _dbContext = database;
-            _eventAggregator = eventAggregator;
+            _regionManager = regions;
+
+            _openResult = new DelegateCommand<Batch>(
+                batch => 
+                {
+                    NavigationParameters par = new NavigationParameters();
+                    par.Add("batchInstance", batch);
+                    _regionManager.RequestNavigate(
+                        Navigation.RegionNames.MainRegion,
+                        new Uri(ViewNames.BatchInfoView, UriKind.Relative),
+                        par);
+                });
+
             _runQuery = new DelegateCommand(
                 () =>
                 {
                     _queryResults = new ObservableCollection<Batch>(_dbContext.Batches);
                     OnPropertyChanged("QueryResults");
                 });
+        }
+
+        public DelegateCommand<Batch> OpenResultCommand
+        {
+            get { return _openResult; }
         }
 
         public ObservableCollection<Batch> QueryResults
@@ -40,6 +60,12 @@ namespace Batches.ViewModels
         public DelegateCommand RunQueryCommand
         {
             get { return _runQuery; }
+        }
+
+        public Batch SelectedResult
+        {
+            get { return _selectedBatch; }
+            set { _selectedBatch = value; }
         }
     }
 }

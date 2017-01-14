@@ -19,7 +19,8 @@ namespace DBManager
         public void Initialize()
         {
             _container.RegisterType(typeof(Batch), "Batch");
-            _container.RegisterType<LabDBEntities>(new ContainerControlledLifetimeManager());
+            _container.RegisterType<DBEntities>(new ContainerControlledLifetimeManager());
+
         }
     }
 }

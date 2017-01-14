@@ -32,7 +32,7 @@ namespace Batches.Views
 
         private void OpenQueryView(object sender, RoutedEventArgs e)
         {
-            _eventAggregator.GetEvent<NavigationRequested>().Publish(BatchesViewNames.BatchQueryView);
+            _eventAggregator.GetEvent<NavigationRequested>().Publish(ViewNames.BatchQueryView);
         }
     }
 }

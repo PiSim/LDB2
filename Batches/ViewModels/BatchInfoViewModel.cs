@@ -2,6 +2,7 @@
 using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,9 +18,24 @@ namespace Batches.ViewModels
             _instance = instance;
         }
 
+        public DBManager.Material Material
+        {
+            get { return _instance.Material; }
+        }
+
         public string Number
         {
             get { return _instance.number; }
+        }
+
+        public ObservableCollection<SampleLogEntry> Samples
+        {
+            get { return new ObservableCollection<SampleLogEntry>(_instance.SampleLogEntries); }
+        }
+
+        public ObservableCollection<DBManager.Report> Reports
+        {
+            get { return new ObservableCollection<Report>(_instance.Reports); }
         }
     }
 }

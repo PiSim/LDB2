@@ -32,7 +32,7 @@ namespace Batches.Views
 
         public string ViewName
         {
-            get { return BatchesViewNames.BatchesView; }
+            get { return ViewNames.BatchesView; }
         }
     }
 }
