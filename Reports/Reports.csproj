@@ -109,6 +109,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="ReportsViewNames.cs" />
+    <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="Views\ReportEditView.xaml.cs">
       <DependentUpon>ReportEditView.xaml</DependentUpon>
     </Compile>
@@ -130,9 +131,7 @@
     </None>
     <AppDesigner Include="Properties\" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ViewModels\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\Controls\Controls.csproj">
       <Project>{315cd8ab-0509-4d45-aba5-b2cbd0f10f69}</Project>

@@ -17,8 +17,7 @@ namespace Batches.ViewModels
     class BatchQueryViewModel : BindableBase
     {
         private Batch _selectedBatch;
-        private DelegateCommand _runQuery;
-        private DelegateCommand<Batch> _openResult;
+        private DelegateCommand _openResult, _runQuery;
         private LabDBEntities _dbContext;
         private IRegionManager _regionManager;
         private ObservableCollection<Batch> _queryResults;
@@ -28,16 +27,17 @@ namespace Batches.ViewModels
             _dbContext = database;
             _regionManager = regions;
 
-            _openResult = new DelegateCommand<Batch>(
-                batch => 
+            _openResult = new DelegateCommand(
+                () => 
                 {
                     NavigationParameters par = new NavigationParameters();
-                    par.Add("batchInstance", batch);
+                    par.Add("batch", SelectedResult);
                     _regionManager.RequestNavigate(
                         Navigation.RegionNames.MainRegion,
                         new Uri(ViewNames.BatchInfoView, UriKind.Relative),
                         par);
-                });
+                },
+                () => SelectedResult != null);
 
             _runQuery = new DelegateCommand(
                 () =>
@@ -47,7 +47,7 @@ namespace Batches.ViewModels
                 });
         }
 
-        public DelegateCommand<Batch> OpenResultCommand
+        public DelegateCommand OpenResultCommand
         {
             get { return _openResult; }
         }
@@ -65,7 +65,11 @@ namespace Batches.ViewModels
         public Batch SelectedResult
         {
             get { return _selectedBatch; }
-            set { _selectedBatch = value; }
+            set
+            {
+                _selectedBatch = value;
+                OpenResultCommand.RaiseCanExecuteChanged();
+            }
         }
     }
 }

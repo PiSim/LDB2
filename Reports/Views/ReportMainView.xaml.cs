@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DBManager;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,8 +21,9 @@ namespace Reports.Views
     /// </summary>
     public partial class ReportMainView : UserControl
     {
-        public ReportMainView()
+        public ReportMainView(DBEntities entities)
         {
+            DataContext = new ViewModels.MainViewModel(entities);
             InitializeComponent();
         }
     }

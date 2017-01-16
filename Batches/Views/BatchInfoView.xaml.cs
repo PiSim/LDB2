@@ -1,4 +1,5 @@
 ﻿using DBManager;
+using Prism.Regions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,12 +20,28 @@ namespace Batches.Views
     /// <summary>
     /// Interaction logic for BatchInfoView.xaml
     /// </summary>
-    public partial class BatchInfoView : UserControl
+    public partial class BatchInfoView : UserControl, INavigationAware
     {
-        public BatchInfoView(Batch batchInstance)
+        public BatchInfoView()
         {
-            DataContext = new ViewModels.BatchInfoViewModel(batchInstance);
             InitializeComponent();
+        }
+
+        public bool IsNavigationTarget(NavigationContext ncontext)
+        {
+            return true;
+        }
+
+        public void OnNavigatedFrom(NavigationContext ncontext)
+        {
+
+        }
+
+        public void OnNavigatedTo(NavigationContext ncontext)
+        {
+            ViewModels.BatchInfoViewModel viewModel =
+                new ViewModels.BatchInfoViewModel(ncontext.Parameters["batch"] as Batch);
+            DataContext = viewModel;
         }
     }
 }

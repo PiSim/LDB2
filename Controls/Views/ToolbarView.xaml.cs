@@ -40,7 +40,7 @@ namespace Controls.Views
         private void OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             _eventAggregator.GetEvent<NavigationRequested>()
-                .Publish("BatchesView");
+                .Publish((MainNavigationComboBox.SelectedItem as IModuleNavigationTag).ViewName);
         }
     }
 }

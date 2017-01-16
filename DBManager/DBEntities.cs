@@ -6,8 +6,5 @@ using System.Threading.Tasks;
 
 namespace DBManager
 {
-    public class DBEntities : LabDBEntities
-    {
 
-    }
 }

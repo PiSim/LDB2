@@ -7,6 +7,19 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-            
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <ListView ItemsSource="{Binding RecentList}"
+                  SelectedItem="{Binding SelectedRecent, Mode=TwoWay}"
+                  Grid.Column="1">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Numero"
+                                    DisplayMemberBinding="{Binding Number}"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
     </Grid>
 </UserControl>
