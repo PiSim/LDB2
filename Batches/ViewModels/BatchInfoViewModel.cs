@@ -28,9 +28,9 @@ namespace Batches.ViewModels
             get { return _instance.number; }
         }
 
-        public ObservableCollection<SampleLogEntry> Samples
+        public ObservableCollection<Sample> Samples
         {
-            get { return new ObservableCollection<SampleLogEntry>(_instance.SampleLogEntries); }
+            get { return new ObservableCollection<Sample>(_instance.Samples); }
         }
 
         public ObservableCollection<DBManager.Report> Reports

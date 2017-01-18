@@ -4,14 +4,14 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="labdbModel.Store" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.7" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="labdbModel.Store" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.7" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="aspects">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="code" Type="char" MaxLength="3" Nullable="false" />
-          <Property Name="name" Type="varchar" MaxLength="45" />
+          <Property Name="name" Type="varchar" MaxLength="45" Nullable="false" />
         </EntityType>
         <EntityType Name="batch_files">
           <Key>
@@ -20,7 +20,7 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="batchID" Type="int" Nullable="false" />
           <Property Name="path" Type="longtext" Nullable="false" />
-          <Property Name="description" Type="varchar" MaxLength="45" />
+          <Property Name="description" Type="varchar" MaxLength="45" Nullable="false" />
         </EntityType>
         <EntityType Name="batches">
           <Key>
@@ -29,7 +29,7 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="number" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="materialID" Type="int" />
-          <Property Name="notes" Type="varchar" MaxLength="45" />
+          <Property Name="notes" Type="varchar" MaxLength="45" Nullable="false" />
         </EntityType>
         <EntityType Name="colours">
           <Key>
@@ -37,7 +37,7 @@
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="name" Type="varchar" MaxLength="45" Nullable="false" />
-          <Property Name="code" Type="varchar" MaxLength="45" />
+          <Property Name="code" Type="varchar" MaxLength="45" Nullable="false" />
         </EntityType>
         <EntityType Name="constructions">
           <Key>
@@ -64,7 +64,7 @@
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="path" Type="varchar" MaxLength="100" Nullable="false" />
-          <Property Name="description" Type="varchar" MaxLength="45" />
+          <Property Name="description" Type="varchar" MaxLength="45" Nullable="false" />
           <Property Name="external_reportID" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="external_reports">
@@ -72,17 +72,17 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="date" Type="text" />
-          <Property Name="description" Type="text" />
-          <Property Name="external_number" Type="text" />
+          <Property Name="date" Type="text" Nullable="false" />
+          <Property Name="description" Type="text" Nullable="false" />
+          <Property Name="external_number" Type="text" Nullable="false" />
           <Property Name="internal_number" Type="int" Nullable="false" />
           <Property Name="external_labID" Type="int" Nullable="false" />
-          <Property Name="material_sent" Type="int" />
-          <Property Name="request_done" Type="int" />
-          <Property Name="purchase_order" Type="text" />
-          <Property Name="price" Type="double" />
-          <Property Name="samples" Type="text" />
-          <Property Name="currency" Type="text" />
+          <Property Name="material_sent" Type="int" Nullable="false" />
+          <Property Name="request_done" Type="int" Nullable="false" />
+          <Property Name="purchase_order" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="price" Type="double" Nullable="false" />
+          <Property Name="samples" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="currency" Type="char" MaxLength="3" Nullable="false" />
           <Property Name="report_received" Type="int" />
           <Property Name="fileID" Type="text" />
           <Property Name="projectID" Type="int" />
@@ -118,13 +118,13 @@
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="standardID" Type="int" Nullable="false" />
-          <Property Name="measurements" Type="text" />
+          <Property Name="measurements" Type="text" Nullable="false" />
           <Property Name="propertyID" Type="int" Nullable="false" />
-          <Property Name="label" Type="text" />
-          <Property Name="description" Type="text" />
-          <Property Name="um" Type="text" />
-          <Property Name="cost_units" Type="int" />
-          <Property Name="old_flag" Type="bit" />
+          <Property Name="label" Type="text" Nullable="false" />
+          <Property Name="description" Type="text" Nullable="false" />
+          <Property Name="um" Type="text" Nullable="false" />
+          <Property Name="cost_units" Type="int" Nullable="false" />
+          <Property Name="old_flag" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="oems">
           <Key>
@@ -139,7 +139,7 @@
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="name" Type="varchar" MaxLength="45" Nullable="false" />
-          <Property Name="category" Type="varchar" MaxLength="15" />
+          <Property Name="category" Type="varchar" MaxLength="15" Nullable="false" />
         </EntityType>
         <EntityType Name="people">
           <Key>
@@ -155,11 +155,11 @@
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="name" Type="varchar" MaxLength="45" Nullable="false" />
-          <Property Name="description" Type="varchar" MaxLength="45" />
+          <Property Name="description" Type="varchar" MaxLength="45" Nullable="false" />
           <Property Name="project_leaderID" Type="int" />
           <Property Name="oemID" Type="int" />
-          <Property Name="total_internal_cost" Type="int" />
-          <Property Name="total_external_cost" Type="double" />
+          <Property Name="total_internal_cost" Type="int" Nullable="false" />
+          <Property Name="total_external_cost" Type="double" Nullable="false" />
         </EntityType>
         <EntityType Name="properties">
           <Key>
@@ -182,7 +182,7 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="description" Type="text" />
+          <Property Name="description" Type="text" Nullable="false" />
           <Property Name="reportID" Type="int" Nullable="false" />
           <Property Name="path" Type="text" Nullable="false" />
         </EntityType>
@@ -191,10 +191,10 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="authorID" Type="int" />
+          <Property Name="authorID" Type="int" Nullable="false" />
           <Property Name="batchID" Type="int" Nullable="false" />
-          <Property Name="category" Type="text" />
-          <Property Name="description" Type="text" />
+          <Property Name="category" Type="text" Nullable="false" />
+          <Property Name="description" Type="text" Nullable="false" />
           <Property Name="end_date" Type="date" />
           <Property Name="number" Type="int" Nullable="false" />
           <Property Name="projectID" Type="int" />
@@ -209,10 +209,10 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="description" Type="text" />
+          <Property Name="description" Type="text" Nullable="false" />
           <Property Name="methodID" Type="int" Nullable="false" />
-          <Property Name="name" Type="text" />
-          <Property Name="position" Type="int" />
+          <Property Name="name" Type="text" Nullable="false" />
+          <Property Name="position" Type="int" Nullable="false" />
           <Property Name="specificationID" Type="int" />
           <Property Name="specification_versionID" Type="int" />
         </EntityType>
@@ -232,7 +232,7 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="main_flag" Type="int" Nullable="false" />
           <Property Name="name" Type="text" Nullable="false" />
-          <Property Name="overrideID" Type="text" />
+          <Property Name="overrideID" Type="text" Nullable="false" />
           <Property Name="specificationID" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="specifications">
@@ -241,8 +241,8 @@
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="standardID" Type="int" Nullable="false" />
-          <Property Name="label" Type="text" />
-          <Property Name="description" Type="text" />
+          <Property Name="label" Type="text" Nullable="false" />
+          <Property Name="description" Type="text" Nullable="false" />
           <Property Name="old_flag" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="standard_files">
@@ -252,7 +252,7 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="standardID" Type="int" Nullable="false" />
           <Property Name="path" Type="varchar" MaxLength="100" Nullable="false" />
-          <Property Name="description" Type="varchar" MaxLength="45" />
+          <Property Name="description" Type="varchar" MaxLength="45" Nullable="false" />
         </EntityType>
         <EntityType Name="standards">
           <Key>
@@ -272,8 +272,8 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="name" Type="text" Nullable="false" />
-          <Property Name="required_value" Type="text" />
+          <Property Name="name" Type="varchar" MaxLength="45" Nullable="false" />
+          <Property Name="required_value" Type="varchar" MaxLength="45" Nullable="false" />
           <Property Name="requirementID" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="sub_tests">
@@ -282,7 +282,7 @@
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="sub_requirementID" Type="int" Nullable="false" />
-          <Property Name="result" Type="text" />
+          <Property Name="result" Type="varchar" MaxLength="45" Nullable="false" />
           <Property Name="testID" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="tasks">
@@ -292,10 +292,10 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="requesterID" Type="int" Nullable="false" />
           <Property Name="projectID" Type="int" Nullable="false" />
-          <Property Name="specificationID" Type="int" Nullable="false" />
+          <Property Name="specification_versionID" Type="int" Nullable="false" />
           <Property Name="batchID" Type="int" Nullable="false" />
-          <Property Name="reportID" Type="int" Nullable="false" />
           <Property Name="notes" Type="text" />
+          <Property Name="reportID" Type="int" />
           <Property Name="progress" Type="int" />
           <Property Name="priority_modifier" Type="int" />
           <Property Name="pipeline_order" Type="text" />
@@ -338,8 +338,22 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="author_to_report">
+          <End Role="people" Type="Self.people" Multiplicity="1" />
+          <End Role="reports" Type="Self.reports" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="people">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="reports">
+              <PropertyRef Name="authorID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="batch">
-          <End Role="batches" Type="Self.batches" Multiplicity="1" />
+          <End Role="batches" Type="Self.batches" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="batch_files" Type="Self.batch_files" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="batches">
@@ -347,6 +361,92 @@
             </Principal>
             <Dependent Role="batch_files">
               <PropertyRef Name="batchID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="batch_by_material">
+          <End Role="materials" Type="Self.materials" Multiplicity="0..1" />
+          <End Role="batches" Type="Self.batches" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="materials">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="batches">
+              <PropertyRef Name="materialID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="batch_to_master">
+          <End Role="batches" Type="Self.batches" Multiplicity="0..1" />
+          <End Role="masters" Type="Self.masters" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="batches">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="masters">
+              <PropertyRef Name="batchID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="batch_to_report">
+          <End Role="batches" Type="Self.batches" Multiplicity="1" />
+          <End Role="reports" Type="Self.reports" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="batches">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="reports">
+              <PropertyRef Name="batchID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="batch_to_sample">
+          <End Role="batches" Type="Self.batches" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="samples" Type="Self.samples" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="batches">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="samples">
+              <PropertyRef Name="batchID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="batch_to_test">
+          <End Role="batches" Type="Self.batches" Multiplicity="1" />
+          <End Role="tests" Type="Self.tests" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="batches">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="tests">
+              <PropertyRef Name="batchID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="color_to_recipe">
+          <End Role="colours" Type="Self.colours" Multiplicity="0..1" />
+          <End Role="recipes" Type="Self.recipes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="colours">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="recipes">
+              <PropertyRef Name="colourID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="construction_to_material">
+          <End Role="constructions" Type="Self.constructions" Multiplicity="1" />
+          <End Role="materials" Type="Self.materials" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="constructions">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="materials">
+              <PropertyRef Name="constructionID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -362,8 +462,22 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="external_lab">
+          <End Role="organizations" Type="Self.organizations" Multiplicity="1" />
+          <End Role="external_reports" Type="Self.external_reports" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="organizations">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="external_reports">
+              <PropertyRef Name="external_labID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="external_report">
-          <End Role="external_reports" Type="Self.external_reports" Multiplicity="1" />
+          <End Role="external_reports" Type="Self.external_reports" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="external_report_files" Type="Self.external_report_files" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="external_reports">
@@ -386,15 +500,39 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="material">
-          <End Role="materials" Type="Self.materials" Multiplicity="0..1" />
-          <End Role="batches" Type="Self.batches" Multiplicity="*" />
+        <Association Name="master_to_recipe">
+          <End Role="masters" Type="Self.masters" Multiplicity="0..1" />
+          <End Role="recipes" Type="Self.recipes" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="materials">
+            <Principal Role="masters">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="batches">
-              <PropertyRef Name="materialID" />
+            <Dependent Role="recipes">
+              <PropertyRef Name="masterID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="method_to_requirement">
+          <End Role="methods" Type="Self.methods" Multiplicity="1" />
+          <End Role="requirements" Type="Self.requirements" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="methods">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="requirements">
+              <PropertyRef Name="methodID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="nextissue_to_standard">
+          <End Role="standards" Type="Self.standards" Multiplicity="0..1" />
+          <End Role="standards1" Type="Self.standards" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="standards">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="standards1">
+              <PropertyRef Name="next_issueID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -411,7 +549,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="oemID">
-          <End Role="organizations" Type="Self.organizations" Multiplicity="1" />
+          <End Role="organizations" Type="Self.organizations" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="external_constructions" Type="Self.external_constructions" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="organizations">
@@ -419,6 +559,42 @@
             </Principal>
             <Dependent Role="external_constructions">
               <PropertyRef Name="oemID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="operatorID">
+          <End Role="people" Type="Self.people" Multiplicity="1" />
+          <End Role="tests" Type="Self.tests" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="people">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="tests">
+              <PropertyRef Name="operatorID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="organization_to_standard">
+          <End Role="organizations" Type="Self.organizations" Multiplicity="1" />
+          <End Role="standards" Type="Self.standards" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="organizations">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="standards">
+              <PropertyRef Name="organizationID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="previssue_to_standard">
+          <End Role="standards" Type="Self.standards" Multiplicity="0..1" />
+          <End Role="standards1" Type="Self.standards" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="standards">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="standards1">
+              <PropertyRef Name="previous_issueID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -431,6 +607,234 @@
             </Principal>
             <Dependent Role="constructions">
               <PropertyRef Name="projectID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="project_to_report">
+          <End Role="projects" Type="Self.projects" Multiplicity="0..1" />
+          <End Role="external_reports" Type="Self.external_reports" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="projects">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="external_reports">
+              <PropertyRef Name="projectID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="project_to_task">
+          <End Role="projects" Type="Self.projects" Multiplicity="1" />
+          <End Role="tasks" Type="Self.tasks" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="projects">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="tasks">
+              <PropertyRef Name="projectID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="property_to_method">
+          <End Role="properties" Type="Self.properties" Multiplicity="1" />
+          <End Role="methods" Type="Self.methods" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="properties">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="methods">
+              <PropertyRef Name="propertyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="recipe_to_material">
+          <End Role="recipes" Type="Self.recipes" Multiplicity="1" />
+          <End Role="materials" Type="Self.materials" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="recipes">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="materials">
+              <PropertyRef Name="recipeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="report_to_reportfile">
+          <End Role="reports" Type="Self.reports" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="report_files" Type="Self.report_files" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="reports">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="report_files">
+              <PropertyRef Name="reportID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="report_to_task">
+          <End Role="reports" Type="Self.reports" Multiplicity="0..1" />
+          <End Role="tasks" Type="Self.tasks" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="reports">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="tasks">
+              <PropertyRef Name="reportID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="report_to_test">
+          <End Role="reports" Type="Self.reports" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="tests" Type="Self.tests" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="reports">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="tests">
+              <PropertyRef Name="reportID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="requester_to_task">
+          <End Role="people" Type="Self.people" Multiplicity="1" />
+          <End Role="tasks" Type="Self.tasks" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="people">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="tasks">
+              <PropertyRef Name="requesterID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="requirement_to_subreq">
+          <End Role="requirements" Type="Self.requirements" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="sub_requirements" Type="Self.sub_requirements" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="requirements">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="sub_requirements">
+              <PropertyRef Name="requirementID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="specification_to_report">
+          <End Role="specifications" Type="Self.specifications" Multiplicity="0..1" />
+          <End Role="reports" Type="Self.reports" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="specifications">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="reports">
+              <PropertyRef Name="specificationID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="specification_to_requirement">
+          <End Role="specifications" Type="Self.specifications" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="requirements" Type="Self.requirements" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="specifications">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="requirements">
+              <PropertyRef Name="specificationID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="specification_to_specversion">
+          <End Role="specifications" Type="Self.specifications" Multiplicity="1" />
+          <End Role="specification_versions" Type="Self.specification_versions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="specifications">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="specification_versions">
+              <PropertyRef Name="specificationID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="specversion_to_report">
+          <End Role="specification_versions" Type="Self.specification_versions" Multiplicity="0..1" />
+          <End Role="reports" Type="Self.reports" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="specification_versions">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="reports">
+              <PropertyRef Name="specification_versionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="specversion_to_requirement">
+          <End Role="specification_versions" Type="Self.specification_versions" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="requirements" Type="Self.requirements" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="specification_versions">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="requirements">
+              <PropertyRef Name="specification_versionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="specversion_to_task">
+          <End Role="specification_versions" Type="Self.specification_versions" Multiplicity="1" />
+          <End Role="tasks" Type="Self.tasks" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="specification_versions">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="tasks">
+              <PropertyRef Name="specification_versionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="standard_to_method">
+          <End Role="standards" Type="Self.standards" Multiplicity="1" />
+          <End Role="methods" Type="Self.methods" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="standards">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="methods">
+              <PropertyRef Name="standardID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="standard_to_specification">
+          <End Role="standards" Type="Self.standards" Multiplicity="1" />
+          <End Role="specifications" Type="Self.specifications" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="standards">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="specifications">
+              <PropertyRef Name="standardID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="standard_to_standardfile">
+          <End Role="standards" Type="Self.standards" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="standard_files" Type="Self.standard_files" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="standards">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="standard_files">
+              <PropertyRef Name="standardID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -447,7 +851,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="test">
-          <End Role="tests" Type="Self.tests" Multiplicity="1" />
+          <End Role="tests" Type="Self.tests" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="sub_tests" Type="Self.sub_tests" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="tests">
@@ -494,13 +900,49 @@
             <End Role="aspects" EntitySet="aspects" />
             <End Role="constructions" EntitySet="constructions" />
           </AssociationSet>
+          <AssociationSet Name="author_to_report" Association="Self.author_to_report">
+            <End Role="people" EntitySet="people" />
+            <End Role="reports" EntitySet="reports" />
+          </AssociationSet>
           <AssociationSet Name="batch" Association="Self.batch">
             <End Role="batches" EntitySet="batches" />
             <End Role="batch_files" EntitySet="batch_files" />
           </AssociationSet>
+          <AssociationSet Name="batch_by_material" Association="Self.batch_by_material">
+            <End Role="materials" EntitySet="materials" />
+            <End Role="batches" EntitySet="batches" />
+          </AssociationSet>
+          <AssociationSet Name="batch_to_master" Association="Self.batch_to_master">
+            <End Role="batches" EntitySet="batches" />
+            <End Role="masters" EntitySet="masters" />
+          </AssociationSet>
+          <AssociationSet Name="batch_to_report" Association="Self.batch_to_report">
+            <End Role="batches" EntitySet="batches" />
+            <End Role="reports" EntitySet="reports" />
+          </AssociationSet>
+          <AssociationSet Name="batch_to_sample" Association="Self.batch_to_sample">
+            <End Role="batches" EntitySet="batches" />
+            <End Role="samples" EntitySet="samples" />
+          </AssociationSet>
+          <AssociationSet Name="batch_to_test" Association="Self.batch_to_test">
+            <End Role="batches" EntitySet="batches" />
+            <End Role="tests" EntitySet="tests" />
+          </AssociationSet>
+          <AssociationSet Name="color_to_recipe" Association="Self.color_to_recipe">
+            <End Role="colours" EntitySet="colours" />
+            <End Role="recipes" EntitySet="recipes" />
+          </AssociationSet>
+          <AssociationSet Name="construction_to_material" Association="Self.construction_to_material">
+            <End Role="constructions" EntitySet="constructions" />
+            <End Role="materials" EntitySet="materials" />
+          </AssociationSet>
           <AssociationSet Name="external_construction" Association="Self.external_construction">
             <End Role="external_constructions" EntitySet="external_constructions" />
             <End Role="constructions" EntitySet="constructions" />
+          </AssociationSet>
+          <AssociationSet Name="external_lab" Association="Self.external_lab">
+            <End Role="organizations" EntitySet="organizations" />
+            <End Role="external_reports" EntitySet="external_reports" />
           </AssociationSet>
           <AssociationSet Name="external_report" Association="Self.external_report">
             <End Role="external_reports" EntitySet="external_reports" />
@@ -510,9 +952,17 @@
             <End Role="people" EntitySet="people" />
             <End Role="projects" EntitySet="projects" />
           </AssociationSet>
-          <AssociationSet Name="material" Association="Self.material">
-            <End Role="materials" EntitySet="materials" />
-            <End Role="batches" EntitySet="batches" />
+          <AssociationSet Name="master_to_recipe" Association="Self.master_to_recipe">
+            <End Role="masters" EntitySet="masters" />
+            <End Role="recipes" EntitySet="recipes" />
+          </AssociationSet>
+          <AssociationSet Name="method_to_requirement" Association="Self.method_to_requirement">
+            <End Role="methods" EntitySet="methods" />
+            <End Role="requirements" EntitySet="requirements" />
+          </AssociationSet>
+          <AssociationSet Name="nextissue_to_standard" Association="Self.nextissue_to_standard">
+            <End Role="standards" EntitySet="standards" />
+            <End Role="standards1" EntitySet="standards" />
           </AssociationSet>
           <AssociationSet Name="oem" Association="Self.oem">
             <End Role="organizations" EntitySet="organizations" />
@@ -522,9 +972,93 @@
             <End Role="organizations" EntitySet="organizations" />
             <End Role="external_constructions" EntitySet="external_constructions" />
           </AssociationSet>
+          <AssociationSet Name="operatorID" Association="Self.operatorID">
+            <End Role="people" EntitySet="people" />
+            <End Role="tests" EntitySet="tests" />
+          </AssociationSet>
+          <AssociationSet Name="organization_to_standard" Association="Self.organization_to_standard">
+            <End Role="organizations" EntitySet="organizations" />
+            <End Role="standards" EntitySet="standards" />
+          </AssociationSet>
+          <AssociationSet Name="previssue_to_standard" Association="Self.previssue_to_standard">
+            <End Role="standards" EntitySet="standards" />
+            <End Role="standards1" EntitySet="standards" />
+          </AssociationSet>
           <AssociationSet Name="project" Association="Self.project">
             <End Role="projects" EntitySet="projects" />
             <End Role="constructions" EntitySet="constructions" />
+          </AssociationSet>
+          <AssociationSet Name="project_to_report" Association="Self.project_to_report">
+            <End Role="projects" EntitySet="projects" />
+            <End Role="external_reports" EntitySet="external_reports" />
+          </AssociationSet>
+          <AssociationSet Name="project_to_task" Association="Self.project_to_task">
+            <End Role="projects" EntitySet="projects" />
+            <End Role="tasks" EntitySet="tasks" />
+          </AssociationSet>
+          <AssociationSet Name="property_to_method" Association="Self.property_to_method">
+            <End Role="properties" EntitySet="properties" />
+            <End Role="methods" EntitySet="methods" />
+          </AssociationSet>
+          <AssociationSet Name="recipe_to_material" Association="Self.recipe_to_material">
+            <End Role="recipes" EntitySet="recipes" />
+            <End Role="materials" EntitySet="materials" />
+          </AssociationSet>
+          <AssociationSet Name="report_to_reportfile" Association="Self.report_to_reportfile">
+            <End Role="reports" EntitySet="reports" />
+            <End Role="report_files" EntitySet="report_files" />
+          </AssociationSet>
+          <AssociationSet Name="report_to_task" Association="Self.report_to_task">
+            <End Role="reports" EntitySet="reports" />
+            <End Role="tasks" EntitySet="tasks" />
+          </AssociationSet>
+          <AssociationSet Name="report_to_test" Association="Self.report_to_test">
+            <End Role="reports" EntitySet="reports" />
+            <End Role="tests" EntitySet="tests" />
+          </AssociationSet>
+          <AssociationSet Name="requester_to_task" Association="Self.requester_to_task">
+            <End Role="people" EntitySet="people" />
+            <End Role="tasks" EntitySet="tasks" />
+          </AssociationSet>
+          <AssociationSet Name="requirement_to_subreq" Association="Self.requirement_to_subreq">
+            <End Role="requirements" EntitySet="requirements" />
+            <End Role="sub_requirements" EntitySet="sub_requirements" />
+          </AssociationSet>
+          <AssociationSet Name="specification_to_report" Association="Self.specification_to_report">
+            <End Role="specifications" EntitySet="specifications" />
+            <End Role="reports" EntitySet="reports" />
+          </AssociationSet>
+          <AssociationSet Name="specification_to_requirement" Association="Self.specification_to_requirement">
+            <End Role="specifications" EntitySet="specifications" />
+            <End Role="requirements" EntitySet="requirements" />
+          </AssociationSet>
+          <AssociationSet Name="specification_to_specversion" Association="Self.specification_to_specversion">
+            <End Role="specifications" EntitySet="specifications" />
+            <End Role="specification_versions" EntitySet="specification_versions" />
+          </AssociationSet>
+          <AssociationSet Name="specversion_to_report" Association="Self.specversion_to_report">
+            <End Role="specification_versions" EntitySet="specification_versions" />
+            <End Role="reports" EntitySet="reports" />
+          </AssociationSet>
+          <AssociationSet Name="specversion_to_requirement" Association="Self.specversion_to_requirement">
+            <End Role="specification_versions" EntitySet="specification_versions" />
+            <End Role="requirements" EntitySet="requirements" />
+          </AssociationSet>
+          <AssociationSet Name="specversion_to_task" Association="Self.specversion_to_task">
+            <End Role="specification_versions" EntitySet="specification_versions" />
+            <End Role="tasks" EntitySet="tasks" />
+          </AssociationSet>
+          <AssociationSet Name="standard_to_method" Association="Self.standard_to_method">
+            <End Role="standards" EntitySet="standards" />
+            <End Role="methods" EntitySet="methods" />
+          </AssociationSet>
+          <AssociationSet Name="standard_to_specification" Association="Self.standard_to_specification">
+            <End Role="standards" EntitySet="standards" />
+            <End Role="specifications" EntitySet="specifications" />
+          </AssociationSet>
+          <AssociationSet Name="standard_to_standardfile" Association="Self.standard_to_standardfile">
+            <End Role="standards" EntitySet="standards" />
+            <End Role="standard_files" EntitySet="standard_files" />
           </AssociationSet>
           <AssociationSet Name="sub_requirement" Association="Self.sub_requirement">
             <End Role="sub_requirements" EntitySet="sub_requirements" />
@@ -535,184 +1069,130 @@
             <End Role="sub_tests" EntitySet="sub_tests" />
           </AssociationSet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="labdbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityContainer Name="labdbEntities1" annotation:LazyLoadingEnabled="true" >
-          <EntitySet Name="Aspects1" EntityType="labdbModel.Aspect" />
-          <EntitySet Name="Colours1" EntityType="labdbModel.Colour" />
-          <EntitySet Name="Recipes1" EntityType="labdbModel.Recipe" />
-          <AssociationSet Name="colour1" Association="labdbModel.colour1">
-            <End Role="colour" EntitySet="Colours1" />
-            <End Role="recipe" EntitySet="Recipes1" />
-          </AssociationSet>
-          <EntitySet Name="Batches1" EntityType="labdbModel.Batch" />
-          <EntitySet Name="Constructions1" EntityType="labdbModel.Construction" />
-          <EntitySet Name="Masters1" EntityType="labdbModel.Master" />
-          <EntitySet Name="Materials1" EntityType="labdbModel.Material" />
-          <AssociationSet Name="aspect1" Association="labdbModel.aspect1">
-            <End Role="Aspect" EntitySet="Aspects1" />
-            <End Role="construction" EntitySet="Constructions1" />
-          </AssociationSet>
-          <AssociationSet Name="material1" Association="labdbModel.material1">
-            <End Role="material" EntitySet="Materials1" />
-            <End Role="batch" EntitySet="Batches1" />
-          </AssociationSet>
-          <AssociationSet Name="construction1" Association="labdbModel.construction1">
-            <End Role="construction" EntitySet="Constructions1" />
-            <End Role="material" EntitySet="Materials1" />
-          </AssociationSet>
-          <AssociationSet Name="master1" Association="labdbModel.master1">
-            <End Role="master" EntitySet="Masters1" />
-            <End Role="Recipe" EntitySet="Recipes1" />
-          </AssociationSet>
-          <AssociationSet Name="recipe1" Association="labdbModel.recipe1">
-            <End Role="Recipe" EntitySet="Recipes1" />
-            <End Role="material" EntitySet="Materials1" />
-          </AssociationSet>
-          <EntitySet Name="Oems1" EntityType="labdbModel.Oem" />
-          <EntitySet Name="People1" EntityType="labdbModel.Person" />
-          <EntitySet Name="Projects1" EntityType="labdbModel.Project" />
-          <AssociationSet Name="oem1" Association="labdbModel.oem1">
-            <End Role="oem" EntitySet="Oems1" />
-            <End Role="project" EntitySet="Projects1" />
-          </AssociationSet>
-          <EntitySet Name="batch_files" EntityType="labdbModel.batch_files" />
-          <EntitySet Name="ExternalConstructions" EntityType="labdbModel.ExternalConstruction" />
-          <EntitySet Name="external_report_files" EntityType="labdbModel.external_report_files" />
-          <EntitySet Name="external_reports" EntityType="labdbModel.external_reports" />
-          <EntitySet Name="Files1" EntityType="labdbModel.File" />
-          <EntitySet Name="methods" EntityType="labdbModel.method" />
-          <EntitySet Name="Organizations1" EntityType="labdbModel.Organization" />
-          <EntitySet Name="Properties1" EntityType="labdbModel.Property" />
-          <EntitySet Name="report_files" EntityType="labdbModel.report_files" />
-          <EntitySet Name="Reports1" EntityType="labdbModel.Report" />
-          <EntitySet Name="requirements" EntityType="labdbModel.requirement" />
-          <EntitySet Name="Samples1" EntityType="labdbModel.Sample" />
-          <EntitySet Name="specification_versions" EntityType="labdbModel.specification_versions" />
-          <EntitySet Name="specifications" EntityType="labdbModel.specification" />
-          <EntitySet Name="standard_files" EntityType="labdbModel.standard_files" />
-          <EntitySet Name="standards" EntityType="labdbModel.standard" />
-          <EntitySet Name="sub_requirements" EntityType="labdbModel.sub_requirements" />
-          <EntitySet Name="sub_tests" EntityType="labdbModel.sub_tests" />
-          <EntitySet Name="tasks" EntityType="labdbModel.task" />
-          <EntitySet Name="tests" EntityType="labdbModel.test" />
-          <EntitySet Name="users" EntityType="labdbModel.user" />
-          <AssociationSet Name="batch1" Association="labdbModel.batch1">
-            <End Role="batch" EntitySet="Batches1" />
-            <End Role="batch_files" EntitySet="batch_files" />
-          </AssociationSet>
-          <AssociationSet Name="external_construction" Association="labdbModel.external_construction">
-            <End Role="external_constructions" EntitySet="ExternalConstructions" />
-            <End Role="construction" EntitySet="Constructions1" />
-          </AssociationSet>
-          <AssociationSet Name="project1" Association="labdbModel.project1">
-            <End Role="project" EntitySet="Projects1" />
-            <End Role="construction" EntitySet="Constructions1" />
-          </AssociationSet>
-          <AssociationSet Name="oemID" Association="labdbModel.oemID">
-            <End Role="organization" EntitySet="Organizations1" />
-            <End Role="external_constructions" EntitySet="ExternalConstructions" />
-          </AssociationSet>
-          <AssociationSet Name="external_report" Association="labdbModel.external_report">
-            <End Role="external_reports" EntitySet="external_reports" />
-            <End Role="external_report_files" EntitySet="external_report_files" />
-          </AssociationSet>
-          <AssociationSet Name="oem11" Association="labdbModel.oem11">
-            <End Role="organization" EntitySet="Organizations1" />
-            <End Role="project" EntitySet="Projects1" />
-          </AssociationSet>
-          <AssociationSet Name="leader1" Association="labdbModel.leader1">
-            <End Role="person" EntitySet="People1" />
-            <End Role="project" EntitySet="Projects1" />
-          </AssociationSet>
-          <AssociationSet Name="sub_requirement" Association="labdbModel.sub_requirement">
-            <End Role="sub_requirements" EntitySet="sub_requirements" />
-            <End Role="sub_tests" EntitySet="sub_tests" />
-          </AssociationSet>
-          <AssociationSet Name="test1" Association="labdbModel.test1">
-            <End Role="test" EntitySet="tests" />
-            <End Role="sub_tests" EntitySet="sub_tests" />
-          </AssociationSet>
-        </EntityContainer>
         <EntityType Name="Aspect">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" />
-          <Property Name="code" Type="String" Nullable="false" MaxLength="3" FixedLength="false" Unicode="false" />
-          <Property Name="name" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="constructions" Relationship="labdbModel.aspect1" FromRole="Aspect" ToRole="construction" />
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="code" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="constructions" Relationship="Self.aspect1" FromRole="aspects" ToRole="constructions" />
+        </EntityType>
+        <EntityType Name="BatchFile">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="batchID" Type="Int32" Nullable="false" />
+          <Property Name="path" Type="String" MaxLength="1073741823" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="description" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="batch" Relationship="Self.batch1" FromRole="batch_files" ToRole="batches" />
+        </EntityType>
+        <EntityType Name="Batch">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="number" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="materialID" Type="Int32" />
+          <Property Name="notes" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="BatchFiles" Relationship="Self.batch1" FromRole="batches" ToRole="batch_files" />
+          <NavigationProperty Name="Material" Relationship="Self.batch_by_material" FromRole="batches" ToRole="materials" />
+          <NavigationProperty Name="Masters" Relationship="Self.batch_to_master" FromRole="batches" ToRole="masters" />
+          <NavigationProperty Name="Reports" Relationship="Self.batch_to_report" FromRole="batches" ToRole="reports" />
+          <NavigationProperty Name="Samples" Relationship="Self.batch_to_sample" FromRole="batches" ToRole="samples" />
+          <NavigationProperty Name="Tests" Relationship="Self.batch_to_test" FromRole="batches" ToRole="tests" />
         </EntityType>
         <EntityType Name="Colour">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" />
-          <Property Name="name" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
-          <Property Name="code" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="recipes" Relationship="labdbModel.colour1" FromRole="colour" ToRole="recipe" />
-        </EntityType>
-        <EntityType Name="Recipe">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="code" Type="String" Nullable="false" MaxLength="4" FixedLength="false" Unicode="false" />
-          <Property Name="colourID" Type="Int32" />
-          <NavigationProperty Name="colour" Relationship="labdbModel.colour1" FromRole="recipe" ToRole="colour" />
-          <Property Name="masterID" Type="Int32" />
-          <NavigationProperty Name="master" Relationship="labdbModel.master1" FromRole="Recipe" ToRole="master" />
-          <NavigationProperty Name="materials" Relationship="labdbModel.recipe1" FromRole="Recipe" ToRole="material" />
-        </EntityType>
-        <Association Name="colour1">
-          <End Type="labdbModel.Colour" Role="colour" Multiplicity="0..1" />
-          <End Type="labdbModel.Recipe" Role="recipe" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="colour">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="recipe">
-              <PropertyRef Name="colourID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <EntityType Name="Batch">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" />
-          <Property Name="number" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="materialID" Type="Int32" />
-          <NavigationProperty Name="Material" Relationship="labdbModel.material1" FromRole="batch" ToRole="material" />
-          <Property Name="notes" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="BatchFiles" Relationship="labdbModel.batch1" FromRole="batch" ToRole="batch_files" />
+          <Property Name="name" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="code" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="recipes" Relationship="Self.color_to_recipe" FromRole="colours" ToRole="recipes" />
         </EntityType>
         <EntityType Name="Construction">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="type" Type="String" Nullable="false" MaxLength="4" FixedLength="false" Unicode="false" />
-          <Property Name="line" Type="String" Nullable="false" MaxLength="3" FixedLength="false" Unicode="false" />
+          <Property Name="type" Type="String" MaxLength="4" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="line" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="aspectID" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="aspect" Relationship="labdbModel.aspect1" FromRole="construction" ToRole="Aspect" />
-          <NavigationProperty Name="materials" Relationship="labdbModel.construction1" FromRole="construction" ToRole="material" />
           <Property Name="projectID" Type="Int32" />
           <Property Name="external_constructionID" Type="Int32" />
-          <NavigationProperty Name="external_constructions" Relationship="labdbModel.external_construction" FromRole="construction" ToRole="external_constructions" />
-          <NavigationProperty Name="project" Relationship="labdbModel.project1" FromRole="construction" ToRole="project" />
+          <NavigationProperty Name="aspect" Relationship="Self.aspect1" FromRole="constructions" ToRole="aspects" />
+          <NavigationProperty Name="materials" Relationship="Self.construction_to_material" FromRole="constructions" ToRole="materials" />
+          <NavigationProperty Name="external_constructions" Relationship="Self.external_construction" FromRole="constructions" ToRole="external_constructions" />
+          <NavigationProperty Name="project" Relationship="Self.project1" FromRole="constructions" ToRole="projects" />
+        </EntityType>
+        <EntityType Name="ExternalConstruction">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="oemID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="constructions" Relationship="Self.external_construction" FromRole="external_constructions" ToRole="constructions" />
+          <NavigationProperty Name="organization" Relationship="Self.oemID" FromRole="external_constructions" ToRole="organizations" />
+        </EntityType>
+        <EntityType Name="ExternalReportFile">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="path" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="description" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="external_reportID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="external_reports" Relationship="Self.external_report" FromRole="external_report_files" ToRole="external_reports" />
+        </EntityType>
+        <EntityType Name="ExternalReport">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="date" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="description" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="external_number" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="internal_number" Type="Int32" Nullable="false" />
+          <Property Name="external_labID" Type="Int32" Nullable="false" />
+          <Property Name="material_sent" Type="Int32" Nullable="false" />
+          <Property Name="request_done" Type="Int32" Nullable="false" />
+          <Property Name="purchase_order" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="price" Type="Double" Nullable="false" />
+          <Property Name="samples" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="currency" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="report_received" Type="Int32" />
+          <Property Name="fileID" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="projectID" Type="Int32" />
+          <NavigationProperty Name="external_report_files" Relationship="Self.external_report" FromRole="external_reports" ToRole="external_report_files" />
+          <NavigationProperty Name="organization" Relationship="Self.external_lab" FromRole="external_reports" ToRole="organizations" />
+          <NavigationProperty Name="project" Relationship="Self.project_to_report" FromRole="external_reports" ToRole="projects" />
+        </EntityType>
+        <EntityType Name="File">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="description" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="path" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
         </EntityType>
         <EntityType Name="Master">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="number" Type="Int32" Nullable="false" />
-          <Property Name="batchID" Type="Int32" />
-          <Property Name="date" Type="DateTime" />
-          <NavigationProperty Name="recipes" Relationship="labdbModel.master1" FromRole="master" ToRole="Recipe" />
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="number" Type="Int32" Nullable="false" />
+          <Property Name="date" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="batchID" Type="Int32" />
+          <NavigationProperty Name="batch" Relationship="Self.batch_to_master" FromRole="masters" ToRole="batches" />
+          <NavigationProperty Name="recipes" Relationship="Self.master_to_recipe" FromRole="masters" ToRole="recipes" />
         </EntityType>
         <EntityType Name="Material">
           <Key>
@@ -721,224 +1201,114 @@
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="constructionID" Type="Int32" Nullable="false" />
           <Property Name="recipeID" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="batches" Relationship="labdbModel.material1" FromRole="material" ToRole="batch" />
-          <NavigationProperty Name="construction" Relationship="labdbModel.construction1" FromRole="material" ToRole="construction" />
-          <NavigationProperty Name="recipe" Relationship="labdbModel.recipe1" FromRole="material" ToRole="Recipe" />
+          <NavigationProperty Name="batches" Relationship="Self.batch_by_material" FromRole="materials" ToRole="batches" />
+          <NavigationProperty Name="construction" Relationship="Self.construction_to_material" FromRole="materials" ToRole="constructions" />
+          <NavigationProperty Name="recipe" Relationship="Self.recipe_to_material" FromRole="materials" ToRole="recipes" />
         </EntityType>
-        <Association Name="aspect1">
-          <End Type="labdbModel.Aspect" Role="Aspect" Multiplicity="1" />
-          <End Type="labdbModel.Construction" Role="construction" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Aspect">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="construction">
-              <PropertyRef Name="aspectID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="material1">
-          <End Type="labdbModel.Material" Role="material" Multiplicity="0..1" />
-          <End Type="labdbModel.Batch" Role="batch" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="material">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="batch">
-              <PropertyRef Name="materialID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="construction1">
-          <End Type="labdbModel.Construction" Role="construction" Multiplicity="1" />
-          <End Type="labdbModel.Material" Role="material" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="construction">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="material">
-              <PropertyRef Name="constructionID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="master1">
-          <End Type="labdbModel.Master" Role="master" Multiplicity="0..1" />
-          <End Type="labdbModel.Recipe" Role="Recipe" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="master">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="Recipe">
-              <PropertyRef Name="masterID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="recipe1">
-          <End Type="labdbModel.Recipe" Role="Recipe" Multiplicity="1" />
-          <End Type="labdbModel.Material" Role="material" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Recipe">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="material">
-              <PropertyRef Name="recipeID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <EntityType Name="Oem">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" />
-          <Property Name="name" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="projects" Relationship="labdbModel.oem1" FromRole="oem" ToRole="project" />
-        </EntityType>
-        <EntityType Name="Person">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="name" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
-          <Property Name="role" Type="String" Nullable="false" MaxLength="2" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Projects" Relationship="labdbModel.leader1" FromRole="person" ToRole="project" />
-        </EntityType>
-        <EntityType Name="Project">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="name" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="oemID" Type="Int32" Nullable="false" />
-          <Property Name="leaderID" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="oem" Relationship="labdbModel.oem1" FromRole="project" ToRole="oem" />
-          <Property Name="description" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
-          <Property Name="project_leaderID" Type="Int32" />
-          <Property Name="total_internal_cost" Type="Int32" />
-          <Property Name="total_external_cost" Type="Double" />
-          <NavigationProperty Name="constructions" Relationship="labdbModel.project1" FromRole="project" ToRole="construction" />
-          <NavigationProperty Name="organization" Relationship="labdbModel.oem11" FromRole="project" ToRole="organization" />
-          <NavigationProperty Name="Leader" Relationship="labdbModel.leader1" FromRole="project" ToRole="person" />
-        </EntityType>
-        <Association Name="oem1">
-          <End Type="labdbModel.Oem" Role="oem" Multiplicity="1" />
-          <End Type="labdbModel.Project" Role="project" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="oem">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="project">
-              <PropertyRef Name="oemID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <EntityType Name="batch_files">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="batchID" Type="Int32" Nullable="false" />
-          <Property Name="path" Type="String" Nullable="false" MaxLength="1073741823" FixedLength="false" Unicode="false" />
-          <Property Name="description" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="batch" Relationship="labdbModel.batch1" FromRole="batch_files" ToRole="batch" />
-        </EntityType>
-        <EntityType Name="ExternalConstruction">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="name" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
-          <Property Name="oemID" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="constructions" Relationship="labdbModel.external_construction" FromRole="external_constructions" ToRole="construction" />
-          <NavigationProperty Name="organization" Relationship="labdbModel.oemID" FromRole="external_constructions" ToRole="organization" />
-        </EntityType>
-        <EntityType Name="external_report_files">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="path" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="description" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
-          <Property Name="external_reportID" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="external_reports" Relationship="labdbModel.external_report" FromRole="external_report_files" ToRole="external_reports" />
-        </EntityType>
-        <EntityType Name="external_reports">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="date" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
-          <Property Name="description" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
-          <Property Name="external_number" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
-          <Property Name="internal_number" Type="Int32" Nullable="false" />
-          <Property Name="external_labID" Type="Int32" Nullable="false" />
-          <Property Name="material_sent" Type="Int32" />
-          <Property Name="request_done" Type="Int32" />
-          <Property Name="purchase_order" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
-          <Property Name="price" Type="Double" />
-          <Property Name="samples" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
-          <Property Name="currency" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
-          <Property Name="report_received" Type="Int32" />
-          <Property Name="fileID" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
-          <Property Name="projectID" Type="Int32" />
-          <NavigationProperty Name="external_report_files" Relationship="labdbModel.external_report" FromRole="external_reports" ToRole="external_report_files" />
-        </EntityType>
-        <EntityType Name="File">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="description" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
-          <Property Name="path" Type="String" Nullable="false" MaxLength="65535" FixedLength="false" Unicode="false" />
-        </EntityType>
-        <EntityType Name="method">
+        <EntityType Name="Method">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="standardID" Type="Int32" Nullable="false" />
-          <Property Name="measurements" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="measurements" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="propertyID" Type="Int32" Nullable="false" />
-          <Property Name="label" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
-          <Property Name="description" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
-          <Property Name="um" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
-          <Property Name="cost_units" Type="Int32" />
-          <Property Name="old_flag" Type="Boolean" />
+          <Property Name="label" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="description" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="um" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="cost_units" Type="Int32" Nullable="false" />
+          <Property Name="old_flag" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="requirements" Relationship="Self.method_to_requirement" FromRole="methods" ToRole="requirements" />
+          <NavigationProperty Name="property" Relationship="Self.property_to_method" FromRole="methods" ToRole="properties" />
+          <NavigationProperty Name="standard" Relationship="Self.standard_to_method" FromRole="methods" ToRole="standards" />
+        </EntityType>
+        <EntityType Name="Oem">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
         </EntityType>
         <EntityType Name="Organization">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="name" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
-          <Property Name="category" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="external_constructions" Relationship="labdbModel.oemID" FromRole="organization" ToRole="external_constructions" />
-          <NavigationProperty Name="projects" Relationship="labdbModel.oem11" FromRole="organization" ToRole="project" />
+          <Property Name="name" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="category" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="external_constructions" Relationship="Self.oemID" FromRole="organizations" ToRole="external_constructions" />
+          <NavigationProperty Name="external_reports" Relationship="Self.external_lab" FromRole="organizations" ToRole="external_reports" />
+          <NavigationProperty Name="projects" Relationship="Self.oem1" FromRole="organizations" ToRole="projects" />
+          <NavigationProperty Name="standards" Relationship="Self.organization_to_standard" FromRole="organizations" ToRole="standards" />
+        </EntityType>
+        <EntityType Name="Person">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="role" Type="String" MaxLength="2" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="reports" Relationship="Self.author_to_report" FromRole="people" ToRole="reports" />
+          <NavigationProperty Name="projects" Relationship="Self.leader" FromRole="people" ToRole="projects" />
+          <NavigationProperty Name="tests" Relationship="Self.operatorID" FromRole="people" ToRole="tests" />
+          <NavigationProperty Name="tasks" Relationship="Self.requester_to_task" FromRole="people" ToRole="tasks" />
+        </EntityType>
+        <EntityType Name="Project">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="description" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="project_leaderID" Type="Int32" />
+          <Property Name="oemID" Type="Int32" />
+          <Property Name="total_internal_cost" Type="Int32" Nullable="false" />
+          <Property Name="total_external_cost" Type="Double" Nullable="false" />
+          <NavigationProperty Name="constructions" Relationship="Self.project1" FromRole="projects" ToRole="constructions" />
+          <NavigationProperty Name="external_reports" Relationship="Self.project_to_report" FromRole="projects" ToRole="external_reports" />
+          <NavigationProperty Name="organization" Relationship="Self.oem1" FromRole="projects" ToRole="organizations" />
+          <NavigationProperty Name="person" Relationship="Self.leader" FromRole="projects" ToRole="people" />
+          <NavigationProperty Name="tasks" Relationship="Self.project_to_task" FromRole="projects" ToRole="tasks" />
         </EntityType>
         <EntityType Name="Property">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="name" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="name" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="methods" Relationship="Self.property_to_method" FromRole="properties" ToRole="methods" />
         </EntityType>
-        <EntityType Name="report_files">
+        <EntityType Name="Recipe">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="description" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="code" Type="String" MaxLength="4" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="colourID" Type="Int32" />
+          <Property Name="masterID" Type="Int32" />
+          <NavigationProperty Name="colour" Relationship="Self.color_to_recipe" FromRole="recipes" ToRole="colours" />
+          <NavigationProperty Name="master" Relationship="Self.master_to_recipe" FromRole="recipes" ToRole="masters" />
+          <NavigationProperty Name="materials" Relationship="Self.recipe_to_material" FromRole="recipes" ToRole="materials" />
+        </EntityType>
+        <EntityType Name="ReportFile">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="description" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="reportID" Type="Int32" Nullable="false" />
-          <Property Name="path" Type="String" Nullable="false" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="path" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="report" Relationship="Self.report_to_reportfile" FromRole="report_files" ToRole="reports" />
         </EntityType>
         <EntityType Name="Report">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="authorID" Type="Int32" />
+          <Property Name="authorID" Type="Int32" Nullable="false" />
           <Property Name="batchID" Type="Int32" Nullable="false" />
-          <Property Name="category" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
-          <Property Name="description" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="category" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="description" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="end_date" Type="DateTime" />
           <Property Name="number" Type="Int32" Nullable="false" />
           <Property Name="projectID" Type="Int32" />
@@ -947,18 +1317,29 @@
           <Property Name="start_date" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
           <Property Name="requestID" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
           <Property Name="label" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="batch" Relationship="Self.batch_to_report" FromRole="reports" ToRole="batches" />
+          <NavigationProperty Name="person" Relationship="Self.author_to_report" FromRole="reports" ToRole="people" />
+          <NavigationProperty Name="report_files" Relationship="Self.report_to_reportfile" FromRole="reports" ToRole="report_files" />
+          <NavigationProperty Name="tasks" Relationship="Self.report_to_task" FromRole="reports" ToRole="tasks" />
+          <NavigationProperty Name="tests" Relationship="Self.report_to_test" FromRole="reports" ToRole="tests" />
+          <NavigationProperty Name="specification" Relationship="Self.specification_to_report" FromRole="reports" ToRole="specifications" />
+          <NavigationProperty Name="specification_versions" Relationship="Self.specversion_to_report" FromRole="reports" ToRole="specification_versions" />
         </EntityType>
-        <EntityType Name="requirement">
+        <EntityType Name="Requirement">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="description" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="description" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="methodID" Type="Int32" Nullable="false" />
-          <Property Name="name" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
-          <Property Name="position" Type="Int32" />
+          <Property Name="name" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="position" Type="Int32" Nullable="false" />
           <Property Name="specificationID" Type="Int32" />
           <Property Name="specification_versionID" Type="Int32" />
+          <NavigationProperty Name="method" Relationship="Self.method_to_requirement" FromRole="requirements" ToRole="methods" />
+          <NavigationProperty Name="sub_requirements" Relationship="Self.requirement_to_subreq" FromRole="requirements" ToRole="sub_requirements" />
+          <NavigationProperty Name="specification" Relationship="Self.specification_to_requirement" FromRole="requirements" ToRole="specifications" />
+          <NavigationProperty Name="specification_versions" Relationship="Self.specversion_to_requirement" FromRole="requirements" ToRole="specification_versions" />
         </EntityType>
         <EntityType Name="Sample">
           <Key>
@@ -966,88 +1347,111 @@
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="batchID" Type="Int32" Nullable="false" />
-          <Property Name="code" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="code" Type="String" MaxLength="1" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="date" Type="DateTime" Nullable="false" />
+          <NavigationProperty Name="batch" Relationship="Self.batch_to_sample" FromRole="samples" ToRole="batches" />
         </EntityType>
-        <EntityType Name="specification_versions">
+        <EntityType Name="SpecificationVersion">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="main_flag" Type="Int32" Nullable="false" />
-          <Property Name="name" Type="String" Nullable="false" MaxLength="65535" FixedLength="false" Unicode="false" />
-          <Property Name="overrideID" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="name" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="overrideID" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="specificationID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="reports" Relationship="Self.specversion_to_report" FromRole="specification_versions" ToRole="reports" />
+          <NavigationProperty Name="requirements" Relationship="Self.specversion_to_requirement" FromRole="specification_versions" ToRole="requirements" />
+          <NavigationProperty Name="specification" Relationship="Self.specification_to_specversion" FromRole="specification_versions" ToRole="specifications" />
+          <NavigationProperty Name="tasks" Relationship="Self.specversion_to_task" FromRole="specification_versions" ToRole="tasks" />
         </EntityType>
-        <EntityType Name="specification">
+        <EntityType Name="Specification">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="standardID" Type="Int32" Nullable="false" />
-          <Property Name="label" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
-          <Property Name="description" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="label" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="description" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="old_flag" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="reports" Relationship="Self.specification_to_report" FromRole="specifications" ToRole="reports" />
+          <NavigationProperty Name="requirements" Relationship="Self.specification_to_requirement" FromRole="specifications" ToRole="requirements" />
+          <NavigationProperty Name="specification_versions" Relationship="Self.specification_to_specversion" FromRole="specifications" ToRole="specification_versions" />
+          <NavigationProperty Name="standard" Relationship="Self.standard_to_specification" FromRole="specifications" ToRole="standards" />
         </EntityType>
-        <EntityType Name="standard_files">
+        <EntityType Name="StandardFile">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="standardID" Type="Int32" Nullable="false" />
-          <Property Name="path" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="description" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="path" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="description" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="standard" Relationship="Self.standard_to_standardfile" FromRole="standard_files" ToRole="standards" />
         </EntityType>
-        <EntityType Name="standard">
+        <EntityType Name="Std">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="name" Type="String" Nullable="false" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="name" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="issue" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
           <Property Name="organizationID" Type="Int32" Nullable="false" />
           <Property Name="old_flag" Type="Int32" />
           <Property Name="fileID" Type="Int32" />
           <Property Name="previous_issueID" Type="Int32" />
           <Property Name="next_issueID" Type="Int32" />
+          <NavigationProperty Name="methods" Relationship="Self.standard_to_method" FromRole="standards" ToRole="methods" />
+          <NavigationProperty Name="organization" Relationship="Self.organization_to_standard" FromRole="standards" ToRole="organizations" />
+          <NavigationProperty Name="specifications" Relationship="Self.standard_to_specification" FromRole="standards" ToRole="specifications" />
+          <NavigationProperty Name="standard_files" Relationship="Self.standard_to_standardfile" FromRole="standards" ToRole="standard_files" />
+          <NavigationProperty Name="standards1" Relationship="Self.nextissue_to_standard" FromRole="standards" ToRole="standards1" />
+          <NavigationProperty Name="standard1" Relationship="Self.nextissue_to_standard" FromRole="standards1" ToRole="standards" />
+          <NavigationProperty Name="standards11" Relationship="Self.previssue_to_standard" FromRole="standards" ToRole="standards1" />
+          <NavigationProperty Name="standard2" Relationship="Self.previssue_to_standard" FromRole="standards1" ToRole="standards" />
         </EntityType>
-        <EntityType Name="sub_requirements">
+        <EntityType Name="SubRequirement">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="name" Type="String" Nullable="false" MaxLength="65535" FixedLength="false" Unicode="false" />
-          <Property Name="required_value" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="name" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="required_value" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="requirementID" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="sub_tests" Relationship="labdbModel.sub_requirement" FromRole="sub_requirements" ToRole="sub_tests" />
+          <NavigationProperty Name="requirement" Relationship="Self.requirement_to_subreq" FromRole="sub_requirements" ToRole="requirements" />
+          <NavigationProperty Name="sub_tests" Relationship="Self.sub_requirement" FromRole="sub_requirements" ToRole="sub_tests" />
         </EntityType>
-        <EntityType Name="sub_tests">
+        <EntityType Name="SubTest">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="sub_requirementID" Type="Int32" Nullable="false" />
-          <Property Name="result" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="result" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="testID" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="sub_requirements" Relationship="labdbModel.sub_requirement" FromRole="sub_tests" ToRole="sub_requirements" />
-          <NavigationProperty Name="test" Relationship="labdbModel.test1" FromRole="sub_tests" ToRole="test" />
+          <NavigationProperty Name="sub_requirements" Relationship="Self.sub_requirement" FromRole="sub_tests" ToRole="sub_requirements" />
+          <NavigationProperty Name="test" Relationship="Self.test1" FromRole="sub_tests" ToRole="tests" />
         </EntityType>
-        <EntityType Name="task">
+        <EntityType Name="Task">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="requesterID" Type="Int32" Nullable="false" />
           <Property Name="projectID" Type="Int32" Nullable="false" />
-          <Property Name="specificationID" Type="Int32" Nullable="false" />
+          <Property Name="specification_versionID" Type="Int32" Nullable="false" />
           <Property Name="batchID" Type="Int32" Nullable="false" />
-          <Property Name="reportID" Type="Int32" Nullable="false" />
           <Property Name="notes" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="reportID" Type="Int32" />
           <Property Name="progress" Type="Int32" />
           <Property Name="priority_modifier" Type="Int32" />
           <Property Name="pipeline_order" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="person" Relationship="Self.requester_to_task" FromRole="tasks" ToRole="people" />
+          <NavigationProperty Name="project" Relationship="Self.project_to_task" FromRole="tasks" ToRole="projects" />
+          <NavigationProperty Name="report" Relationship="Self.report_to_task" FromRole="tasks" ToRole="reports" />
+          <NavigationProperty Name="specification_versions" Relationship="Self.specversion_to_task" FromRole="tasks" ToRole="specification_versions" />
         </EntityType>
-        <EntityType Name="test">
+        <EntityType Name="Test">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
@@ -1061,24 +1465,41 @@
           <Property Name="date" Type="DateTime" />
           <Property Name="meets_requirements" Type="Int32" />
           <Property Name="stat_skip" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="sub_tests" Relationship="labdbModel.test1" FromRole="test" ToRole="sub_tests" />
+          <NavigationProperty Name="batch" Relationship="Self.batch_to_test" FromRole="tests" ToRole="batches" />
+          <NavigationProperty Name="person" Relationship="Self.operatorID" FromRole="tests" ToRole="people" />
+          <NavigationProperty Name="report" Relationship="Self.report_to_test" FromRole="tests" ToRole="reports" />
+          <NavigationProperty Name="sub_tests" Relationship="Self.test1" FromRole="tests" ToRole="sub_tests" />
         </EntityType>
-        <EntityType Name="user">
+        <EntityType Name="User">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="full_name" Type="String" Nullable="false" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="full_name" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="hashed_password" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
           <Property Name="role_list" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
-          <Property Name="user_name" Type="String" Nullable="false" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="user_name" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="personID" Type="Int32" />
         </EntityType>
-        <Association Name="batch1">
-          <End Type="labdbModel.Batch" Role="batch" Multiplicity="1" />
-          <End Type="labdbModel.batch_files" Role="batch_files" Multiplicity="*" />
+        <Association Name="aspect1">
+          <End Role="aspects" Type="labdbModel.Aspect" Multiplicity="1" />
+          <End Role="constructions" Type="labdbModel.Construction" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="batch">
+            <Principal Role="aspects">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="constructions">
+              <PropertyRef Name="aspectID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="batch1">
+          <End Role="batches" Type="labdbModel.Batch" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="batch_files" Type="labdbModel.BatchFile" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="batches">
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="batch_files">
@@ -1086,35 +1507,123 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="batch_by_material">
+          <End Role="materials" Type="labdbModel.Material" Multiplicity="0..1" />
+          <End Role="batches" Type="labdbModel.Batch" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="materials">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="batches">
+              <PropertyRef Name="materialID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="batch_to_master">
+          <End Role="batches" Type="labdbModel.Batch" Multiplicity="0..1" />
+          <End Role="masters" Type="labdbModel.Master" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="batches">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="masters">
+              <PropertyRef Name="batchID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="batch_to_report">
+          <End Role="batches" Type="labdbModel.Batch" Multiplicity="1" />
+          <End Role="reports" Type="labdbModel.Report" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="batches">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="reports">
+              <PropertyRef Name="batchID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="batch_to_sample">
+          <End Role="batches" Type="labdbModel.Batch" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="samples" Type="labdbModel.Sample" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="batches">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="samples">
+              <PropertyRef Name="batchID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="batch_to_test">
+          <End Role="batches" Type="labdbModel.Batch" Multiplicity="1" />
+          <End Role="tests" Type="labdbModel.Test" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="batches">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="tests">
+              <PropertyRef Name="batchID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="color_to_recipe">
+          <End Role="colours" Type="labdbModel.Colour" Multiplicity="0..1" />
+          <End Role="recipes" Type="labdbModel.Recipe" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="colours">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="recipes">
+              <PropertyRef Name="colourID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="construction_to_material">
+          <End Role="constructions" Type="labdbModel.Construction" Multiplicity="1" />
+          <End Role="materials" Type="labdbModel.Material" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="constructions">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="materials">
+              <PropertyRef Name="constructionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="external_construction">
-          <End Type="labdbModel.ExternalConstruction" Role="external_constructions" Multiplicity="0..1" />
-          <End Type="labdbModel.Construction" Role="construction" Multiplicity="*" />
+          <End Role="external_constructions" Type="labdbModel.ExternalConstruction" Multiplicity="0..1" />
+          <End Role="constructions" Type="labdbModel.Construction" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="external_constructions">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="construction">
+            <Dependent Role="constructions">
               <PropertyRef Name="external_constructionID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="project1">
-          <End Type="labdbModel.Project" Role="project" Multiplicity="0..1" />
-          <End Type="labdbModel.Construction" Role="construction" Multiplicity="*" />
+          <End Role="projects" Type="labdbModel.Project" Multiplicity="0..1" />
+          <End Role="constructions" Type="labdbModel.Construction" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="project">
+            <Principal Role="projects">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="construction">
+            <Dependent Role="constructions">
               <PropertyRef Name="projectID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="oemID">
-          <End Type="labdbModel.Organization" Role="organization" Multiplicity="1" />
-          <End Type="labdbModel.ExternalConstruction" Role="external_constructions" Multiplicity="*" />
+          <End Role="organizations" Type="labdbModel.Organization" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="external_constructions" Type="labdbModel.ExternalConstruction" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="organization">
+            <Principal Role="organizations">
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="external_constructions">
@@ -1123,8 +1632,10 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="external_report">
-          <End Type="labdbModel.external_reports" Role="external_reports" Multiplicity="1" />
-          <End Type="labdbModel.external_report_files" Role="external_report_files" Multiplicity="*" />
+          <End Role="external_reports" Type="labdbModel.ExternalReport" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="external_report_files" Type="labdbModel.ExternalReportFile" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="external_reports">
               <PropertyRef Name="ID" />
@@ -1134,33 +1645,357 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="oem11">
-          <End Type="labdbModel.Organization" Role="organization" Multiplicity="0..1" />
-          <End Type="labdbModel.Project" Role="project" Multiplicity="*" />
+        <Association Name="external_lab">
+          <End Role="organizations" Type="labdbModel.Organization" Multiplicity="1" />
+          <End Role="external_reports" Type="labdbModel.ExternalReport" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="organization">
+            <Principal Role="organizations">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="project">
+            <Dependent Role="external_reports">
+              <PropertyRef Name="external_labID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="project_to_report">
+          <End Role="projects" Type="labdbModel.Project" Multiplicity="0..1" />
+          <End Role="external_reports" Type="labdbModel.ExternalReport" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="projects">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="external_reports">
+              <PropertyRef Name="projectID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="master_to_recipe">
+          <End Role="masters" Type="labdbModel.Master" Multiplicity="0..1" />
+          <End Role="recipes" Type="labdbModel.Recipe" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="masters">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="recipes">
+              <PropertyRef Name="masterID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="recipe_to_material">
+          <End Role="recipes" Type="labdbModel.Recipe" Multiplicity="1" />
+          <End Role="materials" Type="labdbModel.Material" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="recipes">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="materials">
+              <PropertyRef Name="recipeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="method_to_requirement">
+          <End Role="methods" Type="labdbModel.Method" Multiplicity="1" />
+          <End Role="requirements" Type="labdbModel.Requirement" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="methods">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="requirements">
+              <PropertyRef Name="methodID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="property_to_method">
+          <End Role="properties" Type="labdbModel.Property" Multiplicity="1" />
+          <End Role="methods" Type="labdbModel.Method" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="properties">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="methods">
+              <PropertyRef Name="propertyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="standard_to_method">
+          <End Role="standards" Type="labdbModel.Std" Multiplicity="1" />
+          <End Role="methods" Type="labdbModel.Method" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="standards">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="methods">
+              <PropertyRef Name="standardID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="oem1">
+          <End Role="organizations" Type="labdbModel.Organization" Multiplicity="0..1" />
+          <End Role="projects" Type="labdbModel.Project" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="organizations">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="projects">
               <PropertyRef Name="oemID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="leader1">
-          <End Type="labdbModel.Person" Role="person" Multiplicity="0..1" />
-          <End Type="labdbModel.Project" Role="project" Multiplicity="*" />
+        <Association Name="organization_to_standard">
+          <End Role="organizations" Type="labdbModel.Organization" Multiplicity="1" />
+          <End Role="standards" Type="labdbModel.Std" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="person">
+            <Principal Role="organizations">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="project">
+            <Dependent Role="standards">
+              <PropertyRef Name="organizationID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="author_to_report">
+          <End Role="people" Type="labdbModel.Person" Multiplicity="1" />
+          <End Role="reports" Type="labdbModel.Report" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="people">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="reports">
+              <PropertyRef Name="authorID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="leader">
+          <End Role="people" Type="labdbModel.Person" Multiplicity="0..1" />
+          <End Role="projects" Type="labdbModel.Project" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="people">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="projects">
               <PropertyRef Name="project_leaderID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="operatorID">
+          <End Role="people" Type="labdbModel.Person" Multiplicity="1" />
+          <End Role="tests" Type="labdbModel.Test" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="people">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="tests">
+              <PropertyRef Name="operatorID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="requester_to_task">
+          <End Role="people" Type="labdbModel.Person" Multiplicity="1" />
+          <End Role="tasks" Type="labdbModel.Task" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="people">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="tasks">
+              <PropertyRef Name="requesterID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="project_to_task">
+          <End Role="projects" Type="labdbModel.Project" Multiplicity="1" />
+          <End Role="tasks" Type="labdbModel.Task" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="projects">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="tasks">
+              <PropertyRef Name="projectID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="report_to_reportfile">
+          <End Role="reports" Type="labdbModel.Report" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="report_files" Type="labdbModel.ReportFile" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="reports">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="report_files">
+              <PropertyRef Name="reportID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="report_to_task">
+          <End Role="reports" Type="labdbModel.Report" Multiplicity="0..1" />
+          <End Role="tasks" Type="labdbModel.Task" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="reports">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="tasks">
+              <PropertyRef Name="reportID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="report_to_test">
+          <End Role="reports" Type="labdbModel.Report" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="tests" Type="labdbModel.Test" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="reports">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="tests">
+              <PropertyRef Name="reportID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="specification_to_report">
+          <End Role="specifications" Type="labdbModel.Specification" Multiplicity="0..1" />
+          <End Role="reports" Type="labdbModel.Report" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="specifications">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="reports">
+              <PropertyRef Name="specificationID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="specversion_to_report">
+          <End Role="specification_versions" Type="labdbModel.SpecificationVersion" Multiplicity="0..1" />
+          <End Role="reports" Type="labdbModel.Report" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="specification_versions">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="reports">
+              <PropertyRef Name="specification_versionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="requirement_to_subreq">
+          <End Role="requirements" Type="labdbModel.Requirement" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="sub_requirements" Type="labdbModel.SubRequirement" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="requirements">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="sub_requirements">
+              <PropertyRef Name="requirementID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="specification_to_requirement">
+          <End Role="specifications" Type="labdbModel.Specification" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="requirements" Type="labdbModel.Requirement" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="specifications">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="requirements">
+              <PropertyRef Name="specificationID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="specversion_to_requirement">
+          <End Role="specification_versions" Type="labdbModel.SpecificationVersion" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="requirements" Type="labdbModel.Requirement" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="specification_versions">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="requirements">
+              <PropertyRef Name="specification_versionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="specification_to_specversion">
+          <End Role="specifications" Type="labdbModel.Specification" Multiplicity="1" />
+          <End Role="specification_versions" Type="labdbModel.SpecificationVersion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="specifications">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="specification_versions">
+              <PropertyRef Name="specificationID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="specversion_to_task">
+          <End Role="specification_versions" Type="labdbModel.SpecificationVersion" Multiplicity="1" />
+          <End Role="tasks" Type="labdbModel.Task" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="specification_versions">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="tasks">
+              <PropertyRef Name="specification_versionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="standard_to_specification">
+          <End Role="standards" Type="labdbModel.Std" Multiplicity="1" />
+          <End Role="specifications" Type="labdbModel.Specification" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="standards">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="specifications">
+              <PropertyRef Name="standardID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="standard_to_standardfile">
+          <End Role="standards" Type="labdbModel.Std" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="standard_files" Type="labdbModel.StandardFile" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="standards">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="standard_files">
+              <PropertyRef Name="standardID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="nextissue_to_standard">
+          <End Role="standards" Type="labdbModel.Std" Multiplicity="0..1" />
+          <End Role="standards1" Type="labdbModel.Std" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="standards">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="standards1">
+              <PropertyRef Name="next_issueID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="previssue_to_standard">
+          <End Role="standards" Type="labdbModel.Std" Multiplicity="0..1" />
+          <End Role="standards1" Type="labdbModel.Std" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="standards">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="standards1">
+              <PropertyRef Name="previous_issueID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="sub_requirement">
-          <End Type="labdbModel.sub_requirements" Role="sub_requirements" Multiplicity="1" />
-          <End Type="labdbModel.sub_tests" Role="sub_tests" Multiplicity="*" />
+          <End Role="sub_requirements" Type="labdbModel.SubRequirement" Multiplicity="1" />
+          <End Role="sub_tests" Type="labdbModel.SubTest" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="sub_requirements">
               <PropertyRef Name="ID" />
@@ -1171,10 +2006,12 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="test1">
-          <End Type="labdbModel.test" Role="test" Multiplicity="1" />
-          <End Type="labdbModel.sub_tests" Role="sub_tests" Multiplicity="*" />
+          <End Role="tests" Type="labdbModel.Test" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="sub_tests" Type="labdbModel.SubTest" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="test">
+            <Principal Role="tests">
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="sub_tests">
@@ -1182,59 +2019,313 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityContainer Name="LabDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Aspects1" EntityType="labdbModel.Aspect" />
+          <EntitySet Name="BatchFiles" EntityType="labdbModel.BatchFile" />
+          <EntitySet Name="Batches" EntityType="labdbModel.Batch" />
+          <EntitySet Name="Colours" EntityType="labdbModel.Colour" />
+          <EntitySet Name="Constructions1" EntityType="labdbModel.Construction" />
+          <EntitySet Name="ExternalConstructions" EntityType="labdbModel.ExternalConstruction" />
+          <EntitySet Name="ExternalReportFiles" EntityType="labdbModel.ExternalReportFile" />
+          <EntitySet Name="ExternalReports" EntityType="labdbModel.ExternalReport" />
+          <EntitySet Name="Files1" EntityType="labdbModel.File" />
+          <EntitySet Name="Masters1" EntityType="labdbModel.Master" />
+          <EntitySet Name="Materials1" EntityType="labdbModel.Material" />
+          <EntitySet Name="Methods1" EntityType="labdbModel.Method" />
+          <EntitySet Name="Oems1" EntityType="labdbModel.Oem" />
+          <EntitySet Name="Organizations1" EntityType="labdbModel.Organization" />
+          <EntitySet Name="People1" EntityType="labdbModel.Person" />
+          <EntitySet Name="Projects" EntityType="labdbModel.Project" />
+          <EntitySet Name="Properties1" EntityType="labdbModel.Property" />
+          <EntitySet Name="Recipes1" EntityType="labdbModel.Recipe" />
+          <EntitySet Name="ReportFiles" EntityType="labdbModel.ReportFile" />
+          <EntitySet Name="Reports" EntityType="labdbModel.Report" />
+          <EntitySet Name="Requirements1" EntityType="labdbModel.Requirement" />
+          <EntitySet Name="Samples1" EntityType="labdbModel.Sample" />
+          <EntitySet Name="SpecificationVersions" EntityType="labdbModel.SpecificationVersion" />
+          <EntitySet Name="Specifications1" EntityType="labdbModel.Specification" />
+          <EntitySet Name="StandardFiles" EntityType="labdbModel.StandardFile" />
+          <EntitySet Name="Stds" EntityType="labdbModel.Std" />
+          <EntitySet Name="SubRequirements" EntityType="labdbModel.SubRequirement" />
+          <EntitySet Name="SubTests" EntityType="labdbModel.SubTest" />
+          <EntitySet Name="Tasks1" EntityType="labdbModel.Task" />
+          <EntitySet Name="Tests" EntityType="labdbModel.Test" />
+          <EntitySet Name="Users1" EntityType="labdbModel.User" />
+          <AssociationSet Name="aspect" Association="Self.aspect1">
+            <End Role="aspects" EntitySet="Aspects1" />
+            <End Role="constructions" EntitySet="Constructions1" />
+          </AssociationSet>
+          <AssociationSet Name="batch" Association="Self.batch1">
+            <End Role="batches" EntitySet="Batches" />
+            <End Role="batch_files" EntitySet="BatchFiles" />
+          </AssociationSet>
+          <AssociationSet Name="batch_by_material" Association="Self.batch_by_material">
+            <End Role="materials" EntitySet="Materials1" />
+            <End Role="batches" EntitySet="Batches" />
+          </AssociationSet>
+          <AssociationSet Name="batch_to_master" Association="Self.batch_to_master">
+            <End Role="batches" EntitySet="Batches" />
+            <End Role="masters" EntitySet="Masters1" />
+          </AssociationSet>
+          <AssociationSet Name="batch_to_report" Association="Self.batch_to_report">
+            <End Role="batches" EntitySet="Batches" />
+            <End Role="reports" EntitySet="Reports" />
+          </AssociationSet>
+          <AssociationSet Name="batch_to_sample" Association="Self.batch_to_sample">
+            <End Role="batches" EntitySet="Batches" />
+            <End Role="samples" EntitySet="Samples1" />
+          </AssociationSet>
+          <AssociationSet Name="batch_to_test" Association="Self.batch_to_test">
+            <End Role="batches" EntitySet="Batches" />
+            <End Role="tests" EntitySet="Tests" />
+          </AssociationSet>
+          <AssociationSet Name="color_to_recipe" Association="Self.color_to_recipe">
+            <End Role="colours" EntitySet="Colours" />
+            <End Role="recipes" EntitySet="Recipes1" />
+          </AssociationSet>
+          <AssociationSet Name="construction_to_material" Association="Self.construction_to_material">
+            <End Role="constructions" EntitySet="Constructions1" />
+            <End Role="materials" EntitySet="Materials1" />
+          </AssociationSet>
+          <AssociationSet Name="external_construction" Association="Self.external_construction">
+            <End Role="external_constructions" EntitySet="ExternalConstructions" />
+            <End Role="constructions" EntitySet="Constructions1" />
+          </AssociationSet>
+          <AssociationSet Name="project" Association="Self.project1">
+            <End Role="projects" EntitySet="Projects" />
+            <End Role="constructions" EntitySet="Constructions1" />
+          </AssociationSet>
+          <AssociationSet Name="oemID" Association="Self.oemID">
+            <End Role="organizations" EntitySet="Organizations1" />
+            <End Role="external_constructions" EntitySet="ExternalConstructions" />
+          </AssociationSet>
+          <AssociationSet Name="external_report" Association="Self.external_report">
+            <End Role="external_reports" EntitySet="ExternalReports" />
+            <End Role="external_report_files" EntitySet="ExternalReportFiles" />
+          </AssociationSet>
+          <AssociationSet Name="external_lab" Association="Self.external_lab">
+            <End Role="organizations" EntitySet="Organizations1" />
+            <End Role="external_reports" EntitySet="ExternalReports" />
+          </AssociationSet>
+          <AssociationSet Name="project_to_report" Association="Self.project_to_report">
+            <End Role="projects" EntitySet="Projects" />
+            <End Role="external_reports" EntitySet="ExternalReports" />
+          </AssociationSet>
+          <AssociationSet Name="master_to_recipe" Association="Self.master_to_recipe">
+            <End Role="masters" EntitySet="Masters1" />
+            <End Role="recipes" EntitySet="Recipes1" />
+          </AssociationSet>
+          <AssociationSet Name="recipe_to_material" Association="Self.recipe_to_material">
+            <End Role="recipes" EntitySet="Recipes1" />
+            <End Role="materials" EntitySet="Materials1" />
+          </AssociationSet>
+          <AssociationSet Name="method_to_requirement" Association="Self.method_to_requirement">
+            <End Role="methods" EntitySet="Methods1" />
+            <End Role="requirements" EntitySet="Requirements1" />
+          </AssociationSet>
+          <AssociationSet Name="property_to_method" Association="Self.property_to_method">
+            <End Role="properties" EntitySet="Properties1" />
+            <End Role="methods" EntitySet="Methods1" />
+          </AssociationSet>
+          <AssociationSet Name="standard_to_method" Association="Self.standard_to_method">
+            <End Role="standards" EntitySet="Stds" />
+            <End Role="methods" EntitySet="Methods1" />
+          </AssociationSet>
+          <AssociationSet Name="oem" Association="Self.oem1">
+            <End Role="organizations" EntitySet="Organizations1" />
+            <End Role="projects" EntitySet="Projects" />
+          </AssociationSet>
+          <AssociationSet Name="organization_to_standard" Association="Self.organization_to_standard">
+            <End Role="organizations" EntitySet="Organizations1" />
+            <End Role="standards" EntitySet="Stds" />
+          </AssociationSet>
+          <AssociationSet Name="author_to_report" Association="Self.author_to_report">
+            <End Role="people" EntitySet="People1" />
+            <End Role="reports" EntitySet="Reports" />
+          </AssociationSet>
+          <AssociationSet Name="leader" Association="Self.leader">
+            <End Role="people" EntitySet="People1" />
+            <End Role="projects" EntitySet="Projects" />
+          </AssociationSet>
+          <AssociationSet Name="operatorID" Association="Self.operatorID">
+            <End Role="people" EntitySet="People1" />
+            <End Role="tests" EntitySet="Tests" />
+          </AssociationSet>
+          <AssociationSet Name="requester_to_task" Association="Self.requester_to_task">
+            <End Role="people" EntitySet="People1" />
+            <End Role="tasks" EntitySet="Tasks1" />
+          </AssociationSet>
+          <AssociationSet Name="project_to_task" Association="Self.project_to_task">
+            <End Role="projects" EntitySet="Projects" />
+            <End Role="tasks" EntitySet="Tasks1" />
+          </AssociationSet>
+          <AssociationSet Name="report_to_reportfile" Association="Self.report_to_reportfile">
+            <End Role="reports" EntitySet="Reports" />
+            <End Role="report_files" EntitySet="ReportFiles" />
+          </AssociationSet>
+          <AssociationSet Name="report_to_task" Association="Self.report_to_task">
+            <End Role="reports" EntitySet="Reports" />
+            <End Role="tasks" EntitySet="Tasks1" />
+          </AssociationSet>
+          <AssociationSet Name="report_to_test" Association="Self.report_to_test">
+            <End Role="reports" EntitySet="Reports" />
+            <End Role="tests" EntitySet="Tests" />
+          </AssociationSet>
+          <AssociationSet Name="specification_to_report" Association="Self.specification_to_report">
+            <End Role="specifications" EntitySet="Specifications1" />
+            <End Role="reports" EntitySet="Reports" />
+          </AssociationSet>
+          <AssociationSet Name="specversion_to_report" Association="Self.specversion_to_report">
+            <End Role="specification_versions" EntitySet="SpecificationVersions" />
+            <End Role="reports" EntitySet="Reports" />
+          </AssociationSet>
+          <AssociationSet Name="requirement_to_subreq" Association="Self.requirement_to_subreq">
+            <End Role="requirements" EntitySet="Requirements1" />
+            <End Role="sub_requirements" EntitySet="SubRequirements" />
+          </AssociationSet>
+          <AssociationSet Name="specification_to_requirement" Association="Self.specification_to_requirement">
+            <End Role="specifications" EntitySet="Specifications1" />
+            <End Role="requirements" EntitySet="Requirements1" />
+          </AssociationSet>
+          <AssociationSet Name="specversion_to_requirement" Association="Self.specversion_to_requirement">
+            <End Role="specification_versions" EntitySet="SpecificationVersions" />
+            <End Role="requirements" EntitySet="Requirements1" />
+          </AssociationSet>
+          <AssociationSet Name="specification_to_specversion" Association="Self.specification_to_specversion">
+            <End Role="specifications" EntitySet="Specifications1" />
+            <End Role="specification_versions" EntitySet="SpecificationVersions" />
+          </AssociationSet>
+          <AssociationSet Name="specversion_to_task" Association="Self.specversion_to_task">
+            <End Role="specification_versions" EntitySet="SpecificationVersions" />
+            <End Role="tasks" EntitySet="Tasks1" />
+          </AssociationSet>
+          <AssociationSet Name="standard_to_specification" Association="Self.standard_to_specification">
+            <End Role="standards" EntitySet="Stds" />
+            <End Role="specifications" EntitySet="Specifications1" />
+          </AssociationSet>
+          <AssociationSet Name="standard_to_standardfile" Association="Self.standard_to_standardfile">
+            <End Role="standards" EntitySet="Stds" />
+            <End Role="standard_files" EntitySet="StandardFiles" />
+          </AssociationSet>
+          <AssociationSet Name="nextissue_to_standard" Association="Self.nextissue_to_standard">
+            <End Role="standards" EntitySet="Stds" />
+            <End Role="standards1" EntitySet="Stds" />
+          </AssociationSet>
+          <AssociationSet Name="previssue_to_standard" Association="Self.previssue_to_standard">
+            <End Role="standards" EntitySet="Stds" />
+            <End Role="standards1" EntitySet="Stds" />
+          </AssociationSet>
+          <AssociationSet Name="sub_requirement" Association="Self.sub_requirement">
+            <End Role="sub_requirements" EntitySet="SubRequirements" />
+            <End Role="sub_tests" EntitySet="SubTests" />
+          </AssociationSet>
+          <AssociationSet Name="test" Association="Self.test1">
+            <End Role="tests" EntitySet="Tests" />
+            <End Role="sub_tests" EntitySet="SubTests" />
+          </AssociationSet>
+        </EntityContainer>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="labdbModelStoreContainer" CdmEntityContainer="labdbEntities1" >
+        <EntityContainerMapping StorageEntityContainer="labdbModelStoreContainer" CdmEntityContainer="LabDBEntities">
           <EntitySetMapping Name="Aspects1">
             <EntityTypeMapping TypeName="labdbModel.Aspect">
               <MappingFragment StoreEntitySet="aspects">
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="code" ColumnName="code" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Colours1">
-            <EntityTypeMapping TypeName="labdbModel.Colour">
-              <MappingFragment StoreEntitySet="colours">
                 <ScalarProperty Name="code" ColumnName="code" />
                 <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Recipes1">
-            <EntityTypeMapping TypeName="labdbModel.Recipe">
-              <MappingFragment StoreEntitySet="recipes">
-                <ScalarProperty Name="masterID" ColumnName="masterID" />
-                <ScalarProperty Name="colourID" ColumnName="colourID" />
-                <ScalarProperty Name="code" ColumnName="code" />
+          <EntitySetMapping Name="BatchFiles">
+            <EntityTypeMapping TypeName="labdbModel.BatchFile">
+              <MappingFragment StoreEntitySet="batch_files">
                 <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="batchID" ColumnName="batchID" />
+                <ScalarProperty Name="path" ColumnName="path" />
+                <ScalarProperty Name="description" ColumnName="description" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Batches1">
+          <EntitySetMapping Name="Batches">
             <EntityTypeMapping TypeName="labdbModel.Batch">
               <MappingFragment StoreEntitySet="batches">
-                <ScalarProperty Name="notes" ColumnName="notes" />
-                <ScalarProperty Name="materialID" ColumnName="materialID" />
-                <ScalarProperty Name="number" ColumnName="number" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="number" ColumnName="number" />
+                <ScalarProperty Name="materialID" ColumnName="materialID" />
+                <ScalarProperty Name="notes" ColumnName="notes" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Colours">
+            <EntityTypeMapping TypeName="labdbModel.Colour">
+              <MappingFragment StoreEntitySet="colours">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="code" ColumnName="code" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Constructions1">
             <EntityTypeMapping TypeName="labdbModel.Construction">
               <MappingFragment StoreEntitySet="constructions">
-                <ScalarProperty Name="external_constructionID" ColumnName="external_constructionID" />
-                <ScalarProperty Name="projectID" ColumnName="projectID" />
-                <ScalarProperty Name="aspectID" ColumnName="aspectID" />
-                <ScalarProperty Name="line" ColumnName="line" />
-                <ScalarProperty Name="type" ColumnName="type" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="type" ColumnName="type" />
+                <ScalarProperty Name="line" ColumnName="line" />
+                <ScalarProperty Name="aspectID" ColumnName="aspectID" />
+                <ScalarProperty Name="projectID" ColumnName="projectID" />
+                <ScalarProperty Name="external_constructionID" ColumnName="external_constructionID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ExternalConstructions">
+            <EntityTypeMapping TypeName="labdbModel.ExternalConstruction">
+              <MappingFragment StoreEntitySet="external_constructions">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="oemID" ColumnName="oemID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ExternalReportFiles">
+            <EntityTypeMapping TypeName="labdbModel.ExternalReportFile">
+              <MappingFragment StoreEntitySet="external_report_files">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="path" ColumnName="path" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="external_reportID" ColumnName="external_reportID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ExternalReports">
+            <EntityTypeMapping TypeName="labdbModel.ExternalReport">
+              <MappingFragment StoreEntitySet="external_reports">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="date" ColumnName="date" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="external_number" ColumnName="external_number" />
+                <ScalarProperty Name="internal_number" ColumnName="internal_number" />
+                <ScalarProperty Name="external_labID" ColumnName="external_labID" />
+                <ScalarProperty Name="material_sent" ColumnName="material_sent" />
+                <ScalarProperty Name="request_done" ColumnName="request_done" />
+                <ScalarProperty Name="purchase_order" ColumnName="purchase_order" />
+                <ScalarProperty Name="price" ColumnName="price" />
+                <ScalarProperty Name="samples" ColumnName="samples" />
+                <ScalarProperty Name="currency" ColumnName="currency" />
+                <ScalarProperty Name="report_received" ColumnName="report_received" />
+                <ScalarProperty Name="fileID" ColumnName="fileID" />
+                <ScalarProperty Name="projectID" ColumnName="projectID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Files1">
+            <EntityTypeMapping TypeName="labdbModel.File">
+              <MappingFragment StoreEntitySet="files">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="path" ColumnName="path" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1242,301 +2333,252 @@
             <EntityTypeMapping TypeName="labdbModel.Master">
               <MappingFragment StoreEntitySet="masters">
                 <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="number" ColumnName="number" />
                 <ScalarProperty Name="date" ColumnName="date" />
                 <ScalarProperty Name="batchID" ColumnName="batchID" />
-                <ScalarProperty Name="number" ColumnName="number" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Materials1">
             <EntityTypeMapping TypeName="labdbModel.Material">
               <MappingFragment StoreEntitySet="materials">
-                <ScalarProperty Name="recipeID" ColumnName="recipeID" />
-                <ScalarProperty Name="constructionID" ColumnName="constructionID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="constructionID" ColumnName="constructionID" />
+                <ScalarProperty Name="recipeID" ColumnName="recipeID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Methods1">
+            <EntityTypeMapping TypeName="labdbModel.Method">
+              <MappingFragment StoreEntitySet="methods">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="standardID" ColumnName="standardID" />
+                <ScalarProperty Name="measurements" ColumnName="measurements" />
+                <ScalarProperty Name="propertyID" ColumnName="propertyID" />
+                <ScalarProperty Name="label" ColumnName="label" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="um" ColumnName="um" />
+                <ScalarProperty Name="cost_units" ColumnName="cost_units" />
+                <ScalarProperty Name="old_flag" ColumnName="old_flag" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Oems1">
             <EntityTypeMapping TypeName="labdbModel.Oem">
               <MappingFragment StoreEntitySet="oems">
+                <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="People1">
-            <EntityTypeMapping TypeName="labdbModel.Person">
-              <MappingFragment StoreEntitySet="people">
-                <ScalarProperty Name="role" ColumnName="role" />
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Projects1">
-            <EntityTypeMapping TypeName="labdbModel.Project">
-              <MappingFragment StoreEntitySet="projects">
-                <ScalarProperty Name="total_external_cost" ColumnName="total_external_cost" />
-                <ScalarProperty Name="total_internal_cost" ColumnName="total_internal_cost" />
-                <ScalarProperty Name="project_leaderID" ColumnName="project_leaderID" />
-                <ScalarProperty Name="description" ColumnName="description" />
-                <ScalarProperty Name="oemID" ColumnName="oemID" />
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="batch_files">
-            <EntityTypeMapping TypeName="labdbModel.batch_files">
-              <MappingFragment StoreEntitySet="batch_files">
-                <ScalarProperty Name="description" ColumnName="description" />
-                <ScalarProperty Name="path" ColumnName="path" />
-                <ScalarProperty Name="batchID" ColumnName="batchID" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="ExternalConstructions">
-            <EntityTypeMapping TypeName="labdbModel.ExternalConstruction">
-              <MappingFragment StoreEntitySet="external_constructions">
-                <ScalarProperty Name="oemID" ColumnName="oemID" />
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="external_report_files">
-            <EntityTypeMapping TypeName="labdbModel.external_report_files">
-              <MappingFragment StoreEntitySet="external_report_files">
-                <ScalarProperty Name="external_reportID" ColumnName="external_reportID" />
-                <ScalarProperty Name="description" ColumnName="description" />
-                <ScalarProperty Name="path" ColumnName="path" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="external_reports">
-            <EntityTypeMapping TypeName="labdbModel.external_reports">
-              <MappingFragment StoreEntitySet="external_reports">
-                <ScalarProperty Name="projectID" ColumnName="projectID" />
-                <ScalarProperty Name="fileID" ColumnName="fileID" />
-                <ScalarProperty Name="report_received" ColumnName="report_received" />
-                <ScalarProperty Name="currency" ColumnName="currency" />
-                <ScalarProperty Name="samples" ColumnName="samples" />
-                <ScalarProperty Name="price" ColumnName="price" />
-                <ScalarProperty Name="purchase_order" ColumnName="purchase_order" />
-                <ScalarProperty Name="request_done" ColumnName="request_done" />
-                <ScalarProperty Name="material_sent" ColumnName="material_sent" />
-                <ScalarProperty Name="external_labID" ColumnName="external_labID" />
-                <ScalarProperty Name="internal_number" ColumnName="internal_number" />
-                <ScalarProperty Name="external_number" ColumnName="external_number" />
-                <ScalarProperty Name="description" ColumnName="description" />
-                <ScalarProperty Name="date" ColumnName="date" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Files1">
-            <EntityTypeMapping TypeName="labdbModel.File">
-              <MappingFragment StoreEntitySet="files">
-                <ScalarProperty Name="path" ColumnName="path" />
-                <ScalarProperty Name="description" ColumnName="description" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="methods">
-            <EntityTypeMapping TypeName="labdbModel.method">
-              <MappingFragment StoreEntitySet="methods">
-                <ScalarProperty Name="old_flag" ColumnName="old_flag" />
-                <ScalarProperty Name="cost_units" ColumnName="cost_units" />
-                <ScalarProperty Name="um" ColumnName="um" />
-                <ScalarProperty Name="description" ColumnName="description" />
-                <ScalarProperty Name="label" ColumnName="label" />
-                <ScalarProperty Name="propertyID" ColumnName="propertyID" />
-                <ScalarProperty Name="measurements" ColumnName="measurements" />
-                <ScalarProperty Name="standardID" ColumnName="standardID" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Organizations1">
             <EntityTypeMapping TypeName="labdbModel.Organization">
               <MappingFragment StoreEntitySet="organizations">
-                <ScalarProperty Name="category" ColumnName="category" />
-                <ScalarProperty Name="name" ColumnName="name" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="category" ColumnName="category" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="People1">
+            <EntityTypeMapping TypeName="labdbModel.Person">
+              <MappingFragment StoreEntitySet="people">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="role" ColumnName="role" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Projects">
+            <EntityTypeMapping TypeName="labdbModel.Project">
+              <MappingFragment StoreEntitySet="projects">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="project_leaderID" ColumnName="project_leaderID" />
+                <ScalarProperty Name="oemID" ColumnName="oemID" />
+                <ScalarProperty Name="total_internal_cost" ColumnName="total_internal_cost" />
+                <ScalarProperty Name="total_external_cost" ColumnName="total_external_cost" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Properties1">
             <EntityTypeMapping TypeName="labdbModel.Property">
               <MappingFragment StoreEntitySet="properties">
+                <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="report_files">
-            <EntityTypeMapping TypeName="labdbModel.report_files">
+          <EntitySetMapping Name="Recipes1">
+            <EntityTypeMapping TypeName="labdbModel.Recipe">
+              <MappingFragment StoreEntitySet="recipes">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="code" ColumnName="code" />
+                <ScalarProperty Name="colourID" ColumnName="colourID" />
+                <ScalarProperty Name="masterID" ColumnName="masterID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ReportFiles">
+            <EntityTypeMapping TypeName="labdbModel.ReportFile">
               <MappingFragment StoreEntitySet="report_files">
-                <ScalarProperty Name="path" ColumnName="path" />
-                <ScalarProperty Name="reportID" ColumnName="reportID" />
-                <ScalarProperty Name="description" ColumnName="description" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="reportID" ColumnName="reportID" />
+                <ScalarProperty Name="path" ColumnName="path" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Reports1">
+          <EntitySetMapping Name="Reports">
             <EntityTypeMapping TypeName="labdbModel.Report">
               <MappingFragment StoreEntitySet="reports">
-                <ScalarProperty Name="label" ColumnName="label" />
-                <ScalarProperty Name="requestID" ColumnName="requestID" />
-                <ScalarProperty Name="start_date" ColumnName="start_date" />
-                <ScalarProperty Name="specification_versionID" ColumnName="specification_versionID" />
-                <ScalarProperty Name="specificationID" ColumnName="specificationID" />
-                <ScalarProperty Name="projectID" ColumnName="projectID" />
-                <ScalarProperty Name="number" ColumnName="number" />
-                <ScalarProperty Name="end_date" ColumnName="end_date" />
-                <ScalarProperty Name="description" ColumnName="description" />
-                <ScalarProperty Name="category" ColumnName="category" />
-                <ScalarProperty Name="batchID" ColumnName="batchID" />
-                <ScalarProperty Name="authorID" ColumnName="authorID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="authorID" ColumnName="authorID" />
+                <ScalarProperty Name="batchID" ColumnName="batchID" />
+                <ScalarProperty Name="category" ColumnName="category" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="end_date" ColumnName="end_date" />
+                <ScalarProperty Name="number" ColumnName="number" />
+                <ScalarProperty Name="projectID" ColumnName="projectID" />
+                <ScalarProperty Name="specificationID" ColumnName="specificationID" />
+                <ScalarProperty Name="specification_versionID" ColumnName="specification_versionID" />
+                <ScalarProperty Name="start_date" ColumnName="start_date" />
+                <ScalarProperty Name="requestID" ColumnName="requestID" />
+                <ScalarProperty Name="label" ColumnName="label" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="requirements">
-            <EntityTypeMapping TypeName="labdbModel.requirement">
+          <EntitySetMapping Name="Requirements1">
+            <EntityTypeMapping TypeName="labdbModel.Requirement">
               <MappingFragment StoreEntitySet="requirements">
-                <ScalarProperty Name="specification_versionID" ColumnName="specification_versionID" />
-                <ScalarProperty Name="specificationID" ColumnName="specificationID" />
-                <ScalarProperty Name="position" ColumnName="position" />
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="methodID" ColumnName="methodID" />
-                <ScalarProperty Name="description" ColumnName="description" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="methodID" ColumnName="methodID" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="position" ColumnName="position" />
+                <ScalarProperty Name="specificationID" ColumnName="specificationID" />
+                <ScalarProperty Name="specification_versionID" ColumnName="specification_versionID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Samples1">
             <EntityTypeMapping TypeName="labdbModel.Sample">
               <MappingFragment StoreEntitySet="samples">
-                <ScalarProperty Name="date" ColumnName="date" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="batchID" ColumnName="batchID" />
                 <ScalarProperty Name="code" ColumnName="code" />
-                <ScalarProperty Name="batchID" ColumnName="batchID" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="specification_versions">
-            <EntityTypeMapping TypeName="labdbModel.specification_versions">
-              <MappingFragment StoreEntitySet="specification_versions">
-                <ScalarProperty Name="specificationID" ColumnName="specificationID" />
-                <ScalarProperty Name="overrideID" ColumnName="overrideID" />
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="main_flag" ColumnName="main_flag" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="specifications">
-            <EntityTypeMapping TypeName="labdbModel.specification">
-              <MappingFragment StoreEntitySet="specifications">
-                <ScalarProperty Name="old_flag" ColumnName="old_flag" />
-                <ScalarProperty Name="description" ColumnName="description" />
-                <ScalarProperty Name="label" ColumnName="label" />
-                <ScalarProperty Name="standardID" ColumnName="standardID" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="standard_files">
-            <EntityTypeMapping TypeName="labdbModel.standard_files">
-              <MappingFragment StoreEntitySet="standard_files">
-                <ScalarProperty Name="description" ColumnName="description" />
-                <ScalarProperty Name="path" ColumnName="path" />
-                <ScalarProperty Name="standardID" ColumnName="standardID" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="standards">
-            <EntityTypeMapping TypeName="labdbModel.standard">
-              <MappingFragment StoreEntitySet="standards">
-                <ScalarProperty Name="next_issueID" ColumnName="next_issueID" />
-                <ScalarProperty Name="previous_issueID" ColumnName="previous_issueID" />
-                <ScalarProperty Name="fileID" ColumnName="fileID" />
-                <ScalarProperty Name="old_flag" ColumnName="old_flag" />
-                <ScalarProperty Name="organizationID" ColumnName="organizationID" />
-                <ScalarProperty Name="issue" ColumnName="issue" />
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="sub_requirements">
-            <EntityTypeMapping TypeName="labdbModel.sub_requirements">
-              <MappingFragment StoreEntitySet="sub_requirements">
-                <ScalarProperty Name="requirementID" ColumnName="requirementID" />
-                <ScalarProperty Name="required_value" ColumnName="required_value" />
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="sub_tests">
-            <EntityTypeMapping TypeName="labdbModel.sub_tests">
-              <MappingFragment StoreEntitySet="sub_tests">
-                <ScalarProperty Name="testID" ColumnName="testID" />
-                <ScalarProperty Name="result" ColumnName="result" />
-                <ScalarProperty Name="sub_requirementID" ColumnName="sub_requirementID" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tasks">
-            <EntityTypeMapping TypeName="labdbModel.task">
-              <MappingFragment StoreEntitySet="tasks">
-                <ScalarProperty Name="pipeline_order" ColumnName="pipeline_order" />
-                <ScalarProperty Name="priority_modifier" ColumnName="priority_modifier" />
-                <ScalarProperty Name="progress" ColumnName="progress" />
-                <ScalarProperty Name="notes" ColumnName="notes" />
-                <ScalarProperty Name="reportID" ColumnName="reportID" />
-                <ScalarProperty Name="batchID" ColumnName="batchID" />
-                <ScalarProperty Name="specificationID" ColumnName="specificationID" />
-                <ScalarProperty Name="projectID" ColumnName="projectID" />
-                <ScalarProperty Name="requesterID" ColumnName="requesterID" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tests">
-            <EntityTypeMapping TypeName="labdbModel.test">
-              <MappingFragment StoreEntitySet="tests">
-                <ScalarProperty Name="stat_skip" ColumnName="stat_skip" />
-                <ScalarProperty Name="meets_requirements" ColumnName="meets_requirements" />
                 <ScalarProperty Name="date" ColumnName="date" />
-                <ScalarProperty Name="operatorID" ColumnName="operatorID" />
-                <ScalarProperty Name="notes" ColumnName="notes" />
-                <ScalarProperty Name="external_reportID" ColumnName="external_reportID" />
-                <ScalarProperty Name="reportID" ColumnName="reportID" />
-                <ScalarProperty Name="methodID" ColumnName="methodID" />
-                <ScalarProperty Name="batchID" ColumnName="batchID" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="users">
-            <EntityTypeMapping TypeName="labdbModel.user">
-              <MappingFragment StoreEntitySet="users">
-                <ScalarProperty Name="personID" ColumnName="personID" />
-                <ScalarProperty Name="user_name" ColumnName="user_name" />
-                <ScalarProperty Name="role_list" ColumnName="role_list" />
-                <ScalarProperty Name="hashed_password" ColumnName="hashed_password" />
-                <ScalarProperty Name="full_name" ColumnName="full_name" />
+          <EntitySetMapping Name="SpecificationVersions">
+            <EntityTypeMapping TypeName="labdbModel.SpecificationVersion">
+              <MappingFragment StoreEntitySet="specification_versions">
                 <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="main_flag" ColumnName="main_flag" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="overrideID" ColumnName="overrideID" />
+                <ScalarProperty Name="specificationID" ColumnName="specificationID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Specifications1">
+            <EntityTypeMapping TypeName="labdbModel.Specification">
+              <MappingFragment StoreEntitySet="specifications">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="standardID" ColumnName="standardID" />
+                <ScalarProperty Name="label" ColumnName="label" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="old_flag" ColumnName="old_flag" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="StandardFiles">
+            <EntityTypeMapping TypeName="labdbModel.StandardFile">
+              <MappingFragment StoreEntitySet="standard_files">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="standardID" ColumnName="standardID" />
+                <ScalarProperty Name="path" ColumnName="path" />
+                <ScalarProperty Name="description" ColumnName="description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Stds">
+            <EntityTypeMapping TypeName="labdbModel.Std">
+              <MappingFragment StoreEntitySet="standards">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="issue" ColumnName="issue" />
+                <ScalarProperty Name="organizationID" ColumnName="organizationID" />
+                <ScalarProperty Name="old_flag" ColumnName="old_flag" />
+                <ScalarProperty Name="fileID" ColumnName="fileID" />
+                <ScalarProperty Name="previous_issueID" ColumnName="previous_issueID" />
+                <ScalarProperty Name="next_issueID" ColumnName="next_issueID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SubRequirements">
+            <EntityTypeMapping TypeName="labdbModel.SubRequirement">
+              <MappingFragment StoreEntitySet="sub_requirements">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="required_value" ColumnName="required_value" />
+                <ScalarProperty Name="requirementID" ColumnName="requirementID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SubTests">
+            <EntityTypeMapping TypeName="labdbModel.SubTest">
+              <MappingFragment StoreEntitySet="sub_tests">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="sub_requirementID" ColumnName="sub_requirementID" />
+                <ScalarProperty Name="result" ColumnName="result" />
+                <ScalarProperty Name="testID" ColumnName="testID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tasks1">
+            <EntityTypeMapping TypeName="labdbModel.Task">
+              <MappingFragment StoreEntitySet="tasks">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="requesterID" ColumnName="requesterID" />
+                <ScalarProperty Name="projectID" ColumnName="projectID" />
+                <ScalarProperty Name="specification_versionID" ColumnName="specification_versionID" />
+                <ScalarProperty Name="batchID" ColumnName="batchID" />
+                <ScalarProperty Name="notes" ColumnName="notes" />
+                <ScalarProperty Name="reportID" ColumnName="reportID" />
+                <ScalarProperty Name="progress" ColumnName="progress" />
+                <ScalarProperty Name="priority_modifier" ColumnName="priority_modifier" />
+                <ScalarProperty Name="pipeline_order" ColumnName="pipeline_order" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tests">
+            <EntityTypeMapping TypeName="labdbModel.Test">
+              <MappingFragment StoreEntitySet="tests">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="batchID" ColumnName="batchID" />
+                <ScalarProperty Name="methodID" ColumnName="methodID" />
+                <ScalarProperty Name="reportID" ColumnName="reportID" />
+                <ScalarProperty Name="external_reportID" ColumnName="external_reportID" />
+                <ScalarProperty Name="notes" ColumnName="notes" />
+                <ScalarProperty Name="operatorID" ColumnName="operatorID" />
+                <ScalarProperty Name="date" ColumnName="date" />
+                <ScalarProperty Name="meets_requirements" ColumnName="meets_requirements" />
+                <ScalarProperty Name="stat_skip" ColumnName="stat_skip" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users1">
+            <EntityTypeMapping TypeName="labdbModel.User">
+              <MappingFragment StoreEntitySet="users">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="full_name" ColumnName="full_name" />
+                <ScalarProperty Name="hashed_password" ColumnName="hashed_password" />
+                <ScalarProperty Name="role_list" ColumnName="role_list" />
+                <ScalarProperty Name="user_name" ColumnName="user_name" />
+                <ScalarProperty Name="personID" ColumnName="personID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
