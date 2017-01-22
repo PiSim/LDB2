@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="labdbModel.Store" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.7" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="labdbModel.Store" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.7" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="aspects">
           <Key>
             <PropertyRef Name="ID" />
@@ -1069,8 +1069,7 @@
             <End Role="sub_tests" EntitySet="sub_tests" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="labdbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -1098,9 +1097,9 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="number" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Number" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="materialID" Type="Int32" />
-          <Property Name="notes" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="notes" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" DefaultValue="" />
           <NavigationProperty Name="BatchFiles" Relationship="Self.batch1" FromRole="batches" ToRole="batch_files" />
           <NavigationProperty Name="Material" Relationship="Self.batch_by_material" FromRole="batches" ToRole="materials" />
           <NavigationProperty Name="Masters" Relationship="Self.batch_to_master" FromRole="batches" ToRole="masters" />
@@ -1308,20 +1307,20 @@
           <Property Name="authorID" Type="Int32" Nullable="false" />
           <Property Name="batchID" Type="Int32" Nullable="false" />
           <Property Name="category" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="description" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="end_date" Type="DateTime" />
-          <Property Name="number" Type="Int32" Nullable="false" />
+          <Property Name="Number" Type="Int32" Nullable="false" />
           <Property Name="projectID" Type="Int32" />
           <Property Name="specificationID" Type="Int32" />
           <Property Name="specification_versionID" Type="Int32" />
           <Property Name="start_date" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
           <Property Name="requestID" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
           <Property Name="label" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="batch" Relationship="Self.batch_to_report" FromRole="reports" ToRole="batches" />
-          <NavigationProperty Name="person" Relationship="Self.author_to_report" FromRole="reports" ToRole="people" />
-          <NavigationProperty Name="report_files" Relationship="Self.report_to_reportfile" FromRole="reports" ToRole="report_files" />
+          <NavigationProperty Name="Batch" Relationship="Self.batch_to_report" FromRole="reports" ToRole="batches" />
+          <NavigationProperty Name="Author" Relationship="Self.author_to_report" FromRole="reports" ToRole="people" />
+          <NavigationProperty Name="ReportFiles" Relationship="Self.report_to_reportfile" FromRole="reports" ToRole="report_files" />
           <NavigationProperty Name="tasks" Relationship="Self.report_to_task" FromRole="reports" ToRole="tasks" />
-          <NavigationProperty Name="tests" Relationship="Self.report_to_test" FromRole="reports" ToRole="tests" />
+          <NavigationProperty Name="Tests" Relationship="Self.report_to_test" FromRole="reports" ToRole="tests" />
           <NavigationProperty Name="specification" Relationship="Self.specification_to_report" FromRole="reports" ToRole="specifications" />
           <NavigationProperty Name="specification_versions" Relationship="Self.specversion_to_report" FromRole="reports" ToRole="specification_versions" />
         </EntityType>
@@ -2041,7 +2040,7 @@
           <EntitySet Name="ReportFiles" EntityType="labdbModel.ReportFile" />
           <EntitySet Name="Reports" EntityType="labdbModel.Report" />
           <EntitySet Name="Requirements1" EntityType="labdbModel.Requirement" />
-          <EntitySet Name="Samples1" EntityType="labdbModel.Sample" />
+          <EntitySet Name="Samples" EntityType="labdbModel.Sample" />
           <EntitySet Name="SpecificationVersions" EntityType="labdbModel.SpecificationVersion" />
           <EntitySet Name="Specifications1" EntityType="labdbModel.Specification" />
           <EntitySet Name="StandardFiles" EntityType="labdbModel.StandardFile" />
@@ -2073,7 +2072,7 @@
           </AssociationSet>
           <AssociationSet Name="batch_to_sample" Association="Self.batch_to_sample">
             <End Role="batches" EntitySet="Batches" />
-            <End Role="samples" EntitySet="Samples1" />
+            <End Role="samples" EntitySet="Samples" />
           </AssociationSet>
           <AssociationSet Name="batch_to_test" Association="Self.batch_to_test">
             <End Role="batches" EntitySet="Batches" />
@@ -2253,7 +2252,7 @@
             <EntityTypeMapping TypeName="labdbModel.Batch">
               <MappingFragment StoreEntitySet="batches">
                 <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="number" ColumnName="number" />
+                <ScalarProperty Name="Number" ColumnName="number" />
                 <ScalarProperty Name="materialID" ColumnName="materialID" />
                 <ScalarProperty Name="notes" ColumnName="notes" />
               </MappingFragment>
@@ -2437,9 +2436,9 @@
                 <ScalarProperty Name="authorID" ColumnName="authorID" />
                 <ScalarProperty Name="batchID" ColumnName="batchID" />
                 <ScalarProperty Name="category" ColumnName="category" />
-                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="Description" ColumnName="description" />
                 <ScalarProperty Name="end_date" ColumnName="end_date" />
-                <ScalarProperty Name="number" ColumnName="number" />
+                <ScalarProperty Name="Number" ColumnName="number" />
                 <ScalarProperty Name="projectID" ColumnName="projectID" />
                 <ScalarProperty Name="specificationID" ColumnName="specificationID" />
                 <ScalarProperty Name="specification_versionID" ColumnName="specification_versionID" />
@@ -2462,7 +2461,7 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Samples1">
+          <EntitySetMapping Name="Samples">
             <EntityTypeMapping TypeName="labdbModel.Sample">
               <MappingFragment StoreEntitySet="samples">
                 <ScalarProperty Name="ID" ColumnName="ID" />

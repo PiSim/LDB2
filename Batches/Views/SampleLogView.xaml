@@ -5,35 +5,112 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Batches.Views"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" d:DesignWidth="600">
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <Label Content="Azione:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,25,0,0"/>
-        <ComboBox ItemsSource="{Binding Path=EntryInstance.Codes}" 
-                  SelectedItem="{Binding Path=EntryInstance.Action, Mode=TwoWay}"
-                  Width="150" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="75,25,0,0"/>
-        <Button Content="OK"
-                Command="{Binding SaveLogEntryCommand}"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Bottom"/>
-        <GroupBox Header="Info Materiale" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,75,0,0"
-                  Width="200" Height="100">
-            <Grid DataContext="{Binding Path=EntryInstance.Batch.Material}">
-                <Label Content="Tipo" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,0,0"/>
-                <TextBox Text="{Binding Path=Construction.Type, Mode=TwoWay}" HorizontalAlignment="Left" 
-                         VerticalAlignment="Top" Margin="0,25,0,0" Width="35"/>
-                <Label Content="Linea" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="40,0,0,0"/>
-                <TextBox Text="{Binding Path=.Construction.Line, Mode=TwoWay}" HorizontalAlignment="Left" 
-                         VerticalAlignment="Top" Margin="40,25,0,0" Width="35"/>
-                <Label Content="Aspetto" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="80,0,0,0"/>
-                <TextBox Text="{Binding Path=Construction.Aspect.Code, Mode=TwoWay}" HorizontalAlignment="Left" 
-                         VerticalAlignment="Top" Margin="90,25,0,0" Width="35"/>
-                <Label Content="Mescola" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="130,0,0,0"/>
-                <TextBox Text="{Binding Path=Recipe.Code, Mode=TwoWay}" HorizontalAlignment="Left" 
-                         VerticalAlignment="Top" Margin="140,25,0,0" Width="35"/>
+        <Grid Grid.Column="0"
+              Grid.Row="0"
+              Margin="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition />
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Label Content="Azione:" 
+                   Grid.Column="0"
+                   Grid.Row="0"
+                   Margin="5"/>
+            <ComboBox ItemsSource="{Binding Path=ActionList}"
+                      DisplayMemberPath="Item1"
+                      SelectedItem="{Binding Path=SelectedAction, Mode=TwoWay}"
+                      Width="150"
+                      Grid.Column="1"
+                      Grid.Row="0"
+                      Margin="5"/>
+            <Label Content="Batch:"
+                   Grid.Column="0"
+                   Grid.Row="1"
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Top"
+                   Margin="5"/>
+            
+            <TextBox Text="{Binding BatchNumber, Mode=TwoWay}"
+                     Grid.Column="1"
+                     Grid.Row="1"
+                     Width="75"
+                     Margin="5"/>
+
+            <Button Content="OK"
+                    Command="{Binding ContinueCommand}"
+                    Grid.Column="1"
+                    Grid.Row="3"
+                    HorizontalAlignment="Right"
+                    Margin="5"
+                    MaxHeight="25"
+                    Width="50"/>
+        </Grid>
+        <GroupBox Header="Info Materiale"
+                  Grid.Column="1"
+                  Grid.Row="0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Label Content="Tipo"
+                       Grid.Column="0"
+                       Grid.Row="0"
+                       Margin="5"/>
+                <TextBox Text="{Binding Path=Construction.Type, Mode=TwoWay}" 
+                         Grid.Column="0"
+                         Grid.Row="1"
+                         Margin="5"/>
+                <Label Content="Linea"
+                       Grid.Column="1"
+                       Grid.Row="0"
+                       Margin="5"/>
+                <TextBox Text="{Binding Path=.Construction.Line, Mode=TwoWay}"
+                         Grid.Column="1"
+                         Grid.Row="1"
+                         Margin="5"/>
+                <Label Content="Aspetto"
+                       Grid.Column="2"
+                       Grid.Row="0"
+                       Margin="5"/>
+                <TextBox Text="{Binding Path=Construction.Aspect.Code, Mode=TwoWay}"
+                         Grid.Column="2"
+                         Grid.Row="1"
+                         Margin="5"/>
+                <Label Content="Mescola"
+                       Grid.Column="3"
+                       Grid.Row="0"
+                       Margin="5"/>
+                <TextBox Text="{Binding Path=Recipe.Code, Mode=TwoWay}"
+                         Grid.Column="3"
+                         Grid.Row="1"
+                         Margin="5"/>
             </Grid>
         </GroupBox>
     </Grid>

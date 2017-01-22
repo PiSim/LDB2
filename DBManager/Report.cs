@@ -17,18 +17,18 @@ namespace DBManager
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Report()
         {
-            this.report_files = new HashSet<ReportFile>();
+            this.ReportFiles = new HashSet<ReportFile>();
             this.tasks = new HashSet<Task>();
-            this.tests = new HashSet<Test>();
+            this.Tests = new HashSet<Test>();
         }
     
         public int ID { get; set; }
         public int authorID { get; set; }
         public int batchID { get; set; }
         public string category { get; set; }
-        public string description { get; set; }
+        public string Description { get; set; }
         public Nullable<System.DateTime> end_date { get; set; }
-        public int number { get; set; }
+        public int Number { get; set; }
         public Nullable<int> projectID { get; set; }
         public Nullable<int> specificationID { get; set; }
         public Nullable<int> specification_versionID { get; set; }
@@ -36,14 +36,14 @@ namespace DBManager
         public string requestID { get; set; }
         public string label { get; set; }
     
-        public virtual Batch batch { get; set; }
-        public virtual Person person { get; set; }
+        public virtual Batch Batch { get; set; }
+        public virtual Person Author { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ReportFile> report_files { get; set; }
+        public virtual ICollection<ReportFile> ReportFiles { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Task> tasks { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Test> tests { get; set; }
+        public virtual ICollection<Test> Tests { get; set; }
         public virtual Specification specification { get; set; }
         public virtual SpecificationVersion specification_versions { get; set; }
     }

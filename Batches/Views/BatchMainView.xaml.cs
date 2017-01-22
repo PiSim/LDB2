@@ -26,7 +26,7 @@ namespace Batches.Views
 
         public BatchMainView(IEventAggregator eventAggregator)
         {
-            _eventAggregator = eventAggregator;
+            DataContext = new ViewModels.BatchMainViewModel(eventAggregator);
             InitializeComponent();
         }
 

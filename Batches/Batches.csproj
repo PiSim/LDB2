@@ -105,6 +105,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="ViewModels\BatchesNavigationItemViewModel.cs" />
+    <Compile Include="ViewModels\BatchMainViewModel.cs" />
     <Compile Include="ViewNames.cs" />
     <Compile Include="ViewModels\BatchInfoViewModel.cs" />
     <Compile Include="ViewModels\BatchQueryViewModel.cs" />

@@ -25,7 +25,7 @@ namespace Batches.ViewModels
 
         public string Number
         {
-            get { return _instance.number; }
+            get { return _instance.Number; }
         }
 
         public ObservableCollection<Sample> Samples

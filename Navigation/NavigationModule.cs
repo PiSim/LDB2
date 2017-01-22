@@ -26,5 +26,10 @@ namespace Navigation
         {
             _regionManager.RequestNavigate("MainRegion", new Uri(viewName, UriKind.Relative));
         }
+
+        public void OnObjectVisualizationRequested()
+        {
+
+        }
     }
 }

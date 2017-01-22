@@ -46,7 +46,7 @@ namespace DBManager
         public virtual DbSet<ReportFile> ReportFiles { get; set; }
         public virtual DbSet<Report> Reports { get; set; }
         public virtual DbSet<Requirement> Requirements1 { get; set; }
-        public virtual DbSet<Sample> Samples1 { get; set; }
+        public virtual DbSet<Sample> Samples { get; set; }
         public virtual DbSet<SpecificationVersion> SpecificationVersions { get; set; }
         public virtual DbSet<Specification> Specifications1 { get; set; }
         public virtual DbSet<StandardFile> StandardFiles { get; set; }

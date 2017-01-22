@@ -81,8 +81,11 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CommitRequested.cs" />
+    <Compile Include="Events\VisualizeObjectRequested.cs" />
     <Compile Include="InfrastructureModule.cs" />
     <Compile Include="NavigationRequested.cs" />
+    <Compile Include="ObjectNavigationToken.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
