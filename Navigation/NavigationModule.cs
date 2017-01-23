@@ -27,9 +27,15 @@ namespace Navigation
             _regionManager.RequestNavigate("MainRegion", new Uri(viewName, UriKind.Relative));
         }
 
-        public void OnObjectVisualizationRequested()
+        public void OnObjectVisualizationRequested(ObjectNavigationToken token)
         {
-
+            NavigationParameters parameters = new NavigationParameters();
+            parameters.Add("batch", token.ObjectInstance);
+            _regionManager.RequestNavigate(
+                RegionNames.MainRegion,
+                new Uri(token.ViewName, UriKind.Relative),
+                parameters
+                );
         }
     }
 }

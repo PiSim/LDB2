@@ -1,4 +1,5 @@
-﻿using Infrastructure;
+﻿using DBManager;
+using Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,9 +25,9 @@ namespace Batches.Views
     {
         IEventAggregator _eventAggregator;
 
-        public BatchMainView(IEventAggregator eventAggregator)
+        public BatchMainView(IEventAggregator eventAggregator, DBEntities entities)
         {
-            DataContext = new ViewModels.BatchMainViewModel(eventAggregator);
+            DataContext = new ViewModels.BatchMainViewModel(eventAggregator, entities);
             InitializeComponent();
         }
 

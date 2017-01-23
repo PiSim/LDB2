@@ -20,11 +20,13 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <TextBox x:Name="QuickQueryTextBox"
+                 Text="{Binding BatchNumber, Mode=TwoWay}"
                  Grid.Column="0"
                  Grid.Row="0"
                  Margin="5"
                  Width="100"/>
         <Button Content="Cerca"
+                Command="{Binding QuickQueryCommand}"
                 Grid.Column="1"
                 Grid.Row="0"
                 Margin="5"/>

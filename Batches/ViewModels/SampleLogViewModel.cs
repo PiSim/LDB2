@@ -1,5 +1,7 @@
-﻿using DBManager;
+﻿using Controls.Views;
+using DBManager;
 using Infrastructure;
+using Microsoft.Practices.Unity;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
@@ -14,17 +16,16 @@ namespace Batches.ViewModels
     class SampleLogViewModel : BindableBase
     {
         private Batch _currentBatch;
-        private bool _materialChanged;
         private DBEntities _entities;
         private DelegateCommand _continue, _saveLogEntry;
         private IEventAggregator _eventAggregator;
+        private IUnityContainer _container;
         private List<Tuple<string, string>> _actions;
-        private Material _material;
         private string _batchNumber;
         private Tuple<string, string> _selectedAction;
 
-        public SampleLogViewModel(DBEntities entities, IEventAggregator eventAggregator) 
-            : base()
+        public SampleLogViewModel(DBEntities entities, IEventAggregator eventAggregator,
+                IUnityContainer container) : base()
         {
             _actions = new List<Tuple<string, string>>()
             {
@@ -35,20 +36,19 @@ namespace Batches.ViewModels
                 new Tuple<string, string> ("Spedito", "S")
             };
 
+            _container = container;
             _entities = entities;
             _eventAggregator = eventAggregator;
 
             _continue = new DelegateCommand(
                 () =>
                 {
-                    if (_currentBatch == null)
-                        CurrentBatch = _entities.GetBatchByNumber(BatchNumber);
-
-                    else
+                    _currentBatch = _entities.GetBatchByNumber(_batchNumber);
+                    if (_currentBatch.Material == null)
                     {
-                        _entities.CreateSampleForBatch(_currentBatch, _selectedAction.Item2);
-                        _eventAggregator.GetEvent<CommitRequested>().Publish();
-                        Clear();
+                        MaterialCreationDialog matDialog = _container.Resolve<MaterialCreationDialog>();
+                        if (matDialog.ShowDialog() == true)
+                            _currentBatch.Material = matDialog.ValidatedMaterial;
                     }
                 });
 
@@ -61,41 +61,21 @@ namespace Batches.ViewModels
 
         public void Clear()
         {
-            CurrentBatch = null;
+            BatchNumber = null;
         }
 
         public List<Tuple<string,string>> ActionList
         {
             get { return _actions; }
         }
-
-        public Material BatchMaterial
-        {
-            get { return _material; }
-            set
-            {
-                _material = value;
-            }
-        }
-
+        
         public string BatchNumber
         {
             get { return _batchNumber; }
             set
             {
                 _batchNumber = value;
-                CurrentBatch = null;
-            }
-        }
-
-        public Batch CurrentBatch
-        {
-            get { return _currentBatch; }
-            set
-            {
-                _currentBatch = value;
-
-                OnPropertyChanged("IsBatchLoaded");
+                OnPropertyChanged("BatchNumber");
             }
         }
 
@@ -108,12 +88,7 @@ namespace Batches.ViewModels
         {
             get { return _saveLogEntry; }
         }
-
-        public bool IsBatchLoaded
-        {
-            get { return _currentBatch != null; }
-        }
-
+        
         public Tuple<string, string> SelectedAction
         {
             get { return _selectedAction; }

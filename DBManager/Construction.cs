@@ -17,20 +17,20 @@ namespace DBManager
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Construction()
         {
-            this.materials = new HashSet<Material>();
+            this.Materials = new HashSet<Material>();
         }
     
         public int ID { get; set; }
-        public string type { get; set; }
-        public string line { get; set; }
-        public int aspectID { get; set; }
-        public Nullable<int> projectID { get; set; }
-        public Nullable<int> external_constructionID { get; set; }
+        public string Type { get; set; }
+        public string Line { get; set; }
+        private int aspectID { get; set; }
+        private Nullable<int> projectID { get; set; }
+        private Nullable<int> external_constructionID { get; set; }
     
-        public virtual Aspect aspect { get; set; }
+        public virtual Aspect Aspect { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Material> materials { get; set; }
-        public virtual ExternalConstruction external_constructions { get; set; }
-        public virtual Project project { get; set; }
+        public virtual ICollection<Material> Materials { get; set; }
+        public virtual ExternalConstruction ExternalConstruction { get; set; }
+        public virtual Project Project { get; set; }
     }
 }

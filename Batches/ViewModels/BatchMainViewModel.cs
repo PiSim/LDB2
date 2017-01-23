@@ -15,10 +15,10 @@ namespace Batches.ViewModels
 {
     class BatchMainViewModel : BindableBase
     {
-        DBEntities _entities;
-        DelegateCommand _quickOpen, _openSampleLogView;
-        IEventAggregator _eventAggregator;
-        string _batchNumber;
+        private DBEntities _entities;
+        private DelegateCommand _quickOpen, _openSampleLogView;
+        private IEventAggregator _eventAggregator;
+        private string _batchNumber;
 
         public BatchMainViewModel(IEventAggregator eventAggregator, DBEntities entities) 
             : base()
@@ -31,14 +31,14 @@ namespace Batches.ViewModels
                 {
                     _eventAggregator.GetEvent<NavigationRequested>().Publish(ViewNames.SampleLogView);
                 });
-
+            
             _quickOpen = new DelegateCommand(
                 () =>
                 {
                     Batch temp = _entities.GetBatchByNumber(_batchNumber, false);
                     ObjectNavigationToken token = new ObjectNavigationToken(temp, ViewNames.BatchInfoView);
-                    if (_entities != null)
-                        _eventAggregator.GetEvent<VisualizeObjectRequested>().Publish();
+                    if (temp != null)
+                        _eventAggregator.GetEvent<VisualizeObjectRequested>().Publish(token);
                 });
         }
 
@@ -52,5 +52,14 @@ namespace Batches.ViewModels
             get { return _quickOpen; }
         }
 
+        public string BatchNumber
+        {
+            get { return _batchNumber; }
+            set
+            {
+                _batchNumber = value;
+                OnPropertyChanged("BatchNumber");
+            }
+        }
     }
 }

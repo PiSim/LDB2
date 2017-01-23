@@ -1,4 +1,5 @@
-﻿using Prism.Events;
+﻿using Microsoft.Practices.Unity;
+using Prism.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,9 +22,11 @@ namespace Batches.Views
     /// </summary>
     public partial class SampleLogView : UserControl
     {
-        public SampleLogView(DBManager.DBEntities entities, IEventAggregator eventAggregator)
+        public SampleLogView(DBManager.DBEntities entities, 
+                            IEventAggregator eventAggregator,
+                            IUnityContainer container)
         {
-            DataContext = new ViewModels.SampleLogViewModel(entities, eventAggregator);
+            DataContext = new ViewModels.SampleLogViewModel(entities, eventAggregator, container);
             InitializeComponent();
         }
     }

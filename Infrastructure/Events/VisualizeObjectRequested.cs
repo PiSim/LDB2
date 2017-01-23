@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Events
 {
-    public class VisualizeObjectRequested : PubSubEvent<string>
+    public class VisualizeObjectRequested : PubSubEvent<ObjectNavigationToken>
     {
     }
 }
