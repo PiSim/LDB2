@@ -13,13 +13,28 @@
         </Grid.ColumnDefinitions>
         <ListView ItemsSource="{Binding RecentList}"
                   SelectedItem="{Binding SelectedRecent, Mode=TwoWay}"
-                  Grid.Column="1">
+                  Grid.Column="0">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Numero"
                                     DisplayMemberBinding="{Binding Number}"/>
+                    <GridViewColumn Header="Batch"
+                                    DisplayMemberBinding="{Binding  Batch.Number}"/>
+                    <GridViewColumn Header="Specifica"
+                                    DisplayMemberBinding="{Binding SpecificationVersion.Specification.Standard.Name}"/>
+                    <GridViewColumn Header="Progetto"
+                                    DisplayMemberBinding="{Binding Batch.Material.Construction.Project.Name}"/>
+                    <GridViewColumn Header="Autore"
+                                    DisplayMemberBinding="{Binding Author.Name}"/>
                 </GridView>
             </ListView.View>
         </ListView>
+
+        <Button Content="Nuovo"
+                Command="{Binding NewReportCommand}"
+                Grid.Column="1"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Margin="5,5,0,0"/>
     </Grid>
 </UserControl>

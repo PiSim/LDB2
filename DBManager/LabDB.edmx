@@ -1232,13 +1232,13 @@
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="name" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="category" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" a:GetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:SetterAccess="Private" />
+          <Property Name="Name" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Category" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="external_constructions" Relationship="Self.oemID" FromRole="organizations" ToRole="external_constructions" />
           <NavigationProperty Name="external_reports" Relationship="Self.external_lab" FromRole="organizations" ToRole="external_reports" />
-          <NavigationProperty Name="projects" Relationship="Self.oem1" FromRole="organizations" ToRole="projects" />
-          <NavigationProperty Name="standards" Relationship="Self.organization_to_standard" FromRole="organizations" ToRole="standards" />
+          <NavigationProperty Name="Projects" Relationship="Self.oem1" FromRole="organizations" ToRole="projects" />
+          <NavigationProperty Name="Standards" Relationship="Self.organization_to_standard" FromRole="organizations" ToRole="standards" />
         </EntityType>
         <EntityType Name="Person">
           <Key>
@@ -1393,15 +1393,15 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="name" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="issue" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
-          <Property Name="organizationID" Type="Int32" Nullable="false" />
-          <Property Name="old_flag" Type="Int32" />
-          <Property Name="fileID" Type="Int32" />
-          <Property Name="previous_issueID" Type="Int32" />
-          <Property Name="next_issueID" Type="Int32" />
+          <Property Name="Name" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Issue" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="organizationID" Type="Int32" Nullable="false" a:GetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:SetterAccess="Private" />
+          <Property Name="OldFlag" Type="Int32" />
+          <Property Name="fileID" Type="Int32" a:SetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:GetterAccess="Private" />
+          <Property Name="previous_issueID" Type="Int32" a:GetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:SetterAccess="Private" />
+          <Property Name="next_issueID" Type="Int32" a:GetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:SetterAccess="Private" />
           <NavigationProperty Name="methods" Relationship="Self.standard_to_method" FromRole="standards" ToRole="methods" />
-          <NavigationProperty Name="organization" Relationship="Self.organization_to_standard" FromRole="standards" ToRole="organizations" />
+          <NavigationProperty Name="Organization" Relationship="Self.organization_to_standard" FromRole="standards" ToRole="organizations" />
           <NavigationProperty Name="specifications" Relationship="Self.standard_to_specification" FromRole="standards" ToRole="specifications" />
           <NavigationProperty Name="standard_files" Relationship="Self.standard_to_standardfile" FromRole="standards" ToRole="standard_files" />
           <NavigationProperty Name="standards1" Relationship="Self.nextissue_to_standard" FromRole="standards" ToRole="standards1" />
@@ -2374,8 +2374,8 @@
             <EntityTypeMapping TypeName="labdbModel.Organization">
               <MappingFragment StoreEntitySet="organizations">
                 <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="category" ColumnName="category" />
+                <ScalarProperty Name="Name" ColumnName="name" />
+                <ScalarProperty Name="Category" ColumnName="category" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -2507,10 +2507,10 @@
             <EntityTypeMapping TypeName="labdbModel.Std">
               <MappingFragment StoreEntitySet="standards">
                 <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="issue" ColumnName="issue" />
+                <ScalarProperty Name="Name" ColumnName="name" />
+                <ScalarProperty Name="Issue" ColumnName="issue" />
                 <ScalarProperty Name="organizationID" ColumnName="organizationID" />
-                <ScalarProperty Name="old_flag" ColumnName="old_flag" />
+                <ScalarProperty Name="OldFlag" ColumnName="old_flag" />
                 <ScalarProperty Name="fileID" ColumnName="fileID" />
                 <ScalarProperty Name="previous_issueID" ColumnName="previous_issueID" />
                 <ScalarProperty Name="next_issueID" ColumnName="next_issueID" />

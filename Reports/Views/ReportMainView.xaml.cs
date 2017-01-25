@@ -1,4 +1,5 @@
 ﻿using DBManager;
+using Prism.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,9 +22,9 @@ namespace Reports.Views
     /// </summary>
     public partial class ReportMainView : UserControl
     {
-        public ReportMainView(DBEntities entities)
+        public ReportMainView(DBEntities entities, EventAggregator eventAggregator)
         {
-            DataContext = new ViewModels.MainViewModel(entities);
+            DataContext = new ViewModels.MainViewModel(entities, eventAggregator);
             InitializeComponent();
         }
     }

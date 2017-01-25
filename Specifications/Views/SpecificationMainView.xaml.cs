@@ -1,5 +1,4 @@
-﻿using DBManager;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,13 +13,15 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Standards.Views
+namespace Specifications.Views
 {
-    public partial class StandardMainView : UserControl
+    /// <summary>
+    /// Interaction logic for SpecificationMainView.xaml
+    /// </summary>
+    public partial class SpecificationMainView : UserControl
     {
-        public StandardMainView(DBEntities entities)
+        public SpecificationMainView()
         {
-            DataContext = new ViewModels.StandardMainViewModel(entities);
             InitializeComponent();
         }
     }

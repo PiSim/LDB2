@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Specifications
 {
-    class SpecificationsViewNames
+    class ViewNames
     {
         public static string SpecificationsCreationView
         {

@@ -17,9 +17,7 @@ using System.Windows.Shapes;
 
 namespace Batches.Views
 {
-    /// <summary>
-    /// Interaction logic for SampleLogView.xaml
-    /// </summary>
+
     public partial class SampleLogView : UserControl
     {
         public SampleLogView(DBManager.DBEntities entities, 

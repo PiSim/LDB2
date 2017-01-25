@@ -25,17 +25,17 @@ namespace DBManager
         }
     
         public int ID { get; set; }
-        public string name { get; set; }
-        public string issue { get; set; }
-        public int organizationID { get; set; }
-        public Nullable<int> old_flag { get; set; }
-        public Nullable<int> fileID { get; set; }
-        public Nullable<int> previous_issueID { get; set; }
-        public Nullable<int> next_issueID { get; set; }
+        public string Name { get; set; }
+        public string Issue { get; set; }
+        private int organizationID { get; set; }
+        public Nullable<int> OldFlag { get; set; }
+        private Nullable<int> fileID { get; set; }
+        private Nullable<int> previous_issueID { get; set; }
+        private Nullable<int> next_issueID { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Method> methods { get; set; }
-        public virtual Organization organization { get; set; }
+        public virtual Organization Organization { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Specification> specifications { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

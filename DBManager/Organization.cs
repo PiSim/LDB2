@@ -19,21 +19,21 @@ namespace DBManager
         {
             this.external_constructions = new HashSet<ExternalConstruction>();
             this.external_reports = new HashSet<ExternalReport>();
-            this.projects = new HashSet<Project>();
-            this.standards = new HashSet<Std>();
+            this.Projects = new HashSet<Project>();
+            this.Standards = new HashSet<Std>();
         }
     
-        public int ID { get; set; }
-        public string name { get; set; }
-        public string category { get; set; }
+        private int ID { get; set; }
+        public string Name { get; set; }
+        public string Category { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ExternalConstruction> external_constructions { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ExternalReport> external_reports { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Project> projects { get; set; }
+        public virtual ICollection<Project> Projects { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Std> standards { get; set; }
+        public virtual ICollection<Std> Standards { get; set; }
     }
 }

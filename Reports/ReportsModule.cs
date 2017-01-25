@@ -8,21 +8,21 @@ namespace Reports
 {
     public class ReportsModule : IModule
     {
-        IEventAggregator _eventAggregator;
         IRegionManager _regionManager;
         IUnityContainer _container;
 
-        public ReportsModule(IRegionManager regionManager, IEventAggregator eventAggregator,
-            IUnityContainer container)
+        public ReportsModule(IRegionManager regionManager,
+                             IUnityContainer container)
         {
             _container = container;
-            _eventAggregator = eventAggregator;
             _regionManager = regionManager;
         }
 
         public void Initialize()
         {
-            _container.RegisterType<Object, Views.ReportMainView>(ReportsViewNames.ReportMainView);
+            _container.RegisterType<Object, Views.ReportMainView>(ViewNames.ReportMainView);
+            _container.RegisterType<Object, Views.ReportEditView>(ViewNames.ReportEditView);
+
             _regionManager.RegisterViewWithRegion("MainNavigationRegion", typeof(Views.ReportsNavigationItem));
         }
     }

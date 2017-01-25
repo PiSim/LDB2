@@ -1,5 +1,4 @@
-﻿using DBManager;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,16 +10,17 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Standards.Views
+namespace Reports.Views
 {
-    public partial class StandardMainView : UserControl
+    /// <summary>
+    /// Interaction logic for ReportCreationDialog.xaml
+    /// </summary>
+    public partial class ReportCreationDialog : Window
     {
-        public StandardMainView(DBEntities entities)
+        public ReportCreationDialog()
         {
-            DataContext = new ViewModels.StandardMainViewModel(entities);
             InitializeComponent();
         }
     }

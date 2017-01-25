@@ -1,7 +1,10 @@
 ﻿using DBManager;
+using Infrastructure;
+using Prism.Commands;
+using Prism.Events;
 using Prism.Mvvm;
 using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,18 +14,26 @@ namespace Reports.ViewModels
     class MainViewModel : BindableBase
     {
         private DBEntities _entities;
-        private List<Report> _recentList;
+        private DelegateCommand _newReport;
+        private EventAggregator _eventAggregator;
+        private ObservableCollection<Report> _reportList;
 
-        public MainViewModel(DBEntities entities) : base()
+        public MainViewModel(DBEntities entities, EventAggregator eventAggregator) : base()
         {
             _entities = entities;
-            int ii = 0;
-            _recentList = new List<Report>(entities.Reports);
+            _eventAggregator = eventAggregator;
+            _reportList = new ObservableCollection<Report>(entities.Reports);
+
+            _newReport = new DelegateCommand(
+                () =>
+                {
+                    
+                });
         }
 
-        public List<Report> RecentList
+        public ObservableCollection<Report> ReportList
         {
-            get { return _recentList; }
+            get { return _reportList; }
         }
     }
 }

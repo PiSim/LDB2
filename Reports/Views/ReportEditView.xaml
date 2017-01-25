@@ -5,8 +5,135 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Reports.Views"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="600" d:DesignWidth="600">
     <Grid>
-            
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="125"/>
+            <RowDefinition/>
+            <RowDefinition Height="125"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Label Content="Numero:" 
+               Grid.Column="0"
+               Grid.Row="0"
+               Height="Auto"
+               HorizontalAlignment="Left"/>
+        <StackPanel Orientation="Horizontal"
+                    Grid.Column="0"
+                    Grid.Row="0"
+                    HorizontalAlignment="Left"
+                    Height="Auto"
+                    Margin="50,0,0,0">
+            <Label Content="{Binding Path=CurrentInstance.Category}"/>
+            <Label Content="{Binding Path=CurrentInstance.Number}"/>
+        </StackPanel>
+        <Grid Grid.Column="0"
+              Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Label Content="Batch:"
+                   Grid.Column="0"
+                   Grid.Row="0"/>
+            <Label Content="{Binding Path=CurrentInstance.Batch.Number}"
+                   Grid.Column="1"
+                   Grid.Row="0"/>
+            <ContentControl Content="{Binding Path=CurrentInstance.Batch.Material}"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="2"
+                            Grid.Row="1"
+                            Height="100"
+                            VerticalAlignment="Bottom"/>
+        </Grid>
+
+
+        <ContentControl Content="{Binding Path=CurrentInstance.Specification}"
+                        Grid.Row="1"
+                        Grid.Column="1"/>
+
+        <GroupBox Header="Risultati"
+                  Grid.Column="0"
+                  Grid.ColumnSpan="2"
+                  Grid.Row="2">
+            <ListView ItemsSource="{Binding Path=CurrentInstance.TestList}">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Prova" DisplayMemberBinding="{Binding Path=Method.Property.Name}"/>
+                        <GridViewColumn Header="Metodo">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Label Content="{Binding Path=Method.Standard.Organization.Name}"/>
+                                        <Label Content="{Binding Path=Method.Standard.Name}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+
+                        <GridViewColumn Header="Risultati">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ListView ItemsSource="{Binding Path=SubTestList}">
+                                        <ListView.ItemTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <Label Content="{Binding Path=SubRequirement.Name}"/>
+                                                    <TextBox Text="{Binding Path=Result, Mode=TwoWay}"/>
+                                                    <Label Content="{Binding Path=SubRequirement.Requirement}"/>
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </ListView.ItemTemplate>
+                                    </ListView>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="Data" DisplayMemberBinding="{Binding Path=Date}"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </GroupBox>
+
+        <GroupBox Header="File"
+                  Grid.Column="0"
+                  Grid.ColumnSpan="2"
+                  Grid.Row="3">
+            <Grid>
+                <ListView ItemsSource="{Binding Path=CurrentInstance.FileList}" 
+                          SelectedItem="{Binding Path=SelectedFile}"
+                          Margin="0,0,100,0">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Percorso" DisplayMemberBinding="{Binding Path=Path}"/>
+                            <GridViewColumn Header="Descrizione" DisplayMemberBinding="{Binding Path=Description}"/>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+
+                <Button Content="Aggiungi" 
+                        Command="{Binding Path=AddFileCommand}" 
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Top" 
+                        Margin="0,0,0,0"/>
+                <Button Content="Rimuovi" 
+                        Command="{Binding Path=RemoveFileCommand}" 
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Top" 
+                        Margin="0,25,0,0"/>
+                <Button Content="Apri" 
+                        Command="{Binding Path=OpenFileCommand}" 
+                        HorizontalAlignment="Right" 
+                        VerticalAlignment="Top" 
+                        Margin="0,50,0,0"/>
+            </Grid>
+        </GroupBox>
     </Grid>
 </UserControl>
