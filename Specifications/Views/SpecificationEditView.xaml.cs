@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DBManager;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,21 +14,17 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Tasks.Views
+namespace Specifications.Views
 {
     /// <summary>
-    /// Interaction logic for TaskNavigationItem.xaml
+    /// Interaction logic for SpecificationEditView.xaml
     /// </summary>
-    public partial class TaskNavigationItem : UserControl, Navigation.IModuleNavigationTag
+    public partial class SpecificationEditView : UserControl
     {
-        public TaskNavigationItem()
+        public SpecificationEditView(DBEntities entities, Specification instance)
         {
+            DataContext = new ViewModels.SpecificationEditViewModel(entities, instance);
             InitializeComponent();
-        }
-
-        public string ViewName
-        {
-            get { return ViewNames.TaskMainView; }
         }
     }
 }

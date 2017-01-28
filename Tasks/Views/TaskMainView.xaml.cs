@@ -1,4 +1,6 @@
-﻿using System;
+﻿using DBManager;
+using Prism.Events;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,19 +17,13 @@ using System.Windows.Shapes;
 
 namespace Tasks.Views
 {
-    /// <summary>
-    /// Interaction logic for TaskNavigationItem.xaml
-    /// </summary>
-    public partial class TaskNavigationItem : UserControl, Navigation.IModuleNavigationTag
-    {
-        public TaskNavigationItem()
-        {
-            InitializeComponent();
-        }
 
-        public string ViewName
+    public partial class TaskMainView : UserControl
+    {
+        public TaskMainView(DBEntities entities, EventAggregator aggregator)
         {
-            get { return ViewNames.TaskMainView; }
+            DataContext = new ViewModels.TaskMainViewModel(entities, aggregator);
+            InitializeComponent();
         }
     }
 }

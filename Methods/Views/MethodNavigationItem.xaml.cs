@@ -27,7 +27,7 @@ namespace Methods.Views
 
         public string ViewName
         {
-            get { return MethodsViewNames.MethodMainView; }
+            get { return ViewNames.MethodMainView; }
         }
     }
 }

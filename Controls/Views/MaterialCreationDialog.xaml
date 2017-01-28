@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Controls.Views"
         mc:Ignorable="d"
-        Title="Inserimento Materiale">
+        Title="Inserimento Materiale"
+        Height="125" Width="250">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
@@ -22,7 +23,7 @@
                Grid.Column="0"
                Grid.Row="0"
                Margin="5"/>
-        <TextBox Text="{Binding Path=Construction.Type, Mode=TwoWay}" 
+        <TextBox Text="{Binding Path=Type, Mode=TwoWay}" 
                  Grid.Column="0"
                  Grid.Row="1"
                  Margin="5"/>
@@ -38,7 +39,7 @@
                Grid.Column="2"
                Grid.Row="0"
                Margin="5"/>
-        <TextBox Text="{Binding Path=Construction.Aspect.Code, Mode=TwoWay}"
+        <TextBox Text="{Binding Path=Aspect, Mode=TwoWay}"
                  Grid.Column="2"
                  Grid.Row="1"
                  Margin="5"/>

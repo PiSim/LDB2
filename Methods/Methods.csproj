@@ -91,7 +91,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MethodsModule.cs" />
-    <Compile Include="MethodsViewNames.cs" />
+    <Compile Include="ViewNames.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -105,6 +105,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="ViewModels\MethodMainViewModel.cs" />
     <Compile Include="Views\MethodMainView.xaml.cs">
       <DependentUpon>MethodMainView.xaml</DependentUpon>
     </Compile>
@@ -123,9 +124,7 @@
     </None>
     <AppDesigner Include="Properties\" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ViewModels\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\Controls\Controls.csproj">
       <Project>{315cd8ab-0509-4d45-aba5-b2cbd0f10f69}</Project>

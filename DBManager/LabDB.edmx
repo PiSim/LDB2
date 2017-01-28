@@ -1369,14 +1369,14 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="standardID" Type="Int32" Nullable="false" />
-          <Property Name="label" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="description" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="old_flag" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="reports" Relationship="Self.specification_to_report" FromRole="specifications" ToRole="reports" />
-          <NavigationProperty Name="requirements" Relationship="Self.specification_to_requirement" FromRole="specifications" ToRole="requirements" />
-          <NavigationProperty Name="specification_versions" Relationship="Self.specification_to_specversion" FromRole="specifications" ToRole="specification_versions" />
-          <NavigationProperty Name="standard" Relationship="Self.standard_to_specification" FromRole="specifications" ToRole="standards" />
+          <Property Name="standardID" Type="Int32" Nullable="false" a:GetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:SetterAccess="Private" />
+          <Property Name="Label" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="OldFlag" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Reports" Relationship="Self.specification_to_report" FromRole="specifications" ToRole="reports" />
+          <NavigationProperty Name="Requirements" Relationship="Self.specification_to_requirement" FromRole="specifications" ToRole="requirements" />
+          <NavigationProperty Name="SpecificationVersions" Relationship="Self.specification_to_specversion" FromRole="specifications" ToRole="specification_versions" />
+          <NavigationProperty Name="Standard" Relationship="Self.standard_to_specification" FromRole="specifications" ToRole="standards" />
         </EntityType>
         <EntityType Name="StandardFile">
           <Key>
@@ -2042,7 +2042,7 @@
           <EntitySet Name="Requirements1" EntityType="labdbModel.Requirement" />
           <EntitySet Name="Samples" EntityType="labdbModel.Sample" />
           <EntitySet Name="SpecificationVersions" EntityType="labdbModel.SpecificationVersion" />
-          <EntitySet Name="Specifications1" EntityType="labdbModel.Specification" />
+          <EntitySet Name="Specifications" EntityType="labdbModel.Specification" />
           <EntitySet Name="StandardFiles" EntityType="labdbModel.StandardFile" />
           <EntitySet Name="Stds" EntityType="labdbModel.Std" />
           <EntitySet Name="SubRequirements" EntityType="labdbModel.SubRequirement" />
@@ -2171,7 +2171,7 @@
             <End Role="tests" EntitySet="Tests" />
           </AssociationSet>
           <AssociationSet Name="specification_to_report" Association="Self.specification_to_report">
-            <End Role="specifications" EntitySet="Specifications1" />
+            <End Role="specifications" EntitySet="Specifications" />
             <End Role="reports" EntitySet="Reports" />
           </AssociationSet>
           <AssociationSet Name="specversion_to_report" Association="Self.specversion_to_report">
@@ -2183,7 +2183,7 @@
             <End Role="sub_requirements" EntitySet="SubRequirements" />
           </AssociationSet>
           <AssociationSet Name="specification_to_requirement" Association="Self.specification_to_requirement">
-            <End Role="specifications" EntitySet="Specifications1" />
+            <End Role="specifications" EntitySet="Specifications" />
             <End Role="requirements" EntitySet="Requirements1" />
           </AssociationSet>
           <AssociationSet Name="specversion_to_requirement" Association="Self.specversion_to_requirement">
@@ -2191,7 +2191,7 @@
             <End Role="requirements" EntitySet="Requirements1" />
           </AssociationSet>
           <AssociationSet Name="specification_to_specversion" Association="Self.specification_to_specversion">
-            <End Role="specifications" EntitySet="Specifications1" />
+            <End Role="specifications" EntitySet="Specifications" />
             <End Role="specification_versions" EntitySet="SpecificationVersions" />
           </AssociationSet>
           <AssociationSet Name="specversion_to_task" Association="Self.specversion_to_task">
@@ -2200,7 +2200,7 @@
           </AssociationSet>
           <AssociationSet Name="standard_to_specification" Association="Self.standard_to_specification">
             <End Role="standards" EntitySet="Stds" />
-            <End Role="specifications" EntitySet="Specifications1" />
+            <End Role="specifications" EntitySet="Specifications" />
           </AssociationSet>
           <AssociationSet Name="standard_to_standardfile" Association="Self.standard_to_standardfile">
             <End Role="standards" EntitySet="Stds" />
@@ -2482,14 +2482,14 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Specifications1">
+          <EntitySetMapping Name="Specifications">
             <EntityTypeMapping TypeName="labdbModel.Specification">
               <MappingFragment StoreEntitySet="specifications">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="standardID" ColumnName="standardID" />
-                <ScalarProperty Name="label" ColumnName="label" />
-                <ScalarProperty Name="description" ColumnName="description" />
-                <ScalarProperty Name="old_flag" ColumnName="old_flag" />
+                <ScalarProperty Name="Label" ColumnName="label" />
+                <ScalarProperty Name="Description" ColumnName="description" />
+                <ScalarProperty Name="OldFlag" ColumnName="old_flag" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

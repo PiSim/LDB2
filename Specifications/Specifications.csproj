@@ -104,7 +104,12 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="ViewModels\SpecificationEditViewModel.cs" />
+    <Compile Include="ViewModels\SpecificationMainViewModel.cs" />
     <Compile Include="ViewNames.cs" />
+    <Compile Include="Views\SpecificationEditView.xaml.cs">
+      <DependentUpon>SpecificationEditView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\SpecificationMainView.xaml.cs">
       <DependentUpon>SpecificationMainView.xaml</DependentUpon>
     </Compile>
@@ -123,13 +128,15 @@
     </None>
     <AppDesigner Include="Properties\" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ViewModels\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\Controls\Controls.csproj">
       <Project>{315cd8ab-0509-4d45-aba5-b2cbd0f10f69}</Project>
       <Name>Controls</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DBManager\DBManager.csproj">
+      <Project>{ab8b448c-dd74-4d60-a041-3e5d03a32180}</Project>
+      <Name>DBManager</Name>
     </ProjectReference>
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj">
       <Project>{c432c3be-1051-45f1-95a1-9397bbf35923}</Project>
@@ -141,6 +148,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Views\SpecificationEditView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\SpecificationMainView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

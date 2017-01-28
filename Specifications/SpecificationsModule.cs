@@ -18,6 +18,7 @@ namespace Specifications
 
         public void Initialize()
         {
+            _container.RegisterType<Object, Views.SpecificationEditView>();
             _container.RegisterType<Object, Views.SpecificationMainView>();
 
             _regionManager.RegisterViewWithRegion("MainNavigationRegion", typeof(Views.SpecificationNavigationItem));

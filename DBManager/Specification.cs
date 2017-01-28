@@ -17,23 +17,23 @@ namespace DBManager
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Specification()
         {
-            this.reports = new HashSet<Report>();
-            this.requirements = new HashSet<Requirement>();
-            this.specification_versions = new HashSet<SpecificationVersion>();
+            this.Reports = new HashSet<Report>();
+            this.Requirements = new HashSet<Requirement>();
+            this.SpecificationVersions = new HashSet<SpecificationVersion>();
         }
     
         public int ID { get; set; }
-        public int standardID { get; set; }
-        public string label { get; set; }
-        public string description { get; set; }
-        public int old_flag { get; set; }
+        private int standardID { get; set; }
+        public string Label { get; set; }
+        public string Description { get; set; }
+        public int OldFlag { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Report> reports { get; set; }
+        public virtual ICollection<Report> Reports { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Requirement> requirements { get; set; }
+        public virtual ICollection<Requirement> Requirements { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SpecificationVersion> specification_versions { get; set; }
-        public virtual Std standard { get; set; }
+        public virtual ICollection<SpecificationVersion> SpecificationVersions { get; set; }
+        public virtual Std Standard { get; set; }
     }
 }

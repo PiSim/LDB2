@@ -50,6 +50,8 @@ namespace Batches.ViewModels
                         if (matDialog.ShowDialog() == true)
                             _currentBatch.Material = matDialog.ValidatedMaterial;
                     }
+                    _eventAggregator.GetEvent<CommitRequested>().Publish();
+                    Clear();
                 });
 
             _saveLogEntry = new DelegateCommand(

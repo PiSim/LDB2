@@ -18,8 +18,10 @@ namespace Tasks
 
         public void Initialize()
         {
+            _container.RegisterType<Object, Views.TaskMainView>();
             
-            _regionManager.RegisterViewWithRegion("MainNavigationRegion", typeof(Views.TaskNavigationItem));
+            _regionManager.RegisterViewWithRegion(Navigation.RegionNames.MainNavigationRegion
+                                                , typeof(Views.TaskNavigationItem));
         }
     }
 }

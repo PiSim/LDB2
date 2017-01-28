@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Tasks
 {
-    class TasksViewNames
+    class ViewNames
     {
         public static string TaskMainView
         {
