@@ -50,6 +50,7 @@ namespace Batches.ViewModels
                         if (matDialog.ShowDialog() == true)
                             _currentBatch.Material = matDialog.ValidatedMaterial;
                     }
+                    _entities.CreateSampleForBatch(_currentBatch, SelectedAction.Item2);
                     _eventAggregator.GetEvent<CommitRequested>().Publish();
                     Clear();
                 });

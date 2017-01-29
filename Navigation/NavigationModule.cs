@@ -1,4 +1,5 @@
 ﻿using Infrastructure;
+using Infrastructure.Events;
 using Prism.Events;
 using Prism.Modularity;
 using Prism.Regions;
@@ -19,6 +20,7 @@ namespace Navigation
 
         public void Initialize()
         {
+            _eventAggregator.GetEvent<VisualizeObjectRequested>().Subscribe(tok => OnObjectVisualizationRequested(tok), true);
             _eventAggregator.GetEvent<NavigationRequested>().Subscribe(str => OnNavigationRequested(str), true);
         }
 

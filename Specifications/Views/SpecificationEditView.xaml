@@ -5,8 +5,312 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Specifications.Views"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="500" d:DesignWidth="600">
     <Grid>
-            
+        <Button Content="Salva" Command="{Binding Path=SaveInstanceCommand}" 
+                Width="50" HorizontalAlignment="Right" VerticalAlignment="top" Margin="0,0,10,0"/>
+        <Button Content="Annulla" Command="{Binding Path=CloseCommand}"
+                Width="50" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,25,10,0"/>
+
+        <Label Content="Standard:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,0,0"/>
+        <Label Content="{Binding Path=CurrentInstance.Standard}"
+               HorizontalAlignment="Left" VerticalAlignment="Top" Margin="100,0,0,0"/>
+        <Label Content="Descrizione:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,19,0,0"/>
+        <Label Content="{Binding Path=CurrentInstance.Description}" 
+               HorizontalAlignment="Left" VerticalAlignment="Top" Margin="100,25,0,0"/>
+
+        <TabControl Margin="0,100,0,0">
+            <TabItem Header="Metodi">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <GroupBox Header="Metodi disponibili"
+                              Grid.Column="0">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <Label Content="Filtra per proprietà:"
+                                   Grid.Column="0"
+                                   Grid.Row="0"
+                                   Height="Auto"/>
+                            <ComboBox ItemsSource="{Binding Path=Properties}" 
+                                      SelectedItem="{Binding Path=FilterProperty, Mode=TwoWay}"
+                                      DisplayMemberPath="Name"
+                                      Grid.Column="1"
+                                      Grid.Row="0"/>
+
+                            <ListView ItemsSource="{Binding Path=FilteredMethods}"
+                                      SelectedItem="{Binding Path=SelectedMethod, Mode=TwoWay}"
+                                      Grid.Column="0"
+                                      Grid.ColumnSpan="2"
+                                      Grid.Row="1">
+                                <ListView.View>
+                                    <GridView>
+                                        <GridViewColumn Header="Proprietà"
+                                                        DisplayMemberBinding="{Binding Path=Property.Name}"/>
+                                        <GridViewColumn Header="OEM"
+                                                        DisplayMemberBinding="{Binding Path=Standard.Organization.Name}"/>
+                                        <GridViewColumn Header="Standard"
+                                                        DisplayMemberBinding="{Binding Path=Standard.Name}"/>
+                                        <GridViewColumn Header="Descrizione"
+                                                        DisplayMemberBinding="{Binding Path=Description}"/>
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
+                        </Grid>
+                    </GroupBox>
+
+                    <Grid Grid.Column="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Button Content="►"
+                                Command="{Binding Path=AddRequirementCommand}"
+                                Grid.Row="1"
+                                Height="30"
+                                Width="30" 
+                                FontSize="20" 
+                                Margin="5,0,5,0"/>
+                        <Button Content="◄"
+                                Command="{Binding Path=RemoveRequirementCommand}"
+                                Grid.Row="3"
+                                Height="30"
+                                Width="30" 
+                                FontSize="20"  
+                                Margin="5,0,5,0"/>
+                    </Grid>
+
+                    <GroupBox Header="Lista Prove"
+                              Grid.Column="2">
+                        <ListView ItemsSource="{Binding Path=CurrentInstance.MainVersion.RequirementList}" 
+                                  SelectedItem="{Binding Path=SelectedRequirement, Mode=TwoWay}">
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="Proprietà"
+                                                    DisplayMemberBinding="{Binding Path=Method.Property.Name}"/>
+                                    <GridViewColumn Header="OEM"
+                                                    DisplayMemberBinding="{Binding Path=Method.Standard.Organization.Name}"/>
+                                    <GridViewColumn Header="Standard"
+                                                    DisplayMemberBinding="{Binding Path=Method.Standard.Name}"/>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                    </GroupBox>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Versioni/Requisiti">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="2*"/>
+                    </Grid.ColumnDefinitions>
+                    <GroupBox Header="Versioni esistenti"
+                              Grid.Column="0">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <ListView ItemsSource="{Binding Path=CurrentInstance.VersionList}"
+                                      SelectedItem="{Binding Path=SelectedVersion, Mode=TwoWay}"
+                                      Grid.Column="0"
+                                      Grid.Row="0">
+                                <ListView.View>
+                                    <GridView>
+                                        <GridViewColumn Header="Nome">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBox Text="{Binding Path=Name, Mode=TwoWay}"/>
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+                                        <GridViewColumn Header="Principale">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <CheckBox IsChecked="{Binding Path=IsMain, Mode=OneWay}"
+                                                              IsEnabled="False"/>
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
+                            <Grid Grid.Column="1"
+                                  Grid.Row="0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Button Content="Crea Nuova"
+                                    Command="{Binding Path=NewVersionCommand}"
+                                    Grid.Row="0"
+                                    Margin="5,5,5,5"/>
+                            </Grid>
+
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Header="Requisiti"
+                              Grid.Column="2">
+                        <ListView ItemsSource="{Binding Path=VersionGeneratedRequirementList}">
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="Override">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <CheckBox IsChecked="{Binding Path=IsOverride, Mode=TwoWay}"
+                                                          IsEnabled="{Binding RelativeSource={RelativeSource AncestorType=UserControl},
+                                                                              Path=DataContext.SelectedVersionIsNotMain}"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Header="Proprietà"
+                                                    DisplayMemberBinding="{Binding Path=Method.Property.Name}"/>
+                                    <GridViewColumn Header="OEM"
+                                                    DisplayMemberBinding="{Binding Path=Method.Organization.Name}"/>
+                                    <GridViewColumn Header="Metodo"
+                                                    DisplayMemberBinding="{Binding Path=Method.Standard.Name}"/>
+                                    <GridViewColumn Header="Misure">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <ListView ItemsSource="{Binding Path=SubRequirementList}"
+                                                          DisplayMemberPath="Name"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Header="Requisiti">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <ListView ItemsSource="{Binding Path=SubRequirementList}">
+                                                    <ListView.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <TextBox Text="{Binding Path=Requirement}"
+                                                                     IsEnabled="{Binding RelativeSource={RelativeSource AncestorType=ListView},
+                                                                     Path=DataContext.IsActiveRequirement}"/>
+                                                        </DataTemplate>
+                                                    </ListView.ItemTemplate>
+                                                </ListView>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                    </GroupBox>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Piani di controllo">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <GroupBox Header="Piani di controllo esistenti"
+                              Grid.Column="0">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+
+                            <ListView ItemsSource="{Binding Path=CurrentInstance.ControlPlanList}"
+                                      SelectedItem="{Binding Path=SelectedControlPlan, Mode=TwoWay}"
+                                      Grid.Column="0"
+                                      Grid.Row="0"
+                                      Grid.RowSpan="5">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBox Text="{Binding Path=Name, Mode=TwoWay}"/>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+
+                            <Button Content="Nuovo"
+                                    Command="{Binding Path=NewControlPlanCommand}"
+                                    Grid.Column="1"
+                                    Grid.Row="0"
+                                    Margin="5,5,5,5"/>
+
+                            <Button Content="Save"
+                                    Command="{Binding Path=SaveControlPlanCommand}"
+                                    Grid.Column="1"
+                                    Grid.Row="1"
+                                    Margin="5,5,5,5"/>
+
+                            <Button Content="Rinomina"
+                                    Command="{Binding Path=RenameControlPlanCommand}"
+                                    Grid.Column="1"
+                                    Grid.Row="2"
+                                    Margin="5,5,5,5"/>
+
+                            <Button Content="Elimina"
+                                    Command="{Binding Path=DeleteControlPlanCommand}"
+                                    Grid.Column="1"
+                                    Grid.Row="3"
+                                    Margin="5,5,5,5"/>
+                        </Grid>
+                    </GroupBox>
+
+                    <GroupBox Header="Test da effettuare"
+                                Grid.Column="1">
+                        <ListView ItemsSource="{Binding Path=ControlPlanVisualizer}">
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="Incluso">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <CheckBox IsChecked="{Binding Path=IncludeInReport}"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Header="Tipo Prova"
+                                                    DisplayMemberBinding="{Binding Path=Method.Property.Name}"/>
+                                    <GridViewColumn Header="Standard"
+                                                    DisplayMemberBinding="{Binding Path=Standard}"/>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                    </GroupBox>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Progetti">
+
+            </TabItem>
+            <TabItem Header="Report">
+
+            </TabItem>
+        </TabControl>
     </Grid>
 </UserControl>

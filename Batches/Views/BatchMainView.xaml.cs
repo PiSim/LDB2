@@ -23,17 +23,10 @@ namespace Batches.Views
     /// </summary>
     public partial class BatchMainView : UserControl
     {
-        IEventAggregator _eventAggregator;
-
         public BatchMainView(IEventAggregator eventAggregator, DBEntities entities)
         {
             DataContext = new ViewModels.BatchMainViewModel(eventAggregator, entities);
             InitializeComponent();
-        }
-
-        private void OpenQueryView(object sender, RoutedEventArgs e)
-        {
-            _eventAggregator.GetEvent<NavigationRequested>().Publish(ViewNames.BatchQueryView);
         }
     }
 }

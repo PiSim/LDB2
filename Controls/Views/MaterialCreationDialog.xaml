@@ -47,7 +47,7 @@
                Grid.Column="3"
                Grid.Row="0"
                Margin="5"/>
-        <TextBox Text="{Binding Path=Recipe.Code, Mode=TwoWay}"
+        <TextBox Text="{Binding Path=Recipe, Mode=TwoWay}"
                  Grid.Column="3"
                  Grid.Row="1"
                  Margin="5"/>
