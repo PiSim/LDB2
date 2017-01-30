@@ -5,43 +5,129 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Batches.Views"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="500" d:DesignWidth="600">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition />
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition/>
             <RowDefinition/>
             <RowDefinition/>
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
-            <Label Content="Batch N°:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,0,0"/>
-            <Label Content="{Binding Path=Number}" HorizontalAlignment="Left" VerticalAlignment="Top"
-               Margin="50,0,0,0"/>
-            <Grid DataContext="{Binding Path=Material}"
-                  Margin="0,25,0,0" 
-                  Height="50" 
-                  Width="200" 
-                  HorizontalAlignment="Left" 
-                  VerticalAlignment="Top">
-                <Label Content="Tipo" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,0,0"/>
-                <Label Content="{Binding Path=Construction.Type}" HorizontalAlignment="Left" 
-                        VerticalAlignment="Top" Margin="0,25,0,0" Width="35"/>
-                <Label Content="Linea" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="40,0,0,0"/>
-                <Label Content="{Binding Path=Construction.Line}" HorizontalAlignment="Left" 
-                        VerticalAlignment="Top" Margin="40,25,0,0" Width="35"/>
-                <Label Content="Aspetto" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="80,0,0,0"/>
-                <Label Content="{Binding Path=Construction.Aspect.Code}" HorizontalAlignment="Left" 
-                        VerticalAlignment="Top" Margin="90,25,0,0" Width="35"/>
-                <Label Content="Mescola" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="130,0,0,0"/>
-                <Label Content="{Binding Path=Recipe.Code}" HorizontalAlignment="Left" 
-                        VerticalAlignment="Top" Margin="140,25,0,0" Width="35"/>
-                <Label Content="Progetto" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,50,0,0"/>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <Label Content="Batch:"
+                   Grid.Column="0"
+                   Margin="5"/>
+            <Label Content="{Binding Path=Number}"
+                   Grid.Column="1"
+                   Margin="5"/>
+        </Grid>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <GroupBox Header="Progetto"
+                      Grid.Column="1"
+                      Height="Auto">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Label Content="Nome:"
+                           Grid.Column="0"
+                           Grid.Row="0"/>
+                    <Label Content="{Binding Name}"
+                           Grid.Column="1"
+                           Grid.Row="0"/>
+
+                    <Label Content="OEM:"
+                           Grid.Column="0"
+                           Grid.Row="1"/>
+                    <Label Content="{Binding OEM}"
+                           Grid.Column="1"
+                           Grid.Row="1"/>
+                    
+                    <Label Content="Descrizione:"
+                           Grid.Column="0"
+                           Grid.Row="2"/>
+                    <Label Content="{Binding Description}"
+                           Grid.Column="1"
+                           Grid.Row="2"/>
+
+                    <Label Content="CP:"
+                           Grid.Column="0"
+                           Grid.Row="3"/>
+                    <Label Content="{Binding Leader}"
+                           Grid.Column="1"
+                           Grid.Row="3"/>
+                </Grid>
+            </GroupBox>
+            <Grid DataContext="{Binding Path=Material}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Label Content="Tipo:"
+                       Grid.Column="0"
+                       Grid.Row="0"/>
+                <Label Content="{Binding Path=Construction.Type}"
+                       Grid.Column="1"
+                       Grid.Row="0"/>
+
+                <Label Content="Linea:"
+                       Grid.Column="0"
+                       Grid.Row="1"/>
+                <Label Content="{Binding Path=Construction.Line}"
+                       Grid.Column="1"
+                       Grid.Row="1"/>
+                
+                <Label Content="Aspetto:"
+                       Grid.Column="0"
+                       Grid.Row="2"/>
+                
+                <Label Content="{Binding Path=Construction.Aspect.Code}"
+                       Grid.Column="1"
+                       Grid.Row="2"/>
+                <Label Content="{Binding Construction.Aspect.Name}"
+                       Grid.Column="2"
+                       Grid.Row="2"/>
+
+                <Label Content="Colore:"
+                       Grid.Column="0"
+                       Grid.Row="3"/>
+                <Label Content="{Binding Path=Recipe.Code}"
+                       Grid.Column="1"
+                       Grid.Row="3"/>
+
+                <Label Content="Construction:"
+                       Grid.Column="0"
+                       Grid.Row="4"/>
             </Grid>
-            <Button Content="Indietro" Command="{Binding Path=CloseCommand}" HorizontalAlignment="Right"
-                VerticalAlignment="Top" Margin="0,0,0,0"/>
         </Grid>
 
-        <GroupBox Header="Rotoli" Grid.Row="1">
+        <GroupBox Header="Rotoli" Grid.Row="2">
             <ListView ItemsSource="{Binding Path=Samples}"
                       Margin="0,0,100,0">
                 <ListView.View>
@@ -52,7 +138,7 @@
                 </ListView.View>
             </ListView>
         </GroupBox>
-        <GroupBox Header="Report" Grid.Row="2">
+        <GroupBox Header="Report" Grid.Row="3">
             <Grid>
                 <Button Content="Apri" Command="{Binding Path=OpenReportCommand}"
                             HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,0,0"/>
@@ -76,7 +162,7 @@
                 </ListView>
             </Grid>
         </GroupBox>
-        <GroupBox Grid.Row="3" Header="Richieste">
+        <GroupBox Grid.Row="4" Header="Richieste">
             <Grid>
                 <Button Content="Apri" Command="{Binding Path=OpenRequestCommand}"
                         HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,0,0"/>

@@ -20,8 +20,20 @@ namespace Navigation
 
         public void Initialize()
         {
+            _eventAggregator.GetEvent<NavigateBackRequested>().Subscribe(() => OnNavigateBackRequested(), true);
+            _eventAggregator.GetEvent<NavigateForwardRequested>().Subscribe(() => OnNavigateForwardRequested(), true);
             _eventAggregator.GetEvent<VisualizeObjectRequested>().Subscribe(tok => OnObjectVisualizationRequested(tok), true);
             _eventAggregator.GetEvent<NavigationRequested>().Subscribe(str => OnNavigationRequested(str), true);
+        }
+
+        private void OnNavigateBackRequested()
+        {
+
+        }
+
+        private void OnNavigateForwardRequested()
+        {
+
         }
 
         public void OnNavigationRequested(string viewName)
