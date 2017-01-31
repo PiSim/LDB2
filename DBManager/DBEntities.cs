@@ -18,6 +18,20 @@ namespace DBManager
             return output;
         }
 
+        public Aspect GetAspect(string code,
+                                bool new_instance_if_not_found = true)
+        {
+            Aspect output = Aspects.FirstOrDefault(asp => asp.Code == code);
+
+            if (output == null && new_instance_if_not_found)
+            {
+                output = new Aspect();
+                output.Code = code;
+            }
+
+            return output;
+        }
+
         public Batch GetBatchByNumber(string number, bool new_instance_if_none_found = true)
         {
             Batch output = base.Batches.FirstOrDefault(bb => bb.Number == number);
@@ -32,78 +46,62 @@ namespace DBManager
             return output;
         }
 
+        public Construction GetConstruction(string type,
+                                            string line,
+                                            string aspectCode,
+                                            bool new_instance_if_not_found = true)
+        {
+            Construction output = Constructions.FirstOrDefault(cons =>
+                cons.Type == type &&
+                cons.Line == line &&
+                cons.Aspect.Code == aspectCode);
+
+            if (output == null && new_instance_if_not_found)
+            {
+                output = new Construction();
+                output.Type = type;
+                output.Line = line;
+                output.Aspect = GetAspect(aspectCode);
+            }
+
+            return output;
+        }
+
         public Material GetMaterial(string type,
                                     string line,
                                     string aspectCode,
                                     string recipeCode,
                                     bool new_instance_if_not_found = true)
         {
-            Construction tempConstruction;
-            Material output;
-            Recipe tempRecipe = Recipes.FirstOrDefault(rec => rec.Code == recipeCode);
-            Aspect tempAspect = Aspects.FirstOrDefault(asp => asp.Code == aspectCode);
-            if (tempAspect != null)
+            Material output = Materials.FirstOrDefault(mat =>
+               mat.Construction.Type == type &&
+               mat.Construction.Line == line &&
+               mat.Construction.Aspect.Code == aspectCode &&
+               mat.Recipe.Code == recipeCode);
+
+            if (output == null && new_instance_if_not_found)
             {
-                tempConstruction = Constructions.FirstOrDefault(
-                    cons => cons.Aspect == tempAspect &&
-                            cons.Line == line &&
-                            cons.Type == type);
-
-                if (tempConstruction != null && tempRecipe != null)
-                {
-                    output = Materials.FirstOrDefault(
-                        mat => mat.Construction == tempConstruction &&
-                               mat.Recipe == tempRecipe);
-
-                    if (output != null)
-                        return output;
-
-                    else if (new_instance_if_not_found == false)
-                        return null;
-                }
-
-                else if (tempConstruction == null)
-                {
-                    tempConstruction = new Construction();
-                    tempConstruction.Aspect = tempAspect;
-                    tempConstruction.Line = line;
-                    tempConstruction.Type = type;
-                }
-
-                else if (tempRecipe == null)
-                {
-                    tempRecipe = new Recipe();
-                    tempRecipe.Code = recipeCode;
-                }
-
                 output = new Material();
-                output.Construction = tempConstruction;
-                output.Recipe = tempRecipe;
-                return output;
+                output.Construction = GetConstruction(type, line, aspectCode);
+                output.Recipe = GetRecipe(recipeCode);
             }
 
-            else
-            {
-                tempAspect = new Aspect();
-                tempAspect.Code = aspectCode;
-
-                tempConstruction = new Construction();
-                tempConstruction.Aspect = tempAspect;
-                tempConstruction.Line = line;
-                tempConstruction.Type = type;
-
-                if (tempRecipe == null)
-                {
-                    tempRecipe = new Recipe();
-                    tempRecipe.Code = recipeCode;
-                }
-
-                output = new Material();
-                output.Construction = tempConstruction;
-                output.Recipe = tempRecipe;
-
-                return output;
-            }
+            return output;
         }
+
+        public Recipe GetRecipe(string code,
+                                bool new_instance_if_not_found = true)
+        {
+            Recipe output = Recipes.FirstOrDefault(rec => rec.Code == code);
+
+            if (output == null && new_instance_if_not_found)
+            {
+                output = new Recipe();
+                output.Code = code;
+            }
+
+            return output;
+        }
+
     }
 }

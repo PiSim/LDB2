@@ -26,14 +26,16 @@ namespace Navigation
             _eventAggregator.GetEvent<NavigationRequested>().Subscribe(str => OnNavigationRequested(str), true);
         }
 
-        private void OnNavigateBackRequested()
+        public void OnNavigateBackRequested()
         {
-
+            var mainregion = _regionManager.Regions[RegionNames.MainRegion];
+            mainregion.NavigationService.Journal.GoBack();
         }
 
-        private void OnNavigateForwardRequested()
+        public void OnNavigateForwardRequested()
         {
-
+            var mainregion = _regionManager.Regions[RegionNames.MainRegion];
+            mainregion.NavigationService.Journal.GoForward();
         }
 
         public void OnNavigationRequested(string viewName)

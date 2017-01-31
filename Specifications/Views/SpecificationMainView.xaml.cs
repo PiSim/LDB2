@@ -1,4 +1,6 @@
-﻿using System;
+﻿using DBManager;
+using Prism.Events;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,8 +22,9 @@ namespace Specifications.Views
     /// </summary>
     public partial class SpecificationMainView : UserControl
     {
-        public SpecificationMainView()
+        public SpecificationMainView(DBEntities entities, EventAggregator eventAggregator)
         {
+            DataContext = new ViewModels.SpecificationMainViewModel(entities, eventAggregator);
             InitializeComponent();
         }
     }

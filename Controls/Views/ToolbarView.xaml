@@ -21,8 +21,10 @@
                   Grid.Column="0"
                   SelectionChanged="OnSelectionChanged"/>
         <Button Content="Indietro"
+                Command="{Binding NavigateBackCommand}"
                 Grid.Column="2"/>
         <Button Content="Avanti"
+                Command="{Binding NavigateForwardCommand}"
                 Grid.Column="3"/>
         <Button Content="Salva"
                 Grid.Column="4"/>

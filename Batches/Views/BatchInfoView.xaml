@@ -36,7 +36,7 @@
             <GroupBox Header="Progetto"
                       Grid.Column="1"
                       Height="Auto">
-                <Grid>
+                <Grid DataContext="{Binding Project}">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition/>
@@ -119,6 +119,9 @@
                        Grid.Row="3"/>
                 <Label Content="{Binding Path=Recipe.Code}"
                        Grid.Column="1"
+                       Grid.Row="3"/>
+                <Label Content="{Binding Recipe.Colour.Name}"
+                       Grid.Column="2"
                        Grid.Row="3"/>
 
                 <Label Content="Construction:"

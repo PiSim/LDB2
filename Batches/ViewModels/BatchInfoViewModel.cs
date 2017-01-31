@@ -18,7 +18,7 @@ namespace Batches.ViewModels
             _instance = instance;
         }
 
-        public DBManager.Material Material
+        public Material Material
         {
             get { return _instance.Material; }
         }
@@ -26,6 +26,11 @@ namespace Batches.ViewModels
         public string Number
         {
             get { return _instance.Number; }
+        }
+
+        public Project Project
+        {
+            get { return _instance.Material.Construction.Project; }
         }
 
         public ObservableCollection<Sample> Samples

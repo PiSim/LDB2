@@ -16,9 +16,9 @@ namespace Specifications
         {
             get { return "SpecificationsMainView"; }
         }
-        public static string SpecificationsQueryView
+        public static string SpecificationsEditView
         {
-            get { return "SpecificationsQueryView"; }
+            get { return "SpecificationsEditView"; }
         }
 
     }

@@ -1,4 +1,6 @@
 ﻿using DBManager;
+using Infrastructure;
+using Infrastructure.Events;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
@@ -26,7 +28,10 @@ namespace Specifications.ViewModels
             _newSpecification = new DelegateCommand(
                 () => { });
             _openSpecification = new DelegateCommand(
-                () => { });
+                () => {
+                    ObjectNavigationToken token = new ObjectNavigationToken(SelectedSpecification, ViewNames.SpecificationsEditView);
+                    _eventAggregator.GetEvent<VisualizeObjectRequested>().Publish(token);
+                });
             _specificationList = new ObservableCollection<Specification>(
                 _entities.Specifications);
         }

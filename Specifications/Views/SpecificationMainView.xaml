@@ -31,5 +31,9 @@
                 </GridView>
             </ListView.View>
         </ListView>
+        <Grid Grid.Column="1">
+            <Button Content="Apri"
+                    Command="{Binding OpenSpecificationCommand}"/>
+        </Grid>
     </Grid>
 </UserControl>
