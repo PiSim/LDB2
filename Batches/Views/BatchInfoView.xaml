@@ -99,6 +99,7 @@
                 <Label Content="Linea:"
                        Grid.Column="0"
                        Grid.Row="1"/>
+                
                 <Label Content="{Binding Path=Construction.Line}"
                        Grid.Column="1"
                        Grid.Row="1"/>
@@ -146,10 +147,10 @@
                 <Button Content="Apri" Command="{Binding Path=OpenReportCommand}"
                             HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,0,0"/>
                 <Button Content="Crea Nuovo" 
-                            Command="{Binding Path=CreateReportCommand}"
-                            HorizontalAlignment="Right"
-                            VerticalAlignment="Top"
-                            Margin="0,25,0,0"/>
+                        Command="{Binding Path=CreateReportCommand}"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Top"
+                        Margin="0,25,0,0"/>
                 <ListView ItemsSource="{Binding Path=Reports}"
                           SelectedItem="{Binding Path=SelectedReport, Mode=TwoWay}"
                           Margin="0,0,100,0">

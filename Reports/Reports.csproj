@@ -104,9 +104,16 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="ViewModels\ExternalReportMainViewModel.cs" />
     <Compile Include="ViewModels\ReportEditViewModel.cs" />
     <Compile Include="ViewNames.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
+    <Compile Include="Views\ExternalReportMainView.xaml.cs">
+      <DependentUpon>ExternalReportMainView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ExternalReportsNavigationItem.xaml.cs">
+      <DependentUpon>ExternalReportsNavigationItem.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ReportCreationDialog.xaml.cs">
       <DependentUpon>ReportCreationDialog.xaml</DependentUpon>
     </Compile>
@@ -151,6 +158,14 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Views\ExternalReportMainView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ExternalReportsNavigationItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\ReportCreationDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

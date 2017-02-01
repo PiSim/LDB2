@@ -17,26 +17,26 @@ namespace DBManager
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Project()
         {
-            this.constructions = new HashSet<Construction>();
-            this.external_reports = new HashSet<ExternalReport>();
-            this.tasks = new HashSet<Task>();
+            this.Constructions = new HashSet<Construction>();
+            this.ExternalReports = new HashSet<ExternalReport>();
+            this.Tasks = new HashSet<Task>();
         }
     
         public int ID { get; set; }
-        public string name { get; set; }
-        public string description { get; set; }
-        public Nullable<int> project_leaderID { get; set; }
-        public Nullable<int> oemID { get; set; }
-        public int total_internal_cost { get; set; }
-        public double total_external_cost { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        private Nullable<int> project_leaderID { get; set; }
+        private Nullable<int> oemID { get; set; }
+        public int TotalInternalCost { get; set; }
+        public double TotalExternalCost { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Construction> constructions { get; set; }
+        public virtual ICollection<Construction> Constructions { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ExternalReport> external_reports { get; set; }
-        public virtual Organization organization { get; set; }
-        public virtual Person person { get; set; }
+        public virtual ICollection<ExternalReport> ExternalReports { get; set; }
+        public virtual Organization Organization { get; set; }
+        public virtual Person Person { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Task> tasks { get; set; }
+        public virtual ICollection<Task> Tasks { get; set; }
     }
 }

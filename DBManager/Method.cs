@@ -17,22 +17,22 @@ namespace DBManager
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Method()
         {
-            this.requirements = new HashSet<Requirement>();
+            this.Requirements = new HashSet<Requirement>();
         }
     
         public int ID { get; set; }
-        public int standardID { get; set; }
-        public string measurements { get; set; }
-        public int propertyID { get; set; }
-        public string label { get; set; }
-        public string description { get; set; }
+        private int standardID { get; set; }
+        public string Measurements { get; set; }
+        private int propertyID { get; set; }
+        public string Label { get; set; }
+        public string Description { get; set; }
         public string um { get; set; }
-        public int cost_units { get; set; }
-        public bool old_flag { get; set; }
+        public int CostUnits { get; set; }
+        public bool IsObsolete { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Requirement> requirements { get; set; }
-        public virtual Property property { get; set; }
-        public virtual Std standard { get; set; }
+        public virtual ICollection<Requirement> Requirements { get; set; }
+        public virtual Property Property { get; set; }
+        public virtual Std Standard { get; set; }
     }
 }

@@ -7,11 +7,6 @@
              mc:Ignorable="d" 
              d:DesignHeight="500" d:DesignWidth="600">
     <Grid>
-        <Button Content="Salva" Command="{Binding Path=SaveInstanceCommand}" 
-                Width="50" HorizontalAlignment="Right" VerticalAlignment="top" Margin="0,0,10,0"/>
-        <Button Content="Annulla" Command="{Binding Path=CloseCommand}"
-                Width="50" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,25,10,0"/>
-
         <Label Content="Standard:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,0,0"/>
         <Label Content="{Binding Path=CurrentInstance.Standard}"
                HorizontalAlignment="Left" VerticalAlignment="Top" Margin="100,0,0,0"/>
@@ -95,16 +90,16 @@
 
                     <GroupBox Header="Lista Prove"
                               Grid.Column="2">
-                        <ListView ItemsSource="{Binding Path=CurrentInstance.MainVersion.RequirementList}" 
-                                  SelectedItem="{Binding Path=SelectedRequirement, Mode=TwoWay}">
+                        <ListView ItemsSource="{Binding MainVersionRequirements}" 
+                                  SelectedItem="{Binding SelectedRequirement, Mode=TwoWay}">
                             <ListView.View>
                                 <GridView>
                                     <GridViewColumn Header="Proprietà"
-                                                    DisplayMemberBinding="{Binding Path=Method.Property.Name}"/>
+                                                    DisplayMemberBinding="{Binding Method.Property.Name}"/>
                                     <GridViewColumn Header="OEM"
-                                                    DisplayMemberBinding="{Binding Path=Method.Standard.Organization.Name}"/>
+                                                    DisplayMemberBinding="{Binding Method.Standard.Organization.Name}"/>
                                     <GridViewColumn Header="Standard"
-                                                    DisplayMemberBinding="{Binding Path=Method.Standard.Name}"/>
+                                                    DisplayMemberBinding="{Binding Method.Standard.Name}"/>
                                 </GridView>
                             </ListView.View>
                         </ListView>
@@ -129,7 +124,7 @@
                                 <RowDefinition/>
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
-                            <ListView ItemsSource="{Binding Path=CurrentInstance.VersionList}"
+                            <ListView ItemsSource="{Binding Path=VersionList}"
                                       SelectedItem="{Binding Path=SelectedVersion, Mode=TwoWay}"
                                       Grid.Column="0"
                                       Grid.Row="0">

@@ -9,7 +9,6 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="125"/>
             <RowDefinition/>
             <RowDefinition Height="125"/>
         </Grid.RowDefinitions>
@@ -17,57 +16,154 @@
             <ColumnDefinition/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <Label Content="Numero:" 
-               Grid.Column="0"
-               Grid.Row="0"
-               Height="Auto"
-               HorizontalAlignment="Left"/>
-        <StackPanel Orientation="Horizontal"
-                    Grid.Column="0"
-                    Grid.Row="0"
-                    HorizontalAlignment="Left"
-                    Height="Auto"
-                    Margin="50,0,0,0">
-            <Label Content="{Binding Path=Category}"/>
-            <Label Content="{Binding Path=Number}"/>
-        </StackPanel>
         <Grid Grid.Column="0"
-              Grid.Row="1">
+              Grid.Row="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
+            <Label Content="Numero:" 
+                   Grid.Column="0"
+                   Grid.Row="0"
+                   Margin="5,0,5,0"/>
+            <StackPanel Orientation="Horizontal"
+                        Grid.Column="1"
+                        Grid.Row="0"
+                        Margin="5,0,5,0">
+                <Label Content="{Binding Path=Category}"/>
+                <Label Content="{Binding Path=Number}"/>
+            </StackPanel>
             <Label Content="Batch:"
                    Grid.Column="0"
-                   Grid.Row="0"/>
-            <Label Content="{Binding Path=Batch.Number}"
+                   Grid.Row="1"
+                   Margin="5,0,5,0"/>
+            <Label Content="{Binding BatchNumber}"
                    Grid.Column="1"
-                   Grid.Row="0"/>
-            <ContentControl Content="{Binding Path=Batch.Material}"
-                            Grid.Column="0"
-                            Grid.ColumnSpan="2"
-                            Grid.Row="1"
-                            Height="100"
-                            VerticalAlignment="Bottom"/>
+                   Grid.Row="1"
+                   Margin="5,0,5,0"/>
+            
+            <Label Content="Progetto:"
+                   Grid.Column="0"
+                   Grid.Row="2"
+                   Margin="5,0,5,0"/>
+            <Label Content="{Binding Project}"
+                   Grid.Column="1"
+                   Grid.Row="2"
+                   Margin="5,0,5,0"/>
+            <Label Content="Specifica:"
+                   Grid.Column="0"
+                   Grid.Row="3"
+                   Margin="5,0,5,0"/>
+            <Label Content="{Binding Specification}"
+                   Grid.Column="1"
+                   Grid.Row="3"
+                   Margin="5,0,5,0"/>
+            <Label Content="Versione:"
+                   Grid.Column="0"
+                   Grid.Row="4"
+                   Margin="5,0,5,0"/>
+            <Label Content="{Binding SpecificationVersion}"
+                   Grid.Column="1"
+                   Grid.Row="4"
+                   Margin="5,0,5,0"/>
+            <Label Content="Descrizione:"
+                   Grid.Column="0"
+                   Grid.Row="5"
+                   Margin="5,0,5,0"/>
+            <Label Content="{Binding Description}"
+                   Grid.Column="1"
+                   Grid.Row="5"
+                   Margin="5,0,5,0"/>
         </Grid>
+        <GroupBox Header="Materiale"
+                  Grid.Column="1"
+                  Grid.Row="0"
+                  Margin="5,0,5,0">
+            <Grid DataContext="{Binding Path=Material}"
+                  Grid.Column="1"
+                  Grid.Row="0"
+                  Margin="5,0,5,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Label Content="Tipo:"
+                       Grid.Column="0"
+                       Grid.Row="0"
+                       Margin="5,0,5,0"/>
+                <Label Content="{Binding Path=Construction.Type}"
+                       Grid.Column="1"
+                       Grid.Row="0"
+                       Margin="5,0,5,0"/>
 
+                <Label Content="Linea:"
+                       Grid.Column="0"
+                       Grid.Row="1"
+                       Margin="5,0,5,0"/>
+                <Label Content="{Binding Path=Construction.Line}"
+                       Grid.Column="1"
+                       Grid.Row="1"
+                       Margin="5,0,5,0"/>
 
-        <ContentControl Content="{Binding Path=Specification}"
-                        Grid.Row="1"
-                        Grid.Column="1"/>
+                <Label Content="Aspetto:"
+                       Grid.Column="0"
+                       Grid.Row="2"
+                       Margin="5,0,5,0"/>
+
+                <Label Content="{Binding Path=Construction.Aspect.Code}"
+                       Grid.Column="1"
+                       Grid.Row="2"
+                       Margin="5,0,5,0"/>
+                <Label Content="{Binding Construction.Aspect.Name}"
+                       Grid.Column="2"
+                       Grid.Row="2"
+                       Margin="5,0,5,0"/>
+
+                <Label Content="Colore:"
+                       Grid.Column="0"
+                       Grid.Row="3"
+                       Margin="5,0,5,0"/>
+                <Label Content="{Binding Path=Recipe.Code}"
+                       Grid.Column="1"
+                       Grid.Row="3"
+                       Margin="5,0,5,0"/>
+                <Label Content="{Binding Recipe.Colour.Name}"
+                       Grid.Column="2"
+                       Grid.Row="3"
+                       Margin="5,0,5,0"/>
+
+                <Label Content="Construction:"
+                       Grid.Column="0"
+                       Grid.Row="4"
+                       Margin="5,0,5,0"/>
+            </Grid>
+        </GroupBox>
 
         <GroupBox Header="Risultati"
                   Grid.Column="0"
                   Grid.ColumnSpan="2"
-                  Grid.Row="2">
+                  Grid.Row="1">
             <ListView ItemsSource="{Binding TestList}">
                 <ListView.View>
                     <GridView>
-                        <GridViewColumn Header="Prova" DisplayMemberBinding="{Binding Method.Property.Name}"/>
+                        <GridViewColumn Header="Prova" 
+                                        DisplayMemberBinding="{Binding Method.Property.Name}"/>
 
                         <GridViewColumn Header="Risultati">
                             <GridViewColumn.CellTemplate>
@@ -86,6 +182,7 @@
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
+                        
                         <GridViewColumn Header="Metodo">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
@@ -105,7 +202,7 @@
         <GroupBox Header="File"
                   Grid.Column="0"
                   Grid.ColumnSpan="2"
-                  Grid.Row="3">
+                  Grid.Row="2">
             <Grid>
                 <ListView ItemsSource="{Binding Path=FileList}" 
                           SelectedItem="{Binding Path=SelectedFile}"

@@ -21,11 +21,11 @@ namespace DBManager
         }
     
         public int ID { get; set; }
-        public string date { get; set; }
-        public string description { get; set; }
-        public string external_number { get; set; }
-        public int internal_number { get; set; }
-        public int external_labID { get; set; }
+        public string Date { get; set; }
+        public string Description { get; set; }
+        public string ExternalNumber { get; set; }
+        public int InternalNumber { get; set; }
+        private int external_labID { get; set; }
         public int material_sent { get; set; }
         public int request_done { get; set; }
         public string purchase_order { get; set; }

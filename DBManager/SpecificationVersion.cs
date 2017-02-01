@@ -17,22 +17,22 @@ namespace DBManager
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public SpecificationVersion()
         {
-            this.reports = new HashSet<Report>();
-            this.requirements = new HashSet<Requirement>();
-            this.tasks = new HashSet<Task>();
+            this.Reports = new HashSet<Report>();
+            this.Requirements = new HashSet<Requirement>();
+            this.Tasks = new HashSet<Task>();
         }
     
         public int ID { get; set; }
-        public int main_flag { get; set; }
-        public string name { get; set; }
-        public int specificationID { get; set; }
+        public int IsMain { get; set; }
+        public string Name { get; set; }
+        private int specificationID { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Report> reports { get; set; }
+        public virtual ICollection<Report> Reports { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Requirement> requirements { get; set; }
-        public virtual Specification specification { get; set; }
+        public virtual ICollection<Requirement> Requirements { get; set; }
+        public virtual Specification Specification { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Task> tasks { get; set; }
+        public virtual ICollection<Task> Tasks { get; set; }
     }
 }

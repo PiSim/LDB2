@@ -1116,11 +1116,11 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="date" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="description" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="external_number" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="internal_number" Type="Int32" Nullable="false" />
-          <Property Name="external_labID" Type="Int32" Nullable="false" />
+          <Property Name="Date" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ExternalNumber" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="InternalNumber" Type="Int32" Nullable="false" />
+          <Property Name="external_labID" Type="Int32" Nullable="false" a:SetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:GetterAccess="Private" />
           <Property Name="material_sent" Type="Int32" Nullable="false" />
           <Property Name="request_done" Type="Int32" Nullable="false" />
           <Property Name="purchase_order" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
@@ -1169,17 +1169,17 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="standardID" Type="Int32" Nullable="false" />
-          <Property Name="measurements" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="propertyID" Type="Int32" Nullable="false" />
-          <Property Name="label" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="description" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="standardID" Type="Int32" Nullable="false" a:GetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:SetterAccess="Private" />
+          <Property Name="Measurements" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="propertyID" Type="Int32" Nullable="false" a:GetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:SetterAccess="Private" />
+          <Property Name="Label" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="um" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="cost_units" Type="Int32" Nullable="false" />
-          <Property Name="old_flag" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="requirements" Relationship="Self.method_to_requirement" FromRole="methods" ToRole="requirements" />
-          <NavigationProperty Name="property" Relationship="Self.property_to_method" FromRole="methods" ToRole="properties" />
-          <NavigationProperty Name="standard" Relationship="Self.standard_to_method" FromRole="methods" ToRole="standards" />
+          <Property Name="CostUnits" Type="Int32" Nullable="false" />
+          <Property Name="IsObsolete" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Requirements" Relationship="Self.method_to_requirement" FromRole="methods" ToRole="requirements" />
+          <NavigationProperty Name="Property" Relationship="Self.property_to_method" FromRole="methods" ToRole="properties" />
+          <NavigationProperty Name="Standard" Relationship="Self.standard_to_method" FromRole="methods" ToRole="standards" />
         </EntityType>
         <EntityType Name="Oem">
           <Key>
@@ -1205,29 +1205,29 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="name" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="role" Type="String" MaxLength="2" FixedLength="false" Unicode="false" Nullable="false" />
-          <NavigationProperty Name="reports" Relationship="Self.author_to_report" FromRole="people" ToRole="reports" />
-          <NavigationProperty Name="projects" Relationship="Self.leader" FromRole="people" ToRole="projects" />
-          <NavigationProperty Name="tests" Relationship="Self.operatorID" FromRole="people" ToRole="tests" />
-          <NavigationProperty Name="tasks" Relationship="Self.requester_to_task" FromRole="people" ToRole="tasks" />
+          <Property Name="Name" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Role" Type="String" MaxLength="2" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Reports" Relationship="Self.author_to_report" FromRole="people" ToRole="reports" />
+          <NavigationProperty Name="Projects" Relationship="Self.leader" FromRole="people" ToRole="projects" />
+          <NavigationProperty Name="Tests" Relationship="Self.operatorID" FromRole="people" ToRole="tests" />
+          <NavigationProperty Name="Tasks" Relationship="Self.requester_to_task" FromRole="people" ToRole="tasks" />
         </EntityType>
         <EntityType Name="Project">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="name" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="description" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="project_leaderID" Type="Int32" />
-          <Property Name="oemID" Type="Int32" />
-          <Property Name="total_internal_cost" Type="Int32" Nullable="false" />
-          <Property Name="total_external_cost" Type="Double" Nullable="false" />
-          <NavigationProperty Name="constructions" Relationship="Self.project1" FromRole="projects" ToRole="constructions" />
-          <NavigationProperty Name="external_reports" Relationship="Self.project_to_report" FromRole="projects" ToRole="external_reports" />
-          <NavigationProperty Name="organization" Relationship="Self.oem1" FromRole="projects" ToRole="organizations" />
-          <NavigationProperty Name="person" Relationship="Self.leader" FromRole="projects" ToRole="people" />
-          <NavigationProperty Name="tasks" Relationship="Self.project_to_task" FromRole="projects" ToRole="tasks" />
+          <Property Name="Name" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" a:GetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:SetterAccess="Public" />
+          <Property Name="Description" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" a:GetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:SetterAccess="Public" />
+          <Property Name="project_leaderID" Type="Int32" a:GetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:SetterAccess="Private" />
+          <Property Name="oemID" Type="Int32" a:SetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:GetterAccess="Private" />
+          <Property Name="TotalInternalCost" Type="Int32" Nullable="false" />
+          <Property Name="TotalExternalCost" Type="Double" Nullable="false" />
+          <NavigationProperty Name="Constructions" Relationship="Self.project1" FromRole="projects" ToRole="constructions" />
+          <NavigationProperty Name="ExternalReports" Relationship="Self.project_to_report" FromRole="projects" ToRole="external_reports" />
+          <NavigationProperty Name="Organization" Relationship="Self.oem1" FromRole="projects" ToRole="organizations" />
+          <NavigationProperty Name="Person" Relationship="Self.leader" FromRole="projects" ToRole="people" />
+          <NavigationProperty Name="Tasks" Relationship="Self.project_to_task" FromRole="projects" ToRole="tasks" />
         </EntityType>
         <EntityType Name="Property">
           <Key>
@@ -1264,36 +1264,36 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="authorID" Type="Int32" Nullable="false" />
-          <Property Name="batchID" Type="Int32" Nullable="false" />
-          <Property Name="category" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="authorID" Type="Int32" Nullable="false" a:GetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:SetterAccess="Private" />
+          <Property Name="batchID" Type="Int32" Nullable="false" a:GetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:SetterAccess="Private" />
+          <Property Name="Category" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Description" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="end_date" Type="DateTime" />
+          <Property Name="EndDate" Type="DateTime" />
           <Property Name="Number" Type="Int32" Nullable="false" />
-          <Property Name="projectID" Type="Int32" />
-          <Property Name="specification_versionID" Type="Int32" Nullable="false" />
-          <Property Name="start_date" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
-          <Property Name="requestID" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="projectID" Type="Int32" a:GetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:SetterAccess="Private" />
+          <Property Name="specification_versionID" Type="Int32" Nullable="false" a:GetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:SetterAccess="Private" />
+          <Property Name="StartDate" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="requestID" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" a:GetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:SetterAccess="Private" />
           <NavigationProperty Name="Batch" Relationship="Self.batch_to_report" FromRole="reports" ToRole="batches" />
           <NavigationProperty Name="Author" Relationship="Self.author_to_report" FromRole="reports" ToRole="people" />
           <NavigationProperty Name="ReportFiles" Relationship="Self.report_to_reportfile" FromRole="reports" ToRole="report_files" />
-          <NavigationProperty Name="tasks" Relationship="Self.report_to_task" FromRole="reports" ToRole="tasks" />
+          <NavigationProperty Name="Tasks" Relationship="Self.report_to_task" FromRole="reports" ToRole="tasks" />
           <NavigationProperty Name="Tests" Relationship="Self.report_to_test" FromRole="reports" ToRole="tests" />
-          <NavigationProperty Name="specification_versions" Relationship="Self.specversion_to_report" FromRole="reports" ToRole="specification_versions" />
+          <NavigationProperty Name="SpecificationVersion" Relationship="Self.specversion_to_report" FromRole="reports" ToRole="specification_versions" />
         </EntityType>
         <EntityType Name="Requirement">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="description" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="methodID" Type="Int32" Nullable="false" />
-          <Property Name="name" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="position" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Position" Type="Int32" Nullable="false" />
           <Property Name="specification_versionID" Type="Int32" />
-          <NavigationProperty Name="method" Relationship="Self.method_to_requirement" FromRole="requirements" ToRole="methods" />
-          <NavigationProperty Name="sub_requirements" Relationship="Self.requirement_to_subreq" FromRole="requirements" ToRole="sub_requirements" />
-          <NavigationProperty Name="specification_versions" Relationship="Self.specversion_to_requirement" FromRole="requirements" ToRole="specification_versions" />
+          <NavigationProperty Name="Method" Relationship="Self.method_to_requirement" FromRole="requirements" ToRole="methods" />
+          <NavigationProperty Name="SubRequirements" Relationship="Self.requirement_to_subreq" FromRole="requirements" ToRole="sub_requirements" />
+          <NavigationProperty Name="SpecificationVersions" Relationship="Self.specversion_to_requirement" FromRole="requirements" ToRole="specification_versions" />
         </EntityType>
         <EntityType Name="Sample">
           <Key>
@@ -1310,13 +1310,13 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="main_flag" Type="Int32" Nullable="false" />
-          <Property Name="name" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="specificationID" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="reports" Relationship="Self.specversion_to_report" FromRole="specification_versions" ToRole="reports" />
-          <NavigationProperty Name="requirements" Relationship="Self.specversion_to_requirement" FromRole="specification_versions" ToRole="requirements" />
-          <NavigationProperty Name="specification" Relationship="Self.specification_to_specversion" FromRole="specification_versions" ToRole="specifications" />
-          <NavigationProperty Name="tasks" Relationship="Self.specversion_to_task" FromRole="specification_versions" ToRole="tasks" />
+          <Property Name="IsMain" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="specificationID" Type="Int32" Nullable="false" a:GetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:SetterAccess="Private" />
+          <NavigationProperty Name="Reports" Relationship="Self.specversion_to_report" FromRole="specification_versions" ToRole="reports" />
+          <NavigationProperty Name="Requirements" Relationship="Self.specversion_to_requirement" FromRole="specification_versions" ToRole="requirements" />
+          <NavigationProperty Name="Specification" Relationship="Self.specification_to_specversion" FromRole="specification_versions" ToRole="specifications" />
+          <NavigationProperty Name="Tasks" Relationship="Self.specversion_to_task" FromRole="specification_versions" ToRole="tasks" />
         </EntityType>
         <EntityType Name="Specification">
           <Key>
@@ -1956,7 +1956,7 @@
           <EntitySet Name="Files1" EntityType="labdbModel.File" />
           <EntitySet Name="Masters1" EntityType="labdbModel.Master" />
           <EntitySet Name="Materials" EntityType="labdbModel.Material" />
-          <EntitySet Name="Methods1" EntityType="labdbModel.Method" />
+          <EntitySet Name="Methods" EntityType="labdbModel.Method" />
           <EntitySet Name="Oems1" EntityType="labdbModel.Oem" />
           <EntitySet Name="Organizations1" EntityType="labdbModel.Organization" />
           <EntitySet Name="People1" EntityType="labdbModel.Person" />
@@ -1965,7 +1965,7 @@
           <EntitySet Name="Recipes" EntityType="labdbModel.Recipe" />
           <EntitySet Name="ReportFiles" EntityType="labdbModel.ReportFile" />
           <EntitySet Name="Reports" EntityType="labdbModel.Report" />
-          <EntitySet Name="Requirements1" EntityType="labdbModel.Requirement" />
+          <EntitySet Name="Requirements" EntityType="labdbModel.Requirement" />
           <EntitySet Name="Samples" EntityType="labdbModel.Sample" />
           <EntitySet Name="SpecificationVersions" EntityType="labdbModel.SpecificationVersion" />
           <EntitySet Name="Specifications" EntityType="labdbModel.Specification" />
@@ -2045,16 +2045,16 @@
             <End Role="materials" EntitySet="Materials" />
           </AssociationSet>
           <AssociationSet Name="method_to_requirement" Association="Self.method_to_requirement">
-            <End Role="methods" EntitySet="Methods1" />
-            <End Role="requirements" EntitySet="Requirements1" />
+            <End Role="methods" EntitySet="Methods" />
+            <End Role="requirements" EntitySet="Requirements" />
           </AssociationSet>
           <AssociationSet Name="property_to_method" Association="Self.property_to_method">
             <End Role="properties" EntitySet="Properties1" />
-            <End Role="methods" EntitySet="Methods1" />
+            <End Role="methods" EntitySet="Methods" />
           </AssociationSet>
           <AssociationSet Name="standard_to_method" Association="Self.standard_to_method">
             <End Role="standards" EntitySet="Stds" />
-            <End Role="methods" EntitySet="Methods1" />
+            <End Role="methods" EntitySet="Methods" />
           </AssociationSet>
           <AssociationSet Name="oem" Association="Self.oem1">
             <End Role="organizations" EntitySet="Organizations1" />
@@ -2101,12 +2101,12 @@
             <End Role="reports" EntitySet="Reports" />
           </AssociationSet>
           <AssociationSet Name="requirement_to_subreq" Association="Self.requirement_to_subreq">
-            <End Role="requirements" EntitySet="Requirements1" />
+            <End Role="requirements" EntitySet="Requirements" />
             <End Role="sub_requirements" EntitySet="SubRequirements" />
           </AssociationSet>
           <AssociationSet Name="specversion_to_requirement" Association="Self.specversion_to_requirement">
             <End Role="specification_versions" EntitySet="SpecificationVersions" />
-            <End Role="requirements" EntitySet="Requirements1" />
+            <End Role="requirements" EntitySet="Requirements" />
           </AssociationSet>
           <AssociationSet Name="specification_to_specversion" Association="Self.specification_to_specversion">
             <End Role="specifications" EntitySet="Specifications" />
@@ -2220,10 +2220,10 @@
             <EntityTypeMapping TypeName="labdbModel.ExternalReport">
               <MappingFragment StoreEntitySet="external_reports">
                 <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="date" ColumnName="date" />
-                <ScalarProperty Name="description" ColumnName="description" />
-                <ScalarProperty Name="external_number" ColumnName="external_number" />
-                <ScalarProperty Name="internal_number" ColumnName="internal_number" />
+                <ScalarProperty Name="Date" ColumnName="date" />
+                <ScalarProperty Name="Description" ColumnName="description" />
+                <ScalarProperty Name="ExternalNumber" ColumnName="external_number" />
+                <ScalarProperty Name="InternalNumber" ColumnName="internal_number" />
                 <ScalarProperty Name="external_labID" ColumnName="external_labID" />
                 <ScalarProperty Name="material_sent" ColumnName="material_sent" />
                 <ScalarProperty Name="request_done" ColumnName="request_done" />
@@ -2265,18 +2265,18 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Methods1">
+          <EntitySetMapping Name="Methods">
             <EntityTypeMapping TypeName="labdbModel.Method">
               <MappingFragment StoreEntitySet="methods">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="standardID" ColumnName="standardID" />
-                <ScalarProperty Name="measurements" ColumnName="measurements" />
+                <ScalarProperty Name="Measurements" ColumnName="measurements" />
                 <ScalarProperty Name="propertyID" ColumnName="propertyID" />
-                <ScalarProperty Name="label" ColumnName="label" />
-                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="Label" ColumnName="label" />
+                <ScalarProperty Name="Description" ColumnName="description" />
                 <ScalarProperty Name="um" ColumnName="um" />
-                <ScalarProperty Name="cost_units" ColumnName="cost_units" />
-                <ScalarProperty Name="old_flag" ColumnName="old_flag" />
+                <ScalarProperty Name="CostUnits" ColumnName="cost_units" />
+                <ScalarProperty Name="IsObsolete" ColumnName="old_flag" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -2301,8 +2301,8 @@
             <EntityTypeMapping TypeName="labdbModel.Person">
               <MappingFragment StoreEntitySet="people">
                 <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="role" ColumnName="role" />
+                <ScalarProperty Name="Name" ColumnName="name" />
+                <ScalarProperty Name="Role" ColumnName="role" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -2310,12 +2310,12 @@
             <EntityTypeMapping TypeName="labdbModel.Project">
               <MappingFragment StoreEntitySet="projects">
                 <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="Name" ColumnName="name" />
+                <ScalarProperty Name="Description" ColumnName="description" />
                 <ScalarProperty Name="project_leaderID" ColumnName="project_leaderID" />
                 <ScalarProperty Name="oemID" ColumnName="oemID" />
-                <ScalarProperty Name="total_internal_cost" ColumnName="total_internal_cost" />
-                <ScalarProperty Name="total_external_cost" ColumnName="total_external_cost" />
+                <ScalarProperty Name="TotalInternalCost" ColumnName="total_internal_cost" />
+                <ScalarProperty Name="TotalExternalCost" ColumnName="total_external_cost" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -2353,25 +2353,25 @@
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="authorID" ColumnName="authorID" />
                 <ScalarProperty Name="batchID" ColumnName="batchID" />
-                <ScalarProperty Name="category" ColumnName="category" />
+                <ScalarProperty Name="Category" ColumnName="category" />
                 <ScalarProperty Name="Description" ColumnName="description" />
-                <ScalarProperty Name="end_date" ColumnName="end_date" />
+                <ScalarProperty Name="EndDate" ColumnName="end_date" />
                 <ScalarProperty Name="Number" ColumnName="number" />
                 <ScalarProperty Name="projectID" ColumnName="projectID" />
                 <ScalarProperty Name="specification_versionID" ColumnName="specification_versionID" />
-                <ScalarProperty Name="start_date" ColumnName="start_date" />
+                <ScalarProperty Name="StartDate" ColumnName="start_date" />
                 <ScalarProperty Name="requestID" ColumnName="requestID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Requirements1">
+          <EntitySetMapping Name="Requirements">
             <EntityTypeMapping TypeName="labdbModel.Requirement">
               <MappingFragment StoreEntitySet="requirements">
                 <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="Description" ColumnName="description" />
                 <ScalarProperty Name="methodID" ColumnName="methodID" />
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="position" ColumnName="position" />
+                <ScalarProperty Name="Name" ColumnName="name" />
+                <ScalarProperty Name="Position" ColumnName="position" />
                 <ScalarProperty Name="specification_versionID" ColumnName="specification_versionID" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -2390,8 +2390,8 @@
             <EntityTypeMapping TypeName="labdbModel.SpecificationVersion">
               <MappingFragment StoreEntitySet="specification_versions">
                 <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="main_flag" ColumnName="main_flag" />
-                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="IsMain" ColumnName="main_flag" />
+                <ScalarProperty Name="Name" ColumnName="name" />
                 <ScalarProperty Name="specificationID" ColumnName="specificationID" />
               </MappingFragment>
             </EntityTypeMapping>

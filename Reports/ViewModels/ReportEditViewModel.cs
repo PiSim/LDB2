@@ -17,40 +17,66 @@ namespace Reports.ViewModels
         List<Test> _testList;
         ReportFile _selectedFile;
 
-        internal ReportEditViewModel(Report target) : base()
+        public ReportEditViewModel(Report target) : base()
         {
             _instance = target;
             _testList = new List<Test>(_instance.Tests);
             _fileList = new List<ReportFile>(_instance.ReportFiles);
         }
 
-        internal Batch Batch
+        public string BatchNumber
         {
-            get { return _instance.Batch; }
+            get { return _instance.Batch.Number; }
         }
 
-        internal List<ReportFile> FileList
+        public string Category
+        {
+            get { return _instance.Category; }
+        }
+
+        public List<ReportFile> FileList
         {
             get { return _fileList; }
         }
 
-        internal Report Instance
+        public Report Instance
         {
             get { return _instance; }
         }
 
-        internal string Number
+        public Material Material
+        {
+            get { return _instance.Batch.Material; }
+        }
+
+        public string Number
         {
             get { return _instance.Number.ToString(); }
         }
 
-        internal ReportFile SelectedFile
+        public string Project
+        {
+            get { return _instance.Batch.Material.Construction.Project.Name; }
+        }
+
+        public string Specification
+        {
+            get { return _instance.SpecificationVersion.Specification.Standard.Organization.Name + " " + 
+                    _instance.SpecificationVersion.Specification.Standard.Name; }
+        }
+
+        public string SpecificationVersion
+        {
+            get { return _instance.SpecificationVersion.Name; }
+        }
+
+        public ReportFile SelectedFile
         {
             get { return _selectedFile; }
             set { _selectedFile = value; }
         } 
 
-        internal List<Test> TestList
+        public List<Test> TestList
         {
             get { return _testList; }
         }

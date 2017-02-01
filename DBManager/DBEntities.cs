@@ -17,6 +17,25 @@ namespace DBManager
             Samples.Add(output);
             return output;
         }
+        
+        public List<Requirement> GenerateRequirementList(SpecificationVersion version)
+        {
+            if (version.IsMain == 1)
+                return new List<Requirement>(version.Requirements);
+
+            else
+            {
+                List<Requirement> output = new List<Requirement>(
+                    version.Specification.SpecificationVersions.First(sv => sv.IsMain == 1).Requirements);
+                foreach (Requirement requirement in version.Requirements)
+                {
+                    int ii = output.FindIndex(rr => rr.Method.ID == requirement.Method.ID);
+                    output[ii] = requirement;
+                }
+
+                return output;
+            }
+        }
 
         public Aspect GetAspect(string code,
                                 bool new_instance_if_not_found = true)

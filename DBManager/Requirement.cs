@@ -17,19 +17,19 @@ namespace DBManager
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Requirement()
         {
-            this.sub_requirements = new HashSet<SubRequirement>();
+            this.SubRequirements = new HashSet<SubRequirement>();
         }
     
         public int ID { get; set; }
-        public string description { get; set; }
+        public string Description { get; set; }
         public int methodID { get; set; }
-        public string name { get; set; }
-        public int position { get; set; }
+        public string Name { get; set; }
+        public int Position { get; set; }
         public Nullable<int> specification_versionID { get; set; }
     
-        public virtual Method method { get; set; }
+        public virtual Method Method { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SubRequirement> sub_requirements { get; set; }
-        public virtual SpecificationVersion specification_versions { get; set; }
+        public virtual ICollection<SubRequirement> SubRequirements { get; set; }
+        public virtual SpecificationVersion SpecificationVersions { get; set; }
     }
 }

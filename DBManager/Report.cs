@@ -18,30 +18,30 @@ namespace DBManager
         public Report()
         {
             this.ReportFiles = new HashSet<ReportFile>();
-            this.tasks = new HashSet<Task>();
+            this.Tasks = new HashSet<Task>();
             this.Tests = new HashSet<Test>();
         }
     
         public int ID { get; set; }
-        public int authorID { get; set; }
-        public int batchID { get; set; }
-        public string category { get; set; }
+        private int authorID { get; set; }
+        private int batchID { get; set; }
+        public string Category { get; set; }
         public string Description { get; set; }
-        public Nullable<System.DateTime> end_date { get; set; }
+        public Nullable<System.DateTime> EndDate { get; set; }
         public int Number { get; set; }
-        public Nullable<int> projectID { get; set; }
-        public int specification_versionID { get; set; }
-        public string start_date { get; set; }
-        public string requestID { get; set; }
+        private Nullable<int> projectID { get; set; }
+        private int specification_versionID { get; set; }
+        public string StartDate { get; set; }
+        private string requestID { get; set; }
     
         public virtual Batch Batch { get; set; }
         public virtual Person Author { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ReportFile> ReportFiles { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Task> tasks { get; set; }
+        public virtual ICollection<Task> Tasks { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Test> Tests { get; set; }
-        public virtual SpecificationVersion specification_versions { get; set; }
+        public virtual SpecificationVersion SpecificationVersion { get; set; }
     }
 }
