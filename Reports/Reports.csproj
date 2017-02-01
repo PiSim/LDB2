@@ -104,6 +104,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="ViewModels\ReportEditViewModel.cs" />
     <Compile Include="ViewNames.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="Views\ReportCreationDialog.xaml.cs">

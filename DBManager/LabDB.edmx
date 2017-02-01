@@ -198,11 +198,9 @@
           <Property Name="end_date" Type="date" />
           <Property Name="number" Type="int" Nullable="false" />
           <Property Name="projectID" Type="int" />
-          <Property Name="specificationID" Type="int" />
-          <Property Name="specification_versionID" Type="int" />
+          <Property Name="specification_versionID" Type="int" Nullable="false" />
           <Property Name="start_date" Type="text" />
           <Property Name="requestID" Type="text" />
-          <Property Name="label" Type="text" />
         </EntityType>
         <EntityType Name="requirements">
           <Key>
@@ -213,7 +211,6 @@
           <Property Name="methodID" Type="int" Nullable="false" />
           <Property Name="name" Type="text" Nullable="false" />
           <Property Name="position" Type="int" Nullable="false" />
-          <Property Name="specificationID" Type="int" />
           <Property Name="specification_versionID" Type="int" />
         </EntityType>
         <EntityType Name="samples">
@@ -232,7 +229,6 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="main_flag" Type="int" Nullable="false" />
           <Property Name="name" Type="text" Nullable="false" />
-          <Property Name="overrideID" Type="text" Nullable="false" />
           <Property Name="specificationID" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="specifications">
@@ -724,32 +720,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="specification_to_report">
-          <End Role="specifications" Type="Self.specifications" Multiplicity="0..1" />
-          <End Role="reports" Type="Self.reports" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="specifications">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="reports">
-              <PropertyRef Name="specificationID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="specification_to_requirement">
-          <End Role="specifications" Type="Self.specifications" Multiplicity="0..1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="requirements" Type="Self.requirements" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="specifications">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="requirements">
-              <PropertyRef Name="specificationID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="specification_to_specversion">
           <End Role="specifications" Type="Self.specifications" Multiplicity="1" />
           <End Role="specification_versions" Type="Self.specification_versions" Multiplicity="*" />
@@ -763,7 +733,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="specversion_to_report">
-          <End Role="specification_versions" Type="Self.specification_versions" Multiplicity="0..1" />
+          <End Role="specification_versions" Type="Self.specification_versions" Multiplicity="1" />
           <End Role="reports" Type="Self.reports" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="specification_versions">
@@ -775,9 +745,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="specversion_to_requirement">
-          <End Role="specification_versions" Type="Self.specification_versions" Multiplicity="0..1">
-            <OnDelete Action="Cascade" />
-          </End>
+          <End Role="specification_versions" Type="Self.specification_versions" Multiplicity="0..1" />
           <End Role="requirements" Type="Self.requirements" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="specification_versions">
@@ -1023,14 +991,6 @@
           <AssociationSet Name="requirement_to_subreq" Association="Self.requirement_to_subreq">
             <End Role="requirements" EntitySet="requirements" />
             <End Role="sub_requirements" EntitySet="sub_requirements" />
-          </AssociationSet>
-          <AssociationSet Name="specification_to_report" Association="Self.specification_to_report">
-            <End Role="specifications" EntitySet="specifications" />
-            <End Role="reports" EntitySet="reports" />
-          </AssociationSet>
-          <AssociationSet Name="specification_to_requirement" Association="Self.specification_to_requirement">
-            <End Role="specifications" EntitySet="specifications" />
-            <End Role="requirements" EntitySet="requirements" />
           </AssociationSet>
           <AssociationSet Name="specification_to_specversion" Association="Self.specification_to_specversion">
             <End Role="specifications" EntitySet="specifications" />
@@ -1311,17 +1271,14 @@
           <Property Name="end_date" Type="DateTime" />
           <Property Name="Number" Type="Int32" Nullable="false" />
           <Property Name="projectID" Type="Int32" />
-          <Property Name="specificationID" Type="Int32" />
-          <Property Name="specification_versionID" Type="Int32" />
+          <Property Name="specification_versionID" Type="Int32" Nullable="false" />
           <Property Name="start_date" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
           <Property Name="requestID" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
-          <Property Name="label" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Batch" Relationship="Self.batch_to_report" FromRole="reports" ToRole="batches" />
           <NavigationProperty Name="Author" Relationship="Self.author_to_report" FromRole="reports" ToRole="people" />
           <NavigationProperty Name="ReportFiles" Relationship="Self.report_to_reportfile" FromRole="reports" ToRole="report_files" />
           <NavigationProperty Name="tasks" Relationship="Self.report_to_task" FromRole="reports" ToRole="tasks" />
           <NavigationProperty Name="Tests" Relationship="Self.report_to_test" FromRole="reports" ToRole="tests" />
-          <NavigationProperty Name="specification" Relationship="Self.specification_to_report" FromRole="reports" ToRole="specifications" />
           <NavigationProperty Name="specification_versions" Relationship="Self.specversion_to_report" FromRole="reports" ToRole="specification_versions" />
         </EntityType>
         <EntityType Name="Requirement">
@@ -1333,11 +1290,9 @@
           <Property Name="methodID" Type="Int32" Nullable="false" />
           <Property Name="name" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="position" Type="Int32" Nullable="false" />
-          <Property Name="specificationID" Type="Int32" />
           <Property Name="specification_versionID" Type="Int32" />
           <NavigationProperty Name="method" Relationship="Self.method_to_requirement" FromRole="requirements" ToRole="methods" />
           <NavigationProperty Name="sub_requirements" Relationship="Self.requirement_to_subreq" FromRole="requirements" ToRole="sub_requirements" />
-          <NavigationProperty Name="specification" Relationship="Self.specification_to_requirement" FromRole="requirements" ToRole="specifications" />
           <NavigationProperty Name="specification_versions" Relationship="Self.specversion_to_requirement" FromRole="requirements" ToRole="specification_versions" />
         </EntityType>
         <EntityType Name="Sample">
@@ -1357,7 +1312,6 @@
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="main_flag" Type="Int32" Nullable="false" />
           <Property Name="name" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="overrideID" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="specificationID" Type="Int32" Nullable="false" />
           <NavigationProperty Name="reports" Relationship="Self.specversion_to_report" FromRole="specification_versions" ToRole="reports" />
           <NavigationProperty Name="requirements" Relationship="Self.specversion_to_requirement" FromRole="specification_versions" ToRole="requirements" />
@@ -1373,8 +1327,6 @@
           <Property Name="Label" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Description" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="OldFlag" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Reports" Relationship="Self.specification_to_report" FromRole="specifications" ToRole="reports" />
-          <NavigationProperty Name="Requirements" Relationship="Self.specification_to_requirement" FromRole="specifications" ToRole="requirements" />
           <NavigationProperty Name="SpecificationVersions" Relationship="Self.specification_to_specversion" FromRole="specifications" ToRole="specification_versions" />
           <NavigationProperty Name="Standard" Relationship="Self.standard_to_specification" FromRole="specifications" ToRole="standards" />
         </EntityType>
@@ -1852,20 +1804,8 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="specification_to_report">
-          <End Role="specifications" Type="labdbModel.Specification" Multiplicity="0..1" />
-          <End Role="reports" Type="labdbModel.Report" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="specifications">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="reports">
-              <PropertyRef Name="specificationID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="specversion_to_report">
-          <End Role="specification_versions" Type="labdbModel.SpecificationVersion" Multiplicity="0..1" />
+          <End Role="specification_versions" Type="labdbModel.SpecificationVersion" Multiplicity="1" />
           <End Role="reports" Type="labdbModel.Report" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="specification_versions">
@@ -1887,20 +1827,6 @@
             </Principal>
             <Dependent Role="sub_requirements">
               <PropertyRef Name="requirementID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="specification_to_requirement">
-          <End Role="specifications" Type="labdbModel.Specification" Multiplicity="0..1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="requirements" Type="labdbModel.Requirement" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="specifications">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="requirements">
-              <PropertyRef Name="specificationID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2170,10 +2096,6 @@
             <End Role="reports" EntitySet="Reports" />
             <End Role="tests" EntitySet="Tests" />
           </AssociationSet>
-          <AssociationSet Name="specification_to_report" Association="Self.specification_to_report">
-            <End Role="specifications" EntitySet="Specifications" />
-            <End Role="reports" EntitySet="Reports" />
-          </AssociationSet>
           <AssociationSet Name="specversion_to_report" Association="Self.specversion_to_report">
             <End Role="specification_versions" EntitySet="SpecificationVersions" />
             <End Role="reports" EntitySet="Reports" />
@@ -2181,10 +2103,6 @@
           <AssociationSet Name="requirement_to_subreq" Association="Self.requirement_to_subreq">
             <End Role="requirements" EntitySet="Requirements1" />
             <End Role="sub_requirements" EntitySet="SubRequirements" />
-          </AssociationSet>
-          <AssociationSet Name="specification_to_requirement" Association="Self.specification_to_requirement">
-            <End Role="specifications" EntitySet="Specifications" />
-            <End Role="requirements" EntitySet="Requirements1" />
           </AssociationSet>
           <AssociationSet Name="specversion_to_requirement" Association="Self.specversion_to_requirement">
             <End Role="specification_versions" EntitySet="SpecificationVersions" />
@@ -2440,11 +2358,9 @@
                 <ScalarProperty Name="end_date" ColumnName="end_date" />
                 <ScalarProperty Name="Number" ColumnName="number" />
                 <ScalarProperty Name="projectID" ColumnName="projectID" />
-                <ScalarProperty Name="specificationID" ColumnName="specificationID" />
                 <ScalarProperty Name="specification_versionID" ColumnName="specification_versionID" />
                 <ScalarProperty Name="start_date" ColumnName="start_date" />
                 <ScalarProperty Name="requestID" ColumnName="requestID" />
-                <ScalarProperty Name="label" ColumnName="label" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -2456,7 +2372,6 @@
                 <ScalarProperty Name="methodID" ColumnName="methodID" />
                 <ScalarProperty Name="name" ColumnName="name" />
                 <ScalarProperty Name="position" ColumnName="position" />
-                <ScalarProperty Name="specificationID" ColumnName="specificationID" />
                 <ScalarProperty Name="specification_versionID" ColumnName="specification_versionID" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -2477,7 +2392,6 @@
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="main_flag" ColumnName="main_flag" />
                 <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="overrideID" ColumnName="overrideID" />
                 <ScalarProperty Name="specificationID" ColumnName="specificationID" />
               </MappingFragment>
             </EntityTypeMapping>

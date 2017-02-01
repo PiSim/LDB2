@@ -17,8 +17,6 @@ namespace DBManager
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Specification()
         {
-            this.Reports = new HashSet<Report>();
-            this.Requirements = new HashSet<Requirement>();
             this.SpecificationVersions = new HashSet<SpecificationVersion>();
         }
     
@@ -28,10 +26,6 @@ namespace DBManager
         public string Description { get; set; }
         public int OldFlag { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Report> Reports { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Requirement> Requirements { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SpecificationVersion> SpecificationVersions { get; set; }
         public virtual Std Standard { get; set; }

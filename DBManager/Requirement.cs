@@ -25,13 +25,11 @@ namespace DBManager
         public int methodID { get; set; }
         public string name { get; set; }
         public int position { get; set; }
-        public Nullable<int> specificationID { get; set; }
         public Nullable<int> specification_versionID { get; set; }
     
         public virtual Method method { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SubRequirement> sub_requirements { get; set; }
-        public virtual Specification specification { get; set; }
         public virtual SpecificationVersion specification_versions { get; set; }
     }
 }

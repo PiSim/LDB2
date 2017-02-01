@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="9fa1cdb38a7949d89850433ccf2fcd72" Name="Diagram1" ZoomLevel="93">
+      <Diagram DiagramId="9fa1cdb38a7949d89850433ccf2fcd72" Name="Diagram1" ZoomLevel="71">
         <EntityTypeShape EntityType="labdbModel.Aspect" Width="1.5" PointX="3" PointY="14.75" IsExpanded="true" />
         <EntityTypeShape EntityType="labdbModel.BatchFile" Width="1.5" PointX="12" PointY="15.375" IsExpanded="true" />
         <EntityTypeShape EntityType="labdbModel.Batch" Width="1.5" PointX="9.75" PointY="17.75" IsExpanded="true" />
@@ -66,10 +66,8 @@
         <AssociationConnector Association="labdbModel.report_to_reportfile" ManuallyRouted="false" />
         <AssociationConnector Association="labdbModel.report_to_task" ManuallyRouted="false" />
         <AssociationConnector Association="labdbModel.report_to_test" ManuallyRouted="false" />
-        <AssociationConnector Association="labdbModel.specification_to_report" ManuallyRouted="false" />
         <AssociationConnector Association="labdbModel.specversion_to_report" ManuallyRouted="false" />
         <AssociationConnector Association="labdbModel.requirement_to_subreq" ManuallyRouted="false" />
-        <AssociationConnector Association="labdbModel.specification_to_requirement" ManuallyRouted="false" />
         <AssociationConnector Association="labdbModel.specversion_to_requirement" ManuallyRouted="false" />
         <AssociationConnector Association="labdbModel.specification_to_specversion" ManuallyRouted="false" />
         <AssociationConnector Association="labdbModel.specversion_to_task" ManuallyRouted="false" />

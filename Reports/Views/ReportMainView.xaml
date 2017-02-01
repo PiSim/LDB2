@@ -11,15 +11,15 @@
             <ColumnDefinition/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <ListView ItemsSource="{Binding RecentList}"
-                  SelectedItem="{Binding SelectedRecent, Mode=TwoWay}"
+        <ListView ItemsSource="{Binding ReportList}"
+                  SelectedItem="{Binding SelectedReport, Mode=TwoWay}"
                   Grid.Column="0">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Numero"
                                     DisplayMemberBinding="{Binding Number}"/>
                     <GridViewColumn Header="Batch"
-                                    DisplayMemberBinding="{Binding  Batch.Number}"/>
+                                    DisplayMemberBinding="{Binding Batch.Number}"/>
                     <GridViewColumn Header="Specifica"
                                     DisplayMemberBinding="{Binding SpecificationVersion.Specification.Standard.Name}"/>
                     <GridViewColumn Header="Progetto"
@@ -36,5 +36,12 @@
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 Margin="5,5,0,0"/>
+
+        <Button Content="Apri"
+                Command="{Binding OpenReportCommand}"
+                Grid.Column="1"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Margin="5,30,0,0"/>
     </Grid>
 </UserControl>

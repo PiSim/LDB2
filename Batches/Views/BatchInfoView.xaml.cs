@@ -40,7 +40,7 @@ namespace Batches.Views
         public void OnNavigatedTo(NavigationContext ncontext)
         {
             ViewModels.BatchInfoViewModel viewModel =
-                new ViewModels.BatchInfoViewModel(ncontext.Parameters["batch"] as Batch);
+                new ViewModels.BatchInfoViewModel(ncontext.Parameters["ObjectInstance"] as Batch);
             DataContext = viewModel;
         }
     }

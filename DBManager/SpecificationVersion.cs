@@ -25,7 +25,6 @@ namespace DBManager
         public int ID { get; set; }
         public int main_flag { get; set; }
         public string name { get; set; }
-        public string overrideID { get; set; }
         public int specificationID { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

@@ -30,11 +30,9 @@ namespace DBManager
         public Nullable<System.DateTime> end_date { get; set; }
         public int Number { get; set; }
         public Nullable<int> projectID { get; set; }
-        public Nullable<int> specificationID { get; set; }
-        public Nullable<int> specification_versionID { get; set; }
+        public int specification_versionID { get; set; }
         public string start_date { get; set; }
         public string requestID { get; set; }
-        public string label { get; set; }
     
         public virtual Batch Batch { get; set; }
         public virtual Person Author { get; set; }
@@ -44,7 +42,6 @@ namespace DBManager
         public virtual ICollection<Task> tasks { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Test> Tests { get; set; }
-        public virtual Specification specification { get; set; }
         public virtual SpecificationVersion specification_versions { get; set; }
     }
 }

@@ -23,7 +23,8 @@ namespace Reports
             _container.RegisterType<Object, Views.ReportMainView>(ViewNames.ReportMainView);
             _container.RegisterType<Object, Views.ReportEditView>(ViewNames.ReportEditView);
 
-            _regionManager.RegisterViewWithRegion("MainNavigationRegion", typeof(Views.ReportsNavigationItem));
+            _regionManager.RegisterViewWithRegion(Navigation.RegionNames.MainNavigationRegion
+                                                , typeof(Views.ReportsNavigationItem));
         }
     }
 }
