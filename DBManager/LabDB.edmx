@@ -212,6 +212,8 @@
           <Property Name="name" Type="text" Nullable="false" />
           <Property Name="position" Type="int" Nullable="false" />
           <Property Name="specification_versionID" Type="int" />
+          <Property Name="is_override" Type="int" Nullable="false" />
+          <Property Name="overriddenID" Type="int" />
         </EntityType>
         <EntityType Name="samples">
           <Key>
@@ -582,6 +584,20 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="overridden_to_requirement">
+          <End Role="requirements" Type="Self.requirements" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="requirements1" Type="Self.requirements" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="requirements">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="requirements1">
+              <PropertyRef Name="overriddenID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="previssue_to_standard">
           <End Role="standards" Type="Self.standards" Multiplicity="0..1" />
           <End Role="standards1" Type="Self.standards" Multiplicity="*" />
@@ -948,6 +964,10 @@
             <End Role="organizations" EntitySet="organizations" />
             <End Role="standards" EntitySet="standards" />
           </AssociationSet>
+          <AssociationSet Name="overridden_to_requirement" Association="Self.overridden_to_requirement">
+            <End Role="requirements" EntitySet="requirements" />
+            <End Role="requirements1" EntitySet="requirements" />
+          </AssociationSet>
           <AssociationSet Name="previssue_to_standard" Association="Self.previssue_to_standard">
             <End Role="standards" EntitySet="standards" />
             <End Role="standards1" EntitySet="standards" />
@@ -1294,6 +1314,10 @@
           <NavigationProperty Name="Method" Relationship="Self.method_to_requirement" FromRole="requirements" ToRole="methods" />
           <NavigationProperty Name="SubRequirements" Relationship="Self.requirement_to_subreq" FromRole="requirements" ToRole="sub_requirements" />
           <NavigationProperty Name="SpecificationVersions" Relationship="Self.specversion_to_requirement" FromRole="requirements" ToRole="specification_versions" />
+          <Property Name="IsOverride" Type="Int32" Nullable="false" />
+          <Property Name="OverriddenID" Type="Int32" />
+          <NavigationProperty Name="Overrides" Relationship="labdbModel.overridden_to_requirement" FromRole="Requirement" ToRole="Requirement1" />
+          <NavigationProperty Name="Overridden" Relationship="labdbModel.overridden_to_requirement" FromRole="Requirement1" ToRole="Requirement" />
         </EntityType>
         <EntityType Name="Sample">
           <Key>
@@ -1366,11 +1390,11 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="name" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="required_value" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="requirementID" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="requirement" Relationship="Self.requirement_to_subreq" FromRole="sub_requirements" ToRole="requirements" />
-          <NavigationProperty Name="sub_tests" Relationship="Self.sub_requirement" FromRole="sub_requirements" ToRole="sub_tests" />
+          <Property Name="Name" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="RequiredValue" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="requirementID" Type="Int32" Nullable="false" a:SetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+          <NavigationProperty Name="Requirement" Relationship="Self.requirement_to_subreq" FromRole="sub_requirements" ToRole="requirements" />
+          <NavigationProperty Name="SubTests" Relationship="Self.sub_requirement" FromRole="sub_requirements" ToRole="sub_tests" />
         </EntityType>
         <EntityType Name="SubTest">
           <Key>
@@ -2140,7 +2164,25 @@
             <End Role="tests" EntitySet="Tests" />
             <End Role="sub_tests" EntitySet="SubTests" />
           </AssociationSet>
+          <AssociationSet Name="overridden_to_requirement" Association="labdbModel.overridden_to_requirement">
+            <End Role="Requirement" EntitySet="Requirements" />
+            <End Role="Requirement1" EntitySet="Requirements" />
+          </AssociationSet>
         </EntityContainer>
+        <Association Name="overridden_to_requirement">
+          <End Type="labdbModel.Requirement" Role="Requirement" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="labdbModel.Requirement" Role="Requirement1" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Requirement">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Requirement1">
+              <PropertyRef Name="OverriddenID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2367,6 +2409,8 @@
           <EntitySetMapping Name="Requirements">
             <EntityTypeMapping TypeName="labdbModel.Requirement">
               <MappingFragment StoreEntitySet="requirements">
+                <ScalarProperty Name="OverriddenID" ColumnName="overriddenID" />
+                <ScalarProperty Name="IsOverride" ColumnName="is_override" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Description" ColumnName="description" />
                 <ScalarProperty Name="methodID" ColumnName="methodID" />
@@ -2435,8 +2479,8 @@
             <EntityTypeMapping TypeName="labdbModel.SubRequirement">
               <MappingFragment StoreEntitySet="sub_requirements">
                 <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="required_value" ColumnName="required_value" />
+                <ScalarProperty Name="Name" ColumnName="name" />
+                <ScalarProperty Name="RequiredValue" ColumnName="required_value" />
                 <ScalarProperty Name="requirementID" ColumnName="requirementID" />
               </MappingFragment>
             </EntityTypeMapping>

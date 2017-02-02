@@ -18,6 +18,7 @@ namespace DBManager
         public Requirement()
         {
             this.SubRequirements = new HashSet<SubRequirement>();
+            this.Overrides = new HashSet<Requirement>();
         }
     
         public int ID { get; set; }
@@ -26,10 +27,15 @@ namespace DBManager
         public string Name { get; set; }
         public int Position { get; set; }
         public Nullable<int> specification_versionID { get; set; }
+        public int IsOverride { get; set; }
+        public Nullable<int> OverriddenID { get; set; }
     
         public virtual Method Method { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SubRequirement> SubRequirements { get; set; }
         public virtual SpecificationVersion SpecificationVersions { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Requirement> Overrides { get; set; }
+        public virtual Requirement Overridden { get; set; }
     }
 }

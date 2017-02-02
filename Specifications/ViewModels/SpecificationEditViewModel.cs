@@ -1,5 +1,6 @@
 ﻿using DBManager;
 using Prism.Commands;
+using Prism.Events;
 using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
@@ -9,6 +10,29 @@ using System.Threading.Tasks;
 
 namespace Specifications.ViewModels
 {
+    internal class RequirementWrapper
+    {
+        private EventAggregator _eventAggregator;
+        private Requirement _requirementInstance;
+
+        internal RequirementWrapper(Requirement instance, EventAggregator eventAggregator)
+        {
+            _eventAggregator = eventAggregator;
+            _requirementInstance = instance;
+        }
+
+        public bool IsOverride
+        {
+            get { return (_requirementInstance.IsOverride == 1) ? true : false ; }
+
+            set
+            {
+                _requirementInstance.IsOverride = (value) ? 1 : 0;
+                if (value)
+            }
+        }
+    }
+
     internal class SpecificationEditViewModel : BindableBase
     {
         private DBEntities _entities;

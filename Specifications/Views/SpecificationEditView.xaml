@@ -179,7 +179,8 @@
                                             <DataTemplate>
                                                 <CheckBox IsChecked="{Binding Path=IsOverride, Mode=TwoWay}"
                                                           IsEnabled="{Binding RelativeSource={RelativeSource AncestorType=UserControl},
-                                                                              Path=DataContext.SelectedVersionIsNotMain}"/>
+                                                                              Path=DataContext.SelectedVersionIsNotMain}"
+                                                          C/>
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>

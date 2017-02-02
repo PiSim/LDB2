@@ -17,16 +17,16 @@ namespace DBManager
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public SubRequirement()
         {
-            this.sub_tests = new HashSet<SubTest>();
+            this.SubTests = new HashSet<SubTest>();
         }
     
         public int ID { get; set; }
-        public string name { get; set; }
-        public string required_value { get; set; }
-        public int requirementID { get; set; }
+        public string Name { get; set; }
+        public string RequiredValue { get; set; }
+        public int requirementID { get; private set; }
     
-        public virtual Requirement requirement { get; set; }
+        public virtual Requirement Requirement { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SubTest> sub_tests { get; set; }
+        public virtual ICollection<SubTest> SubTests { get; set; }
     }
 }
