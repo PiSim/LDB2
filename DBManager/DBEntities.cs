@@ -13,7 +13,7 @@ namespace DBManager
         {
             Requirement output = new Requirement();
             output.Description = toBeOverridden.Description;
-            output.IsOverride = true;
+            output.IsOverride = 1;
             output.Method = toBeOverridden.Method;
             output.Overridden = toBeOverridden;
             output.SpecificationVersion = version;
