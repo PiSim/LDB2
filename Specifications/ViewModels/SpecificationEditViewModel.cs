@@ -32,7 +32,7 @@ namespace Specifications.ViewModels
             set
             {
                 if (value)
-                    _requirementInstance = _entities.AddOverride(_requirementInstance, _versionInstance);
+                    _requirementInstance = _entities.AddOverride(_versionInstance, _requirementInstance);
                 else
                     _requirementInstance = _entities.RemoveOverride(_requirementInstance);
             }
