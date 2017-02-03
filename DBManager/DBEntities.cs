@@ -18,6 +18,17 @@ namespace DBManager
             output.Overridden = toBeOverridden;
             output.SpecificationVersion = version;
             
+            foreach (SubRequirement subReq in toBeOverridden.SubRequirements)
+            {
+                SubRequirement tempSub = new SubRequirement();
+                
+                tempSub.Requirement = output;
+                tempSub.Name = subReq.Name;
+                tempSub.RequiredValue = subReq.RequiredValue;
+                
+                output.SubRequirements.Add(tempSub);
+            }
+            
             version.Requirements.Add(output);
             return output;
         }
