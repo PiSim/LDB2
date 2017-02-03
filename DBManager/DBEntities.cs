@@ -16,7 +16,7 @@ namespace DBManager
             output.IsOverride = 1;
             output.Method = toBeOverridden.Method;
             output.Overridden = toBeOverridden;
-            output.SpecificationVersion = version;
+            output.SpecificationVersions = version;
             
             foreach (SubRequirement subReq in toBeOverridden.SubRequirements)
             {
