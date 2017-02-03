@@ -137,11 +137,10 @@ namespace DBManager
             return output;
         }
         
-        public Requirement RemoveOverride(SpecificationVersion version,
-                                            Requirement toBeRemoved)
+        public Requirement RemoveOverride(Requirement toBeRemoved)
         {
             Requirement output = toBeRemoved.Overridden;
-            version.Requirements.Remove(toBeRemoved);
+            Requirements.Remove(toBeRemoved);
             return output;
         }
     }
