@@ -84,8 +84,6 @@
     <Compile Include="CommitRequested.cs" />
     <Compile Include="Events\NavigateBackRequested.cs" />
     <Compile Include="Events\NavigateForwardRequested.cs" />
-    <Compile Include="Events\RequirementOverrideAdded.cs" />
-    <Compile Include="Events\RequirementOverrideRemoved.cs" />
     <Compile Include="Events\VisualizeObjectRequested.cs" />
     <Compile Include="InfrastructureModule.cs" />
     <Compile Include="NavigationRequested.cs" />
@@ -103,7 +101,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="RequirementOverrideToken.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
