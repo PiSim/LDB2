@@ -12,13 +12,17 @@ namespace Specifications.ViewModels
 {
     internal class RequirementWrapper
     {
-        private EventAggregator _eventAggregator;
+        private DBEntities _entities;
         private Requirement _requirementInstance;
+        private SpecificationVersion _versionInstance;
 
-        internal RequirementWrapper(Requirement instance, EventAggregator eventAggregator)
+        internal RequirementWrapper(Requirement instance,
+                                    SpecificationVersion version, 
+                                    DBEntities entities)
         {
-            _eventAggregator = eventAggregator;
+            _entities = entities;
             _requirementInstance = instance;
+            _versionInstance = version;
         }
 
         public bool IsOverride
@@ -27,8 +31,10 @@ namespace Specifications.ViewModels
 
             set
             {
-                _requirementInstance.IsOverride = (value) ? 1 : 0;
                 if (value)
+                    _requirementInstance = _entities.AddOverride(_requirementInstance, _versionInstance);
+                else
+                    _requirementInstance = _entities.RemoveOverride(_requirementInstance);
             }
         }
     }
