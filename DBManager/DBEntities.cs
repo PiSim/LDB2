@@ -8,6 +8,20 @@ namespace DBManager
 {
     public class DBEntities : LabDBEntities
     {
+        public Requirement AddOverride(SpecificationVersion version,
+                                        Requirement toBeOverridden)
+        {
+            Requirement output = new Requirement();
+            output.Description = toBeOverridden.Description;
+            output.IsOverride = true;
+            output.Method = toBeOverridden.Method;
+            output.Overridden = toBeOverridden;
+            output.SpecificationVersion = version;
+            
+            version.Requirements.Add(output);
+            return output;
+        }
+        
         public Sample CreateSampleForBatch(Batch batch, string actionCode)
         {
             Sample output = new Sample();
@@ -27,6 +41,7 @@ namespace DBManager
             {
                 List<Requirement> output = new List<Requirement>(
                     version.Specification.SpecificationVersions.First(sv => sv.IsMain == 1).Requirements);
+                
                 foreach (Requirement requirement in version.Requirements)
                 {
                     int ii = output.FindIndex(rr => rr.Method.ID == requirement.Method.ID);
@@ -121,6 +136,13 @@ namespace DBManager
 
             return output;
         }
-
+        
+        public Requirement RemoveOverride(SpecificationVersion version,
+                                            Requirement toBeRemoved)
+        {
+            Requirement output = toBeRemoved.Overridden;
+            version.Requirements.Remove(toBeRemoved);
+            return output;
+        }
     }
 }
