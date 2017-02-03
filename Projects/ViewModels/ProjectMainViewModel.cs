@@ -13,20 +13,37 @@ namespace Projects.ViewModels
     internal class ProjectMainViewModel : BindableBase
     {
         private DBEntities _entities;
+        private DelegateCommand _openProject;
         private EventAggregator _eventAggregator;
         private ObservableCollection<Project> _projectList;
+        private Project _selectedProject;
 
         internal ProjectMainViewModel(DBEntities entities, EventAggregator aggregator) 
             : base()
         {
             _entities = entities;
             _eventAggregator = aggregator;
+            _openProject = new DelegateCommand(
+                () => {}
+            );
+            
             _projectList = new ObservableCollection<Project>(_entities.Projects);
+        }
+        
+        public DelegateCommand OpenProjectCommand
+        {
+            get { return _openProject; }
         }
         
         public ObservableCollection<Project> ProjectList
         {
             get { return _projectList; } 
+        }
+        
+        public Project SelectedProject
+        {
+            get { return _selectedProject; }
+            set { _selectedProject = value; }
         }
     }
 }
