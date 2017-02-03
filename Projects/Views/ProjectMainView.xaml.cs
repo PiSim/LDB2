@@ -1,4 +1,6 @@
-﻿using System;
+﻿using DBManager;
+using Prism.Events;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,8 +22,9 @@ namespace Projects.Views
     /// </summary>
     public partial class ProjectMainView : UserControl
     {
-        public ProjectMainView()
+        public ProjectMainView(DBEntities entities, EventAggregator aggregator)
         {
+            DataContext = new ViewModels.ProjectMainViewModel(entities, aggregator);
             InitializeComponent();
         }
     }
