@@ -16,7 +16,7 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <ListView ItemsSource="{Binding SpecificationList}"
-                  SelectedItem="{Binding SelectedSpecification}"
+                  SelectedItem="{Binding SelectedSpecification, Mode=TwoWay}"
                   Grid.Column="0"
                   Grid.Row="0"
                   Grid.RowSpan="2">
