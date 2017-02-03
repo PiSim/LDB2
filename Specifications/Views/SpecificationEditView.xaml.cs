@@ -1,4 +1,5 @@
 ﻿using DBManager;
+using Prism.Regions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,12 +20,28 @@ namespace Specifications.Views
     /// <summary>
     /// Interaction logic for SpecificationEditView.xaml
     /// </summary>
-    public partial class SpecificationEditView : UserControl
+    public partial class SpecificationEditView : UserControl, INavigationAware
     {
-        public SpecificationEditView(DBEntities entities, Specification instance)
+        public SpecificationEditView(DBEntities entities)
         {
-            DataContext = new ViewModels.SpecificationEditViewModel(entities, instance);
             InitializeComponent();
+        }
+        
+        public bool IsNavigationTarget(NavigationContext ncontext)
+        {
+            return true;
+        }
+
+        public void OnNavigatedFrom(NavigationContext ncontext)
+        {
+
+        }
+
+        public void OnNavigatedTo(NavigationContext ncontext)
+        {
+            ViewModels.SpecificationEditViewModel viewModel =
+                new ViewModels.SpecificationEditViewModel(ncontext.Parameters["ObjectInstance"] as Specifications);
+            DataContext = viewModel;
         }
     }
 }
