@@ -17,7 +17,7 @@ namespace DBManager
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Batch()
         {
-            this.notes = "";
+            this.Notes = "";
             this.BatchFiles = new HashSet<BatchFile>();
             this.Masters = new HashSet<Master>();
             this.Reports = new HashSet<Report>();
@@ -28,7 +28,7 @@ namespace DBManager
         public int ID { get; set; }
         public string Number { get; set; }
         public Nullable<int> materialID { get; set; }
-        public string notes { get; set; }
+        public string Notes { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<BatchFile> BatchFiles { get; set; }

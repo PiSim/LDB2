@@ -32,6 +32,21 @@ namespace DBManager
             version.Requirements.Add(output);
             return output;
         }
+
+        public void AddTest(Specification specification, Method method)
+        {
+            Requirement tempReq = new Requirement();
+            tempReq.Method = method;
+            tempReq.IsOverride = 0;string[] parsedMeasurements = method.Measurements.Split((char)007);
+            foreach (string measure in parsedMeasurements)
+            {
+                SubRequirement tempSub = new SubRequirement();
+                tempSub.Name = measure;
+                tempReq.SubRequirements.Add(tempSub);
+            }
+
+            specification.SpecificationVersions.First(ver => ver.IsMain == 1).Requirements.Add(tempReq);
+        }
         
         public Sample CreateSampleForBatch(Batch batch, string actionCode)
         {

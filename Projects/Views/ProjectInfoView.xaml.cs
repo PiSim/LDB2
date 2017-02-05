@@ -21,8 +21,14 @@ namespace Projects.Views
     
     public partial class ProjectInfoView : UserControl, INavigationAware
     {
-        public ProjectInfoView()
+        private DBEntities _entities;
+        private EventAggregator _aggregator;
+
+        public ProjectInfoView(DBEntities entities,
+                                EventAggregator aggregator)
         {
+            _aggregator = aggregator;
+            _entities = entities;
             InitializeComponent();
         }
         
@@ -39,7 +45,9 @@ namespace Projects.Views
         public void OnNavigatedTo(NavigationContext ncontext)
         {
             ViewModels.ProjectInfoViewModel viewModel =
-                new ViewModels.ProjectInfoViewModel(ncontext.Parameters["ObjectInstance"] as Project);
+                new ViewModels.ProjectInfoViewModel(_entities,
+                                                    _aggregator,
+                                                    ncontext.Parameters["ObjectInstance"] as Project);
             DataContext = viewModel;
         }
     }

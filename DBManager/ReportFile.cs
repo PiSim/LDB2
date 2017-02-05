@@ -15,10 +15,10 @@ namespace DBManager
     public partial class ReportFile
     {
         public int ID { get; set; }
-        public string description { get; set; }
+        public string Description { get; set; }
         public int reportID { get; set; }
-        public string path { get; set; }
+        public string Path { get; set; }
     
-        public virtual Report report { get; set; }
+        public virtual Report Report { get; set; }
     }
 }

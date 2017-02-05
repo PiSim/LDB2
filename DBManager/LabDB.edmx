@@ -1070,7 +1070,7 @@
           <Property Name="batchID" Type="Int32" Nullable="false" />
           <Property Name="path" Type="String" MaxLength="1073741823" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="description" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
-          <NavigationProperty Name="batch" Relationship="Self.batch1" FromRole="batch_files" ToRole="batches" />
+          <NavigationProperty Name="Batch" Relationship="Self.batch1" FromRole="batch_files" ToRole="batches" />
         </EntityType>
         <EntityType Name="Batch">
           <Key>
@@ -1079,7 +1079,7 @@
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Number" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="materialID" Type="Int32" />
-          <Property Name="notes" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" DefaultValue="" />
+          <Property Name="Notes" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" DefaultValue="" />
           <NavigationProperty Name="BatchFiles" Relationship="Self.batch1" FromRole="batches" ToRole="batch_files" />
           <NavigationProperty Name="Material" Relationship="Self.batch_by_material" FromRole="batches" ToRole="materials" />
           <NavigationProperty Name="Masters" Relationship="Self.batch_to_master" FromRole="batches" ToRole="masters" />
@@ -1167,11 +1167,11 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="number" Type="Int32" Nullable="false" />
-          <Property Name="date" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="Number" Type="Int32" Nullable="false" />
+          <Property Name="Date" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
           <Property Name="batchID" Type="Int32" />
-          <NavigationProperty Name="batch" Relationship="Self.batch_to_master" FromRole="masters" ToRole="batches" />
-          <NavigationProperty Name="recipes" Relationship="Self.master_to_recipe" FromRole="masters" ToRole="recipes" />
+          <NavigationProperty Name="Batch" Relationship="Self.batch_to_master" FromRole="masters" ToRole="batches" />
+          <NavigationProperty Name="Recipes" Relationship="Self.master_to_recipe" FromRole="masters" ToRole="recipes" />
         </EntityType>
         <EntityType Name="Material">
           <Key>
@@ -1254,8 +1254,8 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="name" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
-          <NavigationProperty Name="methods" Relationship="Self.property_to_method" FromRole="properties" ToRole="methods" />
+          <Property Name="Name" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Methods" Relationship="Self.property_to_method" FromRole="properties" ToRole="methods" />
         </EntityType>
         <EntityType Name="Recipe">
           <Key>
@@ -1265,19 +1265,19 @@
           <Property Name="Code" Type="String" MaxLength="4" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="colourID" Type="Int32" a:GetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:SetterAccess="Private" />
           <Property Name="masterID" Type="Int32" />
-          <NavigationProperty Name="colour" Relationship="Self.color_to_recipe" FromRole="recipes" ToRole="colours" />
-          <NavigationProperty Name="master" Relationship="Self.master_to_recipe" FromRole="recipes" ToRole="masters" />
-          <NavigationProperty Name="materials" Relationship="Self.recipe_to_material" FromRole="recipes" ToRole="materials" />
+          <NavigationProperty Name="Colour" Relationship="Self.color_to_recipe" FromRole="recipes" ToRole="colours" />
+          <NavigationProperty Name="Master" Relationship="Self.master_to_recipe" FromRole="recipes" ToRole="masters" />
+          <NavigationProperty Name="Materials" Relationship="Self.recipe_to_material" FromRole="recipes" ToRole="materials" />
         </EntityType>
         <EntityType Name="ReportFile">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="description" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="reportID" Type="Int32" Nullable="false" />
-          <Property Name="path" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
-          <NavigationProperty Name="report" Relationship="Self.report_to_reportfile" FromRole="report_files" ToRole="reports" />
+          <Property Name="Path" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Report" Relationship="Self.report_to_reportfile" FromRole="report_files" ToRole="reports" />
         </EntityType>
         <EntityType Name="Report">
           <Key>
@@ -1985,7 +1985,7 @@
           <EntitySet Name="Organizations1" EntityType="labdbModel.Organization" />
           <EntitySet Name="People1" EntityType="labdbModel.Person" />
           <EntitySet Name="Projects" EntityType="labdbModel.Project" />
-          <EntitySet Name="Properties1" EntityType="labdbModel.Property" />
+          <EntitySet Name="Properties" EntityType="labdbModel.Property" />
           <EntitySet Name="Recipes" EntityType="labdbModel.Recipe" />
           <EntitySet Name="ReportFiles" EntityType="labdbModel.ReportFile" />
           <EntitySet Name="Reports" EntityType="labdbModel.Report" />
@@ -1997,7 +1997,7 @@
           <EntitySet Name="Stds" EntityType="labdbModel.Std" />
           <EntitySet Name="SubRequirements" EntityType="labdbModel.SubRequirement" />
           <EntitySet Name="SubTests" EntityType="labdbModel.SubTest" />
-          <EntitySet Name="Tasks1" EntityType="labdbModel.Task" />
+          <EntitySet Name="Tasks" EntityType="labdbModel.Task" />
           <EntitySet Name="Tests" EntityType="labdbModel.Test" />
           <EntitySet Name="Users1" EntityType="labdbModel.User" />
           <AssociationSet Name="aspect" Association="Self.aspect1">
@@ -2073,7 +2073,7 @@
             <End Role="requirements" EntitySet="Requirements" />
           </AssociationSet>
           <AssociationSet Name="property_to_method" Association="Self.property_to_method">
-            <End Role="properties" EntitySet="Properties1" />
+            <End Role="properties" EntitySet="Properties" />
             <End Role="methods" EntitySet="Methods" />
           </AssociationSet>
           <AssociationSet Name="standard_to_method" Association="Self.standard_to_method">
@@ -2102,11 +2102,11 @@
           </AssociationSet>
           <AssociationSet Name="requester_to_task" Association="Self.requester_to_task">
             <End Role="people" EntitySet="People1" />
-            <End Role="tasks" EntitySet="Tasks1" />
+            <End Role="tasks" EntitySet="Tasks" />
           </AssociationSet>
           <AssociationSet Name="project_to_task" Association="Self.project_to_task">
             <End Role="projects" EntitySet="Projects" />
-            <End Role="tasks" EntitySet="Tasks1" />
+            <End Role="tasks" EntitySet="Tasks" />
           </AssociationSet>
           <AssociationSet Name="report_to_reportfile" Association="Self.report_to_reportfile">
             <End Role="reports" EntitySet="Reports" />
@@ -2114,7 +2114,7 @@
           </AssociationSet>
           <AssociationSet Name="report_to_task" Association="Self.report_to_task">
             <End Role="reports" EntitySet="Reports" />
-            <End Role="tasks" EntitySet="Tasks1" />
+            <End Role="tasks" EntitySet="Tasks" />
           </AssociationSet>
           <AssociationSet Name="report_to_test" Association="Self.report_to_test">
             <End Role="reports" EntitySet="Reports" />
@@ -2138,7 +2138,7 @@
           </AssociationSet>
           <AssociationSet Name="specversion_to_task" Association="Self.specversion_to_task">
             <End Role="specification_versions" EntitySet="SpecificationVersions" />
-            <End Role="tasks" EntitySet="Tasks1" />
+            <End Role="tasks" EntitySet="Tasks" />
           </AssociationSet>
           <AssociationSet Name="standard_to_specification" Association="Self.standard_to_specification">
             <End Role="standards" EntitySet="Stds" />
@@ -2214,7 +2214,7 @@
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Number" ColumnName="number" />
                 <ScalarProperty Name="materialID" ColumnName="materialID" />
-                <ScalarProperty Name="notes" ColumnName="notes" />
+                <ScalarProperty Name="Notes" ColumnName="notes" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -2292,8 +2292,8 @@
             <EntityTypeMapping TypeName="labdbModel.Master">
               <MappingFragment StoreEntitySet="masters">
                 <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="number" ColumnName="number" />
-                <ScalarProperty Name="date" ColumnName="date" />
+                <ScalarProperty Name="Number" ColumnName="number" />
+                <ScalarProperty Name="Date" ColumnName="date" />
                 <ScalarProperty Name="batchID" ColumnName="batchID" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -2361,11 +2361,11 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Properties1">
+          <EntitySetMapping Name="Properties">
             <EntityTypeMapping TypeName="labdbModel.Property">
               <MappingFragment StoreEntitySet="properties">
                 <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="Name" ColumnName="name" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -2383,9 +2383,9 @@
             <EntityTypeMapping TypeName="labdbModel.ReportFile">
               <MappingFragment StoreEntitySet="report_files">
                 <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="Description" ColumnName="description" />
                 <ScalarProperty Name="reportID" ColumnName="reportID" />
-                <ScalarProperty Name="path" ColumnName="path" />
+                <ScalarProperty Name="Path" ColumnName="path" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -2495,7 +2495,7 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Tasks1">
+          <EntitySetMapping Name="Tasks">
             <EntityTypeMapping TypeName="labdbModel.Task">
               <MappingFragment StoreEntitySet="tasks">
                 <ScalarProperty Name="ID" ColumnName="ID" />

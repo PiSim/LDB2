@@ -17,16 +17,16 @@ namespace DBManager
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Master()
         {
-            this.recipes = new HashSet<Recipe>();
+            this.Recipes = new HashSet<Recipe>();
         }
     
         public int ID { get; set; }
-        public int number { get; set; }
-        public string date { get; set; }
+        public int Number { get; set; }
+        public string Date { get; set; }
         public Nullable<int> batchID { get; set; }
     
-        public virtual Batch batch { get; set; }
+        public virtual Batch Batch { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Recipe> recipes { get; set; }
+        public virtual ICollection<Recipe> Recipes { get; set; }
     }
 }

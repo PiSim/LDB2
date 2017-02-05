@@ -13,17 +13,17 @@ namespace Tasks.ViewModels
     {
         private DBEntities _entities;
         private EventAggregator _eventAggregator;
-        private ObservableCollection<Task> _taskList;
+        private ObservableCollection<DBManager.Task> _taskList;
 
         internal TaskMainViewModel(DBEntities entities, EventAggregator eventAggregator) 
             : base()
         {
             _entities = entities;
             _eventAggregator = eventAggregator;
-            _taskList = new ObservableCollection(_entities.Tasks);
+            _taskList = new ObservableCollection<DBManager.Task>(_entities.Tasks);
         }
         
-        public ObservableCollection<Task> TaskList
+        public ObservableCollection<DBManager.Task> TaskList
         {
             get { return _taskList; }
         }

@@ -17,13 +17,13 @@ namespace DBManager
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Property()
         {
-            this.methods = new HashSet<Method>();
+            this.Methods = new HashSet<Method>();
         }
     
         public int ID { get; set; }
-        public string name { get; set; }
+        public string Name { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Method> methods { get; set; }
+        public virtual ICollection<Method> Methods { get; set; }
     }
 }

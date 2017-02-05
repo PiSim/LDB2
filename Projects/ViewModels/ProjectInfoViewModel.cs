@@ -16,12 +16,12 @@ namespace Projects.ViewModels
         private EventAggregator _eventAggregator;
         private Project _projectInstance;
 
-        internal ProjectInfoViewModel(DBEntities entities, 
-                                    EventAggregator aggregator, 
-                                    Project instance) 
+        internal ProjectInfoViewModel(DBEntities entities,
+                                    EventAggregator aggregator,
+                                    Project instance)
             : base()
         {
-            
+
         }
-        
+    }        
 }

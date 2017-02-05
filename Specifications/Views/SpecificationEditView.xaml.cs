@@ -22,8 +22,11 @@ namespace Specifications.Views
     /// </summary>
     public partial class SpecificationEditView : UserControl, INavigationAware
     {
+        private DBEntities _entities;
+
         public SpecificationEditView(DBEntities entities)
         {
+            _entities = entities;
             InitializeComponent();
         }
         
@@ -40,7 +43,8 @@ namespace Specifications.Views
         public void OnNavigatedTo(NavigationContext ncontext)
         {
             ViewModels.SpecificationEditViewModel viewModel =
-                new ViewModels.SpecificationEditViewModel(ncontext.Parameters["ObjectInstance"] as Specifications);
+                new ViewModels.SpecificationEditViewModel(_entities,
+                                                        ncontext.Parameters["ObjectInstance"] as Specification);
             DataContext = viewModel;
         }
     }

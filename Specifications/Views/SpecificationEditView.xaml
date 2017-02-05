@@ -8,10 +8,13 @@
              d:DesignHeight="500" d:DesignWidth="600">
     <Grid>
         <Label Content="Standard:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,0,0"/>
-        <Label Content="{Binding Path=CurrentInstance.Standard}"
+        <Label Content="{Binding Standard}"
                HorizontalAlignment="Left" VerticalAlignment="Top" Margin="100,0,0,0"/>
         <Label Content="Descrizione:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,19,0,0"/>
-        <Label Content="{Binding Path=CurrentInstance.Description}" 
+        <TextBox Text="{Binding Description, Mode=TwoWay}"
+                 TextWrapping="Wrap"
+                 Height="50"
+                 Width="200"
                HorizontalAlignment="Left" VerticalAlignment="Top" Margin="100,25,0,0"/>
 
         <TabControl Margin="0,100,0,0">
@@ -44,7 +47,7 @@
                                       Grid.Row="0"/>
 
                             <ListView ItemsSource="{Binding Path=FilteredMethods}"
-                                      SelectedItem="{Binding Path=SelectedMethod, Mode=TwoWay}"
+                                      SelectedItem="{Binding Path=SelectedToAdd, Mode=TwoWay}"
                                       Grid.Column="0"
                                       Grid.ColumnSpan="2"
                                       Grid.Row="1">
@@ -73,14 +76,14 @@
                             <RowDefinition/>
                         </Grid.RowDefinitions>
                         <Button Content="►"
-                                Command="{Binding Path=AddRequirementCommand}"
+                                Command="{Binding Path=AddTestCommand}"
                                 Grid.Row="1"
                                 Height="30"
                                 Width="30" 
                                 FontSize="20" 
                                 Margin="5,0,5,0"/>
                         <Button Content="◄"
-                                Command="{Binding Path=RemoveRequirementCommand}"
+                                Command="{Binding Path=RemoveTestCommand}"
                                 Grid.Row="3"
                                 Height="30"
                                 Width="30" 
@@ -91,7 +94,7 @@
                     <GroupBox Header="Lista Prove"
                               Grid.Column="2">
                         <ListView ItemsSource="{Binding MainVersionRequirements}" 
-                                  SelectedItem="{Binding SelectedRequirement, Mode=TwoWay}">
+                                  SelectedItem="{Binding SelectedToRemove, Mode=TwoWay}">
                             <ListView.View>
                                 <GridView>
                                     <GridViewColumn Header="Proprietà"
@@ -166,46 +169,37 @@
                                     Grid.Row="0"
                                     Margin="5,5,5,5"/>
                             </Grid>
-
                         </Grid>
                     </GroupBox>
                     <GroupBox Header="Requisiti"
                               Grid.Column="2">
-                        <ListView ItemsSource="{Binding Path=VersionGeneratedRequirementList}">
+                        <ListView ItemsSource="{Binding Path=RequirementList}">
                             <ListView.View>
                                 <GridView>
                                     <GridViewColumn Header="Override">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
-                                                <CheckBox IsChecked="{Binding Path=IsOverride, Mode=TwoWay}"
-                                                          IsEnabled="{Binding RelativeSource={RelativeSource AncestorType=UserControl},
-                                                                              Path=DataContext.SelectedVersionIsNotMain}"/>
+                                                <CheckBox IsChecked="{Binding IsOverride, Mode=TwoWay}"
+                                                          IsEnabled="{Binding CanSetOverride}"/>
+
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
                                     <GridViewColumn Header="Proprietà"
-                                                    DisplayMemberBinding="{Binding Path=Method.Property.Name}"/>
-                                    <GridViewColumn Header="OEM"
-                                                    DisplayMemberBinding="{Binding Path=Method.Organization.Name}"/>
+                                                    DisplayMemberBinding="{Binding Path=Test}"/>
                                     <GridViewColumn Header="Metodo"
-                                                    DisplayMemberBinding="{Binding Path=Method.Standard.Name}"/>
-                                    <GridViewColumn Header="Misure">
-                                        <GridViewColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <ListView ItemsSource="{Binding Path=SubRequirementList}"
-                                                          DisplayMemberPath="Name"/>
-                                            </DataTemplate>
-                                        </GridViewColumn.CellTemplate>
-                                    </GridViewColumn>
+                                                    DisplayMemberBinding="{Binding Path=Standard}"/>
                                     <GridViewColumn Header="Requisiti">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
-                                                <ListView ItemsSource="{Binding Path=SubRequirementList}">
+                                                <ListView ItemsSource="{Binding Path=SubRequirements}"
+                                                          DisplayMemberPath="Name">
                                                     <ListView.ItemTemplate>
                                                         <DataTemplate>
-                                                            <TextBox Text="{Binding Path=Requirement}"
-                                                                     IsEnabled="{Binding RelativeSource={RelativeSource AncestorType=ListView},
-                                                                     Path=DataContext.IsActiveRequirement}"/>
+                                                            <StackPanel Orientation="Horizontal">
+                                                                <Label Content="{Binding Name}"/>
+                                                                <TextBox Text="{Binding RequiredValue, Mode=TwoWay}"/>
+                                                            </StackPanel>
                                                         </DataTemplate>
                                                     </ListView.ItemTemplate>
                                                 </ListView>

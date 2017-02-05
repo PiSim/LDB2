@@ -17,7 +17,7 @@ namespace DBManager
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Recipe()
         {
-            this.materials = new HashSet<Material>();
+            this.Materials = new HashSet<Material>();
         }
     
         public int ID { get; set; }
@@ -25,9 +25,9 @@ namespace DBManager
         private Nullable<int> colourID { get; set; }
         public Nullable<int> masterID { get; set; }
     
-        public virtual Colour colour { get; set; }
-        public virtual Master master { get; set; }
+        public virtual Colour Colour { get; set; }
+        public virtual Master Master { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Material> materials { get; set; }
+        public virtual ICollection<Material> Materials { get; set; }
     }
 }

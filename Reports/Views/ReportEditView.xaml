@@ -168,13 +168,13 @@
                         <GridViewColumn Header="Risultati">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <ListView ItemsSource="{Binding Path=SubTestList}">
+                                    <ListView ItemsSource="{Binding Path=SubTests}">
                                         <ListView.ItemTemplate>
                                             <DataTemplate>
                                                 <StackPanel Orientation="Horizontal">
                                                     <Label Content="{Binding Path=SubRequirement.Name}"/>
                                                     <TextBox Text="{Binding Path=Result, Mode=TwoWay}"/>
-                                                    <Label Content="{Binding Path=SubRequirement.Requirement}"/>
+                                                    <Label Content="{Binding Path=SubRequirement.RequiredValue}"/>
                                                 </StackPanel>
                                             </DataTemplate>
                                         </ListView.ItemTemplate>
@@ -204,13 +204,15 @@
                   Grid.ColumnSpan="2"
                   Grid.Row="2">
             <Grid>
-                <ListView ItemsSource="{Binding Path=FileList}" 
-                          SelectedItem="{Binding Path=SelectedFile}"
+                <ListView ItemsSource="{Binding FileList}" 
+                          SelectedItem="{Binding SelectedFile, Mode=TwoWay}"
                           Margin="0,0,100,0">
                     <ListView.View>
                         <GridView>
-                            <GridViewColumn Header="Percorso" DisplayMemberBinding="{Binding Path=Path}"/>
-                            <GridViewColumn Header="Descrizione" DisplayMemberBinding="{Binding Path=Description}"/>
+                            <GridViewColumn Header="Percorso" 
+                                            DisplayMemberBinding="{Binding Path}"/>
+                            <GridViewColumn Header="Descrizione" 
+                                            DisplayMemberBinding="{Binding Description}"/>
                         </GridView>
                     </ListView.View>
                 </ListView>
