@@ -14,11 +14,11 @@ namespace DBManager
     
     public partial class ExternalReportFile
     {
-        public int ID { get; set; }
-        public string path { get; set; }
-        public string description { get; set; }
-        public int external_reportID { get; set; }
+        public int ID { get; private set; }
+        public string Path { get; set; }
+        public string Description { get; set; }
+        public int ExternalReportID { get; private set; }
     
-        public virtual ExternalReport external_reports { get; set; }
+        public virtual ExternalReport ExternalReport { get; set; }
     }
 }

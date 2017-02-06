@@ -25,7 +25,7 @@ namespace DBManager
         public Nullable<int> priority_modifier { get; set; }
         public string pipeline_order { get; set; }
     
-        public virtual Person person { get; set; }
+        public virtual Person Requester { get; set; }
         public virtual Project project { get; set; }
         public virtual Report report { get; set; }
         public virtual SpecificationVersion specification_versions { get; set; }

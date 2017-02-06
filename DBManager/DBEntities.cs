@@ -40,6 +40,7 @@ namespace DBManager
             tempReq.IsOverride = 0;
             tempReq.Name = "";
             tempReq.Description = "";
+            tempReq.Position = 0;
             
             string[] parsedMeasurements = method.Measurements.Split((char)007);
             foreach (string measure in parsedMeasurements)
@@ -55,9 +56,9 @@ namespace DBManager
         public Sample CreateSampleForBatch(Batch batch, string actionCode)
         {
             Sample output = new Sample();
-            output.batch = batch;
-            output.date = DateTime.Now;
-            output.code = actionCode;
+            output.Batch = batch;
+            output.Date = DateTime.Now;
+            output.Code = actionCode;
             Samples.Add(output);
             return output;
         }
@@ -79,6 +80,29 @@ namespace DBManager
                 }
 
                 return output;
+            }
+        }
+
+        public void GenerateTestList(Report report,
+                                    IEnumerable<Requirement> requirements)
+        {
+            Test tempTest;
+            SubTest tempSub;
+            foreach (Requirement rq in requirements)
+            {
+                tempTest = new Test();
+                tempTest.Batch = report.Batch;
+                tempTest.Method = rq.Method;
+                tempTest.Person = report.Author;
+                tempTest.Report = report;
+                foreach (SubRequirement subReq in rq.SubRequirements)
+                {
+                    tempSub = new SubTest();
+                    tempSub.SubRequirement = subReq;
+                    tempTest.SubTests.Add(tempSub);
+                }
+
+                report.Tests.Add(tempTest);
             }
         }
 

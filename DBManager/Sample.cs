@@ -15,10 +15,10 @@ namespace DBManager
     public partial class Sample
     {
         public int ID { get; set; }
-        public int batchID { get; set; }
-        public string code { get; set; }
-        public System.DateTime date { get; set; }
+        public int BatchID { get; private set; }
+        public string Code { get; set; }
+        public System.DateTime Date { get; set; }
     
-        public virtual Batch batch { get; set; }
+        public virtual Batch Batch { get; set; }
     }
 }

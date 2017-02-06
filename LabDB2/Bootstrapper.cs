@@ -35,6 +35,10 @@ namespace LabDB2
                     ModuleType = DBManagerModuleType.AssemblyQualifiedName
                 });
 
+            Type AdminModuleType = typeof(Admin.AdminModule);
+            ModuleCatalog.AddModule(
+                new Prism.Modularity.ModuleInfo(AdminModuleType.Name, AdminModuleType.AssemblyQualifiedName));
+
             Type BatchesModuleType = typeof(Batches.BatchesModule);
             ModuleCatalog.AddModule(
                 new Prism.Modularity.ModuleInfo(BatchesModuleType.Name, BatchesModuleType.AssemblyQualifiedName));

@@ -18,6 +18,7 @@ namespace DBManager
         public Method()
         {
             this.Requirements = new HashSet<Requirement>();
+            this.Tests = new HashSet<Test>();
         }
     
         public int ID { get; set; }
@@ -34,5 +35,7 @@ namespace DBManager
         public virtual ICollection<Requirement> Requirements { get; set; }
         public virtual Property Property { get; set; }
         public virtual Std Standard { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Test> Tests { get; set; }
     }
 }

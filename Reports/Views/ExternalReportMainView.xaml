@@ -8,7 +8,7 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
+            <ColumnDefinition Width="3*"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <ListView ItemsSource="{Binding ReportList}"
@@ -17,17 +17,13 @@
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Numero"
-                                    DisplayMemberBinding="{Binding Number}"/>
-                    <GridViewColumn Header="Batch"
-                                    DisplayMemberBinding="{Binding Batch.Number}"/>
-                    <GridViewColumn Header="Specifica"
-                                    DisplayMemberBinding="{Binding SpecificationVersion.Specification.Standard.Name}"/>
-                    <GridViewColumn Header="Versione"
-                                    DisplayMemberBinding="{Binding SpecificationVersion.Name}"/>
-                    <GridViewColumn Header="Progetto"
-                                    DisplayMemberBinding="{Binding Batch.Material.Construction.Project.Name}"/>
-                    <GridViewColumn Header="Autore"
-                                    DisplayMemberBinding="{Binding Author.Name}"/>
+                                    DisplayMemberBinding="{Binding InternalNumber}"/>
+                    <GridViewColumn Header="Campioni"
+                                    DisplayMemberBinding="{Binding Samples}"/>
+                    <GridViewColumn Header="Prove"
+                                    DisplayMemberBinding="{Binding Description}"/>
+                    <GridViewColumn Header="Laboratorio"
+                                    DisplayMemberBinding="{Binding ExternalLab.Name}"/>
                 </GridView>
             </ListView.View>
         </ListView>

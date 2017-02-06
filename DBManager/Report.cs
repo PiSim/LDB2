@@ -30,7 +30,7 @@ namespace DBManager
         public Nullable<System.DateTime> EndDate { get; set; }
         public int Number { get; set; }
         private Nullable<int> projectID { get; set; }
-        private int specification_versionID { get; set; }
+        public int SpecificationVersionID { get; private set; }
         public string StartDate { get; set; }
         private string requestID { get; set; }
     

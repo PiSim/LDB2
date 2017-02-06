@@ -22,10 +22,10 @@ namespace DBManager
             this.Tasks = new HashSet<Task>();
         }
     
-        public int ID { get; set; }
+        public int ID { get; private set; }
         public int IsMain { get; set; }
         public string Name { get; set; }
-        public int specificationID { get; set; }
+        public int SpecificationID { get; private set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Report> Reports { get; set; }

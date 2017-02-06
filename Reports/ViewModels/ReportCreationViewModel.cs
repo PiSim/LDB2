@@ -26,6 +26,11 @@ namespace Reports.ViewModels
         {
             get { return _instance.Method.Standard.Organization.Name + " " + _instance.Method.Standard.Name; }
         }
+
+        public Requirement Instance
+        {
+            get { return _instance; }
+        }
                 
         public bool IsSelected
         {
@@ -57,7 +62,8 @@ namespace Reports.ViewModels
             _entities = entities;
             _parentDialog = parent;
             _versionList = new ObservableCollection<SpecificationVersion>();
-            
+            _requirementList = new ObservableCollection<RequirementWrapper>();
+
             _confirm = new DelegateCommand(
                 () => {
                     Report temp = new Report();
@@ -66,20 +72,9 @@ namespace Reports.ViewModels
                     temp.Category = "TR";
                     temp.Number = _number;
                     temp.SpecificationVersion = _selectedVersion;
-                    
-                    foreach (RequirementWrapper rw in _requirementList)
-                    {
-                        if (!rw.IsSelected)
-                            continue;
-                            
-                        Test tt = new Test();
-                        
-                        tt.Batch = temp.Batch;
-                        // tt.Method = rr.Method;
-                        tt.Person = temp.Author;
-                        
-                        temp.Tests.Add(tt);
-                    }
+
+                    _entities.GenerateTestList(temp, 
+                                            _requirementList.Select(req => req.Instance));
                     
                     _parentDialog.ReportInstance = temp;
                     _parentDialog.DialogResult = true;
@@ -146,7 +141,7 @@ namespace Reports.ViewModels
                 if (_selectedSpecification != null)
                 {
                     _versionList = new ObservableCollection<SpecificationVersion>(
-                        _entities.SpecificationVersions.Where(sv => sv.specificationID == _selectedSpecification.ID));
+                        _entities.SpecificationVersions.Where(sv => sv.SpecificationID == _selectedSpecification.ID));
                     
                     OnPropertyChanged("VersionList");
                 }
@@ -173,6 +168,7 @@ namespace Reports.ViewModels
                     foreach (Requirement rq in tempReq)
                         RequirementList.Add(new RequirementWrapper(rq));
                 }
+                OnPropertyChanged("SelectedVersion");
             }
         }
         

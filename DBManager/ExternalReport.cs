@@ -17,28 +17,28 @@ namespace DBManager
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public ExternalReport()
         {
-            this.external_report_files = new HashSet<ExternalReportFile>();
+            this.ExternalReportFiles = new HashSet<ExternalReportFile>();
         }
     
-        public int ID { get; set; }
+        public int ID { get; private set; }
         public string Date { get; set; }
         public string Description { get; set; }
         public string ExternalNumber { get; set; }
         public int InternalNumber { get; set; }
-        private int external_labID { get; set; }
+        public int external_labID { get; private set; }
         public int material_sent { get; set; }
         public int request_done { get; set; }
         public string purchase_order { get; set; }
-        public double price { get; set; }
-        public string samples { get; set; }
-        public string currency { get; set; }
+        public double Price { get; set; }
+        public string Samples { get; set; }
+        public string Currency { get; set; }
         public Nullable<int> report_received { get; set; }
         public string fileID { get; set; }
         public Nullable<int> projectID { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ExternalReportFile> external_report_files { get; set; }
-        public virtual Organization organization { get; set; }
-        public virtual Project project { get; set; }
+        public virtual ICollection<ExternalReportFile> ExternalReportFiles { get; set; }
+        public virtual Organization ExternalLab { get; set; }
+        public virtual Project Project { get; set; }
     }
 }

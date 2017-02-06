@@ -17,14 +17,14 @@ namespace DBManager
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Colour()
         {
-            this.recipes = new HashSet<Recipe>();
+            this.Recipes = new HashSet<Recipe>();
         }
     
         public int ID { get; set; }
-        public string name { get; set; }
-        public string code { get; set; }
+        public string Name { get; set; }
+        public string Code { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Recipe> recipes { get; set; }
+        public virtual ICollection<Recipe> Recipes { get; set; }
     }
 }

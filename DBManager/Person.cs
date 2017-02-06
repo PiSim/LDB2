@@ -23,7 +23,7 @@ namespace DBManager
             this.Tasks = new HashSet<Task>();
         }
     
-        public int ID { get; set; }
+        public int ID { get; private set; }
         public string Name { get; set; }
         public string Role { get; set; }
     

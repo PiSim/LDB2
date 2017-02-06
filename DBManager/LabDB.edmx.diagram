@@ -78,6 +78,7 @@
         <AssociationConnector Association="labdbModel.sub_requirement" ManuallyRouted="false" />
         <AssociationConnector Association="labdbModel.test1" ManuallyRouted="false" />
         <AssociationConnector Association="labdbModel.overridden_to_requirement" />
+        <AssociationConnector Association="labdbModel.method_to_test" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

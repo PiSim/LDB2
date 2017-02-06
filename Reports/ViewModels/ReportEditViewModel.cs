@@ -20,6 +20,11 @@ namespace Reports.ViewModels
         
         public ReportEditViewModel(Report target) : base()
         {
+
+            _instance = target;
+            _fileList = new List<ReportFile>(_instance.ReportFiles);
+            _testList = new List<Test>(_instance.Tests);
+
             _addFile = new DelegateCommand(
                 () =>
                 {
@@ -31,10 +36,6 @@ namespace Reports.ViewModels
                         _instance.ReportFiles.Add(temp);
                     }
                 });
-
-            _instance = target;
-            _fileList = new List<ReportFile>(_instance.ReportFiles);
-            _testList = new List<Test>(_instance.Tests);
 
             _openFile = new DelegateCommand(
                 () =>

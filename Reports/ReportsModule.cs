@@ -23,7 +23,8 @@ namespace Reports
             _container.RegisterType<Object, Views.ReportMainView>(ViewNames.ReportMainView);
             _container.RegisterType<Object, Views.ReportEditView>(ViewNames.ReportEditView);
             _container.RegisterType<Object, Views.ExternalReportMainView>(ViewNames.ExternalReportMainView);
-            
+            _container.RegisterType<Object, Views.ExternalReportEditView>(ViewNames.ExternalReportEditView);
+
             _regionManager.RegisterViewWithRegion(Navigation.RegionNames.MainNavigationRegion
                                                 , typeof(Views.ExternalReportsNavigationItem));
             _regionManager.RegisterViewWithRegion(Navigation.RegionNames.MainNavigationRegion
