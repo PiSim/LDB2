@@ -144,8 +144,13 @@ namespace Reports.ViewModels
                 _selectedSpecification = value; 
                 
                 if (_selectedSpecification != null)
+                {
                     _versionList = new ObservableCollection<SpecificationVersion>(
                         _entities.SpecificationVersions.Where(sv => sv.specificationID == _selectedSpecification.ID));
+                    
+                    OnPropertyChanged("VersionList");
+                }
+                    
                 
                 else
                     _versionList.Clear();
