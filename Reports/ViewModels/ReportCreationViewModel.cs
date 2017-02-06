@@ -133,7 +133,7 @@ namespace Reports.ViewModels
         
         public List<Person> TechList
         {
-            get { return new List<Person>(_entities.People1.Where(pp => pp.Role == "TL" )); }
+            get { return new List<Person>(_entities.People.Where(pp => pp.Role == "TL" )); }
         }        
 
         public Specification SelectedSpecification
@@ -164,7 +164,7 @@ namespace Reports.ViewModels
                 
                 if (_selectedVersion != null)
                 {
-                    List<Requirement> tempReq = _entities.GenerateRequirementList();
+                    List<Requirement> tempReq = _entities.GenerateRequirementList(_selectedVersion);
                     foreach (Requirement rq in tempReq)
                         RequirementList.Add(new RequirementWrapper(rq));
                 }
