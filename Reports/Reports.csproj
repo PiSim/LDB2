@@ -107,6 +107,7 @@
     </Compile>
     <Compile Include="ViewModels\ExternalReportMainViewModel.cs" />
     <Compile Include="ViewModels\ReportEditViewModel.cs" />
+    <Compile Include="ViewModels\ReportCreationViewModel.cs" />
     <Compile Include="ViewNames.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="Views\ExternalReportMainView.xaml.cs">
