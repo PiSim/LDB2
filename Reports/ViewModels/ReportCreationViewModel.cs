@@ -86,7 +86,7 @@ namespace Reports.ViewModels
                 
             _cancel = new DelegateCommand(
                 () => {
-                    _parentDialog.DialogResult = DialogResult.Cancel;    
+                    _parentDialog.DialogResult = false;    
                 });
         }
         
