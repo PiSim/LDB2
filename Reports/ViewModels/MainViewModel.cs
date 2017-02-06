@@ -36,7 +36,12 @@ namespace Reports.ViewModels
             _newReport = new DelegateCommand(
                 () =>
                 {
-                    
+                    Views.ReportCreationDialog creationDialog = new Views.ReportCreationDialog();
+                    if (creationDialog.ShowDialog() == DialogResult.OK)
+                    {
+                        ObjectNavigationToken token = new ObjectNavigationToken(creationDialog.ReportInstance, ViewNames.ReportEditView);
+                        _eventAggregator.GetEvent<VisualizeObjectRequested>().Publish(token);
+                    }
                 });
         }
 
