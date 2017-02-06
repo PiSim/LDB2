@@ -133,7 +133,7 @@ namespace Reports.ViewModels
         
         public List<Person> TechList
         {
-            get { return new List<Person>(_entities.People.Where(pp => pp.Role == "TL" )); }
+            get { return new List<Person>(_entities.People1.Where(pp => pp.Role == "TL" )); }
         }        
 
         public Specification SelectedSpecification
