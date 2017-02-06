@@ -73,7 +73,7 @@ namespace Reports.ViewModels
                         Test tt = new Test();
                         
                         tt.Batch = temp.Batch;
-                        tt.Method = rr.Method;
+                        // tt.Method = rr.Method;
                         tt.Operator = temp.Author;
                         
                         temp.Tests.Add(tt);
