@@ -80,7 +80,7 @@ namespace Reports.ViewModels
                     }
                     
                     _parentDialog.ReportInstance = temp;
-                    _parentDialog.DialogResult = DialogResults.OK;
+                    _parentDialog.DialogResult = true;
                 },
                 () => IsValidInput);
                 
