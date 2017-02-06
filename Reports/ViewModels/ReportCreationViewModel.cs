@@ -36,7 +36,7 @@ namespace Reports.ViewModels
                     temp.SpecificationVersion = _selectedVersion;
                     
                     
-                    _parentDialog.ValidatedMaterial = temp;
+                    _parentDialog.ReportInstance = temp;
                     _parentDialog.DialogResult = DialogResults.OK;
                 },
                 () => IsValidInput);
