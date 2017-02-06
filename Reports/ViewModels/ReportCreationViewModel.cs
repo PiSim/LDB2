@@ -171,7 +171,7 @@ namespace Reports.ViewModels
             }
         }
         
-        public List<Specification> SpecList
+        public List<Specification> SpecificationList
         {
             get { return new List<Specification>(_entities.Specifications); }
         }
