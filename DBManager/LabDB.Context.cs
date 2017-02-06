@@ -39,7 +39,7 @@ namespace DBManager
         public virtual DbSet<Method> Methods { get; set; }
         public virtual DbSet<Oem> Oems1 { get; set; }
         public virtual DbSet<Organization> Organizations1 { get; set; }
-        public virtual DbSet<Person> People1 { get; set; }
+        public virtual DbSet<Person> People { get; set; }
         public virtual DbSet<Project> Projects { get; set; }
         public virtual DbSet<Property> Properties { get; set; }
         public virtual DbSet<Recipe> Recipes { get; set; }
