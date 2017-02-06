@@ -32,8 +32,9 @@ namespace Reports.ViewModels
                     }
                 });
 
-            _fileList = new List<ReportFile>(_instance.ReportFiles);
             _instance = target;
+            _fileList = new List<ReportFile>(_instance.ReportFiles);
+            _testList = new List<Test>(_instance.Tests);
 
             _openFile = new DelegateCommand(
                 () =>
@@ -49,7 +50,6 @@ namespace Reports.ViewModels
                 },
                 () => _selectedFile != null);
 
-            _testList = new List<Test>(_instance.Tests);
         }
 
         public DelegateCommand AddFileCommand
@@ -126,7 +126,12 @@ namespace Reports.ViewModels
         public ReportFile SelectedFile
         {
             get { return _selectedFile; }
-            set { _selectedFile = value; }
+            set
+            {
+                _selectedFile = value;
+                _openFile.RaiseCanExecuteChanged();
+                _removeFile.RaiseCanExecuteChanged();
+            }
         } 
 
         public List<Test> TestList

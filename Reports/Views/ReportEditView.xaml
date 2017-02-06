@@ -168,7 +168,7 @@
                         <GridViewColumn Header="Risultati">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <ListView ItemsSource="{Binding Path=SubTests}">
+                                    <ListView ItemsSource="{Binding SubTests}">
                                         <ListView.ItemTemplate>
                                             <DataTemplate>
                                                 <StackPanel Orientation="Horizontal">

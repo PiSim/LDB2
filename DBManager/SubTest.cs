@@ -16,10 +16,10 @@ namespace DBManager
     {
         public int ID { get; set; }
         public int sub_requirementID { get; set; }
-        public string result { get; set; }
+        public string Result { get; set; }
         public int testID { get; set; }
     
-        public virtual SubRequirement sub_requirements { get; set; }
-        public virtual Test test { get; set; }
+        public virtual SubRequirement SubRequirement { get; set; }
+        public virtual Test Test { get; set; }
     }
 }

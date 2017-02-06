@@ -17,7 +17,7 @@ namespace DBManager
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Test()
         {
-            this.sub_tests = new HashSet<SubTest>();
+            this.SubTests = new HashSet<SubTest>();
         }
     
         public int ID { get; set; }
@@ -25,16 +25,16 @@ namespace DBManager
         public int methodID { get; set; }
         public int reportID { get; set; }
         public Nullable<int> external_reportID { get; set; }
-        public string notes { get; set; }
+        public string Notes { get; set; }
         public int operatorID { get; set; }
-        public Nullable<System.DateTime> date { get; set; }
-        public Nullable<int> meets_requirements { get; set; }
+        public Nullable<System.DateTime> Date { get; set; }
+        public Nullable<int> MeetsRequirements { get; set; }
         public string stat_skip { get; set; }
     
-        public virtual Batch batch { get; set; }
-        public virtual Person person { get; set; }
-        public virtual Report report { get; set; }
+        public virtual Batch Batch { get; set; }
+        public virtual Person Person { get; set; }
+        public virtual Report Report { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SubTest> sub_tests { get; set; }
+        public virtual ICollection<SubTest> SubTests { get; set; }
     }
 }

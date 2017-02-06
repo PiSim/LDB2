@@ -1402,10 +1402,10 @@
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="sub_requirementID" Type="Int32" Nullable="false" />
-          <Property Name="result" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Result" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="testID" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="sub_requirements" Relationship="Self.sub_requirement" FromRole="sub_tests" ToRole="sub_requirements" />
-          <NavigationProperty Name="test" Relationship="Self.test1" FromRole="sub_tests" ToRole="tests" />
+          <NavigationProperty Name="SubRequirement" Relationship="Self.sub_requirement" FromRole="sub_tests" ToRole="sub_requirements" />
+          <NavigationProperty Name="Test" Relationship="Self.test1" FromRole="sub_tests" ToRole="tests" />
         </EntityType>
         <EntityType Name="Task">
           <Key>
@@ -1435,15 +1435,15 @@
           <Property Name="methodID" Type="Int32" Nullable="false" />
           <Property Name="reportID" Type="Int32" Nullable="false" />
           <Property Name="external_reportID" Type="Int32" />
-          <Property Name="notes" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="Notes" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
           <Property Name="operatorID" Type="Int32" Nullable="false" />
-          <Property Name="date" Type="DateTime" />
-          <Property Name="meets_requirements" Type="Int32" />
+          <Property Name="Date" Type="DateTime" />
+          <Property Name="MeetsRequirements" Type="Int32" />
           <Property Name="stat_skip" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="batch" Relationship="Self.batch_to_test" FromRole="tests" ToRole="batches" />
-          <NavigationProperty Name="person" Relationship="Self.operatorID" FromRole="tests" ToRole="people" />
-          <NavigationProperty Name="report" Relationship="Self.report_to_test" FromRole="tests" ToRole="reports" />
-          <NavigationProperty Name="sub_tests" Relationship="Self.test1" FromRole="tests" ToRole="sub_tests" />
+          <NavigationProperty Name="Batch" Relationship="Self.batch_to_test" FromRole="tests" ToRole="batches" />
+          <NavigationProperty Name="Person" Relationship="Self.operatorID" FromRole="tests" ToRole="people" />
+          <NavigationProperty Name="Report" Relationship="Self.report_to_test" FromRole="tests" ToRole="reports" />
+          <NavigationProperty Name="SubTests" Relationship="Self.test1" FromRole="tests" ToRole="sub_tests" />
         </EntityType>
         <EntityType Name="User">
           <Key>
@@ -2490,7 +2490,7 @@
               <MappingFragment StoreEntitySet="sub_tests">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="sub_requirementID" ColumnName="sub_requirementID" />
-                <ScalarProperty Name="result" ColumnName="result" />
+                <ScalarProperty Name="Result" ColumnName="result" />
                 <ScalarProperty Name="testID" ColumnName="testID" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -2519,10 +2519,10 @@
                 <ScalarProperty Name="methodID" ColumnName="methodID" />
                 <ScalarProperty Name="reportID" ColumnName="reportID" />
                 <ScalarProperty Name="external_reportID" ColumnName="external_reportID" />
-                <ScalarProperty Name="notes" ColumnName="notes" />
+                <ScalarProperty Name="Notes" ColumnName="notes" />
                 <ScalarProperty Name="operatorID" ColumnName="operatorID" />
-                <ScalarProperty Name="date" ColumnName="date" />
-                <ScalarProperty Name="meets_requirements" ColumnName="meets_requirements" />
+                <ScalarProperty Name="Date" ColumnName="date" />
+                <ScalarProperty Name="MeetsRequirements" ColumnName="meets_requirements" />
                 <ScalarProperty Name="stat_skip" ColumnName="stat_skip" />
               </MappingFragment>
             </EntityTypeMapping>
