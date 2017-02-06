@@ -45,6 +45,7 @@ namespace Reports.ViewModels
         private DelegateCommand _cancel, _confirm;
         private Int32 _number;
         private ObservableCollection<RequirementWrapper> _requirementList;
+        private ObservableCollection<SpecificationVersion> _versionList;
         private Person _author;
         private Specification _selectedSpecification;
         private SpecificationVersion _selectedVersion;
@@ -55,6 +56,7 @@ namespace Reports.ViewModels
         {
             _entities = entities;
             _parentDialog = parent;
+            _versionList = new ObservableCollection<SpecificationVersion>();
             
             _confirm = new DelegateCommand(
                 () => {
@@ -101,11 +103,21 @@ namespace Reports.ViewModels
             get { return _batchNumber; }
             set { _batchNumber = value; }
         }
+        
+        public DelegateCommand CancelCommand
+        {
+            get { return _cancel; }
+        }
 
         public string Category
         {
             get { return _category; }
             set { _category = value; }
+        }
+        
+        public DelegateCommand ConfirmCommand
+        {
+            get { return _confirm; }
         }
         
         public bool IsValidInput
@@ -118,23 +130,60 @@ namespace Reports.ViewModels
             get { return _number; }
             set { _number = value; }
         }
+        
+        public List<Person> TechList
+        {
+            get { return new List<Person>(_entities.People.Where(pp => pp.Role == "TL" )); }
+        }        
 
         public Specification SelectedSpecification
         {
             get { return _selectedSpecification; }
-            set { _selectedSpecification = value; }
+            set 
+            { 
+                _selectedSpecification = value; 
+                
+                if (_selectedSpecification != null)
+                    _versionList = new ObservableCollection<SpecificationVersion>(
+                        _entities.SpecificationVersions.Where(sv => sv.specificationID == _selectedSpecification.ID));
+                
+                else
+                    _versionList.Clear();
+                    
+                SelectedVersion = _versionList.FirstOrDefault(sv => sv.IsMain == 1);
+            }
         }
 
         public SpecificationVersion SelectedVersion
         {
             get { return _selectedVersion; }
-            set { _selectedVersion = value; }
+            set 
+            { 
+                _selectedVersion = value; 
+                RequirementList.Clear();
+                
+                if (_selectedVersion != null)
+                {
+                    List<Requirement> tempReq = _entities.GenerateRequirementList();
+                    foreach (Requirement rq in tempReq)
+                        RequirementList.Add(new RequirementWrapper(rq));
+                }
+            }
         }
-
+        
+        public List<Specification> SpecList
+        {
+            get { return new List<Specification>(_entities.Specifications); }
+        }
+        
+        public ObservableCollection<SpecificationVersion> VersionList
+        {
+            get { return _versionList; }
+        }
+            
         public ObservableCollection<RequirementWrapper> RequirementList
         {
             get { return _requirementList; }
-            set { _requirementList = value; }
         }
     }
 }
