@@ -45,6 +45,11 @@ namespace Reports.ViewModels
                 });
         }
 
+        public DelegateCommand NewReportCommand
+        {
+            get { return _newReport; }
+        }
+
         public DelegateCommand OpenReportCommand
         {
             get { return _openReport; }
