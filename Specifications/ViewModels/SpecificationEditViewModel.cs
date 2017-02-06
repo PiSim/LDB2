@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Specifications.ViewModels
 {
-    internal class RequirementWrapper
+    internal class RequirementWrapper : BindableBase
     {
         private DBEntities _entities;
         private Requirement _requirementInstance;
@@ -19,7 +19,7 @@ namespace Specifications.ViewModels
 
         internal RequirementWrapper(Requirement instance,
                                     SpecificationVersion version, 
-                                    DBEntities entities)
+                                    DBEntities entities) : base()
         {
             _entities = entities;
             _requirementInstance = instance;
@@ -41,6 +41,8 @@ namespace Specifications.ViewModels
                     _requirementInstance = _entities.AddOverride(_versionInstance, _requirementInstance);
                 else
                     _requirementInstance = _entities.RemoveOverride(_requirementInstance);
+                    
+                OnPropertyChanged("SubRequirements");
             }
         }
 
