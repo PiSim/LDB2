@@ -37,7 +37,8 @@ namespace DBManager
         {
             Requirement tempReq = new Requirement();
             tempReq.Method = method;
-            tempReq.IsOverride = 0;string[] parsedMeasurements = method.Measurements.Split((char)007);
+            tempReq.IsOverride = 0;
+            string[] parsedMeasurements = method.Measurements.Split((char)007);
             foreach (string measure in parsedMeasurements)
             {
                 SubRequirement tempSub = new SubRequirement();
