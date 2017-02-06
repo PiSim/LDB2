@@ -24,6 +24,7 @@ namespace Reports.Views
         
         public ReportCreationDialog(DBEntities entities)
         {
+            DataContext = new ViewModels.MaterialCreationViewModel(this, entities);
             InitializeComponent();
         }
         
