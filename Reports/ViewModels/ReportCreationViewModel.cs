@@ -63,7 +63,7 @@ namespace Reports.ViewModels
                     Report temp = new Report();
                     temp.Author = _author;
                     temp.Batch = _entities.GetBatchByNumber(_batchNumber);
-                    temp.Category = _category;
+                    temp.Category = "TR";
                     temp.Number = _number;
                     temp.SpecificationVersion = _selectedVersion;
                     
