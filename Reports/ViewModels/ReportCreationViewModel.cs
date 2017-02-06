@@ -74,7 +74,7 @@ namespace Reports.ViewModels
                         
                         tt.Batch = temp.Batch;
                         // tt.Method = rr.Method;
-                        tt.Operator = temp.Author;
+                        tt.Person = temp.Author;
                         
                         temp.Tests.Add(tt);
                     }
