@@ -11,10 +11,40 @@ using System.Windows.Forms;
 
 namespace Reports.ViewModels
 {
+    internal class RequirementWrapper
+    {
+        private bool _isSelected;
+        private Requirement _instance;
+        
+        internal RequirementWrapper(Requirement instance)
+        {
+            _instance = instance;
+            _isSelected = true;
+        }
+        
+        public string Method
+        {
+            get { return _instance.Method.Standard.Organization.Name + " " + _instance.Method.Standard.Name; }
+        }
+                
+        public bool IsSelected
+        {
+            get { return _isSelected; }
+            set { _isSelected = value; }
+        }
+        
+        public string Property
+        {
+            get { return _instance.Method.Property.Name; }
+        }
+    }
+    
     internal class ReportCreationViewModel : BindableBase
     {
         private DBEntities _entities;
         private DelegateCommand _cancel, _confirm;
+        private Int32 _number;
+        private ObservableCollection<RequirementWrapper> _requirementList;
         private Person _author;
         private Specification _selectedSpecification;
         private SpecificationVersion _selectedVersion;
@@ -35,6 +65,19 @@ namespace Reports.ViewModels
                     temp.Number = _number;
                     temp.SpecificationVersion = _selectedVersion;
                     
+                    foreach (RequirementWrapper rw in _requirementList)
+                    {
+                        if (!rw.IsSelected)
+                            continue;
+                            
+                        Test tt = new Test();
+                        
+                        tt.Batch = temp.Batch;
+                        tt.Method = rr.Method;
+                        tt.Operator = temp.Author;
+                        
+                        temp.Tests.Add(tt);
+                    }
                     
                     _parentDialog.ReportInstance = temp;
                     _parentDialog.DialogResult = DialogResults.OK;
@@ -70,28 +113,28 @@ namespace Reports.ViewModels
             get { return true; }
         }
         
-        public string Number
+        public Int32 Number
         {
             get { return _number; }
             set { _number = value; }
         }
 
-        public string SelectedSpecification
+        public Specification SelectedSpecification
         {
             get { return _selectedSpecification; }
             set { _selectedSpecification = value; }
         }
 
-        public string SelectedVersion
+        public SpecificationVersion SelectedVersion
         {
             get { return _selectedVersion; }
             set { _selectedVersion = value; }
         }
 
-        public List<Test> TestList
+        public ObservableCollection<RequirementWrapper> RequirementList
         {
-            get { return _testList; }
-            set { _testList = value; }
+            get { return _requirementList; }
+            set { _requirementList = value; }
         }
     }
 }
