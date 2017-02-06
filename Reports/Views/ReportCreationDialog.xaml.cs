@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DBManager;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,9 +20,17 @@ namespace Reports.Views
     /// </summary>
     public partial class ReportCreationDialog : Window
     {
-        public ReportCreationDialog()
+        private Report _reportInstance;
+        
+        public ReportCreationDialog(DBEntities entities)
         {
             InitializeComponent();
+        }
+        
+        public Report ReportInstance
+        {
+            get { return _reportInstance; }
+            set { _reportInstance = value; }
         }
     }
 }
