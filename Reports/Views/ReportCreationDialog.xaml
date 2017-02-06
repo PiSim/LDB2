@@ -63,7 +63,7 @@
         <ComboBox ItemsSource="{Binding VersionList}"
                   SelectedItem="{Binding SelectedVersion, Mode=TwoWay}"
                   Grid.Column="1"
-                  Grid.Row="5"
+                  Grid.Row="4"
                   Margin="5"/>
 
         <GroupBox Header="Test"
@@ -78,16 +78,23 @@
                     <RowDefinition/>
                 </Grid.RowDefinitions>
 
-                <ListView ItemsSource="{Binding Testlist}"
+                <ListView ItemsSource="{Binding RequirementList}"
                           Grid.Row="2"/>
 
             </Grid>
         </GroupBox>
         
+        <Button Content="Annulla"
+                Command="{Binding CancelCommand}"
+                Grid.Column="1"
+                Grid.Row="5"
+                Margin="5"
+                MaxWidth="50"/>
+                
         <Button Content="OK"
-                Command="{Binding FinalizeCreationCommand}"
+                Command="{Binding ConfirmCommand}"
                 Grid.Column="2"
-                Grid.Row="6"
+                Grid.Row="5"
                 Margin="5"
                 MaxWidth="50"/>
 
