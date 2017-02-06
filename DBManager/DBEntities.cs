@@ -38,6 +38,9 @@ namespace DBManager
             Requirement tempReq = new Requirement();
             tempReq.Method = method;
             tempReq.IsOverride = 0;
+            tempReq.Name = "";
+            tempReq.Description = "";
+            
             string[] parsedMeasurements = method.Measurements.Split((char)007);
             foreach (string measure in parsedMeasurements)
             {
