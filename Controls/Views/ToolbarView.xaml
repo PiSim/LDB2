@@ -27,6 +27,7 @@
                 Command="{Binding NavigateForwardCommand}"
                 Grid.Column="3"/>
         <Button Content="Salva"
+                Command="{Binding SaveCommand}"
                 Grid.Column="4"/>
     </Grid>
 </UserControl>
