@@ -20,7 +20,7 @@ public class ServiceProvider
             
             foreach (string id in fileIDs)
             {
-                File tempFile = _entities.Files1[int.Parse(id)];
+                File tempFile = _entities.Files1.First(file => file.ID.ToString() == id);
                 
                 ExternalReportFile tempExt = new ExternalReportFile();
                 tempExt.ExternalReport = ext;
