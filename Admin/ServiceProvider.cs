@@ -21,7 +21,9 @@ public class ServiceProvider
             
             foreach (string id in fileIDs)
             {
-                File tempFile = _entities.Files1.FirstOrDefault(file => file.ID == int.Parse(id));
+                File tempFile = _entities.Files1.FirstOrDefault(file => file.ID == int.TryParse(id));
+                if (tempFile == null)
+                    continue;
                 
                 ExternalReportFile tempExt = new ExternalReportFile();
                 tempExt.ExternalReport = ext;
