@@ -23,7 +23,7 @@ public class ServiceProvider
             {
                 int parsedID;
                 
-                if (!int.TryParse(id, parsedID))
+                if (!int.TryParse(id, out parsedID))
                     continue;
                     
                 File tempFile = _entities.Files1.FirstOrDefault(file => file.ID == parsedID);
