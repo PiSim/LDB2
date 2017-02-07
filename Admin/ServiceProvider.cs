@@ -21,7 +21,9 @@ public class ServiceProvider
             
             foreach (string id in fileIDs)
             {
-                if (!int.TryParse(id, int parsedID)
+                int parsedID;
+                
+                if (!int.TryParse(id, parsedID))
                     continue;
                     
                 File tempFile = _entities.Files1.FirstOrDefault(file => file.ID == parsedID);
