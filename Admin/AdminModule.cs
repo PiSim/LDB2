@@ -18,6 +18,8 @@ namespace Admin
 
         public void Initialize()
         {
+            _container.RegisterType<ServiceProvider>(new ContainerControlledLifetimeManager());
+            
             _container.RegisterType<Object, Views.AdminMainView>
                 (AdminViewNames.AdminMainView);
 
