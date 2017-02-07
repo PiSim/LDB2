@@ -26,7 +26,9 @@ public class ServiceProvider
                 ExternalReportFile tempExt = new ExternalReportFile();
                 tempExt.ExternalReport = ext;
                 tempExt.Path = tempFile.path;
-                tempExt.Description = tempFile.description;                
+                tempExt.Description = tempFile.description;
+                if (tempExt.Description == null)
+                    tempExt.Description = "";                
             }
         }
         
