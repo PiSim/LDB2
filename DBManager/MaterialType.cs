@@ -12,23 +12,19 @@ namespace DBManager
     using System;
     using System.Collections.Generic;
     
-    public partial class SubRequirement
+    public partial class MaterialType
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public SubRequirement()
+        public MaterialType()
         {
-            this.Name = "";
-            this.RequiredValue = "";
-            this.SubTests = new HashSet<SubTest>();
+            this.Constructions = new HashSet<Construction>();
         }
     
-        public int ID { get; private set; }
-        public string Name { get; set; }
-        public string RequiredValue { get; set; }
-        public int RequirementID { get; private set; }
+        public long ID { get; private set; }
+        public string Code { get; set; }
+        public string Description { get; set; }
     
-        public virtual Requirement Requirement { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SubTest> SubTests { get; set; }
+        public virtual ICollection<Construction> Constructions { get; set; }
     }
 }

@@ -26,11 +26,13 @@ namespace DBManager
         private int aspectID { get; set; }
         private Nullable<int> projectID { get; set; }
         private Nullable<int> external_constructionID { get; set; }
+        public Nullable<long> typeID { get; set; }
     
         public virtual Aspect Aspect { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Material> Materials { get; set; }
         public virtual ExternalConstruction ExternalConstruction { get; set; }
         public virtual Project Project { get; set; }
+        public virtual MaterialType material_types { get; set; }
     }
 }

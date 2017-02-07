@@ -23,13 +23,13 @@ namespace DBManager
         }
     
         public int ID { get; set; }
-        private int authorID { get; set; }
-        private int batchID { get; set; }
+        public int AuthorID { get; private set; }
+        public int BatchID { get; private set; }
         public string Category { get; set; }
         public string Description { get; set; }
         public Nullable<System.DateTime> EndDate { get; set; }
         public int Number { get; set; }
-        private Nullable<int> projectID { get; set; }
+        public Nullable<int> ProjectID { get; private set; }
         public int SpecificationVersionID { get; private set; }
         public string StartDate { get; set; }
         private string requestID { get; set; }

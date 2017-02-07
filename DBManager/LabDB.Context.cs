@@ -37,7 +37,6 @@ namespace DBManager
         public virtual DbSet<Master> Masters1 { get; set; }
         public virtual DbSet<Material> Materials { get; set; }
         public virtual DbSet<Method> Methods { get; set; }
-        public virtual DbSet<Oem> Oems1 { get; set; }
         public virtual DbSet<Organization> Organizations1 { get; set; }
         public virtual DbSet<Person> People { get; set; }
         public virtual DbSet<Project> Projects { get; set; }
@@ -56,5 +55,10 @@ namespace DBManager
         public virtual DbSet<Task> Tasks { get; set; }
         public virtual DbSet<Test> Tests { get; set; }
         public virtual DbSet<User> Users1 { get; set; }
+        public virtual DbSet<MaterialType> MaterialTypes { get; set; }
+        public virtual DbSet<MethodFile> MethodFiles { get; set; }
+        public virtual DbSet<MethodIssue> MethodIssues { get; set; }
+        public virtual DbSet<SpecificationFile> SpecificationFiles { get; set; }
+        public virtual DbSet<SpecificationIssue> SpecificationIssues { get; set; }
     }
 }

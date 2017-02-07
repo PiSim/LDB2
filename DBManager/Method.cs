@@ -19,17 +19,19 @@ namespace DBManager
         {
             this.Requirements = new HashSet<Requirement>();
             this.Tests = new HashSet<Test>();
+            this.Issues = new HashSet<MethodIssue>();
         }
     
-        public int ID { get; set; }
-        private int standardID { get; set; }
+        public int ID { get; private set; }
+        public int StandardID { get; private set; }
         public string Measurements { get; set; }
-        private int propertyID { get; set; }
-        public string Label { get; set; }
+        private int PropertyID { get; set; }
         public string Description { get; set; }
-        public string um { get; set; }
+        public string UM { get; set; }
         public int CostUnits { get; set; }
         public bool IsObsolete { get; set; }
+        public Nullable<int> OemID { get; private set; }
+        public string Name { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Requirement> Requirements { get; set; }
@@ -37,5 +39,8 @@ namespace DBManager
         public virtual Std Standard { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Test> Tests { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<MethodIssue> Issues { get; set; }
+        public virtual Organization Oem { get; set; }
     }
 }

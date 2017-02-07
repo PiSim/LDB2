@@ -17,13 +17,14 @@ namespace DBManager
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Requirement()
         {
+            this.Name = "";
             this.SubRequirements = new HashSet<SubRequirement>();
             this.Overrides = new HashSet<Requirement>();
         }
     
         public int ID { get; set; }
         public string Description { get; set; }
-        public int methodID { get; set; }
+        public int MethodID { get; private set; }
         public string Name { get; set; }
         public int Position { get; set; }
         public Nullable<int> specification_versionID { get; set; }

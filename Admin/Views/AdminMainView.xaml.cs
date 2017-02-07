@@ -20,8 +20,9 @@ namespace Admin.Views
     /// </summary>
     public partial class AdminMainView : UserControl
     {
-        public AdminMainView()
+        public AdminMainView(ServiceProvider services)
         {
+            DataContext = new ViewModels.AdminMainViewModel(services);
             InitializeComponent();
         }
     }

@@ -25,8 +25,6 @@ namespace Admin
 
             _regionManager.RegisterViewWithRegion(Navigation.RegionNames.MainNavigationRegion, 
                                                     typeof(Views.AdminNavigationItem));
-                                                    
-            _container.Resolve<ServiceProvider>().BuildExternalReportFiles();
         }
     }
 }

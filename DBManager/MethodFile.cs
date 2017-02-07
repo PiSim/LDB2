@@ -12,9 +12,13 @@ namespace DBManager
     using System;
     using System.Collections.Generic;
     
-    public partial class Oem
+    public partial class MethodFile
     {
-        public int ID { get; set; }
-        public string name { get; set; }
+        public long ID { get; private set; }
+        public long IssueID { get; private set; }
+        public string Path { get; set; }
+        public string Description { get; set; }
+    
+        public virtual MethodIssue MethodIssue { get; set; }
     }
 }
