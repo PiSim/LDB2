@@ -38,8 +38,9 @@ public class ServiceProvider
                 if (tempExt.Description == null)
                     tempExt.Description = "";                
             }
+            
+            _entities.SaveChanges();
         }
         
-        _entities.SaveChanges();
     }
 }
