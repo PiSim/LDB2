@@ -20,12 +20,12 @@ public class ServiceProvider
             
             foreach (string id in fileIDs)
             {
-                File tempFile = _entities.Files[int.Parse(id)];
+                File tempFile = _entities.Files1[int.Parse(id)];
                 
                 ExternalReportFile tempExt = new ExternalReportFile();
                 tempExt.ExternalReport = ext;
-                tempExt.Path = tempFile.Path;
-                tempExt.Description = tempFile.Description;                
+                tempExt.Path = tempFile.path;
+                tempExt.Description = tempFile.description;                
             }
         }
         
