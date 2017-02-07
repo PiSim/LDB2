@@ -21,7 +21,11 @@ public class ServiceProvider
             
             foreach (string id in fileIDs)
             {
-                File tempFile = _entities.Files1.FirstOrDefault(file => file.ID == int.TryParse(id));
+                if (!int.TryParse(id, int parsedID)
+                    continue;
+                    
+                File tempFile = _entities.Files1.FirstOrDefault(file => file.ID == parsedID);
+                
                 if (tempFile == null)
                     continue;
                 
