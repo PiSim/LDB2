@@ -72,9 +72,9 @@ namespace Reports.ViewModels
                     temp.Category = "TR";
                     temp.Number = _number;
                     temp.SpecificationVersion = _selectedVersion;
-
+     
                     _entities.GenerateTestList(temp, 
-                                            _requirementList.Select(req => req.Instance));
+                                            _requirementList.Where(req => req.IsSelected).Select(req => req.Instance));
                     
                     _parentDialog.ReportInstance = temp;
                     _parentDialog.DialogResult = true;
