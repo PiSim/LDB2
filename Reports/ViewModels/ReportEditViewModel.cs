@@ -15,7 +15,6 @@ namespace Reports.ViewModels
     {
         DelegateCommand _addFile, _openFile, _removeFile;
         Report _instance;
-        ObservableCollection<ReportFile> _fileList;
         List<Test> _testList;
         ReportFile _selectedFile;
         
@@ -23,7 +22,6 @@ namespace Reports.ViewModels
         {
 
             _instance = target;
-            _fileList = new ObservableCollection<ReportFile>(_instance.ReportFiles);
             _testList = new List<Test>(_instance.Tests);
 
             _addFile = new DelegateCommand(
@@ -38,6 +36,7 @@ namespace Reports.ViewModels
                         {
                             ReportFile temp = new ReportFile();
                             temp.Path = pth;
+                            temp.Description = "";
                             _instance.ReportFiles.Add(temp);   
                             OnPropertyChanged("FileList");
                         }
@@ -82,9 +81,9 @@ namespace Reports.ViewModels
             set { _instance.Description = value; }
         }
 
-        public ObservableCollection<ReportFile> FileList
+        public List<ReportFile> FileList
         {
-            get { return _fileList; }
+            get { return new List<ReportFile>(_instance.ReportFiles); }
         }
 
         public Report Instance
