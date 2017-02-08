@@ -3,6 +3,7 @@ using Prism.Commands;
 using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,7 +15,7 @@ namespace Reports.ViewModels
     {
         DelegateCommand _addFile, _openFile, _removeFile;
         Report _instance;
-        List<ReportFile> _fileList;
+        ObservableCollection<ReportFile> _fileList;
         List<Test> _testList;
         ReportFile _selectedFile;
         
@@ -22,7 +23,7 @@ namespace Reports.ViewModels
         {
 
             _instance = target;
-            _fileList = new List<ReportFile>(_instance.ReportFiles);
+            _fileList = new ObservableCollection<ReportFile>(_instance.ReportFiles);
             _testList = new List<Test>(_instance.Tests);
 
             _addFile = new DelegateCommand(
@@ -68,7 +69,7 @@ namespace Reports.ViewModels
             get { return _instance.Category; }
         }
 
-        public List<ReportFile> FileList
+        public ObservableCollection<ReportFile> FileList
         {
             get { return _fileList; }
         }
