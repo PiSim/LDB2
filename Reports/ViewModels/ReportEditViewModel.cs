@@ -30,11 +30,16 @@ namespace Reports.ViewModels
                 () =>
                 {
                     OpenFileDialog fileDialog = new OpenFileDialog();
+                    fileDialog.Multiselect = true;
+                    
                     if (fileDialog.ShowDialog() == DialogResult.OK)
                     {
-                        ReportFile temp = new ReportFile();
-                        temp.Path = fileDialog.FileName;
-                        _instance.ReportFiles.Add(temp);
+                        foreach (string pth in fileDialog.FileNames)
+                        {
+                            ReportFile temp = new ReportFile();
+                            temp.Path = pth;
+                            _instance.ReportFiles.Add(temp);   
+                        }
                     }
                 });
 
