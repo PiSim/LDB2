@@ -14,8 +14,8 @@ namespace DBManager
     
     public partial class SpecificationFile
     {
-        public long ID { get; private set; }
-        public long IssueID { get; private set; }
+        public int ID { get; private set; }
+        public int IssueID { get; private set; }
         public string Path { get; set; }
         public string Description { get; set; }
     

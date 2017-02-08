@@ -11,13 +11,13 @@ namespace Admin.ViewModels
     internal class AdminMainViewModel : BindableBase
     {
         DelegateCommand _runMethod;
-        ServiceProvider services;
 
         internal AdminMainViewModel(ServiceProvider services) : base()
         {
             _runMethod = new DelegateCommand(
-                () => services.BuildMethodFiles() );
-
+                () =>
+                {
+                } );
         }
 
         public DelegateCommand RunMethodCommand

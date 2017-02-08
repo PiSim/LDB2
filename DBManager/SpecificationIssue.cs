@@ -18,15 +18,16 @@ namespace DBManager
         public SpecificationIssue()
         {
             this.SpecificationFiles = new HashSet<SpecificationFile>();
+            this.Specifications = new HashSet<Specification>();
         }
     
-        public long ID { get; set; }
-        public int SpecificationID { get; private set; }
+        public int ID { get; set; }
         public string Issue { get; set; }
-        public Nullable<int> NextIssueID { get; private set; }
+        public Nullable<int> PreviousIssueID { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SpecificationFile> SpecificationFiles { get; set; }
-        public virtual Specification Specification { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Specification> Specifications { get; set; }
     }
 }

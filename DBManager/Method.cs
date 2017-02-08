@@ -19,7 +19,6 @@ namespace DBManager
         {
             this.Requirements = new HashSet<Requirement>();
             this.Tests = new HashSet<Test>();
-            this.Issues = new HashSet<MethodIssue>();
         }
     
         public int ID { get; private set; }
@@ -32,6 +31,7 @@ namespace DBManager
         public bool IsObsolete { get; set; }
         public Nullable<int> OemID { get; private set; }
         public string Name { get; set; }
+        public Nullable<int> issueID { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Requirement> Requirements { get; set; }
@@ -39,8 +39,7 @@ namespace DBManager
         public virtual Std Standard { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Test> Tests { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<MethodIssue> Issues { get; set; }
         public virtual Organization Oem { get; set; }
+        public virtual MethodIssue CurrentIssue { get; set; }
     }
 }

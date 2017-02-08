@@ -55,16 +55,52 @@ public class ServiceProvider
             mtd.Name = mtd.Standard.Name;
             MethodIssue tempIssue = new MethodIssue();
             tempIssue.Issue = mtd.Standard.Issue;
-            foreach (StandardFile stdFile in mtd.Standard.standard_files)
+
+            File stdFile = _entities.Files1.FirstOrDefault(f => f.ID == mtd.Standard.fileID);
+            if (stdFile != null)
             {
                 MethodFile tempMtdFile = new MethodFile();
                 tempMtdFile.Description = stdFile.description;
+                if (tempMtdFile.Description == null)
+                    tempMtdFile.Description = "";
+
                 tempMtdFile.Path = stdFile.path;
                 tempIssue.MethodFiles.Add(tempMtdFile);
             }
-            mtd.Issues.Add(tempIssue);
+
+            mtd.CurrentIssue = tempIssue;
         }
 
         _entities.SaveChanges();
     }
+
+    public void BuildSpecificationFiles()
+    {
+        List<Specification> _specList = new List<Specification>(_entities.Specifications);
+
+        foreach (Specification spc in _specList)
+        {
+            spc.Oem = spc.Standard.Organization;
+            spc.Name = spc.Standard.Name;
+            SpecificationIssue tempIssue = new SpecificationIssue();
+            tempIssue.Issue = spc.Standard.Issue;
+
+            File stdFile = _entities.Files1.FirstOrDefault(f => f.ID == spc.Standard.fileID);
+            if (stdFile != null)
+            {
+                SpecificationFile tempMtdFile = new SpecificationFile();
+                tempMtdFile.Description = stdFile.description;
+                if (tempMtdFile.Description == null)
+                    tempMtdFile.Description = "";
+
+                tempMtdFile.Path = stdFile.path;
+                tempIssue.SpecificationFiles.Add(tempMtdFile);
+            }
+
+            spc.CurrentIssue = tempIssue;
+        }
+
+        _entities.SaveChanges();
+    }
+
 }

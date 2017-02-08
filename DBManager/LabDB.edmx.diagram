@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="9fa1cdb38a7949d89850433ccf2fcd72" Name="Diagram1" ZoomLevel="93">
+      <Diagram DiagramId="9fa1cdb38a7949d89850433ccf2fcd72" Name="Diagram1" ZoomLevel="71">
         <EntityTypeShape EntityType="labdbModel.Aspect" Width="1.5" PointX="3" PointY="16" IsExpanded="true" />
         <EntityTypeShape EntityType="labdbModel.BatchFile" Width="1.5" PointX="12" PointY="18.375" IsExpanded="true" />
         <EntityTypeShape EntityType="labdbModel.Batch" Width="1.5" PointX="9.75" PointY="20.75" IsExpanded="true" />
@@ -84,12 +84,12 @@
         <EntityTypeShape EntityType="labdbModel.SpecificationFile" Width="1.5" PointX="12.75" PointY="32" />
         <EntityTypeShape EntityType="labdbModel.SpecificationIssue" Width="1.5" PointX="10.5" PointY="31.875" />
         <AssociationConnector Association="labdbModel.method_issue_to_file" />
-        <AssociationConnector Association="labdbModel.method_to_issue" />
         <AssociationConnector Association="labdbModel.specification_issue_to_file" />
-        <AssociationConnector Association="labdbModel.specification_to_issue" />
         <AssociationConnector Association="labdbModel.type_to_construction" />
         <AssociationConnector Association="labdbModel.organization_to_method" />
         <AssociationConnector Association="labdbModel.organization_to_specification" />
+        <AssociationConnector Association="labdbModel.issue__to_method" />
+        <AssociationConnector Association="labdbModel.issue_to_specification" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

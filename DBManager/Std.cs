@@ -29,7 +29,7 @@ namespace DBManager
         public string Issue { get; set; }
         private int organizationID { get; set; }
         public Nullable<int> OldFlag { get; set; }
-        private Nullable<int> fileID { get; set; }
+        public Nullable<int> fileID { get; private set; }
         private Nullable<int> previous_issueID { get; set; }
         private Nullable<int> next_issueID { get; set; }
     

@@ -18,15 +18,16 @@ namespace DBManager
         public MethodIssue()
         {
             this.MethodFiles = new HashSet<MethodFile>();
+            this.Methods = new HashSet<Method>();
         }
     
-        public long ID { get; set; }
-        public int MethodID { get; private set; }
+        public int ID { get; set; }
         public string Issue { get; set; }
-        public Nullable<int> NextIssueID { get; private set; }
+        public Nullable<int> PreviousIssueID { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<MethodFile> MethodFiles { get; set; }
-        public virtual Method Method { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Method> Methods { get; set; }
     }
 }
