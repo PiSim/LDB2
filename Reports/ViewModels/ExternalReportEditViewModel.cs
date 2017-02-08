@@ -28,11 +28,16 @@ namespace Reports.ViewModels
                 () =>
                 {
                     OpenFileDialog fileDialog = new OpenFileDialog();
+                    fileDialog.Multiselect = true;
+                    
                     if (fileDialog.ShowDialog() == DialogResult.OK)
                     {
-                        ExternalReportFile temp = new ExternalReportFile();
-                        temp.Path = fileDialog.FileName;
-                        ReportFiles.Add(temp);
+                        foreach (string pth in fileDialog.FileNames)
+                        {
+                            ReportFile temp = new ExternalReportFile();
+                            temp.Path = pth;
+                            FileList.Add(temp);   
+                        }
                     }
                 });
 
