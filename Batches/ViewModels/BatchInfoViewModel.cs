@@ -11,11 +11,15 @@ namespace Batches.ViewModels
 {
     class BatchInfoViewModel : BindableBase
     {
-        Batch _instance;
+        private nBatch _instance;
+        private List<SamplesWrapper> _samplesList;
 
         internal BatchInfoViewModel(Batch instance) : base()
         {
             _instance = instance;
+            _samplesList = new List<SamplesWrapper>();
+            foreach (Sample smp in _instance.Samples)
+                _samplesList.Add(new SamplesWrapper(smp));
         }
 
         public Material Material
@@ -33,9 +37,9 @@ namespace Batches.ViewModels
             get { return _instance.Material.Construction.Project; }
         }
 
-        public ObservableCollection<Sample> Samples
+        public List<SamplesWrapper> Samples
         {
-            get { return new ObservableCollection<Sample>(_instance.Samples); }
+            get { return _samplesList; }
         }
 
         public ObservableCollection<DBManager.Report> Reports
