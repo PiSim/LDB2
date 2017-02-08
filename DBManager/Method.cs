@@ -28,10 +28,7 @@ namespace DBManager
         public string Description { get; set; }
         public string UM { get; set; }
         public int CostUnits { get; set; }
-        public bool IsObsolete { get; set; }
-        public Nullable<int> OemID { get; private set; }
         public string Name { get; set; }
-        public Nullable<int> issueID { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Requirement> Requirements { get; set; }
@@ -39,7 +36,5 @@ namespace DBManager
         public virtual Std Standard { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Test> Tests { get; set; }
-        public virtual Organization Oem { get; set; }
-        public virtual MethodIssue CurrentIssue { get; set; }
     }
 }

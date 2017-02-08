@@ -21,8 +21,6 @@ namespace DBManager
             this.external_reports = new HashSet<ExternalReport>();
             this.Projects = new HashSet<Project>();
             this.Standards = new HashSet<Std>();
-            this.methods = new HashSet<Method>();
-            this.specifications = new HashSet<Specification>();
         }
     
         private int ID { get; set; }
@@ -37,9 +35,5 @@ namespace DBManager
         public virtual ICollection<Project> Projects { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Std> Standards { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Method> methods { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Specification> specifications { get; set; }
     }
 }

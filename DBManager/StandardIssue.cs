@@ -12,22 +12,21 @@ namespace DBManager
     using System;
     using System.Collections.Generic;
     
-    public partial class SpecificationIssue
+    public partial class StandardIssue
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public SpecificationIssue()
+        public StandardIssue()
         {
-            this.SpecificationFiles = new HashSet<SpecificationFile>();
-            this.Specifications = new HashSet<Specification>();
+            this.StandardFiles = new HashSet<StandardFile>();
         }
     
         public int ID { get; set; }
         public string Issue { get; set; }
-        public Nullable<int> PreviousIssueID { get; set; }
+        public sbyte IsOld { get; set; }
+        public Nullable<int> StandardID { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SpecificationFile> SpecificationFiles { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Specification> Specifications { get; set; }
+        public virtual ICollection<StandardFile> StandardFiles { get; set; }
+        public virtual Std Standard { get; set; }
     }
 }

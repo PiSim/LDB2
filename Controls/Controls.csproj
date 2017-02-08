@@ -105,9 +105,13 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="ViewModels\MaterialCreationViewModel.cs" />
+    <Compile Include="ViewModels\TaskCreationViewModel.cs" />
     <Compile Include="ViewModels\ToolbarViewModel.cs" />
     <Compile Include="Views\MaterialCreationDialog.xaml.cs">
       <DependentUpon>MaterialCreationDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TaskCreationDialog.xaml.cs">
+      <DependentUpon>TaskCreationDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ToolbarView.xaml.cs">
       <DependentUpon>ToolbarView.xaml</DependentUpon>
@@ -140,6 +144,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Views\MaterialCreationDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\TaskCreationDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

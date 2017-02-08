@@ -33,7 +33,6 @@ namespace DBManager
         public virtual DbSet<ExternalConstruction> ExternalConstructions { get; set; }
         public virtual DbSet<ExternalReportFile> ExternalReportFiles { get; set; }
         public virtual DbSet<ExternalReport> ExternalReports { get; set; }
-        public virtual DbSet<File> Files1 { get; set; }
         public virtual DbSet<Master> Masters1 { get; set; }
         public virtual DbSet<Material> Materials { get; set; }
         public virtual DbSet<Method> Methods { get; set; }
@@ -56,9 +55,6 @@ namespace DBManager
         public virtual DbSet<Test> Tests { get; set; }
         public virtual DbSet<User> Users1 { get; set; }
         public virtual DbSet<MaterialType> MaterialTypes { get; set; }
-        public virtual DbSet<MethodFile> MethodFiles { get; set; }
-        public virtual DbSet<MethodIssue> MethodIssues { get; set; }
-        public virtual DbSet<SpecificationFile> SpecificationFiles { get; set; }
-        public virtual DbSet<SpecificationIssue> SpecificationIssues { get; set; }
+        public virtual DbSet<StandardIssue> StandardIssues { get; set; }
     }
 }

@@ -129,9 +129,6 @@
     <Compile Include="ExternalReportFile.cs">
       <DependentUpon>LabDB.tt</DependentUpon>
     </Compile>
-    <Compile Include="File.cs">
-      <DependentUpon>LabDB.tt</DependentUpon>
-    </Compile>
     <Compile Include="LabDB.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -157,12 +154,6 @@
       <DependentUpon>LabDB.tt</DependentUpon>
     </Compile>
     <Compile Include="Method.cs">
-      <DependentUpon>LabDB.tt</DependentUpon>
-    </Compile>
-    <Compile Include="MethodFile.cs">
-      <DependentUpon>LabDB.tt</DependentUpon>
-    </Compile>
-    <Compile Include="MethodIssue.cs">
       <DependentUpon>LabDB.tt</DependentUpon>
     </Compile>
     <Compile Include="Organization.cs">
@@ -208,16 +199,13 @@
     <Compile Include="Specification.cs">
       <DependentUpon>LabDB.tt</DependentUpon>
     </Compile>
-    <Compile Include="SpecificationFile.cs">
-      <DependentUpon>LabDB.tt</DependentUpon>
-    </Compile>
-    <Compile Include="SpecificationIssue.cs">
-      <DependentUpon>LabDB.tt</DependentUpon>
-    </Compile>
     <Compile Include="SpecificationVersion.cs">
       <DependentUpon>LabDB.tt</DependentUpon>
     </Compile>
     <Compile Include="StandardFile.cs">
+      <DependentUpon>LabDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="StandardIssue.cs">
       <DependentUpon>LabDB.tt</DependentUpon>
     </Compile>
     <Compile Include="Std.cs">

@@ -15,10 +15,10 @@ namespace DBManager
     public partial class StandardFile
     {
         public int ID { get; set; }
-        public int standardID { get; set; }
-        public string path { get; set; }
-        public string description { get; set; }
+        public string Path { get; set; }
+        public string Description { get; set; }
+        public int IssueID { get; private set; }
     
-        public virtual Std standard { get; set; }
+        public virtual StandardIssue StandardIssue { get; set; }
     }
 }

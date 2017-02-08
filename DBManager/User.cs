@@ -20,5 +20,7 @@ namespace DBManager
         public string role_list { get; set; }
         public string user_name { get; set; }
         public Nullable<int> personID { get; set; }
+    
+        public virtual Person person { get; set; }
     }
 }

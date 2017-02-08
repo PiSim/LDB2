@@ -17,34 +17,23 @@ namespace DBManager
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Std()
         {
-            this.methods = new HashSet<Method>();
-            this.specifications = new HashSet<Specification>();
-            this.standard_files = new HashSet<StandardFile>();
-            this.standards1 = new HashSet<Std>();
-            this.standards11 = new HashSet<Std>();
+            this.Methods = new HashSet<Method>();
+            this.Specifications = new HashSet<Specification>();
+            this.StandardIssues = new HashSet<StandardIssue>();
         }
     
         public int ID { get; set; }
         public string Name { get; set; }
-        public string Issue { get; set; }
-        private int organizationID { get; set; }
-        public Nullable<int> OldFlag { get; set; }
-        public Nullable<int> fileID { get; private set; }
-        private Nullable<int> previous_issueID { get; set; }
-        private Nullable<int> next_issueID { get; set; }
+        public int OrganizationID { get; private set; }
+        public Nullable<int> current_issueID { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Method> methods { get; set; }
+        public virtual ICollection<Method> Methods { get; set; }
         public virtual Organization Organization { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Specification> specifications { get; set; }
+        public virtual ICollection<Specification> Specifications { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<StandardFile> standard_files { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Std> standards1 { get; set; }
-        public virtual Std standard1 { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Std> standards11 { get; set; }
-        public virtual Std standard2 { get; set; }
+        public virtual ICollection<StandardIssue> StandardIssues { get; set; }
+        public virtual StandardIssue CurrentIssue { get; set; }
     }
 }
