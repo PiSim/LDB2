@@ -70,9 +70,11 @@ namespace Reports.ViewModels
                     temp.Author = _author;
                     temp.Batch = _entities.GetBatchByNumber(_batchNumber);
                     temp.Category = "TR";
+                    temp.Description = _selectedSpecification.Description;
                     temp.Number = _number;
                     temp.SpecificationVersion = _selectedVersion;
-     
+                    temp.StartDate = DateTime.Now;
+                    
                     _entities.GenerateTestList(temp, 
                                             _requirementList.Where(req => req.IsSelected).Select(req => req.Instance));
                     
