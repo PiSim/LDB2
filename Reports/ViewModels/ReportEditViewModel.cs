@@ -72,6 +72,13 @@ namespace Reports.ViewModels
         public string Category
         {
             get { return _instance.Category; }
+            set { _instance.Category = value; }
+        }
+        
+        public string Description
+        {
+            get { return _instance.Description; }
+            set { _instance.Description = value; }
         }
 
         public ObservableCollection<ReportFile> FileList
