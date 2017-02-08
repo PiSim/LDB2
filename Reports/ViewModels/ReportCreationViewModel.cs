@@ -73,7 +73,7 @@ namespace Reports.ViewModels
                     temp.Description = _selectedSpecification.Description;
                     temp.Number = _number;
                     temp.SpecificationVersion = _selectedVersion;
-                    temp.StartDate = DateTime.Now;
+                    temp.StartDate = DateTime.Now.ToShortDateString();
                     
                     _entities.GenerateTestList(temp, 
                                             _requirementList.Where(req => req.IsSelected).Select(req => req.Instance));
