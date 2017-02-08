@@ -34,9 +34,9 @@ namespace Reports.ViewModels
                     {
                         foreach (string pth in fileDialog.FileNames)
                         {
-                            ReportFile temp = new ExternalReportFile();
+                            ExternalReportFile temp = new ExternalReportFile();
                             temp.Path = pth;
-                            FileList.Add(temp);   
+                            ReportFiles.Add(temp);   
                         }
                     }
                 });
