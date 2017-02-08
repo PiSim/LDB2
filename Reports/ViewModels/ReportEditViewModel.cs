@@ -38,7 +38,8 @@ namespace Reports.ViewModels
                         {
                             ReportFile temp = new ReportFile();
                             temp.Path = pth;
-                            FileList.Add(temp);   
+                            _instance.ReportFiles.Add(temp);   
+                            OnPropertyChanged("FileList");
                         }
                     }
                 });
