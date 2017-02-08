@@ -11,7 +11,7 @@ namespace Batches.ViewModels
 {
     class BatchInfoViewModel : BindableBase
     {
-        private nBatch _instance;
+        private Batch _instance;
         private List<SamplesWrapper> _samplesList;
 
         internal BatchInfoViewModel(Batch instance) : base()
