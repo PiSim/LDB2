@@ -57,7 +57,7 @@
                     <Label Content="OEM:"
                            Grid.Column="0"
                            Grid.Row="1"/>
-                    <Label Content="{Binding OEM}"
+                    <Label Content="{Binding Oem.Name}"
                            Grid.Column="1"
                            Grid.Row="1"/>
                     
@@ -71,7 +71,7 @@
                     <Label Content="CP:"
                            Grid.Column="0"
                            Grid.Row="3"/>
-                    <Label Content="{Binding Leader}"
+                    <Label Content="{Binding Leader.Name}"
                            Grid.Column="1"
                            Grid.Row="3"/>
                 </Grid>
