@@ -72,6 +72,7 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Prism.Wpf.6.2.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
       <Private>True</Private>
@@ -104,11 +105,30 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="RequirementWrapper.cs" />
     <Compile Include="ViewModels\MaterialCreationViewModel.cs" />
+    <Compile Include="ViewModels\MethodPickerViewModel.cs" />
+    <Compile Include="ViewModels\ReportCreationViewModel.cs" />
+    <Compile Include="ViewModels\StatusBarViewModel.cs" />
     <Compile Include="ViewModels\TaskCreationViewModel.cs" />
     <Compile Include="ViewModels\ToolbarViewModel.cs" />
+    <Compile Include="Views\ColorPickerDialog.xaml.cs">
+      <DependentUpon>ColorPickerDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MaterialCreationDialog.xaml.cs">
       <DependentUpon>MaterialCreationDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MethodPickerDialog.xaml.cs">
+      <DependentUpon>MethodPickerDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ProjectPickerDialog.xaml.cs">
+      <DependentUpon>ProjectPickerDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ReportCreationDialog.xaml.cs">
+      <DependentUpon>ReportCreationDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\StatusBarView.xaml.cs">
+      <DependentUpon>StatusBarView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\TaskCreationDialog.xaml.cs">
       <DependentUpon>TaskCreationDialog.xaml</DependentUpon>
@@ -143,7 +163,27 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Views\ColorPickerDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\MaterialCreationDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MethodPickerDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ProjectPickerDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ReportCreationDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\StatusBarView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

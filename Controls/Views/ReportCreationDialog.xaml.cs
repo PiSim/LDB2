@@ -13,7 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace Reports.Views
+namespace Controls.Views
 {
     /// <summary>
     /// Interaction logic for ReportCreationDialog.xaml

@@ -17,15 +17,15 @@ namespace DBManager
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public ExternalConstruction()
         {
-            this.constructions = new HashSet<Construction>();
+            this.Constructions = new HashSet<Construction>();
         }
     
         public int ID { get; set; }
-        public string name { get; set; }
-        public int oemID { get; set; }
+        public string Name { get; set; }
+        public int OemID { get; private set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Construction> constructions { get; set; }
-        public virtual Organization organization { get; set; }
+        public virtual ICollection<Construction> Constructions { get; set; }
+        public virtual Organization Organization { get; set; }
     }
 }

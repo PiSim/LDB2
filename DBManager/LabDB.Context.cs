@@ -56,5 +56,7 @@ namespace DBManager
         public virtual DbSet<User> Users1 { get; set; }
         public virtual DbSet<MaterialType> MaterialTypes { get; set; }
         public virtual DbSet<StandardIssue> StandardIssues { get; set; }
+        public virtual DbSet<MethodMeasurement> MethodMeasurement { get; set; }
+        public virtual DbSet<task_items> task_items { get; set; }
     }
 }

@@ -12,14 +12,13 @@ namespace DBManager
     using System;
     using System.Collections.Generic;
     
-    public partial class SubTest
+    public partial class MethodMeasurement
     {
-        public int ID { get; set; }
-        public int SubrequirementID { get; private set; }
-        public string Result { get; set; }
-        public int testID { get; set; }
+        public int ID { get; private set; }
+        public int MethodID { get; private set; }
+        public string Name { get; set; }
+        public string UM { get; set; }
     
-        public virtual SubRequirement SubRequirement { get; set; }
-        public virtual Test Test { get; set; }
+        public virtual Method Method { get; set; }
     }
 }

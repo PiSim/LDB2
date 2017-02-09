@@ -1,6 +1,8 @@
 ﻿using DBManager;
+using Controls.Views;
 using Infrastructure;
 using Infrastructure.Events;
+using Microsoft.Practices.Unity;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
@@ -19,9 +21,13 @@ namespace Reports.ViewModels
         private EventAggregator _eventAggregator;
         private ObservableCollection<Report> _reportList;
         private Report _selectedReport;
+        private UnityContainer _container;
 
-        public MainViewModel(DBEntities entities, EventAggregator eventAggregator) : base()
+        public MainViewModel(DBEntities entities, 
+                            EventAggregator eventAggregator,
+                            UnityContainer container) : base()
         {
+            _container = container;
             _entities = entities;
             _eventAggregator = eventAggregator;
             _reportList = new ObservableCollection<Report>(entities.Reports);
@@ -36,7 +42,7 @@ namespace Reports.ViewModels
             _newReport = new DelegateCommand(
                 () =>
                 {
-                    Views.ReportCreationDialog creationDialog = new Views.ReportCreationDialog(_entities);
+                    ReportCreationDialog creationDialog = _container.Resolve<ReportCreationDialog>();
                     if (creationDialog.ShowDialog() == true)
                     {
                         ObjectNavigationToken token = new ObjectNavigationToken(creationDialog.ReportInstance, ViewNames.ReportEditView);

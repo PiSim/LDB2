@@ -156,6 +156,9 @@
     <Compile Include="Method.cs">
       <DependentUpon>LabDB.tt</DependentUpon>
     </Compile>
+    <Compile Include="MethodMeasurement.cs">
+      <DependentUpon>LabDB.tt</DependentUpon>
+    </Compile>
     <Compile Include="Organization.cs">
       <DependentUpon>LabDB.tt</DependentUpon>
     </Compile>
@@ -218,6 +221,9 @@
       <DependentUpon>LabDB.tt</DependentUpon>
     </Compile>
     <Compile Include="Task.cs">
+      <DependentUpon>LabDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="task_items.cs">
       <DependentUpon>LabDB.tt</DependentUpon>
     </Compile>
     <Compile Include="Test.cs">

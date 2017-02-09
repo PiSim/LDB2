@@ -28,8 +28,7 @@ namespace DBManager
         public string Notes { get; set; }
         public int operatorID { get; set; }
         public Nullable<System.DateTime> Date { get; set; }
-        public Nullable<int> MeetsRequirements { get; set; }
-        public string stat_skip { get; set; }
+        public sbyte IsComplete { get; set; }
     
         public virtual Batch Batch { get; set; }
         public virtual Person Person { get; set; }

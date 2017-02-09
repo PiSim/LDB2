@@ -5,35 +5,35 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="9fa1cdb38a7949d89850433ccf2fcd72" Name="Diagram1" ZoomLevel="71">
-        <EntityTypeShape EntityType="labdbModel.Aspect" Width="1.5" PointX="3" PointY="11.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="labdbModel.BatchFile" Width="1.5" PointX="15" PointY="5.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="labdbModel.Batch" Width="1.5" PointX="12.75" PointY="8" IsExpanded="true" />
-        <EntityTypeShape EntityType="labdbModel.Colour" Width="1.5" PointX="15" PointY="2.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="labdbModel.Construction" Width="1.5" PointX="5.25" PointY="10.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="labdbModel.ExternalConstruction" Width="1.5" PointX="3" PointY="21" IsExpanded="true" />
-        <EntityTypeShape EntityType="labdbModel.ExternalReportFile" Width="1.5" PointX="10.5" PointY="11.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="labdbModel.ExternalReport" Width="1.5" PointX="8.25" PointY="10.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="labdbModel.Master" Width="1.5" PointX="15" PointY="8.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="labdbModel.Material" Width="1.5" PointX="10.5" PointY="8.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="labdbModel.Method" Width="1.5" PointX="6" PointY="28.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="labdbModel.Organization" Width="1.5" PointX="0.75" PointY="20.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="labdbModel.Person" Width="1.5" PointX="0.75" PointY="16.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="labdbModel.Project" Width="1.5" PointX="3" PointY="15.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="labdbModel.Property" Width="1.5" PointX="3.75" PointY="29.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="labdbModel.Recipe" Width="1.5" PointX="17.25" PointY="8.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="labdbModel.ReportFile" Width="1.5" PointX="8.25" PointY="25.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="labdbModel.Report" Width="1.5" PointX="6" PointY="15.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="labdbModel.Requirement" Width="1.5" PointX="9" PointY="20.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="labdbModel.Sample" Width="1.5" PointX="15" PointY="11.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="labdbModel.SpecificationVersion" Width="1.5" PointX="3.75" PointY="4.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="labdbModel.Specification" Width="1.5" PointX="1.5" PointY="5.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="labdbModel.StandardFile" Width="1.5" PointX="3.75" PointY="32.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="labdbModel.Std" Width="1.5" PointX="1.5" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="labdbModel.SubRequirement" Width="1.5" PointX="11.25" PointY="21.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="labdbModel.SubTest" Width="1.5" PointX="13.5" PointY="16.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="labdbModel.Task" Width="1.5" PointX="11.25" PointY="15.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="labdbModel.Test" Width="1.5" PointX="8.25" PointY="15.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="labdbModel.User" Width="1.5" PointX="3" PointY="25.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="labdbModel.Aspect" Width="1.5" PointX="6" PointY="28" IsExpanded="true" />
+        <EntityTypeShape EntityType="labdbModel.BatchFile" Width="1.5" PointX="15" PointY="19.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="labdbModel.Batch" Width="1.5" PointX="12.75" PointY="21.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="labdbModel.Colour" Width="1.5" PointX="15" PointY="28.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="labdbModel.Construction" Width="1.5" PointX="8.25" PointY="19.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="labdbModel.ExternalConstruction" Width="1.5" PointX="6" PointY="30.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="labdbModel.ExternalReportFile" Width="1.5" PointX="10.5" PointY="10.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="labdbModel.ExternalReport" Width="1.5" PointX="8.25" PointY="9" IsExpanded="true" />
+        <EntityTypeShape EntityType="labdbModel.Master" Width="1.5" PointX="15" PointY="22.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="labdbModel.Material" Width="1.5" PointX="10.5" PointY="20.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="labdbModel.Method" Width="1.5" PointX="6" PointY="9.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="labdbModel.Organization" Width="1.5" PointX="3.75" PointY="30.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="labdbModel.Person" Width="1.5" PointX="0.75" PointY="15" IsExpanded="true" />
+        <EntityTypeShape EntityType="labdbModel.Project" Width="1.5" PointX="6" PointY="14.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="labdbModel.Property" Width="1.5" PointX="3.75" PointY="10.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="labdbModel.Recipe" Width="1.5" PointX="17.25" PointY="22" IsExpanded="true" />
+        <EntityTypeShape EntityType="labdbModel.ReportFile" Width="1.5" PointX="5.25" PointY="24.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="labdbModel.Report" Width="1.5" PointX="3" PointY="14.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="labdbModel.Requirement" Width="1.5" PointX="9" PointY="4.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="labdbModel.Sample" Width="1.5" PointX="15" PointY="25.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="labdbModel.SpecificationVersion" Width="1.5" PointX="0.75" PointY="9.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="labdbModel.Specification" Width="1.5" PointX="1.5" PointY="5.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="labdbModel.StandardFile" Width="1.5" PointX="3.75" PointY="19.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="labdbModel.Std" Width="1.5" PointX="1.5" PointY="1.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="labdbModel.SubRequirement" Width="1.5" PointX="11.25" PointY="5.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="labdbModel.SubTest" Width="1.5" PointX="13.5" PointY="15.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="labdbModel.Task" Width="1.5" PointX="11.25" PointY="14.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="labdbModel.Test" Width="1.5" PointX="8.25" PointY="14.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="labdbModel.User" Width="1.5" PointX="3" PointY="24.125" IsExpanded="true" />
         <AssociationConnector Association="labdbModel.aspect1" ManuallyRouted="false" />
         <AssociationConnector Association="labdbModel.batch1" ManuallyRouted="false" />
         <AssociationConnector Association="labdbModel.batch_by_material" ManuallyRouted="false" />
@@ -74,13 +74,18 @@
         <AssociationConnector Association="labdbModel.test1" ManuallyRouted="false" />
         <AssociationConnector Association="labdbModel.overridden_to_requirement" />
         <AssociationConnector Association="labdbModel.method_to_test" />
-        <EntityTypeShape EntityType="labdbModel.MaterialType" Width="1.5" PointX="3" PointY="8.75" />
+        <EntityTypeShape EntityType="labdbModel.MaterialType" Width="1.5" PointX="6" PointY="19.5" />
         <AssociationConnector Association="labdbModel.type_to_construction" />
         <AssociationConnector Association="labdbModel.person_to_user" />
-        <EntityTypeShape EntityType="labdbModel.StandardIssue" Width="1.5" PointX="1.5" PointY="29.125" />
+        <EntityTypeShape EntityType="labdbModel.StandardIssue" Width="1.5" PointX="1.5" PointY="19.75" />
         <AssociationConnector Association="labdbModel.standard_issue_to_file" />
         <AssociationConnector Association="labdbModel.standard_to_issue" />
         <AssociationConnector Association="labdbModel.current_issue_to_standard" />
+        <EntityTypeShape EntityType="labdbModel.MethodMeasurement" Width="1.5" PointX="8.25" PointY="1.25" />
+        <AssociationConnector Association="labdbModel.method_to_measurement" />
+        <EntityTypeShape EntityType="labdbModel.task_items" Width="1.5" PointX="13.5" PointY="10.625" />
+        <AssociationConnector Association="labdbModel.requirement_to_task_item" />
+        <AssociationConnector Association="labdbModel.task_to_item" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

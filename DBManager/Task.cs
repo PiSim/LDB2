@@ -14,8 +14,14 @@ namespace DBManager
     
     public partial class Task
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Task()
+        {
+            this.task_items = new HashSet<task_items>();
+        }
+    
         public int ID { get; set; }
-        public int requesterID { get; set; }
+        public int RequesterID { get; private set; }
         public int projectID { get; set; }
         public int specification_versionID { get; set; }
         public int batchID { get; set; }
@@ -23,11 +29,16 @@ namespace DBManager
         public Nullable<int> reportID { get; set; }
         public Nullable<int> progress { get; set; }
         public Nullable<int> priority_modifier { get; set; }
-        public string pipeline_order { get; set; }
+        public string PipelineOrder { get; set; }
+        public Nullable<System.DateTime> start_date { get; set; }
+        public Nullable<System.DateTime> end_date { get; set; }
+        public sbyte is_complete { get; set; }
     
         public virtual Person Requester { get; set; }
-        public virtual Project project { get; set; }
-        public virtual Report report { get; set; }
+        public virtual Project Project { get; set; }
+        public virtual Report Report { get; set; }
         public virtual SpecificationVersion specification_versions { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<task_items> task_items { get; set; }
     }
 }

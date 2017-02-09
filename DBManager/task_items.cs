@@ -12,14 +12,13 @@ namespace DBManager
     using System;
     using System.Collections.Generic;
     
-    public partial class SubTest
+    public partial class task_items
     {
         public int ID { get; set; }
-        public int SubrequirementID { get; private set; }
-        public string Result { get; set; }
-        public int testID { get; set; }
+        public int taskID { get; set; }
+        public int requirementID { get; set; }
     
-        public virtual SubRequirement SubRequirement { get; set; }
-        public virtual Test Test { get; set; }
+        public virtual Requirement requirement { get; set; }
+        public virtual Task task { get; set; }
     }
 }

@@ -1,7 +1,4 @@
-﻿using DBManager;
-using Microsoft.Practices.Unity;
-using Prism.Events;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,18 +13,15 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Reports.Views
+namespace Controls.Views
 {
     /// <summary>
-    /// Interaction logic for ReportMainView.xaml
+    /// Interaction logic for StatusBarView.xaml
     /// </summary>
-    public partial class ReportMainView : UserControl
+    public partial class StatusBarView : UserControl
     {
-        public ReportMainView(DBEntities entities, 
-                            EventAggregator eventAggregator,
-                            UnityContainer container)
+        public StatusBarView()
         {
-            DataContext = new ViewModels.MainViewModel(entities, eventAggregator, container);
             InitializeComponent();
         }
     }

@@ -42,11 +42,10 @@ namespace DBManager
             tempReq.Description = "";
             tempReq.Position = 0;
             
-            string[] parsedMeasurements = method.Measurements.Split((char)007);
-            foreach (string measure in parsedMeasurements)
+            foreach (MethodMeasurement measure in method.Measurements)
             {
                 SubRequirement tempSub = new SubRequirement();
-                tempSub.Name = measure;
+                tempSub.Name = measure.Name;
                 tempReq.SubRequirements.Add(tempSub);
             }
 

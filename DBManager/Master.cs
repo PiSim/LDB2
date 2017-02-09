@@ -23,7 +23,7 @@ namespace DBManager
         public int ID { get; set; }
         public int Number { get; set; }
         public string Date { get; set; }
-        public Nullable<int> batchID { get; set; }
+        public Nullable<int> BatchID { get; private set; }
     
         public virtual Batch Batch { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
