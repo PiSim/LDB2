@@ -34,7 +34,7 @@ namespace Tasks.ViewModels
                 () => 
                 {
                     TaskCreationDialog taskDialog = _container.Resolve<TaskCreationDialog>();
-                    if (taskDialog.ShowDialog())
+                    if (taskDialog.ShowDialog() == true)
                     {
                         
                     }
