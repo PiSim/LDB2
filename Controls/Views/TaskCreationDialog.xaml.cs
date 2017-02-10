@@ -20,10 +20,18 @@ namespace Controls.Views
     /// </summary>
     public partial class TaskCreationDialog : Window
     {
+        private Task _taskInstance;
+        
         public TaskCreationDialog(DBEntities entities)
         {
             DataContext = new ViewModels.TaskCreationViewModel(entitites, this);
             InitializeComponent();
+        }
+        
+        public Task TaskInstance
+        {
+            get { return _taskInstance; }
+            set { _taskInstance = value; }
         }
     }
 }
