@@ -39,12 +39,12 @@ namespace Controls.ViewModels
                     Task output = new Task();
                     output.Requester = _requester;
                     output.SpecificationVersion = _selectedVersion;
-                    output.Batch = _entities.GetBatchByNumber(_batchNumber);
+                    //output.batch = _entities.GetBatchByNumber(_batchNumber);
                     
                     foreach (RequirementWrapper req in _requirementList)
                     {
                         task_items temp = new task_items();
-                        temp.Requirement = req;
+                        temp.requirement = req;
                         output.task_items.Add(temp);
                     }
                     
