@@ -92,5 +92,11 @@ namespace Batches.ViewModels
         {
             get { return new ObservableCollection<Report>(_instance.Reports); }
         }
+        
+        public Report SelectedReport
+        {
+            get { return _selectedReport; }
+            set { _selectedReport = value; }
+        }
     }
 }
