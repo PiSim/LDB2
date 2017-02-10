@@ -1,4 +1,6 @@
 ﻿using DBManager;
+using Microsoft.Practices.Unity;
+using Prism.Events;
 using Prism.Regions;
 using System;
 using System.Collections.Generic;
@@ -22,8 +24,14 @@ namespace Batches.Views
     /// </summary>
     public partial class BatchInfoView : UserControl, INavigationAware
     {
-        public BatchInfoView()
+        private EventAggregator _aggregator;
+        private UnityContainer _container;
+        
+        public BatchInfoView(EventAggregator aggregator,
+                            UnityContainer container)
         {
+            _aggregator = aggregator;
+            _container = container;
             InitializeComponent();
         }
 
@@ -40,7 +48,9 @@ namespace Batches.Views
         public void OnNavigatedTo(NavigationContext ncontext)
         {
             ViewModels.BatchInfoViewModel viewModel =
-                new ViewModels.BatchInfoViewModel(ncontext.Parameters["ObjectInstance"] as Batch);
+                new ViewModels.BatchInfoViewModel(ncontext.Parameters["ObjectInstance"] as Batch,
+                                                _aggregator,
+                                                _container);
             DataContext = viewModel;
         }
     }
