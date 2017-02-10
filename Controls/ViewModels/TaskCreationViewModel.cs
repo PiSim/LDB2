@@ -42,7 +42,16 @@ namespace Controls.ViewModels
                     output.SpecificationVersion = _selectedVersion;
                     output.Batch = _entities.GetBatchByNumber(_batchNumber);
                     
+                    foreach (RequirementWrapper req in _requirementList)
+                    {
+                        task_items temp = new task_items();
+                        temp.Requirement = req;
+                        output.task_items.Add(temp);
+                    }
+                    
                     _entities.Tasks.Add(output);
+                    _parentView.TaskInstance = output;
+                    _parentView.DialogResult = true;
                 },
                 () => IsValidInput
             );
