@@ -24,5 +24,12 @@
             </ListView.View>
         </ListView>
         
+        <Button Content="Nuovo"
+                Command="{Binding NewTaskCommand}"
+                Grid.Column="1"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Margin="0,0,0,0"/>
+                        
     </Grid>
 </UserControl>
