@@ -20,6 +20,12 @@ namespace DBManager
         public void Initialize()
         {
             _container.RegisterType<DBEntities>(new ContainerControlledLifetimeManager());
+            
+            _eventAggregator.GetEvent<Infrastructure.CommitRequested>()
+                .Subscribe(() =>
+                {
+                    _container.Resolve<DBEntities>().SaveChanges();
+                }, true);
 
         }
     }
