@@ -40,7 +40,7 @@ namespace Batches.ViewModels
                 () => 
                 {
                     ReportCreationDialog reportDialog = _container.Resolve<ReportCreationDialog>();
-                    if (reportDialog.ShowDialog == true)
+                    if (reportDialog.ShowDialog() == true)
                     {
                         SelectedReport = reportDialog.ReportInstance;
                         _openReport.Execute();
