@@ -1,4 +1,5 @@
 ﻿using DBManager;
+using Prism.Events;
 using Prism.Regions;
 using System;
 using System.Collections.Generic;
@@ -22,8 +23,13 @@ namespace Reports.Views
     /// </summary>
     public partial class ReportEditView : UserControl, INavigationAware
     {
-        public ReportEditView()
+        private DBEntities _entities;
+        private EventAggregator _eventAggregator;
+
+        public ReportEditView(DBEntities entities, EventAggregator aggregator)
         {
+            _entities = entities;
+            _eventAggregator = aggregator;
             InitializeComponent();
         }
 
@@ -41,7 +47,9 @@ namespace Reports.Views
         public void OnNavigatedTo(NavigationContext ncontext)
         {
             ViewModels.ReportEditViewModel viewModel =
-                new ViewModels.ReportEditViewModel(ncontext.Parameters["ObjectInstance"] as Report);
+                new ViewModels.ReportEditViewModel(_entities,
+                                                    _eventAggregator,
+                                                    ncontext.Parameters["ObjectInstance"] as Report);
             DataContext = viewModel;
         }
     }

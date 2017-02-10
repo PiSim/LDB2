@@ -16,7 +16,7 @@ namespace DBManager
     {
         public int ID { get; set; }
         public string full_name { get; set; }
-        public string hashed_password { get; set; }
+        public string HashedPassword { get; set; }
         public string role_list { get; set; }
         public string user_name { get; set; }
         public Nullable<int> personID { get; set; }

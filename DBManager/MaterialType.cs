@@ -20,7 +20,7 @@ namespace DBManager
             this.Constructions = new HashSet<Construction>();
         }
     
-        public long ID { get; private set; }
+        public int ID { get; private set; }
         public string Code { get; set; }
         public string Description { get; set; }
     

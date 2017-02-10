@@ -45,7 +45,6 @@ namespace Reports.ViewModels
                     ReportCreationDialog creationDialog = _container.Resolve<ReportCreationDialog>();
                     if (creationDialog.ShowDialog() == true)
                     {
-                        _entities.Reports.Add(creationDialog.ReportInstance);
                         ObjectNavigationToken token = new ObjectNavigationToken(creationDialog.ReportInstance, ViewNames.ReportEditView);
                         _eventAggregator.GetEvent<VisualizeObjectRequested>().Publish(token);
                     }

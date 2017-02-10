@@ -26,7 +26,7 @@ namespace DBManager
         private int aspectID { get; set; }
         private Nullable<int> projectID { get; set; }
         private Nullable<int> external_constructionID { get; set; }
-        public Nullable<long> typeID { get; set; }
+        public Nullable<int> TypeID { get; private set; }
     
         public virtual Aspect Aspect { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

@@ -17,13 +17,13 @@ namespace DBManager
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Task()
         {
-            this.task_items = new HashSet<task_items>();
+            this.TaskItems = new HashSet<task_items>();
         }
     
         public int ID { get; set; }
         public int RequesterID { get; private set; }
         public int projectID { get; set; }
-        public int specification_versionID { get; set; }
+        public int SpecificationVersionID { get; set; }
         public int batchID { get; set; }
         public string notes { get; set; }
         public Nullable<int> reportID { get; set; }
@@ -32,13 +32,14 @@ namespace DBManager
         public string PipelineOrder { get; set; }
         public Nullable<System.DateTime> start_date { get; set; }
         public Nullable<System.DateTime> end_date { get; set; }
-        public sbyte is_complete { get; set; }
+        public sbyte IsComplete { get; set; }
     
         public virtual Person Requester { get; set; }
         public virtual Project Project { get; set; }
         public virtual Report Report { get; set; }
-        public virtual SpecificationVersion specification_versions { get; set; }
+        public virtual SpecificationVersion SpecificationVersion { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<task_items> task_items { get; set; }
+        public virtual ICollection<task_items> TaskItems { get; set; }
+        public virtual Batch Batch { get; set; }
     }
 }

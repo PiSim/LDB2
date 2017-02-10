@@ -38,13 +38,14 @@ namespace Controls.ViewModels
                     temp.Batch = _entities.GetBatchByNumber(_batchNumber);
                     temp.Category = "TR";
                     temp.Description = _selectedSpecification.Description;
+                    temp.IsComplete = 0;
                     temp.Number = _number;
                     temp.SpecificationVersion = _selectedVersion;
                     temp.StartDate = DateTime.Now.ToShortDateString();
                     
                     _entities.GenerateTestList(temp, 
                                             _requirementList.Where(req => req.IsSelected).Select(req => req.Instance));
-                                        
+
                     _parentDialog.ReportInstance = temp;
                     _parentDialog.DialogResult = true;
                 },

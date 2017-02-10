@@ -22,12 +22,6 @@ namespace DBManager
         {
             _container.RegisterType<DBEntities>(new ContainerControlledLifetimeManager());
             
-            _eventAggregator.GetEvent<CommitRequested>()
-                .Subscribe(() =>
-                {
-                    _container.Resolve<DBEntities>().SaveChanges();
-                }, true);
-
         }
     }
 }

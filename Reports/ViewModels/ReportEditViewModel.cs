@@ -1,5 +1,7 @@
 ﻿using DBManager;
+using Infrastructure;
 using Prism.Commands;
+using Prism.Events;
 using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
@@ -13,16 +15,30 @@ namespace Reports.ViewModels
 {
     internal class ReportEditViewModel : BindableBase
     {
-        DelegateCommand _addFile, _openFile, _removeFile;
+        private DBEntities _entities;
+        private DelegateCommand _addFile, _openFile, _removeFile;
+        private EventAggregator _eventAggregator;
         Report _instance;
         List<Test> _testList;
         ReportFile _selectedFile;
         
-        public ReportEditViewModel(Report target) : base()
+        public ReportEditViewModel(DBEntities entities,
+                                    EventAggregator aggregator,
+                                    Report target) : base()
         {
-
+            _entities = entities;
+            _eventAggregator = aggregator;
             _instance = target;
+            _entities.Reports.Attach(_instance);
+            
             _testList = new List<Test>(_instance.Tests);
+
+
+            _eventAggregator.GetEvent<CommitRequested>()
+                .Subscribe(() =>
+                {
+                    _entities.SaveChanges();
+                }, true);
 
             _addFile = new DelegateCommand(
                 () =>

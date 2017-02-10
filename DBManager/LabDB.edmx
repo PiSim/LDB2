@@ -49,7 +49,7 @@
           <Property Name="aspectID" Type="int" Nullable="false" />
           <Property Name="projectID" Type="int" />
           <Property Name="external_constructionID" Type="int" />
-          <Property Name="typeID" Type="uint" />
+          <Property Name="typeID" Type="int" />
         </EntityType>
         <EntityType Name="external_constructions">
           <Key>
@@ -101,7 +101,7 @@
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="uint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="code" Type="char" MaxLength="4" Nullable="false" />
           <Property Name="description" Type="varchar" MaxLength="45" Nullable="false" />
         </EntityType>
@@ -422,6 +422,18 @@
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="samples">
+              <PropertyRef Name="batchID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="batch_to_task">
+          <End Role="batches" Type="Self.batches" Multiplicity="1" />
+          <End Role="tasks" Type="Self.tasks" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="batches">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="tasks">
               <PropertyRef Name="batchID" />
             </Dependent>
           </ReferentialConstraint>
@@ -929,9 +941,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="type_to_construction">
-          <End Role="material_types" Type="Self.material_types" Multiplicity="0..1">
-            <OnDelete Action="Cascade" />
-          </End>
+          <End Role="material_types" Type="Self.material_types" Multiplicity="0..1" />
           <End Role="constructions" Type="Self.constructions" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="material_types">
@@ -1003,6 +1013,10 @@
           <AssociationSet Name="batch_to_sample" Association="Self.batch_to_sample">
             <End Role="batches" EntitySet="batches" />
             <End Role="samples" EntitySet="samples" />
+          </AssociationSet>
+          <AssociationSet Name="batch_to_task" Association="Self.batch_to_task">
+            <End Role="batches" EntitySet="batches" />
+            <End Role="tasks" EntitySet="tasks" />
           </AssociationSet>
           <AssociationSet Name="batch_to_test" Association="Self.batch_to_test">
             <End Role="batches" EntitySet="batches" />
@@ -1206,6 +1220,7 @@
           <NavigationProperty Name="Reports" Relationship="Self.batch_to_report" FromRole="batches" ToRole="reports" />
           <NavigationProperty Name="Samples" Relationship="Self.batch_to_sample" FromRole="batches" ToRole="samples" />
           <NavigationProperty Name="Tests" Relationship="Self.batch_to_test" FromRole="batches" ToRole="tests" />
+          <NavigationProperty Name="tasks" Relationship="labdbModel.batch_to_task" FromRole="Batch" ToRole="Task" />
         </EntityType>
         <EntityType Name="Colour">
           <Key>
@@ -1230,7 +1245,7 @@
           <NavigationProperty Name="Materials" Relationship="Self.construction_to_material" FromRole="constructions" ToRole="materials" />
           <NavigationProperty Name="ExternalConstruction" Relationship="Self.external_construction" FromRole="constructions" ToRole="external_constructions" />
           <NavigationProperty Name="Project" Relationship="Self.project1" FromRole="constructions" ToRole="projects" />
-          <Property Name="typeID" Type="Int64" />
+          <Property Name="TypeID" Type="Int32" a:SetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="material_types" Relationship="labdbModel.type_to_construction" FromRole="Construction" ToRole="material_types" />
         </EntityType>
         <EntityType Name="ExternalConstruction">
@@ -1407,7 +1422,7 @@
           <NavigationProperty Name="Tasks" Relationship="Self.report_to_task" FromRole="reports" ToRole="tasks" />
           <NavigationProperty Name="Tests" Relationship="Self.report_to_test" FromRole="reports" ToRole="tests" />
           <NavigationProperty Name="SpecificationVersion" Relationship="Self.specversion_to_report" FromRole="reports" ToRole="specification_versions" />
-          <Property Name="is_complete" Type="SByte" Nullable="false" />
+          <Property Name="IsComplete" Type="SByte" Nullable="false" />
         </EntityType>
         <EntityType Name="Requirement">
           <Key>
@@ -1502,7 +1517,7 @@
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="SubrequirementID" Type="Int32" Nullable="false" a:SetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
-          <Property Name="Result" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Result" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" DefaultValue="" />
           <Property Name="testID" Type="Int32" Nullable="false" />
           <NavigationProperty Name="SubRequirement" Relationship="Self.sub_requirement" FromRole="sub_tests" ToRole="sub_requirements" />
           <NavigationProperty Name="Test" Relationship="Self.test1" FromRole="sub_tests" ToRole="tests" />
@@ -1514,7 +1529,7 @@
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="RequesterID" Type="Int32" Nullable="false" a:SetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <Property Name="projectID" Type="Int32" Nullable="false" />
-          <Property Name="specification_versionID" Type="Int32" Nullable="false" />
+          <Property Name="SpecificationVersionID" Type="Int32" Nullable="false" />
           <Property Name="batchID" Type="Int32" Nullable="false" />
           <Property Name="notes" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
           <Property Name="reportID" Type="Int32" />
@@ -1524,11 +1539,12 @@
           <NavigationProperty Name="Requester" Relationship="Self.requester_to_task" FromRole="tasks" ToRole="people" />
           <NavigationProperty Name="Project" Relationship="Self.project_to_task" FromRole="tasks" ToRole="projects" />
           <NavigationProperty Name="Report" Relationship="Self.report_to_task" FromRole="tasks" ToRole="reports" />
-          <NavigationProperty Name="specification_versions" Relationship="Self.specversion_to_task" FromRole="tasks" ToRole="specification_versions" />
+          <NavigationProperty Name="SpecificationVersion" Relationship="Self.specversion_to_task" FromRole="tasks" ToRole="specification_versions" />
           <Property Name="start_date" Type="DateTime" />
           <Property Name="end_date" Type="DateTime" />
-          <Property Name="is_complete" Type="SByte" Nullable="false" />
-          <NavigationProperty Name="task_items" Relationship="labdbModel.task_to_item" FromRole="Task" ToRole="task_items" />
+          <Property Name="IsComplete" Type="SByte" Nullable="false" />
+          <NavigationProperty Name="TaskItems" Relationship="labdbModel.task_to_item" FromRole="Task" ToRole="task_items" />
+          <NavigationProperty Name="Batch" Relationship="labdbModel.batch_to_task" FromRole="Task" ToRole="Batch" />
         </EntityType>
         <EntityType Name="Test">
           <Key>
@@ -1555,7 +1571,7 @@
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="full_name" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="hashed_password" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="HashedPassword" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="role_list" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="user_name" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="personID" Type="Int32" />
@@ -1993,7 +2009,7 @@
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="tasks">
-              <PropertyRef Name="specification_versionID" />
+              <PropertyRef Name="SpecificationVersionID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2261,6 +2277,10 @@
             <End Role="Task" EntitySet="Tasks" />
             <End Role="task_items" EntitySet="task_items" />
           </AssociationSet>
+          <AssociationSet Name="batch_to_task" Association="labdbModel.batch_to_task">
+            <End Role="Batch" EntitySet="Batches" />
+            <End Role="Task" EntitySet="Tasks" />
+          </AssociationSet>
         </EntityContainer>
         <Association Name="overridden_to_requirement">
           <End Type="labdbModel.Requirement" Role="Requirement" Multiplicity="0..1">
@@ -2292,7 +2312,7 @@
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" a:SetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" a:SetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <Property Name="Code" Type="String" Nullable="false" MaxLength="4" FixedLength="false" Unicode="false" />
           <Property Name="Description" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Constructions" Relationship="labdbModel.type_to_construction" FromRole="material_types" ToRole="Construction" />
@@ -2307,7 +2327,7 @@
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="Construction">
-              <PropertyRef Name="typeID" />
+              <PropertyRef Name="TypeID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2434,6 +2454,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="batch_to_task">
+          <End Type="labdbModel.Batch" Role="Batch" Multiplicity="1" />
+          <End Type="labdbModel.Task" Role="Task" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Batch">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Task">
+              <PropertyRef Name="batchID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2481,7 +2513,7 @@
           <EntitySetMapping Name="Constructions">
             <EntityTypeMapping TypeName="labdbModel.Construction">
               <MappingFragment StoreEntitySet="constructions">
-                <ScalarProperty Name="typeID" ColumnName="typeID" />
+                <ScalarProperty Name="TypeID" ColumnName="typeID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Type" ColumnName="type" />
                 <ScalarProperty Name="Line" ColumnName="line" />
@@ -2624,7 +2656,7 @@
           <EntitySetMapping Name="Reports">
             <EntityTypeMapping TypeName="labdbModel.Report">
               <MappingFragment StoreEntitySet="reports">
-                <ScalarProperty Name="is_complete" ColumnName="is_complete" />
+                <ScalarProperty Name="IsComplete" ColumnName="is_complete" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="AuthorID" ColumnName="authorID" />
                 <ScalarProperty Name="BatchID" ColumnName="batchID" />
@@ -2725,13 +2757,13 @@
           <EntitySetMapping Name="Tasks">
             <EntityTypeMapping TypeName="labdbModel.Task">
               <MappingFragment StoreEntitySet="tasks">
-                <ScalarProperty Name="is_complete" ColumnName="is_complete" />
+                <ScalarProperty Name="IsComplete" ColumnName="is_complete" />
                 <ScalarProperty Name="end_date" ColumnName="end_date" />
                 <ScalarProperty Name="start_date" ColumnName="start_date" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="RequesterID" ColumnName="requesterID" />
                 <ScalarProperty Name="projectID" ColumnName="projectID" />
-                <ScalarProperty Name="specification_versionID" ColumnName="specification_versionID" />
+                <ScalarProperty Name="SpecificationVersionID" ColumnName="specification_versionID" />
                 <ScalarProperty Name="batchID" ColumnName="batchID" />
                 <ScalarProperty Name="notes" ColumnName="notes" />
                 <ScalarProperty Name="reportID" ColumnName="reportID" />
@@ -2761,7 +2793,7 @@
               <MappingFragment StoreEntitySet="users">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="full_name" ColumnName="full_name" />
-                <ScalarProperty Name="hashed_password" ColumnName="hashed_password" />
+                <ScalarProperty Name="HashedPassword" ColumnName="hashed_password" />
                 <ScalarProperty Name="role_list" ColumnName="role_list" />
                 <ScalarProperty Name="user_name" ColumnName="user_name" />
                 <ScalarProperty Name="personID" ColumnName="personID" />

@@ -81,7 +81,17 @@ namespace Batches.ViewModels
 
         public Project Project
         {
-            get { return _instance.Material.Construction.Project; }
+            get
+            {
+                try
+                {
+                    return _instance.Material.Construction.Project;
+                }
+                catch
+                {
+                    return null;
+                }
+            }
         }
 
         public List<SamplesWrapper> Samples

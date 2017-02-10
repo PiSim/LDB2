@@ -33,7 +33,7 @@ namespace DBManager
         public int SpecificationVersionID { get; private set; }
         public string StartDate { get; set; }
         private string requestID { get; set; }
-        public sbyte is_complete { get; set; }
+        public sbyte IsComplete { get; set; }
     
         public virtual Batch Batch { get; set; }
         public virtual Person Author { get; set; }

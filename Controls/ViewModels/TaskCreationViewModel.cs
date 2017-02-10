@@ -38,14 +38,14 @@ namespace Controls.ViewModels
                 {
                     Task output = new Task();
                     output.Requester = _requester;
-                    output.specification_versions = _selectedVersion;
-                    //output.batch = _entities.GetBatchByNumber(_batchNumber);
+                    output.SpecificationVersion = _selectedVersion;
+                    output.Batch = _entities.GetBatchByNumber(_batchNumber);
                     
                     foreach (RequirementWrapper req in _requirementList)
                     {
                         task_items temp = new task_items();
                         temp.requirement = req.Instance;
-                        output.task_items.Add(temp);
+                        output.TaskItems.Add(temp);
                     }
                     
                     _entities.Tasks.Add(output);

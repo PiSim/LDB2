@@ -14,6 +14,12 @@ namespace DBManager
     
     public partial class SubTest
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public SubTest()
+        {
+            this.Result = "";
+        }
+    
         public int ID { get; set; }
         public int SubrequirementID { get; private set; }
         public string Result { get; set; }
