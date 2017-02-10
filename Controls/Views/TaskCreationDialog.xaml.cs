@@ -23,7 +23,7 @@ namespace Controls.Views
         
         public TaskCreationDialog(DBEntities entities)
         {
-            DataContext = new ViewModels.TaskCreationViewModel(entitites, this);
+            DataContext = new ViewModels.TaskCreationViewModel(entities, this);
             InitializeComponent();
         }
         
