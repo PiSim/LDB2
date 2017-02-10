@@ -1,4 +1,5 @@
-﻿using Microsoft.Practices.Unity;
+﻿using Infrastructure;
+using Microsoft.Practices.Unity;
 using Prism.Events;
 using Prism.Modularity;
 using Prism.Regions;
@@ -21,7 +22,7 @@ namespace DBManager
         {
             _container.RegisterType<DBEntities>(new ContainerControlledLifetimeManager());
             
-            _eventAggregator.GetEvent<Infrastructure.CommitRequested>()
+            _eventAggregator.GetEvent<CommitRequested>()
                 .Subscribe(() =>
                 {
                     _container.Resolve<DBEntities>().SaveChanges();
