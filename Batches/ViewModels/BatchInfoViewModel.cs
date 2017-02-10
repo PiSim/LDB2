@@ -1,4 +1,4 @@
-﻿using Controls;
+﻿using Controls.Views;
 using DBManager;
 using Infrastructure;
 using Microsoft.Practices.Unity;
