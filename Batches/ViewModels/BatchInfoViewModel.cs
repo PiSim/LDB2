@@ -1,6 +1,7 @@
 ﻿using Controls;
 using DBManager;
 using Infrastructure;
+using Microsoft.Practices.Unity;
 using Reports;
 using Prism.Commands;
 using Prism.Events;
