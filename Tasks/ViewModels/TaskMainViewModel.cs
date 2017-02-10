@@ -1,4 +1,5 @@
 ﻿using DBManager;
+using Controls.Views;
 using Microsoft.Practices.Unity;
 using Prism.Commands;
 using Prism.Events;
