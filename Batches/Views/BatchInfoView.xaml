@@ -147,7 +147,7 @@
                 <Button Content="Apri" Command="{Binding Path=OpenReportCommand}"
                             HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,0,0"/>
                 <Button Content="Crea Nuovo" 
-                        Command="{Binding Path=CreateReportCommand}"
+                        Command="{Binding Path=NewReportCommand}"
                         HorizontalAlignment="Right"
                         VerticalAlignment="Top"
                         Margin="0,25,0,0"/>
