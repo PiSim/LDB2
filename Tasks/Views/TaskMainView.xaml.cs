@@ -1,4 +1,5 @@
 ﻿using DBManager;
+using Microsoft.Practices.Unity;
 using Prism.Events;
 using System;
 using System.Collections.Generic;
@@ -20,9 +21,11 @@ namespace Tasks.Views
 
     public partial class TaskMainView : UserControl
     {
-        public TaskMainView(DBEntities entities, EventAggregator aggregator)
+        public TaskMainView(DBEntities entities, 
+                            EventAggregator aggregator,
+                            UnityContainer container)
         {
-            DataContext = new ViewModels.TaskMainViewModel(entities, aggregator);
+            DataContext = new ViewModels.TaskMainViewModel(entities, aggregator, container);
             InitializeComponent();
         }
     }
