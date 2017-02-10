@@ -27,6 +27,26 @@ namespace Controls.ViewModels
         {
             _entities = entities;
             _parentView = parentView;
+            
+            _cancel = new DelegateCommand(
+                () => 
+                {
+                    _parentView.DialogResult = false;
+                } );
+            
+            _confirm = new DelegateCommand(
+                () => 
+                {
+                    Task output = new Task();
+                    output.Requester = _requester;
+                    output.SpecificationVersion = _selectedVersion;
+                    output.Batch = _entities.GetBatchByNumber(_batchNumber);
+                    
+                    _entities.Tasks.Add(output);
+                },
+                () => IsValidInput
+            );
+            
         }
 
 
