@@ -1,6 +1,7 @@
 ﻿using Controls.Dialogs;
 using DBManager;
 using Infrastructure;
+using Infrastructure.Events;
 using Microsoft.Practices.Unity;
 using Reports;
 using Prism.Commands;
@@ -88,7 +89,7 @@ namespace Batches.ViewModels
             get { return _samplesList; }
         }
 
-        public ObservableCollection<DBManager.Report> Reports
+        public ObservableCollection<DBManager.Report> ReportList
         {
             get { return new ObservableCollection<Report>(_instance.Reports); }
         }
