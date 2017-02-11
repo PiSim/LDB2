@@ -1,5 +1,4 @@
-﻿using Infrastructure;
-using Microsoft.Practices.Unity;
+﻿using Microsoft.Practices.Unity;
 using Prism.Events;
 using Prism.Modularity;
 using Prism.Regions;

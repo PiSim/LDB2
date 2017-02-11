@@ -108,6 +108,7 @@
     <Compile Include="RequirementWrapper.cs" />
     <Compile Include="ViewModels\MaterialCreationViewModel.cs" />
     <Compile Include="ViewModels\MethodPickerViewModel.cs" />
+    <Compile Include="ViewModels\ProjectPickerViewModel.cs" />
     <Compile Include="ViewModels\ReportCreationViewModel.cs" />
     <Compile Include="ViewModels\StatusBarViewModel.cs" />
     <Compile Include="ViewModels\TaskCreationViewModel.cs" />

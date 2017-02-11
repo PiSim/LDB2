@@ -2268,14 +2268,14 @@
             <End Role="Method" EntitySet="Methods" />
             <End Role="method_measurements" EntitySet="MethodMeasurement" />
           </AssociationSet>
-          <EntitySet Name="task_items" EntityType="labdbModel.task_items" />
+          <EntitySet Name="TaskItems" EntityType="labdbModel.TaskItem" />
           <AssociationSet Name="requirement_to_task_item" Association="labdbModel.requirement_to_task_item">
             <End Role="Requirement" EntitySet="Requirements" />
-            <End Role="task_items" EntitySet="task_items" />
+            <End Role="task_items" EntitySet="TaskItems" />
           </AssociationSet>
           <AssociationSet Name="task_to_item" Association="labdbModel.task_to_item">
             <End Role="Task" EntitySet="Tasks" />
-            <End Role="task_items" EntitySet="task_items" />
+            <End Role="task_items" EntitySet="TaskItems" />
           </AssociationSet>
           <AssociationSet Name="batch_to_task" Association="labdbModel.batch_to_task">
             <End Role="Batch" EntitySet="Batches" />
@@ -2418,7 +2418,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="task_items">
+        <EntityType Name="TaskItem">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
@@ -2430,7 +2430,7 @@
         </EntityType>
         <Association Name="requirement_to_task_item">
           <End Type="labdbModel.Requirement" Role="Requirement" Multiplicity="1" />
-          <End Type="labdbModel.task_items" Role="task_items" Multiplicity="*" />
+          <End Type="labdbModel.TaskItem" Role="task_items" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Requirement">
               <PropertyRef Name="ID" />
@@ -2444,7 +2444,7 @@
           <End Type="labdbModel.Task" Role="Task" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Type="labdbModel.task_items" Role="task_items" Multiplicity="*" />
+          <End Type="labdbModel.TaskItem" Role="task_items" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Task">
               <PropertyRef Name="ID" />
@@ -2829,8 +2829,8 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="task_items">
-            <EntityTypeMapping TypeName="labdbModel.task_items">
+          <EntitySetMapping Name="TaskItems">
+            <EntityTypeMapping TypeName="labdbModel.TaskItem">
               <MappingFragment StoreEntitySet="task_items">
                 <ScalarProperty Name="requirementID" ColumnName="requirementID" />
                 <ScalarProperty Name="taskID" ColumnName="taskID" />

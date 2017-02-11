@@ -43,7 +43,7 @@ namespace Controls.ViewModels
                     
                     foreach (RequirementWrapper req in _requirementList)
                     {
-                        task_items temp = new task_items();
+                        TaskItem temp = new TaskItem();
                         temp.requirement = req.Instance;
                         output.TaskItems.Add(temp);
                     }

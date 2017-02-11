@@ -151,6 +151,10 @@
       <Project>{c432c3be-1051-45f1-95a1-9397bbf35923}</Project>
       <Name>Infrastructure</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Materials\Materials.csproj">
+      <Project>{b6863f10-adc1-4f0c-987b-8aca2db14b0f}</Project>
+      <Name>Materials</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Navigation\Navigation.csproj">
       <Project>{31368a5f-9770-4198-bc3d-4996917b4139}</Project>
       <Name>Navigation</Name>

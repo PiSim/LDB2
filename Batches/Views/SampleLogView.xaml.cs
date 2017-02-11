@@ -21,10 +21,10 @@ namespace Batches.Views
     public partial class SampleLogView : UserControl
     {
         public SampleLogView(DBManager.DBEntities entities, 
-                            IEventAggregator eventAggregator,
+                            Materials.MaterialServiceProvider materialServiceProvider,
                             IUnityContainer container)
         {
-            DataContext = new ViewModels.SampleLogViewModel(entities, eventAggregator, container);
+            DataContext = new ViewModels.SampleLogViewModel(entities, materialServiceProvider, container);
             InitializeComponent();
         }
     }

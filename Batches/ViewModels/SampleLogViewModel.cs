@@ -1,9 +1,9 @@
 ﻿using Controls.Views;
 using DBManager;
 using Infrastructure;
+using Materials;
 using Microsoft.Practices.Unity;
 using Prism.Commands;
-using Prism.Events;
 using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
@@ -18,14 +18,15 @@ namespace Batches.ViewModels
         private Batch _currentBatch;
         private DBEntities _entities;
         private DelegateCommand _continue, _saveLogEntry;
-        private IEventAggregator _eventAggregator;
         private IUnityContainer _container;
         private List<Tuple<string, string>> _actions;
+        private MaterialServiceProvider _materialServiceProvider;
         private string _batchNumber;
         private Tuple<string, string> _selectedAction;
 
-        public SampleLogViewModel(DBEntities entities, IEventAggregator eventAggregator,
-                IUnityContainer container) : base()
+        public SampleLogViewModel(DBEntities entities,
+                                MaterialServiceProvider materialServiceProvider,
+                                IUnityContainer container) : base()
         {
             _actions = new List<Tuple<string, string>>()
             {
@@ -38,7 +39,6 @@ namespace Batches.ViewModels
 
             _container = container;
             _entities = entities;
-            _eventAggregator = eventAggregator;
 
             _continue = new DelegateCommand(
                 () =>
@@ -46,12 +46,10 @@ namespace Batches.ViewModels
                     _currentBatch = _entities.GetBatchByNumber(_batchNumber);
                     if (_currentBatch.Material == null)
                     {
-                        MaterialCreationDialog matDialog = _container.Resolve<MaterialCreationDialog>();
-                        if (matDialog.ShowDialog() == true)
-                            _currentBatch.Material = matDialog.ValidatedMaterial;
+                        _currentBatch.Material = _materialServiceProvider.CreateNewMaterial();
                     }
                     _entities.CreateSampleForBatch(_currentBatch, SelectedAction.Item2);
-                    _eventAggregator.GetEvent<CommitRequested>().Publish();
+                    _entities.SaveChanges();
                     Clear();
                 });
 

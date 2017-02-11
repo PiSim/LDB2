@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DBManager;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,9 +20,18 @@ namespace Controls.Views
     /// </summary>
     public partial class ProjectPickerDialog : Window
     {
-        public ProjectPickerDialog()
+        private Project _projectInstance;
+
+        public ProjectPickerDialog(DBEntities entities)
         {
+            DataContext = new ViewModels.ProjectPickerViewModel(entities, this);
             InitializeComponent();
+        }
+
+        public Project ProjectInstance
+        {
+            get { return _projectInstance; }
+            set { _projectInstance = value; }
         }
     }
 }

@@ -223,7 +223,7 @@
     <Compile Include="Task.cs">
       <DependentUpon>LabDB.tt</DependentUpon>
     </Compile>
-    <Compile Include="task_items.cs">
+    <Compile Include="TaskItem.cs">
       <DependentUpon>LabDB.tt</DependentUpon>
     </Compile>
     <Compile Include="Test.cs">
@@ -267,12 +267,6 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Infrastructure\Infrastructure.csproj">
-      <Project>{c432c3be-1051-45f1-95a1-9397bbf35923}</Project>
-      <Name>Infrastructure</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

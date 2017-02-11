@@ -5,8 +5,40 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Controls.Views"
         mc:Ignorable="d"
-        Title="ProjectPickerDialog" Height="300" Width="300">
+        Title="Selezione Progetto" Height="100" Width="300">
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
         
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <ComboBox ItemsSource="{Binding ProjectList}"
+                  SelectedItem="{Binding SelectedProject, Mode=TwoWay}"
+                  DisplayMemberPath="Name"
+                  Grid.Column="0"
+                  Grid.ColumnSpan="3"
+                  Grid.Row="0"
+                  Margin="5">
+            
+        </ComboBox>
+
+        <Button Content="Salta"
+                Command="{Binding}"
+                Grid.Column="1"
+                Grid.Row="1"
+                Margin="5"/>
+
+        <Button Content="OK"
+                Command="{Binding ConfirmCommand}"
+                Grid.Column="2"
+                Grid.Row="1"
+                Margin="5"/>
+
     </Grid>
 </Window>

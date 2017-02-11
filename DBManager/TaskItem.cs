@@ -12,7 +12,7 @@ namespace DBManager
     using System;
     using System.Collections.Generic;
     
-    public partial class task_items
+    public partial class TaskItem
     {
         public int ID { get; set; }
         public int taskID { get; set; }

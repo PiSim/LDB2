@@ -1,6 +1,5 @@
 ﻿using DBManager;
 using Prism.Commands;
-using Prism.Events;
 using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
@@ -74,9 +73,15 @@ namespace Specifications.ViewModels
         private Specification _instance;
         private SpecificationVersion _selectedVersion;
 
-        internal SpecificationEditViewModel(DBEntities entities, Specification instance) 
+        internal SpecificationEditViewModel(DBEntities entities,
+                                            Specification instance) 
             : base()
         {
+            _requirementList = new ObservableCollection<RequirementWrapper>();
+            _instance = instance;
+            _entities = entities;
+            _entities.Specifications.Attach(_instance);
+
             _addTest = new DelegateCommand(
                 () =>
                 {
@@ -93,10 +98,6 @@ namespace Specifications.ViewModels
                 },
 
                 () => _selectedToRemove != null);
-
-            _requirementList = new ObservableCollection<RequirementWrapper>();
-            _instance = instance;
-            _entities = entities;
         }
 
         public DelegateCommand AddTestCommand

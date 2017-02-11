@@ -1,4 +1,5 @@
 ﻿using DBManager;
+using Prism.Events;
 using Prism.Regions;
 using System;
 using System.Collections.Generic;
@@ -23,10 +24,20 @@ namespace Specifications.Views
     public partial class SpecificationEditView : UserControl, INavigationAware
     {
         private DBEntities _entities;
+        private EventAggregator _eventAggregator;
 
-        public SpecificationEditView(DBEntities entities)
+        public SpecificationEditView(DBEntities entities,
+                                    EventAggregator aggregator)
         {
+            _eventAggregator = aggregator;
             _entities = entities;
+
+            _eventAggregator.GetEvent<Infrastructure.CommitRequested>().Subscribe(
+                () =>
+                {
+                    _entities.SaveChanges();
+                });
+
             InitializeComponent();
         }
         

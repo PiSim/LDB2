@@ -17,7 +17,7 @@ namespace DBManager
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Task()
         {
-            this.TaskItems = new HashSet<task_items>();
+            this.TaskItems = new HashSet<TaskItem>();
         }
     
         public int ID { get; set; }
@@ -39,7 +39,7 @@ namespace DBManager
         public virtual Report Report { get; set; }
         public virtual SpecificationVersion SpecificationVersion { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<task_items> TaskItems { get; set; }
+        public virtual ICollection<TaskItem> TaskItems { get; set; }
         public virtual Batch Batch { get; set; }
     }
 }
