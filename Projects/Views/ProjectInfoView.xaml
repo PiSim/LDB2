@@ -82,7 +82,7 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
 
-                            <ListView ItemsSource="{Binding Path=CurrentInstance.ReportList}"
+                            <ListView ItemsSource="{Binding Path=ReportList}"
                                       SelectedItem="{Binding Path=SelectedReport, Mode=TwoWay}"
                                       Grid.Column="0">
                                 <ListView.View>
@@ -113,7 +113,7 @@
                                 <ColumnDefinition/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-                            <ListView ItemsSource="{Binding Path=CurrentInstance.ExternalReportList}"
+                            <ListView ItemsSource="{Binding Path=ExternalReportList}"
                                       SelectedItem="{Binding Path=SelectedExternalReport, Mode=TwoWay}"
                                       Grid.Column="0">
                                 <ListView.View>
@@ -126,7 +126,7 @@
                                 </ListView.View>
                             </ListView>
                             <Button Content="Apri"
-                                    Command="{Binding Path=OpenExternalReportCommand}"
+                                    Command="{Binding Path=OpenExternalCommand}"
                                     Grid.Column="1"
                                     HorizontalAlignment="Right"
                                     VerticalAlignment="Top"    
@@ -146,7 +146,7 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
 
-                            <ListView ItemsSource="{Binding Path=CurrentInstance.RequestList}"
+                            <ListView ItemsSource="{Binding Path=TaskList}"
                                       SelectedItem="{Binding Path=SelectedRequest}">
                                 <ListView.View>
                                     <GridView>

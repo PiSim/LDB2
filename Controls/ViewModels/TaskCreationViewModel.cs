@@ -49,6 +49,7 @@ namespace Controls.ViewModels
                     }
                     
                     _entities.Tasks.Add(output);
+                    _entities.SaveChanges();
                     _parentView.TaskInstance = output;
                     _parentView.DialogResult = true;
                 },

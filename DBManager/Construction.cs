@@ -23,9 +23,9 @@ namespace DBManager
         public int ID { get; set; }
         public string Type { get; set; }
         public string Line { get; set; }
-        private int aspectID { get; set; }
-        private Nullable<int> projectID { get; set; }
-        private Nullable<int> external_constructionID { get; set; }
+        public int AspectID { get; private set; }
+        public Nullable<int> ProjectID { get; private set; }
+        public Nullable<int> ExternalConstructionID { get; private set; }
         public Nullable<int> TypeID { get; private set; }
     
         public virtual Aspect Aspect { get; set; }

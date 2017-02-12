@@ -5,7 +5,7 @@ using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
 using System;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,7 +17,6 @@ namespace Tasks.ViewModels
         private DBEntities _entities;
         private DelegateCommand _newTask;
         private EventAggregator _eventAggregator;
-        private ObservableCollection<DBManager.Task> _taskList;
         private UnityContainer _container;
 
         internal TaskMainViewModel(DBEntities entities, 
@@ -28,7 +27,6 @@ namespace Tasks.ViewModels
             _container = container;
             _entities = entities;
             _eventAggregator = eventAggregator;
-            _taskList = new ObservableCollection<DBManager.Task>(_entities.Tasks);
             
             _newTask = new DelegateCommand(
                 () => 
@@ -36,14 +34,14 @@ namespace Tasks.ViewModels
                     TaskCreationDialog taskDialog = _container.Resolve<TaskCreationDialog>();
                     if (taskDialog.ShowDialog() == true)
                     {
-                        
+                        OnPropertyChanged("TaskList");
                     }
                 } );
         }
         
-        public ObservableCollection<DBManager.Task> TaskList
+        public List<DBManager.Task> TaskList
         {
-            get { return _taskList; }
+            get { return new List<DBManager.Task>(); }
         }
     }
 }

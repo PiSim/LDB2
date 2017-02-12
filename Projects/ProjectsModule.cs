@@ -20,6 +20,8 @@ namespace Projects
         {
             _container.RegisterType<Object, Views.ProjectMainView>
                 (ProjectsViewNames.ProjectMainView);
+            _container.RegisterType<Object, Views.ProjectInfoView>
+                (ProjectsViewNames.ProjectInfoView);
 
             _regionManager.RegisterViewWithRegion
                 (Navigation.RegionNames.MainNavigationRegion , typeof(Views.ProjectsNavigationItem));

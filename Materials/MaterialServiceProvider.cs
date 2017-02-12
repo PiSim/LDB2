@@ -32,11 +32,25 @@ namespace Materials
                         output.Construction.Project = prjDialog.ProjectInstance;
                 }
 
+                if (output.Recipe.Colour == null)
+                    output.Recipe.Colour = PickColourForRecipe();
+
                 return output;
             }
 
             else
                 return null;
         }
+
+        public Colour PickColourForRecipe()
+        {
+            ColorPickerDialog colourPicker = _container.Resolve<ColorPickerDialog>();
+
+            if (colourPicker.ShowDialog() == true)
+                return colourPicker.ColourInstance;
+
+            else
+                return null;
+        } 
     }
 }

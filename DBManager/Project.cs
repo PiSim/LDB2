@@ -25,8 +25,8 @@ namespace DBManager
         public int ID { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        private Nullable<int> project_leaderID { get; set; }
-        private Nullable<int> oemID { get; set; }
+        public Nullable<int> ProjectLeaderD { get; private set; }
+        public Nullable<int> OemID { get; private set; }
         public int TotalInternalCost { get; set; }
         public double TotalExternalCost { get; set; }
     

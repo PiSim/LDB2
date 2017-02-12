@@ -106,6 +106,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="RequirementWrapper.cs" />
+    <Compile Include="ViewModels\ColorPickerViewModel.cs" />
     <Compile Include="ViewModels\MaterialCreationViewModel.cs" />
     <Compile Include="ViewModels\MethodPickerViewModel.cs" />
     <Compile Include="ViewModels\ProjectPickerViewModel.cs" />

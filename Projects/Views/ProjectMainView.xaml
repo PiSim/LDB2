@@ -20,11 +20,11 @@
                     <GridViewColumn Header="Progetto"
                                     DisplayMemberBinding="{Binding Name}"/>
                     <GridViewColumn Header="OEM"
-                                    DisplayMemberBinding="{Binding Organization.Name}"/>
+                                    DisplayMemberBinding="{Binding Oem.Name}"/>
                     <GridViewColumn Header="Descrizione"
                                     DisplayMemberBinding="{Binding Description}"/>
                     <GridViewColumn Header="Capo Progetto"
-                                    DisplayMemberBinding="{Binding ProjectLeader.Name}"/>
+                                    DisplayMemberBinding="{Binding Leader.Name}"/>
                 </GridView>
             </ListView.View>
         </ListView>

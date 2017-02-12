@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DBManager;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,9 +20,18 @@ namespace Controls.Views
     /// </summary>
     public partial class ColorPickerDialog : Window
     {
-        public ColorPickerDialog()
+        private Colour _colourInstance;
+        
+        public ColorPickerDialog(DBEntities entities)
         {
+            DataContext = new ViewModels.ColorPickerViewModel(entities, this);
             InitializeComponent();
         }
+
+        public Colour ColourInstance
+        {
+            get { return _colourInstance; }
+            set { _colourInstance = value; }
+        } 
     }
 }

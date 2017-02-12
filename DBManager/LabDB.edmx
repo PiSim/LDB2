@@ -1238,9 +1238,9 @@
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Type" Type="String" MaxLength="4" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Line" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="aspectID" Type="Int32" Nullable="false" a:GetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:SetterAccess="Private" />
-          <Property Name="projectID" Type="Int32" a:GetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:SetterAccess="Private" />
-          <Property Name="external_constructionID" Type="Int32" a:GetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:SetterAccess="Private" />
+          <Property Name="AspectID" Type="Int32" Nullable="false" a:GetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:SetterAccess="Private" />
+          <Property Name="ProjectID" Type="Int32" a:GetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:SetterAccess="Private" />
+          <Property Name="ExternalConstructionID" Type="Int32" a:GetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:SetterAccess="Private" />
           <NavigationProperty Name="Aspect" Relationship="Self.aspect1" FromRole="constructions" ToRole="aspects" />
           <NavigationProperty Name="Materials" Relationship="Self.construction_to_material" FromRole="constructions" ToRole="materials" />
           <NavigationProperty Name="ExternalConstruction" Relationship="Self.external_construction" FromRole="constructions" ToRole="external_constructions" />
@@ -1361,8 +1361,8 @@
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" a:GetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:SetterAccess="Public" />
           <Property Name="Description" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" a:GetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:SetterAccess="Public" />
-          <Property Name="project_leaderID" Type="Int32" a:GetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:SetterAccess="Private" />
-          <Property Name="oemID" Type="Int32" a:SetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:GetterAccess="Private" />
+          <Property Name="ProjectLeaderD" Type="Int32" a:GetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:SetterAccess="Private" />
+          <Property Name="OemID" Type="Int32" a:SetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:GetterAccess="Public" />
           <Property Name="TotalInternalCost" Type="Int32" Nullable="false" />
           <Property Name="TotalExternalCost" Type="Double" Nullable="false" />
           <NavigationProperty Name="Constructions" Relationship="Self.project1" FromRole="projects" ToRole="constructions" />
@@ -1585,7 +1585,7 @@
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="constructions">
-              <PropertyRef Name="aspectID" />
+              <PropertyRef Name="AspectID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1697,7 +1697,7 @@
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="constructions">
-              <PropertyRef Name="external_constructionID" />
+              <PropertyRef Name="ExternalConstructionID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1709,7 +1709,7 @@
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="constructions">
-              <PropertyRef Name="projectID" />
+              <PropertyRef Name="ProjectID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1833,7 +1833,7 @@
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="projects">
-              <PropertyRef Name="oemID" />
+              <PropertyRef Name="OemID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1869,7 +1869,7 @@
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="projects">
-              <PropertyRef Name="project_leaderID" />
+              <PropertyRef Name="ProjectLeaderD" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2517,9 +2517,9 @@
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Type" ColumnName="type" />
                 <ScalarProperty Name="Line" ColumnName="line" />
-                <ScalarProperty Name="aspectID" ColumnName="aspectID" />
-                <ScalarProperty Name="projectID" ColumnName="projectID" />
-                <ScalarProperty Name="external_constructionID" ColumnName="external_constructionID" />
+                <ScalarProperty Name="AspectID" ColumnName="aspectID" />
+                <ScalarProperty Name="ProjectID" ColumnName="projectID" />
+                <ScalarProperty Name="ExternalConstructionID" ColumnName="external_constructionID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -2618,8 +2618,8 @@
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Name" ColumnName="name" />
                 <ScalarProperty Name="Description" ColumnName="description" />
-                <ScalarProperty Name="project_leaderID" ColumnName="project_leaderID" />
-                <ScalarProperty Name="oemID" ColumnName="oemID" />
+                <ScalarProperty Name="ProjectLeaderD" ColumnName="project_leaderID" />
+                <ScalarProperty Name="OemID" ColumnName="oemID" />
                 <ScalarProperty Name="TotalInternalCost" ColumnName="total_internal_cost" />
                 <ScalarProperty Name="TotalExternalCost" ColumnName="total_external_cost" />
               </MappingFragment>

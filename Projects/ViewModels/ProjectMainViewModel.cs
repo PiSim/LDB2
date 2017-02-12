@@ -1,4 +1,6 @@
 ﻿using DBManager;
+using Infrastructure;
+using Infrastructure.Events;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
@@ -24,7 +26,11 @@ namespace Projects.ViewModels
             _entities = entities;
             _eventAggregator = aggregator;
             _openProject = new DelegateCommand(
-                () => {}
+                () => 
+                {
+                    ObjectNavigationToken token = new ObjectNavigationToken(_selectedProject, ProjectsViewNames.ProjectInfoView);
+                    _eventAggregator.GetEvent<VisualizeObjectRequested>().Publish(token);
+                }
             );
             
             _projectList = new ObservableCollection<Project>(_entities.Projects);
