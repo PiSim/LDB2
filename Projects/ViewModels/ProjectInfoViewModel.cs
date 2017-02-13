@@ -70,7 +70,7 @@ namespace Projects.ViewModels
                 {
                     UnassignedConstructions.Add(_selectedAssigned);
                     AssignedConstructions.Remove(_selectedAssigned);
-                    _projectInstance.Constructions.Remove(_selectedAssigned);
+                    _entities.SaveChanges();
                     SelectedAssigned = null;
                 },
                 () => _selectedAssigned != null
