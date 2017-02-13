@@ -46,6 +46,7 @@ namespace Projects.ViewModels
                 {
                     AssignedConstructions.Add(_selectedUnassigned);
                     UnassignedConstructions.Remove(_selectedUnassigned);
+                    _projectInstance.Constructions.Add(_selectedUnassigned);
                     _entities.SaveChanges();
                     SelectedUnassigned = null;
                 },
@@ -70,6 +71,7 @@ namespace Projects.ViewModels
                 {
                     UnassignedConstructions.Add(_selectedAssigned);
                     AssignedConstructions.Remove(_selectedAssigned);
+                    _projectInstance.Constructions.Remove(_selectedAssigned);
                     _entities.SaveChanges();
                     SelectedAssigned = null;
                 },
