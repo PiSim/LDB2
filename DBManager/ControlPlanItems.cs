@@ -12,13 +12,13 @@ namespace DBManager
     using System;
     using System.Collections.Generic;
     
-    public partial class TaskItem
+    public partial class ControlPlanItems
     {
-        public int ID { get; set; }
-        public int TaskID { get; private set; }
-        public int RequirementID { get; set; }
+        public int ID { get; private set; }
+        public int ControlPlanID { get; private set; }
+        public int MethodID { get; private set; }
     
-        public virtual Requirement Requirement { get; set; }
-        public virtual Task Task { get; set; }
+        public virtual ControlPlan ControlPlans { get; set; }
+        public virtual Method method { get; set; }
     }
 }

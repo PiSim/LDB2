@@ -234,7 +234,7 @@
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
 
-                            <ListView ItemsSource="{Binding Path=CurrentInstance.ControlPlanList}"
+                            <ListView ItemsSource="{Binding Path=ControlPlanList}"
                                       SelectedItem="{Binding Path=SelectedControlPlan, Mode=TwoWay}"
                                       Grid.Column="0"
                                       Grid.Row="0"
@@ -252,12 +252,6 @@
                                     Grid.Row="0"
                                     Margin="5,5,5,5"/>
 
-                            <Button Content="Save"
-                                    Command="{Binding Path=SaveControlPlanCommand}"
-                                    Grid.Column="1"
-                                    Grid.Row="1"
-                                    Margin="5,5,5,5"/>
-
                             <Button Content="Rinomina"
                                     Command="{Binding Path=RenameControlPlanCommand}"
                                     Grid.Column="1"
@@ -265,7 +259,7 @@
                                     Margin="5,5,5,5"/>
 
                             <Button Content="Elimina"
-                                    Command="{Binding Path=DeleteControlPlanCommand}"
+                                    Command="{Binding Path=RemoveControlPlanCommand}"
                                     Grid.Column="1"
                                     Grid.Row="3"
                                     Margin="5,5,5,5"/>
@@ -274,18 +268,18 @@
 
                     <GroupBox Header="Test da effettuare"
                                 Grid.Column="1">
-                        <ListView ItemsSource="{Binding Path=ControlPlanVisualizer}">
+                        <ListView ItemsSource="{Binding Path=ControlPlanItemList}">
                             <ListView.View>
                                 <GridView>
-                                    <GridViewColumn Header="Incluso">
+                                    <GridViewColumn>
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
-                                                <CheckBox IsChecked="{Binding Path=IncludeInReport}"/>
+                                                <CheckBox IsChecked="{Binding Path=IsSelected}"/>
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
                                     <GridViewColumn Header="Tipo Prova"
-                                                    DisplayMemberBinding="{Binding Path=Method.Property.Name}"/>
+                                                    DisplayMemberBinding="{Binding Path=Method}"/>
                                     <GridViewColumn Header="Standard"
                                                     DisplayMemberBinding="{Binding Path=Standard}"/>
                                 </GridView>
@@ -298,7 +292,29 @@
 
             </TabItem>
             <TabItem Header="Report">
-
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition MaxWidth="100"/>
+                    </Grid.ColumnDefinitions>
+                    <ListView ItemsSource="{Binding ReportList}"
+                              SelectedItem="{Binding SelectedReport, Mode=TwoWay}"
+                              Grid.Column="0">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Numero"
+                                                DisplayMemberBinding="{Binding Number}"/>
+                                <GridViewColumn Header="Batch"
+                                                DisplayMemberBinding="{Binding Batch.Number}"/>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                    <Button Content="Apri"
+                            Command="{Binding OpenReportCommand}"
+                            Grid.Column="1"
+                            VerticalAlignment="Top"
+                            Margin="5,5,5,5"/>
+                </Grid>
             </TabItem>
         </TabControl>
     </Grid>

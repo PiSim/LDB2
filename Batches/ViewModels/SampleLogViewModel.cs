@@ -39,6 +39,7 @@ namespace Batches.ViewModels
 
             _container = container;
             _entities = entities;
+            _materialServiceProvider = materialServiceProvider;
 
             _continue = new DelegateCommand(
                 () =>

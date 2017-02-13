@@ -23,7 +23,7 @@ namespace DBManager
         public int ID { get; set; }
         public int SubrequirementID { get; private set; }
         public string Result { get; set; }
-        public int testID { get; set; }
+        public int TestID { get; private set; }
     
         public virtual SubRequirement SubRequirement { get; set; }
         public virtual Test Test { get; set; }

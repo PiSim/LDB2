@@ -84,6 +84,7 @@
     <Compile Include="CommitRequested.cs" />
     <Compile Include="Events\NavigateBackRequested.cs" />
     <Compile Include="Events\NavigateForwardRequested.cs" />
+    <Compile Include="Events\UserAuthenticated.cs" />
     <Compile Include="Events\VisualizeObjectRequested.cs" />
     <Compile Include="InfrastructureModule.cs" />
     <Compile Include="NavigationRequested.cs" />

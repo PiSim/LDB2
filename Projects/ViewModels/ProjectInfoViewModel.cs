@@ -31,7 +31,6 @@ namespace Projects.ViewModels
         {
             _entities = entities;
             _projectInstance = instance;
-            _entities.Projects.Attach(_projectInstance);
             
             _eventAggregator = aggregator;
             _eventAggregator.GetEvent<CommitRequested>().Subscribe( () => _entities.SaveChanges() );
@@ -45,8 +44,8 @@ namespace Projects.ViewModels
                 () => 
                 {
                     AssignedConstructions.Add(_selectedUnassigned);
+                    _projectInstance.Constructions.Add(_selectedUnassigned);
                     UnassignedConstructions.Remove(_selectedUnassigned);
-                    _selectedUnassigned.Project = _projectInstance;
                     SelectedUnassigned = null;
                 },
                 () => _selectedUnassigned != null
@@ -69,8 +68,8 @@ namespace Projects.ViewModels
                 () => 
                 {
                     UnassignedConstructions.Add(_selectedAssigned);
+                    _projectInstance.Constructions.Remove(_selectedAssigned);
                     AssignedConstructions.Remove(_selectedAssigned);
-                    _selectedAssigned.Project = null;
                     SelectedAssigned = null;
                 },
                 () => _selectedAssigned != null

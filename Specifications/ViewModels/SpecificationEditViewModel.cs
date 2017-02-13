@@ -10,62 +10,11 @@ using System.Threading.Tasks;
 
 namespace Specifications.ViewModels
 {
-    internal class RequirementWrapper : BindableBase
-    {
-        private DBEntities _entities;
-        private Requirement _requirementInstance;
-        private SpecificationVersion _versionInstance;
-
-        internal RequirementWrapper(Requirement instance,
-                                    SpecificationVersion version, 
-                                    DBEntities entities) : base()
-        {
-            _entities = entities;
-            _requirementInstance = instance;
-            _versionInstance = version;
-        }
-
-        public bool CanSetOverride
-        {
-            get { return (_versionInstance.IsMain == 1) ? false : true; }
-        }
-
-        public bool IsOverride
-        {
-            get { return (_requirementInstance.IsOverride == 1) ? true : false ; }
-
-            set
-            {
-                if (value)
-                    _requirementInstance = _entities.AddOverride(_versionInstance, _requirementInstance);
-                else
-                    _requirementInstance = _entities.RemoveOverride(_requirementInstance);
-                    
-                OnPropertyChanged("SubRequirements");
-            }
-        }
-
-        public List<SubRequirement> SubRequirements
-        {
-            get { return new List<SubRequirement>(_requirementInstance.SubRequirements); }
-        }
-        
-        public string Standard
-        {
-            get { return _requirementInstance.Method.Standard.Organization.Name + " " +
-                    _requirementInstance.Method.Standard.Name; }
-        }
-
-        public string Test
-        {
-            get { return _requirementInstance.Method.Property.Name; }
-        }
-    }
-
     internal class SpecificationEditViewModel : BindableBase
     {
+        private ControlPlan _selectedControlPlan;
         private DBEntities _entities;
-        private DelegateCommand _addTest, _removeTest;
+        private DelegateCommand _addControlPlan, _addTest, _removeControlPlan, _removeTest;
         private ObservableCollection<RequirementWrapper> _requirementList;
         private Method _selectedToAdd;
         private Property _filterProperty;
@@ -82,6 +31,16 @@ namespace Specifications.ViewModels
             _entities = entities;
             _entities.Specifications.Attach(_instance);
 
+            _addControlPlan = new DelegateCommand(
+                () =>
+                {
+                    ControlPlan temp = new ControlPlan();
+                    temp.Name = "Nuovo Piano di Controllo";
+                    _instance.ControlPlans.Add(temp);
+                    SelectedControlPlan = temp;
+                    OnPropertyChanged("ControlPlanList");
+                });
+
             _addTest = new DelegateCommand(
                 () =>
                 {
@@ -90,6 +49,14 @@ namespace Specifications.ViewModels
                 },
                 () => _selectedToAdd != null);
 
+            _removeControlPlan = new DelegateCommand(
+                () =>
+                {
+                    _instance.ControlPlans.Remove(_selectedControlPlan);
+                    SelectedControlPlan = null;
+                }, 
+                () => _selectedControlPlan != null);
+            
             _removeTest = new DelegateCommand(
                 () =>
                 {
@@ -103,6 +70,16 @@ namespace Specifications.ViewModels
         public DelegateCommand AddTestCommand
         {
             get { return _addTest; }
+        }
+
+        public DelegateCommand AddControlPlanCommand
+        {
+            get { return _addControlPlan; }
+        }
+
+        public List<ControlPlan> ControlPlanList
+        {
+            get { return new List<ControlPlan>(_instance.ControlPlans); }
         }
 
         public Property FilterProperty
@@ -147,14 +124,39 @@ namespace Specifications.ViewModels
             get { return new List<Property>(_entities.Properties); }
         }
 
+        public DelegateCommand RemoveControlPlanCommand
+        {
+            get { return _removeControlPlan; }
+        }
+
         public DelegateCommand  RemoveTestCommand
         {
             get { return _removeTest; }
         }
 
+        public List<Report> ReportList
+        {
+            get
+            {
+                return new List<Report>(_entities.Reports.Where
+                    (rep => rep.SpecificationVersion.Specification.ID == _instance.ID));
+            }
+        }
+
         public ObservableCollection<RequirementWrapper> RequirementList
         {
             get { return _requirementList; }
+        }
+
+        public ControlPlan SelectedControlPlan
+        {
+            get { return _selectedControlPlan; }
+            set
+            {
+                _selectedControlPlan = value;
+                OnPropertyChanged("SelectedControlPlan");
+                _removeControlPlan.RaiseCanExecuteChanged();
+            }
         }
 
         public SpecificationVersion SelectedVersion

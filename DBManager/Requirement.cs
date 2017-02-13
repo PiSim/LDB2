@@ -20,7 +20,7 @@ namespace DBManager
             this.Name = "";
             this.SubRequirements = new HashSet<SubRequirement>();
             this.Overrides = new HashSet<Requirement>();
-            this.task_items = new HashSet<TaskItem>();
+            this.TaskItems = new HashSet<TaskItem>();
         }
     
         public int ID { get; set; }
@@ -40,6 +40,6 @@ namespace DBManager
         public virtual ICollection<Requirement> Overrides { get; set; }
         public virtual Requirement Overridden { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<TaskItem> task_items { get; set; }
+        public virtual ICollection<TaskItem> TaskItems { get; set; }
     }
 }

@@ -33,6 +33,6 @@ namespace DBManager
         public virtual ICollection<Material> Materials { get; set; }
         public virtual ExternalConstruction ExternalConstruction { get; set; }
         public virtual Project Project { get; set; }
-        public virtual MaterialType material_types { get; set; }
+        public virtual MaterialType MaterialType { get; set; }
     }
 }

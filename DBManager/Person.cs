@@ -21,7 +21,7 @@ namespace DBManager
             this.Projects = new HashSet<Project>();
             this.Tests = new HashSet<Test>();
             this.Tasks = new HashSet<Task>();
-            this.users = new HashSet<User>();
+            this.Users = new HashSet<User>();
         }
     
         public int ID { get; private set; }
@@ -37,6 +37,6 @@ namespace DBManager
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Task> Tasks { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<User> users { get; set; }
+        public virtual ICollection<User> Users { get; set; }
     }
 }

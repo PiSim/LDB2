@@ -20,6 +20,9 @@ namespace Controls.ViewModels
         internal ProjectPickerViewModel(DBEntities entities,
                                         Views.ProjectPickerDialog parentDialog) : base()
         {
+            _entities = entities;
+            _parentDialog = parentDialog;
+
             _cancel = new DelegateCommand(
                 () =>
                 {

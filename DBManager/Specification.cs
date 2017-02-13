@@ -18,6 +18,7 @@ namespace DBManager
         public Specification()
         {
             this.SpecificationVersions = new HashSet<SpecificationVersion>();
+            this.ControlPlans = new HashSet<ControlPlan>();
         }
     
         public int ID { get; private set; }
@@ -27,5 +28,7 @@ namespace DBManager
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SpecificationVersion> SpecificationVersions { get; set; }
         public virtual Std Standard { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ControlPlan> ControlPlans { get; set; }
     }
 }

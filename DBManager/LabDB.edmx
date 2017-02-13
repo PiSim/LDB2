@@ -51,6 +51,22 @@
           <Property Name="external_constructionID" Type="int" />
           <Property Name="typeID" Type="int" />
         </EntityType>
+        <EntityType Name="control_plan_items">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="control_planID" Type="int" Nullable="false" />
+          <Property Name="methodID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="control_plans">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="45" Nullable="false" />
+          <Property Name="specificationID" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="external_constructions">
           <Key>
             <PropertyRef Name="ID" />
@@ -327,6 +343,21 @@
           <Property Name="date" Type="date" />
           <Property Name="is_complete" Type="tinyint" Nullable="false" />
         </EntityType>
+        <EntityType Name="user_role_mappings">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="userID" Type="int" Nullable="false" />
+          <Property Name="roleID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="user_roles">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="45" Nullable="false" />
+        </EntityType>
         <EntityType Name="users">
           <Key>
             <PropertyRef Name="ID" />
@@ -474,6 +505,20 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="control_plan_to_item">
+          <End Role="control_plans" Type="Self.control_plans" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="control_plan_items" Type="Self.control_plan_items" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="control_plans">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="control_plan_items">
+              <PropertyRef Name="control_planID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="current_issue_to_standard">
           <End Role="standard_issues" Type="Self.standard_issues" Multiplicity="0..1" />
           <End Role="standards" Type="Self.standards" Multiplicity="*" />
@@ -545,6 +590,18 @@
             </Principal>
             <Dependent Role="recipes">
               <PropertyRef Name="masterID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="method_to_control_plan_item">
+          <End Role="methods" Type="Self.methods" Multiplicity="1" />
+          <End Role="control_plan_items" Type="Self.control_plan_items" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="methods">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="control_plan_items">
+              <PropertyRef Name="methodID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -800,6 +857,34 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="role_to_role_mapping">
+          <End Role="user_roles" Type="Self.user_roles" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="user_role_mappings" Type="Self.user_role_mappings" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user_roles">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="user_role_mappings">
+              <PropertyRef Name="roleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="specification_to_control_plan">
+          <End Role="specifications" Type="Self.specifications" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="control_plans" Type="Self.control_plans" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="specifications">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="control_plans">
+              <PropertyRef Name="specificationID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="specification_to_specversion">
           <End Role="specifications" Type="Self.specifications" Multiplicity="1" />
           <End Role="specification_versions" Type="Self.specification_versions" Multiplicity="*" />
@@ -952,12 +1037,28 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="user_to_role_mapping">
+          <End Role="users" Type="Self.users" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="user_role_mappings" Type="Self.user_role_mappings" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="user_role_mappings">
+              <PropertyRef Name="userID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="labdbModelStoreContainer">
           <EntitySet Name="aspects" EntityType="Self.aspects" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="batch_files" EntityType="Self.batch_files" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="batches" EntityType="Self.batches" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="colours" EntityType="Self.colours" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="constructions" EntityType="Self.constructions" Schema="labdb" store:Type="Tables" />
+          <EntitySet Name="control_plan_items" EntityType="Self.control_plan_items" Schema="labdb" store:Type="Tables" />
+          <EntitySet Name="control_plans" EntityType="Self.control_plans" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="external_constructions" EntityType="Self.external_constructions" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="external_report_files" EntityType="Self.external_report_files" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="external_reports" EntityType="Self.external_reports" Schema="labdb" store:Type="Tables" />
@@ -985,6 +1086,8 @@
           <EntitySet Name="task_items" EntityType="Self.task_items" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="tasks" EntityType="Self.tasks" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="tests" EntityType="Self.tests" Schema="labdb" store:Type="Tables" />
+          <EntitySet Name="user_role_mappings" EntityType="Self.user_role_mappings" Schema="labdb" store:Type="Tables" />
+          <EntitySet Name="user_roles" EntityType="Self.user_roles" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="users" EntityType="Self.users" Schema="labdb" store:Type="Tables" />
           <AssociationSet Name="aspect" Association="Self.aspect">
             <End Role="aspects" EntitySet="aspects" />
@@ -1030,6 +1133,10 @@
             <End Role="constructions" EntitySet="constructions" />
             <End Role="materials" EntitySet="materials" />
           </AssociationSet>
+          <AssociationSet Name="control_plan_to_item" Association="Self.control_plan_to_item">
+            <End Role="control_plans" EntitySet="control_plans" />
+            <End Role="control_plan_items" EntitySet="control_plan_items" />
+          </AssociationSet>
           <AssociationSet Name="current_issue_to_standard" Association="Self.current_issue_to_standard">
             <End Role="standard_issues" EntitySet="standard_issues" />
             <End Role="standards" EntitySet="standards" />
@@ -1053,6 +1160,10 @@
           <AssociationSet Name="master_to_recipe" Association="Self.master_to_recipe">
             <End Role="masters" EntitySet="masters" />
             <End Role="recipes" EntitySet="recipes" />
+          </AssociationSet>
+          <AssociationSet Name="method_to_control_plan_item" Association="Self.method_to_control_plan_item">
+            <End Role="methods" EntitySet="methods" />
+            <End Role="control_plan_items" EntitySet="control_plan_items" />
           </AssociationSet>
           <AssociationSet Name="method_to_measurement" Association="Self.method_to_measurement">
             <End Role="methods" EntitySet="methods" />
@@ -1134,6 +1245,14 @@
             <End Role="requirements" EntitySet="requirements" />
             <End Role="task_items" EntitySet="task_items" />
           </AssociationSet>
+          <AssociationSet Name="role_to_role_mapping" Association="Self.role_to_role_mapping">
+            <End Role="user_roles" EntitySet="user_roles" />
+            <End Role="user_role_mappings" EntitySet="user_role_mappings" />
+          </AssociationSet>
+          <AssociationSet Name="specification_to_control_plan" Association="Self.specification_to_control_plan">
+            <End Role="specifications" EntitySet="specifications" />
+            <End Role="control_plans" EntitySet="control_plans" />
+          </AssociationSet>
           <AssociationSet Name="specification_to_specversion" Association="Self.specification_to_specversion">
             <End Role="specifications" EntitySet="specifications" />
             <End Role="specification_versions" EntitySet="specification_versions" />
@@ -1182,6 +1301,10 @@
             <End Role="material_types" EntitySet="material_types" />
             <End Role="constructions" EntitySet="constructions" />
           </AssociationSet>
+          <AssociationSet Name="user_to_role_mapping" Association="Self.user_to_role_mapping">
+            <End Role="users" EntitySet="users" />
+            <End Role="user_role_mappings" EntitySet="user_role_mappings" />
+          </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -1194,7 +1317,7 @@
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Code" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Name" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" DefaultValue="" />
-          <NavigationProperty Name="constructions" Relationship="Self.aspect1" FromRole="aspects" ToRole="constructions" />
+          <NavigationProperty Name="Constructions" Relationship="Self.aspect1" FromRole="aspects" ToRole="constructions" />
         </EntityType>
         <EntityType Name="BatchFile">
           <Key>
@@ -1220,7 +1343,7 @@
           <NavigationProperty Name="Reports" Relationship="Self.batch_to_report" FromRole="batches" ToRole="reports" />
           <NavigationProperty Name="Samples" Relationship="Self.batch_to_sample" FromRole="batches" ToRole="samples" />
           <NavigationProperty Name="Tests" Relationship="Self.batch_to_test" FromRole="batches" ToRole="tests" />
-          <NavigationProperty Name="tasks" Relationship="labdbModel.batch_to_task" FromRole="Batch" ToRole="Task" />
+          <NavigationProperty Name="Tasks" Relationship="labdbModel.batch_to_task" FromRole="Batch" ToRole="Task" />
         </EntityType>
         <EntityType Name="Colour">
           <Key>
@@ -1246,7 +1369,7 @@
           <NavigationProperty Name="ExternalConstruction" Relationship="Self.external_construction" FromRole="constructions" ToRole="external_constructions" />
           <NavigationProperty Name="Project" Relationship="Self.project1" FromRole="constructions" ToRole="projects" />
           <Property Name="TypeID" Type="Int32" a:SetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
-          <NavigationProperty Name="material_types" Relationship="labdbModel.type_to_construction" FromRole="Construction" ToRole="material_types" />
+          <NavigationProperty Name="MaterialType" Relationship="labdbModel.type_to_construction" FromRole="Construction" ToRole="material_types" />
         </EntityType>
         <EntityType Name="ExternalConstruction">
           <Key>
@@ -1328,6 +1451,7 @@
           <NavigationProperty Name="Standard" Relationship="Self.standard_to_method" FromRole="methods" ToRole="standards" />
           <NavigationProperty Name="Tests" Relationship="labdbModel.method_to_test" FromRole="Method" ToRole="Test" />
           <NavigationProperty Name="Measurements" Relationship="labdbModel.method_to_measurement" FromRole="Method" ToRole="method_measurements" />
+          <NavigationProperty Name="ControlPlanItems" Relationship="labdbModel.method_to_control_plan_item" FromRole="Method" ToRole="control_plan_items" />
         </EntityType>
         <EntityType Name="Organization">
           <Key>
@@ -1352,7 +1476,7 @@
           <NavigationProperty Name="Projects" Relationship="Self.leader" FromRole="people" ToRole="projects" />
           <NavigationProperty Name="Tests" Relationship="Self.operatorID" FromRole="people" ToRole="tests" />
           <NavigationProperty Name="Tasks" Relationship="Self.requester_to_task" FromRole="people" ToRole="tasks" />
-          <NavigationProperty Name="users" Relationship="labdbModel.person_to_user" FromRole="Person" ToRole="User" />
+          <NavigationProperty Name="Users" Relationship="labdbModel.person_to_user" FromRole="Person" ToRole="User" />
         </EntityType>
         <EntityType Name="Project">
           <Key>
@@ -1441,7 +1565,7 @@
           <Property Name="OverriddenID" Type="Int32" />
           <NavigationProperty Name="Overrides" Relationship="labdbModel.overridden_to_requirement" FromRole="Requirement" ToRole="Requirement1" />
           <NavigationProperty Name="Overridden" Relationship="labdbModel.overridden_to_requirement" FromRole="Requirement1" ToRole="Requirement" />
-          <NavigationProperty Name="task_items" Relationship="labdbModel.requirement_to_task_item" FromRole="Requirement" ToRole="task_items" />
+          <NavigationProperty Name="TaskItems" Relationship="labdbModel.requirement_to_task_item" FromRole="Requirement" ToRole="task_items" />
         </EntityType>
         <EntityType Name="Sample">
           <Key>
@@ -1475,6 +1599,7 @@
           <Property Name="Description" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="SpecificationVersions" Relationship="Self.specification_to_specversion" FromRole="specifications" ToRole="specification_versions" />
           <NavigationProperty Name="Standard" Relationship="Self.standard_to_specification" FromRole="specifications" ToRole="standards" />
+          <NavigationProperty Name="ControlPlans" Relationship="labdbModel.specification_to_control_plan" FromRole="Specification" ToRole="control_plans" />
         </EntityType>
         <EntityType Name="StandardFile">
           <Key>
@@ -1518,7 +1643,7 @@
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="SubrequirementID" Type="Int32" Nullable="false" a:SetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <Property Name="Result" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" DefaultValue="" />
-          <Property Name="testID" Type="Int32" Nullable="false" />
+          <Property Name="TestID" Type="Int32" Nullable="false" a:SetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="SubRequirement" Relationship="Self.sub_requirement" FromRole="sub_tests" ToRole="sub_requirements" />
           <NavigationProperty Name="Test" Relationship="Self.test1" FromRole="sub_tests" ToRole="tests" />
         </EntityType>
@@ -1576,6 +1701,7 @@
           <Property Name="UserName" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="PersonID" Type="Int32" a:SetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="Person" Relationship="labdbModel.person_to_user" FromRole="User" ToRole="Person" />
+          <NavigationProperty Name="UserRoleMappings" Relationship="labdbModel.user_to_role_mapping" FromRole="User" ToRole="user_role_mappings" />
         </EntityType>
         <Association Name="aspect1">
           <End Role="aspects" Type="labdbModel.Aspect" Multiplicity="1" />
@@ -2047,7 +2173,7 @@
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="sub_tests">
-              <PropertyRef Name="testID" />
+              <PropertyRef Name="TestID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2281,6 +2407,30 @@
             <End Role="Batch" EntitySet="Batches" />
             <End Role="Task" EntitySet="Tasks" />
           </AssociationSet>
+          <EntitySet Name="UserRoleMappings" EntityType="labdbModel.UserRoleMapping" />
+          <EntitySet Name="UserRoles" EntityType="labdbModel.UserRole" />
+          <AssociationSet Name="role_to_role_mapping" Association="labdbModel.role_to_role_mapping">
+            <End Role="user_roles" EntitySet="UserRoles" />
+            <End Role="user_role_mappings" EntitySet="UserRoleMappings" />
+          </AssociationSet>
+          <AssociationSet Name="user_to_role_mapping" Association="labdbModel.user_to_role_mapping">
+            <End Role="User" EntitySet="Users" />
+            <End Role="user_role_mappings" EntitySet="UserRoleMappings" />
+          </AssociationSet>
+          <EntitySet Name="ControlPlanItems" EntityType="labdbModel.ControlPlanItems" />
+          <EntitySet Name="ControlPlans" EntityType="labdbModel.ControlPlan" />
+          <AssociationSet Name="control_plan_to_item" Association="labdbModel.control_plan_to_item">
+            <End Role="control_plans" EntitySet="ControlPlans" />
+            <End Role="control_plan_items" EntitySet="ControlPlanItems" />
+          </AssociationSet>
+          <AssociationSet Name="method_to_control_plan_item" Association="labdbModel.method_to_control_plan_item">
+            <End Role="Method" EntitySet="Methods" />
+            <End Role="control_plan_items" EntitySet="ControlPlanItems" />
+          </AssociationSet>
+          <AssociationSet Name="specification_to_control_plan" Association="labdbModel.specification_to_control_plan">
+            <End Role="Specification" EntitySet="Specifications" />
+            <End Role="control_plans" EntitySet="ControlPlans" />
+          </AssociationSet>
         </EntityContainer>
         <Association Name="overridden_to_requirement">
           <End Type="labdbModel.Requirement" Role="Requirement" Multiplicity="0..1">
@@ -2423,10 +2573,10 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="taskID" Type="Int32" Nullable="false" />
-          <Property Name="requirementID" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="requirement" Relationship="labdbModel.requirement_to_task_item" FromRole="task_items" ToRole="Requirement" />
-          <NavigationProperty Name="task" Relationship="labdbModel.task_to_item" FromRole="task_items" ToRole="Task" />
+          <Property Name="TaskID" Type="Int32" Nullable="false" a:SetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+          <Property Name="RequirementID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Requirement" Relationship="labdbModel.requirement_to_task_item" FromRole="task_items" ToRole="Requirement" />
+          <NavigationProperty Name="Task" Relationship="labdbModel.task_to_item" FromRole="task_items" ToRole="Task" />
         </EntityType>
         <Association Name="requirement_to_task_item">
           <End Type="labdbModel.Requirement" Role="Requirement" Multiplicity="1" />
@@ -2436,7 +2586,7 @@
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="task_items">
-              <PropertyRef Name="requirementID" />
+              <PropertyRef Name="RequirementID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2450,7 +2600,7 @@
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="task_items">
-              <PropertyRef Name="taskID" />
+              <PropertyRef Name="TaskID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2463,6 +2613,112 @@
             </Principal>
             <Dependent Role="Task">
               <PropertyRef Name="batchID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="UserRoleMapping">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" a:SetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+          <Property Name="UserID" Type="Int32" Nullable="false" a:SetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+          <Property Name="RoleID" Type="Int32" Nullable="false" a:SetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+          <NavigationProperty Name="UserRole" Relationship="labdbModel.role_to_role_mapping" FromRole="user_role_mappings" ToRole="user_roles" />
+          <NavigationProperty Name="User" Relationship="labdbModel.user_to_role_mapping" FromRole="user_role_mappings" ToRole="User" />
+        </EntityType>
+        <EntityType Name="UserRole">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" a:SetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="UserRoleMappings" Relationship="labdbModel.role_to_role_mapping" FromRole="user_roles" ToRole="user_role_mappings" />
+        </EntityType>
+        <Association Name="role_to_role_mapping">
+          <End Type="labdbModel.UserRole" Role="user_roles" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="labdbModel.UserRoleMapping" Role="user_role_mappings" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user_roles">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="user_role_mappings">
+              <PropertyRef Name="RoleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="user_to_role_mapping">
+          <End Type="labdbModel.User" Role="User" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="labdbModel.UserRoleMapping" Role="user_role_mappings" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="user_role_mappings">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="ControlPlanItems">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" a:SetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+          <Property Name="ControlPlanID" Type="Int32" Nullable="false" a:SetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+          <Property Name="MethodID" Type="Int32" Nullable="false" a:SetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+          <NavigationProperty Name="ControlPlans" Relationship="labdbModel.control_plan_to_item" FromRole="control_plan_items" ToRole="control_plans" />
+          <NavigationProperty Name="method" Relationship="labdbModel.method_to_control_plan_item" FromRole="control_plan_items" ToRole="Method" />
+        </EntityType>
+        <EntityType Name="ControlPlan">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="SpecificationID" Type="Int32" Nullable="false" a:SetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+          <NavigationProperty Name="ControlPlanItems" Relationship="labdbModel.control_plan_to_item" FromRole="control_plans" ToRole="control_plan_items" />
+          <NavigationProperty Name="Specification" Relationship="labdbModel.specification_to_control_plan" FromRole="control_plans" ToRole="Specification" />
+        </EntityType>
+        <Association Name="control_plan_to_item">
+          <End Type="labdbModel.ControlPlan" Role="control_plans" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="labdbModel.ControlPlanItems" Role="control_plan_items" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="control_plans">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="control_plan_items">
+              <PropertyRef Name="ControlPlanID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="method_to_control_plan_item">
+          <End Type="labdbModel.Method" Role="Method" Multiplicity="1" />
+          <End Type="labdbModel.ControlPlanItems" Role="control_plan_items" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Method">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="control_plan_items">
+              <PropertyRef Name="MethodID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="specification_to_control_plan">
+          <End Type="labdbModel.Specification" Role="Specification" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="labdbModel.ControlPlan" Role="control_plans" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Specification">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="control_plans">
+              <PropertyRef Name="SpecificationID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2750,7 +3006,7 @@
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="SubrequirementID" ColumnName="sub_requirementID" />
                 <ScalarProperty Name="Result" ColumnName="result" />
-                <ScalarProperty Name="testID" ColumnName="testID" />
+                <ScalarProperty Name="TestID" ColumnName="testID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -2832,8 +3088,43 @@
           <EntitySetMapping Name="TaskItems">
             <EntityTypeMapping TypeName="labdbModel.TaskItem">
               <MappingFragment StoreEntitySet="task_items">
-                <ScalarProperty Name="requirementID" ColumnName="requirementID" />
-                <ScalarProperty Name="taskID" ColumnName="taskID" />
+                <ScalarProperty Name="RequirementID" ColumnName="requirementID" />
+                <ScalarProperty Name="TaskID" ColumnName="taskID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserRoleMappings">
+            <EntityTypeMapping TypeName="labdbModel.UserRoleMapping">
+              <MappingFragment StoreEntitySet="user_role_mappings">
+                <ScalarProperty Name="RoleID" ColumnName="roleID" />
+                <ScalarProperty Name="UserID" ColumnName="userID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserRoles">
+            <EntityTypeMapping TypeName="labdbModel.UserRole">
+              <MappingFragment StoreEntitySet="user_roles">
+                <ScalarProperty Name="Name" ColumnName="name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ControlPlanItems">
+            <EntityTypeMapping TypeName="labdbModel.ControlPlanItems">
+              <MappingFragment StoreEntitySet="control_plan_items">
+                <ScalarProperty Name="MethodID" ColumnName="methodID" />
+                <ScalarProperty Name="ControlPlanID" ColumnName="control_planID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ControlPlans">
+            <EntityTypeMapping TypeName="labdbModel.ControlPlan">
+              <MappingFragment StoreEntitySet="control_plans">
+                <ScalarProperty Name="SpecificationID" ColumnName="specificationID" />
+                <ScalarProperty Name="Name" ColumnName="name" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

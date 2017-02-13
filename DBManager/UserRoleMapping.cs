@@ -12,13 +12,13 @@ namespace DBManager
     using System;
     using System.Collections.Generic;
     
-    public partial class TaskItem
+    public partial class UserRoleMapping
     {
-        public int ID { get; set; }
-        public int TaskID { get; private set; }
-        public int RequirementID { get; set; }
+        public int ID { get; private set; }
+        public int UserID { get; private set; }
+        public int RoleID { get; private set; }
     
-        public virtual Requirement Requirement { get; set; }
-        public virtual Task Task { get; set; }
+        public virtual UserRole UserRole { get; set; }
+        public virtual User User { get; set; }
     }
 }

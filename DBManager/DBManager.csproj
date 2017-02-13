@@ -119,6 +119,12 @@
     <Compile Include="Construction.cs">
       <DependentUpon>LabDB.tt</DependentUpon>
     </Compile>
+    <Compile Include="ControlPlan.cs">
+      <DependentUpon>LabDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ControlPlanItems.cs">
+      <DependentUpon>LabDB.tt</DependentUpon>
+    </Compile>
     <Compile Include="DBManagerModule.cs" />
     <Compile Include="ExternalConstruction.cs">
       <DependentUpon>LabDB.tt</DependentUpon>
@@ -230,6 +236,12 @@
       <DependentUpon>LabDB.tt</DependentUpon>
     </Compile>
     <Compile Include="User.cs">
+      <DependentUpon>LabDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UserRole.cs">
+      <DependentUpon>LabDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UserRoleMapping.cs">
       <DependentUpon>LabDB.tt</DependentUpon>
     </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">

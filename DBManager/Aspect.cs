@@ -18,7 +18,7 @@ namespace DBManager
         public Aspect()
         {
             this.Name = "";
-            this.constructions = new HashSet<Construction>();
+            this.Constructions = new HashSet<Construction>();
         }
     
         public int ID { get; set; }
@@ -26,6 +26,6 @@ namespace DBManager
         public string Name { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Construction> constructions { get; set; }
+        public virtual ICollection<Construction> Constructions { get; set; }
     }
 }
