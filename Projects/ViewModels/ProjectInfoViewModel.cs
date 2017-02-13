@@ -1,9 +1,12 @@
 using DBManager;
+using Infrastructure;
+using Infrastructure.Events;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,10 +15,12 @@ namespace Projects.ViewModels
 {
     internal class ProjectInfoViewModel : BindableBase
     {
+        private Construction _selectedAssigned, _selectedUnassigned;
         private DBEntities _entities;
-        private DelegateCommand _openExternal, _openReport;
+        private DelegateCommand _assignConstruction, _openExternal, _openReport, _unassignConstruction;
         private EventAggregator _eventAggregator;
         private ExternalReport _selectedExternal;
+        private ObservableCollection<Construction> _assignedConstructions, _unassignedConstructions;
         private Project _projectInstance;
         private Report _selectedReport;
 
@@ -27,18 +32,55 @@ namespace Projects.ViewModels
             _entities = entities;
             _eventAggregator = aggregator;
             _projectInstance = instance;
+            
+            _assignedConstructions = new ObservableCollection<Construction>(
+                _entities.Constructions.Where(cns => cns.Project.ID == _projectInstance.ID));
+                
+            _unassignedConstructions = new ObservableCollection<Construction>(
+               _entities.Constructions.Where(cns => cns.Project == null));
+
+            _assignConstruction = new DelegateCommand(
+                () => 
+                {
+                    AssignedConstructions.Add(_selectedUnassigned);
+                    UnassignedConstructions.Remove(_selectedUnassigned);
+                    SelectedUnassigned = null;
+                },
+                () => _selectedUnassigned != null
+            );
 
             _openExternal = new DelegateCommand(
                 () =>
                 {
-
+                    
                 });
 
             _openReport = new DelegateCommand(
                 () =>
                 {
-
+                    ObjectNavigationToken token = new ObjectNavigationToken(_selectedReport, Reports.ViewNames.ReportEditView);
+                    _eventAggregator.GetEvent<VisualizeObjectRequested>().Publish(token);
                 });
+                
+            _unassignConstruction = new DelegateCommand(
+                () => 
+                {
+                    UnassignedConstructions.Add(_selectedAssigned);
+                    AssignedConstructions.Remove(_selectedAssigned);
+                    SelectedAssigned = null;
+                },
+                () => _selectedAssigned != null
+            );
+        }
+        
+        public DelegateCommand AssignConstruction
+        {
+            get { return _assignConstruction; }
+        }
+        
+        public ObservableCollection<Construction> AssignedConstructions
+        {
+            get { return _assignedConstructions; }
         }
 
         public List<ExternalReport> ExternalReportList
@@ -69,6 +111,17 @@ namespace Projects.ViewModels
             }
         }
 
+        public Construction SelectedAssigned
+        {
+            get { return _selectedAssigned; }
+            set 
+            { 
+                _selectedAssigned = value; 
+                OnPropertyChanged("SelectedAssigned");
+                _unassignConstruction.RaiseCanExecuteChanged();
+            }
+        }
+
         public ExternalReport SelectedExternal
         {
             get { return _selectedExternal; }
@@ -80,10 +133,31 @@ namespace Projects.ViewModels
             get { return _selectedReport; }
             set { _selectedReport = value; }
         }
+        
+        public Construction SelectedUnassigned
+        {
+            get { return _selectedUnassigned; }
+            set 
+            { 
+                _selectedUnassigned = value; 
+                OnPropertyChanged("SelectedUnassigned");
+                _assignConstruction.RaiseCanExecuteChanged();
+            }
+        }
 
         public List<DBManager.Task> TaskList
         {
             get { return new List<DBManager.Task>(_projectInstance.Tasks); }
+        }
+        
+        public DelegateCommand UnassignConstruction
+        {
+            get { return _unassignConstruction; }
+        }
+        
+        public ObservableCollection<Construction> UnassignedConstructions
+        {
+            get { return _unassignedConstructions; }
         }
     }        
 }
