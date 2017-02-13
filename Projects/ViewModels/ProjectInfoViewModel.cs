@@ -45,6 +45,7 @@ namespace Projects.ViewModels
                 {
                     AssignedConstructions.Add(_selectedUnassigned);
                     UnassignedConstructions.Remove(_selectedUnassigned);
+                    _projectInstance.Constructions.Add(_selectedUnassigned);
                     SelectedUnassigned = null;
                 },
                 () => _selectedUnassigned != null
@@ -68,6 +69,7 @@ namespace Projects.ViewModels
                 {
                     UnassignedConstructions.Add(_selectedAssigned);
                     AssignedConstructions.Remove(_selectedAssigned);
+                    _projectInstance.Constructions.Remove(_selectedAssigned);
                     SelectedAssigned = null;
                 },
                 () => _selectedAssigned != null
