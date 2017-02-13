@@ -35,8 +35,7 @@ namespace Projects.ViewModels
             _eventAggregator = aggregator;
             _eventAggregator.GetEvent<CommitRequested>().Subscribe( () => _entities.SaveChanges() );
             
-            _assignedConstructions = new ObservableCollection<Construction>(
-                _entities.Constructions.Where(cns => cns.Project.ID == _projectInstance.ID));
+            _assignedConstructions = new ObservableCollection<Construction>(_projectInstance.Constructions);
                 
             _unassignedConstructions = new ObservableCollection<Construction>(
                _entities.Constructions.Where(cns => cns.Project == null));
