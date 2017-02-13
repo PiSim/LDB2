@@ -53,7 +53,7 @@ namespace DBManager
         public virtual DbSet<SubTest> SubTests { get; set; }
         public virtual DbSet<Task> Tasks { get; set; }
         public virtual DbSet<Test> Tests { get; set; }
-        public virtual DbSet<User> Users1 { get; set; }
+        public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<MaterialType> MaterialTypes { get; set; }
         public virtual DbSet<StandardIssue> StandardIssues { get; set; }
         public virtual DbSet<MethodMeasurement> MethodMeasurement { get; set; }

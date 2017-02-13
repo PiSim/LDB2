@@ -14,13 +14,13 @@ namespace DBManager
     
     public partial class User
     {
-        public int ID { get; set; }
-        public string full_name { get; set; }
+        public int ID { get; private set; }
+        public string FullName { get; set; }
         public string HashedPassword { get; set; }
-        public string role_list { get; set; }
-        public string user_name { get; set; }
-        public Nullable<int> personID { get; set; }
+        public string RoleList { get; set; }
+        public string UserName { get; set; }
+        public Nullable<int> PersonID { get; private set; }
     
-        public virtual Person person { get; set; }
+        public virtual Person Person { get; set; }
     }
 }

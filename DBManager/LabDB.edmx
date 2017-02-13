@@ -1569,13 +1569,13 @@
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="full_name" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" a:SetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+          <Property Name="FullName" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="HashedPassword" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="role_list" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="user_name" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="personID" Type="Int32" />
-          <NavigationProperty Name="person" Relationship="labdbModel.person_to_user" FromRole="User" ToRole="Person" />
+          <Property Name="RoleList" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="UserName" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="PersonID" Type="Int32" a:SetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+          <NavigationProperty Name="Person" Relationship="labdbModel.person_to_user" FromRole="User" ToRole="Person" />
         </EntityType>
         <Association Name="aspect1">
           <End Role="aspects" Type="labdbModel.Aspect" Multiplicity="1" />
@@ -2080,7 +2080,7 @@
           <EntitySet Name="SubTests" EntityType="labdbModel.SubTest" />
           <EntitySet Name="Tasks" EntityType="labdbModel.Task" />
           <EntitySet Name="Tests" EntityType="labdbModel.Test" />
-          <EntitySet Name="Users1" EntityType="labdbModel.User" />
+          <EntitySet Name="Users" EntityType="labdbModel.User" />
           <AssociationSet Name="aspect" Association="Self.aspect1">
             <End Role="aspects" EntitySet="Aspects" />
             <End Role="constructions" EntitySet="Constructions" />
@@ -2248,7 +2248,7 @@
           </AssociationSet>
           <AssociationSet Name="person_to_user" Association="labdbModel.person_to_user">
             <End Role="Person" EntitySet="People" />
-            <End Role="User" EntitySet="Users1" />
+            <End Role="User" EntitySet="Users" />
           </AssociationSet>
           <EntitySet Name="StandardIssues" EntityType="labdbModel.StandardIssue" />
           <AssociationSet Name="standard_issue_to_file" Association="labdbModel.standard_issue_to_file">
@@ -2339,7 +2339,7 @@
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="User">
-              <PropertyRef Name="personID" />
+              <PropertyRef Name="PersonID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2788,15 +2788,15 @@
                 </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Users1">
+          <EntitySetMapping Name="Users">
             <EntityTypeMapping TypeName="labdbModel.User">
               <MappingFragment StoreEntitySet="users">
                 <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="full_name" ColumnName="full_name" />
+                <ScalarProperty Name="FullName" ColumnName="full_name" />
                 <ScalarProperty Name="HashedPassword" ColumnName="hashed_password" />
-                <ScalarProperty Name="role_list" ColumnName="role_list" />
-                <ScalarProperty Name="user_name" ColumnName="user_name" />
-                <ScalarProperty Name="personID" ColumnName="personID" />
+                <ScalarProperty Name="RoleList" ColumnName="role_list" />
+                <ScalarProperty Name="UserName" ColumnName="user_name" />
+                <ScalarProperty Name="PersonID" ColumnName="personID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

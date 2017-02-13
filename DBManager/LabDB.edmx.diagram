@@ -33,7 +33,7 @@
         <EntityTypeShape EntityType="labdbModel.SubTest" Width="1.5" PointX="12.25" PointY="10.625" IsExpanded="true" />
         <EntityTypeShape EntityType="labdbModel.Task" Width="1.5" PointX="13.25" PointY="14.375" IsExpanded="true" />
         <EntityTypeShape EntityType="labdbModel.Test" Width="1.5" PointX="10.5" PointY="13.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="labdbModel.User" Width="1.5" PointX="6.5" PointY="18.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="labdbModel.User" Width="1.5" PointX="6.125" PointY="18.25" IsExpanded="true" />
         <AssociationConnector Association="labdbModel.aspect1" ManuallyRouted="false" />
         <AssociationConnector Association="labdbModel.batch1" ManuallyRouted="false" />
         <AssociationConnector Association="labdbModel.batch_by_material" ManuallyRouted="false" />
@@ -57,8 +57,7 @@
           <ConnectorPoint PointX="5.75" PointY="22.375" />
           <ConnectorPoint PointX="5.75" PointY="11.224174400577116" />
           <ConnectorPoint PointX="8.43" PointY="11.224174400577116" />
-          <ConnectorPoint PointX="8.43" PointY="11.112567258195139" />
-          <ConnectorPoint PointX="9.75" PointY="11.112567258195139" />
+          <ConnectorPoint PointX="9.75" PointY="11.345341232902438" />
         </AssociationConnector>
         <AssociationConnector Association="labdbModel.project_to_report" ManuallyRouted="false" >
         </AssociationConnector>
