@@ -30,8 +30,10 @@ namespace Projects.ViewModels
             : base()
         {
             _entities = entities;
-            _eventAggregator = aggregator;
             _projectInstance = instance;
+            
+            _eventAggregator = aggregator;
+            _eventAggregator.GetEvent<CommitRequested>().Subscribe( () => _entities.SaveChanges() );
             
             _assignedConstructions = new ObservableCollection<Construction>(
                 _entities.Constructions.Where(cns => cns.Project.ID == _projectInstance.ID));
