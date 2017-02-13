@@ -33,7 +33,7 @@
                    Grid.Column="0"
                    Grid.Row="0"
                    Height="Auto"/>
-            <Label Content="{Binding Path=CurrentInstance.Name}"
+            <Label Content="{Binding Path=Name}"
                    Grid.Column="1"
                    Grid.Row="0"
                    Height="Auto"/>
@@ -41,7 +41,7 @@
                    Grid.Column="0"
                    Grid.Row="1"
                    Height="Auto"/>
-            <Label Content="{Binding Path=CurrentInstance.ProjectLeader.Name}"
+            <Label Content="{Binding Path=LeaderName}"
                    Grid.Column="1"
                    Grid.Row="1"
                    Height="Auto"/>
@@ -49,7 +49,7 @@
                    Grid.Column="0"
                    Grid.Row="2"
                    Height="Auto"/>
-            <Label Content="{Binding Path=CurrentInstance.OEM.Name}"
+            <Label Content="{Binding Path=OEMName}"
                    Grid.Column="1"
                    Grid.Row="2"
                    Height="Auto"/>
@@ -57,7 +57,7 @@
                    Grid.Column="0"
                    Grid.Row="3"
                    Height="Auto"/>
-            <Label Content="{Binding Path=CurrentInstance.Description}"
+            <Label Content="{Binding Path=Description}"
                    Grid.Column="1"
                    Grid.Row="3"
                    Height="Auto"/>
@@ -147,7 +147,7 @@
                             </Grid.ColumnDefinitions>
 
                             <ListView ItemsSource="{Binding Path=TaskList}"
-                                      SelectedItem="{Binding Path=SelectedRequest}">
+                                      SelectedItem="{Binding Path=SelectedTask}">
                                 <ListView.View>
                                     <GridView>
                                         <GridViewColumn Header="Commessa" DisplayMemberBinding="{Binding Path=Batch.Number}"/>
@@ -180,7 +180,7 @@
 
                     <GroupBox Header="Assegnati al progetto"
                               Grid.Column="0">
-                        <ListView ItemsSource="{Binding Path=CurrentInstance.ConstructionList}"
+                        <ListView ItemsSource="{Binding Path=AssignedConstructions}"
                                   SelectedItem="{Binding Path=SelectedAssigned}">
                             <ListView.View>
                                 <GridView>
