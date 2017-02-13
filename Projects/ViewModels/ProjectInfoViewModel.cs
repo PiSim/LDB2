@@ -73,7 +73,7 @@ namespace Projects.ViewModels
             );
         }
         
-        public DelegateCommand AssignConstruction
+        public DelegateCommand AssignConstructionCommand
         {
             get { return _assignConstruction; }
         }
@@ -150,7 +150,7 @@ namespace Projects.ViewModels
             get { return new List<DBManager.Task>(_projectInstance.Tasks); }
         }
         
-        public DelegateCommand UnassignConstruction
+        public DelegateCommand UnassignConstructionCommand
         {
             get { return _unassignConstruction; }
         }
