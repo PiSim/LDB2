@@ -31,6 +31,7 @@ namespace Projects.ViewModels
         {
             _entities = entities;
             _projectInstance = instance;
+            _entities.Projects.Attach(_projectInstance);
             
             _eventAggregator = aggregator;
             _eventAggregator.GetEvent<CommitRequested>().Subscribe( () => _entities.SaveChanges() );
