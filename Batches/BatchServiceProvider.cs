@@ -9,17 +9,13 @@ using System.Threading.Tasks;
 
 namespace Batch
 {
-    public class BatchServiceProvider
+    public class BatchServices
     {
         
-        public BatchServiceProvider()
+        public static void LogSampleForBatch(string batchNumber, string action)
         {
-            
+                         
         }
-    
-    
         
-    }
-    
-    
+    }    
 }
