@@ -28,7 +28,6 @@ namespace Controls.ViewModels
                                                           _line,
                                                           _aspect,
                                                           _recipe);
-                    _entities.SaveChanges();
                     _parentDialog.ValidatedMaterial = temp;
                     _parentDialog.DialogResult = true;
                 },
