@@ -128,7 +128,6 @@ namespace DBManager
             {
                 output = new Batch();
                 output.Number = number;
-                Batches.Add(output);
             }
 
             return output;
