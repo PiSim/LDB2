@@ -111,6 +111,7 @@
     <Compile Include="ViewModels\BatchQueryViewModel.cs" />
     <Compile Include="ViewModels\SampleLogViewModel.cs" />
     <Compile Include="SamplesWrapper.cs" />
+    <Compile Include="BatchServiceProvider.cs" />
     <Compile Include="Views\BatchesNavigationItem.xaml.cs">
       <DependentUpon>BatchesNavigationItem.xaml</DependentUpon>
     </Compile>
