@@ -20,12 +20,12 @@ namespace Batches.ViewModels
         private DelegateCommand _continue, _saveLogEntry;
         private IUnityContainer _container;
         private List<Tuple<string, string>> _actions;
-        private MaterialServiceProvider _materialServiceProvider;
+        private BatchServiceProvider _batchServiceProvider;
         private string _batchNumber;
         private Tuple<string, string> _selectedAction;
 
         public SampleLogViewModel(DBEntities entities,
-                                MaterialServiceProvider materialServiceProvider,
+                                BatchServiceProvider batchServiceProvider,
                                 IUnityContainer container) : base()
         {
             _actions = new List<Tuple<string, string>>()
@@ -39,18 +39,12 @@ namespace Batches.ViewModels
 
             _container = container;
             _entities = entities;
-            _materialServiceProvider = materialServiceProvider;
+            _batchServiceProvider = batchServiceProvider;
 
             _continue = new DelegateCommand(
                 () =>
                 {
-                    _currentBatch = _entities.GetBatchByNumber(_batchNumber);
-                    if (_currentBatch.Material == null)
-                    {
-                        _currentBatch.Material = _materialServiceProvider.CreateNewMaterial();
-                    }
-                    _entities.CreateSampleForBatch(_currentBatch, SelectedAction.Item2);
-                    _entities.SaveChanges();
+                    _batchServiceProvider.AddSampleLog(_batchNumber, SelectedAction.Item2);
                     Clear();
                 });
 

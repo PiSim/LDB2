@@ -52,16 +52,6 @@ namespace DBManager
             specification.SpecificationVersions.First(ver => ver.IsMain == 1).Requirements.Add(tempReq);
         }
         
-        public Sample CreateSampleForBatch(Batch batch, string actionCode)
-        {
-            Sample output = new Sample();
-            output.Batch = batch;
-            output.Date = DateTime.Now;
-            output.Code = actionCode;
-            Samples.Add(output);
-            return output;
-        }
-        
         public List<Requirement> GenerateRequirementList(SpecificationVersion version)
         {
             if (version.IsMain == 1)
@@ -122,7 +112,7 @@ namespace DBManager
 
         public Batch GetBatchByNumber(string number, bool new_instance_if_none_found = true)
         {
-            Batch output = base.Batches.FirstOrDefault(bb => bb.Number == number);
+            Batch output = Batches.FirstOrDefault(bb => bb.Number == number);
 
             if (output == null && new_instance_if_none_found)
             {
