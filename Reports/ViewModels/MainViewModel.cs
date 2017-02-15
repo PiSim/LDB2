@@ -37,7 +37,8 @@ namespace Reports.ViewModels
                 {
                     ObjectNavigationToken token = new ObjectNavigationToken(SelectedReport, ViewNames.ReportEditView);
                     _eventAggregator.GetEvent<VisualizeObjectRequested>().Publish(token);
-                });
+                },
+                () => SelectedReport != null);
 
             _newReport = new DelegateCommand(
                 () =>
@@ -45,8 +46,10 @@ namespace Reports.ViewModels
                     ReportCreationDialog creationDialog = _container.Resolve<ReportCreationDialog>();
                     if (creationDialog.ShowDialog() == true)
                     {
-                        ObjectNavigationToken token = new ObjectNavigationToken(creationDialog.ReportInstance, ViewNames.ReportEditView);
-                        _eventAggregator.GetEvent<VisualizeObjectRequested>().Publish(token);
+                        Report temp = creationDialog.ReportInstance;
+                        _reportList.Add(temp);
+                        SelectedReport = temp;
+                        _openReport.Execute();
                     }
                 });
         }
@@ -69,7 +72,11 @@ namespace Reports.ViewModels
         public Report SelectedReport
         {
             get { return _selectedReport; }
-            set { _selectedReport = value; }
+            set 
+            { 
+                _selectedReport = value; 
+                OpenReportCommand.RaiseCanExecuteChanged();                
+            }
         }
     }
 }
