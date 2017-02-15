@@ -45,6 +45,9 @@ namespace Controls.ViewModels
                     
                     _entities.GenerateTestList(temp, 
                                             _requirementList.Where(req => req.IsSelected).Select(req => req.Instance));
+                    
+                    _entities.Reports.Add(temp);
+                    _entities.SaveChanges();
 
                     _parentDialog.ReportInstance = temp;
                     _parentDialog.DialogResult = true;
