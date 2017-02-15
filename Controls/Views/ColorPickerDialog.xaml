@@ -18,7 +18,7 @@
         </Grid.RowDefinitions>
 
         <ComboBox ItemsSource="{Binding ColourList}"
-                  SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
+                  SelectedItem="{Binding SelectedColour, Mode=TwoWay}"
                   DisplayMemberPath="Name"
                   Grid.Column="0"
                   Grid.ColumnSpan="3"
