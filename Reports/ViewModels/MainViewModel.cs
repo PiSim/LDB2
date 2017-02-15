@@ -75,7 +75,8 @@ namespace Reports.ViewModels
             set 
             { 
                 _selectedReport = value; 
-                OpenReportCommand.RaiseCanExecuteChanged();                
+                OpenReportCommand.RaiseCanExecuteChanged();
+                OnPropertyChanged("SelectedReport");                
             }
         }
     }
