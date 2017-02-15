@@ -11,7 +11,7 @@ namespace Controls.ViewModels
 {
     internal class ColorPickerViewModel : BindableBase
     {
-        private Colour _selectedColor;
+        private Colour _selectedColour;
         private DBEntities _entities;
         private DelegateCommand _cancel, _confirm;
         private Views.ColorPickerDialog _parentView;
@@ -30,7 +30,7 @@ namespace Controls.ViewModels
             _confirm = new DelegateCommand(
                 () =>
                 {
-                    _parentView.ColourInstance = SelectedColor;
+                    _parentView.ColourInstance = SelectedColour;
                     _parentView.DialogResult = true;
                 });
         }
@@ -50,9 +50,9 @@ namespace Controls.ViewModels
             get { return _confirm; }
         }
 
-        public Colour SelectedColor
+        public Colour SelectedColour
         {
-            get { return _selectedColor; }
+            get { return _selectedColour; }
             set { _selectedColor = value; }
         }
     }
