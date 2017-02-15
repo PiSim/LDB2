@@ -53,7 +53,7 @@ namespace Controls.ViewModels
         public Colour SelectedColour
         {
             get { return _selectedColour; }
-            set { _selectedColor = value; }
+            set { _selectedColour = value; }
         }
     }
 }
