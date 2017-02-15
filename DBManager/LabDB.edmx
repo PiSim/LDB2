@@ -2189,7 +2189,7 @@
           <EntitySet Name="Masters1" EntityType="labdbModel.Master" />
           <EntitySet Name="Materials" EntityType="labdbModel.Material" />
           <EntitySet Name="Methods" EntityType="labdbModel.Method" />
-          <EntitySet Name="Organizations1" EntityType="labdbModel.Organization" />
+          <EntitySet Name="Organizations" EntityType="labdbModel.Organization" />
           <EntitySet Name="People" EntityType="labdbModel.Person" />
           <EntitySet Name="Projects" EntityType="labdbModel.Project" />
           <EntitySet Name="Properties" EntityType="labdbModel.Property" />
@@ -2252,7 +2252,7 @@
             <End Role="constructions" EntitySet="Constructions" />
           </AssociationSet>
           <AssociationSet Name="oemID" Association="Self.oemID">
-            <End Role="organizations" EntitySet="Organizations1" />
+            <End Role="organizations" EntitySet="Organizations" />
             <End Role="external_constructions" EntitySet="ExternalConstructions" />
           </AssociationSet>
           <AssociationSet Name="external_report" Association="Self.external_report">
@@ -2260,7 +2260,7 @@
             <End Role="external_report_files" EntitySet="ExternalReportFiles" />
           </AssociationSet>
           <AssociationSet Name="external_lab" Association="Self.external_lab">
-            <End Role="organizations" EntitySet="Organizations1" />
+            <End Role="organizations" EntitySet="Organizations" />
             <End Role="external_reports" EntitySet="ExternalReports" />
           </AssociationSet>
           <AssociationSet Name="project_to_report" Association="Self.project_to_report">
@@ -2288,11 +2288,11 @@
             <End Role="methods" EntitySet="Methods" />
           </AssociationSet>
           <AssociationSet Name="oem" Association="Self.oem1">
-            <End Role="organizations" EntitySet="Organizations1" />
+            <End Role="organizations" EntitySet="Organizations" />
             <End Role="projects" EntitySet="Projects" />
           </AssociationSet>
           <AssociationSet Name="organization_to_standard" Association="Self.organization_to_standard">
-            <End Role="organizations" EntitySet="Organizations1" />
+            <End Role="organizations" EntitySet="Organizations" />
             <End Role="standards" EntitySet="Stds" />
           </AssociationSet>
           <AssociationSet Name="author_to_report" Association="Self.author_to_report">
@@ -2850,7 +2850,7 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Organizations1">
+          <EntitySetMapping Name="Organizations">
             <EntityTypeMapping TypeName="labdbModel.Organization">
               <MappingFragment StoreEntitySet="organizations">
                 <ScalarProperty Name="ID" ColumnName="ID" />

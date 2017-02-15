@@ -91,6 +91,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="RequirementWrapper.cs" />
+    <Compile Include="SpecificationServiceProvider.cs" />
     <Compile Include="SpecificationsModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -105,9 +106,13 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="ViewModels\SpecificationCreationViewModel.cs" />
     <Compile Include="ViewModels\SpecificationEditViewModel.cs" />
     <Compile Include="ViewModels\SpecificationMainViewModel.cs" />
     <Compile Include="ViewNames.cs" />
+    <Compile Include="Views\SpecificationCreationDialog.xaml.cs">
+      <DependentUpon>SpecificationCreationDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\SpecificationEditView.xaml.cs">
       <DependentUpon>SpecificationEditView.xaml</DependentUpon>
     </Compile>
@@ -149,6 +154,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Views\SpecificationCreationDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\SpecificationEditView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

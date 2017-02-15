@@ -31,9 +31,20 @@
                 </GridView>
             </ListView.View>
         </ListView>
-        <Grid Grid.Column="1">
+        <Grid Grid.Column="1"
+              Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <Button Content="Nuova"
+                    Command="{Binding NewSpecificationCommand}"
+                    Grid.Column="0"/>
+
             <Button Content="Apri"
-                    Command="{Binding OpenSpecificationCommand}"/>
+                    Command="{Binding OpenSpecificationCommand}"
+                    Grid.Column="1"/>
         </Grid>
     </Grid>
 </UserControl>

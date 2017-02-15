@@ -36,7 +36,7 @@ namespace DBManager
         public virtual DbSet<Master> Masters1 { get; set; }
         public virtual DbSet<Material> Materials { get; set; }
         public virtual DbSet<Method> Methods { get; set; }
-        public virtual DbSet<Organization> Organizations1 { get; set; }
+        public virtual DbSet<Organization> Organizations { get; set; }
         public virtual DbSet<Person> People { get; set; }
         public virtual DbSet<Project> Projects { get; set; }
         public virtual DbSet<Property> Properties { get; set; }

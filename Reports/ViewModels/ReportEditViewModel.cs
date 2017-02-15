@@ -26,11 +26,13 @@ namespace Reports.ViewModels
                                     EventAggregator aggregator,
                                     Report target) : base()
         {
+            if (!(target is Report))
+                throw new InvalidOperationException("Not a Report Object");
+
             _entities = entities;
             _eventAggregator = aggregator;
-            _instance = target;
-            _entities.Reports.Attach(_instance);
-            
+            _instance = _entities.Reports.FirstOrDefault(rep => rep.ID == target.ID);
+
             _testList = new List<Test>(_instance.Tests);
 
 

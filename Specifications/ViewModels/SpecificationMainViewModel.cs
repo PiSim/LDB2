@@ -1,6 +1,7 @@
 ﻿using DBManager;
 using Infrastructure;
 using Infrastructure.Events;
+using Microsoft.Practices.Unity;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
@@ -19,21 +20,47 @@ namespace Specifications.ViewModels
         private EventAggregator _eventAggregator;
         private ObservableCollection<Specification> _specificationList;
         private Specification _selectedSpecification;
+        private UnityContainer _container;
 
-        internal SpecificationMainViewModel(DBEntities entities, EventAggregator aggregator) 
+        internal SpecificationMainViewModel(DBEntities entities, 
+                                            EventAggregator aggregator,
+                                            UnityContainer container) 
             : base()
         {
+            _container = container;
             _entities = entities;
             _eventAggregator = aggregator;
-            _newSpecification = new DelegateCommand(
-                () => { });
-            _openSpecification = new DelegateCommand(
-                () => {
-                    ObjectNavigationToken token = new ObjectNavigationToken(SelectedSpecification, ViewNames.SpecificationsEditView);
-                    _eventAggregator.GetEvent<VisualizeObjectRequested>().Publish(token);
-                });
             _specificationList = new ObservableCollection<Specification>(
                 _entities.Specifications);
+
+            _newSpecification = new DelegateCommand(
+                () => 
+                {
+                    Views.SpecificationCreationDialog creationDialog = 
+                        _container.Resolve<Views.SpecificationCreationDialog>();
+                    
+                    if (creationDialog.ShowDialog() == true)
+                    {
+                        Specification temp = creationDialog.SpecificationInstance;
+                        _specificationList.Add(temp);
+                        SelectedSpecification = temp;
+                        _openSpecification.Execute();
+                    }
+                                            
+                });
+
+            _openSpecification = new DelegateCommand(
+                () => 
+                {
+                    ObjectNavigationToken token = new ObjectNavigationToken(SelectedSpecification, ViewNames.SpecificationsEditView);
+                    _eventAggregator.GetEvent<VisualizeObjectRequested>().Publish(token);
+                },
+                () => SelectedSpecification != null);
+        }
+
+        public DelegateCommand NewSpecificationCommand
+        {
+            get { return _newSpecification; }
         }
 
         public DelegateCommand OpenSpecificationCommand
@@ -49,7 +76,11 @@ namespace Specifications.ViewModels
         public Specification SelectedSpecification
         {
             get { return _selectedSpecification; }
-            set { _selectedSpecification = value; }
+            set
+            {
+                _selectedSpecification = value;
+                _openSpecification.RaiseCanExecuteChanged();
+            }
         }
     }
 }
