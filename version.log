@@ -6,7 +6,7 @@ v 0.4.0 -- In Corso
 -Implementato DbContext EntityFramework6/ADO.NET in sostituzione della classe DBManager
 -Numerose modifiche alla struttura del DB per sfruttare le caratteristiche dell'ORM
 -Trasferite le principali viste di gestione e reimplementati i viewmodel per il funzionamento con Prism/EF6
--Introdotti diverse finestre di dialogo per funzioni comuni(creazione report-specifiche-progetti, associazione materiale-progetto e ricetta-colore)
+-Introdotte diverse finestre di dialogo per funzioni comuni(creazione report-specifiche-progetti, associazione materiale-progetto e ricetta-colore)
 
 v 0.3.6 -- 03/01/2017
 
