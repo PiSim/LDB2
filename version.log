@@ -1,0 +1,339 @@
+v 0.4.0 -- In Corso
+
+-Reimplementazione totale dell'applicazione
+-Suddiviso il progetto in moduli, aggiunto pacchetto Unity per la gestione delle dipendenze
+-Aggiunto pacchetto Prism
+-Implementato DbContext EntityFramework6/ADO.NET in sostituzione della classe DBManager
+-Numerose modifiche alla struttura del DB per sfruttare le caratteristiche dell'ORM
+-Trasferite le principali viste di gestione e reimplementati i viewmodel per il funzionamento con Prism/EF6
+-Introdotti diverse finestre di dialogo per funzioni comuni(creazione report-specifiche-progetti, associazione materiale-progetto e ricetta-colore)
+
+v 0.3.6 -- 03/01/2017
+
+-Rivisto ruolo e funzionamento delle classi specifica e requisito
+-Implementate classi DBSpecificationVariant e DBControlPlan
+-Ristrutturata UI specifiche per funzionare con il nuovo modello
+-Aggiunto campo descrizione agli oggetti report
+-Applicata variante della vista report alle richieste pipeline
+-Implementato controllo MaterialBox
+-Aggiunti campi costo ai progetti: totale interno, totale esterno
+-Implementati servizi di autenticazione di base e profili utente
+-Creata struttura viste progetti
+-Implementata vista associazione construction a progetto
+-Modificata classe Report e viste associate in modo da funzionare con le nuove implementazioni
+-Modificata classe RequestedReport e viste associate in modo da funzionare con le nuove implementazioni
+
+v 0.3.5 -- 17/12/2016
+
+-Definite classi DBConstruction e DBExternalConstruction e relative tabelle
+-Migrati dati relativi a tipo, linea, aspetto e progetto dal materiale alla construction
+-Rimossa completamente la selezione progetto in entrata rotoli e creazione Report
+-Trasferito il metodo StartReportEdit alla superclasse ViewModelBase
+-Migliorate le viste di visualizzazione di Batch e Report e di modifica Report
+-Corretti metodi di compilazione dei query statement per funzionare con la nuova struttura dati
+-Aggiunto metodo per la sostituzione degli standard obsoleti nei metodi al momento dell'aggiornamento 
+-Migliorate le viste di visualizzazione e modifica report esterni
+-Creazione vista per il controllo dello stato di aggiornamento delle specifiche
+-Corretto errore che impediva la creazione di nuove specifiche
+-Escluse specifiche e metodi obsoleti e/o marcati per cancellazione dalle liste locali
+-Corretti diversi Binding nelle viste Test Esterni
+-Corretto metodo DBRequirement.Clone() in modo da copiare correttamente anche le sottoistanze collegate
+-Aggiunta funzionalità di creazione richieste e report alla vista visualizzazione Batch
+
+v 0.3.4 -- 04/12/2016
+
+-Definite le classi DBSubTest e DBSubRequirement per la gestione delle singole misurazioni relative ad un metodo
+-Aggiunte liste di DBSubRequirement e DBSubTest alle classi DBRequirement e DBTest
+-Trasferite le informazioni relative alle misurazioni requisito alla classe DBSubRequirement
+-Trasferite le informazioni relative alle misurazioni prova alla classe DBSubTest
+-Trasferimento percorsi file DBReport su istanze DBFile
+-Trasferimento percorsi file DBStandard su istanze DBFile
+-Introduzione supporto file multipli per Report e standard
+-Definite e implementate procedure aggiornamento per DBMethod 
+-Definita e implementata procedura aggiornamento per DBStandard
+-*Definite e implementate procedure report esterni
+-Aggiornati diversi metodi della classe DBManager per funzionare con le nuove implementazioni delle classi
+-Implementata conversione da DBRequestedReport a DBReport
+
+v 0.3.3 -- 24/11/2016
+
+-Implementata classe DBFile:DBObject e tabella file per contenere percorsi file 
+-Creata struttura viste per la classe DBExternalReport
+-Aggiunta funzionalità inserimento dati materiale da vista Log campioni
+-Creata struttura viste per SampleLogEntry, a sostituzione della precendente vista singola
+-Implementato metodo DBProject.GetExportValues
+-Trasferita la funzione di salvataggio delle nuove istanze dal metodo DBManager.GetBatch all'istanza stessa
+-Rimosso riferimento all'oem dai batch
+-Modificato la collezione locale di oggetti DBBatch per indicizzare secondo numero anziché id
+-Implementazione delle classi DBObject relative alle caratteristiche materiale: DBAspect, DBColour, DBMaster, DBMaterial, DBRecipe
+
+v 0.3.2 -- 14/11/2016
+
+-Aggiunto a DBBatch riferimento ad istanza DBMaterial
+-Aggiunto a DBReport un riferimento alla richiesta che lo ha generato (se esiste)
+-Implementata funzionalità base Pipeline e viste relative
+-Funzionalita apertura file da percorso salvato
+-Aggiunta funzionalità di selezione requisiti alla creazione di un Report
+-Implementati in DBManager diversi metodi Get***(id)
+-Aggiunto alla classe DBRequirement un flag bool per selezionare l'inclusione o meno in un report
+-Implementata classe PendingTest
+-Implementata classe DBRequestedReport:DBObject
+-Create tabelle per funzionalità pipeline: requested_reports e pending_tests
+-Implementata procedura di query rapido per Batch nella view BatchMenuView
+-Rimossa la generazione degli ID dalla classe DBObject
+-Riorganizzata la procedura interna di creazione/inizializzazione/salvataggio di un report, creato il metodo InitializeNewReport()
+-Modificato il livello di accessibilità di diversi metodi di oggetti DBObject
+-Modificato il campo DBReport.batch(string) in _batchID(Int64) la colonna batch(TEXT) in batchID(INTEGER) 
+-Implementata importazione on-demand degli oggetti figli innescata dal metodo get delle proprietà relative
+-Corretta eccezione all'inserimento di un SampleLogEntry
+-Creato campo Dictionary<Int64, DBBatch> e metodo GetBatchInstance(id) nella classe DBManager
+-Creata una vista per la visualizzazione Batch
+-Aggiunte agli oggetti DBBatch liste di SampleLogEntry, DBReport e DBTest
+-Implementato DBManager.GetBatchInstance(number) e l'overload DBManager.GetBatchInstance(id)
+-Inserita chiamata al metodo GetBatchInstance() alla creazione di oggetti DBReport, e passaggio del riferimento agli oggetti figli
+-Creata classe statica Model.Maintenance per contenere i metodi di manutenzione del DB
+-Implementato il metodo ReportBatchesToID() per la sostituzione procedurale delle stringhe batch con gli Id per le classi DBReport e DBTest 
+-Pulizia generale del codice modificando e rinominando le componenti interne di numerose classi.
+
+v 0.3.1 -- 02/11/2016
+
+-Implementato il metodo SampleLogEntry.Save()
+-Modificata la classe SampleLogEntry in modo da salvare un riferimento ad oggetto DBBatch anziché una stringa con il numero
+-Completate le viste per la classe DBMethod
+-Sostituiti tutti i binding a proprietà vm*** con binding a CurrentInstance
+-Implementazione struttura viste DBBatch e relativa vista di query
+-Implementato il metodo DBSpecification.Clone()
+-Implementato il metodo DBRequirement.Clone()
+-Implementato il metodo DBMethod.Clone()
+-Implementato il metodo Parametro.Clone()
+-Inseriti ove necessario i metodi Clone() nei costruttori per evitare che più oggetti facessero riferimento ad un'unica istanza
+-Integrata negli oggetti DBSpecification una procedura di aggiornamento/sostituzione innescata dal metodo StartUpdate()
+-Integrata negli oggetti DBMethod una procedura di aggiornamento/sostituzione innescata dal metodo StartUpdate()
+-Predisposti gli oggetti DBMethod per contenere un valore di costo(Int)
+-Implementato il metodo DBMethod.GetExportValues()
+-Inserito un controllo in GUI per l'aggiornamento/sostituzione di specifiche
+-Corretti vari Binding
+-Modificati i campi della classe DBBatch e le colonne della tabella batches per rispecchiare l'excel prove in preparazione dell'importazione dati
+-Corretta la mancata esecuzione del metodo DBReport.FetchTests()
+
+v 0.3.0 -- 20/10/2016
+
+-Aggiunta la funzionalita relativa alle sottoviste alla classe ViewModelBase
+-Corretta la procedura di salvataggio degli oggetti SampleLogEntry
+-Corretta la persistenza dei dati inseriti in ViewModel anche dopo il salvataggio/annullamento 
+-Corretta NullReferenceException nel metodo ReportQueryViewModel.Clear
+-Tabella requirements: modificato il tipo della colonna number in "INTEGER"
+-Tabella report: modificato il nome della colonna author in authorID
+-Corretta InvalidCastException al salvataggio di un nuovo report
+-Aggiunto campo batch agli oggetti DBReport
+-Reimplementate secondo la nuova struttura le viste relative agli oggetti DBTest
+-Reimplementate secondo la nuova struttura le viste relative agli oggetti DBReport
+-Reimplementate secondo la nuova struttura le viste relative agli oggetti DBSpecification
+-Reimplementate secondo la nuova struttura le viste relative agli oggetti DBStandard
+-Reimplementate secondo la nuova struttura le viste relative agli oggetti DBMethod
+-Corretto XAMLParseError nella vista SampleLogView
+-Creata la classe astratta VisualizationViewModelBase:ViewModelBase
+-Trasferiti i metodi sui ViewModel "Main" per facilitare la gestione delle procedure
+-ViewModelBase: modificata la gestione delle sottoviste, una nuova istanza viene creata ad ogni cambio vista
+
+v 0.2.6 -- 10/10/2016
+
+-Corretta NullReferenceException all'inserimento di un nuovo progetto
+-Corretta ArgumentNullException all'inserimento di una specifica
+-Corretta OutOfRangeException all'inserimento di un report
+-Implementata vista per la ricerca di singole prove
+-Corretto cast non valido nelle funzioni di Query
+-Corretta la mancata attribuzione del campo ReportID nella classe DBTest
+-Corretta la mancata attribuzione del campo projectID nella classe DBReport
+-Aggiunta gestione misure individuali per i requisiti nella videata Specifiche
+-Tolta la funzionalità di formattazione dagli oggetti DBRequirement, che ora fungono esclusivamente da template per oggetti DBTest
+-Modificata la videata Specifiche in modo da semplificare l'inserimento di requisiti, spostata la selezione metodi a una ListView e introdotti dei filtri selezione
+-Implementata la possibilità di rimuovere requisiti da una specifica
+-Implementato metodo DBManager.UpdateStructure(DBTable)
+-Ulteriori correzioni a Binding e proprietà VM
+-Flag relativo alla numerazione automatica trasferito da DBReport al ViewModel
+-GetExportValues() implementato per la classe DBExternalReport, DBTest e DBReport
+-Implementato costruttore DBRequirement(DataRow)
+-Implementato metodo DBReport.LoadFromSpecification()
+-Implementate le proprietà mancanti della classe DBExternalReport
+-Implementati override dei metodi DBtableGen e DBTableDrop che accettano una singola istanza DBTable
+-Aggiunta la colonna batch alla tabella report
+-Implementata vista Test Esterni
+-Aggiunta descrizione breve ed estesa nella tendina di selezione specifica nella View report
+-Aggiunto riferimento ad autore ed edizione nella tendina di selezione standard nella View specifiche
+-Inserita in DataStructure la tabella samples_log per tenere conto dei rotoli arrivati/buttati
+-Implementata classe SampleLogEntry associata alla tabella sample_log
+-Creata vista Movimenti rotoli
+-Corretta la sintassi SQL del metodo DBManager.UpdateEntry
+-Rimossa colonna punto nella visualizzazione specifiche
+-Aggiunta colonna note nella visualizzazione report
+-Campo punto nella classe DBrequirement cambiato in int 
+-Aggiunto alla soluzione il framework MVVMLight
+-Rivista l'implementazione MVVM a partire dalla vista ReportView, da estendere alle altre in seguito
+-ReportView divisa in 4 viste con funzionalità specifiche: ReportView, ReportCreationView, ReportEditView e ReportQueryView
+-Eliminato il namespace SearchDialogs
+-Aggiunto riferimento al ViewModel "parent" nella classe ViewModelBase
+
+v 0.2.5 -- 07/09/2016
+
+-MainWindow: corretti diversi riferimenti errati a proprietà del ViewModel
+-Inserita colonna in ogni tabella per contenere il flag di cancellazione
+-Inserito statement try/catch nel metodo GetNewID per gestire l'inserimento di oggetti in tabelle vuote
+-Metodo generico ImportAll(DBTable) per creare una copia locale di una tabella del DB
+-Implementato metodo DBObject.StoreLocally() e relativi override per inserire un'istanza nella rispettiva collezione locale
+-Implementato metodo DBManager.ImportAll() per salvare copie locali di tutte le tabelle contenute in una lista;
+-Eliminati i vecchi metodi di importazione specifici per classe
+-DBObject: implementata gestione del flag di cancellazione nella classe base e in tutte le derivate
+-Corretti diversi riferimenti errati a colonne del database nei costruttori
+-Implementato metodo UpdateEntry(DBObject);
+-Modificato DBManager.GetElement() per restituire un DataSet
+-Creato namespace LabDB.SearchDialogs per ospitare il codice relativo alle finestre di ricerca
+-Creata finestra DBReportSearchDialog e relativo ViewModel per la ricerca di DBReport
+-DBSpecification.Save invoca DBRequirement.Save per tutti gli elementi della lista requirements
+-Nuovo metodo DBReport.GenerateNumber genera automaticamente progressivo se auto_number è "vero"
+-DBReport.Save invoca DBTest.Save per tutti gli elementi della lista test_list
+-Implementato metodo DBReportSearchDialog.GenerateQuery() 
+-Implementato DBManager.RunQuery(string), che restituisce un Dataset con i risultati di una ricerca
+-Implementato il costruttore DBObject(DataRow)
+-Implementato il costruttore DBReport(DataRow)
+-Implementato il costruttore DBTest(DataRow)
+-FetchTests() implementato per la classe DBReport
+-Modificato il loop nel metodo DBManager.ImportAll in modo da ottenere l'ordine di caricamento corretto
+-Eliminata la classe Vista
+-Tutte le viste sono state separate in file UserControl.xaml e relativi UserControl.xaml.cs
+-Implementata classe ViewModelBase
+-Implementati ViewModel:ViewModelBase individuali per le viste
+-Revisionata la struttura fisica del programma, separate le classi in file .cs individuali
+-MainWindowViewModel contiene una lista di viewmodel corrispondenti ad ogni Tab
+-Implementati Datatemplate nella finestra principale per richiamare la vista adatta per il viewmodel selezionato
+-Modificati tutti i Binding in modo da funzionare con la nuova implementazione dei ViewModels
+-Implementato il metodo virtuale DBObject.GetExportValues()
+
+v 0.2.4 -- 25/08/2016
+
+-Corretti errori nei riferimenti alle colonne nel costruttore DBOrganization(rdr) che causavano SQLParseException all'avvio del programma 
+-Classe progetto reimplementata come DBProject
+-Classe DBObject: Implementato metodo Save per gestire la chiamata a ExportToDB ed eventuali operazioni preparatorie
+-Estratta la chiamata al metodo new_id da ExportToDB, new_id reso pubblico e rinominato in GetNewID
+-Eliminato il metodo ExportToDB
+-Trasferita la funzionalità di aggiunta di un'istanza alle collezioni locali al metodo Save dell'istanza stessa
+-Metodo add_entry reso pubblico, rinominato in CreateNewEntry e modificato in modo da accettare un'istanza DBObject come unico parametro
+-Implementato metodo di query GetMaxElement(DBTable, colonna) che restituisce un DataSet rappresentativo dell'elemento della tabella con il massimo valore nella colonna data
+-Corretti diversi Binding nella finestra MainWindow
+-Implementazione di base della classe DBBatch:DBObject
+-Implementazione di base della classe DBMaterial:DBObject
+-Creata GUI per l'inserimento di report da specifica o aggiungendo singole prove
+
+v 0.2.3 -- 18/08/2016
+
+-Rinominate numerose classi, proprietà, tabelle e metodi in modo da renderle più riconoscibili e stabilire convenzioni interne più consistenti
+-Eliminata la classe VersioneSpecifica e relativa tabella
+-Eliminata la classe variantemetodo e relativa tabella
+-Integrati i campi e le funzionalità della classe VarianteMetodo nella classe Metodo
+-Classe Requisito reimplementata come DBRequirement:DBObject
+-Creata tabella requirements
+-Classe DBTest: Implementato il costruttore DBTest(DBReport)
+-Classe DBTest: Implementato il costruttore DBTest(DBRequirement)
+-Aggiunto un selettore di categoria nella GUI Enti
+-Implementata la classe DBExternalReport : DBObject
+-Aggiunta la possibilità di specificare un requisito per ogni Misurazione in un oggetto DBTest
+-Implementato il metodo virtuale DBObject.GetExportValues() , che andrà a sostituire la proprietà ExportList
+
+v 0.2.2 -- 16/08/2016
+
+-Interfaccia TableObject sostituita dalla classe base DBObject
+-Eliminati i metodi di copia dei DBObjects
+-MainWindowViewModel: eliminati tutti i riferimenti diretti a elementi dell'interfaccia
+-Definita la classe statica DataStructure come modello del DB ad uso interno
+-Definite le classi DBTable e Column per supportare la classe DataStructure
+-Riferimenti a istanze DBTable sono ora passate per le esportazioni su db al posto di semplici stringhe
+-Creata la tabella Utenti per contenere una lista di utenti e le impostazioni di ognuno 
+-Tabella Modifiche, contenente una cronologia delle modifiche apportate al DB (funzionalità non implementata)
+-Creata la classe Report:DBObject e la relativa tabella report
+-Metodi procedurali per la creazione/cancellazione delle tabelle che attingono direttamente dalla classe DataStructure
+-Eliminati i vecchi metodi di creazione/cancellazione delle tabelle
+-Eliminata la vecchia classe statica Tables
+-Integrate tutte le tabelle in uso nella classe DataStructure
+-Uniformati i nomi delle colonne tra le diverse tabelle 
+-Nuova tabella test_esterni
+-Sospesa temporaneamente la funzionalità della classe Progetto
+-Implementato il costruttore DBObject(rdr) e aggiunto il riferimento base(rdr) negli oggetti DBObject 
+
+v 0.2.1 -- 11/08/2016
+
+-Aggiunta la proprietà IsNew all'interfaccia TableObject
+-Definita la tabella DBInfo per contenere informazioni generali sul DB
+-Tabella metodi: aggiunta la colonna "note" (TEXT) 
+-Tabella ODP : aggiunta la colonna "note" (TEXT)
+-Corretto crash all'inserimento di una nuova prova
+-DBManager: Aggiunto il metodo FindID per recuperare specifiche istanze da un' ObservableCollection
+-Corretto il passaggio di riferimenti al momento dell'esportazione su DB
+-TableObject: Aggiunta proprietà LocalCollection
+-Condensati tutti i metodi di esportazione nel generico ExportToDB(TableObject)
+-Definita la classe di supporto Requisito che rappresenta una singola linea di una specifica
+-Definita la classe Specifica con interfaccia TableObject, costituita da una una raccolta di requisiti e alcuni parametri identificativi
+-Definita nel database la tabella "spec" per archiviare le specifiche
+-Definita la classe VersioneSpecifica con interfaccia TableObject
+-Definita nel database la tabella "versionispec" per archiviare le VersioneSpecifica
+-Creazione di una vista per la definizione delle specifiche
+-DBManager : sostituite le liste locali con ObservableCollection
+-OEM: rinominata tabella e classe in Ente, aggiunto campo categoria(TEXT)
+-Standard : aggiunto riferimento a un Ente nella classe e nella tabella
+
+v 0.2.0 -- 02/08/2016
+
+-Eliminata la tavola gruppi_prop
+-Sostituita la colonna gruppo(INTEGER) con la colonna misure(TEXT) nella tavola prop_mat
+-Eliminato l'oggetto GruppoProve, la cui funzionalità è stata trasferita all'oggetto Metodo
+-Aggiunta la colonna "parametri" (TEXT) alla tabella metodi
+-Ad ogni metodo è ora associata una lista di parametri da definire (Temperatura, n° cicli, dimensioni provino, etc..)
+-Nuovo oggetto "VarianteMetodo": definita classe e tabella relativa
+-Ad ogni metodo è ora associata una lista di "VariantiMetodo"
+-Ad ogni prova è associato un ID di VarianteMetodo che fornisce i parametri utilizzati
+-Creata vista per l'inserimento di OEM
+-Creata classe OEM con interfaccia TableObject
+-Sostituito l'uso del nome di un OEM con riferimenti all'ID in tutte le classi e tabelle associate
+-Classe Metodo: Sostituito il campo di testo "std" con riferimento ad un oggetto "Standard"
+-Nuovo Oggetto "Standard" : definita classe e tabella relativa
+-Nuova Vista per L'inserimento di standard
+-Nelle viste relative a Proprietà, Metodi e Prove le proprietà relative ai singoli controlli VM sono state rimpiazzate con binding a istanze delle classi 
+-Rimossa la chiamata al metodo new_id() dalla proprietà ImportList
+-Creazione di un interfaccia TableObject e relativo metodo AddTO(TableObject) per standardizzare gli inserimenti
+-Interfaccia TableObject implementata per le classi GruppoProp, Metodo, Persona, Proprietà, Prova e Specifica 
+-Trasferita la classe statica Tables all'interno delle singole classi e legata alle proprietà Colonne e Table dell'interfaccia TableObject
+-ImportList rinominata a ExportList
+-Classe Requisito rinominata in Parametro
+-Creato metodo di query generico GetElement(Int64 ID, string table) che restituisce un reader 
+-Rivista la chiamata al metodo new_id per evitare conflitti dovuti a inserimenti simultanei
+ 
+v 0.1.3 -- 11/07/2016
+
+-View inserimento prove singole operativa
+-Migrazione a nuova struttura dati generata direttamente dal programma
+-La classe Prova ora contiene un'istanza della classe Metodo associata 
+-La classe Metodo ora contiene un'istanza della classe proprietà associata
+-La classe Proprietà ora contiene un'istanza della classe GruppoProve associata
+-Riscritto il metodo new_id in modo che restituisca un int
+-Riscritti tutti i metodi di query ed inserimento in modo da evitare che il db rimanesse bloccato
+-Aggiunte viste (Admin) per l'inserimento di proprietà e gruppi proprietà 
+-Rivista DataStructure interna, riscritte tutte le classi rilevanti in base al nuovo modello
+-Implementazione per ogni classe rilevante della proprietà ImportList, che restituisce una lista di stringhe per l'inserimento in database
+-Aggiunto un overload del costruttore di ogni classe senza nessun argomento per la creazione di un temporaneo "bianco"
+
+v 0.1.2 -- 04/07/2016
+
+-View inserimento metodi operativa
+-Create le classi "Prova", "Risultato" e "GruppoProve" per la gestione dell'inserimento prove
+
+v 0.1.1 -- 02/07/2016
+
+-Implementate views creazione materiali e inserimento metodi
+-Implementata parzialmente view inserimento prove
+-Riorganizzata la struttura dati
+-Operatori e capi progetto ora gestiti come generica risorsa "Persona"
+-Tutte le liste locali vengono ora passate all'interfaccia come i loro rispettivi oggetti anziché come stringhe
+
+v 0.1.0 -- 20/06/2016
+
+-Creato metodo generico per l'inserimento nel database
+-Primo abbozzo di interfaccia creazione materiali
