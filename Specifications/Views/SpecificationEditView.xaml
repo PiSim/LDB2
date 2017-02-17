@@ -219,7 +219,7 @@
                         <ColumnDefinition/>
                         <ColumnDefinition Width="2*"/>
                     </Grid.ColumnDefinitions>
-                    <GroupBox Header="Versioni esistenti"
+                    <GroupBox Header="Edizioni"
                               Grid.Column="0">
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -230,23 +230,23 @@
                                 <RowDefinition/>
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
-                            <ListView ItemsSource="{Binding Path=VersionList}"
-                                      SelectedItem="{Binding Path=SelectedVersion, Mode=TwoWay}"
+                            <ListView ItemsSource="{Binding Path=IssuesList}"
+                                      SelectedItem="{Binding Path=SelectedIssue, Mode=TwoWay}"
                                       Grid.Column="0"
                                       Grid.Row="0">
                                 <ListView.View>
                                     <GridView>
-                                        <GridViewColumn Header="Nome">
+                                        <GridViewColumn Header="Edizione">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
-                                                    <TextBox Text="{Binding Path=Name, Mode=TwoWay}"/>
+                                                    <TextBox Text="{Binding Path=Issue, Mode=TwoWay}"/>
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </GridViewColumn>
-                                        <GridViewColumn Header="Principale">
+                                        <GridViewColumn Header="Corrente">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
-                                                    <CheckBox IsChecked="{Binding Path=IsMain, Mode=OneWay}"
+                                                    <CheckBox IsChecked="{Binding Path=IsCurrent, Mode=OneWay}"
                                                               IsEnabled="False"/>
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
@@ -268,49 +268,16 @@
                                     <RowDefinition/>
                                 </Grid.RowDefinitions>
                                 <Button Content="Crea Nuova"
-                                    Command="{Binding Path=NewVersionCommand}"
+                                    Command="{Binding Path=NewIssueCommand}"
                                     Grid.Row="0"
                                     Margin="5,5,5,5"/>
                             </Grid>
                         </Grid>
                     </GroupBox>
-                    <GroupBox Header="Requisiti"
+                    <GroupBox Header="Files"
                               Grid.Column="2">
-                        <ListView ItemsSource="{Binding Path=RequirementList}">
-                            <ListView.View>
-                                <GridView>
-                                    <GridViewColumn Header="Override">
-                                        <GridViewColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <CheckBox IsChecked="{Binding IsOverride, Mode=TwoWay}"
-                                                          IsEnabled="{Binding CanSetOverride}"/>
-
-                                            </DataTemplate>
-                                        </GridViewColumn.CellTemplate>
-                                    </GridViewColumn>
-                                    <GridViewColumn Header="Proprietà"
-                                                    DisplayMemberBinding="{Binding Path=Test}"/>
-                                    <GridViewColumn Header="Metodo"
-                                                    DisplayMemberBinding="{Binding Path=Standard}"/>
-                                    <GridViewColumn Header="Requisiti">
-                                        <GridViewColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <ListView ItemsSource="{Binding Path=SubRequirements}"
-                                                          DisplayMemberPath="Name">
-                                                    <ListView.ItemTemplate>
-                                                        <DataTemplate>
-                                                            <StackPanel Orientation="Horizontal">
-                                                                <Label Content="{Binding Name}"/>
-                                                                <TextBox Text="{Binding RequiredValue, Mode=TwoWay}"/>
-                                                            </StackPanel>
-                                                        </DataTemplate>
-                                                    </ListView.ItemTemplate>
-                                                </ListView>
-                                            </DataTemplate>
-                                        </GridViewColumn.CellTemplate>
-                                    </GridViewColumn>
-                                </GridView>
-                            </ListView.View>
+                        <ListView ItemsSource="{Binding Path=FileList}">
+                           
                         </ListView>
                     </GroupBox>
                 </Grid>
