@@ -27,9 +27,12 @@ namespace Specifications.ViewModels
             : base()
         {
             _requirementList = new ObservableCollection<RequirementWrapper>();
-            _instance = instance;
             _entities = entities;
-            _entities.Specifications.Attach(_instance);
+            
+            _instance = _entities.Specification.FirstOrDefault(spec => spec.ID == instance.ID);
+            
+            if (_instance == null)
+                throw new NullReferenceException(); 
 
             _addControlPlan = new DelegateCommand(
                 () =>
