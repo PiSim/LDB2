@@ -14,13 +14,15 @@ namespace Specifications.ViewModels
     {
         private ControlPlan _selectedControlPlan;
         private DBEntities _entities;
-        private DelegateCommand _addControlPlan, _addTest, _removeControlPlan, _removeTest;
+        private DelegateCommand _addControlPlan, _addFile, _addTest, _removeControlPlan, _removeFile, _removeTest;
         private ObservableCollection<RequirementWrapper> _requirementList;
         private Method _selectedToAdd;
         private Property _filterProperty;
         private Requirement _selectedToRemove;
         private Specification _instance;
         private SpecificationVersion _selectedVersion;
+        private StandardFile _selectedFile;
+        private StandardIssue _selectedIssue;
 
         internal SpecificationEditViewModel(DBEntities entities,
                                             Specification instance) 
@@ -84,6 +86,11 @@ namespace Specifications.ViewModels
         {
             get { return new List<ControlPlan>(_instance.ControlPlans); }
         }
+        
+        public List<StandardFile> FileList
+        {
+            get { return new List<StandardFile>(SelectedIssue.StandardFiles); }
+        }
 
         public Property FilterProperty
         {
@@ -110,6 +117,11 @@ namespace Specifications.ViewModels
         public Specification Instance
         {
             get { return _instance; }
+        }
+        
+        public List<StandardIssue> IssueList
+        {
+            get { return new List<StandardIssue>(_instance.StandardIssues); }
         }
 
         public SpecificationVersion MainVersion
@@ -159,6 +171,25 @@ namespace Specifications.ViewModels
                 _selectedControlPlan = value;
                 OnPropertyChanged("SelectedControlPlan");
                 _removeControlPlan.RaiseCanExecuteChanged();
+            }
+        }
+        
+        public StandardFile SelectedFile
+        {
+            get { return _selectedFile; }
+            set 
+            { 
+                _selectedFile = value; 
+            }
+        }
+        
+        public StandardIssue SelectedIssue
+        {
+            get { return _selectedIssue; }
+            set 
+            {
+                _selectedIssue = value;
+                OnPropertyChanged("FileList");
             }
         }
 
