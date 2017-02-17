@@ -30,7 +30,7 @@ namespace Projects.ViewModels
                 () =>
                 {
                     Views.ProjectCreationDialog creationDialog = new Views.ProjectCreationDialog(_entities);
-                    if (creationDialog.DialogResult == true)
+                    if (creationDialog.ShowDialog() == true)
                     {
                         OnPropertyChanged("ProjectList");
                     }
