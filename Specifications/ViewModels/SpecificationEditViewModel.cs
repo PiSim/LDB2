@@ -31,7 +31,7 @@ namespace Specifications.ViewModels
             _requirementList = new ObservableCollection<RequirementWrapper>();
             _entities = entities;
             
-            _instance = _entities.Specification.FirstOrDefault(spec => spec.ID == instance.ID);
+            _instance = _entities.Specifications.FirstOrDefault(spec => spec.ID == instance.ID);
             
             if (_instance == null)
                 throw new NullReferenceException(); 
@@ -121,7 +121,7 @@ namespace Specifications.ViewModels
         
         public List<StandardIssue> IssueList
         {
-            get { return new List<StandardIssue>(_instance.StandardIssues); }
+            get { return new List<StandardIssue>(_instance.Standard.StandardIssues); }
         }
 
         public SpecificationVersion MainVersion
