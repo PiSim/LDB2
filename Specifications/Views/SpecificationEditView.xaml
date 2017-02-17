@@ -212,6 +212,110 @@
                     </GroupBox>
                 </Grid>
             </TabItem>
+
+            <TabItem Header="Edizioni/File">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="2*"/>
+                    </Grid.ColumnDefinitions>
+                    <GroupBox Header="Versioni esistenti"
+                              Grid.Column="0">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <ListView ItemsSource="{Binding Path=VersionList}"
+                                      SelectedItem="{Binding Path=SelectedVersion, Mode=TwoWay}"
+                                      Grid.Column="0"
+                                      Grid.Row="0">
+                                <ListView.View>
+                                    <GridView>
+                                        <GridViewColumn Header="Nome">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBox Text="{Binding Path=Name, Mode=TwoWay}"/>
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+                                        <GridViewColumn Header="Principale">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <CheckBox IsChecked="{Binding Path=IsMain, Mode=OneWay}"
+                                                              IsEnabled="False"/>
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
+                            <Grid Grid.Column="1"
+                                  Grid.Row="0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Button Content="Crea Nuova"
+                                    Command="{Binding Path=NewVersionCommand}"
+                                    Grid.Row="0"
+                                    Margin="5,5,5,5"/>
+                            </Grid>
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Header="Requisiti"
+                              Grid.Column="2">
+                        <ListView ItemsSource="{Binding Path=RequirementList}">
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="Override">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <CheckBox IsChecked="{Binding IsOverride, Mode=TwoWay}"
+                                                          IsEnabled="{Binding CanSetOverride}"/>
+
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Header="Proprietà"
+                                                    DisplayMemberBinding="{Binding Path=Test}"/>
+                                    <GridViewColumn Header="Metodo"
+                                                    DisplayMemberBinding="{Binding Path=Standard}"/>
+                                    <GridViewColumn Header="Requisiti">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <ListView ItemsSource="{Binding Path=SubRequirements}"
+                                                          DisplayMemberPath="Name">
+                                                    <ListView.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <StackPanel Orientation="Horizontal">
+                                                                <Label Content="{Binding Name}"/>
+                                                                <TextBox Text="{Binding RequiredValue, Mode=TwoWay}"/>
+                                                            </StackPanel>
+                                                        </DataTemplate>
+                                                    </ListView.ItemTemplate>
+                                                </ListView>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                    </GroupBox>
+                </Grid>
+            </TabItem>
+            
             <TabItem Header="Piani di controllo">
                 <Grid>
                     <Grid.ColumnDefinitions>

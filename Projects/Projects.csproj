@@ -105,8 +105,12 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="ViewModels\ProjectCreationViewModel.cs" />
     <Compile Include="ViewModels\ProjectInfoViewModel.cs" />
     <Compile Include="ViewModels\ProjectMainViewModel.cs" />
+    <Compile Include="Views\ProjectCreationDialog.xaml.cs">
+      <DependentUpon>ProjectCreationDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ProjectInfoView.xaml.cs">
       <DependentUpon>ProjectInfoView.xaml</DependentUpon>
     </Compile>
@@ -152,6 +156,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Views\ProjectCreationDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\ProjectInfoView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

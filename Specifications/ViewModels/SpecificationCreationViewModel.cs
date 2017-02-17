@@ -49,6 +49,7 @@ namespace Specifications.ViewModels
                     tempMain.IsMain = 1;
 
                     Specification tempSpec = new Specification();
+                    tempSpec.Description = "";
                     tempSpec.Standard = tempStd;
                     tempSpec.SpecificationVersions.Add(tempMain);
 

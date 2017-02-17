@@ -28,7 +28,7 @@
                 </GridView>
             </ListView.View>
         </ListView>
-        
+
         <Grid Grid.Column="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
@@ -36,15 +36,22 @@
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
+            
             <Button Content="Apri"
                     Command="{Binding OpenProjectCommand}"
                     Grid.Column="0"
                     Grid.Row="0"
                     Margin="5"/>
-            
+
+            <Button Content="Nuovo"
+                    Command="{Binding NewProjectCommand}"
+                    Grid.Column="0"
+                    Grid.Row="1"
+                    Margin="5"/>
+
         </Grid>
-            
     </Grid>
 </UserControl>
