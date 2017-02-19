@@ -51,6 +51,7 @@ namespace Specifications.ViewModels
                 {
                     _entities.AddTest(_instance, _selectedToAdd);
                     OnPropertyChanged("MainVersionRequirements");
+                    OnPropertyChanged("RequirementList");
                 },
                 () => _selectedToAdd != null);
 
@@ -67,8 +68,9 @@ namespace Specifications.ViewModels
                 {
                     MainVersion.Requirements.Remove(_selectedToRemove);
                     OnPropertyChanged("MainVersionRequirements");
+                    OnPropertyChanged("RequirementList");
                 },
-
+                
                 () => _selectedToRemove != null);
         }
 

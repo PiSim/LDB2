@@ -99,6 +99,18 @@
         <AssociationConnector Association="labdbModel.control_plan_to_item" />
         <AssociationConnector Association="labdbModel.method_to_control_plan_item" />
         <AssociationConnector Association="labdbModel.specification_to_control_plan" />
+        <EntityTypeShape EntityType="labdbModel.CalibrationFiles" Width="1.5" PointX="5.25" PointY="28.75" />
+        <EntityTypeShape EntityType="labdbModel.CalibrationReport" Width="1.5" PointX="2.75" PointY="28.25" />
+        <EntityTypeShape EntityType="labdbModel.InstrumentType" Width="1.5" PointX="5.25" PointY="31.75" />
+        <EntityTypeShape EntityType="labdbModel.instrument" Width="1.5" PointX="2.75" PointY="31.875" />
+        <EntityTypeShape EntityType="labdbModel.PendingCalibration" Width="1.5" PointX="5.25" PointY="33.875" />
+        <AssociationConnector Association="labdbModel.instrument_to_calibration_report" />
+        <AssociationConnector Association="labdbModel.laboratory_to_calibration_report" />
+        <AssociationConnector Association="labdbModel.operator_to_calibration_report" />
+        <AssociationConnector Association="labdbModel.reference_to_calibration_report" />
+        <AssociationConnector Association="labdbModel.type_to_instrument" />
+        <AssociationConnector Association="labdbModel.intrument_to_pending_calibration" />
+        <AssociationConnector Association="labdbModel.calibration_report_to_files" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

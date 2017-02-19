@@ -62,5 +62,10 @@ namespace DBManager
         public virtual DbSet<UserRole> UserRoles { get; set; }
         public virtual DbSet<ControlPlanItems> ControlPlanItems { get; set; }
         public virtual DbSet<ControlPlan> ControlPlans { get; set; }
+        public virtual DbSet<CalibrationFiles> CalibrationFiles { get; set; }
+        public virtual DbSet<CalibrationReport> CalibrationReports { get; set; }
+        public virtual DbSet<InstrumentType> InstrumentTypes { get; set; }
+        public virtual DbSet<instrument> Instruments { get; set; }
+        public virtual DbSet<PendingCalibration> PendingCalibrations { get; set; }
     }
 }

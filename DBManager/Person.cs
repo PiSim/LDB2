@@ -22,6 +22,7 @@ namespace DBManager
             this.Tests = new HashSet<Test>();
             this.Tasks = new HashSet<Task>();
             this.Users = new HashSet<User>();
+            this.calibration_reports = new HashSet<CalibrationReport>();
         }
     
         public int ID { get; private set; }
@@ -38,5 +39,7 @@ namespace DBManager
         public virtual ICollection<Task> Tasks { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<User> Users { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<CalibrationReport> calibration_reports { get; set; }
     }
 }

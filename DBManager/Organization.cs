@@ -21,6 +21,7 @@ namespace DBManager
             this.external_reports = new HashSet<ExternalReport>();
             this.Projects = new HashSet<Project>();
             this.Standards = new HashSet<Std>();
+            this.calibration_reports = new HashSet<CalibrationReport>();
         }
     
         private int ID { get; set; }
@@ -35,5 +36,7 @@ namespace DBManager
         public virtual ICollection<Project> Projects { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Std> Standards { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<CalibrationReport> calibration_reports { get; set; }
     }
 }
