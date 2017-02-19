@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Specifications.ViewModels
 {
@@ -14,7 +15,8 @@ namespace Specifications.ViewModels
     {
         private ControlPlan _selectedControlPlan;
         private DBEntities _entities;
-        private DelegateCommand _addControlPlan, _addFile, _addTest, _removeControlPlan, _removeFile, _removeTest;
+        private DelegateCommand _addControlPlan, _addFile, _addIssue,
+            _addTest, _openFile, _removeControlPlan, _removeFile, _removeTest;
         private ObservableCollection<RequirementWrapper> _requirementList;
         private Method _selectedToAdd;
         private Property _filterProperty;
@@ -46,6 +48,40 @@ namespace Specifications.ViewModels
                     OnPropertyChanged("ControlPlanList");
                 });
 
+            _addFile = new DelegateCommand(
+                () =>
+                {
+                    OpenFileDialog fileDialog = new OpenFileDialog();
+                    fileDialog.Multiselect = true;
+
+                    if (fileDialog.ShowDialog() == DialogResult.OK)
+                    {
+                        foreach (string pth in fileDialog.FileNames)
+                        {
+                            StandardFile temp = new StandardFile();
+                            temp.Path = pth;
+                            temp.Description = "";
+                            _selectedIssue.StandardFiles.Add(temp);
+                        }
+
+                        OnPropertyChanged("FileList");
+                    }
+                });
+
+            _addIssue = new DelegateCommand(
+                () =>
+                {
+                    StandardIssue temp = new StandardIssue();
+                    temp.IsOld = 0;
+                    temp.Issue = DateTime.Now.ToShortDateString();
+                    temp.Standard = _instance.Standard;
+
+                    _instance.Standard.StandardIssues.Add(temp);
+                    _instance.Standard.CurrentIssue = temp;
+
+                    SelectedIssue = temp;
+                });
+
             _addTest = new DelegateCommand(
                 () =>
                 {
@@ -55,6 +91,14 @@ namespace Specifications.ViewModels
                 },
                 () => _selectedToAdd != null);
 
+
+            _openFile = new DelegateCommand(
+                () =>
+                {
+                    System.Diagnostics.Process.Start(_selectedFile.Path);
+                },
+                () => _selectedFile != null);
+
             _removeControlPlan = new DelegateCommand(
                 () =>
                 {
@@ -62,6 +106,14 @@ namespace Specifications.ViewModels
                     SelectedControlPlan = null;
                 }, 
                 () => _selectedControlPlan != null);
+
+            _removeFile = new DelegateCommand(
+                () =>
+                {
+                    _selectedIssue.StandardFiles.Remove(_selectedFile);
+                    SelectedFile = null;
+                },
+                () => _selectedFile != null );
             
             _removeTest = new DelegateCommand(
                 () =>
@@ -82,6 +134,16 @@ namespace Specifications.ViewModels
         public DelegateCommand AddControlPlanCommand
         {
             get { return _addControlPlan; }
+        }
+
+        public DelegateCommand AddFileCommand
+        {
+            get { return _addFile; }
+        }
+
+        public DelegateCommand AddIssueCommand
+        {
+            get { return _addIssue; }
         }
 
         public List<ControlPlan> ControlPlanList
@@ -136,6 +198,11 @@ namespace Specifications.ViewModels
             get { return new ObservableCollection<Requirement>(MainVersion.Requirements); }
         }
 
+        public DelegateCommand OpenFileCommand
+        {
+            get { return _openFile; }
+        }
+
         public List<Property> Properties
         {
             get { return new List<Property>(_entities.Properties); }
@@ -144,6 +211,11 @@ namespace Specifications.ViewModels
         public DelegateCommand RemoveControlPlanCommand
         {
             get { return _removeControlPlan; }
+        }
+
+        public DelegateCommand RemoveFileCommand
+        {
+            get { return _removeFile; }
         }
 
         public DelegateCommand  RemoveTestCommand
@@ -181,7 +253,9 @@ namespace Specifications.ViewModels
             get { return _selectedFile; }
             set 
             { 
-                _selectedFile = value; 
+                _selectedFile = value;
+                OnPropertyChanged("SelectedFile");
+                OpenFileCommand.RaiseCanExecuteChanged();
             }
         }
         

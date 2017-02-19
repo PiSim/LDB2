@@ -95,6 +95,14 @@
           <Property Name="name" Type="varchar" MaxLength="45" Nullable="false" />
           <Property Name="oemID" Type="int" Nullable="false" />
         </EntityType>
+        <EntityType Name="external_report_batch_mapping">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="external_reportID" Type="int" Nullable="false" />
+          <Property Name="batchID" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="external_report_files">
           <Key>
             <PropertyRef Name="ID" />
@@ -263,6 +271,7 @@
           <Property Name="start_date" Type="text" />
           <Property Name="requestID" Type="text" />
           <Property Name="is_complete" Type="tinyint" Nullable="false" />
+          <Property Name="specification_issueID" Type="int" />
         </EntityType>
         <EntityType Name="requirements">
           <Key>
@@ -464,6 +473,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="batch_to_external_report_mapping">
+          <End Role="batches" Type="Self.batches" Multiplicity="1" />
+          <End Role="external_report_batch_mapping" Type="Self.external_report_batch_mapping" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="batches">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="external_report_batch_mapping">
+              <PropertyRef Name="batchID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="batch_to_master">
           <End Role="batches" Type="Self.batches" Multiplicity="0..1" />
           <End Role="masters" Type="Self.masters" Multiplicity="*" />
@@ -624,6 +645,20 @@
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="external_report_files">
+              <PropertyRef Name="external_reportID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="external_report_to_batch_mapping">
+          <End Role="external_reports" Type="Self.external_reports" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="external_report_batch_mapping" Type="Self.external_report_batch_mapping" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="external_reports">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="external_report_batch_mapping">
               <PropertyRef Name="external_reportID" />
             </Dependent>
           </ReferentialConstraint>
@@ -1018,6 +1053,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="specissue_to_report">
+          <End Role="standard_issues" Type="Self.standard_issues" Multiplicity="0..1" />
+          <End Role="reports" Type="Self.reports" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="standard_issues">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="reports">
+              <PropertyRef Name="specification_issueID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="specversion_to_report">
           <End Role="specification_versions" Type="Self.specification_versions" Multiplicity="1" />
           <End Role="reports" Type="Self.reports" Multiplicity="*" />
@@ -1195,6 +1242,7 @@
           <EntitySet Name="control_plan_items" EntityType="Self.control_plan_items" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="control_plans" EntityType="Self.control_plans" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="external_constructions" EntityType="Self.external_constructions" Schema="labdb" store:Type="Tables" />
+          <EntitySet Name="external_report_batch_mapping" EntityType="Self.external_report_batch_mapping" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="external_report_files" EntityType="Self.external_report_files" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="external_reports" EntityType="Self.external_reports" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="instrument_types" EntityType="Self.instrument_types" Schema="labdb" store:Type="Tables" />
@@ -1242,6 +1290,10 @@
           <AssociationSet Name="batch_by_material" Association="Self.batch_by_material">
             <End Role="materials" EntitySet="materials" />
             <End Role="batches" EntitySet="batches" />
+          </AssociationSet>
+          <AssociationSet Name="batch_to_external_report_mapping" Association="Self.batch_to_external_report_mapping">
+            <End Role="batches" EntitySet="batches" />
+            <End Role="external_report_batch_mapping" EntitySet="external_report_batch_mapping" />
           </AssociationSet>
           <AssociationSet Name="batch_to_master" Association="Self.batch_to_master">
             <End Role="batches" EntitySet="batches" />
@@ -1294,6 +1346,10 @@
           <AssociationSet Name="external_report" Association="Self.external_report">
             <End Role="external_reports" EntitySet="external_reports" />
             <End Role="external_report_files" EntitySet="external_report_files" />
+          </AssociationSet>
+          <AssociationSet Name="external_report_to_batch_mapping" Association="Self.external_report_to_batch_mapping">
+            <End Role="external_reports" EntitySet="external_reports" />
+            <End Role="external_report_batch_mapping" EntitySet="external_report_batch_mapping" />
           </AssociationSet>
           <AssociationSet Name="instrument_to_calibration_report" Association="Self.instrument_to_calibration_report">
             <End Role="instruments" EntitySet="instruments" />
@@ -1419,6 +1475,10 @@
             <End Role="specifications" EntitySet="specifications" />
             <End Role="specification_versions" EntitySet="specification_versions" />
           </AssociationSet>
+          <AssociationSet Name="specissue_to_report" Association="Self.specissue_to_report">
+            <End Role="standard_issues" EntitySet="standard_issues" />
+            <End Role="reports" EntitySet="reports" />
+          </AssociationSet>
           <AssociationSet Name="specversion_to_report" Association="Self.specversion_to_report">
             <End Role="specification_versions" EntitySet="specification_versions" />
             <End Role="reports" EntitySet="reports" />
@@ -1510,6 +1570,7 @@
           <NavigationProperty Name="Samples" Relationship="Self.batch_to_sample" FromRole="batches" ToRole="samples" />
           <NavigationProperty Name="Tests" Relationship="Self.batch_to_test" FromRole="batches" ToRole="tests" />
           <NavigationProperty Name="Tasks" Relationship="labdbModel.batch_to_task" FromRole="Batch" ToRole="Task" />
+          <NavigationProperty Name="external_report_batch_mapping" Relationship="labdbModel.batch_to_external_report_mapping" FromRole="Batch" ToRole="external_report_batch_mapping" />
         </EntityType>
         <EntityType Name="Colour">
           <Key>
@@ -1579,6 +1640,7 @@
           <NavigationProperty Name="ExternalReportFiles" Relationship="Self.external_report" FromRole="external_reports" ToRole="external_report_files" />
           <NavigationProperty Name="ExternalLab" Relationship="Self.external_lab" FromRole="external_reports" ToRole="organizations" />
           <NavigationProperty Name="Project" Relationship="Self.project_to_report" FromRole="external_reports" ToRole="projects" />
+          <NavigationProperty Name="external_report_batch_mapping" Relationship="labdbModel.external_report_to_batch_mapping" FromRole="ExternalReport" ToRole="external_report_batch_mapping" />
         </EntityType>
         <EntityType Name="Master">
           <Key>
@@ -1630,7 +1692,7 @@
           <NavigationProperty Name="external_reports" Relationship="Self.external_lab" FromRole="organizations" ToRole="external_reports" />
           <NavigationProperty Name="Projects" Relationship="Self.oem1" FromRole="organizations" ToRole="projects" />
           <NavigationProperty Name="Standards" Relationship="Self.organization_to_standard" FromRole="organizations" ToRole="standards" />
-          <NavigationProperty Name="calibration_reports" Relationship="labdbModel.laboratory_to_calibration_report" FromRole="Organization" ToRole="calibration_reports" />
+          <NavigationProperty Name="CalibrationReports" Relationship="labdbModel.laboratory_to_calibration_report" FromRole="Organization" ToRole="calibration_reports" />
         </EntityType>
         <EntityType Name="Person">
           <Key>
@@ -1715,6 +1777,8 @@
           <NavigationProperty Name="Tests" Relationship="Self.report_to_test" FromRole="reports" ToRole="tests" />
           <NavigationProperty Name="SpecificationVersion" Relationship="Self.specversion_to_report" FromRole="reports" ToRole="specification_versions" />
           <Property Name="IsComplete" Type="SByte" Nullable="false" />
+          <Property Name="SpecificationIssueID" Type="Int32" />
+          <NavigationProperty Name="SpecificationIssues" Relationship="labdbModel.specissue_to_report1" FromRole="Report" ToRole="StandardIssue" />
         </EntityType>
         <EntityType Name="Requirement">
           <Key>
@@ -1725,7 +1789,7 @@
           <Property Name="MethodID" Type="Int32" Nullable="false" a:SetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <Property Name="Name" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" DefaultValue="" />
           <Property Name="Position" Type="Int32" Nullable="false" />
-          <Property Name="specification_versionID" Type="Int32" />
+          <Property Name="SpecificationVersionID" Type="Int32" />
           <NavigationProperty Name="Method" Relationship="Self.method_to_requirement" FromRole="requirements" ToRole="methods" />
           <NavigationProperty Name="SubRequirements" Relationship="Self.requirement_to_subreq" FromRole="requirements" ToRole="sub_requirements" />
           <NavigationProperty Name="SpecificationVersions" Relationship="Self.specversion_to_requirement" FromRole="requirements" ToRole="specification_versions" />
@@ -2279,7 +2343,7 @@
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="requirements">
-              <PropertyRef Name="specification_versionID" />
+              <PropertyRef Name="SpecificationVersionID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2632,6 +2696,19 @@
             <End Role="calibration_reports" EntitySet="CalibrationReports" />
             <End Role="calibration_files" EntitySet="CalibrationFiles" />
           </AssociationSet>
+          <EntitySet Name="ExternalReportBatchMappings" EntityType="labdbModel.ExternalReportBatchMapping" />
+          <AssociationSet Name="batch_to_external_report_mapping" Association="labdbModel.batch_to_external_report_mapping">
+            <End Role="Batch" EntitySet="Batches" />
+            <End Role="external_report_batch_mapping" EntitySet="ExternalReportBatchMappings" />
+          </AssociationSet>
+          <AssociationSet Name="external_report_to_batch_mapping" Association="labdbModel.external_report_to_batch_mapping">
+            <End Role="ExternalReport" EntitySet="ExternalReports" />
+            <End Role="external_report_batch_mapping" EntitySet="ExternalReportBatchMappings" />
+          </AssociationSet>
+          <AssociationSet Name="specissue_to_report1" Association="labdbModel.specissue_to_report1">
+            <End Role="StandardIssue" EntitySet="StandardIssues" />
+            <End Role="Report" EntitySet="Reports" />
+          </AssociationSet>
         </EntityContainer>
         <Association Name="overridden_to_requirement">
           <End Type="labdbModel.Requirement" Role="Requirement" Multiplicity="0..1">
@@ -2704,6 +2781,7 @@
           <Property Name="StandardID" Type="Int32" />
           <NavigationProperty Name="StandardFiles" Relationship="labdbModel.standard_issue_to_file" FromRole="standard_issues" ToRole="StandardFile" />
           <NavigationProperty Name="Standard" Relationship="labdbModel.standard_to_issue" FromRole="StandardIssue" ToRole="Std" />
+          <NavigationProperty Name="reports" Relationship="labdbModel.specissue_to_report1" FromRole="StandardIssue" ToRole="Report" />
         </EntityType>
         <Association Name="standard_issue_to_file">
           <End Type="labdbModel.StandardIssue" Role="standard_issues" Multiplicity="1">
@@ -3068,6 +3146,54 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="ExternalReportBatchMapping">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ExternalReportID" Type="Int32" Nullable="false" />
+          <Property Name="BatchID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Batch" Relationship="labdbModel.batch_to_external_report_mapping" FromRole="external_report_batch_mapping" ToRole="Batch" />
+          <NavigationProperty Name="ExternalReports" Relationship="labdbModel.external_report_to_batch_mapping" FromRole="external_report_batch_mapping" ToRole="ExternalReport" />
+        </EntityType>
+        <Association Name="batch_to_external_report_mapping">
+          <End Type="labdbModel.Batch" Role="Batch" Multiplicity="1" />
+          <End Type="labdbModel.ExternalReportBatchMapping" Role="external_report_batch_mapping" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Batch">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="external_report_batch_mapping">
+              <PropertyRef Name="BatchID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="external_report_to_batch_mapping">
+          <End Type="labdbModel.ExternalReport" Role="ExternalReport" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="labdbModel.ExternalReportBatchMapping" Role="external_report_batch_mapping" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ExternalReport">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="external_report_batch_mapping">
+              <PropertyRef Name="ExternalReportID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="specissue_to_report1">
+          <End Type="labdbModel.StandardIssue" Role="StandardIssue" Multiplicity="0..1" />
+          <End Type="labdbModel.Report" Role="Report" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StandardIssue">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Report">
+              <PropertyRef Name="SpecificationIssueID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -3258,6 +3384,7 @@
           <EntitySetMapping Name="Reports">
             <EntityTypeMapping TypeName="labdbModel.Report">
               <MappingFragment StoreEntitySet="reports">
+                <ScalarProperty Name="SpecificationIssueID" ColumnName="specification_issueID" />
                 <ScalarProperty Name="IsComplete" ColumnName="is_complete" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="AuthorID" ColumnName="authorID" />
@@ -3283,7 +3410,7 @@
                 <ScalarProperty Name="MethodID" ColumnName="methodID" />
                 <ScalarProperty Name="Name" ColumnName="name" />
                 <ScalarProperty Name="Position" ColumnName="position" />
-                <ScalarProperty Name="specification_versionID" ColumnName="specification_versionID" />
+                <ScalarProperty Name="SpecificationVersionID" ColumnName="specification_versionID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -3521,6 +3648,15 @@
               <MappingFragment StoreEntitySet="pending_calibrations">
                 <ScalarProperty Name="instrumentID" ColumnName="instrumentID" />
                 <ScalarProperty Name="ExpiryDate" ColumnName="expiry_date" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ExternalReportBatchMappings">
+            <EntityTypeMapping TypeName="labdbModel.ExternalReportBatchMapping">
+              <MappingFragment StoreEntitySet="external_report_batch_mapping">
+                <ScalarProperty Name="BatchID" ColumnName="batchID" />
+                <ScalarProperty Name="ExternalReportID" ColumnName="external_reportID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

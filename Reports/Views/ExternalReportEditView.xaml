@@ -88,7 +88,7 @@
                   Grid.Column="0"
                   Grid.Row="2">
             <Grid>
-                <ListView ItemsSource="{Binding Path=FileList}" 
+                <ListView ItemsSource="{Binding Path=ReportFiles}" 
                           SelectedItem="{Binding Path=SelectedFile, Mode=TwoWay}"
                           Margin="0,0,60,0">
                     <ListView.View>

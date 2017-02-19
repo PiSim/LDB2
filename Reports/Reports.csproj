@@ -110,6 +110,9 @@
     <Compile Include="ViewModels\ReportEditViewModel.cs" />
     <Compile Include="ViewNames.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
+    <Compile Include="Views\ExternalReportCreationDialog.xaml.cs">
+      <DependentUpon>ExternalReportCreationDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ExternalReportEditView.xaml.cs">
       <DependentUpon>ExternalReportEditView.xaml</DependentUpon>
     </Compile>
@@ -160,6 +163,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Views\ExternalReportCreationDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\ExternalReportEditView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

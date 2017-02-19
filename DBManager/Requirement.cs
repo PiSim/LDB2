@@ -28,7 +28,7 @@ namespace DBManager
         public int MethodID { get; private set; }
         public string Name { get; set; }
         public int Position { get; set; }
-        public Nullable<int> specification_versionID { get; set; }
+        public Nullable<int> SpecificationVersionID { get; set; }
         public int IsOverride { get; set; }
         public Nullable<int> OverriddenID { get; set; }
     

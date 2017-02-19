@@ -13,14 +13,21 @@ namespace Reports.ViewModels
 {
     internal class ExternalReportEditViewModel : BindableBase
     {
+        private DBEntities _entities;
         private DelegateCommand _addFile, _openFile, _removeFile;
         private ExternalReport _instance;
         private ExternalReportFile _selectedFile;
         private ObservableCollection<ExternalReportFile> _reportFiles;
 
-        internal ExternalReportEditViewModel(ExternalReport instance) : base()
+        internal ExternalReportEditViewModel(DBEntities entities,
+                                            ExternalReport instance) : base()
         {
-            _instance = instance;
+            _entities = entities;
+            _instance = _entities.ExternalReports.FirstOrDefault(xrp => xrp.ID == instance.ID);
+
+            if (_instance == null)
+                throw new InvalidOperationException();
+
             _reportFiles = new ObservableCollection<ExternalReportFile>
                 (_instance.ExternalReportFiles);
 
@@ -89,6 +96,17 @@ namespace Reports.ViewModels
         {
             get { return _instance.Samples; }
             set { _instance.Samples = value; }
+        }
+
+        public ExternalReportFile SelectedFile
+        {
+            get { return _selectedFile; }
+            set
+            {
+                _selectedFile = value;
+                _openFile.RaiseCanExecuteChanged();
+                _removeFile.RaiseCanExecuteChanged();
+            }
         }
     }
 }

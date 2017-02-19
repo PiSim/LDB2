@@ -67,5 +67,6 @@ namespace DBManager
         public virtual DbSet<InstrumentType> InstrumentTypes { get; set; }
         public virtual DbSet<instrument> Instruments { get; set; }
         public virtual DbSet<PendingCalibration> PendingCalibrations { get; set; }
+        public virtual DbSet<ExternalReportBatchMapping> ExternalReportBatchMappings { get; set; }
     }
 }

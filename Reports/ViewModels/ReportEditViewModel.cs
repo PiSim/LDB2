@@ -55,9 +55,10 @@ namespace Reports.ViewModels
                             ReportFile temp = new ReportFile();
                             temp.Path = pth;
                             temp.Description = "";
-                            _instance.ReportFiles.Add(temp);   
-                            OnPropertyChanged("FileList");
+                            _instance.ReportFiles.Add(temp);
                         }
+
+                        OnPropertyChanged("FileList");
                     }
                 });
 

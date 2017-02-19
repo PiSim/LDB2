@@ -22,8 +22,11 @@ namespace Reports.Views
     /// </summary>
     public partial class ExternalReportEditView : UserControl, INavigationAware
     {
-        public ExternalReportEditView()
+        private DBEntities _entities;
+
+        public ExternalReportEditView(DBEntities entities)
         {
+            _entities = entities;
             InitializeComponent();
         }
 
@@ -41,7 +44,8 @@ namespace Reports.Views
         public void OnNavigatedTo(NavigationContext ncontext)
         {
             ViewModels.ExternalReportEditViewModel viewModel =
-                new ViewModels.ExternalReportEditViewModel(ncontext.Parameters["ObjectInstance"] as ExternalReport);
+                new ViewModels.ExternalReportEditViewModel(_entities,
+                    ncontext.Parameters["ObjectInstance"] as ExternalReport);
             DataContext = viewModel;
         }
     }

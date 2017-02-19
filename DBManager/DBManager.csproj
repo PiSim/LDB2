@@ -138,6 +138,9 @@
     <Compile Include="ExternalReport.cs">
       <DependentUpon>LabDB.tt</DependentUpon>
     </Compile>
+    <Compile Include="ExternalReportBatchMapping.cs">
+      <DependentUpon>LabDB.tt</DependentUpon>
+    </Compile>
     <Compile Include="ExternalReportFile.cs">
       <DependentUpon>LabDB.tt</DependentUpon>
     </Compile>
