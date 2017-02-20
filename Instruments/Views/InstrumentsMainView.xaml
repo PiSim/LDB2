@@ -7,6 +7,44 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
+    
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
             
+        <GroupBox Header="Strumenti"
+                  Grid.Column="0">
+            <Grid>
+            
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+            
+                <ListView ItemsSource="{Binding InstrumentList}"
+                          SelectedItem="{Binding SelectedInstrument, Mode=TwoWay}"
+                          Grid.Row="1">
+                
+                </ListView>
+            
+            </Grid>
+        </GroupBox>
+        
+        
+        <GroupBox Header="Calendario tarature"
+                  Grid.Column="1">
+            <Grid>
+            
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                
+                <ListView ItemsSource="{Binding PendingCalibrationsList}"
+                          SelectedItem="{Binding SelectedCalibration, Mode=TwoWay}"
+                          Grid.Row="1">
+            </Grid>
+        </GroupBox>
     </Grid>
 </UserControl>
