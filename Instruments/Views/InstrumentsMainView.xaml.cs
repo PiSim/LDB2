@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DBManager;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,8 +21,9 @@ namespace Instruments.Views
     /// </summary>
     public partial class InstrumentsMainView : UserControl
     {
-        public InstrumentsMainView()
+        public InstrumentsMainView(DBEntities entities)
         {
+            DataContext = new ViewModels.InstrumentsMainViewModel(entities);
             InitializeComponent();
         }
     }
