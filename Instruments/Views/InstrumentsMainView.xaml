@@ -12,39 +12,69 @@
             <ColumnDefinition/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
+        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
             
         <GroupBox Header="Strumenti"
-                  Grid.Column="0">
-            <Grid>
-            
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-            
-                <ListView ItemsSource="{Binding InstrumentList}"
+                  Grid.Column="0"
+                  Grid.Row="0"
+                  Grid.RowSpan="2">
+                  
+            <ListView ItemsSource="{Binding InstrumentList}"
                           SelectedItem="{Binding SelectedInstrument, Mode=TwoWay}"
                           Grid.Row="1">
-                
-                </ListView>
-            
-            </Grid>
+                                      
         </GroupBox>
         
+        <Grid Grid.Column="1"
+              Grid.Row="0">
+              
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>  
+            
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            
+            <Button Content="Apri"
+                    Command="{Binding OpenInstrumentCommand}"
+                    Grid.Column="0"
+                    Grid.Row="0"
+                    Margin="5"/>
+            
+            <Button Content="Nuovo"
+                    Command="{Binding NewInstrumentCommand}"
+                    Grid.Column="0"
+                    Grid.Row="0"
+                    Margin="5"/>
+            
+        </Grid>
         
         <GroupBox Header="Calendario tarature"
-                  Grid.Column="1">
-            <Grid>
-            
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-                
-                <ListView ItemsSource="{Binding PendingCalibrationsList}"
+                  Grid.Column="1"
+                  Grid.Row="1">
+            <ListView ItemsSource="{Binding PendingCalibrationsList}"
                           SelectedItem="{Binding SelectedCalibration, Mode=TwoWay}"
                           Grid.Row="1">
-            </Grid>
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Codice"
+                                        DisplayMemberBinding="{Binding Name}"/>
+                        <GridViewColumn Header="Tipo"
+                                        DisplayMemberBinding="{Binding Type}"/>
+                        <GridViewColumn Header="Scadenza"
+                                        DisplayMemberBinding="{Binding ExpiryDate}"/> 
+                    </GridView>
+                </ListView.View>   
+            </ListView>
         </GroupBox>
     </Grid>
 </UserControl>
