@@ -2,6 +2,7 @@
 using Prism.Commands;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,6 +15,7 @@ namespace Reports.ViewModels
         private DBEntities _entities;
         private DelegateCommand _addBatch, _cancel, _confirm, _removeBatch;
         private Int32 _number;
+        private ObservableCollection<Batch> _batchList;
         private Project _selectedProject;
         private string _sampleDescription, _testDescription;
         private Views.ExternalReportCreationDialog _parentDialog;
@@ -21,7 +23,7 @@ namespace Reports.ViewModels
         internal ExternalReportCreationViewModel(DBEntities entities,
                                                 Views.ExternalReportCreationDialog parentDialog)
         {
-            
+            _batchList = new ObservableCollection<Batch>();
             _entities = entities;
             _parentDialog = parentDialog;
             
@@ -34,7 +36,7 @@ namespace Reports.ViewModels
             _cancel = new DelegateCommand(
                 () => 
                 {
-                    
+                    _parentDialog.DialogResult = false;
                 });
                 
            _confirm = new DelegateCommand(
@@ -78,6 +80,11 @@ namespace Reports.ViewModels
             set { _number}
         }
         
+        public ObservableCollection<Batch> BatchList
+        {
+            get { return _batchList; }
+        }
+        
         public string SampleDescription
         {
             get { return _sampleDescription; }
@@ -96,6 +103,11 @@ namespace Reports.ViewModels
                 RemoveBatchCommand.RaiseCanExecuteChanged();
                 OnPropertyChanged("SelectedBatch");
             }
+        }
+        
+        public List<Project> ProjectList
+        {
+            get { return new List<Project>(_entities.Projects); }
         }
         
         public Project SelectedProject
