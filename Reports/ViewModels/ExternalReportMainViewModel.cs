@@ -14,7 +14,7 @@ namespace Reports.ViewModels
     internal class ExternalReportMainViewModel : BindableBase
     {
         private DBEntities _entities;
-        private DelegateCommand _openReport;
+        private DelegateCommand _newReport, _openReport;
         private EventAggregator _eventAggregator;
         private ExternalReport _selectedReport;
         private ObservableCollection<ExternalReport> _reportList;       
@@ -25,6 +25,12 @@ namespace Reports.ViewModels
             _entities = entities;
             _eventAggregator = aggregator;
             _reportList = new ObservableCollection<ExternalReport>(_entities.ExternalReports);
+            
+            _newReport = new DelegateCommand(
+                () => 
+                {
+                    
+                });
 
             _openReport = new DelegateCommand(
                 () =>
@@ -36,6 +42,11 @@ namespace Reports.ViewModels
                         .Publish(token);
                 });
         } 
+        
+        public DelegateCommand NewReportCommand
+        {
+            get { return _newReport; }
+        }
 
         public DelegateCommand OpenReportCommand
         {
