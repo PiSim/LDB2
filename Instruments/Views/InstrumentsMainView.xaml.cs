@@ -23,7 +23,7 @@ namespace Instruments.Views
     {
         public InstrumentsMainView(DBEntities entities)
         {
-            DataContext = new ViewModels.InstrumentsMainViewModel(entities);
+            DataContext = new ViewModels.InstrumentMainViewModel(entities);
             InitializeComponent();
         }
     }
