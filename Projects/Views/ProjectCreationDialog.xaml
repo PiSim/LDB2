@@ -54,6 +54,7 @@
 
         <ComboBox ItemsSource="{Binding LeaderList}"
                   SelectedItem="{Binding SelectedLeader, Mode=TwoWay}"
+                  DisplayMemberPath="Name"
                   Grid.Column="1"
                   Grid.ColumnSpan="3"
                   Grid.Row="2"
