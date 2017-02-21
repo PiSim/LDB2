@@ -22,6 +22,7 @@ namespace DBManager
             this.Projects = new HashSet<Project>();
             this.Standards = new HashSet<Std>();
             this.CalibrationReports = new HashSet<CalibrationReport>();
+            this.RoleMapping = new HashSet<OrganizationRoleMapping>();
         }
     
         private int ID { get; set; }
@@ -38,5 +39,7 @@ namespace DBManager
         public virtual ICollection<Std> Standards { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CalibrationReport> CalibrationReports { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<OrganizationRoleMapping> RoleMapping { get; set; }
     }
 }

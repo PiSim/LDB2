@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Reports.Views"
         mc:Ignorable="d"
-        Title="ExternalReportCreationDialog" Height="500" Width="500">
+        Title="Nuovo Report Esterno" Height="500" Width="500">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -58,6 +58,7 @@
                  Grid.Column="1"
                  Grid.ColumnSpan="3"
                  Grid.Row="2"
+                 Height="75"
                  Margin="5"/>
 
         <Label Content="Descrizione&#10;Campioni:"
@@ -71,6 +72,7 @@
                  Grid.Column="1"
                  Grid.ColumnSpan="3"
                  Grid.Row="3"
+                 Height="75"
                  Margin="5"/>
 
         <Label Content="Odp:"
@@ -85,6 +87,12 @@
                   Grid.Row="4"
                   Grid.RowSpan="3"
                   Margin="5">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Numero"
+                                    DisplayMemberBinding="{Binding Number}"/>
+                </GridView>
+            </ListView.View>
             
         </ListView>
 

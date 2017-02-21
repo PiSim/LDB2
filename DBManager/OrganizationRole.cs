@@ -12,23 +12,18 @@ namespace DBManager
     using System;
     using System.Collections.Generic;
     
-    public partial class User
+    public partial class OrganizationRole
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public User()
+        public OrganizationRole()
         {
-            this.RoleMappings = new HashSet<UserRoleMapping>();
+            this.OrganizationMappings = new HashSet<OrganizationRoleMapping>();
         }
     
-        public int ID { get; private set; }
-        public string FullName { get; set; }
-        public string HashedPassword { get; set; }
-        public string RoleList { get; set; }
-        public string UserName { get; set; }
-        public Nullable<int> PersonID { get; private set; }
+        public int ID { get; set; }
+        public string Name { get; set; }
     
-        public virtual Person Person { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<UserRoleMapping> RoleMappings { get; set; }
+        public virtual ICollection<OrganizationRoleMapping> OrganizationMappings { get; set; }
     }
 }

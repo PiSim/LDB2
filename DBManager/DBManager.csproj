@@ -183,6 +183,12 @@
     <Compile Include="Organization.cs">
       <DependentUpon>LabDB.tt</DependentUpon>
     </Compile>
+    <Compile Include="OrganizationRole.cs">
+      <DependentUpon>LabDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OrganizationRoleMapping.cs">
+      <DependentUpon>LabDB.tt</DependentUpon>
+    </Compile>
     <Compile Include="PendingCalibration.cs">
       <DependentUpon>LabDB.tt</DependentUpon>
     </Compile>

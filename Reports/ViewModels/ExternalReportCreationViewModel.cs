@@ -1,5 +1,6 @@
 ﻿using DBManager;
 using Prism.Commands;
+using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Reports.ViewModels
 {
-    internal class ExternalReportCreationViewModel
+    internal class ExternalReportCreationViewModel : BindableBase
     {
         private Batch _selectedBatch;
         private DBEntities _entities;
@@ -21,7 +22,7 @@ namespace Reports.ViewModels
         private Views.ExternalReportCreationDialog _parentDialog;
         
         internal ExternalReportCreationViewModel(DBEntities entities,
-                                                Views.ExternalReportCreationDialog parentDialog)
+                                                Views.ExternalReportCreationDialog parentDialog) : base()
         {
             _batchList = new ObservableCollection<Batch>();
             _entities = entities;
@@ -77,7 +78,7 @@ namespace Reports.ViewModels
         public Int32 Number 
         {
             get { return _number; }
-            set { _number}
+            set { _number = value; }
         }
         
         public ObservableCollection<Batch> BatchList

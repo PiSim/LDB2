@@ -16,7 +16,7 @@
         <EntityTypeShape EntityType="labdbModel.Master" Width="1.5" PointX="21.25" PointY="13.625" IsExpanded="true" />
         <EntityTypeShape EntityType="labdbModel.Material" Width="1.5" PointX="19" PointY="17" IsExpanded="true" />
         <EntityTypeShape EntityType="labdbModel.Method" Width="1.5" PointX="6.75" PointY="3.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="labdbModel.Organization" Width="1.5" PointX="0.625" PointY="22.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="labdbModel.Organization" Width="1.5" PointX="0.5" PointY="22.125" IsExpanded="true" />
         <EntityTypeShape EntityType="labdbModel.Person" Width="1.5" PointX="8.25" PointY="18.25" IsExpanded="true" />
         <EntityTypeShape EntityType="labdbModel.Project" Width="1.5" PointX="13.25" PointY="19.875" IsExpanded="true" />
         <EntityTypeShape EntityType="labdbModel.Property" Width="1.5" PointX="4.75" PointY="3.375" IsExpanded="true" />
@@ -115,6 +115,10 @@
         <AssociationConnector Association="labdbModel.batch_to_external_report_mapping" />
         <AssociationConnector Association="labdbModel.external_report_to_batch_mapping" />
         <AssociationConnector Association="labdbModel.specissue_to_report1" />
+        <EntityTypeShape EntityType="labdbModel.OrganizationRoleMapping" Width="1.5" PointX="0.5" PointY="35.25" />
+        <EntityTypeShape EntityType="labdbModel.OrganizationRole" Width="1.5" PointX="2.5" PointY="35.5" />
+        <AssociationConnector Association="labdbModel.organization_to_role_mapping" />
+        <AssociationConnector Association="labdbModel.role_to_organization_mapping" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
