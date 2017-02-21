@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DBManager;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,9 +20,18 @@ namespace Reports.Views
     /// </summary>
     public partial class ExternalReportCreationDialog : Window
     {
-        public ExternalReportCreationDialog()
+        private ExternalReport _externalReportInstance;
+        
+        public ExternalReportCreationDialog(DBEntities entities)
         {
+            DataContext = new ViewModels.ExternalReportCreationViewModel(entities, this);
             InitializeComponent();
+        }
+        
+        public ExternalReport ExternalReportInstance
+        {
+            get { return _externalReportInstance; }
+            set { _externalReportInstance = value; }
         }
     }
 }
