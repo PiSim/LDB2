@@ -37,7 +37,6 @@ namespace LabDB2
                 {
                     ModuleName = DBManagerModuleType.Name,
                     ModuleType = DBManagerModuleType.AssemblyQualifiedName,
-                    InitializationMode = Prism.Modularity.InitializationMode.OnDemand
                 });
 
             Type ControlsModuleType = typeof(Controls.ControlsModule);
