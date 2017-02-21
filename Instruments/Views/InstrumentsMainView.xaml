@@ -26,6 +26,8 @@
             <ListView ItemsSource="{Binding InstrumentList}"
                           SelectedItem="{Binding SelectedInstrument, Mode=TwoWay}"
                           Grid.Row="1">
+                          
+            </ListView>
                                       
         </GroupBox>
         
