@@ -22,6 +22,22 @@ namespace Batches
 
         public Sample AddSampleLog(string batchNumber, string actionCode)
         {
+            Batch temp = GetBatch(batchNumber);
+
+            Sample output = new Sample();
+
+            output.Batch = temp;
+            output.Date = DateTime.Now;
+            output.Code = actionCode;
+
+            _entities.Samples.Add(output);
+            _entities.SaveChanges();
+
+            return output;
+        }
+        
+        public Batch GetBatch(string batchNumber)
+        {
             Batch temp = _entities.GetBatchByNumber(batchNumber);
 
             if (temp.Material == null)
@@ -42,17 +58,8 @@ namespace Batches
                         temp.Material.Recipe.Colour = colourPicker.ColourInstance;
                 }
             }
-
-            Sample output = new Sample();
-
-            output.Batch = temp;
-            output.Date = DateTime.Now;
-            output.Code = actionCode;
-
-            _entities.Samples.Add(output);
-            _entities.SaveChanges();
-
-            return output;
+            
+            return temp;
         }
 
         public Material CreateNewMaterial()
