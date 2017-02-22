@@ -20,6 +20,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
@@ -46,27 +47,44 @@
                   Grid.ColumnSpan="3"
                   Grid.Row="1"
                   Margin="5"/>
-
-        <Label Content="Descrizione&#10;Prove:"
+                  
+        <Label Content="Progetto:"
                Grid.Column="0"
                Grid.Row="2"
                Margin="5"/>
+               
+        <ComboBox ItemsSource="{Binding ProjectList}"
+                  SelectedItem="{Binding SelectedProject, Mode=TwoWay}"
+                  Grid.Column="1"
+                  Grid.ColumnSpan="3"
+                  Grid.Row="2"
+                  Margin="5">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid Height="Auto">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="50"/>
+                            <ColumnDefinition Width="50"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Label Content="{Binding Name}"
+                               Grid.Column="0"/>
+                        <Label Content="{Binding Oem.Name}"
+                               Grid.Column="1"/>
+                        <Label Content="{Binding Description}"
+                               Grid.Column="2"/>
+                    </Grid>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>          
+        </ComboBox>
+               
 
-        <TextBox Text="{Binding TestDescription, Mode=TwoWay}"
-                 TextWrapping="Wrap"
-                 AcceptsReturn="True"
-                 Grid.Column="1"
-                 Grid.ColumnSpan="3"
-                 Grid.Row="2"
-                 Height="75"
-                 Margin="5"/>
-
-        <Label Content="Descrizione&#10;Campioni:"
+        <Label Content="Descrizione&#10;Prove:"
                Grid.Column="0"
                Grid.Row="3"
                Margin="5"/>
 
-        <TextBox Text="{Binding SamplesDescription, Mode=TwoWay}"
+        <TextBox Text="{Binding TestDescription, Mode=TwoWay}"
                  TextWrapping="Wrap"
                  AcceptsReturn="True"
                  Grid.Column="1"
@@ -75,16 +93,30 @@
                  Height="75"
                  Margin="5"/>
 
-        <Label Content="Odp:"
+        <Label Content="Descrizione&#10;Campioni:"
                Grid.Column="0"
                Grid.Row="4"
+               Margin="5"/>
+
+        <TextBox Text="{Binding SamplesDescription, Mode=TwoWay}"
+                 TextWrapping="Wrap"
+                 AcceptsReturn="True"
+                 Grid.Column="1"
+                 Grid.ColumnSpan="3"
+                 Grid.Row="4"
+                 Height="75"
+                 Margin="5"/>
+
+        <Label Content="Odp:"
+               Grid.Column="0"
+               Grid.Row="5"
                Margin="5"/>
 
         <ListView ItemsSource="{Binding AssociatedBatches}"
                   SelectedItem="{Binding SelectedBatch, Mode=TwoWay}"
                   Grid.Column="1"
                   Grid.ColumnSpan="2"
-                  Grid.Row="4"
+                  Grid.Row="5"
                   Grid.RowSpan="3"
                   Margin="5">
             <ListView.View>
@@ -99,25 +131,25 @@
         <Button Content="Aggiungi"
                 Command="{Binding AddBatchCommand}"
                 Grid.Column="3"
-                Grid.Row="4"
+                Grid.Row="5"
                 Margin="5"/>
 
         <Button Content="Rimuovi"
                 Command="{Binding RemoveBatchCommand}"
                 Grid.Column="3"
-                Grid.Row="5"
+                Grid.Row="6"
                 Margin="5"/>
 
         <Button Content="Annulla"
                 Command="{Binding CancelCommand}"
                 Grid.Column="2"
-                Grid.Row="7"
+                Grid.Row="8"
                 Margin="5"/>
 
         <Button Content="Ok"
                 Command="{Binding ConfirmCommand}"
                 Grid.Column="3"
-                Grid.Row="7"
+                Grid.Row="8"
                 Margin="5"/>
     </Grid>
 </Window>
