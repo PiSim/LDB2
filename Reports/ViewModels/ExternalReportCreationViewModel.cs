@@ -18,6 +18,7 @@ namespace Reports.ViewModels
         private DelegateCommand _addBatch, _cancel, _confirm, _removeBatch;
         private Int32 _number;
         private ObservableCollection<Batch> _batchList;
+        private Organization _selectedLab;
         private Project _selectedProject;
         private string _sampleDescription, _testDescription;
         private UnityContainer _container;
@@ -50,7 +51,28 @@ namespace Reports.ViewModels
                 () => 
                 {
                     ExternalReport output = new ExternalReport();
+                    output.Date = DateTime.Now.ToShortDateString();
+                    output.Description = _testDescription;
+                    output.InternalNumber = _number;
+                    output.material_sent = 0;
+                    output.request_done = 0;
+                    output.purchase_order = "";
+                    output.Price = 0;
+                    output.Samples = _sampleDescription;
+                    output.Currency = '';
+                    output.report.received = 0;
+                    output.ExternalLab = _selectedLab;
+                    output.Project = _selectedProject;
                     
+                    foreach (Batch selectedBatch in _batchList)
+                    {
+                        ExternalReportBatchMapping tempMap = new ExternalReportBatchMapping();
+                        tempMap.Batch = selectedBatch;
+                        
+                        output.external_report_batch_mapping.Add(tempMap);
+                    }
+                    
+                    _entities.SaveChanges();
                     
                     _parentDialog.DialogResult = true;
                 });
@@ -96,6 +118,11 @@ namespace Reports.ViewModels
             get { return _batchList; }
         }
         
+        public List<Organization> LabList 
+        {
+            get { return new List<Organization>(_entities.Organizations.Where(org => org.Category == "Laboratorio")); }
+        }
+        
         public string SampleDescription
         {
             get { return _sampleDescription; }
@@ -119,6 +146,12 @@ namespace Reports.ViewModels
         public List<Project> ProjectList
         {
             get { return new List<Project>(_entities.Projects); }
+        }
+        
+        public Organization SelectedLab
+        {
+            get { return _selectedLab; }
+            set { _selectedLab = value; }
         }
         
         public Project SelectedProject
