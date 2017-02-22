@@ -39,7 +39,7 @@ namespace Reports.ViewModels
                 {
                     BatchPickerDialog batchPicker = _container.Resolve<BatchPickerDialog>();
                     if (batchPicker.ShowDialog() == true)
-                        _batchList.Add(batchPicker.BatchInstance;                                            
+                        _batchList.Add(batchPicker.BatchInstance);                                            
                 });
             
             _cancel = new DelegateCommand(
