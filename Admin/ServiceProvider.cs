@@ -13,7 +13,7 @@ public class ServiceProvider
         _entities = entities;
     }
     
-    public void BuildMaterialTypeIDs
+    public void BuildMaterialTypeIDs()
     {
         foreach (Construction current in _entities.Constructions)
         {
