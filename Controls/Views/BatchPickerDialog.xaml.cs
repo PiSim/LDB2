@@ -24,7 +24,7 @@ namespace Controls.Views
         
         public BatchPickerDialog(DBEntities entities)
         {
-            DataContext = new ViewModels.BatchPickerViewModel(entities);
+            DataContext = new ViewModels.BatchPickerViewModel(entities, this);
             InitializeComponent();
         }
         
