@@ -24,14 +24,21 @@ namespace Controls.ViewModels
             
             _cancel = new DelegateCommand(
                 () => 
-                {
-                    
+                {                    
+                    _parentDialog.DialogResult = false;
                 });
                 
             _confirm = new DelegateCommand(
                 () => 
                 {
-                    
+                    Batch output = GetBatch(_number);
+                    if (output != null)
+                    {
+                        _parentDialog.BatchInstance = output;
+                        _parentDialog.DialogResult = true;                        
+                    }
+                    else 
+                        _parentDialog.DialogResult = false;
                 });
         }
         
@@ -52,7 +59,42 @@ namespace Controls.ViewModels
             {
                 _number = value;
             }
-        }
+        }        
         
+        public Batch GetBatch(string batchNumber)
+        {
+            Batch temp = _entities.GetBatchByNumber(batchNumber);
+
+            if (temp.Material == null)
+                temp.Material = CreateNewMaterial();
+
+            if (temp.Material != null)
+            {
+                if (temp.Material.Construction.Project == null)
+                {
+                    ProjectPickerDialog prjDialog = new ProjectPickerDialog(_entities);
+                    if (prjDialog.ShowDialog() == true)
+                        temp.Material.Construction.Project = prjDialog.ProjectInstance;
+                }
+                if (temp.Material.Recipe.Colour == null)
+                {
+                    ColorPickerDialog colourPicker = new ColorPickerDialog(_entities);
+                    if (colourPicker.ShowDialog() == true)
+                        temp.Material.Recipe.Colour = colourPicker.ColourInstance;
+                }
+            }
+            
+            return temp;
+        }
+
+        public Material CreateNewMaterial()
+        {
+            MaterialCreationDialog matDialog = new MaterialCreationDialog(_entities);
+            if (matDialog.ShowDialog() == true)
+                return matDialog.ValidatedMaterial;
+
+            else
+                return null;
+        }
     }
 }
