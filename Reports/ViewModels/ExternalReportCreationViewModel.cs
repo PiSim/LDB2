@@ -118,7 +118,7 @@ namespace Reports.ViewModels
             get { return _batchList; }
         }
         
-        public List<Organization> LabList 
+        public List<Organization> LaboratoriesList 
         {
             get { return new List<Organization>(_entities.Organizations.Where(org => org.Category == "Laboratorio")); }
         }
