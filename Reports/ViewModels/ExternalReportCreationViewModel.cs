@@ -59,7 +59,7 @@ namespace Reports.ViewModels
                     output.purchase_order = "";
                     output.Price = 0;
                     output.Samples = _sampleDescription;
-                    output.Currency = '';
+                    output.Currency = "";
                     output.report.received = 0;
                     output.ExternalLab = _selectedLab;
                     output.Project = _selectedProject;
