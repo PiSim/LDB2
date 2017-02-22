@@ -49,7 +49,7 @@ namespace Controls.ViewModels
 
         public List<Project> ProjectList
         {
-            get { return new List<Project>(_entities.Projects); }
+            get { return new List<Project>(_entities.Projects.OrderBy(prj => prj.Name)); }
         }
 
         public Project SelectedProject
