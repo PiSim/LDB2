@@ -129,14 +129,14 @@ namespace DBManager
                                             bool new_instance_if_not_found = true)
         {
             Construction output = Constructions.FirstOrDefault(cons =>
-                cons.Type == type &&
+                cons.MaterialType.Code == type &&
                 cons.Line == line &&
                 cons.Aspect.Code == aspectCode);
 
             if (output == null && new_instance_if_not_found)
             {
                 output = new Construction();
-                output.Type = type;
+                output.Type = MaterialTypes.First(tt => tt.Code == type);
                 output.Line = line;
                 output.Aspect = GetAspect(aspectCode);
             }
@@ -151,7 +151,7 @@ namespace DBManager
                                     bool new_instance_if_not_found = true)
         {
             Material output = Materials.FirstOrDefault(mat =>
-               mat.Construction.Type == type &&
+               mat.Construction.MaterialType.Code == type &&
                mat.Construction.Line == line &&
                mat.Construction.Aspect.Code == aspectCode &&
                mat.Recipe.Code == recipeCode);
