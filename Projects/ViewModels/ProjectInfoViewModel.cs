@@ -85,6 +85,11 @@ namespace Projects.ViewModels
         {
             get { return _assignedConstructions; }
         }
+        
+        public string Description
+        {
+            get { return _projectInstance.Description; }
+        }
 
         public List<ExternalReport> ExternalReportList
         {
@@ -93,6 +98,21 @@ namespace Projects.ViewModels
                 return new List<ExternalReport>
                     (_entities.ExternalReports.Where(ext => ext.projectID == _projectInstance.ID));
             }
+        }
+        
+        public string LeaderName
+        {
+            get { return _projectInstance.Leader.Name; }
+        }
+        
+        public string Name
+        {
+            get { return _projectInstance.Name; }
+        }
+
+        public string OemName
+        {
+            get { return _projectInstance.Oem.Name; }
         }
 
         public DelegateCommand OpenExternalCommand
