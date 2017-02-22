@@ -72,13 +72,13 @@ namespace Controls.ViewModels
             {
                 if (temp.Material.Construction.Project == null)
                 {
-                    ProjectPickerDialog prjDialog = new ProjectPickerDialog(_entities);
+                    Views.ProjectPickerDialog prjDialog = new Views.ProjectPickerDialog(_entities);
                     if (prjDialog.ShowDialog() == true)
                         temp.Material.Construction.Project = prjDialog.ProjectInstance;
                 }
                 if (temp.Material.Recipe.Colour == null)
                 {
-                    ColorPickerDialog colourPicker = new ColorPickerDialog(_entities);
+                    Views.ColorPickerDialog colourPicker = new Views.ColorPickerDialog(_entities);
                     if (colourPicker.ShowDialog() == true)
                         temp.Material.Recipe.Colour = colourPicker.ColourInstance;
                 }
@@ -89,7 +89,7 @@ namespace Controls.ViewModels
 
         public Material CreateNewMaterial()
         {
-            MaterialCreationDialog matDialog = new MaterialCreationDialog(_entities);
+            Views.MaterialCreationDialog matDialog = new Views.MaterialCreationDialog(_entities);
             if (matDialog.ShowDialog() == true)
                 return matDialog.ValidatedMaterial;
 
