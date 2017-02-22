@@ -1,4 +1,5 @@
 ﻿using DBManager;
+using Microsoft.Practices.Unity;
 using Prism.Commands;
 using Prism.Mvvm;
 using System;
@@ -19,19 +20,24 @@ namespace Reports.ViewModels
         private ObservableCollection<Batch> _batchList;
         private Project _selectedProject;
         private string _sampleDescription, _testDescription;
+        private UnityContainer _container;
         private Views.ExternalReportCreationDialog _parentDialog;
         
         internal ExternalReportCreationViewModel(DBEntities entities,
+                                                UnityContainer container,
                                                 Views.ExternalReportCreationDialog parentDialog) : base()
         {
             _batchList = new ObservableCollection<Batch>();
+            _container = container;
             _entities = entities;
             _parentDialog = parentDialog;
             
             _addBatch = new DelegateCommand(
                 () => 
                 {
-                        
+                    BatchPickerDialog batchPicker = _container.Resolve<BatchPickerDialog>();
+                    if (batchPicker.ShowDialog() == true)
+                        _batchList.Add(batchPicker.BatchInstance());                                            
                 });
             
             _cancel = new DelegateCommand(
@@ -43,13 +49,17 @@ namespace Reports.ViewModels
            _confirm = new DelegateCommand(
                 () => 
                 {
+                    ExternalReport output = new ExternalReport();
                     
+                    
+                    _parentDialog.DialogResult = true;
                 });
                 
             _removeBatch = new DelegateCommand(
                 () => 
                 {
-                    
+                    _batchList.Remove(_selectedBatch);
+                    SelectedBatch = null;
                 },
                 () => _selectedBatch != null);
         }
