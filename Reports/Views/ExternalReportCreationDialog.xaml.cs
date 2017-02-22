@@ -25,7 +25,7 @@ namespace Reports.Views
         
         public ExternalReportCreationDialog(DBEntities entities, UnityContainer container)
         {
-            DataContext = new ViewModels.ExternalReportCreationViewModel(entities, this, container);
+            DataContext = new ViewModels.ExternalReportCreationViewModel(entities, container, this);
             InitializeComponent();
         }
         
