@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DBManager;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,9 +20,18 @@ namespace Controls.Views
     /// </summary>
     public partial class BatchPickerDialog : Window
     {
-        public BatchPickerDialog()
+        private Batch _batchInstance;
+        
+        public BatchPickerDialog(DBEntities entities)
         {
+            DataContext = new ViewModels.BatchPickerViewModel(entities);
             InitializeComponent();
+        }
+        
+        public Batch BatchInstance
+        {
+            get { return _batchInstance; }
+            set { _batchInstance = value; }
         }
     }
 }
