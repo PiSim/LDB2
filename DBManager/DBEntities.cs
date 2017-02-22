@@ -136,7 +136,7 @@ namespace DBManager
             if (output == null && new_instance_if_not_found)
             {
                 output = new Construction();
-                output.Type = MaterialTypes.First(tt => tt.Code == type);
+                output.MaterialType = MaterialTypes.First(tt => tt.Code == type);
                 output.Line = line;
                 output.Aspect = GetAspect(aspectCode);
             }
