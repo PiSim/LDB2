@@ -66,31 +66,22 @@ namespace LabDB2
                     InitializationMode = Prism.Modularity.InitializationMode.OnDemand
                 });
 
-            Type BatchesModuleType = typeof(Batches.BatchesModule);
+            Type MaterialsModuleType = typeof(Materials.MaterialsModule);
             ModuleCatalog.AddModule(
-                new Prism.Modularity.ModuleInfo()
+                new ModuleInfo()
                 {
-                    ModuleName = BatchesModuleType.Name,
-                    ModuleType = BatchesModuleType.AssemblyQualifiedName,
-                    InitializationMode = Prism.Modularity.InitializationMode.OnDemand
+                    ModuleName = MaterialsModuleType.Name,
+                    ModuleType = MaterialsModuleType.AssemblyQualifiedName,
+                    InitializationMode = InitializationMode.OnDemand
                 });
 
-            Type MastersModuleType = typeof(Masters.MastersModule);
+            Type OrganizationsModuleType = typeof(Organizations.OrganizationsModule);
             ModuleCatalog.AddModule(
-                new Prism.Modularity.ModuleInfo()
+                new ModuleInfo()
                 {
-                    ModuleName = MastersModuleType.Name,
-                    ModuleType = MastersModuleType.AssemblyQualifiedName,
-                    InitializationMode = Prism.Modularity.InitializationMode.OnDemand
-                });
-
-            Type MethodsModuleType = typeof(Methods.MethodsModule);
-            ModuleCatalog.AddModule(
-                new Prism.Modularity.ModuleInfo()
-                {
-                    ModuleName = MethodsModuleType.Name,
-                    ModuleType = MethodsModuleType.AssemblyQualifiedName,
-                    InitializationMode = Prism.Modularity.InitializationMode.OnDemand
+                    ModuleName = OrganizationsModuleType.Name,
+                    ModuleType = OrganizationsModuleType.AssemblyQualifiedName,
+                    InitializationMode = InitializationMode.OnDemand
                 });
 
             Type ProjectsModuleType = typeof(Projects.ProjectsModule);
@@ -117,15 +108,6 @@ namespace LabDB2
                 {
                     ModuleName = SpecificationModuleType.Name,
                     ModuleType = SpecificationModuleType.AssemblyQualifiedName,
-                    InitializationMode = Prism.Modularity.InitializationMode.OnDemand
-                });
-
-            Type StandardModuleType = typeof(Standards.StandardsModule);
-            ModuleCatalog.AddModule(
-                new Prism.Modularity.ModuleInfo()
-                {
-                    ModuleName = StandardModuleType.Name,
-                    ModuleType = StandardModuleType.AssemblyQualifiedName,
                     InitializationMode = Prism.Modularity.InitializationMode.OnDemand
                 });
 
@@ -163,13 +145,11 @@ namespace LabDB2
             IModuleManager moduleManager = Container.Resolve<IModuleManager>();
 
             moduleManager.LoadModule(typeof(Admin.AdminModule).Name);
-            moduleManager.LoadModule(typeof(Batches.BatchesModule).Name);
-            moduleManager.LoadModule(typeof(Masters.MastersModule).Name);
-            moduleManager.LoadModule(typeof(Methods.MethodsModule).Name);
+            moduleManager.LoadModule(typeof(Materials.MaterialsModule).Name);
+            moduleManager.LoadModule(typeof(Organizations.OrganizationsModule).Name);
             moduleManager.LoadModule(typeof(Projects.ProjectsModule).Name);
             moduleManager.LoadModule(typeof(Reports.ReportsModule).Name);
             moduleManager.LoadModule(typeof(Specifications.SpecificationsModule).Name);
-            moduleManager.LoadModule(typeof(Standards.StandardsModule).Name);
             moduleManager.LoadModule(typeof(Tasks.TasksModule).Name);
         }
     }

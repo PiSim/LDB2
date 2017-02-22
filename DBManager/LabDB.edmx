@@ -64,7 +64,6 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="type" Type="char" MaxLength="4" Nullable="false" />
           <Property Name="line" Type="char" MaxLength="3" Nullable="false" />
           <Property Name="aspectID" Type="int" Nullable="false" />
           <Property Name="projectID" Type="int" />
@@ -129,7 +128,6 @@
           <Property Name="samples" Type="varchar" MaxLength="100" Nullable="false" />
           <Property Name="currency" Type="char" MaxLength="3" Nullable="false" />
           <Property Name="report_received" Type="int" />
-          <Property Name="fileID" Type="text" />
           <Property Name="projectID" Type="int" />
         </EntityType>
         <EntityType Name="instrument_types">
@@ -207,7 +205,8 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="name" Type="varchar" MaxLength="45" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="description" Type="varchar" MaxLength="45" Nullable="false" />
         </EntityType>
         <EntityType Name="organizations">
           <Key>
@@ -1639,7 +1638,6 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Type" Type="String" MaxLength="4" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Line" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="AspectID" Type="Int32" Nullable="false" a:GetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:SetterAccess="Private" />
           <Property Name="ProjectID" Type="Int32" a:GetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:SetterAccess="Private" />
@@ -1649,7 +1647,7 @@
           <NavigationProperty Name="ExternalConstruction" Relationship="Self.external_construction" FromRole="constructions" ToRole="external_constructions" />
           <NavigationProperty Name="Project" Relationship="Self.project1" FromRole="constructions" ToRole="projects" />
           <Property Name="TypeID" Type="Int32" a:SetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
-          <NavigationProperty Name="MaterialType" Relationship="labdbModel.type_to_construction" FromRole="Construction" ToRole="material_types" />
+          <NavigationProperty Name="Type" Relationship="labdbModel.type_to_construction" FromRole="Construction" ToRole="material_types" />
         </EntityType>
         <EntityType Name="ExternalConstruction">
           <Key>
@@ -1688,12 +1686,11 @@
           <Property Name="Samples" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Currency" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="report_received" Type="Int32" />
-          <Property Name="fileID" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
           <Property Name="projectID" Type="Int32" />
           <NavigationProperty Name="ExternalReportFiles" Relationship="Self.external_report" FromRole="external_reports" ToRole="external_report_files" />
           <NavigationProperty Name="ExternalLab" Relationship="Self.external_lab" FromRole="external_reports" ToRole="organizations" />
           <NavigationProperty Name="Project" Relationship="Self.project_to_report" FromRole="external_reports" ToRole="projects" />
-          <NavigationProperty Name="external_report_batch_mapping" Relationship="labdbModel.external_report_to_batch_mapping" FromRole="ExternalReport" ToRole="external_report_batch_mapping" />
+          <NavigationProperty Name="BatchMappings" Relationship="labdbModel.external_report_to_batch_mapping" FromRole="ExternalReport" ToRole="external_report_batch_mapping" />
         </EntityType>
         <EntityType Name="Master">
           <Key>
@@ -1908,7 +1905,7 @@
           <NavigationProperty Name="Organization" Relationship="Self.organization_to_standard" FromRole="standards" ToRole="organizations" />
           <NavigationProperty Name="Specifications" Relationship="Self.standard_to_specification" FromRole="standards" ToRole="specifications" />
           <NavigationProperty Name="StandardIssues" Relationship="labdbModel.standard_to_issue" FromRole="Std" ToRole="StandardIssue" />
-          <Property Name="current_issueID" Type="Int32" />
+          <Property Name="CurrentIssueID" Type="Int32" />
           <NavigationProperty Name="CurrentIssue" Relationship="labdbModel.current_issue_to_standard" FromRole="Std" ToRole="StandardIssue" />
         </EntityType>
         <EntityType Name="SubRequirement">
@@ -2883,7 +2880,7 @@
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="Std">
-              <PropertyRef Name="current_issueID" />
+              <PropertyRef Name="CurrentIssueID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -3275,6 +3272,7 @@
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="OrganizationMappings" Relationship="labdbModel.role_to_organization_mapping" FromRole="organization_roles" ToRole="organization_role_mappings" />
+          <Property Name="description" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
         </EntityType>
         <Association Name="organization_to_role_mapping">
           <End Type="labdbModel.Organization" Role="Organization" Multiplicity="1">
@@ -3353,7 +3351,6 @@
               <MappingFragment StoreEntitySet="constructions">
                 <ScalarProperty Name="TypeID" ColumnName="typeID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="Type" ColumnName="type" />
                 <ScalarProperty Name="Line" ColumnName="line" />
                 <ScalarProperty Name="AspectID" ColumnName="aspectID" />
                 <ScalarProperty Name="ProjectID" ColumnName="projectID" />
@@ -3396,7 +3393,6 @@
                 <ScalarProperty Name="Samples" ColumnName="samples" />
                 <ScalarProperty Name="Currency" ColumnName="currency" />
                 <ScalarProperty Name="report_received" ColumnName="report_received" />
-                <ScalarProperty Name="fileID" ColumnName="fileID" />
                 <ScalarProperty Name="projectID" ColumnName="projectID" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -3566,7 +3562,7 @@
           <EntitySetMapping Name="Stds">
             <EntityTypeMapping TypeName="labdbModel.Std">
               <MappingFragment StoreEntitySet="standards">
-                <ScalarProperty Name="current_issueID" ColumnName="current_issueID" />
+                <ScalarProperty Name="CurrentIssueID" ColumnName="current_issueID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Name" ColumnName="name" />
                 <ScalarProperty Name="OrganizationID" ColumnName="organizationID" />
@@ -3783,6 +3779,7 @@
           <EntitySetMapping Name="OrganizationRoles">
             <EntityTypeMapping TypeName="labdbModel.OrganizationRole">
               <MappingFragment StoreEntitySet="organization_roles">
+                <ScalarProperty Name="description" ColumnName="description" />
                 <ScalarProperty Name="Name" ColumnName="name" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>

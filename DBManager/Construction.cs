@@ -21,7 +21,6 @@ namespace DBManager
         }
     
         public int ID { get; set; }
-        public string Type { get; set; }
         public string Line { get; set; }
         public int AspectID { get; private set; }
         public Nullable<int> ProjectID { get; private set; }
@@ -33,6 +32,6 @@ namespace DBManager
         public virtual ICollection<Material> Materials { get; set; }
         public virtual ExternalConstruction ExternalConstruction { get; set; }
         public virtual Project Project { get; set; }
-        public virtual MaterialType MaterialType { get; set; }
+        public virtual MaterialType Type { get; set; }
     }
 }

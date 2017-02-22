@@ -25,7 +25,7 @@ namespace DBManager
         public int ID { get; set; }
         public string Name { get; set; }
         public int OrganizationID { get; private set; }
-        public Nullable<int> current_issueID { get; set; }
+        public Nullable<int> CurrentIssueID { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Method> Methods { get; set; }

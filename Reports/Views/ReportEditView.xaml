@@ -107,10 +107,15 @@
                        Grid.Column="0"
                        Grid.Row="0"
                        Margin="5,0,5,0"/>
-                <Label Content="{Binding Path=Construction.Type}"
+                <Label Content="{Binding Path=Construction.Type.Code}"
                        Grid.Column="1"
                        Grid.Row="0"
-                       Margin="5,0,5,0"/>
+                       Margin="5"/>
+
+                <Label Content="{Binding Construction.Type.Description}"
+                       Grid.Column="2"
+                       Grid.Row="0"
+                       Margin="5"/>
 
                 <Label Content="Linea:"
                        Grid.Column="0"

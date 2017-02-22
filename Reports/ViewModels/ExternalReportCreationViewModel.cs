@@ -37,7 +37,7 @@ namespace Reports.ViewModels
             _addBatch = new DelegateCommand(
                 () => 
                 {
-                    BatchPickerDialog batchPicker = _container.Resolve<BatchPickerDialog>();
+                    BatchPickerDialog batchPicker = new BatchPickerDialog(_entities); 
                     if (batchPicker.ShowDialog() == true)
                         _batchList.Add(batchPicker.BatchInstance);                                            
                 });
@@ -55,6 +55,7 @@ namespace Reports.ViewModels
                     output.Date = DateTime.Now.ToShortDateString();
                     output.Description = _testDescription;
                     output.InternalNumber = _number;
+                    output.ExternalNumber = "";
                     output.material_sent = 0;
                     output.request_done = 0;
                     output.purchase_order = "";
@@ -70,11 +71,13 @@ namespace Reports.ViewModels
                         ExternalReportBatchMapping tempMap = new ExternalReportBatchMapping();
                         tempMap.Batch = selectedBatch;
                         
-                        output.external_report_batch_mapping.Add(tempMap);
+                        output.BatchMappings.Add(tempMap);
                     }
-                    
+
+                    _entities.ExternalReports.Add(output);
                     _entities.SaveChanges();
-                    
+
+                    _parentDialog.ExternalReportInstance = output;
                     _parentDialog.DialogResult = true;
                 });
                 
@@ -92,7 +95,12 @@ namespace Reports.ViewModels
         {
             get { return _addBatch; }
         }
-        
+
+        public ObservableCollection<Batch> BatchList
+        {
+            get { return _batchList; }
+        }
+
         public DelegateCommand CancelCommand
         {
             get { return _cancel; }
@@ -112,11 +120,6 @@ namespace Reports.ViewModels
         {
             get { return _number; }
             set { _number = value; }
-        }
-        
-        public ObservableCollection<Batch> BatchList
-        {
-            get { return _batchList; }
         }
         
         public List<Organization> LaboratoriesList 

@@ -18,7 +18,7 @@ namespace DBManager
         public ExternalReport()
         {
             this.ExternalReportFiles = new HashSet<ExternalReportFile>();
-            this.external_report_batch_mapping = new HashSet<ExternalReportBatchMapping>();
+            this.BatchMappings = new HashSet<ExternalReportBatchMapping>();
         }
     
         public int ID { get; private set; }
@@ -34,7 +34,6 @@ namespace DBManager
         public string Samples { get; set; }
         public string Currency { get; set; }
         public Nullable<int> report_received { get; set; }
-        public string fileID { get; set; }
         public Nullable<int> projectID { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -42,6 +41,6 @@ namespace DBManager
         public virtual Organization ExternalLab { get; set; }
         public virtual Project Project { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ExternalReportBatchMapping> external_report_batch_mapping { get; set; }
+        public virtual ICollection<ExternalReportBatchMapping> BatchMappings { get; set; }
     }
 }

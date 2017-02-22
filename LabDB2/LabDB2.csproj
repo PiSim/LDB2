@@ -163,10 +163,6 @@
       <Project>{df56d17f-6cee-4bed-9931-43260ec3fbd7}</Project>
       <Name>Admin</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Batches\Batches.csproj">
-      <Project>{9cfe2583-7690-4d76-8b06-bf8d767f3b1f}</Project>
-      <Name>Batches</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Controls\Controls.csproj">
       <Project>{315cd8ab-0509-4d45-aba5-b2cbd0f10f69}</Project>
       <Name>Controls</Name>
@@ -179,17 +175,21 @@
       <Project>{c432c3be-1051-45f1-95a1-9397bbf35923}</Project>
       <Name>Infrastructure</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Masters\Masters.csproj">
-      <Project>{4c670989-4c2c-4503-bac5-14d276938a8f}</Project>
-      <Name>Masters</Name>
+    <ProjectReference Include="..\Instruments\Instruments.csproj">
+      <Project>{820441f7-4e40-4536-9b31-6a30c7811e92}</Project>
+      <Name>Instruments</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Methods\Methods.csproj">
-      <Project>{255095cd-0add-4970-a6d3-0c8c19aaa35f}</Project>
-      <Name>Methods</Name>
+    <ProjectReference Include="..\Materials\Materials.csproj">
+      <Project>{b6863f10-adc1-4f0c-987b-8aca2db14b0f}</Project>
+      <Name>Materials</Name>
     </ProjectReference>
     <ProjectReference Include="..\Navigation\Navigation.csproj">
       <Project>{31368a5f-9770-4198-bc3d-4996917b4139}</Project>
       <Name>Navigation</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Organizations\Organizations.csproj">
+      <Project>{8d1d2e26-45c1-421a-a2e0-0299ceaf1c42}</Project>
+      <Name>Organizations</Name>
     </ProjectReference>
     <ProjectReference Include="..\Projects\Projects.csproj">
       <Project>{18b8efff-84ff-4652-b3e6-a35f59461247}</Project>
@@ -206,10 +206,6 @@
     <ProjectReference Include="..\Specifications\Specifications.csproj">
       <Project>{4ad99f97-c930-447d-93df-225eb347255e}</Project>
       <Name>Specifications</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Standards\Standards.csproj">
-      <Project>{cfaecdb8-ac3d-4add-989d-6a3d40b06b1c}</Project>
-      <Name>Standards</Name>
     </ProjectReference>
     <ProjectReference Include="..\Tasks\Tasks.csproj">
       <Project>{243da195-5ca0-4826-94e8-13b023bab8c6}</Project>

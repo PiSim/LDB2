@@ -13,15 +13,4 @@ public class ServiceProvider
         _entities = entities;
     }
     
-    public void BuildMaterialTypeIDs()
-    {
-        foreach (Construction current in _entities.Constructions)
-        {
-            current.MaterialType = _entities.MaterialTypes.First(tt => tt.Code == current.Type);
-        }
-        
-        _entities.SaveChanges();
-        
-    }
-
 }

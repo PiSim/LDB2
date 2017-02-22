@@ -98,7 +98,7 @@
                Grid.Row="4"
                Margin="5"/>
 
-        <TextBox Text="{Binding SamplesDescription, Mode=TwoWay}"
+        <TextBox Text="{Binding SampleDescription, Mode=TwoWay}"
                  TextWrapping="Wrap"
                  AcceptsReturn="True"
                  Grid.Column="1"
@@ -112,7 +112,7 @@
                Grid.Row="5"
                Margin="5"/>
 
-        <ListView ItemsSource="{Binding AssociatedBatches}"
+        <ListView ItemsSource="{Binding BatchList}"
                   SelectedItem="{Binding SelectedBatch, Mode=TwoWay}"
                   Grid.Column="1"
                   Grid.ColumnSpan="2"
