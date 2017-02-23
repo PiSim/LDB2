@@ -1,5 +1,7 @@
 ﻿using DBManager;
+using Infrastructure;
 using Prism.Commands;
+using Prism.Events;
 using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
@@ -15,19 +17,26 @@ namespace Reports.ViewModels
     {
         private DBEntities _entities;
         private DelegateCommand _addFile, _openFile, _removeFile;
+        private EventAggregator _eventAggregator;
         private ExternalReport _instance;
         private ExternalReportFile _selectedFile;
         private ObservableCollection<ExternalReportFile> _reportFiles;
 
         internal ExternalReportEditViewModel(DBEntities entities,
+                                            EventAggregator aggregator,
                                             ExternalReport instance) : base()
         {
-            _entities = entities;
-            _instance = _entities.ExternalReports.FirstOrDefault(xrp => xrp.ID == instance.ID);
-
-            if (_instance == null)
+            
+            if (instance == null)
                 throw new InvalidOperationException();
-
+                
+            _eventAggregator = aggregator;
+            
+            _entities = entities;
+            _eventAggregator.GetEvent<CommitRequested>().Subscribe(() => _entities.SaveChanges());
+            
+            _instance = _entities.ExternalReports.FirstOrDefault(xrp => xrp.ID == instance.ID);
+            
             _reportFiles = new ObservableCollection<ExternalReportFile>
                 (_instance.ExternalReportFiles);
 
@@ -44,6 +53,7 @@ namespace Reports.ViewModels
                             ExternalReportFile temp = new ExternalReportFile();
                             temp.Path = pth;
                             ReportFiles.Add(temp);   
+                            _instance.ExternalReportFiles.Add(temp);
                         }
                     }
                 });
@@ -59,8 +69,15 @@ namespace Reports.ViewModels
                 () =>
                 {
                     ReportFiles.Remove(_selectedFile);
+                    _instance.ExternalReportFiles.Remove(_selectedFile);
+                    SelectedFile = null;
                 },
                 () => _selectedFile != null);
+        }
+
+        public DelegateCommand AddFileCommand
+        {
+            get { return _addFile; }
         }
 
         public string Description
@@ -74,6 +91,27 @@ namespace Reports.ViewModels
             get { return _instance.Currency; }
             set { _instance.Currency = value; }
         }
+        
+        public string ExternalLab
+        {
+            get { return _instance.ExternalLab.Name; }
+        }
+        
+        public int InternalNumber
+        {
+            get { return _instance.InternalNumber; }
+            set { _instance.InternalNumber = value; }
+        }
+
+        public DelegateCommand OpenFileCommand
+        {
+            get { return _openFile; }
+        }
+
+        public DelegateCommand RemoveFileCommand
+        {
+            get { return _removeFile; }
+        }
 
         public ObservableCollection<ExternalReportFile> ReportFiles
         {
@@ -84,6 +122,11 @@ namespace Reports.ViewModels
         {
             get { return _instance.Price; }
             set { _instance.Price = value; }
+        }
+        
+        public Project Project
+        {
+            get { return _instance.Project; }
         }
 
         public string PurchaseOrder

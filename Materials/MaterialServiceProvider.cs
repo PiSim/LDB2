@@ -40,13 +40,13 @@ namespace Materials
         public Material CreateNewMaterial()
         {
             Material output;
-            MaterialCreationDialog matDialog = _container.Resolve<MaterialCreationDialog>();
+            MaterialCreationDialog matDialog = new MaterialCreationDialog(_entities);
             if (matDialog.ShowDialog() == true)
             {
                 output = matDialog.ValidatedMaterial;
                 if (output.Construction.Project == null)
                 {
-                    ProjectPickerDialog prjDialog = _container.Resolve<ProjectPickerDialog>();
+                    ProjectPickerDialog prjDialog = new ProjectPickerDialog(_entities);
                     if (prjDialog.ShowDialog() == true)
                         output.Construction.Project = prjDialog.ProjectInstance;
                 }
@@ -89,7 +89,7 @@ namespace Materials
 
         public Colour PickColourForRecipe()
         {
-            ColorPickerDialog colourPicker = _container.Resolve<ColorPickerDialog>();
+            ColorPickerDialog colourPicker = new ColorPickerDialog(_entities);
 
             if (colourPicker.ShowDialog() == true)
                 return colourPicker.ColourInstance;
