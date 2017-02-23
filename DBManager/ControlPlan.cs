@@ -17,7 +17,7 @@ namespace DBManager
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public ControlPlan()
         {
-            this.ControlPlanItems = new HashSet<ControlPlanItems>();
+            this.ControlPlanItems = new HashSet<ControlPlanItem>();
         }
     
         public int ID { get; set; }
@@ -25,7 +25,7 @@ namespace DBManager
         public int SpecificationID { get; private set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ControlPlanItems> ControlPlanItems { get; set; }
+        public virtual ICollection<ControlPlanItem> ControlPlanItems { get; set; }
         public virtual Specification Specification { get; set; }
     }
 }

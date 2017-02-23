@@ -20,7 +20,7 @@ namespace DBManager
             this.Requirements = new HashSet<Requirement>();
             this.Tests = new HashSet<Test>();
             this.Measurements = new HashSet<MethodMeasurement>();
-            this.ControlPlanItems = new HashSet<ControlPlanItems>();
+            this.ControlPlanItems = new HashSet<ControlPlanItem>();
         }
     
         public int ID { get; private set; }
@@ -39,6 +39,6 @@ namespace DBManager
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<MethodMeasurement> Measurements { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ControlPlanItems> ControlPlanItems { get; set; }
+        public virtual ICollection<ControlPlanItem> ControlPlanItems { get; set; }
     }
 }

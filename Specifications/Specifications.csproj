@@ -91,6 +91,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ControlPlanItemWrapper.cs" />
     <Compile Include="RequirementWrapper.cs" />
     <Compile Include="SpecificationServiceProvider.cs" />
     <Compile Include="SpecificationsModule.cs" />

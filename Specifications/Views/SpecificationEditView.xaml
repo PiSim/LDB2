@@ -362,7 +362,7 @@
                             </ListView>
 
                             <Button Content="Nuovo"
-                                    Command="{Binding Path=NewControlPlanCommand}"
+                                    Command="{Binding Path=AddControlPlanCommand}"
                                     Grid.Column="1"
                                     Grid.Row="0"
                                     Margin="5,5,5,5"/>
@@ -383,7 +383,7 @@
 
                     <GroupBox Header="Test da effettuare"
                                 Grid.Column="1">
-                        <ListView ItemsSource="{Binding Path=ControlPlanItemList}">
+                        <ListView ItemsSource="{Binding Path=ControlPlanItemsList}">
                             <ListView.View>
                                 <GridView>
                                     <GridViewColumn>

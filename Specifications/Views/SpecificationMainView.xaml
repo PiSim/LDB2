@@ -27,7 +27,7 @@
                     <GridViewColumn Header="Nome"
                                     DisplayMemberBinding="{Binding Standard.Name}"/>
                     <GridViewColumn Header="Edizione"
-                                    DisplayMemberBinding="{Binding Standard.Issue}"/>
+                                    DisplayMemberBinding="{Binding Standard.CurrentIssue.Issue}"/>
                 </GridView>
             </ListView.View>
         </ListView>

@@ -128,7 +128,7 @@
     <Compile Include="ControlPlan.cs">
       <DependentUpon>LabDB.tt</DependentUpon>
     </Compile>
-    <Compile Include="ControlPlanItems.cs">
+    <Compile Include="ControlPlanItem.cs">
       <DependentUpon>LabDB.tt</DependentUpon>
     </Compile>
     <Compile Include="DBManagerModule.cs" />

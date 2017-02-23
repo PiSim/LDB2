@@ -2700,15 +2700,15 @@
             <End Role="User" EntitySet="Users" />
             <End Role="user_role_mappings" EntitySet="UserRoleMappings" />
           </AssociationSet>
-          <EntitySet Name="ControlPlanItems" EntityType="labdbModel.ControlPlanItems" />
+          <EntitySet Name="ControlPlanItems1" EntityType="labdbModel.ControlPlanItem" />
           <EntitySet Name="ControlPlans" EntityType="labdbModel.ControlPlan" />
           <AssociationSet Name="control_plan_to_item" Association="labdbModel.control_plan_to_item">
             <End Role="control_plans" EntitySet="ControlPlans" />
-            <End Role="control_plan_items" EntitySet="ControlPlanItems" />
+            <End Role="control_plan_items" EntitySet="ControlPlanItems1" />
           </AssociationSet>
           <AssociationSet Name="method_to_control_plan_item" Association="labdbModel.method_to_control_plan_item">
             <End Role="Method" EntitySet="Methods" />
-            <End Role="control_plan_items" EntitySet="ControlPlanItems" />
+            <End Role="control_plan_items" EntitySet="ControlPlanItems1" />
           </AssociationSet>
           <AssociationSet Name="specification_to_control_plan" Association="labdbModel.specification_to_control_plan">
             <End Role="Specification" EntitySet="Specifications" />
@@ -3002,15 +3002,15 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="ControlPlanItems">
+        <EntityType Name="ControlPlanItem">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" a:SetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <Property Name="ControlPlanID" Type="Int32" Nullable="false" a:SetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <Property Name="MethodID" Type="Int32" Nullable="false" a:SetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
-          <NavigationProperty Name="ControlPlans" Relationship="labdbModel.control_plan_to_item" FromRole="control_plan_items" ToRole="control_plans" />
-          <NavigationProperty Name="method" Relationship="labdbModel.method_to_control_plan_item" FromRole="control_plan_items" ToRole="Method" />
+          <NavigationProperty Name="ControlPlan" Relationship="labdbModel.control_plan_to_item" FromRole="control_plan_items" ToRole="control_plans" />
+          <NavigationProperty Name="Method" Relationship="labdbModel.method_to_control_plan_item" FromRole="control_plan_items" ToRole="Method" />
         </EntityType>
         <EntityType Name="ControlPlan">
           <Key>
@@ -3026,7 +3026,7 @@
           <End Type="labdbModel.ControlPlan" Role="control_plans" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Type="labdbModel.ControlPlanItems" Role="control_plan_items" Multiplicity="*" />
+          <End Type="labdbModel.ControlPlanItem" Role="control_plan_items" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="control_plans">
               <PropertyRef Name="ID" />
@@ -3038,7 +3038,7 @@
         </Association>
         <Association Name="method_to_control_plan_item">
           <End Type="labdbModel.Method" Role="Method" Multiplicity="1" />
-          <End Type="labdbModel.ControlPlanItems" Role="control_plan_items" Multiplicity="*" />
+          <End Type="labdbModel.ControlPlanItem" Role="control_plan_items" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Method">
               <PropertyRef Name="ID" />
@@ -3690,8 +3690,8 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="ControlPlanItems">
-            <EntityTypeMapping TypeName="labdbModel.ControlPlanItems">
+          <EntitySetMapping Name="ControlPlanItems1">
+            <EntityTypeMapping TypeName="labdbModel.ControlPlanItem">
               <MappingFragment StoreEntitySet="control_plan_items">
                 <ScalarProperty Name="MethodID" ColumnName="methodID" />
                 <ScalarProperty Name="ControlPlanID" ColumnName="control_planID" />

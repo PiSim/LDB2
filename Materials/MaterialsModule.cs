@@ -22,7 +22,6 @@ namespace Materials
         {
             _container.RegisterType<Object, Views.BatchInfoView>(ViewNames.BatchInfoView);
             _container.RegisterType<Object, Views.BatchMainView>(ViewNames.BatchesView);
-            _container.RegisterType<Object, Views.BatchQueryView>(ViewNames.BatchQueryView);
             _container.RegisterType<Object, Views.SampleLogView>(ViewNames.SampleLogView);
 
             _regionManager.RegisterViewWithRegion(Navigation.RegionNames.MainNavigationRegion, 

@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="9fa1cdb38a7949d89850433ccf2fcd72" Name="Diagram1" ZoomLevel="71">
+      <Diagram DiagramId="9fa1cdb38a7949d89850433ccf2fcd72" Name="Diagram1" ZoomLevel="81">
         <EntityTypeShape EntityType="labdbModel.Aspect" Width="1.5" PointX="13.25" PointY="29.375" IsExpanded="true" />
         <EntityTypeShape EntityType="labdbModel.BatchFile" Width="1.5" PointX="19" PointY="10.5" IsExpanded="true" />
         <EntityTypeShape EntityType="labdbModel.Batch" Width="1.5" PointX="19" PointY="13.125" IsExpanded="true" />
@@ -94,7 +94,7 @@
         <EntityTypeShape EntityType="labdbModel.UserRole" Width="1.5" PointX="1.375" PointY="18.75" />
         <AssociationConnector Association="labdbModel.role_to_role_mapping" />
         <AssociationConnector Association="labdbModel.user_to_role_mapping" />
-        <EntityTypeShape EntityType="labdbModel.ControlPlanItems" Width="1.5" PointX="6.75" PointY="0.5" />
+        <EntityTypeShape EntityType="labdbModel.ControlPlanItem" Width="1.5" PointX="6.75" PointY="0.5" />
         <EntityTypeShape EntityType="labdbModel.ControlPlan" Width="1.5" PointX="0.5" PointY="0.5" />
         <AssociationConnector Association="labdbModel.control_plan_to_item" />
         <AssociationConnector Association="labdbModel.method_to_control_plan_item" />
