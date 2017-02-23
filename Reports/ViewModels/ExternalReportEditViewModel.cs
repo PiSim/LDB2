@@ -63,6 +63,11 @@ namespace Reports.ViewModels
                 () => _selectedFile != null);
         }
 
+        public DelegateCommand AddFile
+        {
+            get { return _addFile; }
+        }
+
         public string Description
         {
             get { return _instance.Description; }
@@ -73,6 +78,16 @@ namespace Reports.ViewModels
         {
             get { return _instance.Currency; }
             set { _instance.Currency = value; }
+        }
+
+        public DelegateCommand OpenFile 
+        {
+            get { return _openFile; }
+        }
+
+        public DelegateCommand RemoveFile 
+        {
+            get { return _removeFile; }
         }
 
         public ObservableCollection<ExternalReportFile> ReportFiles
