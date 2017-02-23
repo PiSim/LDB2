@@ -16,13 +16,42 @@
             <ColumnDefinition/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <Label Content="Numero interno:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,0,0"/>
-        <Label Content="{Binding Path=InternalNumber}" HorizontalAlignment="Left" VerticalAlignment="Top"
-               Margin="125,0,0,0"/>
-        <Label Content="Laboratorio:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,25,0,0"/>
-        <Label Content="{Binding Path=ExternalLab}" 
-               HorizontalAlignment="Left" VerticalAlignment="Top" Margin="125,25,0,0"/>
-        <GroupBox Header="Progetto"
+        
+        <Grid Grid.Column="0"
+              Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>                
+            </Grid.RowDefinitions>
+            
+            
+            <Label Content="Numero interno:"
+                   Grid.Column="0"
+                   Grid.Row="0" 
+                   Margin="5"/>
+                   
+            <Label Content="{Binding Path=InternalNumber}"
+                   Grid.Column="1"
+                   Grid.Row="0"
+                   Margin="5"/>
+                   
+            <Label Content="Laboratorio:" 
+                   Grid.Column="0"
+                   Grid.Row="1"
+                   Margin="5"/>
+            <Label Content="{Binding Path=ExternalLab}" 
+                   Grid.Column="1"
+                   Grid.Row="1"
+                   Margin="5"/> 
+                   
+            <GroupBox Header="Progetto"
                       Grid.Column="1"
                       Height="Auto"
                       HorizontalAlignment="Left"
@@ -39,6 +68,7 @@
                         <RowDefinition/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
+                    
                     <Label Content="Nome:"
                            Grid.Column="0"
                            Grid.Row="0"/>
@@ -68,6 +98,9 @@
                            Grid.Row="3"/>
                 </Grid>
             </GroupBox>
+        </Grid>
+        
+        
 
         <GroupBox Header="Dettagli ordine"
                   Grid.Column="1"
