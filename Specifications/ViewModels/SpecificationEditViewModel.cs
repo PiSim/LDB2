@@ -189,7 +189,7 @@ namespace Specifications.ViewModels
 
         public List<ControlPlanItem> ControlPlanItemsList
         {
-            get { return new List<ControlPlanItem>(_selectedControlPlan.ControlPlanItems); }
+            get { return new List<ControlPlanItem>(); }
         }
 
         public List<ControlPlan> ControlPlanList
