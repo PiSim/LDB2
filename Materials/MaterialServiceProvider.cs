@@ -89,7 +89,7 @@ namespace Materials
 
         public Colour PickColourForRecipe()
         {
-            ColorPickerDialog colourPicker = new ColorPickerDialog();
+            ColorPickerDialog colourPicker = new ColorPickerDialog(_entities);
 
             if (colourPicker.ShowDialog() == true)
                 return colourPicker.ColourInstance;
