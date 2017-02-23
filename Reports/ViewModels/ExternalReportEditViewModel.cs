@@ -27,7 +27,7 @@ namespace Reports.ViewModels
                                             ExternalReport instance) : base()
         {
             
-            if (_instance == null)
+            if (instance == null)
                 throw new InvalidOperationException();
                 
             _eventAggregator = aggregator;
