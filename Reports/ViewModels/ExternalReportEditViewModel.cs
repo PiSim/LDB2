@@ -63,7 +63,7 @@ namespace Reports.ViewModels
                 () => _selectedFile != null);
         }
 
-        public DelegateCommand AddFile
+        public DelegateCommand AddFileCommand
         {
             get { return _addFile; }
         }
@@ -91,12 +91,12 @@ namespace Reports.ViewModels
             set { _instance.InternalNumber = value; }
         }
 
-        public DelegateCommand OpenFile 
+        public DelegateCommand OpenFileCommand
         {
             get { return _openFile; }
         }
 
-        public DelegateCommand RemoveFile 
+        public DelegateCommand RemoveFileCommand
         {
             get { return _removeFile; }
         }
