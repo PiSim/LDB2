@@ -51,92 +51,91 @@
                    Grid.Row="1"
                    Margin="5"/> 
                    
-            <GroupBox Header="Progetto"
-                      Grid.Column="1"
-                      Height="Auto"
-                      HorizontalAlignment="Left"
-                      VerticalAlignment="Top"
-                      Margin="0,50,0,0">
-                <Grid DataContext="{Binding Project}">
+            
+            
+            <GroupBox Header="Dettagli ordine"
+                      Grid.Column="0"
+                      Grid.ColumnSpan="3"
+                      Grid.Row="2">
+                <Grid>
                     <Grid.ColumnDefinitions>
+                        <ColumnDefinition MaxWidth="75"/>
                         <ColumnDefinition/>
-                        <ColumnDefinition/>
+                        <ColumnDefinition MaxWidth="50"/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition/>
                         <RowDefinition/>
-                        <RowDefinition/>
-                        <RowDefinition/>
                     </Grid.RowDefinitions>
-                    
-                    <Label Content="Nome:"
+                    <Label Content="Numero:"
                            Grid.Column="0"
-                           Grid.Row="0"/>
-                    <Label Content="{Binding Name}"
-                           Grid.Column="1"
-                           Grid.Row="0"/>
-
-                    <Label Content="OEM:"
+                           Grid.Row="0"
+                           Height="25"/>
+                    <TextBox Text="{Binding Path=PurchaseOrder, Mode=TwoWay}"
+                             Grid.ColumnSpan="2"
+                             Grid.Column="1"
+                             Grid.Row="0"
+                             Height="20"/>
+                    <Label Content="Costo:"
                            Grid.Column="0"
-                           Grid.Row="1"/>
-                    <Label Content="{Binding Oem.Name}"
-                           Grid.Column="1"
-                           Grid.Row="1"/>
-                    
-                    <Label Content="Descrizione:"
-                           Grid.Column="0"
-                           Grid.Row="2"/>
-                    <Label Content="{Binding Description}"
-                           Grid.Column="1"
-                           Grid.Row="2"/>
-
-                    <Label Content="CP:"
-                           Grid.Column="0"
-                           Grid.Row="3"/>
-                    <Label Content="{Binding Leader.Name}"
-                           Grid.Column="1"
-                           Grid.Row="3"/>
+                           Grid.Row="1"
+                           Height="25"/>
+                    <TextBox Text="{Binding Path=CurrentInstance.Price, Mode=TwoWay}" 
+                             Grid.Column="1"
+                             Grid.Row="1"
+                             Height="20"/>
+                    <ComboBox ItemsSource="{Binding Path=CurrentInstance.Currencies}"
+                              SelectedItem="{Binding Path=Currency, Mode=TwoWay}"
+                              Grid.Column="2"
+                              Grid.Row="1"
+                              Height="25"/>
                 </Grid>
             </GroupBox>
         </Grid>
         
-        
-
-        <GroupBox Header="Dettagli ordine"
+        <GroupBox Header="Progetto"
                   Grid.Column="1"
-                  Grid.Row="0">
-            <Grid>
+                  Grid.Row="0"
+                  Height="Auto">
+            <Grid DataContext="{Binding Project}">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition MaxWidth="75"/>
+                    <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition/>
-                    <ColumnDefinition MaxWidth="50"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition/>
                     <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
                 </Grid.RowDefinitions>
-                <Label Content="Numero:"
+                
+                <Label Content="Nome:"
                        Grid.Column="0"
-                       Grid.Row="0"
-                       Height="25"/>
-                <TextBox Text="{Binding Path=PurchaseOrder, Mode=TwoWay}"
-                         Grid.ColumnSpan="2"
-                         Grid.Column="1"
-                         Grid.Row="0"
-                         Height="20"/>
-                <Label Content="Costo:"
+                       Grid.Row="0"/>
+                <Label Content="{Binding Name}"
+                       Grid.Column="1"
+                       Grid.Row="0"/>
+
+                <Label Content="OEM:"
                        Grid.Column="0"
-                       Grid.Row="1"
-                       Height="25"/>
-                <TextBox Text="{Binding Path=CurrentInstance.Price, Mode=TwoWay}" 
-                         Grid.Column="1"
-                         Grid.Row="1"
-                         Height="20"/>
-                <ComboBox ItemsSource="{Binding Path=CurrentInstance.Currencies}"
-                          SelectedItem="{Binding Path=Currency, Mode=TwoWay}"
-                          Grid.Column="2"
-                          Grid.Row="1"
-                          Height="25"/>
+                       Grid.Row="1"/>
+                <Label Content="{Binding Oem.Name}"
+                       Grid.Column="1"
+                       Grid.Row="1"/>
+                
+                <Label Content="Descrizione:"
+                       Grid.Column="0"
+                       Grid.Row="2"/>
+                <Label Content="{Binding Description}"
+                       Grid.Column="1"
+                       Grid.Row="2"/>
+
+                <Label Content="CP:"
+                       Grid.Column="0"
+                       Grid.Row="3"/>
+                <Label Content="{Binding Leader.Name}"
+                       Grid.Column="1"
+                       Grid.Row="3"/>
             </Grid>
         </GroupBox>
 
