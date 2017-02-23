@@ -1,5 +1,7 @@
 ﻿using DBManager;
+using Infrastructure;
 using Prism.Commands;
+using Prism.Events;
 using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
@@ -15,19 +17,26 @@ namespace Reports.ViewModels
     {
         private DBEntities _entities;
         private DelegateCommand _addFile, _openFile, _removeFile;
+        private EventAggregator _eventAggregator;
         private ExternalReport _instance;
         private ExternalReportFile _selectedFile;
         private ObservableCollection<ExternalReportFile> _reportFiles;
 
         internal ExternalReportEditViewModel(DBEntities entities,
+                                            EventAggregator aggregator,
                                             ExternalReport instance) : base()
         {
-            _entities = entities;
-            _instance = _entities.ExternalReports.FirstOrDefault(xrp => xrp.ID == instance.ID);
-
+            
             if (_instance == null)
                 throw new InvalidOperationException();
-
+                
+            _eventAggregator = aggregator;
+            
+            _entities = entities;
+            _eventAggregator.GetEvent<CommitRequested>().Subscribe(() => _entities.SaveChanges());
+            
+            _instance = _entities.ExternalReports.FirstOrDefault(xrp => xrp.ID == instance.ID);
+            
             _reportFiles = new ObservableCollection<ExternalReportFile>
                 (_instance.ExternalReportFiles);
 
