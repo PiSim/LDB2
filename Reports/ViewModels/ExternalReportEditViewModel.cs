@@ -53,6 +53,7 @@ namespace Reports.ViewModels
                             ExternalReportFile temp = new ExternalReportFile();
                             temp.Path = pth;
                             ReportFiles.Add(temp);   
+                            _instance.ExternalReportFiles.Add(temp);
                         }
                     }
                 });
@@ -68,6 +69,8 @@ namespace Reports.ViewModels
                 () =>
                 {
                     ReportFiles.Remove(_selectedFile);
+                    _instance.ExternalReportFiles.Remove(_selectedFile);
+                    SelectedFile = null;
                 },
                 () => _selectedFile != null);
         }
