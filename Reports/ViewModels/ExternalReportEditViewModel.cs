@@ -79,6 +79,17 @@ namespace Reports.ViewModels
             get { return _instance.Currency; }
             set { _instance.Currency = value; }
         }
+        
+        public string ExternalLab
+        {
+            get { return _instance.ExternalLab.Name; }
+        }
+        
+        public int InternalNumber
+        {
+            get { return _instance.InternalNumber; }
+            set { _instance.InternalNumber = value; }
+        }
 
         public DelegateCommand OpenFile 
         {
@@ -99,6 +110,11 @@ namespace Reports.ViewModels
         {
             get { return _instance.Price; }
             set { _instance.Price = value; }
+        }
+        
+        public Project Project
+        {
+            get { return _instance.Project; }
         }
 
         public string PurchaseOrder
