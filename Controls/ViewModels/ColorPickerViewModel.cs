@@ -42,7 +42,7 @@ namespace Controls.ViewModels
 
         public List<Colour> ColourList
         {
-            get { return new List<Colour>(_entities.Colours); }
+            get { return new List<Colour>(_entities.Colours.OrderBy(clr => clr.Name)); }
         }
 
         public DelegateCommand ConfirmCommand
