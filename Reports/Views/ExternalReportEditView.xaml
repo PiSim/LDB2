@@ -22,14 +22,52 @@
         <Label Content="Laboratorio:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,25,0,0"/>
         <Label Content="{Binding Path=ExternalLab}" 
                HorizontalAlignment="Left" VerticalAlignment="Top" Margin="125,25,0,0"/>
-        <Label Content="Progetto:"
-               HorizontalAlignment="Left"
-               VerticalAlignment="Top"
-               Margin="0,50,0,0"/>
-        <ContentControl Content="{Binding Path=Project}"
-                        HorizontalAlignment="Left"
-                        VerticalAlignment="Top"
-                        Margin="0,75,0,0"/>
+        <GroupBox Header="Progetto"
+                      Grid.Column="1"
+                      Height="Auto"
+                      HorizontalAlignment="Left"
+                      VerticalAlignment="Top"
+                      Margin="0,50,0,0">
+                <Grid DataContext="{Binding Project}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Label Content="Nome:"
+                           Grid.Column="0"
+                           Grid.Row="0"/>
+                    <Label Content="{Binding Name}"
+                           Grid.Column="1"
+                           Grid.Row="0"/>
+
+                    <Label Content="OEM:"
+                           Grid.Column="0"
+                           Grid.Row="1"/>
+                    <Label Content="{Binding Oem.Name}"
+                           Grid.Column="1"
+                           Grid.Row="1"/>
+                    
+                    <Label Content="Descrizione:"
+                           Grid.Column="0"
+                           Grid.Row="2"/>
+                    <Label Content="{Binding Description}"
+                           Grid.Column="1"
+                           Grid.Row="2"/>
+
+                    <Label Content="CP:"
+                           Grid.Column="0"
+                           Grid.Row="3"/>
+                    <Label Content="{Binding Leader.Name}"
+                           Grid.Column="1"
+                           Grid.Row="3"/>
+                </Grid>
+            </GroupBox>
 
         <GroupBox Header="Dettagli ordine"
                   Grid.Column="1"
