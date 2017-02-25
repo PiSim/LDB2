@@ -394,9 +394,9 @@
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
                                     <GridViewColumn Header="Tipo Prova"
-                                                    DisplayMemberBinding="{Binding Path=Method}"/>
+                                                    DisplayMemberBinding="{Binding Path=Property}"/>
                                     <GridViewColumn Header="Standard"
-                                                    DisplayMemberBinding="{Binding Path=Standard}"/>
+                                                    DisplayMemberBinding="{Binding Path=Method}"/>
                                 </GridView>
                             </ListView.View>
                         </ListView>

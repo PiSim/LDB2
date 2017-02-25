@@ -187,9 +187,9 @@ namespace Specifications.ViewModels
             get { return _addVersion; }
         }
 
-        public List<ControlPlanItem> ControlPlanItemsList
+        public List<ControlPlanItemWrapper> ControlPlanItemsList
         {
-            get { return new List<ControlPlanItem>(); }
+            get { return _controlPlanItemsList; }
         }
 
         public List<ControlPlan> ControlPlanList
@@ -307,6 +307,11 @@ namespace Specifications.ViewModels
             set
             {
                 _selectedControlPlan = value;
+
+                _controlPlanItemsList = new List<ControlPlanItemWrapper>();
+                foreach (Requirement rr in _instance.SpecificationVersions.First(sve => sve.IsMain==1).Requirements)
+                    _controlPlanItemsList.Add(new ControlPlanItemWrapper(_selectedControlPlan, rr));
+
                 OnPropertyChanged("SelectedControlPlan");
                 OnPropertyChanged("ControlPlanItemsList");
                 _removeControlPlan.RaiseCanExecuteChanged();

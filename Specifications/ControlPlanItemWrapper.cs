@@ -14,6 +14,7 @@ namespace Specifications
     {
         private bool _isSelected;
         private ControlPlan _parent;
+        private ControlPlanItem _item;
         private Requirement _requirement;
 
         internal ControlPlanItemWrapper(ControlPlan parent,
@@ -21,6 +22,8 @@ namespace Specifications
         {
             _parent = parent;
             _requirement = requirement;
+            _item = _parent.ControlPlanItems.FirstOrDefault(cpi => cpi.MethodID == _requirement.MethodID);
+            _isSelected = _item != null;
         }
 
         public bool IsSelected
@@ -30,16 +33,18 @@ namespace Specifications
             {
                 if (value)
                 {
-                    ControlPlanItem temp = new ControlPlanItem();
-                    temp.Method = _requirement.Method;
-                    _parent.ControlPlanItems.Add(temp);
+                    _item = new ControlPlanItem();
+                    _item.Method = _requirement.Method;
+                    _parent.ControlPlanItems.Add(_item);
                 }
 
                 else
                 {
-                    _parent.ControlPlanItems.First(cpi => cpi.MethodID == _requirement.MethodID);
+                    _parent.ControlPlanItems.Remove(_item);
+                    _item = null;
                 }
 
+                _isSelected = value;
                 OnPropertyChanged("IsSelected");
             }
         }
@@ -49,5 +54,9 @@ namespace Specifications
             get { return _requirement.Method.Standard.Name; }
         }
 
+        public string Property
+        {
+            get { return _requirement.Method.Property.Name; }
+        }
     }
 }
