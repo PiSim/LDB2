@@ -33,9 +33,27 @@
             </Grid>
 
         </GroupBox>
-        <Grid DataContext="{Binding SelectedOrganization}"
-              Grid.Column="1">
-            
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <ListView ItemsSource="{Binding RoleList}"
+                      Grid.Row="1">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn>
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox IsChecked="{Binding IsSelected, Mode=TwoWay}"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="Ruolo"
+                                        DisplayMemberBinding="{Binding Role.Name}"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
         </Grid>
     </Grid>
 </UserControl>

@@ -1,6 +1,8 @@
 ﻿v 0.4.1 -- In corso
 
--Introdotta vista gestione Organizzazioni con tab per la selezione dei ruoli (implementata classe organizationrolewrapper)
+-Introdotta vista gestione Organizzazioni per la selezione dei ruoli
+-Introdotta vista Admin per la gestione degli account Utente
+-*Reimplementazione della vista creazione/modifica metodi
 
 v 0.4.0 -- 25/02/2017
 

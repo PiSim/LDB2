@@ -17,7 +17,7 @@ namespace Admin.ViewModels
             _runMethod = new DelegateCommand(
                 () =>
                 {
-
+                    services.BuildOrganizationRoles();
                 } );
         }
 

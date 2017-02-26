@@ -6,7 +6,7 @@
         Title="{Binding Title}" Height="700" Width="900">
     <Grid Background="LightGray">
         <Grid.RowDefinitions>
-            <RowDefinition MaxHeight="25"/>
+            <RowDefinition Height="40"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
         <ContentControl prism:RegionManager.RegionName="ToolbarRegion"

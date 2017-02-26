@@ -1,4 +1,5 @@
 ﻿using DBManager;
+using Infrastructure.Events;
 using Prism.Events;
 using Prism.Regions;
 using System;
@@ -32,12 +33,6 @@ namespace Specifications.Views
             _eventAggregator = aggregator;
             _entities = entities;
 
-            _eventAggregator.GetEvent<Infrastructure.CommitRequested>().Subscribe(
-                () =>
-                {
-                    _entities.SaveChanges();
-                });
-
             InitializeComponent();
         }
         
@@ -55,6 +50,7 @@ namespace Specifications.Views
         {
             ViewModels.SpecificationEditViewModel viewModel =
                 new ViewModels.SpecificationEditViewModel(_entities,
+                                                        _eventAggregator,
                                                         ncontext.Parameters["ObjectInstance"] as Specification);
             DataContext = viewModel;
         }

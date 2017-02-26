@@ -154,6 +154,10 @@
       <Project>{31368a5f-9770-4198-bc3d-4996917b4139}</Project>
       <Name>Navigation</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Reports\Reports.csproj">
+      <Project>{dd1a1429-e1ac-4611-9971-f99988c4edba}</Project>
+      <Name>Reports</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Page Include="Views\SpecificationCreationDialog.xaml">

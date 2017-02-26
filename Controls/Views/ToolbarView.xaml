@@ -9,7 +9,7 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="200"/>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="Auto"/>
@@ -19,15 +19,19 @@
         <ComboBox x:Name="MainNavigationComboBox"
                   prism:RegionManager.RegionName="MainNavigationRegion"
                   Grid.Column="0"
-                  SelectionChanged="OnSelectionChanged"/>
+                  SelectionChanged="OnSelectionChanged"
+                  Margin="5"/>
         <Button Content="Indietro"
                 Command="{Binding NavigateBackCommand}"
-                Grid.Column="2"/>
+                Grid.Column="2"
+                Margin="5"/>
         <Button Content="Avanti"
                 Command="{Binding NavigateForwardCommand}"
-                Grid.Column="3"/>
+                Grid.Column="3"
+                Margin="5"/>
         <Button Content="Salva"
                 Command="{Binding SaveCommand}"
-                Grid.Column="4"/>
+                Grid.Column="4"
+                Margin="5"/>
     </Grid>
 </UserControl>

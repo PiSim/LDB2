@@ -199,6 +199,7 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="organizationID" Type="int" Nullable="false" />
           <Property Name="roleID" Type="int" Nullable="false" />
+          <Property Name="is_selected" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="organization_roles">
           <Key>
@@ -437,6 +438,7 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="userID" Type="int" Nullable="false" />
           <Property Name="roleID" Type="int" Nullable="false" />
+          <Property Name="is_selected" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="user_roles">
           <Key>
@@ -3029,6 +3031,7 @@
           <Property Name="RoleID" Type="Int32" Nullable="false" a:SetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="UserRole" Relationship="labdbModel.role_to_role_mapping" FromRole="user_role_mappings" ToRole="user_roles" />
           <NavigationProperty Name="User" Relationship="labdbModel.user_to_role_mapping" FromRole="user_role_mappings" ToRole="User" />
+          <Property Name="IsSelected" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="UserRole">
           <Key>
@@ -3327,7 +3330,8 @@
           <Property Name="OrganizationID" Type="Int32" Nullable="false" />
           <Property Name="roleID" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Organization" Relationship="labdbModel.organization_to_role_mapping" FromRole="organization_role_mappings" ToRole="Organization" />
-          <NavigationProperty Name="Roles" Relationship="labdbModel.role_to_organization_mapping" FromRole="organization_role_mappings" ToRole="organization_roles" />
+          <NavigationProperty Name="Role" Relationship="labdbModel.role_to_organization_mapping" FromRole="organization_role_mappings" ToRole="organization_roles" />
+          <Property Name="IsSelected" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="OrganizationRole">
           <Key>
@@ -3787,6 +3791,7 @@
           <EntitySetMapping Name="UserRoleMappings">
             <EntityTypeMapping TypeName="labdbModel.UserRoleMapping">
               <MappingFragment StoreEntitySet="user_role_mappings">
+                <ScalarProperty Name="IsSelected" ColumnName="is_selected" />
                 <ScalarProperty Name="RoleID" ColumnName="roleID" />
                 <ScalarProperty Name="UserID" ColumnName="userID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
@@ -3881,6 +3886,7 @@
           <EntitySetMapping Name="OrganizationRoleMappings">
             <EntityTypeMapping TypeName="labdbModel.OrganizationRoleMapping">
               <MappingFragment StoreEntitySet="organization_role_mappings">
+                <ScalarProperty Name="IsSelected" ColumnName="is_selected" />
                 <ScalarProperty Name="roleID" ColumnName="roleID" />
                 <ScalarProperty Name="OrganizationID" ColumnName="organizationID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />

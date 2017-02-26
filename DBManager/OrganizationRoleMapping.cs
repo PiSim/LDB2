@@ -17,8 +17,9 @@ namespace DBManager
         public int ID { get; set; }
         public int OrganizationID { get; set; }
         public int roleID { get; set; }
+        public bool IsSelected { get; set; }
     
         public virtual Organization Organization { get; set; }
-        public virtual OrganizationRole Roles { get; set; }
+        public virtual OrganizationRole Role { get; set; }
     }
 }

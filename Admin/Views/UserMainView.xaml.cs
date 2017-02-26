@@ -1,6 +1,4 @@
-﻿using DBManager;
-using Prism.Events;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,17 +13,15 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Organizations.Views
+namespace Admin.Views
 {
     /// <summary>
-    /// Interaction logic for OrganizationsMainView.xaml
+    /// Interaction logic for UserMainView.xaml
     /// </summary>
-    public partial class OrganizationsMainView : UserControl
+    public partial class UserMainView : UserControl
     {
-        public OrganizationsMainView(DBEntities entities,
-                                    EventAggregator aggregator)
+        public UserMainView()
         {
-            DataContext = new ViewModels.OrganizationsMainViewModel(entities, aggregator);
             InitializeComponent();
         }
     }

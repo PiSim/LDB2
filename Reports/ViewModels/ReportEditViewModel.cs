@@ -1,5 +1,5 @@
 ﻿using DBManager;
-using Infrastructure;
+using Infrastructure.Events;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;

@@ -1,13 +1,15 @@
 ﻿using DBManager;
 using Infrastructure;
+using Infrastructure.Events;
 using Prism.Commands;
+using Prism.Events;
 using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace Specifications.ViewModels
@@ -18,11 +20,12 @@ namespace Specifications.ViewModels
         private DBEntities _entities;
         private DelegateCommand _addControlPlan, _addFile, _addIssue,
             _addTest, _addVersion, _openFile, _openReport, _removeControlPlan, _removeFile, _removeIssue, _removeTest, _removeVersion;
+        private EventAggregator _eventAggregator;
         private List<ControlPlanItemWrapper> _controlPlanItemsList;
+        private Method _selectedToAdd;
         private ObservableCollection<RequirementWrapper> _requirementList;
         private ObservableCollection<SpecificationVersion> _versionList;
         private ObservableCollection<StandardIssue> _issueList;
-        private Method _selectedToAdd;
         private Property _filterProperty;
         private Report _selectedReport;
         private Requirement _selectedToRemove;
@@ -32,6 +35,7 @@ namespace Specifications.ViewModels
         private StandardIssue _selectedIssue;
 
         internal SpecificationEditViewModel(DBEntities entities,
+                                            EventAggregator aggregator,
                                             Specification instance) 
             : base()
         {
@@ -40,6 +44,13 @@ namespace Specifications.ViewModels
 
             _requirementList = new ObservableCollection<RequirementWrapper>();
             _entities = entities;
+            _eventAggregator = aggregator;
+
+            _eventAggregator.GetEvent<CommitRequested>().Subscribe(
+                () =>
+                {
+                    _entities.SaveChanges();
+                });
 
             _instance = _entities.Specifications.FirstOrDefault(spec => spec.ID == instance.ID);
 
@@ -121,7 +132,9 @@ namespace Specifications.ViewModels
             _openReport = new DelegateCommand(
                 () =>
                 {
-
+                    ObjectNavigationToken token = new ObjectNavigationToken(_selectedReport,
+                                                                            Reports.ViewNames.ReportEditView);
+                    _eventAggregator.GetEvent<VisualizeObjectRequested>().Publish(token);
                 },
                 () => _selectedReport != null);
 

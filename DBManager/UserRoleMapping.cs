@@ -17,6 +17,7 @@ namespace DBManager
         public int ID { get; private set; }
         public int UserID { get; private set; }
         public int RoleID { get; private set; }
+        public bool IsSelected { get; set; }
     
         public virtual UserRole UserRole { get; set; }
         public virtual User User { get; set; }
