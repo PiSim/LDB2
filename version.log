@@ -1,4 +1,8 @@
-v 0.4.0 -- In Corso
+﻿v 0.4.1 -- In corso
+
+-Introdotta vista gestione Organizzazioni con tab per la selezione dei ruoli (implementata classe organizationrolewrapper)
+
+v 0.4.0 -- 25/02/2017
 
 -Reimplementazione totale dell'applicazione
 -Suddiviso il progetto in moduli, aggiunto pacchetto Unity per la gestione delle dipendenze

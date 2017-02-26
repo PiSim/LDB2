@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Security
 {
-    public class DBPrincipal
+    public class DBPrincipal : IPrincipal
     {
         private DBIdentity _identity;
 

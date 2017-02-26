@@ -43,6 +43,7 @@ namespace Security.Views
 
                 DBPrincipal _currentPrincipal = Thread.CurrentPrincipal as DBPrincipal;
                 _currentPrincipal.Identity = new DBIdentity(_authenticatedUser);
+                DialogResult = true;
             }
             
             catch (UnauthorizedAccessException)

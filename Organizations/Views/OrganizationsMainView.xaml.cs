@@ -1,4 +1,6 @@
-﻿using System;
+﻿using DBManager;
+using Prism.Events;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,8 +22,9 @@ namespace Organizations.Views
     /// </summary>
     public partial class OrganizationsMainView : UserControl
     {
-        public OrganizationsMainView()
+        public OrganizationsMainView(DBEntities entities)
         {
+            DataContext = new ViewModels.OrganizationsMainViewModel(entities);
             InitializeComponent();
         }
     }

@@ -35,7 +35,7 @@ namespace LabDB2
 
             DBManagerModuleType = typeof(Navigation.NavigationModule);
             ModuleCatalog.AddModule(
-                new Prism.Modularity.ModuleInfo()
+                new ModuleInfo()
                 {
                     ModuleName = DBManagerModuleType.Name,
                     ModuleType = DBManagerModuleType.AssemblyQualifiedName,
@@ -43,7 +43,7 @@ namespace LabDB2
 
             Type ControlsModuleType = typeof(Controls.ControlsModule);
             ModuleCatalog.AddModule(
-                new Prism.Modularity.ModuleInfo()
+                new ModuleInfo()
                 {
                     ModuleName = ControlsModuleType.Name,
                     ModuleType = ControlsModuleType.AssemblyQualifiedName

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Linq;
-using System.Threading.Tasks;
+using System.Threading;
 using System.Windows;
 
 namespace LabDB2
@@ -16,7 +16,7 @@ namespace LabDB2
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-
+            Thread.CurrentPrincipal = new Security.DBPrincipal();
             var bootstrapper = new Bootstrapper();
             bootstrapper.Run();
         }

@@ -31,7 +31,11 @@ namespace Organizations.ViewModels
 
         public ObservableCollection<Organization> OrganizationList
         {
-            get { return new ObservableCollection<Organization>(_entities.Organizations); }
+            get
+            {
+                return new ObservableCollection<Organization>
+                    (_entities.Organizations.OrderBy(org => org.Name));
+            }
         }
 
     }

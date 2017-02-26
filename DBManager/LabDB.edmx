@@ -1700,7 +1700,7 @@
           <NavigationProperty Name="Materials" Relationship="Self.construction_to_material" FromRole="constructions" ToRole="materials" />
           <NavigationProperty Name="ExternalConstruction" Relationship="Self.external_construction" FromRole="constructions" ToRole="external_constructions" />
           <NavigationProperty Name="Project" Relationship="Self.project1" FromRole="constructions" ToRole="projects" />
-          <Property Name="TypeID" Type="Int32" a:SetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+          <Property Name="TypeID" Type="Int32" a:SetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" Nullable="false" />
           <NavigationProperty Name="Type" Relationship="labdbModel.type_to_construction" FromRole="Construction" ToRole="material_types" />
         </EntityType>
         <EntityType Name="ExternalConstruction">
@@ -2871,7 +2871,7 @@
           <NavigationProperty Name="Constructions" Relationship="labdbModel.type_to_construction" FromRole="material_types" ToRole="Construction" />
         </EntityType>
         <Association Name="type_to_construction">
-          <End Type="labdbModel.MaterialType" Role="material_types" Multiplicity="0..1">
+          <End Type="labdbModel.MaterialType" Role="material_types" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
           <End Type="labdbModel.Construction" Role="Construction" Multiplicity="*" />
