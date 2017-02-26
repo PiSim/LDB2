@@ -119,6 +119,10 @@
         <EntityTypeShape EntityType="labdbModel.OrganizationRole" Width="1.5" PointX="2.5" PointY="27.375" />
         <AssociationConnector Association="labdbModel.organization_to_role_mapping" />
         <AssociationConnector Association="labdbModel.role_to_organization_mapping" />
+        <EntityTypeShape EntityType="labdbModel.PurchaseOrderFile" Width="1.5" PointX="2.75" PointY="32.625" />
+        <EntityTypeShape EntityType="labdbModel.PurchaseOrder" Width="1.5" PointX="0.5" PointY="32.25" />
+        <AssociationConnector Association="labdbModel.organization_to_purchase_order" />
+        <AssociationConnector Association="labdbModel.purchase_order_to_file" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

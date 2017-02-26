@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DBManager;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Principal;
@@ -26,6 +27,11 @@ namespace Security
         public bool IsInRole(string role)
         {
             return _identity.User.RoleMappings.Any(urm => urm.UserRole.Name == role);
+        }
+
+        public Person CurrentPerson
+        {
+            get { return _identity.User.Person; }
         }
     }
 }
