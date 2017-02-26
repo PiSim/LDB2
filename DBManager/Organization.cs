@@ -23,6 +23,7 @@ namespace DBManager
             this.Standards = new HashSet<Std>();
             this.CalibrationReports = new HashSet<CalibrationReport>();
             this.RoleMapping = new HashSet<OrganizationRoleMapping>();
+            this.purchase_orders = new HashSet<PurchaseOrder>();
         }
     
         private int ID { get; set; }
@@ -41,5 +42,7 @@ namespace DBManager
         public virtual ICollection<CalibrationReport> CalibrationReports { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OrganizationRoleMapping> RoleMapping { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PurchaseOrder> purchase_orders { get; set; }
     }
 }
