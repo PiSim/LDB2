@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -36,11 +36,20 @@ namespace Security.Views
 
         private void Confirm_Click(object sender, RoutedEventArgs e)
         {
-            _authenticatedUser = _authenticator.AuthenticateUser
+            try
+            {
+                _authenticatedUser = _authenticator.AuthenticateUser
                 (UserNameTextBox.Text, PasswordBox.Password);
 
-            if (_authenticatedUser != null)
-                DialogResult = true;
+                DBPrincipal _currentPrincipal = Thread.CurrentPrincipal as DBPrincipal;
+                _currentPrincipal.Identity = new DBIdentity(_authenticatedUser);
+            }
+            
+            catch (UnauthorizedAccessException)
+            {
+                PasswordBox.Clear();
+                UserNameTextBox.Clear();
+            }
         }
 
         public User AuthenticatedUser

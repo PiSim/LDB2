@@ -23,7 +23,6 @@ namespace DBManager
         public int ID { get; private set; }
         public string FullName { get; set; }
         public string HashedPassword { get; set; }
-        public string RoleList { get; set; }
         public string UserName { get; set; }
         public Nullable<int> PersonID { get; private set; }
     

@@ -2,8 +2,10 @@
 using Prism.Modularity;
 using Prism.Unity;
 using LabDB2.Views;
+using Security;
 using Security.Views;
 using System;
+using System.Threading;
 using System.Windows;
 
 namespace LabDB2
@@ -144,13 +146,19 @@ namespace LabDB2
         {
             IModuleManager moduleManager = Container.Resolve<IModuleManager>();
 
-            moduleManager.LoadModule(typeof(Admin.AdminModule).Name);
+            DBPrincipal _currentPrincipal = Thread.CurrentPrincipal as DBPrincipal;
+
+            if (_currentPrincipal.IsInRole(RoleNames.Admin))
+                moduleManager.LoadModule(typeof(Admin.AdminModule).Name);
+
             moduleManager.LoadModule(typeof(Materials.MaterialsModule).Name);
             moduleManager.LoadModule(typeof(Organizations.OrganizationsModule).Name);
             moduleManager.LoadModule(typeof(Projects.ProjectsModule).Name);
             moduleManager.LoadModule(typeof(Reports.ReportsModule).Name);
             moduleManager.LoadModule(typeof(Specifications.SpecificationsModule).Name);
-            moduleManager.LoadModule(typeof(Tasks.TasksModule).Name);
+
+            if (_currentPrincipal.IsInRole(RoleNames.LoadTasks))
+                moduleManager.LoadModule(typeof(Tasks.TasksModule).Name);
         }
     }
 }

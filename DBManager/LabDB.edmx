@@ -64,11 +64,11 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="typeID" Type="int" Nullable="false" />
           <Property Name="line" Type="char" MaxLength="3" Nullable="false" />
           <Property Name="aspectID" Type="int" Nullable="false" />
           <Property Name="projectID" Type="int" />
           <Property Name="external_constructionID" Type="int" />
-          <Property Name="typeID" Type="int" />
         </EntityType>
         <EntityType Name="control_plan_items">
           <Key>
@@ -433,7 +433,6 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="full_name" Type="text" Nullable="false" />
           <Property Name="hashed_password" Type="text" Nullable="false" />
-          <Property Name="role_list" Type="text" Nullable="false" />
           <Property Name="user_name" Type="text" Nullable="false" />
           <Property Name="personID" Type="int" />
         </EntityType>
@@ -1236,7 +1235,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="type_to_construction">
-          <End Role="material_types" Type="Self.material_types" Multiplicity="0..1" />
+          <End Role="material_types" Type="Self.material_types" Multiplicity="1" />
           <End Role="constructions" Type="Self.constructions" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="material_types">
@@ -1980,7 +1979,6 @@
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" a:SetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <Property Name="FullName" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="HashedPassword" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="RoleList" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="UserName" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="PersonID" Type="Int32" a:SetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="Person" Relationship="labdbModel.person_to_user" FromRole="User" ToRole="Person" />
@@ -3629,7 +3627,6 @@
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="FullName" ColumnName="full_name" />
                 <ScalarProperty Name="HashedPassword" ColumnName="hashed_password" />
-                <ScalarProperty Name="RoleList" ColumnName="role_list" />
                 <ScalarProperty Name="UserName" ColumnName="user_name" />
                 <ScalarProperty Name="PersonID" ColumnName="personID" />
               </MappingFragment>
