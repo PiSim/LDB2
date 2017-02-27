@@ -4,6 +4,7 @@
 -Introdotta vista Admin per la gestione degli account Utente
 -*Reimplementazione della vista creazione/modifica metodi
 -*Aggiunta selezione versione corrente di una specifica
+-*Flag completamento test + data completamento
 
 v 0.4.0 -- 25/02/2017
 
