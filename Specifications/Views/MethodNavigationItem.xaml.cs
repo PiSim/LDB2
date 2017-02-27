@@ -1,6 +1,4 @@
-﻿using DBManager;
-using Microsoft.Practices.Unity;
-using Prism.Events;
+﻿using Navigation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,16 +17,18 @@ using System.Windows.Shapes;
 namespace Specifications.Views
 {
     /// <summary>
-    /// Interaction logic for SpecificationMainView.xaml
+    /// Interaction logic for MethodNavigationItem.xaml
     /// </summary>
-    public partial class SpecificationMainView : UserControl
+    public partial class MethodNavigationItem : UserControl, IModuleNavigationTag
     {
-        public SpecificationMainView(DBEntities entities, 
-                                    EventAggregator eventAggregator,
-                                    UnityContainer container)
+        public MethodNavigationItem()
         {
-            DataContext = new ViewModels.SpecificationMainViewModel(entities, eventAggregator, container);
             InitializeComponent();
+        }
+
+        public string ViewName
+        {
+            get { return ViewNames.MethodMainView; }
         }
     }
 }

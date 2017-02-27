@@ -1,4 +1,5 @@
-﻿using Microsoft.Practices.Unity;
+﻿using Microsoft.Practices.Prism.Mvvm;
+using Microsoft.Practices.Unity;
 using Prism.Modularity;
 using Prism.Unity;
 using LabDB2.Views;
@@ -14,6 +15,11 @@ namespace LabDB2
     {
         protected override void ConfigureModuleCatalog()
         {
+
+            ViewModelLocationProvider.SetDefaultViewModelFactory((type) =>
+            {
+                return Container.Resolve(type);
+            });
 
             // Loading common modules
 

@@ -41,6 +41,18 @@
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.Practices.Prism.Mvvm, Version=1.1.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Prism.Mvvm.1.1.1\lib\net45\Microsoft.Practices.Prism.Mvvm.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Prism.Mvvm.Desktop, Version=1.1.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Prism.Mvvm.1.1.1\lib\net45\Microsoft.Practices.Prism.Mvvm.Desktop.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Prism.SharedInterfaces, Version=1.1.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Prism.Mvvm.1.1.1\lib\net45\Microsoft.Practices.Prism.SharedInterfaces.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
       <Private>True</Private>
@@ -108,18 +120,33 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="ViewModels\MethodCreationViewModel.cs" />
+    <Compile Include="ViewModels\MethodEditViewModel.cs" />
+    <Compile Include="ViewModels\MethodMainViewModel.cs" />
     <Compile Include="ViewModels\SpecificationCreationViewModel.cs" />
     <Compile Include="ViewModels\SpecificationEditViewModel.cs" />
     <Compile Include="ViewModels\SpecificationMainViewModel.cs" />
     <Compile Include="ViewNames.cs" />
+    <Compile Include="Views\MethodCreationDialog.xaml.cs">
+      <DependentUpon>MethodCreationDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MethodEditView.xaml.cs">
+      <DependentUpon>MethodEditView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MethodMain.xaml.cs">
+      <DependentUpon>MethodMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MethodNavigationItem.xaml.cs">
+      <DependentUpon>MethodNavigationItem.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\SpecificationCreationDialog.xaml.cs">
       <DependentUpon>SpecificationCreationDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SpecificationEditView.xaml.cs">
       <DependentUpon>SpecificationEditView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\SpecificationMainView.xaml.cs">
-      <DependentUpon>SpecificationMainView.xaml</DependentUpon>
+    <Compile Include="Views\SpecificationMain.xaml.cs">
+      <DependentUpon>SpecificationMain.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SpecificationNavigationItem.xaml.cs">
       <DependentUpon>SpecificationNavigationItem.xaml</DependentUpon>
@@ -160,6 +187,22 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Views\MethodCreationDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MethodEditView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MethodMain.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MethodNavigationItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\SpecificationCreationDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -168,7 +211,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\SpecificationMainView.xaml">
+    <Page Include="Views\SpecificationMain.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -22,7 +22,7 @@ namespace Specifications.ViewModels
         private Specification _selectedSpecification;
         private UnityContainer _container;
 
-        internal SpecificationMainViewModel(DBEntities entities, 
+        public SpecificationMainViewModel(DBEntities entities, 
                                             EventAggregator aggregator,
                                             UnityContainer container) 
             : base()

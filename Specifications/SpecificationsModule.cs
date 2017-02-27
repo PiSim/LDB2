@@ -1,4 +1,5 @@
 ﻿using Microsoft.Practices.Unity;
+using Navigation;
 using Prism.Modularity;
 using Prism.Regions;
 using System;
@@ -18,10 +19,20 @@ namespace Specifications
 
         public void Initialize()
         {
+            _container.RegisterType<Object, Views.MethodMain>(ViewNames.MethodMainView);
             _container.RegisterType<Object, Views.SpecificationEditView>(ViewNames.SpecificationsEditView);
-            _container.RegisterType<Object, Views.SpecificationMainView>(ViewNames.SpecificationsMainView);
+            _container.RegisterType<Object, Views.SpecificationMain>(ViewNames.SpecificationsMainView);
 
-            _regionManager.RegisterViewWithRegion("MainNavigationRegion", typeof(Views.SpecificationNavigationItem));
+            _container.RegisterType<Views.MethodCreationDialog>();
+            _container.RegisterType<Views.SpecificationCreationDialog>();
+
+            _container.RegisterType<ViewModels.MethodMainViewModel>();
+            _container.RegisterType<ViewModels.SpecificationMainViewModel>();
+
+            _regionManager.RegisterViewWithRegion(RegionNames.MainNavigationRegion, 
+                                                typeof(Views.MethodNavigationItem));
+            _regionManager.RegisterViewWithRegion(RegionNames.MainNavigationRegion, 
+                                                typeof(Views.SpecificationNavigationItem));
         }
     }
 }

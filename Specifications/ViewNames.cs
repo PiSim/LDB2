@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace Specifications
 {
-    class ViewNames
+    public class ViewNames
     {
-        public static string SpecificationsCreationView
+        public static string MethodMainView
         {
-            get { return "SpecificationsCreationView"; }
+            get { return "MethodMainView"; }
         }
         public static string SpecificationsMainView
         {

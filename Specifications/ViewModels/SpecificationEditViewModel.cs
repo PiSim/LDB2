@@ -34,7 +34,7 @@ namespace Specifications.ViewModels
         private StandardFile _selectedFile;
         private StandardIssue _selectedIssue;
 
-        internal SpecificationEditViewModel(DBEntities entities,
+        public SpecificationEditViewModel(DBEntities entities,
                                             EventAggregator aggregator,
                                             Specification instance) 
             : base()
