@@ -3,6 +3,7 @@
 -Introdotta vista gestione Organizzazioni per la selezione dei ruoli
 -Introdotta vista Admin per la gestione degli account Utente
 -*Reimplementazione della vista creazione/modifica metodi
+-*Aggiunta selezione versione corrente di una specifica
 
 v 0.4.0 -- 25/02/2017
 
