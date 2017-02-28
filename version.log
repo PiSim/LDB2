@@ -2,7 +2,7 @@
 
 -Introdotta vista gestione Organizzazioni per la selezione dei ruoli
 -Introdotta vista Admin per la gestione degli account Utente
--*Reimplementazione della vista creazione/modifica metodi
+-Reimplementazione della vista creazione/modifica metodi
 -*Aggiunta selezione versione corrente di una specifica
 -*Flag completamento test + data completamento
 
