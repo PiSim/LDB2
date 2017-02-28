@@ -41,6 +41,7 @@ namespace Specifications.ViewModels
 
                     Std tempStd = new Std();
                     tempStd.CurrentIssue = tempIssue;
+                    tempStd.StandardIssues.Add(tempIssue);
                     tempStd.Name = _name;
                     tempStd.Organization = _oem;
 
