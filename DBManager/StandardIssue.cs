@@ -23,8 +23,8 @@ namespace DBManager
     
         public int ID { get; set; }
         public string Issue { get; set; }
-        public sbyte IsOld { get; set; }
-        public Nullable<int> StandardID { get; set; }
+        public int StandardID { get; set; }
+        public bool IsCurrent { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<StandardFile> StandardFiles { get; set; }

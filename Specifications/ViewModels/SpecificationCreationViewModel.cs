@@ -35,13 +35,7 @@ namespace Specifications.ViewModels
             _confirm = new DelegateCommand(
                 () =>
                 {
-                    StandardIssue tempIssue = new StandardIssue();
-                    tempIssue.IsOld = 0;
-                    tempIssue.Issue = "";
-
                     Std tempStd = new Std();
-                    tempStd.CurrentIssue = tempIssue;
-                    tempStd.StandardIssues.Add(tempIssue);
                     tempStd.Name = _name;
                     tempStd.Organization = _oem;
 

@@ -24,11 +24,10 @@ namespace DBManager
         public int batchID { get; set; }
         public int methodID { get; set; }
         public int reportID { get; set; }
-        public Nullable<int> external_reportID { get; set; }
         public string Notes { get; set; }
         public int operatorID { get; set; }
         public Nullable<System.DateTime> Date { get; set; }
-        public sbyte IsComplete { get; set; }
+        public bool IsComplete { get; set; }
     
         public virtual Batch Batch { get; set; }
         public virtual Person Person { get; set; }

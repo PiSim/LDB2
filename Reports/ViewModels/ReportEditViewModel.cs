@@ -19,7 +19,7 @@ namespace Reports.ViewModels
         private DelegateCommand _addFile, _openFile, _removeFile;
         private EventAggregator _eventAggregator;
         Report _instance;
-        List<Test> _testList;
+        List<TestWrapper> _testList;
         ReportFile _selectedFile;
         
         public ReportEditViewModel(DBEntities entities,
@@ -33,12 +33,18 @@ namespace Reports.ViewModels
             _eventAggregator = aggregator;
             _instance = _entities.Reports.FirstOrDefault(rep => rep.ID == target.ID);
 
-            _testList = new List<Test>(_instance.Tests);
-
+            _testList = new List<TestWrapper>();
+            foreach (Test tst in _instance.Tests)
+                _testList.Add(new TestWrapper(tst));
 
             _eventAggregator.GetEvent<CommitRequested>()
                 .Subscribe(() =>
                 {
+                    if (!_testList.Any(tst => !tst.IsComplete))
+                    {
+                        _instance.IsComplete = true;
+                        _instance.EndDate = DateTime.Now.Date;
+                    }
                     _entities.SaveChanges();
                 }, true);
 
@@ -167,7 +173,7 @@ namespace Reports.ViewModels
             }
         } 
 
-        public List<Test> TestList
+        public List<TestWrapper> TestList
         {
             get { return _testList; }
         }

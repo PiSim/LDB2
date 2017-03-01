@@ -19,7 +19,7 @@ namespace Specifications.ViewModels
         private ControlPlan _selectedControlPlan;
         private DBEntities _entities;
         private DelegateCommand _addControlPlan, _addFile, _addIssue,
-            _addTest, _addVersion, _openFile, _openReport, _removeControlPlan, _removeFile, _removeIssue, _removeTest, _removeVersion;
+            _addTest, _addVersion, _openFile, _openReport, _removeControlPlan, _removeFile, _removeIssue, _removeTest, _removeVersion, _setCurrent;
         private EventAggregator _eventAggregator;
         private List<ControlPlanItemWrapper> _controlPlanItemsList;
         private Method _selectedToAdd;
@@ -91,7 +91,7 @@ namespace Specifications.ViewModels
                 () =>
                 {
                     StandardIssue temp = new StandardIssue();
-                    temp.IsOld = 0;
+                    temp.IsCurrent = false;
                     temp.Issue = DateTime.Now.ToShortDateString();
                     temp.Standard = _instance.Standard;
 
@@ -172,6 +172,20 @@ namespace Specifications.ViewModels
                 },
 
                 () => _selectedToRemove != null);
+
+            _setCurrent = new DelegateCommand(
+                () =>
+                {
+                    _instance.Standard.CurrentIssue = _selectedIssue;
+                    foreach (StandardIssue stdi in _instance.Standard.StandardIssues)
+                    {
+                        if (stdi == _selectedIssue)
+                            stdi.IsCurrent = true;
+                        else
+                            stdi.IsCurrent = false;
+                    }
+                },
+                () => _selectedIssue != null);
         }
 
 
@@ -348,6 +362,8 @@ namespace Specifications.ViewModels
             set 
             {
                 _selectedIssue = value;
+                _setCurrent.RaiseCanExecuteChanged();
+                _removeIssue.RaiseCanExecuteChanged();
                 OnPropertyChanged("SelectedIssue");
                 OnPropertyChanged("FileList");
             }
@@ -397,6 +413,11 @@ namespace Specifications.ViewModels
                 _removeTest.RaiseCanExecuteChanged();
                 OnPropertyChanged("SelectedToRemove");
             }
+        }
+
+        public DelegateCommand SetCurrentCommand
+        {
+            get { return _setCurrent; }
         }
 
         public string Standard

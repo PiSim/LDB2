@@ -168,7 +168,7 @@
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Header="Prova" 
-                                        DisplayMemberBinding="{Binding Method.Property.Name}"/>
+                                        DisplayMemberBinding="{Binding Property}"/>
 
                         <GridViewColumn Header="Risultati">
                             <GridViewColumn.CellTemplate>
@@ -178,7 +178,8 @@
                                             <DataTemplate>
                                                 <StackPanel Orientation="Horizontal">
                                                     <Label Content="{Binding Path=SubRequirement.Name}"/>
-                                                    <TextBox Text="{Binding Path=Result, Mode=TwoWay}"/>
+                                                    <TextBox Text="{Binding Path=Result, Mode=TwoWay}"
+                                                             IsEnabled="{Binding DataContext.CanModify, RelativeSource={RelativeSource AncestorType=ListViewItem, AncestorLevel=2}}"/>
                                                     <Label Content="{Binding Path=SubRequirement.RequiredValue}"/>
                                                 </StackPanel>
                                             </DataTemplate>
@@ -187,25 +188,19 @@
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
-                        
-                        <GridViewColumn Header="Metodo">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <StackPanel Orientation="Horizontal">
-                                        <Label Content="{Binding Path=Method.Standard.Organization.Name}"/>
-                                        <Label Content="{Binding Path=Method.Standard.Name}"/>
-                                    </StackPanel>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
+
+                        <GridViewColumn Header="Metodo"
+                                        DisplayMemberBinding="{Binding Method}"/>
                         <GridViewColumn Header="Completo">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <CheckBox IsChecked="{Binding IsComplete, Mode=TwoWay}"/>
+                                    <CheckBox IsChecked="{Binding IsComplete, Mode=TwoWay}"
+                                              IsEnabled="{Binding CanModify}"/>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
-                        <GridViewColumn Header="Data Completamento" DisplayMemberBinding="{Binding Path=Date}"/>
+                        <GridViewColumn Header="Data Completamento" 
+                                        DisplayMemberBinding="{Binding CompletionDate}"/>
                     </GridView>
                 </ListView.View>
             </ListView>

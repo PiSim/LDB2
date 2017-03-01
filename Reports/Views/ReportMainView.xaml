@@ -9,7 +9,7 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
-            <ColumnDefinition/>
+            <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
         <ListView ItemsSource="{Binding ReportList}"
                   SelectedItem="{Binding SelectedReport, Mode=TwoWay}"
@@ -28,6 +28,14 @@
                                     DisplayMemberBinding="{Binding Batch.Material.Construction.Project.Name}"/>
                     <GridViewColumn Header="Autore"
                                     DisplayMemberBinding="{Binding Author.Name}"/>
+                    <GridViewColumn Header="Completo">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox IsChecked="{Binding IsComplete}"
+                                          IsEnabled="False"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
                 </GridView>
             </ListView.View>
         </ListView>

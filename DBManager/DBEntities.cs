@@ -81,7 +81,7 @@ namespace DBManager
             {
                 tempTest = new Test();
                 tempTest.Batch = report.Batch;
-                tempTest.IsComplete = 0;
+                tempTest.IsComplete = false;
                 tempTest.Method = rq.Method;
                 tempTest.Person = report.Author;
                 tempTest.Report = report;

@@ -38,7 +38,7 @@ namespace Controls.ViewModels
                     temp.Batch = _entities.GetBatchByNumber(_batchNumber);
                     temp.Category = "TR";
                     temp.Description = _selectedSpecification.Description;
-                    temp.IsComplete = 0;
+                    temp.IsComplete = false;
                     temp.Number = _number;
                     temp.SpecificationVersion = _selectedVersion;
                     temp.StartDate = DateTime.Now.ToShortDateString();
