@@ -198,7 +198,14 @@
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
-                        <GridViewColumn Header="Data" DisplayMemberBinding="{Binding Path=Date}"/>
+                        <GridViewColumn Header="Completo">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox IsChecked="{Binding IsComplete, Mode=TwoWay}"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="Data Completamento" DisplayMemberBinding="{Binding Path=Date}"/>
                     </GridView>
                 </ListView.View>
             </ListView>
