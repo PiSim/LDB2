@@ -12,14 +12,15 @@ namespace DBManager
     using System;
     using System.Collections.Generic;
     
-    public partial class instrument
+    public partial class Instrument
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public instrument()
+        public Instrument()
         {
             this.CalibrationReports = new HashSet<CalibrationReport>();
             this.CalibrationReportsAsReference = new HashSet<CalibrationReport>();
             this.PendingCalibrations = new HashSet<PendingCalibration>();
+            this.Tests = new HashSet<Test>();
         }
     
         public int ID { get; set; }
@@ -27,6 +28,11 @@ namespace DBManager
         public string Description { get; set; }
         public int InstrumentTypeID { get; set; }
         public sbyte ControlPeriod { get; set; }
+        public bool IsUnderControl { get; set; }
+        public Nullable<int> supplierID { get; set; }
+        public Nullable<int> manufacturerID { get; set; }
+        public string SerialNumber { get; set; }
+        public string Model { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CalibrationReport> CalibrationReports { get; set; }
@@ -35,5 +41,9 @@ namespace DBManager
         public virtual InstrumentType InstrumentType { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PendingCalibration> PendingCalibrations { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Test> Tests { get; set; }
+        public virtual Organization Manufacturer { get; set; }
+        public virtual Organization Supplier { get; set; }
     }
 }

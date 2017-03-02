@@ -74,6 +74,15 @@ namespace LabDB2
                     InitializationMode = Prism.Modularity.InitializationMode.OnDemand
                 });
 
+            Type InstrumentModuleType = typeof(Instruments.InstrumentsModule);
+            ModuleCatalog.AddModule(
+                new ModuleInfo()
+                {
+                    ModuleName = InstrumentModuleType.Name,
+                    ModuleType = InstrumentModuleType.AssemblyQualifiedName,
+                    InitializationMode = InitializationMode.OnDemand
+                });
+
             Type MaterialsModuleType = typeof(Materials.MaterialsModule);
             ModuleCatalog.AddModule(
                 new ModuleInfo()
@@ -157,6 +166,7 @@ namespace LabDB2
             if (_currentPrincipal.IsInRole(RoleNames.Admin))
                 moduleManager.LoadModule(typeof(Admin.AdminModule).Name);
 
+            moduleManager.LoadModule(typeof(Instruments.InstrumentsModule).Name);
             moduleManager.LoadModule(typeof(Materials.MaterialsModule).Name);
             moduleManager.LoadModule(typeof(Organizations.OrganizationsModule).Name);
             moduleManager.LoadModule(typeof(Projects.ProjectsModule).Name);

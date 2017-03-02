@@ -12,18 +12,12 @@ namespace DBManager
     using System;
     using System.Collections.Generic;
     
-    public partial class InstrumentType
+    public partial class instrument_events
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public InstrumentType()
-        {
-            this.Instruments = new HashSet<Instrument>();
-        }
-    
         public int ID { get; set; }
-        public string Name { get; set; }
-    
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Instrument> Instruments { get; set; }
+        public int instrumentID { get; set; }
+        public int organizationID { get; set; }
+        public System.DateTime date { get; set; }
+        public int instrument_event_typeID { get; set; }
     }
 }

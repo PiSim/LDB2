@@ -5,9 +5,10 @@
 -Reimplementazione della vista creazione/modifica metodi
 -Aggiunta selezione versione corrente di una specifica
 -Flag completamento test + data completamento
--*Aggiunta strumento utilizzato a test
--*Implementazione lista strumenti
--*Aggiunta ruolo fornitore ad organizzazioni
+-Aggiunta strumento utilizzato a test
+-Implementazione lista strumenti
+-Creata finestra di dialogo per la creazione di strumenti
+-Aggiunta ruolo fornitore ad organizzazioni
 
 v 0.4.0 -- 25/02/2017
 

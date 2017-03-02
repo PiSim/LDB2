@@ -130,8 +130,8 @@
     <Compile Include="Views\MethodCreationDialog.xaml.cs">
       <DependentUpon>MethodCreationDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MethodEditView.xaml.cs">
-      <DependentUpon>MethodEditView.xaml</DependentUpon>
+    <Compile Include="Views\MethodEdit.xaml.cs">
+      <DependentUpon>MethodEdit.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MethodMain.xaml.cs">
       <DependentUpon>MethodMain.xaml</DependentUpon>
@@ -191,7 +191,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\MethodEditView.xaml">
+    <Page Include="Views\MethodEdit.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

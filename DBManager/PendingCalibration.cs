@@ -18,6 +18,6 @@ namespace DBManager
         public System.DateTime ExpiryDate { get; set; }
         public int instrumentID { get; set; }
     
-        public virtual instrument Instrument { get; set; }
+        public virtual Instrument Instrument { get; set; }
     }
 }

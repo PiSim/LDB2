@@ -26,8 +26,12 @@ namespace Specifications
             _container.RegisterType<Views.MethodCreationDialog>();
             _container.RegisterType<Views.SpecificationCreationDialog>();
 
+            _container.RegisterType<ViewModels.MethodEditViewModel>();
             _container.RegisterType<ViewModels.MethodMainViewModel>();
             _container.RegisterType<ViewModels.SpecificationMainViewModel>();
+
+            _regionManager.RegisterViewWithRegion("MethodEditRegion",
+                                                typeof(Views.MethodEdit));
 
             _regionManager.RegisterViewWithRegion(RegionNames.MainNavigationRegion, 
                                                 typeof(Views.MethodNavigationItem));

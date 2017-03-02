@@ -11,20 +11,27 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace Instruments.Views
 {
     /// <summary>
-    /// Interaction logic for InstrumentsMainView.xaml
+    /// Interaction logic for InstrumentCreationDialog.xaml
     /// </summary>
-    public partial class InstrumentsMainView : UserControl
+    public partial class InstrumentCreationDialog : Window
     {
-        public InstrumentsMainView(DBEntities entities)
+        private Instrument _instrumentInstance;
+
+        public InstrumentCreationDialog(DBEntities entities)
         {
-            DataContext = new ViewModels.InstrumentMainViewModel(entities);
+            DataContext = new ViewModels.InstrumentCreationDialogViewModel(this, entities);
             InitializeComponent();
+        }
+
+        public Instrument InstrumentInstance
+        {
+            get { return _instrumentInstance; }
+            set { _instrumentInstance = value; }
         }
     }
 }

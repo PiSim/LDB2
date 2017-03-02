@@ -19,9 +19,9 @@ namespace Specifications.Views
     /// <summary>
     /// Interaction logic for MethodEditView.xaml
     /// </summary>
-    public partial class MethodEditView : UserControl, IView
+    public partial class MethodEdit : UserControl, IView
     {
-        public MethodEditView()
+        public MethodEdit()
         {
             InitializeComponent();
         }

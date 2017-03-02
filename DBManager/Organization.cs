@@ -24,6 +24,8 @@ namespace DBManager
             this.CalibrationReports = new HashSet<CalibrationReport>();
             this.RoleMapping = new HashSet<OrganizationRoleMapping>();
             this.purchase_orders = new HashSet<PurchaseOrder>();
+            this.instruments = new HashSet<Instrument>();
+            this.instruments1 = new HashSet<Instrument>();
         }
     
         private int ID { get; set; }
@@ -44,5 +46,9 @@ namespace DBManager
         public virtual ICollection<OrganizationRoleMapping> RoleMapping { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PurchaseOrder> purchase_orders { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Instrument> instruments { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Instrument> instruments1 { get; set; }
     }
 }

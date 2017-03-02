@@ -10,5 +10,9 @@ namespace Specifications.ViewModels
 {
     public class MethodEditViewModel : BindableBase
     {
+        public MethodEditViewModel() : base()
+        {
+
+        }
     }
 }

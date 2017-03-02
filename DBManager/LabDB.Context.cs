@@ -65,12 +65,14 @@ namespace DBManager
         public virtual DbSet<CalibrationFiles> CalibrationFiles { get; set; }
         public virtual DbSet<CalibrationReport> CalibrationReports { get; set; }
         public virtual DbSet<InstrumentType> InstrumentTypes { get; set; }
-        public virtual DbSet<instrument> Instruments { get; set; }
+        public virtual DbSet<Instrument> Instruments { get; set; }
         public virtual DbSet<PendingCalibration> PendingCalibrations { get; set; }
         public virtual DbSet<ExternalReportBatchMapping> ExternalReportBatchMappings { get; set; }
         public virtual DbSet<OrganizationRoleMapping> OrganizationRoleMappings { get; set; }
         public virtual DbSet<OrganizationRole> OrganizationRoles { get; set; }
         public virtual DbSet<PurchaseOrderFile> PurchaseOrderFiles { get; set; }
         public virtual DbSet<PurchaseOrder> PurchaseOrders { get; set; }
+        public virtual DbSet<instrument_event_types> instrument_event_types { get; set; }
+        public virtual DbSet<instrument_events> instrument_events { get; set; }
     }
 }

@@ -6,6 +6,7 @@ using System;
 
 namespace Instruments
 {
+    [Module(ModuleName = "InstrumentsModule")]
     public class InstrumentsModule : IModule
     {
         IRegionManager _regionManager;
@@ -20,8 +21,10 @@ namespace Instruments
 
         public void Initialize()
         {
-            _container.RegisterType<Object, Views.InstrumentsMainView>(ViewNames.InstrumentsMainView);
+            _container.RegisterType<ViewModels.InstrumentMainViewModel>();
 
+            _container.RegisterType<Object, Views.InstrumentMain>(ViewNames.InstrumentsMainView);
+            
             _regionManager.RegisterViewWithRegion(RegionNames.MainNavigationRegion, 
                                                 typeof(Views.InstrumentsNavigationItem));
         }

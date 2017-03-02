@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Specifications.Views"
-             xmlns:prism="clr-namespace:Microsoft.Practices.Prism.Mvvm;assembly=Microsoft.Practices.Prism.Mvvm.Desktop"
+             xmlns:prism="http://prismlibrary.com/"
              prism:ViewModelLocator.AutoWireViewModel="True"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
@@ -47,5 +47,9 @@
                 </ListView>
             </Grid>
         </GroupBox>
+
+        <ContentControl prism:RegionManager.RegionName="MethodEditRegion"
+                        Grid.Column="1"/>
+
     </Grid>
 </UserControl>
