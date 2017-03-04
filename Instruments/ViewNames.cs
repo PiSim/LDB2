@@ -8,6 +8,11 @@ namespace Instruments
 {
     public class ViewNames
     {
+        public static string InstrumentEditView
+        {
+            get { return "InstrumentEditView"; }
+        }
+
         public static string InstrumentsMainView
         {
             get { return "InstrumentsMainView"; }

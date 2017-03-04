@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="9fa1cdb38a7949d89850433ccf2fcd72" Name="Diagram1" ZoomLevel="33">
+      <Diagram DiagramId="9fa1cdb38a7949d89850433ccf2fcd72" Name="Diagram1" ZoomLevel="108">
         <EntityTypeShape EntityType="labdbModel.Aspect" Width="1.5" PointX="13.25" PointY="29.375" IsExpanded="true" />
         <EntityTypeShape EntityType="labdbModel.BatchFile" Width="1.5" PointX="19" PointY="10.5" IsExpanded="true" />
         <EntityTypeShape EntityType="labdbModel.Batch" Width="1.5" PointX="19" PointY="13.125" IsExpanded="true" />
@@ -126,8 +126,8 @@
         <AssociationConnector Association="labdbModel.instrument_to_test" />
         <AssociationConnector Association="labdbModel.manufacturer_to_instrument" />
         <AssociationConnector Association="labdbModel.supplier_to_instrument" />
-        <EntityTypeShape EntityType="labdbModel.instrument_event_types" Width="1.5" PointX="9.375" PointY="0.75" />
-        <EntityTypeShape EntityType="labdbModel.instrument_events" Width="1.5" PointX="11.375" PointY="0.75" />
+        <EntityTypeShape EntityType="labdbModel.InstrumentEventTypes" Width="1.5" PointX="9.375" PointY="0.75" />
+        <EntityTypeShape EntityType="labdbModel.InstrumentEvent" Width="1.5" PointX="11.375" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

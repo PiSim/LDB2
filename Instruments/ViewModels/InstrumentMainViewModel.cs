@@ -1,6 +1,9 @@
 ﻿using DBManager;
+using Infrastructure;
+using Infrastructure.Events;
 using Microsoft.Practices.Unity;
 using Prism.Commands;
+using Prism.Events;
 using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
@@ -13,14 +16,17 @@ namespace Instruments.ViewModels
 {
     public class InstrumentMainViewModel : BindableBase
     {
-        private DelegateCommand _newInstrument;
+        private DelegateCommand _newInstrument, _openInstrument;
         private DBEntities _entities;
+        private EventAggregator _eventAggregator;
+        private Instrument _selectedInstrument;
         IUnityContainer _container;
 
         public InstrumentMainViewModel(UnityContainer container) : base()
         {
             _container = container;
             _entities = _container.Resolve<DBEntities>();
+            _eventAggregator = _container.Resolve<EventAggregator>();
 
             _newInstrument = new DelegateCommand(
                 () =>
@@ -34,6 +40,15 @@ namespace Instruments.ViewModels
                     }
 
                 });
+
+            _openInstrument = new DelegateCommand(
+                () =>
+                {
+                    ObjectNavigationToken token = new ObjectNavigationToken(SelectedInstrument,
+                                                                            ViewNames.InstrumentEditView);
+                    _eventAggregator.GetEvent<VisualizeObjectRequested>().Publish(token);
+                },
+                () => SelectedInstrument != null);
         }
 
         public List<Instrument> InstrumentList
@@ -44,6 +59,21 @@ namespace Instruments.ViewModels
         public DelegateCommand NewInstrumentCommand
         {
             get { return _newInstrument; }
+        }
+
+        public DelegateCommand OpenInstrumentCommand
+        {
+            get { return _openInstrument; }
+        }
+
+        public Instrument SelectedInstrument
+        {
+            get { return _selectedInstrument; }
+            set
+            {
+                _selectedInstrument = value;
+                _openInstrument.RaiseCanExecuteChanged();
+            }
         }
 
     }

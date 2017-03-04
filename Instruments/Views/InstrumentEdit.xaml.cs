@@ -1,5 +1,6 @@
 ﻿using DBManager;
 using Microsoft.Practices.Prism.Mvvm;
+using Prism.Mvvm;
 using Prism.Regions;
 using System;
 using System.Collections.Generic;
@@ -16,14 +17,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Specifications.Views
+namespace Instruments.Views
 {
     /// <summary>
-    /// Interaction logic for MethodEditView.xaml
+    /// Interaction logic for InstrumentEdit.xaml
     /// </summary>
-    public partial class MethodEdit : UserControl, IView, INavigationAware
+    public partial class InstrumentEdit : UserControl, IView, INavigationAware 
     {
-        public MethodEdit()
+        public InstrumentEdit()
         {
             InitializeComponent();
         }
@@ -40,8 +41,8 @@ namespace Specifications.Views
 
         public void OnNavigatedTo(NavigationContext ncontext)
         {
-            (DataContext as ViewModels.MethodEditViewModel).MethodInstance =
-               ncontext.Parameters["ObjectInstance"] as Method;
+            (DataContext as ViewModels.InstrumentEditViewModel).InstrumentInstance = 
+               ncontext.Parameters["ObjectInstance"] as Instrument;
         }
     }
 }

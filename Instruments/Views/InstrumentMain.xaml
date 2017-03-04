@@ -59,7 +59,13 @@
                     Grid.Column="0"
                     Grid.Row="0"
                     Margin="5"/>
-            
+
+            <Button Content="Apri"
+                    Command="{Binding OpenInstrumentCommand}"
+                    Grid.Column="0"
+                    Grid.Row="1"
+                    Margin="5"/>
+
         </Grid>
         
         <GroupBox Header="Calendario tarature"

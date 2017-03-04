@@ -117,10 +117,14 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="ViewModels\InstrumentCreationDialogViewModel.cs" />
+    <Compile Include="ViewModels\InstrumentEditViewModel.cs" />
     <Compile Include="ViewModels\InstrumentMainViewModel.cs" />
     <Compile Include="ViewNames.cs" />
     <Compile Include="Views\InstrumentCreationDialog.xaml.cs">
       <DependentUpon>InstrumentCreationDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InstrumentEdit.xaml.cs">
+      <DependentUpon>InstrumentEdit.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\InstrumentMain.xaml.cs">
       <DependentUpon>InstrumentMain.xaml</DependentUpon>
@@ -161,6 +165,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Views\InstrumentCreationDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\InstrumentEdit.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

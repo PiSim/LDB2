@@ -12,12 +12,9 @@ namespace DBManager
     using System;
     using System.Collections.Generic;
     
-    public partial class instrument_events
+    public partial class InstrumentEventTypes
     {
         public int ID { get; set; }
-        public int instrumentID { get; set; }
-        public int organizationID { get; set; }
-        public System.DateTime date { get; set; }
-        public int instrument_event_typeID { get; set; }
+        public string Name { get; set; }
     }
 }

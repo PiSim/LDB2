@@ -72,7 +72,7 @@ namespace DBManager
         public virtual DbSet<OrganizationRole> OrganizationRoles { get; set; }
         public virtual DbSet<PurchaseOrderFile> PurchaseOrderFiles { get; set; }
         public virtual DbSet<PurchaseOrder> PurchaseOrders { get; set; }
-        public virtual DbSet<instrument_event_types> instrument_event_types { get; set; }
-        public virtual DbSet<instrument_events> instrument_events { get; set; }
+        public virtual DbSet<InstrumentEventTypes> InstrumentEventTypes { get; set; }
+        public virtual DbSet<InstrumentEvent> InstrumentEvents { get; set; }
     }
 }

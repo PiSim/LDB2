@@ -1751,7 +1751,7 @@
           <NavigationProperty Name="Samples" Relationship="Self.batch_to_sample" FromRole="batches" ToRole="samples" />
           <NavigationProperty Name="Tests" Relationship="Self.batch_to_test" FromRole="batches" ToRole="tests" />
           <NavigationProperty Name="Tasks" Relationship="labdbModel.batch_to_task" FromRole="Batch" ToRole="Task" />
-          <NavigationProperty Name="external_report_batch_mapping" Relationship="labdbModel.batch_to_external_report_mapping" FromRole="Batch" ToRole="external_report_batch_mapping" />
+          <NavigationProperty Name="ExternalReportMapping" Relationship="labdbModel.batch_to_external_report_mapping" FromRole="Batch" ToRole="external_report_batch_mapping" />
         </EntityType>
         <EntityType Name="Colour">
           <Key>
@@ -2924,8 +2924,8 @@
             <End Role="Organization" EntitySet="Organizations" />
             <End Role="instrument" EntitySet="Instruments" />
           </AssociationSet>
-          <EntitySet Name="instrument_event_types" EntityType="labdbModel.instrument_event_types" />
-          <EntitySet Name="instrument_events" EntityType="labdbModel.instrument_events" />
+          <EntitySet Name="InstrumentEventTypes" EntityType="labdbModel.InstrumentEventTypes" />
+          <EntitySet Name="InstrumentEvents" EntityType="labdbModel.InstrumentEvent" />
         </EntityContainer>
         <Association Name="overridden_to_requirement">
           <End Type="labdbModel.Requirement" Role="Requirement" Multiplicity="0..1">
@@ -3553,22 +3553,22 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="instrument_event_types">
+        <EntityType Name="InstrumentEventTypes">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="name" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
         </EntityType>
-        <EntityType Name="instrument_events">
+        <EntityType Name="InstrumentEvent">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="instrumentID" Type="Int32" Nullable="false" />
           <Property Name="organizationID" Type="Int32" Nullable="false" />
-          <Property Name="date" Type="DateTime" Nullable="false" />
-          <Property Name="instrument_event_typeID" Type="Int32" Nullable="false" />
+          <Property Name="Date" Type="DateTime" Nullable="false" />
+          <Property Name="EventTypeID" Type="Int32" Nullable="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -4081,19 +4081,19 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="instrument_event_types">
-            <EntityTypeMapping TypeName="labdbModel.instrument_event_types">
+          <EntitySetMapping Name="InstrumentEventTypes">
+            <EntityTypeMapping TypeName="labdbModel.InstrumentEventTypes">
               <MappingFragment StoreEntitySet="instrument_event_types">
-                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="Name" ColumnName="name" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="instrument_events">
-            <EntityTypeMapping TypeName="labdbModel.instrument_events">
+          <EntitySetMapping Name="InstrumentEvents">
+            <EntityTypeMapping TypeName="labdbModel.InstrumentEvent">
               <MappingFragment StoreEntitySet="instrument_events">
-                <ScalarProperty Name="instrument_event_typeID" ColumnName="instrument_event_typeID" />
-                <ScalarProperty Name="date" ColumnName="date" />
+                <ScalarProperty Name="EventTypeID" ColumnName="instrument_event_typeID" />
+                <ScalarProperty Name="Date" ColumnName="date" />
                 <ScalarProperty Name="organizationID" ColumnName="organizationID" />
                 <ScalarProperty Name="instrumentID" ColumnName="instrumentID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />

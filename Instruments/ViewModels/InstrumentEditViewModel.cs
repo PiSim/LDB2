@@ -8,16 +8,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
- 
-namespace Specifications.ViewModels
+
+namespace Instruments.ViewModels
 {
-    public class MethodEditViewModel : BindableBase
+    public class InstrumentEditViewModel : BindableBase
     {
         private DBEntities _entities;
         private EventAggregator _eventAggregator;
-        private Method _methodInstance;
+        private Instrument _instance;
 
-        public MethodEditViewModel(DBEntities entities, EventAggregator aggregator) : base()
+        public InstrumentEditViewModel(DBEntities entities, EventAggregator aggregator) : base()
         {
             _entities = entities;
             _eventAggregator = aggregator;
@@ -25,18 +25,18 @@ namespace Specifications.ViewModels
             _eventAggregator.GetEvent<CommitRequested>().Subscribe(() => _entities.SaveChanges());
         }
 
-        public Method MethodInstance
+        public Instrument InstrumentInstance
         {
-            get { return _methodInstance; }
+            get { return _instance; }
             set
             {
-                _methodInstance = value;
+                _instance = value;
             }
         }
 
-        public string Name
+        public string Code
         {
-            get { return _methodInstance.Standard.Name; }
+            get { return _instance.Code; }
         }
     }
 }
