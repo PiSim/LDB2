@@ -37,7 +37,8 @@ namespace Controls.ViewModels
             _requestNavigation = new DelegateCommand<IModuleNavigationTag>(
                 view => 
                 {
-                    _eventAggregator.GetEvent<NavigationRequested>().Publish(view.ViewName);
+                    NavigationToken token = new NavigationToken(view.ViewName);
+                    _eventAggregator.GetEvent<NavigationRequested>().Publish(token);
                 });
                 
            _save = new DelegateCommand(
