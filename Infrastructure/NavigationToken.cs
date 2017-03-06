@@ -12,8 +12,8 @@ namespace Infrastructure
         private string _regionName, _viewName;
 
         public NavigationToken(string viewName,
-                                string regionName = null,
-                                object instance = null)
+                                object instance = null,
+                                string regionName = null)
         {
             if (regionName == null)
                 regionName = RegionNames.MainRegion;
