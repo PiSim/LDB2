@@ -52,7 +52,7 @@ namespace Specifications.ViewModels
             _openSpecification = new DelegateCommand(
                 () => 
                 {
-                    ObjectNavigationToken token = new ObjectNavigationToken(SelectedSpecification, ViewNames.SpecificationsEditView);
+                    ObjectNavigationToken token = new ObjectNavigationToken(ViewNames.SpecificationsEditView,SelectedSpecification);
                     _eventAggregator.GetEvent<VisualizeObjectRequested>().Publish(token);
                 },
                 () => SelectedSpecification != null);
