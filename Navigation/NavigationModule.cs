@@ -37,12 +37,7 @@ namespace Navigation
             mainregion.NavigationService.Journal.GoForward();
         }
 
-        public void OnNavigationRequested(string viewName)
-        {
-            _regionManager.RequestNavigate("MainRegion", new Uri(viewName, UriKind.Relative));
-        }
-
-        public void OnObjectVisualizationRequested(NavigationToken token)
+        public void OnNavigationRequested(NavigationToken token)
         {
             NavigationParameters parameters = new NavigationParameters();
             parameters.Add("ObjectInstance", token.ObjectInstance);
