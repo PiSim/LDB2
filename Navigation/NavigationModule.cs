@@ -23,7 +23,7 @@ namespace Navigation
             _eventAggregator.GetEvent<NavigateBackRequested>().Subscribe(() => OnNavigateBackRequested(), true);
             _eventAggregator.GetEvent<NavigateForwardRequested>().Subscribe(() => OnNavigateForwardRequested(), true);
             _eventAggregator.GetEvent<VisualizeObjectRequested>().Subscribe(tok => OnObjectVisualizationRequested(tok), true);
-            _eventAggregator.GetEvent<NavigationRequested>().Subscribe(str => OnNavigationRequested(str), true);
+            _eventAggregator.GetEvent<NavigationRequested>().Subscribe(tkn => OnNavigationRequested(tkn), true);
         }
 
         public void OnNavigateBackRequested()
@@ -43,12 +43,12 @@ namespace Navigation
             _regionManager.RequestNavigate("MainRegion", new Uri(viewName, UriKind.Relative));
         }
 
-        public void OnObjectVisualizationRequested(ObjectNavigationToken token)
+        public void OnObjectVisualizationRequested(NavigationToken token)
         {
             NavigationParameters parameters = new NavigationParameters();
             parameters.Add("ObjectInstance", token.ObjectInstance);
             _regionManager.RequestNavigate(
-                RegionNames.MainRegion,
+                token.RegionName,
                 new Uri(token.ViewName, UriKind.Relative),
                 parameters
                 );
