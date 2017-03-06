@@ -111,6 +111,7 @@
     <Compile Include="InfrastructureModule.cs" />
     <Compile Include="NavigationToken.cs" />
     <Compile Include="ObjectNavigationToken.cs" />
+    <Compile Include="RegionNames.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
