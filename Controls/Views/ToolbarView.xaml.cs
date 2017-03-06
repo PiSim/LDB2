@@ -39,8 +39,8 @@ namespace Controls.Views
 
         private void OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            _eventAggregator.GetEvent<NavigationRequested>()
-                .Publish((MainNavigationComboBox.SelectedItem as IModuleNavigationTag).ViewName);
+            NavigationToken token = new NavigationToken((MainNavigationComboBox.SelectedItem as IModuleNavigationTag).ViewName);
+            _eventAggregator.GetEvent<NavigationRequested>().Publish(token);
         }
     }
 }
