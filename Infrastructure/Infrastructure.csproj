@@ -107,10 +107,8 @@
     <Compile Include="Events\NavigateForwardRequested.cs" />
     <Compile Include="Events\NavigationRequested.cs" />
     <Compile Include="Events\UserAuthenticated.cs" />
-    <Compile Include="Events\VisualizeObjectRequested.cs" />
     <Compile Include="InfrastructureModule.cs" />
     <Compile Include="NavigationToken.cs" />
-    <Compile Include="ObjectNavigationToken.cs" />
     <Compile Include="RegionNames.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

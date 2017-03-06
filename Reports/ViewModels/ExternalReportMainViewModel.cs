@@ -46,10 +46,10 @@ namespace Reports.ViewModels
             _openReport = new DelegateCommand(
                 () =>
                 {
-                    ObjectNavigationToken token = 
-                        new ObjectNavigationToken(_selectedReport, ViewNames.ExternalReportEditView);
+                    NavigationToken token = new NavigationToken(ViewNames.ExternalReportEditView,
+                                                                _selectedReport);
 
-                    _eventAggregator.GetEvent<Infrastructure.Events.VisualizeObjectRequested>()
+                    _eventAggregator.GetEvent<Infrastructure.Events.NavigationRequested>()
                         .Publish(token);
                 },
                 () => _selectedReport != null);

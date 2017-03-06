@@ -39,8 +39,9 @@ namespace Projects.ViewModels
             _openProject = new DelegateCommand(
                 () => 
                 {
-                    ObjectNavigationToken token = new ObjectNavigationToken(_selectedProject, ProjectsViewNames.ProjectInfoView);
-                    _eventAggregator.GetEvent<VisualizeObjectRequested>().Publish(token);
+                    NavigationToken token = new NavigationToken(ProjectsViewNames.ProjectInfoView,
+                                                                _selectedProject);
+                    _eventAggregator.GetEvent<NavigationRequested>().Publish(token);
                 },
                 () => _selectedProject != null
             );

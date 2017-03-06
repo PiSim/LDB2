@@ -44,9 +44,9 @@ namespace Instruments.ViewModels
             _openInstrument = new DelegateCommand(
                 () =>
                 {
-                    ObjectNavigationToken token = new ObjectNavigationToken(SelectedInstrument,
-                                                                            ViewNames.InstrumentEditView);
-                    _eventAggregator.GetEvent<VisualizeObjectRequested>().Publish(token);
+                    NavigationToken token = new NavigationToken(ViewNames.InstrumentEditView,
+                                                                SelectedInstrument);
+                    _eventAggregator.GetEvent<NavigationRequested>().Publish(token);
                 },
                 () => SelectedInstrument != null);
         }

@@ -26,6 +26,7 @@ namespace DBManager
             this.purchase_orders = new HashSet<PurchaseOrder>();
             this.instruments = new HashSet<Instrument>();
             this.instruments1 = new HashSet<Instrument>();
+            this.instrument_maintenance_events = new HashSet<InstrumentMaintenanceEvent>();
         }
     
         private int ID { get; set; }
@@ -50,5 +51,7 @@ namespace DBManager
         public virtual ICollection<Instrument> instruments { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Instrument> instruments1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<InstrumentMaintenanceEvent> instrument_maintenance_events { get; set; }
     }
 }

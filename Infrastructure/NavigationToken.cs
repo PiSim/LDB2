@@ -16,7 +16,7 @@ namespace Infrastructure
                                 string regionName = null)
         {
             if (regionName == null)
-                regionName = RegionNames.MainRegion;
+                _regionName = RegionNames.MainRegion;
             else
                 _regionName = regionName;
                 

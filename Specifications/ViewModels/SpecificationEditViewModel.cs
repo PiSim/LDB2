@@ -132,9 +132,9 @@ namespace Specifications.ViewModels
             _openReport = new DelegateCommand(
                 () =>
                 {
-                    ObjectNavigationToken token = new ObjectNavigationToken(_selectedReport,
-                                                                            Reports.ViewNames.ReportEditView);
-                    _eventAggregator.GetEvent<VisualizeObjectRequested>().Publish(token);
+                    NavigationToken token = new NavigationToken(Reports.ViewNames.ReportEditView,
+                                                                SelectedReport);
+                    _eventAggregator.GetEvent<NavigationRequested>().Publish(token);
                 },
                 () => _selectedReport != null);
 

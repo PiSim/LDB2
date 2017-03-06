@@ -21,6 +21,7 @@ namespace DBManager
             this.CalibrationReportsAsReference = new HashSet<CalibrationReport>();
             this.PendingCalibrations = new HashSet<PendingCalibration>();
             this.Tests = new HashSet<Test>();
+            this.MaintenanceEvent = new HashSet<InstrumentMaintenanceEvent>();
         }
     
         public int ID { get; set; }
@@ -45,5 +46,7 @@ namespace DBManager
         public virtual ICollection<Test> Tests { get; set; }
         public virtual Organization Manufacturer { get; set; }
         public virtual Organization Supplier { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<InstrumentMaintenanceEvent> MaintenanceEvent { get; set; }
     }
 }

@@ -30,7 +30,7 @@ namespace DBManager
         public virtual Instrument Instrument { get; set; }
         public virtual Organization Organization { get; set; }
         public virtual Person Person { get; set; }
-        public virtual Instrument Instruments { get; set; }
+        public virtual Instrument Reference { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CalibrationFiles> CalibrationFiles { get; set; }
     }

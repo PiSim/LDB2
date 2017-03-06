@@ -130,22 +130,15 @@
           <Property Name="report_received" Type="int" />
           <Property Name="projectID" Type="int" />
         </EntityType>
-        <EntityType Name="instrument_event_types">
+        <EntityType Name="instrument_maintenance_events">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="name" Type="varchar" MaxLength="45" Nullable="false" />
-        </EntityType>
-        <EntityType Name="instrument_events">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="instrumentID" Type="int" Nullable="false" />
-          <Property Name="organizationID" Type="int" Nullable="false" />
           <Property Name="date" Type="date" Nullable="false" />
-          <Property Name="instrument_event_typeID" Type="int" Nullable="false" />
+          <Property Name="description" Type="varchar" MaxLength="45" Nullable="false" />
+          <Property Name="organizationID" Type="int" Nullable="false" />
+          <Property Name="instrumentID" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="instrument_types">
           <Key>
@@ -732,6 +725,20 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="instrument_to_maintenance_event">
+          <End Role="instruments" Type="Self.instruments" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="instrument_maintenance_events" Type="Self.instrument_maintenance_events" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="instruments">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="instrument_maintenance_events">
+              <PropertyRef Name="instrumentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="instrument_to_test">
           <End Role="instruments" Type="Self.instruments" Multiplicity="0..1" />
           <End Role="tests" Type="Self.tests" Multiplicity="*" />
@@ -903,6 +910,18 @@
             </Principal>
             <Dependent Role="tests">
               <PropertyRef Name="operatorID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="organization_to_maintenance_event">
+          <End Role="organizations" Type="Self.organizations" Multiplicity="1" />
+          <End Role="instrument_maintenance_events" Type="Self.instrument_maintenance_events" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="organizations">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="instrument_maintenance_events">
+              <PropertyRef Name="organizationID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1392,8 +1411,7 @@
           <EntitySet Name="external_report_batch_mapping" EntityType="Self.external_report_batch_mapping" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="external_report_files" EntityType="Self.external_report_files" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="external_reports" EntityType="Self.external_reports" Schema="labdb" store:Type="Tables" />
-          <EntitySet Name="instrument_event_types" EntityType="Self.instrument_event_types" Schema="labdb" store:Type="Tables" />
-          <EntitySet Name="instrument_events" EntityType="Self.instrument_events" Schema="labdb" store:Type="Tables" />
+          <EntitySet Name="instrument_maintenance_events" EntityType="Self.instrument_maintenance_events" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="instrument_types" EntityType="Self.instrument_types" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="instruments" EntityType="Self.instruments" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="masters" EntityType="Self.masters" Schema="labdb" store:Type="Tables" />
@@ -1508,6 +1526,10 @@
             <End Role="instruments" EntitySet="instruments" />
             <End Role="calibration_reports" EntitySet="calibration_reports" />
           </AssociationSet>
+          <AssociationSet Name="instrument_to_maintenance_event" Association="Self.instrument_to_maintenance_event">
+            <End Role="instruments" EntitySet="instruments" />
+            <End Role="instrument_maintenance_events" EntitySet="instrument_maintenance_events" />
+          </AssociationSet>
           <AssociationSet Name="instrument_to_test" Association="Self.instrument_to_test">
             <End Role="instruments" EntitySet="instruments" />
             <End Role="tests" EntitySet="tests" />
@@ -1563,6 +1585,10 @@
           <AssociationSet Name="operatorID" Association="Self.operatorID">
             <End Role="people" EntitySet="people" />
             <End Role="tests" EntitySet="tests" />
+          </AssociationSet>
+          <AssociationSet Name="organization_to_maintenance_event" Association="Self.organization_to_maintenance_event">
+            <End Role="organizations" EntitySet="organizations" />
+            <End Role="instrument_maintenance_events" EntitySet="instrument_maintenance_events" />
           </AssociationSet>
           <AssociationSet Name="organization_to_purchase_order" Association="Self.organization_to_purchase_order">
             <End Role="organizations" EntitySet="organizations" />
@@ -1876,6 +1902,7 @@
           <NavigationProperty Name="purchase_orders" Relationship="labdbModel.organization_to_purchase_order" FromRole="Organization" ToRole="purchase_orders" />
           <NavigationProperty Name="instruments" Relationship="labdbModel.manufacturer_to_instrument" FromRole="Organization" ToRole="instrument" />
           <NavigationProperty Name="instruments1" Relationship="labdbModel.supplier_to_instrument" FromRole="Organization" ToRole="instrument" />
+          <NavigationProperty Name="instrument_maintenance_events" Relationship="labdbModel.organization_to_maintenance_event" FromRole="Organization" ToRole="instrument_maintenance_events" />
         </EntityType>
         <EntityType Name="Person">
           <Key>
@@ -2924,8 +2951,15 @@
             <End Role="Organization" EntitySet="Organizations" />
             <End Role="instrument" EntitySet="Instruments" />
           </AssociationSet>
-          <EntitySet Name="InstrumentEventTypes" EntityType="labdbModel.InstrumentEventTypes" />
-          <EntitySet Name="InstrumentEvents" EntityType="labdbModel.InstrumentEvent" />
+          <EntitySet Name="InstrumentMaintenanceEvents" EntityType="labdbModel.InstrumentMaintenanceEvent" />
+          <AssociationSet Name="instrument_to_maintenance_event" Association="labdbModel.instrument_to_maintenance_event">
+            <End Role="Instrument" EntitySet="Instruments" />
+            <End Role="instrument_maintenance_events" EntitySet="InstrumentMaintenanceEvents" />
+          </AssociationSet>
+          <AssociationSet Name="organization_to_maintenance_event" Association="labdbModel.organization_to_maintenance_event">
+            <End Role="Organization" EntitySet="Organizations" />
+            <End Role="instrument_maintenance_events" EntitySet="InstrumentMaintenanceEvents" />
+          </AssociationSet>
         </EntityContainer>
         <Association Name="overridden_to_requirement">
           <End Type="labdbModel.Requirement" Role="Requirement" Multiplicity="0..1">
@@ -3243,7 +3277,7 @@
           <NavigationProperty Name="Instrument" Relationship="labdbModel.instrument_to_calibration_report" FromRole="calibration_reports" ToRole="instrument" />
           <NavigationProperty Name="Organization" Relationship="labdbModel.laboratory_to_calibration_report" FromRole="calibration_reports" ToRole="Organization" />
           <NavigationProperty Name="Person" Relationship="labdbModel.operator_to_calibration_report" FromRole="calibration_reports" ToRole="Person" />
-          <NavigationProperty Name="Instruments" Relationship="labdbModel.reference_to_calibration_report" FromRole="calibration_reports" ToRole="instrument" />
+          <NavigationProperty Name="Reference" Relationship="labdbModel.reference_to_calibration_report" FromRole="calibration_reports" ToRole="instrument" />
           <NavigationProperty Name="CalibrationFiles" Relationship="labdbModel.calibration_report_to_files" FromRole="calibration_reports" ToRole="calibration_files" />
         </EntityType>
         <EntityType Name="InstrumentType">
@@ -3275,6 +3309,7 @@
           <NavigationProperty Name="Tests" Relationship="labdbModel.instrument_to_test" FromRole="instrument" ToRole="Test" />
           <NavigationProperty Name="Manufacturer" Relationship="labdbModel.manufacturer_to_instrument" FromRole="instrument" ToRole="Organization" />
           <NavigationProperty Name="Supplier" Relationship="labdbModel.supplier_to_instrument" FromRole="instrument" ToRole="Organization" />
+          <NavigationProperty Name="MaintenanceEvent" Relationship="labdbModel.instrument_to_maintenance_event" FromRole="Instrument" ToRole="instrument_maintenance_events" />
         </EntityType>
         <EntityType Name="PendingCalibration">
           <Key>
@@ -3553,23 +3588,44 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="InstrumentEventTypes">
+        <EntityType Name="InstrumentMaintenanceEvent">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
-        </EntityType>
-        <EntityType Name="InstrumentEvent">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="instrumentID" Type="Int32" Nullable="false" />
-          <Property Name="organizationID" Type="Int32" Nullable="false" />
           <Property Name="Date" Type="DateTime" Nullable="false" />
-          <Property Name="EventTypeID" Type="Int32" Nullable="false" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="OrganizationID" Type="Int32" Nullable="false" />
+          <Property Name="InstrumentID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Instrument" Relationship="labdbModel.instrument_to_maintenance_event" FromRole="instrument_maintenance_events" ToRole="Instrument" />
+          <NavigationProperty Name="Organization" Relationship="labdbModel.organization_to_maintenance_event" FromRole="instrument_maintenance_events" ToRole="Organization" />
         </EntityType>
+        <Association Name="instrument_to_maintenance_event">
+          <End Type="labdbModel.Instrument" Role="Instrument" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="labdbModel.InstrumentMaintenanceEvent" Role="instrument_maintenance_events" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Instrument">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="instrument_maintenance_events">
+              <PropertyRef Name="InstrumentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="organization_to_maintenance_event">
+          <End Type="labdbModel.Organization" Role="Organization" Multiplicity="1" />
+          <End Type="labdbModel.InstrumentMaintenanceEvent" Role="instrument_maintenance_events" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Organization">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="instrument_maintenance_events">
+              <PropertyRef Name="OrganizationID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -4081,21 +4137,13 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="InstrumentEventTypes">
-            <EntityTypeMapping TypeName="labdbModel.InstrumentEventTypes">
-              <MappingFragment StoreEntitySet="instrument_event_types">
-                <ScalarProperty Name="Name" ColumnName="name" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="InstrumentEvents">
-            <EntityTypeMapping TypeName="labdbModel.InstrumentEvent">
-              <MappingFragment StoreEntitySet="instrument_events">
-                <ScalarProperty Name="EventTypeID" ColumnName="instrument_event_typeID" />
+          <EntitySetMapping Name="InstrumentMaintenanceEvents">
+            <EntityTypeMapping TypeName="labdbModel.InstrumentMaintenanceEvent">
+              <MappingFragment StoreEntitySet="instrument_maintenance_events">
+                <ScalarProperty Name="InstrumentID" ColumnName="instrumentID" />
+                <ScalarProperty Name="OrganizationID" ColumnName="organizationID" />
+                <ScalarProperty Name="Description" ColumnName="description" />
                 <ScalarProperty Name="Date" ColumnName="date" />
-                <ScalarProperty Name="organizationID" ColumnName="organizationID" />
-                <ScalarProperty Name="instrumentID" ColumnName="instrumentID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

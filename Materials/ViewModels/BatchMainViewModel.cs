@@ -29,16 +29,16 @@ namespace Materials.ViewModels
             _openSampleLogView = new DelegateCommand(
                 () =>
                 {
-                    _eventAggregator.GetEvent<NavigationRequested>().Publish(ViewNames.SampleLogView);
+                    _eventAggregator.GetEvent<NavigationRequested>().Publish(new NavigationToken(ViewNames.SampleLogView));
                 });
             
             _quickOpen = new DelegateCommand(
                 () =>
                 {
                     Batch temp = _entities.GetBatchByNumber(_batchNumber, false);
-                    ObjectNavigationToken token = new ObjectNavigationToken(temp, ViewNames.BatchInfoView);
+                    NavigationToken token = new NavigationToken(ViewNames.BatchInfoView, temp);
                     if (temp != null)
-                        _eventAggregator.GetEvent<VisualizeObjectRequested>().Publish(token);
+                        _eventAggregator.GetEvent<NavigationRequested>().Publish(token);
                 });
         }
 
