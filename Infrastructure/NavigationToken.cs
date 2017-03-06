@@ -12,11 +12,15 @@ namespace Infrastructure
         private string _regionName, _viewName;
 
         public NavigationToken(string viewName,
-                                string regionName = RegionNames.MainRegion,
+                                string regionName = null,
                                 object instance = null)
         {
+            if (regionName == null)
+                regionName = RegionNames.MainRegion;
+            else
+                _regionName = regionName;
+                
             _instance = instance;
-            _regionName = regionName;
             _viewName = viewName;
         }
 
