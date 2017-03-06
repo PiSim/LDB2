@@ -10,5 +10,6 @@ namespace Navigation
     {
         public static string MainNavigationRegion { get { return "MainNavigationRegion"; } }
         public static string MainRegion { get { return "MainRegion"; } }
+        public static string MethodEditRegion { get { return "MethodEditRegion"; } }
     }
 }
