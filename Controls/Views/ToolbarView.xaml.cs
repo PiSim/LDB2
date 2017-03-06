@@ -1,4 +1,5 @@
 ﻿using Infrastructure;
+using Infrastructure.Events;
 using Navigation;
 using Microsoft.Practices.Unity;
 using Prism.Events;
