@@ -22,7 +22,6 @@ namespace Navigation
         {
             _eventAggregator.GetEvent<NavigateBackRequested>().Subscribe(() => OnNavigateBackRequested(), true);
             _eventAggregator.GetEvent<NavigateForwardRequested>().Subscribe(() => OnNavigateForwardRequested(), true);
-            _eventAggregator.GetEvent<VisualizeObjectRequested>().Subscribe(tok => OnObjectVisualizationRequested(tok), true);
             _eventAggregator.GetEvent<NavigationRequested>().Subscribe(tkn => OnNavigationRequested(tkn), true);
         }
 
