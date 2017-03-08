@@ -9,25 +9,40 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition/>
         </Grid.RowDefinitions>
         <Label Content="{Binding Name}"
-               Grid.Column="0"
                Grid.Row="0"
                Margin="5"/>
-
-        <ListView ItemsSource="{Binding SubMeasurementList}"
-                  SelectedItem="{Binding SelectedSubMeasurement, Mode=TwoWay}"
-                  Grid.Column="0"
-                  Grid.Row="1">
-            
-        </ListView>
+        <TabControl>
+            <TabItem Header="Prove">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    
+                    
+                    <ListView ItemsSource="{Binding Measurements}"
+                            SelectedItem="{Binding SelectedMeasurement, Mode=TwoWay}"
+                            Grid.Column="0">
+                        
+                    </ListView>
+                    <StackPanel Orientation="Vertical"
+                                Grid.Column="1">
+                        <Button Content="Aggiungi"
+                                Command="{Binding AddMeasurementCommand}"
+                                Margin="5"/>
+                        <Button Content="Rimuovi"
+                                Command="{Binding RemoveMeasurementCommand}"
+                                Margin="5"/>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+        </TabControl>
+        
 
     </Grid>
 </UserControl>
