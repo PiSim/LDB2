@@ -1,7 +1,10 @@
 ﻿using DBManager;
+using Infrastructure;
+using Infrastructure.Events;
 using Microsoft.Practices.Prism.Mvvm;
 using Microsoft.Practices.Unity;
 using Prism.Commands;
+using Prism.Events;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -14,15 +17,18 @@ namespace Specifications.ViewModels
     {
         private DBEntities _entities;
         private DelegateCommand _newMethod;
+        private EventAggregator _eventAggregator;
         private Method _selectedMethod;
         private ObservableCollection<Method> _methodList;
         private UnityContainer _container;
 
         public MethodMainViewModel(DBEntities entities,
+                                    EventAggregator aggregator,
                                     UnityContainer container) : base()
         {
             _container = container;
             _entities = entities;
+            _eventAggregator = aggregator;
             _methodList = new ObservableCollection<Method>(_entities.Methods);
 
             _newMethod = new DelegateCommand(
@@ -65,6 +71,11 @@ namespace Specifications.ViewModels
             {
                 _selectedMethod = value;
                 OnPropertyChanged("SelectedMethod");
+                NavigationToken token = new NavigationToken(ViewNames.MethodEditView,
+                                                            _selectedMethod,
+                                                            RegionNames.MethodEditRegion);
+
+                _eventAggregator.GetEvent<NavigationRequested>().Publish(token);
             }
         }
     }

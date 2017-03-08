@@ -9,8 +9,25 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        <Label Content="{Binding Method}"/>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Label Content="{Binding Name}"
+               Grid.Column="0"
+               Grid.Row="0"
+               Margin="5"/>
 
+        <ListView ItemsSource="{Binding SubMeasurementList}"
+                  SelectedItem="{Binding SelectedSubMeasurement, Mode=TwoWay}"
+                  Grid.Column="0"
+                  Grid.Row="1">
+            
+        </ListView>
 
     </Grid>
 </UserControl>

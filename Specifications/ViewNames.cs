@@ -8,6 +8,10 @@ namespace Specifications
 {
     public class ViewNames
     {
+        public static string MethodEditView
+        {
+            get { return "MethodEditView"; }
+        }
         public static string MethodMainView
         {
             get { return "MethodMainView"; }

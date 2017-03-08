@@ -19,6 +19,7 @@ namespace Specifications
 
         public void Initialize()
         {
+            _container.RegisterType<Object, Views.MethodEdit>(ViewNames.MethodEditView);
             _container.RegisterType<Object, Views.MethodMain>(ViewNames.MethodMainView);
             _container.RegisterType<Object, Views.SpecificationEditView>(ViewNames.SpecificationsEditView);
             _container.RegisterType<Object, Views.SpecificationMain>(ViewNames.SpecificationsMainView);
@@ -29,9 +30,6 @@ namespace Specifications
             _container.RegisterType<ViewModels.MethodEditViewModel>();
             _container.RegisterType<ViewModels.MethodMainViewModel>();
             _container.RegisterType<ViewModels.SpecificationMainViewModel>();
-
-            _regionManager.RegisterViewWithRegion("MethodEditRegion",
-                                                typeof(Views.MethodEdit));
 
             _regionManager.RegisterViewWithRegion(RegionNames.MainNavigationRegion, 
                                                 typeof(Views.MethodNavigationItem));

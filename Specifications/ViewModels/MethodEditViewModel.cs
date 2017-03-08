@@ -36,7 +36,10 @@ namespace Specifications.ViewModels
 
         public string Name
         {
-            get { return _methodInstance.Standard.Name; }
+            get
+            {
+                return (_methodInstance != null) ? _methodInstance.Standard.Name : null;
+            }
         }
     }
 }
