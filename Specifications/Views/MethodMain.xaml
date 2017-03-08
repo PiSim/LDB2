@@ -40,8 +40,8 @@
                         <GridView>
                             <GridViewColumn Header="Nome"
                                             DisplayMemberBinding="{Binding Standard.Name}"/>
-                            <GridViewColumn Header="Oem"
-                                            DisplayMemberBinding="{Binding Oem.Name}"/>
+                            <GridViewColumn Header="Proprietà"
+                                            DisplayMemberBinding="{Binding Property.Name}"/>
                         </GridView>
                     </ListView.View>
                 </ListView>
