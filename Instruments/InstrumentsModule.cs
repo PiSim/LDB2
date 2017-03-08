@@ -21,8 +21,10 @@ namespace Instruments
 
         public void Initialize()
         {
+            _container.RegisterType<ViewModels.InstrumentEditViewModel>();
             _container.RegisterType<ViewModels.InstrumentMainViewModel>();
 
+            _container.RegisterType<Object, Views.InstrumentEdit>(ViewNames.InstrumentEditView);
             _container.RegisterType<Object, Views.InstrumentMain>(ViewNames.InstrumentsMainView);
             
             _regionManager.RegisterViewWithRegion(RegionNames.MainNavigationRegion, 
