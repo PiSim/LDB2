@@ -28,7 +28,12 @@
             <ListView ItemsSource="{Binding InstrumentList}"
                           SelectedItem="{Binding SelectedInstrument, Mode=TwoWay}"
                           Grid.Row="1">
-                          
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Codice"
+                                        DisplayMemberBinding="{Binding Code}"/>
+                    </GridView>
+                </ListView.View>             
             </ListView>
                                       
         </GroupBox>
