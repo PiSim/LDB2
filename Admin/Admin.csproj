@@ -119,12 +119,16 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="ViewModels\AdminMainViewModel.cs" />
+    <Compile Include="ViewModels\NewUserDialogViewModel.cs" />
     <Compile Include="ViewModels\UserMainViewModel.cs" />
     <Compile Include="Views\AdminMainView.xaml.cs">
       <DependentUpon>AdminMainView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\AdminNavigationItem.xaml.cs">
       <DependentUpon>AdminNavigationItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\NewUserDialog.xaml.cs">
+      <DependentUpon>NewUserDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\UserMainView.xaml.cs">
       <DependentUpon>UserMainView.xaml</DependentUpon>
@@ -166,6 +170,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\AdminNavigationItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\NewUserDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

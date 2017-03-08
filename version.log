@@ -1,7 +1,7 @@
 ﻿v 0.4.1 -- In corso
 
 -Introdotta vista gestione Organizzazioni per la selezione dei ruoli
--Introdotta vista Admin per la gestione degli account Utente
+-Introdotta vista Admin per la gestione dei ruoli Utente
 -Reimplementazione della vista creazione/modifica metodi
 -Aggiunta selezione versione corrente di una specifica
 -Flag completamento test + data completamento
@@ -9,6 +9,11 @@
 -Implementazione lista strumenti
 -Creata finestra di dialogo per la creazione di strumenti
 -Aggiunta ruolo fornitore ad organizzazioni
+-Reimplementato evento NavigationRequested per utilizzare un NavigationToken comprendente regione, vista e istanza oggetto
+-Ripristinate viste MethodMain e MethodEdit
+-*Aggiunti ruoli utente per test esterni
+-*Migliorata vista ExternalReportEdit
+-*Funzionalità creazione nuovo utente tramite NewUserDialog
 
 v 0.4.0 -- 25/02/2017
 
