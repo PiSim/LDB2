@@ -48,12 +48,6 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
             
-            <Button Content="Apri"
-                    Command="{Binding OpenInstrumentCommand}"
-                    Grid.Column="0"
-                    Grid.Row="0"
-                    Margin="5"/>
-            
             <Button Content="Nuovo"
                     Command="{Binding NewInstrumentCommand}"
                     Grid.Column="0"
