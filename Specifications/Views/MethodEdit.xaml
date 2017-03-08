@@ -16,7 +16,8 @@
         <Label Content="{Binding Name}"
                Grid.Row="0"
                Margin="5"/>
-        <TabControl>
+        <TabControl Grid.Row="1"
+                    Margin="5">
             <TabItem Header="Prove">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -28,7 +29,25 @@
                     <ListView ItemsSource="{Binding Measurements}"
                             SelectedItem="{Binding SelectedMeasurement, Mode=TwoWay}"
                             Grid.Column="0">
-                        
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Nome">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBox Text="{Binding Name, Mode=TwoWay}"/>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                
+                                <GridViewColumn Header="UM">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBox Text="{Binding UM, Mode=TwoWay}"/>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                            </GridView>
+                        <ListView.View>
                     </ListView>
                     <StackPanel Orientation="Vertical"
                                 Grid.Column="1">
