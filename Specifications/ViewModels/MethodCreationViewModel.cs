@@ -89,7 +89,7 @@ namespace Specifications.ViewModels
             {
                 return new List<Organization>
                     (_entities.Organizations.Where(org => org.RoleMapping
-                                            .Any(orm => orm.Role.Name == "OEM" && orm.IsSelected)));
+                                            .Any(orm => orm.Role.Name == "STD_PUB" && orm.IsSelected)));
             }
         }
 
