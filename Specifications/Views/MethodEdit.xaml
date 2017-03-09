@@ -138,7 +138,7 @@
                                 <RowDefinition/>
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
-                            <ListView ItemsSource="{Binding Path=IssuesList}"
+                            <ListView ItemsSource="{Binding Path=IssueList}"
                                       SelectedItem="{Binding Path=SelectedIssue, Mode=TwoWay}"
                                       Grid.Column="0"
                                       Grid.Row="0">
@@ -182,7 +182,7 @@
                                     Margin="5,5,5,5"/>
 
                                 <Button Content="Elimina"
-                                        Command="{Binding Path=RemoveIssueCommand}"
+                                        Command="{Binding RemoveIssueCommand}"
                                         Grid.Row="1"
                                         Margin="5"/>
 

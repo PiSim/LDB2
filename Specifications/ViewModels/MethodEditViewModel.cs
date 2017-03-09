@@ -16,7 +16,7 @@ namespace Specifications.ViewModels
     public class MethodEditViewModel : BindableBase
     {
         private DBEntities _entities;
-        private DelegateCommand _addFile, _addIssue, _addMeasurement, _openFile, _removeFile, _removeIssue, _removeMeasurement;
+        private DelegateCommand _addFile, _addIssue, _addMeasurement, _openFile, _removeFile, _removeIssue, _removeMeasurement, _setCurrent;
         private EventAggregator _eventAggregator;
         private Method _methodInstance;
         private MethodMeasurement _selectedMeasurement;
@@ -75,6 +75,8 @@ namespace Specifications.ViewModels
                     tempMea.Name = "Nuova Prova";
                     tempMea.UM = "";
                     Measurements.Add(tempMea);
+
+                    _methodInstance.Measurements.Add(tempMea);
                 });
 
             _openFile = new DelegateCommand(
@@ -108,6 +110,16 @@ namespace Specifications.ViewModels
                     SelectedMeasurement = null;
                 },
                 () => SelectedMeasurement != null );
+
+            _setCurrent = new DelegateCommand(
+                () =>
+                {
+                    _selectedIssue.IsCurrent = true;
+                    _methodInstance.Standard.CurrentIssue.IsCurrent = false;
+                    _methodInstance.Standard.CurrentIssue = _selectedIssue;
+                },
+                () => _selectedIssue != null
+                );
         }
 
         public DelegateCommand AddFileCommand
@@ -118,6 +130,11 @@ namespace Specifications.ViewModels
         public DelegateCommand AddMeasurementCommand
         {
             get { return _addMeasurement; }
+        }
+
+        public List<StandardFile> FileList
+        {
+            get { return new List<StandardFile>(_selectedIssue.StandardFiles); }
         }
 
         public ObservableCollection<StandardIssue> IssueList
@@ -216,13 +233,24 @@ namespace Specifications.ViewModels
         public StandardFile SelectedFile
         {
             get { return _selectedFile; }
-            set { _selectedFile = value; }
+            set
+            {
+                _selectedFile = value;
+                _openFile.RaiseCanExecuteChanged();
+                _removeFile.RaiseCanExecuteChanged();
+            }
         }
 
         public StandardIssue SelectedIssue
         {
             get { return _selectedIssue; }
-            set { _selectedIssue = value; }
+            set
+            {
+                _selectedIssue = value;
+                OnPropertyChanged("FileList");
+                _removeIssue.RaiseCanExecuteChanged();
+                _setCurrent.RaiseCanExecuteChanged();
+            }
         }
         
         public MethodMeasurement SelectedMeasurement
@@ -237,6 +265,11 @@ namespace Specifications.ViewModels
                 _removeMeasurement.RaiseCanExecuteChanged();
                 OnPropertyChanged("SelectedMeasurement");
             }
+        }
+
+        public DelegateCommand SetCurrentCommand
+        {
+            get { return _setCurrent; }
         }
 
         public List<Specification> SpecificationList
