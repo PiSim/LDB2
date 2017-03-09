@@ -1,5 +1,5 @@
 ﻿using DBManager;
-using Infrastructure.Events;
+using Infrastructure;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
@@ -16,10 +16,11 @@ namespace Reports.ViewModels
     internal class ExternalReportEditViewModel : BindableBase
     {
         private DBEntities _entities;
-        private DelegateCommand _addFile, _openFile, _removeFile;
+        private DelegateCommand _addBatch, _addFile, _openBatch, _openFile, _removeBatch, _removeFile;
         private EventAggregator _eventAggregator;
         private ExternalReport _instance;
         private ExternalReportFile _selectedFile;
+        private ObservableCollection<Batch> _batchList;
         private ObservableCollection<ExternalReportFile> _reportFiles;
 
         internal ExternalReportEditViewModel(DBEntities entities,
@@ -36,6 +37,9 @@ namespace Reports.ViewModels
             _eventAggregator.GetEvent<CommitRequested>().Subscribe(() => _entities.SaveChanges());
             
             _instance = _entities.ExternalReports.FirstOrDefault(xrp => xrp.ID == instance.ID);
+            
+            _batchList = new ObservableCollection<Batch>
+                (_instance.BatchMappings.Select(btm => btm.Batch));
             
             _reportFiles = new ObservableCollection<ExternalReportFile>
                 (_instance.ExternalReportFiles);
@@ -75,9 +79,19 @@ namespace Reports.ViewModels
                 () => _selectedFile != null);
         }
 
+        public DelegateCommand AddBatchCommand
+        {
+            get { return _addBatch;}
+        }
+
         public DelegateCommand AddFileCommand
         {
             get { return _addFile; }
+        }
+        
+        public ObservableCollection<Batch> BatchList
+        {
+            get { return _batchList; }
         }
 
         public string Description
@@ -102,10 +116,20 @@ namespace Reports.ViewModels
             get { return _instance.InternalNumber; }
             set { _instance.InternalNumber = value; }
         }
+        
+        public DelegateCommand OpenBatchCommand
+        {
+            get { return _openBatch; }
+        }
 
         public DelegateCommand OpenFileCommand
         {
             get { return _openFile; }
+        }
+
+        public DelegateCommand RemoveBatchCommand
+        {
+            get { return _removeBatch; }
         }
 
         public DelegateCommand RemoveFileCommand
@@ -153,3 +177,4 @@ namespace Reports.ViewModels
         }
     }
 }
+
