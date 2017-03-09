@@ -14,6 +14,7 @@ namespace Specifications.ViewModels
         private DBEntities _entities;
         private DelegateCommand _cancel, _confirm;
         private Organization _selectedOem;
+        private Property _selectedProperty;
         private string _name;
         private Views.MethodCreationDialog _parentDialog;
 
@@ -43,7 +44,9 @@ namespace Specifications.ViewModels
                     }
 
                     output.Standard = tempStd;
+                    output.CostUnits = 0;
                     output.Description = "";
+                    output.Property = _selectedProperty;
                     output.UM = "";
 
                     _entities.Methods.Add(output);
@@ -67,7 +70,7 @@ namespace Specifications.ViewModels
 
         private bool IsValidInput
         {
-            get { return _name != null && _selectedOem != null; }
+            get { return _name != null && _selectedOem != null && _selectedProperty != null; }
         }
 
         public string Name
@@ -90,12 +93,27 @@ namespace Specifications.ViewModels
             }
         }
 
+        public List<Property> PropertiesList
+        {
+            get { return new List<Property>(_entities.Properties); }
+        }
+
         public Organization SelectedOem
         {
             get { return _selectedOem; }
             set
             {
                 _selectedOem = value;
+                _confirm.RaiseCanExecuteChanged();
+            }
+        }
+        
+        public Property SelectedProperty
+        {
+            get { return _selectedProperty; }
+            set
+            {
+                _selectedProperty = value;
                 _confirm.RaiseCanExecuteChanged();
             }
         }
