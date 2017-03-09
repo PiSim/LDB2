@@ -172,7 +172,7 @@
                     <RowDefinition/>
                 </Grid.RowDefinitions>
                 
-                <ListView ItemsSource="{Binding Path=Batches}" 
+                <ListView ItemsSource="{Binding Path=BatchList}" 
                           SelectedItem="{Binding Path=SelectedBatch, Mode=TwoWay}"
                           Grid.Column="0"
                           Grid.Row="0"
