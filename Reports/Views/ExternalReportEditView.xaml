@@ -177,7 +177,7 @@
                           Grid.Column="0"
                           Grid.Row="0"
                           Grid.RowSpan="4"
-                          Margin="5>
+                          Margin="5">
                     <ListView.View>
                         <GridView>
                             <GridViewColumn Header="Numero" 
