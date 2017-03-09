@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Practices.Prism.Mvvm;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,7 +18,7 @@ namespace Admin.Views
     /// <summary>
     /// Interaction logic for NewUserDialog.xaml
     /// </summary>
-    public partial class NewUserDialog : Window
+    public partial class NewUserDialog : Window, IView
     {
         public NewUserDialog()
         {
