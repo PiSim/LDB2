@@ -26,7 +26,7 @@ namespace Reports
 
         public string CompletionDate
         {
-            get { return _testInstance.Date.ToString(); }
+            get { return _testInstance.Date.ToShortDateString(); }
         }
 
         public bool IsComplete
