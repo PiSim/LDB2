@@ -11,9 +11,10 @@
 -Aggiunta ruolo fornitore ad organizzazioni
 -Reimplementato evento NavigationRequested per utilizzare un NavigationToken comprendente regione, vista e istanza oggetto
 -Ripristinate viste MethodMain e MethodEdit
--*Aggiunti ruoli utente per test esterni
--*Migliorata vista ExternalReportEdit
+-Aggiunti ruoli utente per test esterni
+-Migliorata vista ExternalReportEdit
 -*Funzionalità creazione nuovo utente tramite NewUserDialog
+-Aggiunti campi mancanti al dialogo creazione Metodi
 
 v 0.4.0 -- 25/02/2017
 
