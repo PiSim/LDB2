@@ -8,9 +8,10 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="125"/>
+            <RowDefinition Height="125"/>
             <RowDefinition/>
-            <RowDefinition/>
+            <RowDefinition Height="125"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -94,8 +95,8 @@
         </Grid>
         
         <GroupBox Header="Progetto"
-                  Grid.Column="1"
-                  Grid.Row="0"
+                  Grid.Column="0"
+                  Grid.Row="1"
                   Height="Auto">
             <Grid DataContext="{Binding Project}">
                 <Grid.ColumnDefinitions>
@@ -140,8 +141,8 @@
         </GroupBox>
 
         <GroupBox Header="Prove:" 
-                  Grid.Column="0"
-                  Grid.Row="1">
+                  Grid.Column="1"
+                  Grid.Row="0">
             <TextBox Text="{Binding Path=Description}"
                      TextWrapping="Wrap"
                      AcceptsReturn="True"/>
@@ -153,10 +154,59 @@
                      TextWrapping="Wrap"
                      AcceptsReturn="True"/>
         </GroupBox>
-        <GroupBox Header="File"
+        
+        <GroupBox Header="Batch Inviati"
                   Grid.ColumnSpan="2"
                   Grid.Column="0"
                   Grid.Row="2">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                
+                <ListView ItemsSource="{Binding Path=Batches}" 
+                          SelectedItem="{Binding Path=SelectedBatch, Mode=TwoWay}"
+                          Grid.Column="0"
+                          Grid.Row="0"
+                          Grid.RowSpan="4"
+                          Margin="5>
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Numero" 
+                                            DisplayMemberBinding="{Binding Number}"/>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+                <Button Content="Apri" 
+                        Command="{Binding Path=OpenBatchCommand}" 
+                        Grid.Column="1"
+                        Grid.Row="0"
+                        Margin="5"/>
+                <Button Content="Aggiungi" 
+                        Command="{Binding Path=AddBatchCommand}" 
+                        Grid.Column="1"
+                        Grid.Row="1"
+                        Margin="5"/>
+                <Button Content="Rimuovi" 
+                        Command="{Binding Path=RemoveBatchCommand}" 
+                        Grid.Column="1"
+                        Grid.Row="2"
+                        Margin="5"/>
+            </Grid>
+        </GroupBox>
+        
+        <GroupBox Header="File"
+                  Grid.ColumnSpan="2"
+                  Grid.Column="0"
+                  Grid.Row="3">
             <Grid>
                 <ListView ItemsSource="{Binding Path=ReportFiles}" 
                           SelectedItem="{Binding Path=SelectedFile, Mode=TwoWay}"
