@@ -114,8 +114,8 @@ namespace Specifications.ViewModels
             _setCurrent = new DelegateCommand(
                 () =>
                 {
-                    _selectedIssue.IsCurrent = true;
                     _methodInstance.Standard.CurrentIssue.IsCurrent = false;
+                    _selectedIssue.IsCurrent = true;
                     _methodInstance.Standard.CurrentIssue = _selectedIssue;
                 },
                 () => _selectedIssue != null
@@ -125,6 +125,11 @@ namespace Specifications.ViewModels
         public DelegateCommand AddFileCommand
         {
             get { return _addFile; }
+        }
+        
+        public DelegateCommand AddIssueCommand
+        {
+            get { return _addIssue; }
         }
         
         public DelegateCommand AddMeasurementCommand
