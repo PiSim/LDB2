@@ -15,10 +15,10 @@
 -Migliorata vista ExternalReportEdit
 -*Funzionalità creazione nuovo utente tramite NewUserDialog
 -Aggiunti campi mancanti al dialogo creazione Metodi
--*Aggiunta FK methodmeasurementID(method_measurements) alla tabella sub_requirements
+-Aggiunta FK methodmeasurementID(method_measurements) alla tabella sub_requirements
 -*Implementata aggiunta/rimozione a cascata dei sub_requirements alla creazione/rimozione di method_measurements
 -*Rinominata entità e tabella method_measurements in SubMethod 
--*Rimossa FK taskID (task) da tabella report
+-Rimossa FK taskID (task) da tabella report
 -*Aggiunte colonne dettagli alla lista report nella vista ProjectEdit
 -*Aggiunte colonne dettagli alla lista report nella vista SpecificationEdit
 -*Aggiunte colonne dettagli alla lista report nella vista ReportMain
@@ -26,7 +26,11 @@
 -*Funzionalità apertura report esterno da progetto
 -*Abbozzo videata utente con lista report e filtro per quelli in sospeso
 -*Vista per "Lista Report????"
--*Sostituita FK sub_requirementID (sub_tests) con colonna "Nome"
+-Sostituita FK sub_requirementID (sub_tests) con colonna "Nome"
+-Aggiunto riferimento all'edizione corrente del metodo nelle istanze test
+-*Aggiunta creazione di un'edizione generica alla creazione di un metodo/specifica
+-*Funzionalità apertura report da vista progetti/specifica
+-*Abbozzo videata InstrumentEdit
 
 v 0.4.0 -- 25/02/2017
 
