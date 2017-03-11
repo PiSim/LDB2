@@ -39,11 +39,23 @@ namespace Security
             return Convert.ToBase64String(hashedBytes);
         }
 
-        public User CreateNewUser(string userName, string password)
+        public User CreateNewUser(Person personInstance,
+                                string userName, 
+                                string password)
         {
             User output = new User();
             output.UserName = userName;
             output.HashedPassword = CalculateHash(password, userName);
+            output.PersonID = personInstance.ID;
+
+            foreach (UserRole role in _entities.UserRoles)
+            {
+                UserRoleMapping tempMapping = new UserRoleMapping();
+                tempMapping.UserRole = role;
+                tempMapping.IsSelected = false;
+
+                output.RoleMappings.Add(tempMapping);
+            }
             _entities.Users.Add(output);
             _entities.SaveChanges();
 

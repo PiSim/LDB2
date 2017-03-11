@@ -23,7 +23,7 @@ namespace DBManager
         }
     
         public int ID { get; private set; }
-        public int IsMain { get; set; }
+        public bool IsMain { get; set; }
         public string Name { get; set; }
         public int SpecificationID { get; private set; }
     

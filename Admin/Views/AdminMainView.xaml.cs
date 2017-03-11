@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Practices.Prism.Mvvm;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,11 +19,10 @@ namespace Admin.Views
     /// <summary>
     /// Interaction logic for AdminMainView.xaml
     /// </summary>
-    public partial class AdminMainView : UserControl
+    public partial class AdminMain : UserControl, IView
     {
-        public AdminMainView(ServiceProvider services)
+        public AdminMain()
         {
-            DataContext = new ViewModels.AdminMainViewModel(services);
             InitializeComponent();
         }
     }

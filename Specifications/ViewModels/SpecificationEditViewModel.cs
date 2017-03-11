@@ -115,7 +115,7 @@ namespace Specifications.ViewModels
                 () =>
                 {
                     SpecificationVersion temp = new SpecificationVersion();
-                    temp.IsMain = 0;
+                    temp.IsMain = false;
                     temp.Name = "Nuova versione";
 
                     _instance.SpecificationVersions.Add(temp);
@@ -276,7 +276,7 @@ namespace Specifications.ViewModels
 
         public SpecificationVersion MainVersion
         {
-            get { return _instance.SpecificationVersions.First(ver => ver.IsMain == 1); }
+            get { return _instance.SpecificationVersions.First(ver => ver.IsMain); }
         }
 
         public ObservableCollection<Requirement> MainVersionRequirements
@@ -336,7 +336,7 @@ namespace Specifications.ViewModels
                 _selectedControlPlan = value;
 
                 _controlPlanItemsList = new List<ControlPlanItemWrapper>();
-                foreach (Requirement rr in _instance.SpecificationVersions.First(sve => sve.IsMain==1).Requirements)
+                foreach (Requirement rr in _instance.SpecificationVersions.First(sve => sve.IsMain).Requirements)
                     _controlPlanItemsList.Add(new ControlPlanItemWrapper(_selectedControlPlan, rr));
 
                 OnPropertyChanged("SelectedControlPlan");
@@ -391,7 +391,7 @@ namespace Specifications.ViewModels
 
         public bool SelectedVersionIsNotMain
         {
-            get { return !(_selectedVersion.IsMain == 1); }
+            get { return !_selectedVersion.IsMain; }
         }
 
         public Method SelectedToAdd

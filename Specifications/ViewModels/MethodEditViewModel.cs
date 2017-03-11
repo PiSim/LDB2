@@ -19,8 +19,8 @@ namespace Specifications.ViewModels
         private DelegateCommand _addFile, _addIssue, _addMeasurement, _openFile, _removeFile, _removeIssue, _removeMeasurement, _setCurrent;
         private EventAggregator _eventAggregator;
         private Method _methodInstance;
-        private MethodMeasurement _selectedMeasurement;
-        private ObservableCollection<MethodMeasurement>_measurementList;
+        private SubMethod _selectedMeasurement;
+        private ObservableCollection<SubMethod>_measurementList;
         private ObservableCollection<StandardIssue> _issueList;
         private StandardIssue _selectedIssue;
         private StandardFile _selectedFile;
@@ -71,12 +71,20 @@ namespace Specifications.ViewModels
             _addMeasurement = new DelegateCommand(
                 () => 
                 {
-                    MethodMeasurement tempMea = new MethodMeasurement();
+                    SubMethod tempMea = new SubMethod();
                     tempMea.Name = "Nuova Prova";
                     tempMea.UM = "";
-                    Measurements.Add(tempMea);
 
-                    _methodInstance.Measurements.Add(tempMea);
+                    foreach (Requirement req in MethodInstance.Requirements)
+                    {
+                        SubRequirement tempSR = new SubRequirement();
+                        tempSR.RequiredValue = "";
+                        tempMea.SubRequirements.Add(tempSR);
+                        req.SubRequirements.Add(tempSR);
+                    }
+                    
+                    Measurements.Add(tempMea);                   
+                    _methodInstance.SubMethods.Add(tempMea);
                 });
 
             _openFile = new DelegateCommand(
@@ -106,6 +114,9 @@ namespace Specifications.ViewModels
             _removeMeasurement = new DelegateCommand(
                 () => 
                 {
+                    if (SelectedMeasurement.SubRequirements.Any())
+                        throw new NotImplementedException();
+
                     Measurements.Remove(SelectedMeasurement);
                     SelectedMeasurement = null;
                 },
@@ -162,7 +173,7 @@ namespace Specifications.ViewModels
             set
             {
                 _methodInstance = value;
-                Measurements = new ObservableCollection<MethodMeasurement>(_methodInstance.Measurements);
+                Measurements = new ObservableCollection<SubMethod>(_methodInstance.SubMethods);
                 IssueList = new ObservableCollection<StandardIssue>(_methodInstance.Standard.StandardIssues);
                 OnPropertyChanged("Name");
                 OnPropertyChanged("Oem");
@@ -172,7 +183,7 @@ namespace Specifications.ViewModels
             }
         }
 
-        public ObservableCollection<MethodMeasurement> Measurements
+        public ObservableCollection<SubMethod> Measurements
         {
             get 
             { 
@@ -258,7 +269,7 @@ namespace Specifications.ViewModels
             }
         }
         
-        public MethodMeasurement SelectedMeasurement
+        public SubMethod SelectedMeasurement
         {
             get 
             {

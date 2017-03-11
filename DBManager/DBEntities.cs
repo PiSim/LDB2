@@ -23,7 +23,7 @@ namespace DBManager
                 SubRequirement tempSub = new SubRequirement();
                 
                 tempSub.Requirement = output;
-                tempSub.Name = subReq.Name;
+                tempSub.SubMethod = subReq.SubMethod;
                 tempSub.RequiredValue = subReq.RequiredValue;
                 
                 output.SubRequirements.Add(tempSub);
@@ -42,25 +42,25 @@ namespace DBManager
             tempReq.Description = "";
             tempReq.Position = 0;
             
-            foreach (MethodMeasurement measure in method.Measurements)
+            foreach (SubMethod measure in method.SubMethods)
             {
                 SubRequirement tempSub = new SubRequirement();
-                tempSub.Name = measure.Name;
+                tempSub.SubMethod = measure;
                 tempReq.SubRequirements.Add(tempSub);
             }
 
-            specification.SpecificationVersions.First(ver => ver.IsMain == 1).Requirements.Add(tempReq);
+            specification.SpecificationVersions.First(ver => ver.IsMain).Requirements.Add(tempReq);
         }
         
         public List<Requirement> GenerateRequirementList(SpecificationVersion version)
         {
-            if (version.IsMain == 1)
+            if (version.IsMain)
                 return new List<Requirement>(version.Requirements);
 
             else
             {
                 List<Requirement> output = new List<Requirement>(
-                    version.Specification.SpecificationVersions.First(sv => sv.IsMain == 1).Requirements);
+                    version.Specification.SpecificationVersions.First(sv => sv.IsMain).Requirements);
                 
                 foreach (Requirement requirement in version.Requirements)
                 {
@@ -88,7 +88,7 @@ namespace DBManager
                 foreach (SubRequirement subReq in rq.SubRequirements)
                 {
                     tempSub = new SubTest();
-                    tempSub.SubRequirement = subReq;
+                    tempSub.Name = subReq.SubMethod.Name;
                     tempTest.SubTests.Add(tempSub);
                 }
 

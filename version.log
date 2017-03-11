@@ -16,8 +16,9 @@
 -*Funzionalità creazione nuovo utente tramite NewUserDialog
 -Aggiunti campi mancanti al dialogo creazione Metodi
 -Aggiunta FK methodmeasurementID(method_measurements) alla tabella sub_requirements
--*Implementata aggiunta/rimozione a cascata dei sub_requirements alla creazione/rimozione di method_measurements
--*Rinominata entità e tabella method_measurements in SubMethod 
+-Implementata aggiunta/rimozione a cascata dei sub_requirements alla creazione/rimozione di method_measurements
+-Rinominata tabella method_measurements in sub_methods
+-Rinominata entità MethodMeasurements in SubMethod 
 -Rimossa FK taskID (task) da tabella report
 -*Aggiunte colonne dettagli alla lista report nella vista ProjectEdit
 -*Aggiunte colonne dettagli alla lista report nella vista SpecificationEdit

@@ -25,7 +25,7 @@ namespace Specifications
 
         public bool CanSetOverride
         {
-            get { return (_versionInstance.IsMain == 1) ? false : true; }
+            get { return !_versionInstance.IsMain;  }
         }
 
         public bool IsOverride

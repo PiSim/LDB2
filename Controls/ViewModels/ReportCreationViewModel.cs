@@ -123,7 +123,7 @@ namespace Controls.ViewModels
                 else
                     _versionList.Clear();
                     
-                SelectedVersion = _versionList.FirstOrDefault(sv => sv.IsMain == 1);
+                SelectedVersion = _versionList.FirstOrDefault(sv => sv.IsMain);
             }
         }
 

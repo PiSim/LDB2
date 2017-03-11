@@ -163,6 +163,10 @@
       <Project>{31368a5f-9770-4198-bc3d-4996917b4139}</Project>
       <Name>Navigation</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Security\Security.csproj">
+      <Project>{ec7f180a-b306-4d9c-84c8-632bb2e4ae5c}</Project>
+      <Name>Security</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Page Include="Views\AdminMainView.xaml">

@@ -24,7 +24,7 @@ namespace DBManager
         public string FullName { get; set; }
         public string HashedPassword { get; set; }
         public string UserName { get; set; }
-        public Nullable<int> PersonID { get; private set; }
+        public Nullable<int> PersonID { get; set; }
     
         public virtual Person Person { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

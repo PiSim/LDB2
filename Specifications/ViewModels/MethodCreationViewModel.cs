@@ -41,6 +41,13 @@ namespace Specifications.ViewModels
                         tempStd = new Std();
                         tempStd.Name = Name;
                         tempStd.Organization = _selectedOem;
+
+                        StandardIssue tempIssue = new StandardIssue();
+                        tempIssue.IsCurrent = true;
+                        tempIssue.Issue = DateTime.Now.ToShortDateString();
+
+                        tempStd.CurrentIssue = tempIssue;
+                        tempStd.StandardIssues.Add(tempIssue);
                     }
 
                     output.Standard = tempStd;

@@ -1,4 +1,5 @@
-﻿using Prism.Commands;
+﻿using Microsoft.Practices.Unity;
+using Prism.Commands;
 using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
@@ -8,17 +9,32 @@ using System.Threading.Tasks;
 
 namespace Admin.ViewModels
 {
-    internal class AdminMainViewModel : BindableBase
+    public class AdminMainViewModel : BindableBase
     {
-        DelegateCommand _newOrganizationRole, _newUserRole, _runMethod;
+        DelegateCommand _newOrganizationRole, _newUser, _newUserRole, _runMethod;
         private string _name;
+        private UnityContainer _container;
 
-        internal AdminMainViewModel(ServiceProvider services) : base()
+        public AdminMainViewModel(ServiceProvider services,
+                                    UnityContainer container) : base()
         {
+            _container = container;
+
             _newOrganizationRole = new DelegateCommand(
                 () =>
                 {
                     services.AddOrganizationRole(_name);
+                });
+
+            _newUser = new DelegateCommand(
+                () =>
+                {
+                    Views.NewUserDialog dialog = _container.Resolve<Views.NewUserDialog>();
+
+                    if (dialog.ShowDialog() == true)
+                    {
+
+                    }
                 });
 
             _newUserRole = new DelegateCommand(
@@ -51,6 +67,11 @@ namespace Admin.ViewModels
         public DelegateCommand NewUserRoleCommand
         {
             get { return _newUserRole; }
+        }
+
+        public DelegateCommand NewUserCommand
+        {
+            get { return _newUser; }
         }
 
         public DelegateCommand RunMethodCommand

@@ -35,13 +35,24 @@ namespace Specifications.ViewModels
             _confirm = new DelegateCommand(
                 () =>
                 {
-                    Std tempStd = new Std();
-                    tempStd.Name = _name;
-                    tempStd.Organization = _oem;
+                    Std tempStd = _entities.Stds.FirstOrDefault(std => std.Name == _name);
+                    if (tempStd == null)
+                    {
+                        tempStd = new Std();
+                        tempStd.Name = Name;
+                        tempStd.Organization = _oem;
+
+                        StandardIssue tempIssue = new StandardIssue();
+                        tempIssue.IsCurrent = true;
+                        tempIssue.Issue = DateTime.Now.ToShortDateString();
+
+                        tempStd.CurrentIssue = tempIssue;
+                        tempStd.StandardIssues.Add(tempIssue);
+                    }
 
                     SpecificationVersion tempMain = new SpecificationVersion();
                     tempMain.Name = "Generica";
-                    tempMain.IsMain = 1;
+                    tempMain.IsMain = true;
 
                     Specification tempSpec = new Specification();
                     tempSpec.Description = "";

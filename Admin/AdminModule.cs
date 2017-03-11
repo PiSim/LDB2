@@ -20,8 +20,11 @@ namespace Admin
         {
             _container.RegisterType<ServiceProvider>(new ContainerControlledLifetimeManager());
             
-            _container.RegisterType<Object, Views.AdminMainView>
+            _container.RegisterType<Object, Views.AdminMain>
                 (AdminViewNames.AdminMainView);
+
+            _container.RegisterType<ViewModels.AdminMainViewModel>();
+            _container.RegisterType<Views.NewUserDialog>();
 
             _regionManager.RegisterViewWithRegion(Navigation.RegionNames.MainNavigationRegion, 
                                                     typeof(Views.AdminNavigationItem));

@@ -12,13 +12,21 @@ namespace DBManager
     using System;
     using System.Collections.Generic;
     
-    public partial class MethodMeasurement
+    public partial class SubMethod
     {
-        public int ID { get; private set; }
-        public int MethodID { get; private set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public SubMethod()
+        {
+            this.SubRequirements = new HashSet<SubRequirement>();
+        }
+    
+        public int ID { get; set; }
+        public int MethodID { get; set; }
         public string Name { get; set; }
         public string UM { get; set; }
     
         public virtual Method Method { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SubRequirement> SubRequirements { get; set; }
     }
 }
