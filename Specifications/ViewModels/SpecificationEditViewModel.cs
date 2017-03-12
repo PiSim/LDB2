@@ -23,7 +23,7 @@ namespace Specifications.ViewModels
         private EventAggregator _eventAggregator;
         private List<ControlPlanItemWrapper> _controlPlanItemsList;
         private Method _selectedToAdd;
-        private ObservableCollection<RequirementWrapper> _requirementList;
+        private List<RequirementWrapper> _requirementList;
         private ObservableCollection<SpecificationVersion> _versionList;
         private ObservableCollection<StandardIssue> _issueList;
         private Property _filterProperty;
@@ -35,14 +35,9 @@ namespace Specifications.ViewModels
         private StandardIssue _selectedIssue;
 
         public SpecificationEditViewModel(DBEntities entities,
-                                            EventAggregator aggregator,
-                                            Specification instance) 
+                                            EventAggregator aggregator) 
             : base()
         {
-            if (instance == null)
-                throw new NullReferenceException();
-
-            _requirementList = new ObservableCollection<RequirementWrapper>();
             _entities = entities;
             _eventAggregator = aggregator;
 
@@ -51,11 +46,6 @@ namespace Specifications.ViewModels
                 {
                     _entities.SaveChanges();
                 });
-
-            _instance = _entities.Specifications.FirstOrDefault(spec => spec.ID == instance.ID);
-
-            _issueList = new ObservableCollection<StandardIssue>(_instance.Standard.StandardIssues);
-            _versionList = new ObservableCollection<SpecificationVersion>(_instance.SpecificationVersions);
 
             _addControlPlan = new DelegateCommand(
                 () =>
@@ -221,12 +211,24 @@ namespace Specifications.ViewModels
 
         public List<ControlPlan> ControlPlanList
         {
-            get { return new List<ControlPlan>(_instance.ControlPlans); }
+            get
+            {
+                if (_instance == null)
+                    return null;
+
+                return new List<ControlPlan>(_instance.ControlPlans);
+            }
         }
 
         public string Description
         {
-            get { return _instance.Description; }
+            get
+            {
+                if (_instance == null)
+                    return null;
+
+                return _instance.Description;
+            }
             set { _instance.Description = value; }
         }
         
@@ -263,11 +265,6 @@ namespace Specifications.ViewModels
                         _entities.Methods.Where(mtd => mtd.Property.ID == FilterProperty.ID));
             }
         }
-
-        public Specification Instance
-        {
-            get { return _instance; }
-        }
         
         public ObservableCollection<StandardIssue> IssuesList
         {
@@ -276,12 +273,23 @@ namespace Specifications.ViewModels
 
         public SpecificationVersion MainVersion
         {
-            get { return _instance.SpecificationVersions.First(ver => ver.IsMain); }
+            get
+            {
+                if (_instance == null)
+                    return null;
+
+                return _instance.SpecificationVersions.First(ver => ver.IsMain);
+            }
         }
 
         public ObservableCollection<Requirement> MainVersionRequirements
         {
-            get { return new ObservableCollection<Requirement>(MainVersion.Requirements); }
+            get
+            {
+                if (MainVersion == null)
+                    return null;
+                return new ObservableCollection<Requirement>(MainVersion.Requirements);
+            }
         }
 
         public DelegateCommand OpenFileCommand
@@ -318,12 +326,15 @@ namespace Specifications.ViewModels
         {
             get
             {
+                if(_instance == null)
+                    return null;
+
                 return new List<Report>(_entities.Reports.Where
                     (rep => rep.SpecificationVersion.Specification.ID == _instance.ID));
             }
         }
 
-        public ObservableCollection<RequirementWrapper> RequirementList
+        public List<RequirementWrapper> RequirementList
         {
             get { return _requirementList; }
         }
@@ -382,10 +393,14 @@ namespace Specifications.ViewModels
             {
                 _selectedVersion = value;
                 OnPropertyChanged("SelectedVersionIsNotMain");
-                List<Requirement> tempReqList = _entities.GenerateRequirementList(_selectedVersion);
-                _requirementList.Clear();
-                foreach (Requirement rr in tempReqList)
-                    _requirementList.Add(new RequirementWrapper(rr, _selectedVersion, _entities));
+                if (_selectedVersion != null)
+                {
+                    List<Requirement> tempReqList = _entities.GenerateRequirementList(_selectedVersion);
+                    _requirementList = new List<RequirementWrapper>();
+                    foreach (Requirement rr in tempReqList)
+                        _requirementList.Add(new RequirementWrapper(rr, _selectedVersion, _entities));
+                    OnPropertyChanged("RequirementList");
+                }
             }
         }
 
@@ -415,6 +430,24 @@ namespace Specifications.ViewModels
             }
         }
 
+        public Specification SpecificationInstance
+        {
+            get { return _instance; }
+            set
+            {
+                _instance = _entities.Specifications.FirstOrDefault(spec => spec.ID == value.ID);
+                _issueList = new ObservableCollection<StandardIssue>(_instance.Standard.StandardIssues);
+                _versionList = new ObservableCollection<SpecificationVersion>(_instance.SpecificationVersions);
+
+                OnPropertyChanged("ControlPlanList");
+                OnPropertyChanged("MainVersion");
+                OnPropertyChanged("MainVersionRequirements");
+                OnPropertyChanged("ReportList");
+                OnPropertyChanged("Standard");
+                OnPropertyChanged("VersionList");
+            }
+        }
+
         public DelegateCommand SetCurrentCommand
         {
             get { return _setCurrent; }
@@ -424,6 +457,9 @@ namespace Specifications.ViewModels
         {
             get
             {
+                if (_instance == null)
+                    return null;
+
                 return _instance.Standard.Organization.Name + " " +
                   _instance.Standard.Name;
             }
@@ -431,7 +467,13 @@ namespace Specifications.ViewModels
 
         public List<SpecificationVersion> VersionList
         {
-            get { return new List<SpecificationVersion>(_instance.SpecificationVersions); }
+            get
+            {
+                if (_instance == null)
+                    return null;
+
+                return new List<SpecificationVersion>(_instance.SpecificationVersions);
+            }
         }
     }
 }

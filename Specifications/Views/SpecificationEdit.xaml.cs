@@ -1,4 +1,6 @@
 ﻿using DBManager;
+using Infrastructure.Events;
+using Microsoft.Practices.Prism.Mvvm;
 using Prism.Events;
 using Prism.Regions;
 using System;
@@ -16,19 +18,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Projects.Views
+namespace Specifications.Views
 {
-    
-    public partial class ProjectInfoView : UserControl, INavigationAware
+    /// <summary>
+    /// Interaction logic for SpecificationEditView.xaml
+    /// </summary>
+    public partial class SpecificationEdit : UserControl, INavigationAware, IView
     {
-        private DBEntities _entities;
-        private EventAggregator _aggregator;
 
-        public ProjectInfoView(DBEntities entities,
-                                EventAggregator aggregator)
+        public SpecificationEdit()
         {
-            _aggregator = aggregator;
-            _entities = entities;
             InitializeComponent();
         }
         
@@ -44,11 +43,8 @@ namespace Projects.Views
 
         public void OnNavigatedTo(NavigationContext ncontext)
         {
-            ViewModels.ProjectInfoViewModel viewModel =
-                new ViewModels.ProjectInfoViewModel(_entities,
-                                                    _aggregator,
-                                                    ncontext.Parameters["ObjectInstance"] as Project);
-            DataContext = viewModel;
+            (DataContext as ViewModels.SpecificationEditViewModel).SpecificationInstance 
+                = ncontext.Parameters["ObjectInstance"] as Specification;
         }
     }
 }

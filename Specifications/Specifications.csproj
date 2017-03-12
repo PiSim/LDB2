@@ -142,8 +142,8 @@
     <Compile Include="Views\SpecificationCreationDialog.xaml.cs">
       <DependentUpon>SpecificationCreationDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\SpecificationEditView.xaml.cs">
-      <DependentUpon>SpecificationEditView.xaml</DependentUpon>
+    <Compile Include="Views\SpecificationEdit.xaml.cs">
+      <DependentUpon>SpecificationEdit.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SpecificationMain.xaml.cs">
       <DependentUpon>SpecificationMain.xaml</DependentUpon>
@@ -207,7 +207,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\SpecificationEditView.xaml">
+    <Page Include="Views\SpecificationEdit.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

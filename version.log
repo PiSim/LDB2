@@ -13,23 +13,23 @@
 -Ripristinate viste MethodMain e MethodEdit
 -Aggiunti ruoli utente per test esterni
 -Migliorata vista ExternalReportEdit
--*Funzionalità creazione nuovo utente tramite NewUserDialog
+-Funzionalità creazione nuovo utente tramite NewUserDialog
 -Aggiunti campi mancanti al dialogo creazione Metodi
 -Aggiunta FK methodmeasurementID(method_measurements) alla tabella sub_requirements
 -Implementata aggiunta/rimozione a cascata dei sub_requirements alla creazione/rimozione di method_measurements
 -Rinominata tabella method_measurements in sub_methods
 -Rinominata entità MethodMeasurements in SubMethod 
 -Rimossa FK taskID (task) da tabella report
--*Aggiunte colonne dettagli alla lista report nella vista ProjectEdit
+-Sostituita lista report con Regione ReportListRegion nella vista ProjectInfo
 -*Aggiunte colonne dettagli alla lista report nella vista SpecificationEdit
 -*Aggiunte colonne dettagli alla lista report nella vista ReportMain
 -*Aggiunte colonne dettagli alla lista report nella vista Batchinfo
 -*Funzionalità apertura report esterno da progetto
 -*Abbozzo videata utente con lista report e filtro per quelli in sospeso
--*Vista per "Lista Report????"
+-Implementata vista controllo condivisa per "Lista Report"
 -Sostituita FK sub_requirementID (sub_tests) con colonna "Nome"
 -Aggiunto riferimento all'edizione corrente del metodo nelle istanze test
--*Aggiunta creazione di un'edizione generica alla creazione di un metodo/specifica
+-Aggiunta creazione di un'edizione generica alla creazione di un metodo/specifica
 -*Funzionalità apertura report da vista progetti/specifica
 -*Abbozzo videata InstrumentEdit
 

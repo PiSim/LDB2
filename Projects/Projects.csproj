@@ -123,8 +123,8 @@
     <Compile Include="Views\ProjectCreationDialog.xaml.cs">
       <DependentUpon>ProjectCreationDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\ProjectInfoView.xaml.cs">
-      <DependentUpon>ProjectInfoView.xaml</DependentUpon>
+    <Compile Include="Views\ProjectInfo.xaml.cs">
+      <DependentUpon>ProjectInfo.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ProjectMainView.xaml.cs">
       <DependentUpon>ProjectMainView.xaml</DependentUpon>
@@ -172,7 +172,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\ProjectInfoView.xaml">
+    <Page Include="Views\ProjectInfo.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

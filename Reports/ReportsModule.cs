@@ -25,6 +25,13 @@ namespace Reports
             _container.RegisterType<Object, Views.ExternalReportMainView>(ViewNames.ExternalReportMainView);
             _container.RegisterType<Object, Views.ExternalReportEditView>(ViewNames.ExternalReportEditView);
 
+            _regionManager.RegisterViewWithRegion(Navigation.RegionNames.MethodReportListRegion,
+                                                typeof(Views.ReportList));
+            _regionManager.RegisterViewWithRegion(Navigation.RegionNames.ProjectReportListRegion,
+                                                typeof(Views.ReportList));
+            _regionManager.RegisterViewWithRegion(Navigation.RegionNames.SpecificationReportListRegion,
+                                                typeof(Views.ReportList));
+
             _regionManager.RegisterViewWithRegion(Navigation.RegionNames.MainNavigationRegion
                                                 , typeof(Views.ExternalReportsNavigationItem));
             _regionManager.RegisterViewWithRegion(Navigation.RegionNames.MainNavigationRegion

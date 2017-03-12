@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace Projects.ViewModels
 {
-    internal class ProjectInfoViewModel : BindableBase
+    public class ProjectInfoViewModel : BindableBase
     {
         private Construction _selectedAssigned, _selectedUnassigned;
         private DBEntities _entities;
@@ -24,22 +24,15 @@ namespace Projects.ViewModels
         private Project _projectInstance;
         private Report _selectedReport;
 
-        internal ProjectInfoViewModel(DBEntities entities,
-                                    EventAggregator aggregator,
-                                    Project instance)
+        public ProjectInfoViewModel(DBEntities entities,
+                                    EventAggregator aggregator)
             : base()
         {
             _entities = entities;
-            _projectInstance = instance;
             
             _eventAggregator = aggregator;
             _eventAggregator.GetEvent<CommitRequested>().Subscribe( () => _entities.SaveChanges() );
             
-            _assignedConstructions = new ObservableCollection<Construction>(_projectInstance.Constructions);
-                
-            _unassignedConstructions = new ObservableCollection<Construction>(
-               _entities.Constructions.Where(cns => cns.Project == null));
-
             _assignConstruction = new DelegateCommand(
                 () => 
                 {
@@ -85,17 +78,31 @@ namespace Projects.ViewModels
         public ObservableCollection<Construction> AssignedConstructions
         {
             get { return _assignedConstructions; }
+            private set
+            {
+                _assignedConstructions = value;
+                OnPropertyChanged("AssignedConstructions");
+            }
         }
         
         public string Description
         {
-            get { return _projectInstance.Description; }
+            get
+            {
+                if (_projectInstance == null)
+                    return null;
+
+                return _projectInstance.Description;
+            }
         }
 
         public List<ExternalReport> ExternalReportList
         {
             get
             {
+                if (_projectInstance == null)
+                    return null;
+
                 return new List<ExternalReport>
                     (_entities.ExternalReports.Where(ext => ext.projectID == _projectInstance.ID));
             }
@@ -103,17 +110,35 @@ namespace Projects.ViewModels
         
         public string LeaderName
         {
-            get { return _projectInstance.Leader.Name; }
+            get
+            {
+                if (_projectInstance == null)
+                    return null;
+
+                return _projectInstance.Leader.Name;
+            }
         }
         
         public string Name
         {
-            get { return _projectInstance.Name; }
+            get
+            {
+                if (_projectInstance == null)
+                    return null;
+
+                return _projectInstance.Name;
+            }
         }
 
         public string OemName
         {
-            get { return _projectInstance.Oem.Name; }
+            get
+            {
+                if (_projectInstance == null)
+                    return null;
+
+                return _projectInstance.Oem.Name;
+            }
         }
 
         public DelegateCommand OpenExternalCommand
@@ -124,6 +149,27 @@ namespace Projects.ViewModels
         public DelegateCommand OpenReportCommand
         {
             get { return _openReport; }
+        }
+
+        public Project ProjectInstance
+        {
+            get { return _projectInstance; }
+            set
+            {
+                _projectInstance = value;
+
+                AssignedConstructions = new ObservableCollection<Construction>(_projectInstance.Constructions);
+
+                UnassignedConstructions = new ObservableCollection<Construction>(
+                   _entities.Constructions.Where(cns => cns.Project == null));
+
+                OnPropertyChanged("Description");
+                OnPropertyChanged("ExternalReportList");
+                OnPropertyChanged("LeaderName");
+                OnPropertyChanged("Name");
+                OnPropertyChanged("OemName");
+                OnPropertyChanged("TaskList");
+            }
         }
 
         public List<Report> ReportList
@@ -171,7 +217,13 @@ namespace Projects.ViewModels
 
         public List<DBManager.Task> TaskList
         {
-            get { return new List<DBManager.Task>(_projectInstance.Tasks); }
+            get
+            {
+                if (_projectInstance == null)
+                    return null;
+
+                return new List<DBManager.Task>(_projectInstance.Tasks);
+            }
         }
         
         public DelegateCommand UnassignConstructionCommand
@@ -182,6 +234,11 @@ namespace Projects.ViewModels
         public ObservableCollection<Construction> UnassignedConstructions
         {
             get { return _unassignedConstructions; }
+            private set
+            {
+                _unassignedConstructions = value;
+                OnPropertyChanged("UnassignedConstructions");
+            }
         }
     }        
 }

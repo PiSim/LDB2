@@ -1,9 +1,11 @@
-﻿<UserControl x:Class="Specifications.Views.SpecificationEditView"
+﻿<UserControl x:Class="Specifications.Views.SpecificationEdit"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Specifications.Views"
+             xmlns:prism="http://prismlibrary.com/"
+             prism:ViewModelLocator.AutoWireViewModel="True"
              mc:Ignorable="d" 
              d:DesignHeight="500" d:DesignWidth="600">
     <Grid>
@@ -197,7 +199,7 @@
                                                     <ListView.ItemTemplate>
                                                         <DataTemplate>
                                                             <StackPanel Orientation="Horizontal">
-                                                                <Label Content="{Binding Name}"/>
+                                                                <Label Content="{Binding SubMethod.Name}"/>
                                                                 <TextBox Text="{Binding RequiredValue, Mode=TwoWay}"/>
                                                             </StackPanel>
                                                         </DataTemplate>
@@ -412,31 +414,9 @@
             <TabItem Header="Progetti">
 
             </TabItem>
-            
+
             <TabItem Header="Report">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition MaxWidth="100"/>
-                    </Grid.ColumnDefinitions>
-                    <ListView ItemsSource="{Binding ReportList}"
-                              SelectedItem="{Binding SelectedReport, Mode=TwoWay}"
-                              Grid.Column="0">
-                        <ListView.View>
-                            <GridView>
-                                <GridViewColumn Header="Numero"
-                                                DisplayMemberBinding="{Binding Number}"/>
-                                <GridViewColumn Header="Batch"
-                                                DisplayMemberBinding="{Binding Batch.Number}"/>
-                            </GridView>
-                        </ListView.View>
-                    </ListView>
-                    <Button Content="Apri"
-                            Command="{Binding OpenReportCommand}"
-                            Grid.Column="1"
-                            VerticalAlignment="Top"
-                            Margin="5,5,5,5"/>
-                </Grid>
+                <ContentControl prism:RegionManager.RegionName="SpecificationReportListRegion"/>
             </TabItem>
         </TabControl>
     </Grid>
