@@ -1,4 +1,6 @@
-﻿using Prism.Modularity;
+﻿using Infrastructure;
+using Microsoft.Practices.Unity;
+using Prism.Modularity;
 using Prism.Regions;
 using System;
 
@@ -6,16 +8,21 @@ namespace User
 {
     public class UserModule : IModule
     {
-        IRegionManager _regionManager;
+        private IRegionManager _regionManager;
+        private UnityContainer _container;
 
-        public UserModule(RegionManager regionManager)
+        public UserModule(RegionManager regionManager,
+                        UnityContainer container)
         {
+            _container = container;
             _regionManager = regionManager;
         }
 
         public void Initialize()
         {
-            throw new NotImplementedException();
+            _container.RegisterType<Object, Views.CurrentUserMain>(UserViewNames.CurrentUserMain);
+
+            _container.RegisterType<ViewModels.CurrentUserMainViewModel>();
         }
     }
 }

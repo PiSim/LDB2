@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Security
 {
-    class DBIdentity : IIdentity
+    public class DBIdentity : IIdentity
     {
         private User _user;
 

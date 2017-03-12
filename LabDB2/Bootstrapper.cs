@@ -136,6 +136,15 @@ namespace LabDB2
                     ModuleType = TaskModuleType.AssemblyQualifiedName,
                     InitializationMode = Prism.Modularity.InitializationMode.OnDemand
                 });
+
+            Type UserModuleType = typeof(User.UserModule);
+            ModuleCatalog.AddModule(
+                new Prism.Modularity.ModuleInfo()
+                {
+                    ModuleName = UserModuleType.Name,
+                    ModuleType = UserModuleType.AssemblyQualifiedName,
+                    InitializationMode = Prism.Modularity.InitializationMode.OnDemand
+                });
         }
 
         protected override DependencyObject CreateShell()
@@ -172,6 +181,7 @@ namespace LabDB2
             moduleManager.LoadModule(typeof(Projects.ProjectsModule).Name);
             moduleManager.LoadModule(typeof(Reports.ReportsModule).Name);
             moduleManager.LoadModule(typeof(Specifications.SpecificationsModule).Name);
+            moduleManager.LoadModule(typeof(User.UserModule).Name);
 
             if (_currentPrincipal.IsInRole(RoleNames.LoadTasks))
                 moduleManager.LoadModule(typeof(Tasks.TasksModule).Name);

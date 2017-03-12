@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Practices.Prism.Mvvm;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,9 +19,9 @@ namespace User.Views
     /// <summary>
     /// Interaction logic for UserMainView.xaml
     /// </summary>
-    public partial class UserMain : UserControl
+    public partial class CurrentUserMain : UserControl, IView
     {
-        public UserMain()
+        public CurrentUserMain()
         {
             InitializeComponent();
         }

@@ -226,6 +226,10 @@
       <Project>{243da195-5ca0-4826-94e8-13b023bab8c6}</Project>
       <Name>Tasks</Name>
     </ProjectReference>
+    <ProjectReference Include="..\User\User.csproj">
+      <Project>{c08f0724-a1a8-490d-be56-2d196b0f877f}</Project>
+      <Name>User</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Vulca.ico" />

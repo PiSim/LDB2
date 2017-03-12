@@ -14,13 +14,20 @@ namespace Controls.ViewModels
 {
     class ToolbarViewModel : Prism.Mvvm.BindableBase
     {
-        private DelegateCommand _navigateBack, _navigateForward, _save;
+        private DelegateCommand _navigateBack, _navigateForward, _openCurrentUserMenu, _save;
         private DelegateCommand<IModuleNavigationTag> _requestNavigation;
         private IEventAggregator _eventAggregator;
 
         public ToolbarViewModel(IEventAggregator eventAggregator) : base()
         {
             _eventAggregator = eventAggregator;
+
+            _openCurrentUserMenu = new DelegateCommand(
+                () =>
+                {
+                    NavigationToken token = new NavigationToken(UserViewNames.CurrentUserMain);
+                    _eventAggregator.GetEvent<NavigationRequested>().Publish(token);
+                });
 
             _navigateBack = new DelegateCommand(
                 () =>
@@ -57,6 +64,11 @@ namespace Controls.ViewModels
         public DelegateCommand NavigateForwardCommand
         {
             get { return _navigateForward; }
+        }
+
+        public DelegateCommand OpenCurrentUserMenuCommand
+        {
+            get { return _openCurrentUserMenu; }
         }
 
         public DelegateCommand<IModuleNavigationTag> RequestNavigationCommand
