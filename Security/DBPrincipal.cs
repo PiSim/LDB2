@@ -16,7 +16,10 @@ namespace Security
         {
             get
             {
-                return (_identity != null) ?? _identity : new DBIdentity();
+                if (_identity == null)
+                    _identity = new DBIdentity();
+                    
+                return _identity;
             }
             set
             {
