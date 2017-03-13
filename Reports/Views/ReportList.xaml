@@ -28,6 +28,7 @@
                     <GridViewColumn Header="Tipo" DisplayMemberBinding="{Binding Category}"/>
                     <GridViewColumn Header="Numero" DisplayMemberBinding="{Binding Number}"/>
                     <GridViewColumn Header="Commessa" DisplayMemberBinding="{Binding Batch.Number}"/>
+                    <GridViewColumn Header="Progetto" DisplayMemberBinding="{Binding Batch.Material.Construction.Project.Name}"/>
                     <GridViewColumn Header="Materiale"
                                     DisplayMemberBinding="{Binding Batch.Material.Construction.Type.Code}"/>
                     <GridViewColumn Header="Linea"
