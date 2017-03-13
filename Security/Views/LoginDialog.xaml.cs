@@ -41,8 +41,9 @@ namespace Security.Views
                 _authenticatedUser = _authenticator.AuthenticateUser
                 (UserNameTextBox.Text, PasswordBox.Password);
 
-                DBPrincipal _currentPrincipal = Thread.CurrentPrincipal as DBPrincipal;
+                DBPrincipal _currentPrincipal = new DBPrincipal();
                 _currentPrincipal.Identity = new DBIdentity(_authenticatedUser);
+                Thread.CurrentPrincipal = _currentPrincipal;
                 DialogResult = true;
             }
             
