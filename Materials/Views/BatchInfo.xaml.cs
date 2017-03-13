@@ -1,4 +1,5 @@
 ﻿using DBManager;
+using Microsoft.Practices.Prism.Mvvm;
 using Microsoft.Practices.Unity;
 using Prism.Events;
 using Prism.Regions;
@@ -22,16 +23,10 @@ namespace Materials.Views
     /// <summary>
     /// Interaction logic for BatchInfoView.xaml
     /// </summary>
-    public partial class BatchInfoView : UserControl, INavigationAware
+    public partial class BatchInfo : UserControl, INavigationAware, IView
     {
-        private EventAggregator _aggregator;
-        private UnityContainer _container;
-        
-        public BatchInfoView(EventAggregator aggregator,
-                            UnityContainer container)
+        public BatchInfo()
         {
-            _aggregator = aggregator;
-            _container = container;
             InitializeComponent();
         }
 
@@ -46,12 +41,9 @@ namespace Materials.Views
         }
 
         public void OnNavigatedTo(NavigationContext ncontext)
-        {
-            ViewModels.BatchInfoViewModel viewModel =
-                new ViewModels.BatchInfoViewModel(ncontext.Parameters["ObjectInstance"] as Batch,
-                                                _aggregator,
-                                                _container);
-            DataContext = viewModel;
+        { 
+            (DataContext as ViewModels.BatchInfoViewModel).BatchInstance 
+                = ncontext.Parameters["ObjectInstance"] as Batch;
         }
     }
 }

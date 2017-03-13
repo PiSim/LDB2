@@ -89,6 +89,8 @@ namespace DBManager
                 {
                     tempSub = new SubTest();
                     tempSub.Name = subReq.SubMethod.Name;
+                    tempSub.Requirement = subReq.RequiredValue;
+                    tempSub.UM = subReq.SubMethod.UM;
                     tempTest.SubTests.Add(tempSub);
                 }
 

@@ -16,25 +16,20 @@ using System.Threading.Tasks;
 
 namespace Materials.ViewModels
 {
-    class BatchInfoViewModel : BindableBase
+    public class BatchInfoViewModel : BindableBase
     {
         private Batch _instance;
         private DelegateCommand _newReport, _openReport;
         private EventAggregator _eventAggregator;
         private List<SamplesWrapper> _samplesList;
         private Report _selectedReport;
-        private UnityContainer _container;
+        private IUnityContainer _container;
 
-        internal BatchInfoViewModel(Batch instance,
-                                    EventAggregator aggregator,
-                                    UnityContainer container) : base()
+        public BatchInfoViewModel(EventAggregator aggregator,
+                                IUnityContainer container) : base()
         {
             _container = container;
             _eventAggregator = aggregator;
-            _instance = instance;
-            _samplesList = new List<SamplesWrapper>();
-            foreach (Sample smp in _instance.Samples)
-                _samplesList.Add(new SamplesWrapper(smp));
                 
             _newReport = new DelegateCommand(
                 () => 
@@ -60,9 +55,33 @@ namespace Materials.ViewModels
                 
         }
 
+        public Batch BatchInstance
+        {
+            get { return _instance; }
+            set
+            {
+                _instance = value;
+
+                _samplesList = new List<SamplesWrapper>();
+                foreach (Sample smp in _instance.Samples)
+                    _samplesList.Add(new SamplesWrapper(smp));
+                OnPropertyChanged("Samples");
+                OnPropertyChanged("Material");
+                OnPropertyChanged("Number");
+                OnPropertyChanged("Project");
+                OnPropertyChanged("ReportList");
+            }
+        }
+
         public Material Material
         {
-            get { return _instance.Material; }
+            get
+            {
+                if (_instance == null)
+                    return null;
+                else
+                    return _instance.Material;
+            }
         }
         
         public DelegateCommand NewReportCommand
@@ -72,7 +91,13 @@ namespace Materials.ViewModels
 
         public string Number
         {
-            get { return _instance.Number; }
+            get
+            {
+                if (_instance == null)
+                    return null;
+                else
+                    return _instance.Number;
+            }
         }
 
         public DelegateCommand OpenReportCommand

@@ -404,6 +404,8 @@
           <Property Name="result" Type="varchar" MaxLength="45" Nullable="false" />
           <Property Name="testID" Type="int" Nullable="false" />
           <Property Name="name" Type="varchar" MaxLength="45" Nullable="false" />
+          <Property Name="requirement" Type="varchar" MaxLength="45" Nullable="false" />
+          <Property Name="um" Type="varchar" MaxLength="45" Nullable="false" />
         </EntityType>
         <EntityType Name="task_items">
           <Key>
@@ -2088,6 +2090,8 @@
           <Property Name="TestID" Type="Int32" Nullable="false" a:SetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="Test" Relationship="Self.test1" FromRole="sub_tests" ToRole="tests" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="Requirement" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="UM" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="Task">
           <Key>
@@ -3909,6 +3913,8 @@
           <EntitySetMapping Name="SubTests">
             <EntityTypeMapping TypeName="labdbModel.SubTest">
               <MappingFragment StoreEntitySet="sub_tests">
+                <ScalarProperty Name="UM" ColumnName="um" />
+                <ScalarProperty Name="Requirement" ColumnName="requirement" />
                 <ScalarProperty Name="Name" ColumnName="name" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Result" ColumnName="result" />

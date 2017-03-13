@@ -2,7 +2,7 @@ using DBManager;
 using System;
 using System.Collections.Generic;
 
-internal class SamplesWrapper
+public class SamplesWrapper
 {
     private Sample _instance;
     private static readonly Dictionary<string,string> _actionDictionary = new Dictionary<string,string>()
@@ -14,7 +14,7 @@ internal class SamplesWrapper
         {"M", "Masterizzato"}
     };
     
-    internal SamplesWrapper(Sample instance)
+    public SamplesWrapper(Sample instance)
     {
         _instance = instance;        
     }

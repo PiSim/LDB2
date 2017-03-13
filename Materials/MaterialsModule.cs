@@ -20,9 +20,11 @@ namespace Materials
 
         public void Initialize()
         {
-            _container.RegisterType<Object, Views.BatchInfoView>(ViewNames.BatchInfoView);
+            _container.RegisterType<Object, Views.BatchInfo>(ViewNames.BatchInfoView);
             _container.RegisterType<Object, Views.BatchMainView>(ViewNames.BatchesView);
             _container.RegisterType<Object, Views.SampleLogView>(ViewNames.SampleLogView);
+
+            _container.RegisterType<ViewModels.BatchInfoViewModel>();
 
             _regionManager.RegisterViewWithRegion(Navigation.RegionNames.MainNavigationRegion, 
                                                 typeof(Views.BatchesNavigationItem));

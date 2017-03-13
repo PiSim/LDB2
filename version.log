@@ -21,17 +21,19 @@
 -Rinominata entità MethodMeasurements in SubMethod 
 -Rimossa FK taskID (task) da tabella report
 -Sostituita lista report con Regione ReportListRegion nella vista ProjectInfo
--*Aggiunte colonne dettagli alla lista report nella vista SpecificationEdit
--*Aggiunte colonne dettagli alla lista report nella vista ReportMain
--*Aggiunte colonne dettagli alla lista report nella vista Batchinfo
+-Sostituita lista report con Regione ReportListRegion nella vista SpecificationEdit
+-*Sostituita lista report con Regione ReportListRegion nella vista ReportMain
+-Sostituita lista report con Regione ReportListRegion nella vista Batchinfo
 -*Funzionalità apertura report esterno da progetto
--*Abbozzo videata utente con lista report e filtro per quelli in sospeso
+-Abbozzo videata utente con lista report e filtro per quelli in sospeso
 -Implementata vista controllo condivisa per "Lista Report"
 -Sostituita FK sub_requirementID (sub_tests) con colonna "Nome"
 -Aggiunto riferimento all'edizione corrente del metodo nelle istanze test
 -Aggiunta creazione di un'edizione generica alla creazione di un metodo/specifica
 -*Funzionalità apertura report da vista progetti/specifica
 -*Abbozzo videata InstrumentEdit
+-Spostata l'istanza DBPrincipal contenente dal Thread al container di Unity
+-Aggiunte le colonne requirement e UM a sub_tests
 
 v 0.4.0 -- 25/02/2017
 

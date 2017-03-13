@@ -126,8 +126,8 @@
     <Compile Include="Views\BatchesNavigationItem.xaml.cs">
       <DependentUpon>BatchesNavigationItem.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\BatchInfoView.xaml.cs">
-      <DependentUpon>BatchInfoView.xaml</DependentUpon>
+    <Compile Include="Views\BatchInfo.xaml.cs">
+      <DependentUpon>BatchInfo.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\BatchMainView.xaml.cs">
       <DependentUpon>BatchMainView.xaml</DependentUpon>
@@ -179,7 +179,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\BatchInfoView.xaml">
+    <Page Include="Views\BatchInfo.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
