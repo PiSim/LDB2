@@ -1,4 +1,5 @@
-﻿using Microsoft.Practices.Unity;
+﻿using Infrastructure;
+using Microsoft.Practices.Unity;
 using Prism.Modularity;
 using Prism.Regions;
 using System;
@@ -26,7 +27,7 @@ namespace Projects
             _container.RegisterType<ViewModels.ProjectInfoViewModel>();
 
             _regionManager.RegisterViewWithRegion
-                (Navigation.RegionNames.MainNavigationRegion , typeof(Views.ProjectsNavigationItem));
+                (RegionNames.MainNavigationRegion , typeof(Views.ProjectsNavigationItem));
         }
     }
 }

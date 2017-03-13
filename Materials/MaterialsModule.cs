@@ -1,4 +1,5 @@
-﻿using Microsoft.Practices.Unity;
+﻿using Infrastructure;
+using Microsoft.Practices.Unity;
 using Prism.Modularity;
 using Prism.Regions;
 using System;
@@ -26,7 +27,7 @@ namespace Materials
 
             _container.RegisterType<ViewModels.BatchInfoViewModel>();
 
-            _regionManager.RegisterViewWithRegion(Navigation.RegionNames.MainNavigationRegion, 
+            _regionManager.RegisterViewWithRegion(RegionNames.MainNavigationRegion, 
                                                 typeof(Views.BatchesNavigationItem));
         }
     }

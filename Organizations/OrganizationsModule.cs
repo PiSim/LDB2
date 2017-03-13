@@ -1,4 +1,5 @@
-﻿using Microsoft.Practices.Unity;
+﻿using Infrastructure;
+using Microsoft.Practices.Unity;
 using Prism.Modularity;
 using Prism.Regions;
 using System;
@@ -21,7 +22,7 @@ namespace Organizations
         {
             _container.RegisterType<Object, Views.OrganizationsMainView>(ViewNames.OrganizationsMainView);
 
-            _regionManager.RegisterViewWithRegion(Navigation.RegionNames.MainNavigationRegion,
+            _regionManager.RegisterViewWithRegion(RegionNames.MainNavigationRegion,
                                                 typeof(Views.OrganizationsNavigationItem));
         }
     }

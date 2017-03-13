@@ -1,4 +1,5 @@
-﻿using Microsoft.Practices.Unity;
+﻿using Infrastructure;
+using Microsoft.Practices.Unity;
 using Prism.Events;
 using Prism.Modularity;
 using Prism.Regions;
@@ -26,20 +27,20 @@ namespace Reports
             _container.RegisterType<Object, Views.ExternalReportMainView>(ViewNames.ExternalReportMainView);
             _container.RegisterType<Object, Views.ExternalReportEditView>(ViewNames.ExternalReportEditView);
 
-            _regionManager.RegisterViewWithRegion(Navigation.RegionNames.BatchReportListRegion,
+            _regionManager.RegisterViewWithRegion(RegionNames.BatchReportListRegion,
                                                 typeof(Views.ReportList));
-            _regionManager.RegisterViewWithRegion(Navigation.RegionNames.CurrentUserMainReportListRegion,
+            _regionManager.RegisterViewWithRegion(RegionNames.CurrentUserMainReportListRegion,
                                                 typeof(Views.ReportList));
-            _regionManager.RegisterViewWithRegion(Navigation.RegionNames.MethodReportListRegion,
+            _regionManager.RegisterViewWithRegion(RegionNames.MethodReportListRegion,
                                                 typeof(Views.ReportList));
-            _regionManager.RegisterViewWithRegion(Navigation.RegionNames.ProjectReportListRegion,
+            _regionManager.RegisterViewWithRegion(RegionNames.ProjectReportListRegion,
                                                 typeof(Views.ReportList));
-            _regionManager.RegisterViewWithRegion(Navigation.RegionNames.SpecificationReportListRegion,
+            _regionManager.RegisterViewWithRegion(RegionNames.SpecificationReportListRegion,
                                                 typeof(Views.ReportList));
 
-            _regionManager.RegisterViewWithRegion(Navigation.RegionNames.MainNavigationRegion
+            _regionManager.RegisterViewWithRegion(RegionNames.MainNavigationRegion
                                                 , typeof(Views.ExternalReportsNavigationItem));
-            _regionManager.RegisterViewWithRegion(Navigation.RegionNames.MainNavigationRegion
+            _regionManager.RegisterViewWithRegion(RegionNames.MainNavigationRegion
                                                 , typeof(Views.ReportsNavigationItem));
         }
     }

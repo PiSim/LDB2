@@ -1,4 +1,5 @@
-﻿using Microsoft.Practices.Unity;
+﻿using Infrastructure;
+using Microsoft.Practices.Unity;
 using Prism.Modularity;
 using Prism.Regions;
 using System;
@@ -20,7 +21,7 @@ namespace Tasks
         {
             _container.RegisterType<Object, Views.TaskMainView>(ViewNames.TaskMainView);
             
-            _regionManager.RegisterViewWithRegion(Navigation.RegionNames.MainNavigationRegion
+            _regionManager.RegisterViewWithRegion(RegionNames.MainNavigationRegion
                                                 , typeof(Views.TaskNavigationItem));
         }
     }

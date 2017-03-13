@@ -1,4 +1,5 @@
-﻿using Microsoft.Practices.Unity;
+﻿using Infrastructure;
+using Microsoft.Practices.Unity;
 using Prism.Modularity;
 using Prism.Regions;
 using System;
@@ -26,7 +27,7 @@ namespace Admin
             _container.RegisterType<ViewModels.AdminMainViewModel>();
             _container.RegisterType<Views.NewUserDialog>();
 
-            _regionManager.RegisterViewWithRegion(Navigation.RegionNames.MainNavigationRegion, 
+            _regionManager.RegisterViewWithRegion(RegionNames.MainNavigationRegion, 
                                                     typeof(Views.AdminNavigationItem));
         }
     }

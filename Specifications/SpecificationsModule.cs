@@ -1,5 +1,5 @@
 ﻿using Microsoft.Practices.Unity;
-using Navigation;
+using Infrastructure;
 using Prism.Modularity;
 using Prism.Regions;
 using System;

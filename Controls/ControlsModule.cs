@@ -1,4 +1,5 @@
-﻿using Microsoft.Practices.Unity;
+﻿using Infrastructure;
+using Microsoft.Practices.Unity;
 using Prism.Modularity;
 using Prism.Regions;
 using System;
@@ -23,7 +24,7 @@ namespace Controls
             _container.RegisterType<Views.ProjectPickerDialog>();
             _container.RegisterType<Views.ReportCreationDialog>();
             _container.RegisterType<Views.TaskCreationDialog>();
-            _regionManager.RegisterViewWithRegion(Navigation.RegionNames.ToolbarRegion, 
+            _regionManager.RegisterViewWithRegion(RegionNames.ToolbarRegion, 
                                                 typeof(Views.ToolbarView));
         }
     }
