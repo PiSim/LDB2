@@ -1,4 +1,5 @@
 ﻿using DBManager;
+using Microsoft.Practices.Unity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,11 +22,14 @@ namespace Security.Views
     public partial class LoginDialog : Window
     {
         private AuthenticationService _authenticator;
+        private IUnityContainer _container;
         private User _authenticatedUser;
 
-        public LoginDialog(AuthenticationService authenticator)
+        public LoginDialog(AuthenticationService authenticator,
+                            IUnityContainer container)
         {
             _authenticator = authenticator;
+            _container = container;
             InitializeComponent();
         }
 
@@ -43,7 +47,8 @@ namespace Security.Views
 
                 DBPrincipal _currentPrincipal = new DBPrincipal();
                 _currentPrincipal.Identity = new DBIdentity(_authenticatedUser);
-                Thread.CurrentPrincipal = _currentPrincipal;
+                _container.RegisterInstance(typeof(DBPrincipal),
+                                            _currentPrincipal);
                 DialogResult = true;
             }
             

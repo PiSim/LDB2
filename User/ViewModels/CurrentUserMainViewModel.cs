@@ -11,24 +11,23 @@ namespace User.ViewModels
 {
     public class CurrentUserMainViewModel : BindableBase
     {
-        public CurrentUserMainViewModel() : base()
-        { 
-            
-        }
+        private DBPrincipal _principal;
+        private DBIdentity _identity;
 
-        private DBManager.User CurrentUser
+        public CurrentUserMainViewModel(DBPrincipal principal) : base()
         {
-            get { return (Thread.CurrentPrincipal as  DBPrincipal).CurrentUser;  }
+            _principal = principal;
+            _identity = principal.Identity as DBIdentity;
         }
 
         private string Name
         {
-            get { return CurrentUser.Person.Name; }
+            get { return _identity.User.Person.Name; }
         }
 
         public List<Report> ReportList
         {
-            get { return new List<Report>(CurrentUser.Person.Reports); }
+            get { return new List<Report>(_identity.User.Person.Reports); }
         }
     }
 }

@@ -17,7 +17,6 @@ namespace Security
         {
             _container.RegisterType<AuthenticationService>();
             _container.RegisterType<Views.LoginDialog>();
-            _container.RegisterType<DBPrincipal>();
         }
     }
 }

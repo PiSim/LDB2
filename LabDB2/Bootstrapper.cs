@@ -170,7 +170,7 @@ namespace LabDB2
         {
             IModuleManager moduleManager = Container.Resolve<IModuleManager>();
 
-            DBPrincipal _currentPrincipal = Thread.CurrentPrincipal as DBPrincipal;
+            DBPrincipal _currentPrincipal = Container.Resolve<DBPrincipal>();
 
             if (_currentPrincipal.IsInRole(RoleNames.Admin))
                 moduleManager.LoadModule(typeof(Admin.AdminModule).Name);
