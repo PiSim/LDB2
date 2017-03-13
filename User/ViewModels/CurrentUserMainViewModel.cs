@@ -18,7 +18,7 @@ namespace User.ViewModels
 
         private DBManager.User CurrentUser
         {
-            get { return null;  }
+            get { return (Thread.CurrentPrincipal.Identity as DBIdentity).User;  }
         }
 
         private string Name
