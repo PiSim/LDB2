@@ -16,7 +16,7 @@ namespace Security
         {
             get
             {
-                return _identity ?? new DBIdentity();
+                return (_identity != null) ?? _identity : new DBIdentity();
             }
             set
             {
@@ -32,6 +32,11 @@ namespace Security
         public Person CurrentPerson
         {
             get { return _identity.User.Person; }
+        }
+        
+        public User CurrentUser
+        {
+            get { return _identity.User; }
         }
     }
 }
