@@ -17,20 +17,28 @@
                                       Grid.Column="0">
             <ListView.View>
                 <GridView>
+                    <GridViewColumn Header="Completo">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox IsChecked="{Binding IsComplete}"
+                                          IsEnabled="False"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
                     <GridViewColumn Header="Tipo" DisplayMemberBinding="{Binding Category}"/>
                     <GridViewColumn Header="Numero" DisplayMemberBinding="{Binding Number}"/>
                     <GridViewColumn Header="Commessa" DisplayMemberBinding="{Binding Batch.Number}"/>
                     <GridViewColumn Header="Materiale"
-                                    DisplayMemberBinding="{Binding Batch.Material.Construction.MaterialType.Code}"/>
+                                    DisplayMemberBinding="{Binding Batch.Material.Construction.Type.Code}"/>
                     <GridViewColumn Header="Linea"
                                     DisplayMemberBinding="{Binding Batch.Material.Construction.Line}"/>
                     <GridViewColumn Header="Aspetto"
                                     DisplayMemberBinding="{Binding Batch.Material.Construction.Aspect.Code}"/>
                     <GridViewColumn Header="Ricetta"
                                     DisplayMemberBinding="{Binding Batch.Material.Recipe.Code}"/>
-                    <GridViewColumn Header="Specifica" DisplayMemberBinding="{Binding Specification.Standard.Name}"/>
-                    <GridViewColumn Header="Versione" DisplayMemberBinding="{Binding Specification.Label}"/>
-                    <GridViewColumn Header="Descrizione" DisplayMemberBinding="{Binding Specification.Description}"/>
+                    <GridViewColumn Header="Specifica" DisplayMemberBinding="{Binding SpecificationVersion.Specification.Standard.Name}"/>
+                    <GridViewColumn Header="Versione" DisplayMemberBinding="{Binding SpecificationVersion.Name}"/>
+                    <GridViewColumn Header="Descrizione" DisplayMemberBinding="{Binding SpecificationVersion.Specification.Description}"/>
                     <GridViewColumn Header="Autore" DisplayMemberBinding="{Binding Author.Name}"/>
                 </GridView>
             </ListView.View>
