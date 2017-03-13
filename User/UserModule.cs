@@ -6,13 +6,14 @@ using System;
 
 namespace User
 {
+    [Module(ModuleName = "UserModule")]
     public class UserModule : IModule
     {
         private IRegionManager _regionManager;
-        private UnityContainer _container;
+        private IUnityContainer _container;
 
-        public UserModule(RegionManager regionManager,
-                        UnityContainer container)
+        public UserModule(IRegionManager regionManager,
+                        IUnityContainer container)
         {
             _container = container;
             _regionManager = regionManager;

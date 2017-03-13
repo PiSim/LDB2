@@ -18,7 +18,7 @@
                Margin="5"/>
         <TabControl Grid.Row="1">
             <TabItem Header="Report">
-                <ContentControl prism:RegionManager.RegionName="CurrentUserMainReportList"/>
+                <ContentControl prism:RegionManager.RegionName="CurrentUserMainReportListRegion"/>
             </TabItem>
         </TabControl>
     </Grid>

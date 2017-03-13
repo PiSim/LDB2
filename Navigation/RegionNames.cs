@@ -8,6 +8,7 @@ namespace Navigation
 {
     public class RegionNames
     {
+        public static string CurrentUserMainReportListRegion { get { return "CurrentUserMainReportListRegion"; } }
         public static string MainNavigationRegion { get { return "MainNavigationRegion"; } }
         public static string MainRegion { get { return "MainRegion"; } }
         public static string MainUserReportListRegion { get { return "MainUserReportListRegion"; } }
