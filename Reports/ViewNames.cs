@@ -10,7 +10,7 @@ namespace Reports
     {
         public static string ExternalReportMainView { get { return "ExternalReportMainView"; } }
         public static string ExternalReportEditView { get { return "ExternalReportEditView"; } }
-        public static string ReportMainView { get { return "ReportsView"; } }
+        public static string ReportMain { get { return "ReportsView"; } }
         public static string ReportEditView { get { return "ReportEditView"; } }
     }
 }
