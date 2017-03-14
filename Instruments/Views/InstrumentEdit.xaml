@@ -22,12 +22,22 @@
                 <ColumnDefinitions/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            
+            <Label Content="Codice:"
+                   Grid.Column="0"
+                   Grid.Row="0"
+                   Margin="5"/>
+                   
+            <Label Content="{Binding Code}"
+                   Grid.Column="1"
+                   Grid.Row="0"
+                   Margin="5"/>
         <Grid>
 
         <TabControl Grid.Row="1">
