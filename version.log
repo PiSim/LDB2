@@ -1,4 +1,9 @@
-﻿v 0.4.1 -- In corso
+﻿v 0.4.2 -- 
+
+-*Trasferiti i nomi delle viste nel progetto Infrastructure
+
+
+v 0.4.1 -- In corso
 
 -Introdotta vista gestione Organizzazioni per la selezione dei ruoli
 -Introdotta vista Admin per la gestione dei ruoli Utente
@@ -24,7 +29,7 @@
 -Sostituita lista report con Regione ReportListRegion nella vista SpecificationEdit
 -*Sostituita lista report con Regione ReportListRegion nella vista ReportMain
 -Sostituita lista report con Regione ReportListRegion nella vista Batchinfo
--*Aggiunto comando OpenExternalReport a ProjectInfo
+-Aggiunto comando OpenExternalReport a ProjectInfo
 -Abbozzo videata utente con lista report e filtro per quelli in sospeso
 -Implementata vista controllo condivisa per "Lista Report"
 -Sostituita FK sub_requirementID (sub_tests) con colonna "Nome"
