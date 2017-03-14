@@ -47,7 +47,6 @@ namespace Specifications.ViewModels
                         tempIssue.Issue = DateTime.Now.ToShortDateString();
 
                         tempStd.CurrentIssue = tempIssue;
-                        tempStd.StandardIssues.Add(tempIssue);
                     }
 
                     SpecificationVersion tempMain = new SpecificationVersion();
