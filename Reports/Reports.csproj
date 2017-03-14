@@ -126,7 +126,7 @@
     <Compile Include="ViewModels\ExternalReportMainViewModel.cs" />
     <Compile Include="ViewModels\ReportEditViewModel.cs" />
     <Compile Include="ViewNames.cs" />
-    <Compile Include="ViewModels\MainViewModel.cs" />
+    <Compile Include="ViewModels\ReportMainViewModel.cs" />
     <Compile Include="Views\ExternalReportCreationDialog.xaml.cs">
       <DependentUpon>ExternalReportCreationDialog.xaml</DependentUpon>
     </Compile>
