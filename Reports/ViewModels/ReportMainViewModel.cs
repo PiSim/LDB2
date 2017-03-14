@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace Reports.ViewModels
 {
-    class MainViewModel : BindableBase
+    class ReportMainViewModel : BindableBase
     {
         private DBEntities _entities;
         private DelegateCommand _newReport, _openReport;
@@ -23,7 +23,7 @@ namespace Reports.ViewModels
         private Report _selectedReport;
         private UnityContainer _container;
 
-        public MainViewModel(DBEntities entities, 
+        public ReportMainViewModel(DBEntities entities, 
                             EventAggregator eventAggregator,
                             UnityContainer container) : base()
         {
