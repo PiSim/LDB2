@@ -24,7 +24,7 @@
 -Sostituita lista report con Regione ReportListRegion nella vista SpecificationEdit
 -*Sostituita lista report con Regione ReportListRegion nella vista ReportMain
 -Sostituita lista report con Regione ReportListRegion nella vista Batchinfo
--*Funzionalità apertura report esterno da progetto
+-*Aggiunto comando OpenExternalReport a ProjectInfo
 -Abbozzo videata utente con lista report e filtro per quelli in sospeso
 -Implementata vista controllo condivisa per "Lista Report"
 -Sostituita FK sub_requirementID (sub_tests) con colonna "Nome"
