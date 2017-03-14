@@ -22,14 +22,18 @@ namespace Reports
 
         public void Initialize()
         {
-            _container.RegisterType<Object, Views.ReportMainView>(ViewNames.ReportMainView);
+            _container.RegisterType<Object, Views.ReportMainView>(ViewNames.ReportMain);
             _container.RegisterType<Object, Views.ReportEditView>(ViewNames.ReportEditView);
             _container.RegisterType<Object, Views.ExternalReportMainView>(ViewNames.ExternalReportMainView);
             _container.RegisterType<Object, Views.ExternalReportEditView>(ViewNames.ExternalReportEditView);
+            
+            _container.RegisterType<ViewModels.ReportMainViewModel>();
 
             _regionManager.RegisterViewWithRegion(RegionNames.BatchReportListRegion,
                                                 typeof(Views.ReportList));
             _regionManager.RegisterViewWithRegion(RegionNames.CurrentUserMainReportListRegion,
+                                                typeof(Views.ReportList));
+            _regionManager.RegisterViewWithRegion(RegionNames.MainReportListRegion,
                                                 typeof(Views.ReportList));
             _regionManager.RegisterViewWithRegion(RegionNames.MethodReportListRegion,
                                                 typeof(Views.ReportList));
