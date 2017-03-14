@@ -19,7 +19,7 @@ namespace Specifications.ViewModels
         private ControlPlan _selectedControlPlan;
         private DBEntities _entities;
         private DelegateCommand _addControlPlan, _addFile, _addIssue,
-            _addTest, _addVersion, _openFile, _openReport, _removeControlPlan, _removeFile, _removeIssue, _removeTest, _removeVersion, _setCurrent;
+            _addTest, _addVersion, _newReport, _openFile, _openReport, _removeControlPlan, _removeFile, _removeIssue, _removeTest, _removeVersion, _setCurrent;
         private EventAggregator _eventAggregator;
         private List<ControlPlanItemWrapper> _controlPlanItemsList;
         private Method _selectedToAdd;
@@ -111,7 +111,13 @@ namespace Specifications.ViewModels
                     _instance.SpecificationVersions.Add(temp);
                     _versionList.Add(temp);
                 });
-
+            
+            _newReport = new DelegateCommand(
+                () =>
+                {
+                    
+                });
+                
             _openFile = new DelegateCommand(
                 () =>
                 {
@@ -291,6 +297,11 @@ namespace Specifications.ViewModels
                 return new ObservableCollection<Requirement>(MainVersion.Requirements);
             }
         }
+        
+        public DelegateCommand NewReportCommand
+        {
+            get { return _newReport; }
+        }
 
         public DelegateCommand OpenFileCommand
         {
@@ -383,7 +394,11 @@ namespace Specifications.ViewModels
         public Report SelectedReport
         {
             get { return _selectedReport; }
-            set { _selectedReport = value; }
+            set 
+            { 
+                _selectedReport = value; 
+                _openReport.RaiseCanExecuteChanged();
+            }
         }
 
         public SpecificationVersion SelectedVersion
