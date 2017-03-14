@@ -102,6 +102,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="InstrumentServiceProvider.cs" />
     <Compile Include="InstrumentsModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -119,6 +120,8 @@
     <Compile Include="ViewModels\InstrumentCreationDialogViewModel.cs" />
     <Compile Include="ViewModels\InstrumentEditViewModel.cs" />
     <Compile Include="ViewModels\InstrumentMainViewModel.cs" />
+    <Compile Include="ViewModels\NewCalibrationDialogViewModel.cs" />
+    <Compile Include="ViewModels\NewMaintenanceEventDialogViewModel.cs" />
     <Compile Include="ViewNames.cs" />
     <Compile Include="Views\InstrumentCreationDialog.xaml.cs">
       <DependentUpon>InstrumentCreationDialog.xaml</DependentUpon>
@@ -131,6 +134,12 @@
     </Compile>
     <Compile Include="Views\InstrumentsNavigationItem.xaml.cs">
       <DependentUpon>InstrumentsNavigationItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\NewCalibrationDialog.xaml.cs">
+      <DependentUpon>NewCalibrationDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\NewMaintenanceEventDialog.xaml.cs">
+      <DependentUpon>NewMaintenanceEventDialog.xaml</DependentUpon>
     </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -177,6 +186,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\InstrumentsNavigationItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\NewCalibrationDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\NewMaintenanceEventDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

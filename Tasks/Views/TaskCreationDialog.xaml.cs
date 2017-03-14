@@ -12,7 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace Controls.Views
+namespace Tasks.Views
 {
     /// <summary>
     /// Interaction logic for TaskCreationDialog.xaml
@@ -23,7 +23,7 @@ namespace Controls.Views
         
         public TaskCreationDialog(DBEntities entities)
         {
-            DataContext = new ViewModels.TaskCreationViewModel(entities, this);
+            DataContext = new ViewModels.TaskCreationDialogViewModel(entities, this);
             InitializeComponent();
         }
         

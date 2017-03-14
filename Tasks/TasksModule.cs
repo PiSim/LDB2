@@ -20,7 +20,14 @@ namespace Tasks
         public void Initialize()
         {
             _container.RegisterType<Object, Views.TaskMainView>(ViewNames.TaskMainView);
-            
+
+            _container.RegisterType<ViewModels.TaskMainViewModel>();
+
+            _container.RegisterType<Views.TaskCreationDialog>();
+
+            _container.RegisterType<TaskServiceProvider>(new ContainerControlledLifetimeManager());
+            _container.Resolve<TaskServiceProvider>();
+
             _regionManager.RegisterViewWithRegion(RegionNames.MainNavigationRegion
                                                 , typeof(Views.TaskNavigationItem));
         }

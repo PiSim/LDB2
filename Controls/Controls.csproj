@@ -123,7 +123,6 @@
     <Compile Include="ViewModels\MethodPickerViewModel.cs" />
     <Compile Include="ViewModels\ProjectPickerViewModel.cs" />
     <Compile Include="ViewModels\StatusBarViewModel.cs" />
-    <Compile Include="ViewModels\TaskCreationViewModel.cs" />
     <Compile Include="ViewModels\ToolbarViewModel.cs" />
     <Compile Include="Views\BatchPickerDialog.xaml.cs">
       <DependentUpon>BatchPickerDialog.xaml</DependentUpon>
@@ -140,14 +139,8 @@
     <Compile Include="Views\ProjectPickerDialog.xaml.cs">
       <DependentUpon>ProjectPickerDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\ReportList.xaml.cs">
-      <DependentUpon>ReportList.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\StatusBarView.xaml.cs">
       <DependentUpon>StatusBarView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\TaskCreationDialog.xaml.cs">
-      <DependentUpon>TaskCreationDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ToolbarView.xaml.cs">
       <DependentUpon>ToolbarView.xaml</DependentUpon>
@@ -199,15 +192,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\ReportList.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\StatusBarView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\TaskCreationDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

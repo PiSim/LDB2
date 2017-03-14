@@ -3,7 +3,7 @@ using Prism.Events;
 
 namespace Infrastructure.Events
 {
-    public class TaskCreationRequested
+    public class TaskCreationRequested : PubSubEvent<NewTaskToken>
     {
     }
 }

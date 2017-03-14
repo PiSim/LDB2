@@ -1,5 +1,6 @@
 ﻿using DBManager;
-using Controls.Views;
+using Infrastructure.Events;
+using Infrastructure.Tokens;
 using Microsoft.Practices.Unity;
 using Prism.Commands;
 using Prism.Events;
@@ -27,15 +28,13 @@ namespace Tasks.ViewModels
             _container = container;
             _entities = entities;
             _eventAggregator = eventAggregator;
-            
+
             _newTask = new DelegateCommand(
-                () => 
+                () =>
                 {
-                    TaskCreationDialog taskDialog = _container.Resolve<TaskCreationDialog>();
-                    if (taskDialog.ShowDialog() == true)
-                    {
-                        OnPropertyChanged("TaskList");
-                    }
+                    NewTaskToken token = new NewTaskToken();
+                    _eventAggregator.GetEvent<TaskCreationRequested>().
+                        Publish(token);
                 } );
         }
         

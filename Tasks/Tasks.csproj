@@ -102,6 +102,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="TaskServiceProvider.cs" />
     <Compile Include="TasksModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -116,8 +117,23 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="ViewModels\ConversionReviewDialogViewModel.cs" />
+    <Compile Include="ViewModels\TaskCreationDialogViewModel.cs" />
+    <Compile Include="ViewModels\TaskEditViewModel.cs" />
     <Compile Include="ViewModels\TaskMainViewModel.cs" />
     <Compile Include="ViewNames.cs" />
+    <Compile Include="Views\ConversionReviewDialog.xaml.cs">
+      <DependentUpon>ConversionReviewDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TaskCreationDialog.xaml.cs">
+      <DependentUpon>TaskCreationDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TaskEdit.xaml.cs">
+      <DependentUpon>TaskEdit.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TaskList.xaml.cs">
+      <DependentUpon>TaskList.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\TaskMainView.xaml.cs">
       <DependentUpon>TaskMainView.xaml</DependentUpon>
     </Compile>
@@ -156,6 +172,22 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Views\ConversionReviewDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\TaskCreationDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\TaskEdit.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\TaskList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\TaskMainView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

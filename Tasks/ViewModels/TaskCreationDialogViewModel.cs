@@ -8,9 +8,9 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 
-namespace Controls.ViewModels
+namespace Tasks.ViewModels
 {
-    internal class TaskCreationViewModel : BindableBase
+    public class TaskCreationDialogViewModel : BindableBase
     {
         private string _batchNumber;
         private DBEntities _entities;
@@ -22,7 +22,7 @@ namespace Controls.ViewModels
         private SpecificationVersion _selectedVersion;
         private Views.TaskCreationDialog _parentView;
 
-        internal TaskCreationViewModel(DBEntities entities,
+        public TaskCreationDialogViewModel(DBEntities entities,
                                     Views.TaskCreationDialog parentView) : base()
         {
             _entities = entities;

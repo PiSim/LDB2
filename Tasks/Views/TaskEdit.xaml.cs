@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Controls.Views
+namespace Tasks.Views
 {
     /// <summary>
-    /// Interaction logic for ReportList.xaml
+    /// Interaction logic for TaskEdit.xaml
     /// </summary>
-    public partial class ReportList : UserControl
+    public partial class TaskEdit : UserControl
     {
-        public ReportList()
+        public TaskEdit()
         {
             InitializeComponent();
         }
