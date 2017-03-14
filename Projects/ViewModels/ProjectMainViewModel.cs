@@ -32,7 +32,9 @@ namespace Projects.ViewModels
                     Views.ProjectCreationDialog creationDialog = new Views.ProjectCreationDialog(_entities);
                     if (creationDialog.ShowDialog() == true)
                     {
-                        OnPropertyChanged("ProjectList");
+                        Project temp_prj = creationDialog.ProjectInstance;
+                        _projectList.Add(temp_prj);
+                        SelectedProject = temp_prj;
                     }
                 });
 
