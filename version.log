@@ -2,7 +2,6 @@
 
 -*Trasferiti i nomi delle viste nel progetto Infrastructure
 -*Abbozzi di interfacce per i dialoghi richiamati da più moduli
--*Aggiunte le regioni MethodIssueRegion e SpecificationIssueRegion
 -*Creato NewCalibrationDialog
 -*Creato NewInstrumentEventDialog
 -*Classi servizio
@@ -48,6 +47,7 @@ v 0.4.1 -- In corso
 -Aggiunte le colonne requirement e UM a sub_tests
 -*Crash alla creazione di una specifica
 -*Creato controllo StandardIssueControl
+-*Aggiunte le regioni MethodIssueRegion e SpecificationIssueRegion
 
 v 0.4.0 -- 25/02/2017
 
