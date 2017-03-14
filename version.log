@@ -30,7 +30,8 @@
 -Sostituita FK sub_requirementID (sub_tests) con colonna "Nome"
 -Aggiunto riferimento all'edizione corrente del metodo nelle istanze test
 -Aggiunta creazione di un'edizione generica alla creazione di un metodo/specifica
--*Aggiunti comandi OpenReport e NewReport a ViewModel ProjectEdit e SpecificationEdit
+-*Aggiunti comandi OpenReport e NewReport a ViewModel ProjectEdit
+-*Aggiunti comandi OpenReport e NewReport a ViewModel SpecificationEdit
 -*Abbozzo videata InstrumentEdit
 -Spostata l'istanza DBPrincipal contenente dal Thread al container di Unity
 -Aggiunte le colonne requirement e UM a sub_tests
