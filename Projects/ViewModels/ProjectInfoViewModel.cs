@@ -53,7 +53,7 @@ namespace Projects.ViewModels
                 () =>
                 {
                     ReportCreationDialog creationDialog = _container.Resolve<ReportCreationDialog>();
-                    if (creationDialog.ShowDialog == true)
+                    if (creationDialog.ShowDialog() == true)
                     {
                         OnPropertyChanged("ReportList");                        
                     }
