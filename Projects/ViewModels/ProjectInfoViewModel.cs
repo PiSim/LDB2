@@ -147,6 +147,11 @@ namespace Projects.ViewModels
                 return _projectInstance.Name;
             }
         }
+        
+        public DelegateCommand NewReportCommand
+        {
+            get { return _newReport; }
+        }
 
         public string OemName
         {
