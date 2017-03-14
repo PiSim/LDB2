@@ -1,6 +1,7 @@
 using DBManager;
 using Infrastructure;
 using Infrastructure.Events;
+using Microsoft.Practices.Unity;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
@@ -17,18 +18,21 @@ namespace Projects.ViewModels
     {
         private Construction _selectedAssigned, _selectedUnassigned;
         private DBEntities _entities;
-        private DelegateCommand _assignConstruction, _openExternalReport, _openReport, _unassignConstruction;
+        private DelegateCommand _assignConstruction, _newReport, _openExternalReport, _openReport, _unassignConstruction;
         private EventAggregator _eventAggregator;
         private ExternalReport _selectedExternal;
+        private IUnityContainer _container;
         private ObservableCollection<Construction> _assignedConstructions, _unassignedConstructions;
         private Project _projectInstance;
         private Report _selectedReport;
 
         public ProjectInfoViewModel(DBEntities entities,
-                                    EventAggregator aggregator)
+                                    EventAggregator aggregator,
+                                    IUnityContainer container)
             : base()
         {
             _entities = entities;
+            _container = container;
             
             _eventAggregator = aggregator;
             _eventAggregator.GetEvent<CommitRequested>().Subscribe( () => _entities.SaveChanges() );
@@ -42,6 +46,17 @@ namespace Projects.ViewModels
                     SelectedUnassigned = null;
                 },
                 () => _selectedUnassigned != null
+            );
+            
+            _newReport = new DelegateCommand(
+                () =>
+                {
+                    ReportCreationDialog creationDialog = _container.Resolve<ReportCreationDialog>();
+                    if (creationDialog.ShowDialog == true)
+                    {
+                        OnPropertyChanged("ReportList");                        
+                    }
+                }
             );
 
             _openExternalReport = new DelegateCommand(
