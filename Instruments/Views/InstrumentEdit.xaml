@@ -9,8 +9,32 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        <Label Content="{Binding Code}"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinitions Width="Auto"/>
+                <ColumnDefinitions Width="Auto"/>
+                <ColumnDefinitions Width="Auto"/>
+                <ColumnDefinitions Width="Auto"/>
+                <ColumnDefinitions/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid>
 
+        <TabControl Grid.Row="1">
+            <TabItem Header="Tarature"/>
+            <TabItem Header="Manutenzione"/>
+            <TabItem Header="Documenti"/>
+        </TabControl>
 
     </Grid>
 </UserControl>
