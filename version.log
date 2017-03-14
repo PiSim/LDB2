@@ -42,7 +42,7 @@ v 0.4.1 -- In corso
 -Aggiunta creazione di un'edizione generica alla creazione di un metodo/specifica
 -Aggiunto comando NewReport a ViewModel ProjectEdit
 -*Aggiunti comandi OpenReport e NewReport a ViewModel SpecificationEdit
--*Abbozzo videata InstrumentEdit
+-Abbozzo videata InstrumentEdit
 -Spostata l'istanza DBPrincipal contenente dal Thread al container di Unity
 -Aggiunte le colonne requirement e UM a sub_tests
 -*Crash alla creazione di una specifica
