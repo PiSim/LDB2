@@ -15,11 +15,11 @@
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinitions Width="Auto"/>
-                <ColumnDefinitions Width="Auto"/>
-                <ColumnDefinitions Width="Auto"/>
-                <ColumnDefinitions Width="Auto"/>
-                <ColumnDefinitions/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -38,7 +38,7 @@
                    Grid.Column="1"
                    Grid.Row="0"
                    Margin="5"/>
-        <Grid>
+        </Grid>
 
         <TabControl Grid.Row="1">
             <TabItem Header="Tarature"/>

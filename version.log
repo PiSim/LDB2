@@ -8,7 +8,7 @@
 -*Eventi per richiesta creazione istanze
 -*Eventi notifica creazione istanze
 
-v 0.4.1 -- In corso
+v 0.4.1 -- 
 
 -Introdotta vista gestione Organizzazioni per la selezione dei ruoli
 -Introdotta vista Admin per la gestione dei ruoli Utente
@@ -32,7 +32,7 @@ v 0.4.1 -- In corso
 -Rimossa FK taskID (task) da tabella report
 -Sostituita lista report con Regione ReportListRegion nella vista ProjectInfo
 -Sostituita lista report con Regione ReportListRegion nella vista SpecificationEdit
--*Sostituita lista report con Regione ReportListRegion nella vista ReportMain
+-Sostituita lista report con Regione ReportListRegion nella vista ReportMain
 -Sostituita lista report con Regione ReportListRegion nella vista Batchinfo
 -Aggiunto comando OpenExternalReport a ProjectInfo
 -Abbozzo videata utente con lista report e filtro per quelli in sospeso
@@ -41,13 +41,12 @@ v 0.4.1 -- In corso
 -Aggiunto riferimento all'edizione corrente del metodo nelle istanze test
 -Aggiunta creazione di un'edizione generica alla creazione di un metodo/specifica
 -Aggiunto comando NewReport a ViewModel ProjectEdit
--*Aggiunti comandi OpenReport e NewReport a ViewModel SpecificationEdit
 -Abbozzo videata InstrumentEdit
 -Spostata l'istanza DBPrincipal contenente dal Thread al container di Unity
 -Aggiunte le colonne requirement e UM a sub_tests
--*Crash alla creazione di una specifica
--*Creato controllo StandardIssueControl
--*Aggiunte le regioni MethodIssueRegion e SpecificationIssueRegion
+-Crash alla creazione di una specifica
+-Creato controllo StandardIssueControl
+-Aggiunte le regioni MethodIssueRegion e SpecificationIssueRegion
 
 v 0.4.0 -- 25/02/2017
 

@@ -45,7 +45,9 @@ namespace Specifications.ViewModels
                         StandardIssue tempIssue = new StandardIssue();
                         tempIssue.IsCurrent = true;
                         tempIssue.Issue = DateTime.Now.ToShortDateString();
-
+                        tempIssue.Standard = tempStd;
+                        _entities.Stds.Add(tempStd);
+                        _entities.SaveChanges();
                         tempStd.CurrentIssue = tempIssue;
                     }
 

@@ -9,51 +9,6 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition Width="Auto"/>
-        </Grid.ColumnDefinitions>
-        <ListView ItemsSource="{Binding ReportList}"
-                  SelectedItem="{Binding SelectedReport, Mode=TwoWay}"
-                  Grid.Column="0">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Header="Numero"
-                                    DisplayMemberBinding="{Binding Number}"/>
-                    <GridViewColumn Header="Batch"
-                                    DisplayMemberBinding="{Binding Batch.Number}"/>
-                    <GridViewColumn Header="Specifica"
-                                    DisplayMemberBinding="{Binding SpecificationVersion.Specification.Standard.Name}"/>
-                    <GridViewColumn Header="Versione"
-                                    DisplayMemberBinding="{Binding SpecificationVersion.Name}"/>
-                    <GridViewColumn Header="Progetto"
-                                    DisplayMemberBinding="{Binding Batch.Material.Construction.Project.Name}"/>
-                    <GridViewColumn Header="Autore"
-                                    DisplayMemberBinding="{Binding Author.Name}"/>
-                    <GridViewColumn Header="Completo">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <CheckBox IsChecked="{Binding IsComplete}"
-                                          IsEnabled="False"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                </GridView>
-            </ListView.View>
-        </ListView>
-
-        <Button Content="Nuovo"
-                Command="{Binding NewReportCommand}"
-                Grid.Column="1"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top"
-                Margin="5,5,0,0"/>
-
-        <Button Content="Apri"
-                Command="{Binding OpenReportCommand}"
-                Grid.Column="1"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top"
-                Margin="5,30,0,0"/>
+        <ContentControl prism:RegionManager.RegionName="MainReportListRegion"/>
     </Grid>
 </UserControl>

@@ -150,7 +150,13 @@ namespace Specifications.ViewModels
 
         public List<StandardFile> FileList
         {
-            get { return new List<StandardFile>(_selectedIssue.StandardFiles); }
+            get
+            {
+                if (_selectedIssue == null)
+                    return null;
+
+                return new List<StandardFile>(_selectedIssue.StandardFiles);
+            }
         }
 
         public ObservableCollection<StandardIssue> IssueList

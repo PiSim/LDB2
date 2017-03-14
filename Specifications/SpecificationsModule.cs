@@ -36,6 +36,10 @@ namespace Specifications
                                                 typeof(Views.MethodNavigationItem));
             _regionManager.RegisterViewWithRegion(RegionNames.MainNavigationRegion, 
                                                 typeof(Views.SpecificationNavigationItem));
+            _regionManager.RegisterViewWithRegion(RegionNames.MethodIssueRegion,
+                                                typeof(Views.StandardIssueControl));
+            _regionManager.RegisterViewWithRegion(RegionNames.SpecificationIssueRegion,
+                                                typeof(Views.StandardIssueControl));
         }
     }
 }
