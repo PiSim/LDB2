@@ -142,8 +142,8 @@
     <Compile Include="Views\ReportEditView.xaml.cs">
       <DependentUpon>ReportEditView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\ReportMainView.xaml.cs">
-      <DependentUpon>ReportMainView.xaml</DependentUpon>
+    <Compile Include="Views\ReportMain.xaml.cs">
+      <DependentUpon>ReportMain.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ReportsNavigationItem.xaml.cs">
       <DependentUpon>ReportsNavigationItem.xaml</DependentUpon>
@@ -204,7 +204,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\ReportMainView.xaml">
+    <Page Include="Views\ReportMain.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
