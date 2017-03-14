@@ -6,6 +6,8 @@
 -*Aggiunte le regioni MethodIssueRegion e SpecificationIssueRegion
 -*Creato NewCalibrationDialog
 -*Creato NewInstrumentEventDialog
+-*Eventi per richiesta creazione istanze
+-*Eventi notifica creazione istanze
 
 v 0.4.1 -- In corso
 
