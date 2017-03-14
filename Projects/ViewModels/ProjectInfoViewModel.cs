@@ -17,7 +17,7 @@ namespace Projects.ViewModels
     {
         private Construction _selectedAssigned, _selectedUnassigned;
         private DBEntities _entities;
-        private DelegateCommand _assignConstruction, _openExternal, _openReport, _unassignConstruction;
+        private DelegateCommand _assignConstruction, _openExternalReport, _openReport, _unassignConstruction;
         private EventAggregator _eventAggregator;
         private ExternalReport _selectedExternal;
         private ObservableCollection<Construction> _assignedConstructions, _unassignedConstructions;
@@ -44,11 +44,14 @@ namespace Projects.ViewModels
                 () => _selectedUnassigned != null
             );
 
-            _openExternal = new DelegateCommand(
+            _openExternalReport = new DelegateCommand(
                 () =>
                 {
-                    
-                });
+                    NavigationToken token = new NavigationToken(Reports.ViewNames.ExternalReportEditView,
+                                                                SelectedExternal);
+                    _eventAggregator.GetEvent<NavigationRequested>().Publish(token);
+                },
+                () => SelectedExternal != null);
 
             _openReport = new DelegateCommand(
                 () =>
@@ -141,9 +144,9 @@ namespace Projects.ViewModels
             }
         }
 
-        public DelegateCommand OpenExternalCommand
+        public DelegateCommand OpenExternalReportCommand
         {
-            get { return _openExternal; }
+            get { return _openExternalReport; }
         }
 
         public DelegateCommand OpenReportCommand
@@ -195,13 +198,21 @@ namespace Projects.ViewModels
         public ExternalReport SelectedExternal
         {
             get { return _selectedExternal; }
-            set { _selectedExternal = value; }
+            set 
+            { 
+                _selectedExternal = value; 
+                _openExternalReport.RaiseCanExecuteChanged();
+            }
         }
 
         public Report SelectedReport
         {
             get { return _selectedReport; }
-            set { _selectedReport = value; }
+            set 
+            { 
+                _selectedReport = value; 
+                _openReport.RaiseCanExecuteChanged();
+            }
         }
         
         public Construction SelectedUnassigned
