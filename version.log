@@ -1,7 +1,11 @@
 ﻿v 0.4.2 -- 
 
 -*Trasferiti i nomi delle viste nel progetto Infrastructure
-
+-*Abbozzi di interfacce per i dialoghi richiamati da più moduli
+-*Creato controllo StandardIssueControl
+-*Aggiunte le regioni MethodIssueRegion e SpecificationIssueRegion
+-*Creato NewCalibrationDialog
+-*Creato NewInstrumentEventDialog
 
 v 0.4.1 -- In corso
 
@@ -40,7 +44,6 @@ v 0.4.1 -- In corso
 -*Abbozzo videata InstrumentEdit
 -Spostata l'istanza DBPrincipal contenente dal Thread al container di Unity
 -Aggiunte le colonne requirement e UM a sub_tests
--*Abbozzi di interfacce per i dialoghi richiamati da più moduli
 
 v 0.4.0 -- 25/02/2017
 
