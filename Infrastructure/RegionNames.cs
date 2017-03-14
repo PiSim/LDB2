@@ -12,6 +12,7 @@ namespace Infrastructure
         public static string CurrentUserMainReportListRegion { get { return "CurrentUserMainReportListRegion"; } }
         public static string MainNavigationRegion { get { return "MainNavigationRegion"; } }
         public static string MainRegion { get { return "MainRegion"; } }
+        public static string MainReportListRegion { get { return "MainReportListRegion"; } }
         public static string MainUserReportListRegion { get { return "MainUserReportListRegion"; } }
         public static string MethodEditRegion { get { return "MethodEditRegion"; } }
         public static string MethodReportListRegion { get { return "MethodReportListRegion"; } }
