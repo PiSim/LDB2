@@ -5,14 +5,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Controls
+namespace Infrastructure.Wrappers
 {
-    internal class RequirementWrapper
+    public class ReportItemWrapper
     {
         private bool _isSelected;
         private Requirement _instance;
 
-        internal RequirementWrapper(Requirement instance)
+        public ReportItemWrapper(Requirement instance)
         {
             _instance = instance;
             _isSelected = true;

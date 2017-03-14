@@ -102,10 +102,15 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AdminViewNames.cs" />
     <Compile Include="Events\CommitRequested.cs" />
     <Compile Include="Events\NavigateBackRequested.cs" />
     <Compile Include="Events\NavigateForwardRequested.cs" />
     <Compile Include="Events\NavigationRequested.cs" />
+    <Compile Include="Events\ReportCreated.cs" />
+    <Compile Include="Events\ReportCreationRequested.cs" />
+    <Compile Include="Events\TaskCreated.cs" />
+    <Compile Include="Events\TaskCreationRequested.cs" />
     <Compile Include="Events\UserAuthenticated.cs" />
     <Compile Include="InfrastructureModule.cs" />
     <Compile Include="NavigationToken.cs" />
@@ -123,8 +128,12 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="RequirementWrapper.cs" />
+    <Compile Include="Tokens\NewReportToken.cs" />
+    <Compile Include="Tokens\NewTaskToken.cs" />
+    <Compile Include="Wrappers\ReportItemWrapper.cs" />
+    <Compile Include="Wrappers\RequirementWrapper.cs" />
     <Compile Include="UserViewNames.cs" />
+    <Compile Include="InstrumentViewNames.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -140,7 +149,6 @@
   <ItemGroup>
     <Folder Include="ViewModels\" />
     <Folder Include="Views\" />
-    <Folder Include="Wrappers\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DBManager\DBManager.csproj">

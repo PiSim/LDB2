@@ -1,6 +1,7 @@
 ﻿using DBManager;
 using Infrastructure;
 using Infrastructure.Events;
+using Infrastructure.Tokens;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
@@ -115,7 +116,8 @@ namespace Specifications.ViewModels
             _newReport = new DelegateCommand(
                 () =>
                 {
-                    
+                    NewReportToken token = new NewReportToken();
+                    _eventAggregator.GetEvent<ReportCreationRequested>().Publish(token);
                 });
                 
             _openFile = new DelegateCommand(
@@ -182,6 +184,16 @@ namespace Specifications.ViewModels
                     }
                 },
                 () => _selectedIssue != null);
+
+            // Event Subscriptions
+
+            _eventAggregator.GetEvent<ReportCreated>().Subscribe(
+                rpt =>
+                {
+                    if (rpt.SpecificationVersion.SpecificationID == _instance.ID)
+                        OnPropertyChanged("ReportList");
+                });
+
         }
 
 

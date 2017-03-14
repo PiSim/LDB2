@@ -22,8 +22,8 @@ namespace Controls
             _container.RegisterType<Views.ColorPickerDialog>();
             _container.RegisterType<Views.MaterialCreationDialog>();
             _container.RegisterType<Views.ProjectPickerDialog>();
-            _container.RegisterType<Views.ReportCreationDialog>();
             _container.RegisterType<Views.TaskCreationDialog>();
+
             _regionManager.RegisterViewWithRegion(RegionNames.ToolbarRegion, 
                                                 typeof(Views.ToolbarView));
         }

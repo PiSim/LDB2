@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Admin
+namespace Infrastructure
 {
-    class AdminViewNames
+    public class AdminViewNames
     {
         public static string AdminMainView { get { return "AdminMainView"; } }
         public static string UserView { get { return "UserView"; } }

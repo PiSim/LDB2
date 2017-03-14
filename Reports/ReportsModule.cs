@@ -29,6 +29,8 @@ namespace Reports
             
             _container.RegisterType<ViewModels.ReportMainViewModel>();
 
+            _container.RegisterType<Views.ReportCreationDialog>();
+
             _regionManager.RegisterViewWithRegion(RegionNames.BatchReportListRegion,
                                                 typeof(Views.ReportList));
             _regionManager.RegisterViewWithRegion(RegionNames.CurrentUserMainReportListRegion,
@@ -46,6 +48,9 @@ namespace Reports
                                                 , typeof(Views.ExternalReportsNavigationItem));
             _regionManager.RegisterViewWithRegion(RegionNames.MainNavigationRegion
                                                 , typeof(Views.ReportsNavigationItem));
+
+            _container.RegisterType<ReportServiceProvider>(new ContainerControlledLifetimeManager());
+            _container.Resolve<ReportServiceProvider>();
         }
     }
 }

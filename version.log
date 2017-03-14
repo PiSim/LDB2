@@ -1,4 +1,4 @@
-﻿v 0.4.2 -- 
+﻿v 0.4.2 -- In corso
 
 -*Trasferiti i nomi delle viste nel progetto Infrastructure
 -*Abbozzi di interfacce per i dialoghi richiamati da più moduli
@@ -8,7 +8,7 @@
 -*Eventi per richiesta creazione istanze
 -*Eventi notifica creazione istanze
 
-v 0.4.1 -- 
+v 0.4.1 -- 14/03/2017
 
 -Introdotta vista gestione Organizzazioni per la selezione dei ruoli
 -Introdotta vista Admin per la gestione dei ruoli Utente

@@ -1,4 +1,5 @@
 ﻿using DBManager;
+using Infrastructure.Wrappers;
 using Prism.Commands;
 using Prism.Mvvm;
 using System;
@@ -14,7 +15,7 @@ namespace Controls.ViewModels
         private string _batchNumber;
         private DBEntities _entities;
         private DelegateCommand _cancel, _confirm;
-        private ObservableCollection<RequirementWrapper> _requirementList;
+        private ObservableCollection<ReportItemWrapper> _requirementList;
         private ObservableCollection<SpecificationVersion> _versionList;
         private Person _requester;
         private Specification _selectedSpecification;
@@ -41,7 +42,7 @@ namespace Controls.ViewModels
                     output.SpecificationVersion = _selectedVersion;
                     output.Batch = _entities.GetBatchByNumber(_batchNumber);
                     
-                    foreach (RequirementWrapper req in _requirementList)
+                    foreach (ReportItemWrapper req in _requirementList)
                     {
                         TaskItem temp = new TaskItem();
                         temp.Requirement = req.Instance;
@@ -126,7 +127,7 @@ namespace Controls.ViewModels
                 {
                     List<Requirement> tempReq = _entities.GenerateRequirementList(_selectedVersion);
                     foreach (Requirement rq in tempReq)
-                        RequirementList.Add(new RequirementWrapper(rq));
+                        RequirementList.Add(new ReportItemWrapper(rq));
                 }
                 OnPropertyChanged("SelectedVersion");
             }
@@ -142,7 +143,7 @@ namespace Controls.ViewModels
             get { return _versionList; }
         }
 
-        public ObservableCollection<RequirementWrapper> RequirementList
+        public ObservableCollection<ReportItemWrapper> RequirementList
         {
             get { return _requirementList; }
         }

@@ -6,9 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Specifications
+namespace Infrastructure.Wrappers
 {
-    internal class RequirementWrapper : BindableBase
+    public class RequirementWrapper : BindableBase
     {
         private DBEntities _entities;
         private Requirement _requirementInstance;

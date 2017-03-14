@@ -1,5 +1,8 @@
 using DBManager;
+using Infrastructure.Events;
+using Infrastructure.Wrappers;
 using Prism.Commands;
+using Prism.Events;
 using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
@@ -9,14 +12,15 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Controls.ViewModels
+namespace Reports.ViewModels
 {   
-    internal class ReportCreationViewModel : BindableBase
+    public class ReportCreationDialogViewModel : BindableBase
     {
         private DBEntities _entities;
         private DelegateCommand _cancel, _confirm;
+        private EventAggregator _eventAggregator;
         private Int32 _number;
-        private ObservableCollection<RequirementWrapper> _requirementList;
+        private ObservableCollection<ReportItemWrapper> _requirementList;
         private ObservableCollection<SpecificationVersion> _versionList;
         private Person _author;
         private Specification _selectedSpecification;
@@ -24,12 +28,13 @@ namespace Controls.ViewModels
         private string _batchNumber, _category;
         private Views.ReportCreationDialog _parentDialog;
         
-        public ReportCreationViewModel(Views.ReportCreationDialog parent, DBEntities entities) : base()
+        public ReportCreationDialogViewModel(DBEntities entities,
+                                        Views.ReportCreationDialog parentDialog) : base()
         {
             _entities = entities;
-            _parentDialog = parent;
+            _parentDialog = parentDialog;
             _versionList = new ObservableCollection<SpecificationVersion>();
-            _requirementList = new ObservableCollection<RequirementWrapper>();
+            _requirementList = new ObservableCollection<ReportItemWrapper>();
 
             _confirm = new DelegateCommand(
                 () => {
@@ -139,7 +144,7 @@ namespace Controls.ViewModels
                 {
                     List<Requirement> tempReq = _entities.GenerateRequirementList(_selectedVersion);
                     foreach (Requirement rq in tempReq)
-                        RequirementList.Add(new RequirementWrapper(rq));
+                        RequirementList.Add(new ReportItemWrapper(rq));
                 }
                 OnPropertyChanged("SelectedVersion");
             }
@@ -155,7 +160,7 @@ namespace Controls.ViewModels
             get { return _versionList; }
         }
             
-        public ObservableCollection<RequirementWrapper> RequirementList
+        public ObservableCollection<ReportItemWrapper> RequirementList
         {
             get { return _requirementList; }
         }

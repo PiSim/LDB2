@@ -2,6 +2,7 @@
 using DBManager;
 using Infrastructure;
 using Infrastructure.Events;
+using Infrastructure.Tokens;
 using Microsoft.Practices.Unity;
 using Reports;
 using Prism.Commands;
@@ -30,17 +31,15 @@ namespace Materials.ViewModels
         {
             _container = container;
             _eventAggregator = aggregator;
-                
+
+            _eventAggregator.GetEvent<ReportCreated>().Subscribe(
+                rpt => OnPropertyChanged("ReportList")); 
+               
             _newReport = new DelegateCommand(
                 () => 
                 {
-                    ReportCreationDialog reportDialog = _container.Resolve<ReportCreationDialog>();
-                    if (reportDialog.ShowDialog() == true)
-                    {
-                        SelectedReport = reportDialog.ReportInstance;
-                        _openReport.Execute();
-                    }
-                    
+                    NewReportToken token = new NewReportToken();
+                    _eventAggregator.GetEvent<ReportCreationRequested>().Publish(token);
                 }
             );
             

@@ -1,7 +1,7 @@
-using Controls.Views;
 using DBManager;
 using Infrastructure;
 using Infrastructure.Events;
+using Infrastructure.Tokens;
 using Microsoft.Practices.Unity;
 using Prism.Commands;
 using Prism.Events;
@@ -34,10 +34,22 @@ namespace Projects.ViewModels
         {
             _entities = entities;
             _container = container;
-            
             _eventAggregator = aggregator;
-            _eventAggregator.GetEvent<CommitRequested>().Subscribe( () => _entities.SaveChanges() );
-            
+
+            #region EventSubscriptions
+
+            _eventAggregator.GetEvent<CommitRequested>().Subscribe(() => _entities.SaveChanges());
+            _eventAggregator.GetEvent<ReportCreated>().Subscribe(
+                rpt =>
+                {
+                    if (rpt.Batch.Material.Construction.ProjectID == _projectInstance.ID)
+                        OnPropertyChanged("ReportLsit");
+                });
+
+            #endregion
+
+            #region CommandDefinitions
+
             _assignConstruction = new DelegateCommand(
                 () => 
                 {
@@ -52,11 +64,8 @@ namespace Projects.ViewModels
             _newReport = new DelegateCommand(
                 () =>
                 {
-                    ReportCreationDialog creationDialog = _container.Resolve<ReportCreationDialog>();
-                    if (creationDialog.ShowDialog() == true)
-                    {
-                        OnPropertyChanged("ReportList");                        
-                    }
+                    NewReportToken token = new NewReportToken();
+                    _eventAggregator.GetEvent<ReportCreationRequested>().Publish(token);
                 }
             );
 
@@ -87,8 +96,10 @@ namespace Projects.ViewModels
                 },
                 () => _selectedAssigned != null
             );
+
+            #endregion
         }
-        
+
         public DelegateCommand AssignConstructionCommand
         {
             get { return _assignConstruction; }

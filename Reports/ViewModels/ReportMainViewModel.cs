@@ -2,6 +2,7 @@
 using Controls.Views;
 using Infrastructure;
 using Infrastructure.Events;
+using Infrastructure.Tokens;
 using Microsoft.Practices.Unity;
 using Prism.Commands;
 using Prism.Events;
@@ -16,6 +17,7 @@ namespace Reports.ViewModels
 {
     class ReportMainViewModel : BindableBase
     {
+        private bool _isActive;
         private DBEntities _entities;
         private DelegateCommand _newReport, _openReport;
         private EventAggregator _eventAggregator;
@@ -30,6 +32,7 @@ namespace Reports.ViewModels
             _container = container;
             _entities = entities;
             _eventAggregator = eventAggregator;
+            _isActive = false;
             _reportList = new ObservableCollection<Report>(entities.Reports);
 
             _openReport = new DelegateCommand(
@@ -43,15 +46,15 @@ namespace Reports.ViewModels
             _newReport = new DelegateCommand(
                 () =>
                 {
-                    ReportCreationDialog creationDialog = _container.Resolve<ReportCreationDialog>();
-                    if (creationDialog.ShowDialog() == true)
-                    {
-                        Report temp = creationDialog.ReportInstance;
-                        _reportList.Add(temp);
-                        SelectedReport = temp;
-                        _openReport.Execute();
-                    }
+                    _eventAggregator.GetEvent<ReportCreationRequested>().Publish(new NewReportToken());
                 });
+
+            _eventAggregator.GetEvent<ReportCreated>().Subscribe(
+                rpt => 
+                {
+                    _reportList.Add(rpt);
+                    SelectedReport = rpt;
+                } ); 
         }
 
         public DelegateCommand NewReportCommand

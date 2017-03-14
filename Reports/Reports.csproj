@@ -103,6 +103,11 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ReportServiceProvider.cs" />
+    <Compile Include="ViewModels\ReportCreationDialogViewModel.cs" />
+    <Compile Include="Views\ReportCreationDialog.xaml.cs">
+      <DependentUpon>ReportCreationDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ReportList.xaml.cs">
       <DependentUpon>ReportList.xaml</DependentUpon>
     </Compile>
@@ -180,6 +185,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Views\ReportCreationDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\ReportList.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
