@@ -19,7 +19,7 @@ namespace Tasks
 
         public void Initialize()
         {
-            _container.RegisterType<Object, Views.TaskMainView>(ViewNames.TaskMainView);
+            _container.RegisterType<Object, Views.TaskMain>(ViewNames.TaskMainView);
 
             _container.RegisterType<ViewModels.TaskMainViewModel>();
 
