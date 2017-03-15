@@ -284,7 +284,7 @@ namespace Specifications.ViewModels
             }
         }
         
-        public ObservableCollection<StandardIssue> IssuesList
+        public ObservableCollection<StandardIssue> IssueList
         {
             get { return _issueList; }
         }
