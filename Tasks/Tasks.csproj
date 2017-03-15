@@ -134,8 +134,8 @@
     <Compile Include="Views\TaskList.xaml.cs">
       <DependentUpon>TaskList.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\TaskMainView.xaml.cs">
-      <DependentUpon>TaskMainView.xaml</DependentUpon>
+    <Compile Include="Views\TaskMain.xaml.cs">
+      <DependentUpon>TaskMain.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\TaskNavigationItem.xaml.cs">
       <DependentUpon>TaskNavigationItem.xaml</DependentUpon>
@@ -188,7 +188,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\TaskMainView.xaml">
+    <Page Include="Views\TaskMain.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
