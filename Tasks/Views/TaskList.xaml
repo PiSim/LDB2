@@ -7,6 +7,53 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-            
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+
+        <ListView ItemsSource="{Binding TaskList}"
+                  SelectedItem="{Binding SelectedTask, Mode=TwoWay}"
+                  Grid.Column="0">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Completo">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox IsChecked="{Binding IsComplete}"
+                                          IsEnabled="False"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="TR" DisplayMemberBinding="{Binding Report.Number}"/>
+                    <GridViewColumn Header="Commessa" DisplayMemberBinding="{Binding Batch.Number}"/>
+                    <GridViewColumn Header="Progetto" DisplayMemberBinding="{Binding Batch.Material.Construction.Project.Name}"/>
+                    <GridViewColumn Header="Materiale"
+                                    DisplayMemberBinding="{Binding Batch.Material.Construction.Type.Code}"/>
+                    <GridViewColumn Header="Linea"
+                                    DisplayMemberBinding="{Binding Batch.Material.Construction.Line}"/>
+                    <GridViewColumn Header="Aspetto"
+                                    DisplayMemberBinding="{Binding Batch.Material.Construction.Aspect.Code}"/>
+                    <GridViewColumn Header="Ricetta"
+                                    DisplayMemberBinding="{Binding Batch.Material.Recipe.Code}"/>
+                    <GridViewColumn Header="Specifica" DisplayMemberBinding="{Binding SpecificationVersion.Specification.Standard.Name}"/>
+                    <GridViewColumn Header="Versione" DisplayMemberBinding="{Binding SpecificationVersion.Name}"/>
+                    <GridViewColumn Header="Descrizione" DisplayMemberBinding="{Binding Notes}"/>
+                    <GridViewColumn Header="Richiedente" DisplayMemberBinding="{Binding Author.Name}"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+        <StackPanel Orientation="Vertical"
+                    Grid.Column="1">
+            <Button Content="Apri"
+                    Command="{Binding Path=OpenTaskCommand}"
+                    Margin="5"/>
+            <Button Content="Crea Nuovo"
+                    Command="{Binding NewTaskCommand}"
+                    Margin="5"/>
+        </StackPanel>
+        
+        
     </Grid>
 </UserControl>
