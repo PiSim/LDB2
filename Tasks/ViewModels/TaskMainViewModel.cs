@@ -13,14 +13,15 @@ using System.Threading.Tasks;
 
 namespace Tasks.ViewModels
 {
-    internal class TaskMainViewModel : BindableBase
+    public class TaskMainViewModel : BindableBase
     {
         private DBEntities _entities;
         private DelegateCommand _newTask;
         private EventAggregator _eventAggregator;
+        private DBManager.Task _selectedTask;
         private UnityContainer _container;
 
-        internal TaskMainViewModel(DBEntities entities, 
+        public TaskMainViewModel(DBEntities entities, 
                                     EventAggregator eventAggregator,
                                     UnityContainer container) 
             : base()
@@ -41,6 +42,16 @@ namespace Tasks.ViewModels
         public DelegateCommand NewTaskCommand
         {
             get { return _newTask; }
+        }
+        
+        public DBManager.Task SelectedTask 
+        {
+            get { return _selectedTask; }
+            set 
+            {
+                _selectedTask = value;
+                OnPropertyChanged("SelectedTask");
+            }       
         }
         
         public List<DBManager.Task> TaskList
