@@ -38,6 +38,11 @@ namespace Tasks.ViewModels
                 } );
         }
         
+        public DelegateCommand NewTaskCommand
+        {
+            get { return _newTask; }
+        }
+        
         public List<DBManager.Task> TaskList
         {
             get { return new List<DBManager.Task>(); }
