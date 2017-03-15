@@ -203,6 +203,7 @@ namespace Projects.ViewModels
                 OnPropertyChanged("LeaderName");
                 OnPropertyChanged("Name");
                 OnPropertyChanged("OemName");
+                OnPropertyChanged("ReportList");
                 OnPropertyChanged("TaskList");
             }
         }
