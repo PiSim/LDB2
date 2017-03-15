@@ -45,7 +45,7 @@ namespace Tasks.ViewModels
         
         public List<DBManager.Task> TaskList
         {
-            get { return new List<DBManager.Task>(); }
+            get { return new List<DBManager.Task>(_entities.Tasks); }
         }
     }
 }
