@@ -167,7 +167,7 @@
                                     <RowDefinition/>
                                 </Grid.RowDefinitions>
                                 <Button Content="Crea Nuova"
-                                    Command="{Binding Path=NewVersionCommand}"
+                                    Command="{Binding Path=AddVersionCommand}"
                                     Grid.Row="0"
                                     Margin="5,5,5,5"/>
                             </Grid>
