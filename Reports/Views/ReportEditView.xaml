@@ -189,6 +189,9 @@
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
+                        
+                        <GridViewColumn Header="Nome"
+                                        DisplayMemberBinding="{Binding Notes}"/>
 
                         <GridViewColumn Header="Metodo"
                                         DisplayMemberBinding="{Binding Method}"/>
