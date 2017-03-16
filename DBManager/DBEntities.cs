@@ -83,6 +83,7 @@ namespace DBManager
                 tempTest.Batch = report.Batch;
                 tempTest.IsComplete = false;
                 tempTest.Method = rq.Method;
+                tempTest.Notes = rq.Description;
                 tempTest.Person = report.Author;
                 tempTest.Report = report;
                 foreach (SubRequirement subReq in rq.SubRequirements)
