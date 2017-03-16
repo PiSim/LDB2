@@ -27,6 +27,15 @@ namespace Infrastructure.Wrappers
         {
             get { return !_versionInstance.IsMain;  }
         }
+        
+        public string Description
+        {
+            get { return _requirementInstance.Description; }
+            set
+            {
+                _requirementInstance.Description = value;
+            }
+        }
 
         public bool IsOverride
         {
