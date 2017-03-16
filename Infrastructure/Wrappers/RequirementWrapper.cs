@@ -61,8 +61,7 @@ namespace Infrastructure.Wrappers
         {
             get
             {
-                return _requirementInstance.Method.Standard.Organization.Name + " " +
-                  _requirementInstance.Method.Standard.Name;
+                return _requirementInstance.Method.Standard.Name;
             }
         }
 
