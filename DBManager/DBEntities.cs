@@ -83,6 +83,7 @@ namespace DBManager
                 tempTest.Batch = report.Batch;
                 tempTest.IsComplete = false;
                 tempTest.Method = rq.Method;
+                tempTest.MethodIssue = rq.Method.Standard.CurrentIssue;
                 tempTest.Notes = rq.Description;
                 tempTest.Person = report.Author;
                 tempTest.Report = report;
