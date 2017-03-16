@@ -191,6 +191,8 @@
                                                     DisplayMemberBinding="{Binding Path=Test}"/>
                                     <GridViewColumn Header="Metodo"
                                                     DisplayMemberBinding="{Binding Path=Standard}"/>
+                                    <GridViewColumn Header="Note"
+                                                    DisplayMemberBinding="{Binding Description}"/>
                                     <GridViewColumn Header="Requisiti">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
