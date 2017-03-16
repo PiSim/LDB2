@@ -72,6 +72,7 @@ namespace Specifications.ViewModels
                             temp.Path = pth;
                             temp.Description = "";
                             _selectedIssue.StandardFiles.Add(temp);
+                            _issueList.Add(temp);
                         }
 
                         OnPropertyChanged("FileList");
@@ -155,7 +156,7 @@ namespace Specifications.ViewModels
             _removeIssue = new DelegateCommand(
                 () =>
                 {
-                    _instance.Standard.StandardIssues.Remove(_selectedIssue);
+                    _entities.StandardIssues.Remove(_selectedIssue);
                     _issueList.Remove(_selectedIssue);
                     SelectedIssue = null;
                 },
