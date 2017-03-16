@@ -98,8 +98,9 @@ namespace Specifications.ViewModels
                 () =>
                 {
                     _entities.AddTest(_instance, _selectedToAdd);
+                    if (_requirementList != null)
+                        
                     OnPropertyChanged("MainVersionRequirements");
-                    OnPropertyChanged("RequirementList");
                 },
                 () => _selectedToAdd != null);
 
@@ -195,6 +196,14 @@ namespace Specifications.ViewModels
                         OnPropertyChanged("ReportList");
                 });
 
+        }
+        
+        private void GenerateRequirementList()
+        {
+            List<Requirement> tempReqList = _entities.GenerateRequirementList(_selectedVersion);
+            _requirementList = new List<RequirementWrapper>();
+            foreach (Requirement rr in tempReqList)
+                _requirementList.Add(new RequirementWrapper(rr, _selectedVersion, _entities));
         }
 
 
@@ -423,10 +432,7 @@ namespace Specifications.ViewModels
                 OnPropertyChanged("SelectedVersionIsNotMain");
                 if (_selectedVersion != null)
                 {
-                    List<Requirement> tempReqList = _entities.GenerateRequirementList(_selectedVersion);
-                    _requirementList = new List<RequirementWrapper>();
-                    foreach (Requirement rr in tempReqList)
-                        _requirementList.Add(new RequirementWrapper(rr, _selectedVersion, _entities));
+                    GenerateRequirementList();
                     OnPropertyChanged("RequirementList");
                 }
             }
