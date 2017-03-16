@@ -72,7 +72,6 @@ namespace Specifications.ViewModels
                             temp.Path = pth;
                             temp.Description = "";
                             _selectedIssue.StandardFiles.Add(temp);
-                            _issueList.Add(temp);
                         }
 
                         OnPropertyChanged("FileList");
