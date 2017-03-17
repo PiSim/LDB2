@@ -166,7 +166,7 @@ namespace Specifications.ViewModels
             _removeTest = new DelegateCommand(
                 () =>
                 {
-                    MainVersion.Requirements.Remove(_selectedToRemove);
+                    _entities.Requirements.Remove(_selectedToRemove);
                     OnPropertyChanged("MainVersionRequirements");
                     OnPropertyChanged("RequirementList");
                 },
