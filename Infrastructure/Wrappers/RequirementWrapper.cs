@@ -14,7 +14,7 @@ namespace Infrastructure.Wrappers
         private Requirement _requirementInstance;
         private SpecificationVersion _versionInstance;
 
-        internal RequirementWrapper(Requirement instance,
+        public RequirementWrapper(Requirement instance,
                                     SpecificationVersion version,
                                     DBEntities entities) : base()
         {
