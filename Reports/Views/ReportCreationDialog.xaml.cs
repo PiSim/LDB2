@@ -1,4 +1,5 @@
 ﻿using DBManager;
+using Infrastructure;
 using Microsoft.Practices.Prism.Mvvm;
 using System;
 using System.Collections.Generic;
@@ -16,9 +17,10 @@ namespace Reports.Views
     {
         private Report _reportInstance;
 
-        public ReportCreationDialog(DBEntities entities)
+        public ReportCreationDialog(DBEntities entities, 
+                                    IMaterialServiceProvider serviceProvider)
         {
-            DataContext = new ViewModels.ReportCreationDialogViewModel(entities, this);
+            DataContext = new ViewModels.ReportCreationDialogViewModel(entities, serviceProvider, this);
             InitializeComponent();
         }
 

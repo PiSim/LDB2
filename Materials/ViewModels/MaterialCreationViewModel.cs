@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Controls.ViewModels
+namespace Materials.ViewModels
 {
     public class MaterialCreationViewModel : BindableBase
     {

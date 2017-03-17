@@ -20,12 +20,12 @@ namespace Materials.ViewModels
         private DelegateCommand _continue, _saveLogEntry;
         private IUnityContainer _container;
         private List<Tuple<string, string>> _actions;
-        private MaterialServiceProvider _batchServiceProvider;
+        private IMaterialServiceProvider _batchServiceProvider;
         private string _batchNumber;
         private Tuple<string, string> _selectedAction;
 
         public SampleLogViewModel(DBEntities entities,
-                                MaterialServiceProvider batchServiceProvider,
+                                IMaterialServiceProvider batchServiceProvider,
                                 IUnityContainer container) : base()
         {
             _actions = new List<Tuple<string, string>>()

@@ -4,7 +4,6 @@ using Infrastructure;
 using Infrastructure.Events;
 using Infrastructure.Tokens;
 using Microsoft.Practices.Unity;
-using Reports;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
@@ -46,7 +45,7 @@ namespace Materials.ViewModels
             _openReport = new DelegateCommand(
                 () => 
                 {
-                    NavigationToken token = new NavigationToken(Reports.ViewNames.ReportEditView,
+                    NavigationToken token = new NavigationToken(ReportViewNames.ReportEditView,
                                                                 _selectedReport);
                     _eventAggregator.GetEvent<NavigationRequested>().Publish(token);
                 }

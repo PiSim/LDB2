@@ -1,9 +1,12 @@
 ﻿using DBManager;
+using Infrastructure;
+using Microsoft.Practices.Prism.Mvvm;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Prism.Events;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -11,27 +14,19 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Controls.Views
+namespace Materials.Views
 {
     /// <summary>
-    /// Interaction logic for BatchPickerDialog.xaml
+    /// Interaction logic for BatchesView.xaml
     /// </summary>
-    public partial class BatchPickerDialog : Window
+    public partial class BatchMain : UserControl, IView
     {
-        private Batch _batchInstance;
-        
-        public BatchPickerDialog(DBEntities entities)
+        public BatchMain()
         {
-            DataContext = new ViewModels.BatchPickerViewModel(entities, this);
             InitializeComponent();
-        }
-        
-        public Batch BatchInstance
-        {
-            get { return _batchInstance; }
-            set { _batchInstance = value; }
         }
     }
 }

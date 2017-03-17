@@ -321,8 +321,8 @@
           <Property Name="methodID" Type="int" Nullable="false" />
           <Property Name="name" Type="text" Nullable="false" />
           <Property Name="position" Type="int" Nullable="false" />
-          <Property Name="specification_versionID" Type="int" />
-          <Property Name="is_override" Type="int" Nullable="false" />
+          <Property Name="specification_versionID" Type="int" Nullable="false" />
+          <Property Name="is_override" Type="bit" Nullable="false" />
           <Property Name="overriddenID" Type="int" />
         </EntityType>
         <EntityType Name="samples">
@@ -1246,7 +1246,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="specversion_to_requirement">
-          <End Role="specification_versions" Type="Self.specification_versions" Multiplicity="0..1" />
+          <End Role="specification_versions" Type="Self.specification_versions" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="requirements" Type="Self.requirements" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="specification_versions">
@@ -1815,7 +1817,7 @@
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Line" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="AspectID" Type="Int32" Nullable="false" a:GetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:SetterAccess="Private" />
-          <Property Name="ProjectID" Type="Int32" a:GetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:SetterAccess="Private" />
+          <Property Name="ProjectID" Type="Int32" a:GetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:SetterAccess="Public" />
           <Property Name="ExternalConstructionID" Type="Int32" a:GetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:SetterAccess="Private" />
           <NavigationProperty Name="Aspect" Relationship="Self.aspect1" FromRole="constructions" ToRole="aspects" />
           <NavigationProperty Name="Materials" Relationship="Self.construction_to_material" FromRole="constructions" ToRole="materials" />
@@ -1969,7 +1971,7 @@
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Code" Type="String" MaxLength="4" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="colourID" Type="Int32" a:GetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:SetterAccess="Private" />
+          <Property Name="ColourID" Type="Int32" a:GetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:SetterAccess="Public" />
           <Property Name="masterID" Type="Int32" />
           <NavigationProperty Name="Colour" Relationship="Self.color_to_recipe" FromRole="recipes" ToRole="colours" />
           <NavigationProperty Name="Master" Relationship="Self.master_to_recipe" FromRole="recipes" ToRole="masters" />
@@ -2018,11 +2020,11 @@
           <Property Name="MethodID" Type="Int32" Nullable="false" a:SetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <Property Name="Name" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" DefaultValue="" />
           <Property Name="Position" Type="Int32" Nullable="false" />
-          <Property Name="SpecificationVersionID" Type="Int32" />
+          <Property Name="SpecificationVersionID" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Method" Relationship="Self.method_to_requirement" FromRole="requirements" ToRole="methods" />
           <NavigationProperty Name="SubRequirements" Relationship="Self.requirement_to_subreq" FromRole="requirements" ToRole="sub_requirements" />
           <NavigationProperty Name="SpecificationVersions" Relationship="Self.specversion_to_requirement" FromRole="requirements" ToRole="specification_versions" />
-          <Property Name="IsOverride" Type="Int32" Nullable="false" />
+          <Property Name="IsOverride" Type="Boolean" Nullable="false" />
           <Property Name="OverriddenID" Type="Int32" />
           <NavigationProperty Name="Overrides" Relationship="labdbModel.overridden_to_requirement" FromRole="Requirement" ToRole="Requirement1" />
           <NavigationProperty Name="Overridden" Relationship="labdbModel.overridden_to_requirement" FromRole="Requirement1" ToRole="Requirement" />
@@ -2263,7 +2265,7 @@
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="recipes">
-              <PropertyRef Name="colourID" />
+              <PropertyRef Name="ColourID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2566,7 +2568,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="specversion_to_requirement">
-          <End Role="specification_versions" Type="labdbModel.SpecificationVersion" Multiplicity="0..1">
+          <End Role="specification_versions" Type="labdbModel.SpecificationVersion" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
           <End Role="requirements" Type="labdbModel.Requirement" Multiplicity="*" />
@@ -3838,7 +3840,7 @@
               <MappingFragment StoreEntitySet="recipes">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Code" ColumnName="code" />
-                <ScalarProperty Name="colourID" ColumnName="colourID" />
+                <ScalarProperty Name="ColourID" ColumnName="colourID" />
                 <ScalarProperty Name="masterID" ColumnName="masterID" />
               </MappingFragment>
             </EntityTypeMapping>

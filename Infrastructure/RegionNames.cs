@@ -1,9 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace Infrastructure
 {
     public class RegionNames
@@ -21,6 +15,7 @@ namespace Infrastructure
         public static string ProjectReportListRegion { get { return "ProjectReportListRegion"; } }
         public static string SpecificationIssueRegion { get { return "SpecificationIssueRegion"; } }
         public static string SpecificationReportListRegion { get { return "SpecificationReportListRegion"; } }
+        public static string StatusbarRegion { get { return "StatusbarRegion"; } }
         public static string ToolbarRegion { get { return "ToolbarRegion"; } }
     }
 }

@@ -1,5 +1,5 @@
-﻿using Controls.Views;
-using DBManager;
+﻿using DBManager;
+using Infrastructure;
 using Microsoft.Practices.Unity;
 using Prism.Commands;
 using Prism.Mvvm;
@@ -17,29 +17,28 @@ namespace Reports.ViewModels
         private Batch _selectedBatch;
         private DBEntities _entities;
         private DelegateCommand _addBatch, _cancel, _confirm, _removeBatch;
+        private IMaterialServiceProvider _materialServiceProvider;
         private Int32 _number;
         private ObservableCollection<Batch> _batchList;
         private Organization _selectedLab;
         private Project _selectedProject;
         private string _sampleDescription, _testDescription;
-        private UnityContainer _container;
         private Views.ExternalReportCreationDialog _parentDialog;
         
         internal ExternalReportCreationViewModel(DBEntities entities,
-                                                UnityContainer container,
+                                                IMaterialServiceProvider materialServiceProvider,
                                                 Views.ExternalReportCreationDialog parentDialog) : base()
         {
             _batchList = new ObservableCollection<Batch>();
-            _container = container;
+            _materialServiceProvider = materialServiceProvider;
             _entities = entities;
             _parentDialog = parentDialog;
             
             _addBatch = new DelegateCommand(
                 () => 
                 {
-                    BatchPickerDialog batchPicker = new BatchPickerDialog(_entities); 
-                    if (batchPicker.ShowDialog() == true)
-                        _batchList.Add(batchPicker.BatchInstance);                                            
+                    Batch temp = _materialServiceProvider.StartBatchSelection();
+                    _batchList.Add(temp);                                      
                 });
             
             _cancel = new DelegateCommand(

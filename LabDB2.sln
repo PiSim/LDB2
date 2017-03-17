@@ -8,6 +8,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{8F1F5AA4-B46F-4661-AAB0-490B2C80DA5C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{3560430A-1098-46BE-8732-26BCC70F451A}"
+	ProjectSection(SolutionItems) = preProject
+		Controls\ViewModels\ColorPickerViewModel.cs = Controls\ViewModels\ColorPickerViewModel.cs
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{C432C3BE-1051-45F1-95A1-9397BBF35923}"
 EndProject

@@ -1,5 +1,6 @@
 ﻿using Controls.Views;
 using DBManager;
+using Infrastructure;
 using Microsoft.Practices.Unity;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Materials
 {
-    public class MaterialServiceProvider
+    public class MaterialServiceProvider : IMaterialServiceProvider
     {
         private DBEntities _entities;
         private UnityContainer _container;
@@ -39,18 +40,16 @@ namespace Materials
 
         private Material GetMaterial()
         {
-            if (target.Material != null)
-                return;
-
-            MaterialCreationDialog matDialog = _container.Resolve<MaterialCreationDialog>();
+            Material output = null;
+            Views.MaterialCreationDialog matDialog = _container.Resolve<Views.MaterialCreationDialog>();
             
             if (matDialog.ShowDialog() == true)
             {
-                Construction tempConstruction = _entities.Constructions(con => con.Type.Code matDialog.MaterialType &&
-                                                                                con.Line == matDialog.MaterialLine &&
-                                                                                con.Aspect.Code == matDialog.MaterialAspect);
+                Construction tempConstruction = _entities.Constructions.FirstOrDefault(con => con.Type.Code == matDialog.MaterialType &&
+                                                                                            con.Line == matDialog.MaterialLine &&
+                                                                                            con.Aspect.Code == matDialog.MaterialAspect);
                 
-                Recipe tempRecipe = _entities.Recipes(rcp => rcp.Code == matDialog.MaterialRecipe);
+                Recipe tempRecipe = _entities.Recipes.FirstOrDefault(rcp => rcp.Code == matDialog.MaterialRecipe);
 
                 if (tempConstruction != null && tempRecipe != null)
                     output = _entities.Materials.FirstOrDefault(mat => mat.ConstructionID == tempConstruction.ID &&
@@ -69,7 +68,7 @@ namespace Materials
                     if (tempRecipe == null)
                     {
                         tempRecipe = new Recipe();
-                        tempRecipe.Code == matDialog.MaterialRecipe;
+                        tempRecipe.Code = matDialog.MaterialRecipe;
                     };
                 }
                 
@@ -79,75 +78,63 @@ namespace Materials
                     output.Construction = tempConstruction;
                     output.Recipe = tempRecipe;
                 }
-
-                return output;
             }
 
-            else
-                return;
+            return output;
         }
 
         public void CheckMaterialData(Material target)
         {
-            if (output.Construction.Project == null)
+            if (target.Construction.Project == null)
             {
-                ProjectPickerDialog prjDialog = new ProjectPickerDialog(_entities);
+                Views.ProjectPickerDialog prjDialog = _container.Resolve<Views.ProjectPickerDialog>();
                 if (prjDialog.ShowDialog() == true)
-                    output.Construction.Project = prjDialog.ProjectInstance;
+                    target.Construction.ProjectID = prjDialog.ProjectInstance.ID;
             }
 
-            if (output.Recipe.Colour == null)
-                output.Recipe.Colour = PickColourForRecipe();
-
+            if (target.Recipe.Colour == null)
+            {
+                Views.ColorPickerDialog colourPicker = _container.Resolve<Views.ColorPickerDialog>();
+                if (colourPicker.ShowDialog() == true)
+                    target.Recipe.ColourID = colourPicker.ColourInstance.ID;
+            }
         }
 
         public Batch GetBatch(string batchNumber)
         {
-            Batch temp = Batches.FirstOrDefault(bb => bb.Number == batchNumber);
+            Batch temp = _entities.Batches.FirstOrDefault(bb => bb.Number == batchNumber);
 
             if (temp == null)
             {
-                output = new Batch();
-                output.Number = batchNumber;
-            }
-
-            if (temp.Material != null)
-            {
-                if (temp.Material.Construction.Project == null)
-                {
-                    ProjectPickerDialog prjDialog = new ProjectPickerDialog(_entities);
-                    if (prjDialog.ShowDialog() == true)
-                        temp.Material.Construction.Project = prjDialog.ProjectInstance;
-                }
-                if (temp.Material.Recipe.Colour == null)
-                {
-                    ColorPickerDialog colourPicker = new ColorPickerDialog(_entities);
-                    if (colourPicker.ShowDialog() == true)
-                        temp.Material.Recipe.Colour = colourPicker.ColourInstance;
-                }
+                temp = new Batch();
+                temp.Number = batchNumber;
             }
 
             if (temp.Material == null)
-                temp.Material = CreateNewMaterial();
+                temp.Material = GetMaterial();
+
+            CheckMaterialData(temp.Material);
 
             return temp;
         }
 
         private void OnColorCreationRequested()
         {
-            ColorCreationDialog colorCreator =  _container.Resolve<ColorCreationDialog>();
+            Views.ColorCreationDialog colorCreator =  _container.Resolve<Views.ColorCreationDialog>();
             colorCreator.ShowDialog();
         }
 
-        public Colour PickColourForRecipe()
+        public Batch StartBatchSelection()
         {
-            ColorPickerDialog colourPicker = new ColorPickerDialog(_entities);
-
-            if (colourPicker.ShowDialog() == true)
-                return colourPicker.ColourInstance;
+            Views.BatchPickerDialog batchPicker = _container.Resolve<Views.BatchPickerDialog>();
+            if (batchPicker.ShowDialog() == true)
+            {
+                Batch output = GetBatch(batchPicker.BatchNumber);
+                return output;
+            }
 
             else
                 return null;
-        } 
+        }
     }
 }

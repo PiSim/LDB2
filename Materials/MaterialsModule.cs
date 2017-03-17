@@ -22,13 +22,24 @@ namespace Materials
         public void Initialize()
         {
             _container.RegisterType<Object, Views.BatchInfo>(ViewNames.BatchInfoView);
-            _container.RegisterType<Object, Views.BatchMainView>(ViewNames.BatchesView);
+            _container.RegisterType<Object, Views.BatchMain>(ViewNames.BatchesView);
             _container.RegisterType<Object, Views.SampleLogView>(ViewNames.SampleLogView);
 
-            _container.RegisterType<ViewModels.BatchInfoViewModel>();
+            _container.RegisterType<Views.BatchPickerDialog>();
+            _container.RegisterType<Views.ColorCreationDialog>();
+            _container.RegisterType<Views.ColorPickerDialog>();
+            _container.RegisterType<Views.MaterialCreationDialog>();
+            _container.RegisterType<Views.ProjectPickerDialog>();
+            _container.RegisterType<Views.SampleLogDialog>();
 
-            _container.RegisterType<MaterialServiceProvider>(new ContainerControlledLifetimeManager());
-            _container.Resolve<MaterialServiceProvider>();
+            _container.RegisterType<ViewModels.BatchInfoViewModel>();
+            _container.RegisterType<ViewModels.BatchMainViewModel>();
+            _container.RegisterType<ViewModels.BatchPickerDialogViewModel>();
+            _container.RegisterType<ViewModels.ColorCreationDialogViewModel>();
+            _container.RegisterType<ViewModels.SampleLogDialogViewModel>();
+
+            _container.RegisterType<IMaterialServiceProvider, MaterialServiceProvider>(new ContainerControlledLifetimeManager());
+            _container.Resolve<IMaterialServiceProvider>();
 
             _regionManager.RegisterViewWithRegion(RegionNames.MainNavigationRegion, 
                                                 typeof(Views.BatchesNavigationItem));

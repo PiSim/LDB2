@@ -18,13 +18,17 @@ namespace Materials.ViewModels
         private DBEntities _entities;
         private DelegateCommand _quickOpen, _openSampleLogView;
         private IEventAggregator _eventAggregator;
+        private IMaterialServiceProvider _materialServiceProvider;
         private string _batchNumber;
 
-        public BatchMainViewModel(IEventAggregator eventAggregator, DBEntities entities) 
+        public BatchMainViewModel(IEventAggregator eventAggregator, 
+                                IMaterialServiceProvider serviceProvider,
+                                DBEntities entities) 
             : base()
         {
             _entities = entities;
             _eventAggregator = eventAggregator;
+            _materialServiceProvider = serviceProvider;
 
             _openSampleLogView = new DelegateCommand(
                 () =>
@@ -35,7 +39,7 @@ namespace Materials.ViewModels
             _quickOpen = new DelegateCommand(
                 () =>
                 {
-                    Batch temp = _entities.GetBatchByNumber(_batchNumber, false);
+                    Batch temp = _materialServiceProvider.GetBatch(_batchNumber);
                     NavigationToken token = new NavigationToken(ViewNames.BatchInfoView, temp);
                     if (temp != null)
                         _eventAggregator.GetEvent<NavigationRequested>().Publish(token);

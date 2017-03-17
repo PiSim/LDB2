@@ -121,6 +121,11 @@
     <Compile Include="ViewModels\BatchesNavigationItemViewModel.cs" />
     <Compile Include="ViewModels\BatchInfoViewModel.cs" />
     <Compile Include="ViewModels\BatchMainViewModel.cs" />
+    <Compile Include="ViewModels\BatchPickerDialogViewModel.cs" />
+    <Compile Include="ViewModels\ColorCreationDialogViewModel.cs" />
+    <Compile Include="ViewModels\ColorPickerDialogViewModel.cs" />
+    <Compile Include="ViewModels\MaterialCreationViewModel.cs" />
+    <Compile Include="ViewModels\ProjectPickerViewModel.cs" />
     <Compile Include="ViewModels\SampleLogDialogViewModel.cs" />
     <Compile Include="ViewModels\SampleLogViewModel.cs" />
     <Compile Include="ViewNames.cs" />
@@ -130,8 +135,23 @@
     <Compile Include="Views\BatchInfo.xaml.cs">
       <DependentUpon>BatchInfo.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\BatchMainView.xaml.cs">
-      <DependentUpon>BatchMainView.xaml</DependentUpon>
+    <Compile Include="Views\BatchMain.xaml.cs">
+      <DependentUpon>BatchMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\BatchPickerDialog.xaml.cs">
+      <DependentUpon>BatchPickerDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ColorCreationDialog.xaml.cs">
+      <DependentUpon>ColorCreationDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ColorPickerDialog.xaml.cs">
+      <DependentUpon>ColorPickerDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MaterialCreationDialog.xaml.cs">
+      <DependentUpon>MaterialCreationDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ProjectPickerDialog.xaml.cs">
+      <DependentUpon>ProjectPickerDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SampleLogDialog.xaml.cs">
       <DependentUpon>SampleLogDialog.xaml</DependentUpon>
@@ -169,10 +189,6 @@
       <Project>{31368a5f-9770-4198-bc3d-4996917b4139}</Project>
       <Name>Navigation</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Reports\Reports.csproj">
-      <Project>{dd1a1429-e1ac-4611-9971-f99988c4edba}</Project>
-      <Name>Reports</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Security\Security.csproj">
       <Project>{ec7f180a-b306-4d9c-84c8-632bb2e4ae5c}</Project>
       <Name>Security</Name>
@@ -187,7 +203,27 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\BatchMainView.xaml">
+    <Page Include="Views\BatchMain.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\BatchPickerDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\ColorCreationDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ColorPickerDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\MaterialCreationDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\ProjectPickerDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

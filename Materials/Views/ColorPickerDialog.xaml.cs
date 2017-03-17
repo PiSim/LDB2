@@ -13,25 +13,25 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace Controls.Views
+namespace Materials.Views
 {
     /// <summary>
-    /// Interaction logic for ProjectPickerDialog.xaml
+    /// Interaction logic for ColorPickerDialog.xaml
     /// </summary>
-    public partial class ProjectPickerDialog : Window
+    public partial class ColorPickerDialog : Window
     {
-        private Project _projectInstance;
-
-        public ProjectPickerDialog(DBEntities entities)
+        private Colour _colourInstance;
+        
+        public ColorPickerDialog(DBEntities entities)
         {
-            DataContext = new ViewModels.ProjectPickerViewModel(entities, this);
+            DataContext = new ViewModels.ColorPickerDialogViewModel(entities, this);
             InitializeComponent();
         }
 
-        public Project ProjectInstance
+        public Colour ColourInstance
         {
-            get { return _projectInstance; }
-            set { _projectInstance = value; }
-        }
+            get { return _colourInstance; }
+            set { _colourInstance = value; }
+        } 
     }
 }

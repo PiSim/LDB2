@@ -1,4 +1,5 @@
 using DBManager;
+using Infrastructure;
 using Infrastructure.Events;
 using Infrastructure.Wrappers;
 using Prism.Commands;
@@ -18,7 +19,7 @@ namespace Reports.ViewModels
     {
         private DBEntities _entities;
         private DelegateCommand _cancel, _confirm;
-        private EventAggregator _eventAggregator;
+        private IMaterialServiceProvider _materialServiceProvider;
         private Int32 _number;
         private ObservableCollection<ReportItemWrapper> _requirementList;
         private ObservableCollection<SpecificationVersion> _versionList;
@@ -29,9 +30,11 @@ namespace Reports.ViewModels
         private Views.ReportCreationDialog _parentDialog;
         
         public ReportCreationDialogViewModel(DBEntities entities,
+                                        IMaterialServiceProvider serviceProvider,
                                         Views.ReportCreationDialog parentDialog) : base()
         {
             _entities = entities;
+            _materialServiceProvider = serviceProvider;
             _parentDialog = parentDialog;
             _versionList = new ObservableCollection<SpecificationVersion>();
             _requirementList = new ObservableCollection<ReportItemWrapper>();
@@ -40,7 +43,7 @@ namespace Reports.ViewModels
                 () => {
                     Report temp = new Report();
                     temp.Author = _author;
-                    temp.Batch = _entities.GetBatchByNumber(_batchNumber);
+                    temp.Batch = _materialServiceProvider.GetBatch(_batchNumber);
                     temp.Category = "TR";
                     temp.Description = _selectedSpecification.Description;
                     temp.IsComplete = false;

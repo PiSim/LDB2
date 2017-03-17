@@ -44,5 +44,15 @@ namespace Infrastructure.Tokens
         {
             get { return _requester; }
         }
+
+        public Specification Specification
+        {
+            get { return _specification; }
+        }
+
+        public SpecificationVersion SpecificationVersion
+        {
+            get { return _specVersion; }
+        }
     }
 }

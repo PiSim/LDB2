@@ -19,12 +19,10 @@ namespace Controls
 
         public void Initialize()
         {
-            _container.RegisterType<Views.ColorPickerDialog>();
-            _container.RegisterType<Views.MaterialCreationDialog>();
-            _container.RegisterType<Views.ProjectPickerDialog>();
-
             _regionManager.RegisterViewWithRegion(RegionNames.ToolbarRegion, 
                                                 typeof(Views.ToolbarView));
+            _regionManager.RegisterViewWithRegion(RegionNames.StatusbarRegion,
+                                                typeof(Views.StatusBarView)); 
         }
     }
 }

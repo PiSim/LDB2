@@ -39,7 +39,7 @@ namespace Infrastructure.Wrappers
 
         public bool IsOverride
         {
-            get { return (_requirementInstance.IsOverride == 1) ? true : false; }
+            get { return _requirementInstance.IsOverride; }
 
             set
             {

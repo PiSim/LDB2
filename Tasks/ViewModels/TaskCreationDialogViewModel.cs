@@ -1,4 +1,5 @@
 ﻿using DBManager;
+using Infrastructure;
 using Infrastructure.Wrappers;
 using Prism.Commands;
 using Prism.Mvvm;
@@ -15,6 +16,7 @@ namespace Tasks.ViewModels
         private string _batchNumber;
         private DBEntities _entities;
         private DelegateCommand _cancel, _confirm;
+        private IMaterialServiceProvider _materialServiceProvider;
         private ObservableCollection<ReportItemWrapper> _requirementList;
         private ObservableCollection<SpecificationVersion> _versionList;
         private Person _requester;
@@ -23,9 +25,11 @@ namespace Tasks.ViewModels
         private Views.TaskCreationDialog _parentView;
 
         public TaskCreationDialogViewModel(DBEntities entities,
+                                    IMaterialServiceProvider serviceProvider,
                                     Views.TaskCreationDialog parentView) : base()
         {
             _entities = entities;
+            _materialServiceProvider = serviceProvider;
             _parentView = parentView;
             
             _cancel = new DelegateCommand(
@@ -40,7 +44,7 @@ namespace Tasks.ViewModels
                     Task output = new Task();
                     output.Requester = _requester;
                     output.SpecificationVersion = _selectedVersion;
-                    output.Batch = _entities.GetBatchByNumber(_batchNumber);
+                    output.Batch = _materialServiceProvider.GetBatch(_batchNumber);
                     
                     foreach (ReportItemWrapper req in _requirementList)
                     {

@@ -6,18 +6,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 
-namespace Controls.ViewModels
+namespace Materials.ViewModels
 {
-    internal class ProjectPickerViewModel : BindableBase
+    public class ProjectPickerViewModel : BindableBase
     {
         DBEntities _entities;
         private DelegateCommand _cancel, _confirm;
         private Project _selectedProject;
         private Views.ProjectPickerDialog _parentDialog;
 
-        internal ProjectPickerViewModel(DBEntities entities,
+        public ProjectPickerViewModel(DBEntities entities,
                                         Views.ProjectPickerDialog parentDialog) : base()
         {
             _entities = entities;

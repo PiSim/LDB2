@@ -7,16 +7,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Controls.ViewModels
+namespace Materials.ViewModels
 {
-    internal class ColorPickerViewModel : BindableBase
+    public class ColorPickerDialogViewModel : BindableBase
     {
         private Colour _selectedColour;
         private DBEntities _entities;
         private DelegateCommand _cancel, _confirm;
         private Views.ColorPickerDialog _parentView;
 
-        internal ColorPickerViewModel(DBEntities entities, Views.ColorPickerDialog parent) : base()
+        public ColorPickerDialogViewModel(DBEntities entities, Views.ColorPickerDialog parent) : base()
         {
             _entities = entities;
             _parentView = parent;

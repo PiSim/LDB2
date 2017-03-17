@@ -1,4 +1,5 @@
 ﻿using DBManager;
+using Infrastructure;
 using Microsoft.Practices.Unity;
 using System;
 using System.Collections.Generic;
@@ -23,9 +24,9 @@ namespace Reports.Views
     {
         private ExternalReport _externalReportInstance;
         
-        public ExternalReportCreationDialog(DBEntities entities, UnityContainer container)
+        public ExternalReportCreationDialog(DBEntities entities, IMaterialServiceProvider serviceProvider)
         {
-            DataContext = new ViewModels.ExternalReportCreationViewModel(entities, container, this);
+            DataContext = new ViewModels.ExternalReportCreationViewModel(entities, serviceProvider, this);
             InitializeComponent();
         }
         

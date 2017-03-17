@@ -1,4 +1,5 @@
 ﻿using DBManager;
+using Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,9 +22,10 @@ namespace Tasks.Views
     {
         private Task _taskInstance;
         
-        public TaskCreationDialog(DBEntities entities)
+        public TaskCreationDialog(DBEntities entities,
+                                IMaterialServiceProvider serviceProvider)
         {
-            DataContext = new ViewModels.TaskCreationDialogViewModel(entities, this);
+            DataContext = new ViewModels.TaskCreationDialogViewModel(entities, serviceProvider, this);
             InitializeComponent();
         }
         

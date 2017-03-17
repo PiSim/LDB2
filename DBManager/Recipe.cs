@@ -22,7 +22,7 @@ namespace DBManager
     
         public int ID { get; set; }
         public string Code { get; set; }
-        private Nullable<int> colourID { get; set; }
+        public Nullable<int> ColourID { get; set; }
         public Nullable<int> masterID { get; set; }
     
         public virtual Colour Colour { get; set; }

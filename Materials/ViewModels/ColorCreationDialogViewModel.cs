@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Instruments.ViewModels
+namespace Materials.ViewModels
 {
-    public class NewMaintenanceEventDialogViewModel : BindableBase
+    public class ColorCreationDialogViewModel : BindableBase
     {
     }
 }

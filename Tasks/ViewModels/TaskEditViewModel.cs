@@ -21,8 +21,18 @@ namespace Tasks.ViewModels
         {
             _entities = entities;
             _eventAggregator = aggregator;
+
+            _convert = new DelegateCommand(
+                () =>
+                {
+
+                });
+
         }
 
-
+        public DelegateCommand ConvertCommand
+        {
+            get { return _convert; }
+        }
     }
 }
