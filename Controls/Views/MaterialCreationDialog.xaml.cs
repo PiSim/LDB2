@@ -21,9 +21,9 @@ namespace Controls.Views
     {
         private string _aspect, _line, _recipe, _type;
 
-        public MaterialCreationDialog(DBEntities entities)
+        public MaterialCreationDialog()
         {
-            DataContext = new ViewModels.MaterialCreationViewModel(entities, this);
+            DataContext = new ViewModels.MaterialCreationViewModel(this);
             InitializeComponent();
         }
 
