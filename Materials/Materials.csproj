@@ -121,6 +121,7 @@
     <Compile Include="ViewModels\BatchesNavigationItemViewModel.cs" />
     <Compile Include="ViewModels\BatchInfoViewModel.cs" />
     <Compile Include="ViewModels\BatchMainViewModel.cs" />
+    <Compile Include="ViewModels\SampleLogDialogViewModel.cs" />
     <Compile Include="ViewModels\SampleLogViewModel.cs" />
     <Compile Include="ViewNames.cs" />
     <Compile Include="Views\BatchesNavigationItem.xaml.cs">
@@ -131,6 +132,9 @@
     </Compile>
     <Compile Include="Views\BatchMainView.xaml.cs">
       <DependentUpon>BatchMainView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SampleLogDialog.xaml.cs">
+      <DependentUpon>SampleLogDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SampleLogView.xaml.cs">
       <DependentUpon>SampleLogView.xaml</DependentUpon>
@@ -186,6 +190,10 @@
     <Page Include="Views\BatchMainView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\SampleLogDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\SampleLogView.xaml">
       <Generator>MSBuild:Compile</Generator>

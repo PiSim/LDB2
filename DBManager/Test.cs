@@ -29,7 +29,7 @@ namespace DBManager
         public Nullable<System.DateTime> Date { get; set; }
         public bool IsComplete { get; set; }
         public Nullable<int> instrumentID { get; set; }
-        public Nullable<int> method_issueID { get; set; }
+        public Nullable<int> MethodIssueID { get; set; }
     
         public virtual Batch Batch { get; set; }
         public virtual Person Person { get; set; }
@@ -38,5 +38,6 @@ namespace DBManager
         public virtual ICollection<SubTest> SubTests { get; set; }
         public virtual Method Method { get; set; }
         public virtual Instrument instrument { get; set; }
+        public virtual StandardIssue MethodIssue { get; set; }
     }
 }

@@ -18,7 +18,8 @@ namespace DBManager
         public StandardIssue()
         {
             this.StandardFiles = new HashSet<StandardFile>();
-            this.reports = new HashSet<Report>();
+            this.Reports = new HashSet<Report>();
+            this.Tests = new HashSet<Test>();
         }
     
         public int ID { get; set; }
@@ -30,6 +31,8 @@ namespace DBManager
         public virtual ICollection<StandardFile> StandardFiles { get; set; }
         public virtual Std Standard { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Report> reports { get; set; }
+        public virtual ICollection<Report> Reports { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Test> Tests { get; set; }
     }
 }

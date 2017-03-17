@@ -27,6 +27,9 @@ namespace Materials
 
             _container.RegisterType<ViewModels.BatchInfoViewModel>();
 
+            _container.RegisterType<MaterialServiceProvider>(new ContainerControlledLifetimeManager());
+            _container.Resolve<MaterialServiceProvider>();
+
             _regionManager.RegisterViewWithRegion(RegionNames.MainNavigationRegion, 
                                                 typeof(Views.BatchesNavigationItem));
         }

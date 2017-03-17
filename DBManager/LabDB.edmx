@@ -815,6 +815,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="method_issue_to_test">
+          <End Role="standard_issues" Type="Self.standard_issues" Multiplicity="0..1" />
+          <End Role="tests" Type="Self.tests" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="standard_issues">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="tests">
+              <PropertyRef Name="method_issueID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="method_to_control_plan_item">
           <End Role="methods" Type="Self.methods" Multiplicity="1" />
           <End Role="control_plan_items" Type="Self.control_plan_items" Multiplicity="*" />
@@ -1558,6 +1570,10 @@
             <End Role="masters" EntitySet="masters" />
             <End Role="recipes" EntitySet="recipes" />
           </AssociationSet>
+          <AssociationSet Name="method_issue_to_test" Association="Self.method_issue_to_test">
+            <End Role="standard_issues" EntitySet="standard_issues" />
+            <End Role="tests" EntitySet="tests" />
+          </AssociationSet>
           <AssociationSet Name="method_to_control_plan_item" Association="Self.method_to_control_plan_item">
             <End Role="methods" EntitySet="methods" />
             <End Role="control_plan_items" EntitySet="control_plan_items" />
@@ -2136,7 +2152,8 @@
           <Property Name="IsComplete" Type="Boolean" Nullable="false" />
           <Property Name="instrumentID" Type="Int32" />
           <NavigationProperty Name="instrument" Relationship="labdbModel.instrument_to_test" FromRole="Test" ToRole="instrument" />
-          <Property Name="method_issueID" Type="Int32" />
+          <Property Name="MethodIssueID" Type="Int32" />
+          <NavigationProperty Name="MethodIssue" Relationship="labdbModel.method_issue_to_test" FromRole="Test" ToRole="StandardIssue" />
         </EntityType>
         <EntityType Name="User">
           <Key>
@@ -2953,6 +2970,10 @@
             <End Role="sub_methods" EntitySet="SubMethods" />
             <End Role="SubRequirement" EntitySet="SubRequirements" />
           </AssociationSet>
+          <AssociationSet Name="method_issue_to_test" Association="labdbModel.method_issue_to_test">
+            <End Role="StandardIssue" EntitySet="StandardIssues" />
+            <End Role="Test" EntitySet="Tests" />
+          </AssociationSet>
         </EntityContainer>
         <Association Name="overridden_to_requirement">
           <End Type="labdbModel.Requirement" Role="Requirement" Multiplicity="0..1">
@@ -3024,8 +3045,9 @@
           <Property Name="StandardID" Type="Int32" Nullable="false" />
           <NavigationProperty Name="StandardFiles" Relationship="labdbModel.standard_issue_to_file" FromRole="standard_issues" ToRole="StandardFile" />
           <NavigationProperty Name="Standard" Relationship="labdbModel.standard_to_issue" FromRole="StandardIssue" ToRole="Std" />
-          <NavigationProperty Name="reports" Relationship="labdbModel.specissue_to_report1" FromRole="StandardIssue" ToRole="Report" />
+          <NavigationProperty Name="Reports" Relationship="labdbModel.specissue_to_report1" FromRole="StandardIssue" ToRole="Report" />
           <Property Name="IsCurrent" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Tests" Relationship="labdbModel.method_issue_to_test" FromRole="StandardIssue" ToRole="Test" />
         </EntityType>
         <Association Name="standard_issue_to_file">
           <End Type="labdbModel.StandardIssue" Role="standard_issues" Multiplicity="1">
@@ -3634,6 +3656,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="method_issue_to_test">
+          <End Type="labdbModel.StandardIssue" Role="StandardIssue" Multiplicity="0..1" />
+          <End Type="labdbModel.Test" Role="Test" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StandardIssue">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Test">
+              <PropertyRef Name="MethodIssueID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -3944,7 +3978,7 @@
           <EntitySetMapping Name="Tests">
             <EntityTypeMapping TypeName="labdbModel.Test">
               <MappingFragment StoreEntitySet="tests">
-                <ScalarProperty Name="method_issueID" ColumnName="method_issueID" />
+                <ScalarProperty Name="MethodIssueID" ColumnName="method_issueID" />
                 <ScalarProperty Name="instrumentID" ColumnName="instrumentID" />
                 <ScalarProperty Name="IsComplete" ColumnName="is_complete" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
