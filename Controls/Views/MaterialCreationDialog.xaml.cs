@@ -1,5 +1,4 @@
-﻿using DBManager;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,7 +19,7 @@ namespace Controls.Views
     /// </summary>
     public partial class MaterialCreationDialog : Window
     {
-        private Material _validatedMaterial;
+        private string _aspect, _line, _recipe, _type;
 
         public MaterialCreationDialog(DBEntities entities)
         {
@@ -28,10 +27,28 @@ namespace Controls.Views
             InitializeComponent();
         }
 
-        public Material ValidatedMaterial
+        public string MaterialAspect
         {
-            get { return _validatedMaterial; }
-            set { _validatedMaterial = value; }
+            get { return _aspect; }
+            set { _aspect = value; }
+        }
+
+        public string MaterialLine
+        {
+            get { return _line; }
+            set { _line = value; }
+        }
+
+        public string MaterialRecipe
+        {
+            get { return _recipe; }
+            set { _recipe = value; }
+        }
+
+        public string MaterialType
+        {
+            get { return _type; }
+            set { _type = value; }
         }
     }
 }
