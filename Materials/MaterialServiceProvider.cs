@@ -40,11 +40,11 @@ namespace Materials
         public Material CreateNewMaterial()
         {
             Material output;
-            MaterialCreationDialog matDialog = new MaterialCreationDialog(_entities);
+            MaterialCreationDialog matDialog = _container.Resolve<MaterialCreationDialog>();
             
             if (matDialog.ShowDialog() == true)
             {
-                output = matDialog.ValidatedMaterial;
+                output = _entities.Materials.First(mat => mat.ID == matDialog.ValidatedMaterial.ID);
                 if (output.Construction.Project == null)
                 {
                     ProjectPickerDialog prjDialog = new ProjectPickerDialog(_entities);
