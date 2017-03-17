@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Events
 {
-    public class StatusNotificationIssued : PubSubEvent<string>;
+    public class StatusNotificationIssued : PubSubEvent<string> 
     {
     }
 }
