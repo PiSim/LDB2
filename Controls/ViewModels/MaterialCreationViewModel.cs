@@ -11,24 +11,22 @@ namespace Controls.ViewModels
 {
     public class MaterialCreationViewModel : BindableBase
     {
-        private DBEntities _entities;
         private DelegateCommand _confirmCreation;
         private string _aspect, _line, _recipe, _type;
         private Views.MaterialCreationDialog _parentDialog;
 
-        public MaterialCreationViewModel(DBEntities entities, Views.MaterialCreationDialog parentDialog) 
+        public MaterialCreationViewModel(Views.MaterialCreationDialog parentDialog) 
             : base()
         {
-            _entities = entities;
             _parentDialog = parentDialog;
 
             _confirmCreation = new DelegateCommand(
                 () => {
-                    Material temp = _entities.GetMaterial(_type,
-                                                          _line,
-                                                          _aspect,
-                                                          _recipe);
-                    _parentDialog.ValidatedMaterial = temp;
+                    _parentDialog.MaterialType = _type;
+                    _parentDialog.MaterialLine = _line;
+                    _parentDialog.MaterialAspect = _aspect;
+                    _parentDialog.MaterialRecipe = _recipe;
+                    
                     _parentDialog.DialogResult = true;
                 },
                 () => IsValidInput);
