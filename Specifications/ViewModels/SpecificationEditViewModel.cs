@@ -2,6 +2,7 @@
 using Infrastructure;
 using Infrastructure.Events;
 using Infrastructure.Tokens;
+using Infrastructure.Wrappers;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
