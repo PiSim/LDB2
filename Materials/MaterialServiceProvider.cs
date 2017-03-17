@@ -64,7 +64,13 @@ namespace Materials
 
         public Batch GetBatch(string batchNumber)
         {
-            Batch temp = _entities.GetBatchByNumber(batchNumber);
+            Batch temp = Batches.FirstOrDefault(bb => bb.Number == batchNumber);
+
+            if (temp == null)
+            {
+                output = new Batch();
+                output.Number = batchNumber;
+            }
 
             if (temp.Material != null)
             {
