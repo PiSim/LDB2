@@ -13,7 +13,7 @@ namespace DBManager
         {
             Requirement output = new Requirement();
             output.Description = toBeOverridden.Description;
-            output.IsOverride = 1;
+            output.IsOverride = true;
             output.Method = toBeOverridden.Method;
             output.Overridden = toBeOverridden;
             output.SpecificationVersions = version;
@@ -37,7 +37,7 @@ namespace DBManager
         {
             Requirement tempReq = new Requirement();
             tempReq.Method = method;
-            tempReq.IsOverride = 0;
+            tempReq.IsOverride = false;
             tempReq.Name = "";
             tempReq.Description = "";
             tempReq.Position = 0;
