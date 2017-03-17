@@ -7,7 +7,7 @@
 -Trasferito ReportCreationDialog dal modulo Controls a Reports
 -Creata classe di servizio TaskServiceProvider, registrata come singleton
 -*Dialogo ConversionReview
--*Registrata classe di servizio MaterialServiceProvider come singleton
+-Registrata classe di servizio MaterialServiceProvider come singleton
 
 v 0.4.1 -- 14/03/2017
 
