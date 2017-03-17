@@ -88,6 +88,12 @@ namespace Materials
             return temp;
         }
 
+        private void OnColorCreationRequested()
+        {
+            ColorCreationDialog colorCreator =  _container.Resolve<ColorCreationDialog>();
+            colorCreator.ShowDialog();
+        }
+
         public Colour PickColourForRecipe()
         {
             ColorPickerDialog colourPicker = new ColorPickerDialog(_entities);
