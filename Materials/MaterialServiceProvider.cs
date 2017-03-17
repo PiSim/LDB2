@@ -41,6 +41,7 @@ namespace Materials
         {
             Material output;
             MaterialCreationDialog matDialog = new MaterialCreationDialog(_entities);
+            
             if (matDialog.ShowDialog() == true)
             {
                 output = matDialog.ValidatedMaterial;
@@ -65,9 +66,6 @@ namespace Materials
         {
             Batch temp = _entities.GetBatchByNumber(batchNumber);
 
-            if (temp.Material == null)
-                temp.Material = CreateNewMaterial();
-
             if (temp.Material != null)
             {
                 if (temp.Material.Construction.Project == null)
@@ -83,6 +81,9 @@ namespace Materials
                         temp.Material.Recipe.Colour = colourPicker.ColourInstance;
                 }
             }
+
+            if (temp.Material == null)
+                temp.Material = CreateNewMaterial();
 
             return temp;
         }
