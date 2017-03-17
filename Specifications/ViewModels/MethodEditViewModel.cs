@@ -178,7 +178,7 @@ namespace Specifications.ViewModels
             get { return _methodInstance; }
             set
             {
-                _methodInstance = value;
+                _methodInstance = _entities.Method.First(mtd => mtd.ID == value.ID);
                 Measurements = new ObservableCollection<SubMethod>(_methodInstance.SubMethods);
                 IssueList = new ObservableCollection<StandardIssue>(_methodInstance.Standard.StandardIssues);
                 OnPropertyChanged("Name");
