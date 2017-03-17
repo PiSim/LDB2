@@ -122,63 +122,6 @@ namespace DBManager
 
             return output;
         }
-
-        public Construction GetConstruction(string type,
-                                            string line,
-                                            string aspectCode,
-                                            bool new_instance_if_not_found = true)
-        {
-            Construction output = Constructions.FirstOrDefault(cons =>
-                cons.Type.Code == type &&
-                cons.Line == line &&
-                cons.Aspect.Code == aspectCode);
-
-            if (output == null && new_instance_if_not_found)
-            {
-                output = new Construction();
-                output.Type = MaterialTypes.First(tt => tt.Code == type);
-                output.Line = line;
-                output.Aspect = GetAspect(aspectCode);
-            }
-
-            return output;
-        }
-
-        public Material GetMaterial(string type,
-                                    string line,
-                                    string aspectCode,
-                                    string recipeCode,
-                                    bool new_instance_if_not_found = true)
-        {
-            Material output = Materials.FirstOrDefault(mat =>
-               mat.Construction.Type.Code == type &&
-               mat.Construction.Line == line &&
-               mat.Construction.Aspect.Code == aspectCode &&
-               mat.Recipe.Code == recipeCode);
-
-            if (output == null && new_instance_if_not_found)
-            {
-                output = new Material();
-                output.Construction = GetConstruction(type, line, aspectCode);
-                output.Recipe = GetRecipe(recipeCode);
-            }
-
-            return output;
-        }
-
-        public Recipe GetRecipe(string code,
-                                bool new_instance_if_not_found = true)
-        {
-            Recipe output = Recipes.FirstOrDefault(rec => rec.Code == code);
-
-            if (output == null && new_instance_if_not_found)
-            {
-                output = new Recipe();
-                output.Code = code;
-            }
-
-            return output;
-        }
         
         public Requirement RemoveOverride(Requirement toBeRemoved)
         {
