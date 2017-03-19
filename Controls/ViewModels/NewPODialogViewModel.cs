@@ -6,14 +6,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Instruments.ViewModels
+namespace Controls.ViewModels
 {
-    public class NewCalibrationDialogViewModel : BindableBase
+    public class NewPODialogViewModel : BindableBase 
     {
         private DelegateCommand _cancel, _confirm;
-        private Views.NewCalibrationDialog _parentDialog;
+        private Views.NewPODialog _parentDialog;
 
-        public NewCalibrationDialogViewModel(Views.NewCalibrationDialog parentDialog) : base()
+        public NewPODialogViewModel(Views.NewPODialog parentDialog) : base()
         {
 
         }

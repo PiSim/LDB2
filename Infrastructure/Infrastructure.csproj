@@ -115,6 +115,7 @@
     <Compile Include="Events\UserAuthenticated.cs" />
     <Compile Include="IMaterialServiceProvider.cs" />
     <Compile Include="InfrastructureModule.cs" />
+    <Compile Include="ITaskServiceProvider.cs" />
     <Compile Include="NavigationToken.cs" />
     <Compile Include="RegionNames.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">

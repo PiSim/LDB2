@@ -118,10 +118,14 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="ViewModels\MethodPickerViewModel.cs" />
+    <Compile Include="ViewModels\NewPODialogViewModel.cs" />
     <Compile Include="ViewModels\StatusBarViewModel.cs" />
     <Compile Include="ViewModels\ToolbarViewModel.cs" />
     <Compile Include="Views\MethodPickerDialog.xaml.cs">
       <DependentUpon>MethodPickerDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\NewPODialog.xaml.cs">
+      <DependentUpon>NewPODialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\StatusBarView.xaml.cs">
       <DependentUpon>StatusBarView.xaml</DependentUpon>
@@ -157,6 +161,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Views\MethodPickerDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\NewPODialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
