@@ -43,7 +43,7 @@ namespace Reports.ViewModels
                 () => {
                     Report temp = new Report();
                     temp.Author = _author;
-                    temp.Batch = _materialServiceProvider.GetBatch(_batchNumber);
+                    temp.BatchID = (_materialServiceProvider.GetBatch(_batchNumber)).ID;
                     temp.Category = "TR";
                     temp.Description = _selectedSpecification.Description;
                     temp.IsComplete = false;
