@@ -25,9 +25,10 @@ namespace Reports
             _container.RegisterType<Object, Views.ReportMain>(ViewNames.ReportMain);
             _container.RegisterType<Object, Views.ReportEditView>(ViewNames.ReportEditView);
             _container.RegisterType<Object, Views.ExternalReportMainView>(ViewNames.ExternalReportMainView);
-            _container.RegisterType<Object, Views.ExternalReportEditView>(ViewNames.ExternalReportEditView);
+            _container.RegisterType<Object, Views.ExternalReportEdit>(ViewNames.ExternalReportEditView);
             
             _container.RegisterType<ViewModels.ReportMainViewModel>();
+            _container.RegisterType<ViewModels.ExternalReportEditViewModel>();
 
             _container.RegisterType<Views.ReportCreationDialog>();
 
