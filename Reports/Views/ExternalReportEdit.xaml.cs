@@ -1,4 +1,5 @@
 ﻿using DBManager;
+using Microsoft.Prism.Mvvm;
 using Prism.Events;
 using Prism.Regions;
 using System;
@@ -21,16 +22,10 @@ namespace Reports.Views
     /// <summary>
     /// Interaction logic for ReportEditView.xaml
     /// </summary>
-    public partial class ExternalReportEditView : UserControl, INavigationAware
+    public partial class ExternalReportEdit : UserControl, INavigationAware, IView
     {
-        private DBEntities _entities;
-        private EventAggregator _eventAggregator;
-
-        public ExternalReportEditView(DBEntities entities,
-                                    EventAggregator aggregator)
+        public ExternalReportEdit()
         {
-            _eventAggregator = aggregator;
-            _entities = entities;
             InitializeComponent();
         }
 
@@ -47,11 +42,8 @@ namespace Reports.Views
 
         public void OnNavigatedTo(NavigationContext ncontext)
         {
-            ViewModels.ExternalReportEditViewModel viewModel =
-                new ViewModels.ExternalReportEditViewModel(_entities,
-                                                            _eventAggregator,
-                                                            ncontext.Parameters["ObjectInstance"] as ExternalReport);
-            DataContext = viewModel;
+            (DataContext as ViewModels.ExternalReportEditViewModel).ExternalReportInstance =
+                 ncontext.Parameters["ObjectInstance"] as ExternalReport;
         }
     }
 }
