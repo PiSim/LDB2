@@ -19,10 +19,12 @@ namespace Controls
 
         public void Initialize()
         {
+            _container.RegisterType<ViewModels.StatusBarViewModel>();
+
             _regionManager.RegisterViewWithRegion(RegionNames.ToolbarRegion, 
                                                 typeof(Views.ToolbarView));
             _regionManager.RegisterViewWithRegion(RegionNames.StatusbarRegion,
-                                                typeof(Views.StatusBarView)); 
+                                                typeof(Views.StatusBar)); 
         }
     }
 }
