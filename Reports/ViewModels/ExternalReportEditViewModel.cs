@@ -91,13 +91,25 @@ namespace Reports.ViewModels
 
         public string Description
         {
-            get { return _instance.Description; }
+            get 
+            { 
+                if (_instance == null)
+                    return null;
+                    
+                return _instance.Description; 
+            }
             set { _instance.Description = value; }
         }
 
         public string Currency
         {
-            get { return _instance.Currency; }
+            get 
+            { 
+                if (_instance == null)
+                    return null;
+                    
+                return _instance.Currency; 
+            }
             set { _instance.Currency = value; }
         }
         
@@ -112,6 +124,7 @@ namespace Reports.ViewModels
             set 
             {
                 _instance = value;
+                OnPropertyChanged("Currency");
                 OnPropertyChanged("Description");
 
                 _batchList = new ObservableCollection<Batch>
@@ -122,13 +135,22 @@ namespace Reports.ViewModels
                     (_instance.ExternalReportFiles);
                 OnPropertyChanged("ReportFiles");
                 OnPropertyChanged("InternalNumber");
+                OnPropertyChanged("Price");
+                OnPropertyChanged("Project");
+                OnPropertyChanged("PurchaseOrder");
                 OnPropertyChanged("Samples");
             }
         }
         
         public int InternalNumber
         {
-            get { return _instance.InternalNumber; }
+            get 
+            { 
+                if (_instance == null)
+                    return null;
+                    
+                return _instance.InternalNumber; 
+            }
             set { _instance.InternalNumber = value; }
         }
         
@@ -159,13 +181,26 @@ namespace Reports.ViewModels
 
         public double Price
         {
-            get { return _instance.Price; }
+            get 
+            { 
+                if (_instance == null)
+                    return null;
+                    
+                return _instance.Price; 
+            }
+
             set { _instance.Price = value; }
         }
         
         public Project Project
         {
-            get { return _instance.Project; }
+            get 
+            { 
+                if (_instance == null)
+                    return null;
+                    
+                return _instance.Project; 
+            }
         }
 
         public string PurchaseOrder
