@@ -86,7 +86,7 @@ namespace DBManager
                 tempTest.MethodIssue = rq.Method.Standard.CurrentIssue;
                 tempTest.Notes = rq.Description;
                 tempTest.Person = report.Author;
-                tempTest.Report = report;
+                
                 foreach (SubRequirement subReq in rq.SubRequirements)
                 {
                     tempSub = new SubTest();
