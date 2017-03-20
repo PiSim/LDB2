@@ -113,7 +113,8 @@ namespace Materials
             if (temp.Material == null)
                 temp.Material = GetMaterial();
 
-            CheckMaterialData(temp.Material);
+            if (temp.Material != null)
+                CheckMaterialData(temp.Material);
 
             return temp;
         }
