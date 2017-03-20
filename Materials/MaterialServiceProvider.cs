@@ -115,7 +115,8 @@ namespace Materials
 
             if (temp.Material != null)
                 CheckMaterialData(temp.Material);
-
+            
+            _entities.SaveChanges();
             return temp;
         }
 
