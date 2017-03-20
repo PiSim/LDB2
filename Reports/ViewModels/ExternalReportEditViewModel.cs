@@ -32,13 +32,7 @@ namespace Reports.ViewModels
             _materialServiceProvider = materialServiceProvider;
             _entities = entities;
             _eventAggregator.GetEvent<CommitRequested>().Subscribe(() => _entities.SaveChanges());
-
-            _batchList = new ObservableCollection<Batch>
-                (_instance.BatchMappings.Select(btm => btm.Batch));
             
-            _reportFiles = new ObservableCollection<ExternalReportFile>
-                (_instance.ExternalReportFiles);
-
             _addBatch = new DelegateCommand(
                 () => 
                 {
@@ -111,6 +105,26 @@ namespace Reports.ViewModels
         {
             get { return _instance.ExternalLab.Name; }
         }
+
+        public ExternalReport ExternalReportInstance
+        {
+            get { return _instance; }
+            set 
+            {
+                _instance = value;
+                OnPropertyChanged("Description");
+
+                _batchList = new ObservableCollection<Batch>
+                    (_instance.BatchMappings.Select(btm => btm.Batch));
+                OnPropertyChanged("BatchList");
+
+                _reportFiles = new ObservableCollection<ExternalReportFile>
+                    (_instance.ExternalReportFiles);
+                OnPropertyChanged("ReportFiles");
+                OnPropertyChanged("InternalNumber");
+                OnPropertyChanged("Samples");
+            }
+        }
         
         public int InternalNumber
         {
@@ -156,13 +170,26 @@ namespace Reports.ViewModels
 
         public string PurchaseOrder
         {
-            get { return _instance.purchase_order; }
+            get 
+            { 
+                if (_instance == null)
+                    return null;
+                    
+                return _instance.purchase_order; 
+            }
             set { _instance.purchase_order = value; }
         }
 
         public string Samples
         {
-            get { return _instance.Samples; }
+            get 
+            { 
+                if (_instance == null)
+                    return null;
+
+                return _instance.Samples; 
+            }
+            
             set { _instance.Samples = value; }
         }
 
