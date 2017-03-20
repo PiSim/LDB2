@@ -18,7 +18,7 @@ namespace Controls.ViewModels
         {
             _eventAggregator = eventAggregator;
             
-            _eventAggregator.GetEvent<StatusNotificationIssue>().Subscribe(
+            _eventAggregator.GetEvent<StatusNotificationIssued>().Subscribe(
                 msg => 
                 {
                     ShownMessage = msg;
