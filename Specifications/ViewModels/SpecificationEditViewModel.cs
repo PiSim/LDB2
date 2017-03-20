@@ -480,7 +480,9 @@ namespace Specifications.ViewModels
             {
                 _instance = _entities.Specifications.FirstOrDefault(spec => spec.ID == value.ID);
                 _issueList = new ObservableCollection<StandardIssue>(_instance.Standard.StandardIssues);
+                SelectedIssue = null;
                 _versionList = new ObservableCollection<SpecificationVersion>(_instance.SpecificationVersions);
+                SelectedVersion = null;
 
                 OnPropertyChanged("ControlPlanList");
                 OnPropertyChanged("MainVersion");
