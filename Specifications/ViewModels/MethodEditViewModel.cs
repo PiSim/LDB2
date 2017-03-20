@@ -270,6 +270,7 @@ namespace Specifications.ViewModels
             {
                 _selectedIssue = value;
                 OnPropertyChanged("FileList");
+                _addFile.RaiseCanExecuteChanged();
                 _removeIssue.RaiseCanExecuteChanged();
                 _setCurrent.RaiseCanExecuteChanged();
             }
