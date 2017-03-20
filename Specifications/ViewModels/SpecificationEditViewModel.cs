@@ -397,6 +397,7 @@ namespace Specifications.ViewModels
                 _selectedFile = value;
                 OnPropertyChanged("SelectedFile");
                 OpenFileCommand.RaiseCanExecuteChanged();
+                RemoveFileCommand.RaiseCanExecuteChanged();
             }
         }
         
