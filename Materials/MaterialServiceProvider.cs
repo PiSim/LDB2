@@ -13,10 +13,10 @@ namespace Materials
     public class MaterialServiceProvider : IMaterialServiceProvider
     {
         private DBEntities _entities;
-        private UnityContainer _container;
+        private IUnityContainer _container;
 
         public MaterialServiceProvider(DBEntities entities,
-                                    UnityContainer container)
+                                    IUnityContainer container)
         {
             _container = container;
             _entities = entities;
@@ -108,6 +108,7 @@ namespace Materials
             {
                 temp = new Batch();
                 temp.Number = batchNumber;
+                _entities.Batches.Add(temp);
             }
 
             if (temp.Material == null)
