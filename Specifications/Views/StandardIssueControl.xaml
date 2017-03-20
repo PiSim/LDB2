@@ -116,6 +116,14 @@
                           Grid.Column="0"
                           Grid.ColumnSpan="4"
                           Grid.Row="1">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Percorso"
+                                            DisplayMemberBinding="{Binding Path}"/>
+                            <GridViewColumn Header="Descrizione"
+                                            DisplayMemberBinding="{Binding Description}"/>
+                        </GridView>
+                    </ListView.View>
 
                 </ListView>
 
