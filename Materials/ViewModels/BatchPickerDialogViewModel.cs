@@ -15,7 +15,7 @@ namespace Materials.ViewModels
         private string _number;
         private Views.BatchPickerDialog _parentDialog;
         
-        internal BatchPickerDialogViewModel(Views.BatchPickerDialog parentDialog) : base()
+        public BatchPickerDialogViewModel(Views.BatchPickerDialog parentDialog) : base()
         {
             _parentDialog = parentDialog;
             
