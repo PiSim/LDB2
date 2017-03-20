@@ -127,8 +127,8 @@
     <Compile Include="Views\NewPODialog.xaml.cs">
       <DependentUpon>NewPODialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\StatusBarView.xaml.cs">
-      <DependentUpon>StatusBarView.xaml</DependentUpon>
+    <Compile Include="Views\StatusBar.xaml.cs">
+      <DependentUpon>StatusBar.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ToolbarView.xaml.cs">
       <DependentUpon>ToolbarView.xaml</DependentUpon>
@@ -168,7 +168,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\StatusBarView.xaml">
+    <Page Include="Views\StatusBar.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
