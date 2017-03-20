@@ -13,36 +13,37 @@ using System.Windows.Forms;
 
 namespace Reports.ViewModels
 {
-    internal class ExternalReportEditViewModel : BindableBase
+    public class ExternalReportEditViewModel : BindableBase
     {
         private DBEntities _entities;
         private DelegateCommand _addBatch, _addFile, _openBatch, _openFile, _removeBatch, _removeFile;
         private EventAggregator _eventAggregator;
         private ExternalReport _instance;
         private ExternalReportFile _selectedFile;
+        private IMaterialServiceProvider _materialServiceProvider;
         private ObservableCollection<Batch> _batchList;
         private ObservableCollection<ExternalReportFile> _reportFiles;
 
-        internal ExternalReportEditViewModel(DBEntities entities,
+        public ExternalReportEditViewModel(DBEntities entities,
                                             EventAggregator aggregator,
-                                            ExternalReport instance) : base()
+                                            IMaterialServiceProvider materialServiceProvider) : base()
         {
-            
-            if (instance == null)
-                throw new InvalidOperationException();
-                
             _eventAggregator = aggregator;
-            
+            _materialServiceProvider = materialServiceProvider;
             _entities = entities;
             _eventAggregator.GetEvent<CommitRequested>().Subscribe(() => _entities.SaveChanges());
-            
-            _instance = _entities.ExternalReports.FirstOrDefault(xrp => xrp.ID == instance.ID);
-            
+
             _batchList = new ObservableCollection<Batch>
                 (_instance.BatchMappings.Select(btm => btm.Batch));
             
             _reportFiles = new ObservableCollection<ExternalReportFile>
                 (_instance.ExternalReportFiles);
+
+            _addBatch = new DelegateCommand(
+                () => 
+                {
+                    
+                } );
 
             _addFile = new DelegateCommand(
                 () =>
