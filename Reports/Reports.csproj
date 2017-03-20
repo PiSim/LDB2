@@ -135,8 +135,8 @@
     <Compile Include="Views\ExternalReportCreationDialog.xaml.cs">
       <DependentUpon>ExternalReportCreationDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\ExternalReportEditView.xaml.cs">
-      <DependentUpon>ExternalReportEditView.xaml</DependentUpon>
+    <Compile Include="Views\ExternalReportEdit.xaml.cs">
+      <DependentUpon>ExternalReportEdit.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ExternalReportMainView.xaml.cs">
       <DependentUpon>ExternalReportMainView.xaml</DependentUpon>
@@ -197,7 +197,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\ExternalReportEditView.xaml">
+    <Page Include="Views\ExternalReportEdit.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
