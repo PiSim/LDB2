@@ -43,7 +43,7 @@ namespace Materials.ViewModels
 
                     if (temp != null)
                     {
-                        NavigationToken token = new NavigationToken(ViewNames.BatchEditView, temp);
+                        NavigationToken token = new NavigationToken(ViewNames.BatchInfoView, temp);
                         _eventAggregator.GetEvent<NavigationRequested>().Publish(token);
                     }
 
