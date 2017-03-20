@@ -125,7 +125,15 @@ namespace Specifications.ViewModels
             _openFile = new DelegateCommand(
                 () =>
                 {
-                    System.Diagnostics.Process.Start(_selectedFile.Path);
+                    try
+                    {
+                        System.Diagnostics.Process.Start(_selectedFile.Path);
+                    }
+
+                    catch (Exception)
+                    {
+                        _eventAggregator.GetEvent<StatusNotificationIssued>().Publish("File non trovato");
+                    }
                 },
                 () => _selectedFile != null);
 
