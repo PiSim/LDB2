@@ -22,19 +22,20 @@ namespace DBManager
         }
     
         public int ID { get; private set; }
-        public string Date { get; set; }
         public string Description { get; set; }
         public string ExternalNumber { get; set; }
         public int InternalNumber { get; set; }
-        public int external_labID { get; private set; }
-        public int material_sent { get; set; }
-        public int request_done { get; set; }
-        public string purchase_order { get; set; }
+        public int ExternalLabID { get; private set; }
+        public bool MaterialSent { get; set; }
+        public bool RequestDone { get; set; }
+        public string PurchaseOrder { get; set; }
         public double Price { get; set; }
         public string Samples { get; set; }
         public string Currency { get; set; }
-        public Nullable<int> report_received { get; set; }
-        public Nullable<int> projectID { get; set; }
+        public Nullable<bool> ReportReceived { get; set; }
+        public Nullable<int> ProjectID { get; set; }
+        public Nullable<int> PurchaseOrderID { get; set; }
+        public Nullable<System.DateTime> ArrivalDate { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ExternalReportFile> ExternalReportFiles { get; set; }
@@ -42,5 +43,6 @@ namespace DBManager
         public virtual Project Project { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ExternalReportBatchMapping> BatchMappings { get; set; }
+        public virtual PurchaseOrder PO { get; set; }
     }
 }

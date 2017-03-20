@@ -29,7 +29,7 @@ namespace DBManager
         public string Description { get; set; }
         public Nullable<System.DateTime> EndDate { get; set; }
         public int Number { get; set; }
-        public Nullable<int> ProjectID { get; private set; }
+        public Nullable<int> ProjectID { get; set; }
         public int SpecificationVersionID { get; private set; }
         public string StartDate { get; set; }
         public bool IsComplete { get; set; }

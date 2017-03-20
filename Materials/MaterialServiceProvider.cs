@@ -63,6 +63,14 @@ namespace Materials
                         tempConstruction.Type = _entities.MaterialTypes.First(mty => mty.Code == matDialog.MaterialType);
                         tempConstruction.Line = matDialog.MaterialLine;
                         tempConstruction.Aspect = _entities.Aspects.FirstOrDefault(asp => asp.Code == matDialog.MaterialAspect);
+                        
+                        if (tempConstruction.Aspect == null)
+                        {
+                            Aspect tempAspect = new Aspect();
+                            tempAspect.Code = matDialog.MaterialAspect;
+                            tempAspect.Name = "";
+                            tempConstruction.Aspect = tempAspect;
+                        }
                     }
 
                     if (tempRecipe == null)
@@ -89,14 +97,14 @@ namespace Materials
             {
                 Views.ProjectPickerDialog prjDialog = _container.Resolve<Views.ProjectPickerDialog>();
                 if (prjDialog.ShowDialog() == true)
-                    target.Construction.ProjectID = prjDialog.ProjectInstance.ID;
+                    target.Construction.Project = _entities.Projects.First(prj => prj.ID == prjDialog.ProjectInstance.ID);
             }
 
             if (target.Recipe.Colour == null)
             {
                 Views.ColorPickerDialog colourPicker = _container.Resolve<Views.ColorPickerDialog>();
                 if (colourPicker.ShowDialog() == true)
-                    target.Recipe.ColourID = colourPicker.ColourInstance.ID;
+                    target.Recipe.Colour = _entities.Colours.First(clr => clr.ID == colourPicker.ColourInstance.ID);
             }
         }
 

@@ -51,17 +51,16 @@ namespace Reports.ViewModels
                 () => 
                 {
                     ExternalReport output = new ExternalReport();
-                    output.Date = DateTime.Now.ToShortDateString();
                     output.Description = _testDescription;
                     output.InternalNumber = _number;
                     output.ExternalNumber = "";
-                    output.material_sent = 0;
-                    output.request_done = 0;
-                    output.purchase_order = "";
+                    output.MaterialSent = false;
+                    output.RequestDone = false;
+                    output.PurchaseOrder = "";
                     output.Price = 0;
                     output.Samples = _sampleDescription;
                     output.Currency = "";
-                    output.report_received = 0;
+                    output.ReportReceived = false;
                     output.ExternalLab = _selectedLab;
                     output.Project = _selectedProject;
                     

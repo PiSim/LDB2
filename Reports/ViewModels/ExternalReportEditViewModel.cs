@@ -1,8 +1,9 @@
 ﻿using DBManager;
+using Infrastructure;
 using Infrastructure.Events;
+using Microsoft.Practices.Prism.Mvvm;
 using Prism.Commands;
 using Prism.Events;
-using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -147,7 +148,7 @@ namespace Reports.ViewModels
             get 
             { 
                 if (_instance == null)
-                    return null;
+                    return 0;
                     
                 return _instance.InternalNumber; 
             }
@@ -184,7 +185,7 @@ namespace Reports.ViewModels
             get 
             { 
                 if (_instance == null)
-                    return null;
+                    return 0;
                     
                 return _instance.Price; 
             }
@@ -210,9 +211,9 @@ namespace Reports.ViewModels
                 if (_instance == null)
                     return null;
                     
-                return _instance.purchase_order; 
+                return _instance.PurchaseOrder; 
             }
-            set { _instance.purchase_order = value; }
+            set { _instance.PurchaseOrder = value; }
         }
 
         public string Samples

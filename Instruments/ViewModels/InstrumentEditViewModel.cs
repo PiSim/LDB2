@@ -14,6 +14,7 @@ namespace Instruments.ViewModels
     public class InstrumentEditViewModel : BindableBase
     {
         private DBEntities _entities;
+        private DelegateCommand _addCalibration, _addMaintenanceEvent;
         private EventAggregator _eventAggregator;
         private Instrument _instance;
 
@@ -23,6 +24,28 @@ namespace Instruments.ViewModels
             _eventAggregator = aggregator;
 
             _eventAggregator.GetEvent<CommitRequested>().Subscribe(() => _entities.SaveChanges());
+
+            _addCalibration = new DelegateCommand(
+                () =>
+                {
+                    
+                });
+
+            _addMaintenanceEvent = new DelegateCommand(
+                () =>
+                {
+
+                });
+        }
+
+        public DelegateCommand AddCalibrationCommand
+        {
+            get { return _addCalibration; }
+        }
+
+        public DelegateCommand AddMaintenanceEvent
+        {
+            get { return _addMaintenanceEvent; }
         }
 
         public Instrument InstrumentInstance
@@ -31,12 +54,18 @@ namespace Instruments.ViewModels
             set
             {
                 _instance = value;
+                OnPropertyChanged("Code");
             }
         }
 
         public string Code
         {
-            get { return _instance.Code; }
+            get
+            {
+                if (_instance == null)
+                    return null;
+                return _instance.Code;
+            }
         }
     }
 }

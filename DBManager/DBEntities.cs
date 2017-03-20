@@ -80,7 +80,6 @@ namespace DBManager
             foreach (Requirement rq in requirements)
             {
                 tempTest = new Test();
-                tempTest.Batch = report.Batch;
                 tempTest.IsComplete = false;
                 tempTest.Method = rq.Method;
                 tempTest.MethodIssue = rq.Method.Standard.CurrentIssue;

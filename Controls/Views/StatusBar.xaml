@@ -10,6 +10,6 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
         <Label Content="{Binding ShownMessage}"
-               Margin="5"/>            
+               Margin="2"/>            
     </Grid>
 </UserControl>

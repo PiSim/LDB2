@@ -4,14 +4,14 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Reports.Views"
+             xmlns:prism="http://prismlibrary.com/"
+             prism:ViewModelLocator.AutoWireViewModel="True"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="125"/>
-            <RowDefinition Height="125"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition/>
-            <RowDefinition MaxHeight="200"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -31,7 +31,6 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition/>                
             </Grid.RowDefinitions>
-            
             
             <Label Content="Numero interno:"
                    Grid.Column="0"
@@ -53,63 +52,24 @@
                    Margin="5"/> 
                    
             
-            
-            <GroupBox Header="Dettagli ordine"
-                      Grid.Column="0"
-                      Grid.ColumnSpan="3"
-                      Grid.Row="2">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition MaxWidth="75"/>
-                        <ColumnDefinition/>
-                        <ColumnDefinition MaxWidth="50"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                    </Grid.RowDefinitions>
-                    <Label Content="Numero:"
-                           Grid.Column="0"
-                           Grid.Row="0"
-                           Height="25"/>
-                    <TextBox Text="{Binding Path=PurchaseOrder, Mode=TwoWay}"
-                             Grid.ColumnSpan="2"
-                             Grid.Column="1"
-                             Grid.Row="0"
-                             Height="20"/>
-                    <Label Content="Costo:"
-                           Grid.Column="0"
-                           Grid.Row="1"
-                           Height="25"/>
-                    <TextBox Text="{Binding Path=CurrentInstance.Price, Mode=TwoWay}" 
-                             Grid.Column="1"
-                             Grid.Row="1"
-                             Height="20"/>
-                    <ComboBox ItemsSource="{Binding Path=CurrentInstance.Currencies}"
-                              SelectedItem="{Binding Path=Currency, Mode=TwoWay}"
-                              Grid.Column="2"
-                              Grid.Row="1"
-                              Height="25"/>
-                </Grid>
-            </GroupBox>
         </Grid>
-        
         <GroupBox Header="Progetto"
-                  Grid.Column="0"
-                  Grid.Row="1"
+                  Grid.Column="1"
+                  Grid.Row="0"
                   Height="Auto">
             <Grid DataContext="{Binding Project}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
+
                 <Grid.RowDefinitions>
                     <RowDefinition/>
                     <RowDefinition/>
                     <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                
+
                 <Label Content="Nome:"
                        Grid.Column="0"
                        Grid.Row="0"/>
@@ -117,13 +77,13 @@
                        Grid.Column="1"
                        Grid.Row="0"/>
 
-                <Label Content="OEM:"
+                <Label Content="OEM"
                        Grid.Column="0"
                        Grid.Row="1"/>
                 <Label Content="{Binding Oem.Name}"
                        Grid.Column="1"
                        Grid.Row="1"/>
-                
+
                 <Label Content="Descrizione:"
                        Grid.Column="0"
                        Grid.Row="2"/>
@@ -139,107 +99,223 @@
                        Grid.Row="3"/>
             </Grid>
         </GroupBox>
+        
+        <TabControl Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    Grid.Row="1">
+            <TabItem Header="Dettagli">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
 
-        <GroupBox Header="Prove:" 
-                  Grid.Column="1"
-                  Grid.Row="0">
-            <TextBox Text="{Binding Path=Description}"
-                     TextWrapping="Wrap"
-                     AcceptsReturn="True"/>
-        </GroupBox>
-        <GroupBox Header="Campioni:"
-                  Grid.Column="1"
-                  Grid.Row="1">
-            <TextBox Text="{Binding Path=Samples}"
-                     TextWrapping="Wrap"
-                     AcceptsReturn="True"/>
-        </GroupBox>
-        
-        <GroupBox Header="Batch Inviati"
-                  Grid.ColumnSpan="2"
-                  Grid.Column="0"
-                  Grid.Row="2">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-                
-                <ListView ItemsSource="{Binding Path=BatchList}" 
-                          SelectedItem="{Binding Path=SelectedBatch, Mode=TwoWay}"
+                    <GroupBox Header="Campioni:"
+                              Grid.Column="0"
+                              Grid.Row="0">
+                        <TextBox Text="{Binding Path=Samples}"
+                                 TextWrapping="Wrap"
+                                 AcceptsReturn="True"/>
+                    </GroupBox>
+
+                    <GroupBox Header="Prove:" 
+                              Grid.Column="1"
+                              Grid.Row="0">
+                        <TextBox Text="{Binding Path=Description}"
+                                 TextWrapping="Wrap"
+                                 AcceptsReturn="True"/>
+                    </GroupBox>
+
+                    <GroupBox Header="Batch Inviati"
+                              Grid.ColumnSpan="2"
+                              Grid.Column="0"
+                              Grid.Row="1">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+
+                            <ListView ItemsSource="{Binding Path=BatchList}" 
+                                      SelectedItem="{Binding Path=SelectedBatch, Mode=TwoWay}"
+                                      Grid.Column="0"
+                                      Grid.Row="0"
+                                      Grid.RowSpan="4"
+                                      Margin="5">
+                                <ListView.View>
+                                    <GridView>
+                                        <GridViewColumn Header="Numero" 
+                                                        DisplayMemberBinding="{Binding Number}"/>
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
+                            <Button Content="Apri" 
+                                    Command="{Binding Path=OpenBatchCommand}" 
+                                    Grid.Column="1"
+                                    Grid.Row="0"
+                                    Margin="5"/>
+                            <Button Content="Aggiungi" 
+                                    Command="{Binding Path=AddBatchCommand}" 
+                                    Grid.Column="1"
+                                    Grid.Row="1"
+                                    Margin="5"/>
+                            <Button Content="Rimuovi" 
+                                    Command="{Binding Path=RemoveBatchCommand}" 
+                                    Grid.Column="1"
+                                    Grid.Row="2"
+                                    Margin="5"/>    
+                        </Grid>
+                    </GroupBox>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Stato">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Label Content="RDA fatta:"
+                               Grid.Column="0"
+                               Grid.Row="0"
+                               Margin="5"/>
+                        <CheckBox IsChecked="{Binding RequestDone, Mode=TwoWay}"
+                                  IsEnabled="{Binding CanModifyStatus}"
+                                  Grid.Column="1"
+                                  Grid.Row="0"
+                                  Margin="5"/>
+
+                        <Label Content="Campioni inviati:"
+                               Grid.Column="0"
+                               Grid.Row="1"
+                               Margin="5"/>
+                        <CheckBox IsChecked="{Binding SamplesSent, Mode=TwoWay}"
+                                  IsEnabled="{Binding CanModifyStatus}"
+                                  Grid.Column="1"
+                                  Grid.Row="1"
+                                  Margin="5"/>
+
+                        <Label Content="Report ricevuto:"
+                               Grid.Column="0"
+                               Grid.Row="2"
+                               Margin="5"/>
+
+                        <CheckBox IsChecked="{Binding ReportReceived, Mode=TwoWay}"
+                                  Grid.Column="1"
+                                  Grid.Row="2"
+                                  Margin="5"/>
+                    </Grid>
+                    <GroupBox Header="Dettagli ordine"
+                              Grid.Column="0"
+                              Grid.ColumnSpan="3"
+                              Grid.Row="2">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition MaxWidth="75"/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition MaxWidth="50"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <Label Content="Numero:"
+                           Grid.Column="0"
+                           Grid.Row="0"
+                           Height="25"/>
+                            <TextBox Text="{Binding Path=PurchaseOrder, Mode=TwoWay}"
+                             Grid.ColumnSpan="2"
+                             Grid.Column="1"
+                             Grid.Row="0"
+                             Height="20"/>
+                            <Label Content="Costo:"
+                           Grid.Column="0"
+                           Grid.Row="1"
+                           Height="25"/>
+                            <TextBox Text="{Binding Path=CurrentInstance.Price, Mode=TwoWay}" 
+                             Grid.Column="1"
+                             Grid.Row="1"
+                             Height="20"/>
+                            <ComboBox ItemsSource="{Binding Path=CurrentInstance.Currencies}"
+                              SelectedItem="{Binding Path=Currency, Mode=TwoWay}"
+                              Grid.Column="2"
+                              Grid.Row="1"
+                              Height="25"/>
+                        </Grid>
+                    </GroupBox>
+                </Grid>
+            </TabItem>
+            <TabItem Header="File">
+                <GroupBox Header="File"
+                          Grid.ColumnSpan="2"
                           Grid.Column="0"
-                          Grid.Row="0"
-                          Grid.RowSpan="4"
-                          Margin="5">
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn Header="Numero" 
-                                            DisplayMemberBinding="{Binding Number}"/>
-                        </GridView>
-                    </ListView.View>
-                </ListView>
-                <Button Content="Apri" 
-                        Command="{Binding Path=OpenBatchCommand}" 
-                        Grid.Column="1"
-                        Grid.Row="0"
-                        Margin="5"/>
-                <Button Content="Aggiungi" 
-                        Command="{Binding Path=AddBatchCommand}" 
-                        Grid.Column="1"
-                        Grid.Row="1"
-                        Margin="5"/>
-                <Button Content="Rimuovi" 
-                        Command="{Binding Path=RemoveBatchCommand}" 
-                        Grid.Column="1"
-                        Grid.Row="2"
-                        Margin="5"/>
-            </Grid>
-        </GroupBox>
+                          Grid.Row="3">
+                    <Grid>
+                        <ListView ItemsSource="{Binding Path=ReportFiles}" 
+                                  SelectedItem="{Binding Path=SelectedFile, Mode=TwoWay}"
+                                  Margin="0,0,60,0">
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="Percorso" 
+                                                    DisplayMemberBinding="{Binding Path=Path}"/>
+                                    <GridViewColumn Header="Descrizione">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBox Text="{Binding Path=Description, Mode=TwoWay}"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                        <Button Content="Apri" 
+                                Command="{Binding Path=OpenFileCommand}" 
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Top" 
+                                Margin="0,0,0,0"/>  
+                        <Button Content="Aggiungi" 
+                                Command="{Binding Path=AddFileCommand}" 
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Top" 
+                                Margin="0,25,0,0"/>
+                        <Button Content="Rimuovi" 
+                                Command="{Binding Path=RemoveFileCommand}" 
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Top" 
+                                Margin="0,50,0,0"/>
+                    </Grid>
+                </GroupBox>
+            </TabItem>
+        </TabControl>
         
-        <GroupBox Header="File"
-                  Grid.ColumnSpan="2"
-                  Grid.Column="0"
-                  Grid.Row="3">
-            <Grid>
-                <ListView ItemsSource="{Binding Path=ReportFiles}" 
-                          SelectedItem="{Binding Path=SelectedFile, Mode=TwoWay}"
-                          Margin="0,0,60,0">
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn Header="Percorso" DisplayMemberBinding="{Binding Path=Path}"/>
-                            <GridViewColumn Header="Descrizione">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBox Text="{Binding Path=Description, Mode=TwoWay}"/>
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                        </GridView>
-                    </ListView.View>
-                </ListView>
-                <Button Content="Apri" 
-                        Command="{Binding Path=OpenFileCommand}" 
-                        HorizontalAlignment="Right"
-                        VerticalAlignment="Top" 
-                        Margin="0,0,0,0"/>
-                <Button Content="Aggiungi" 
-                        Command="{Binding Path=AddFileCommand}" 
-                        HorizontalAlignment="Right"
-                        VerticalAlignment="Top" 
-                        Margin="0,25,0,0"/>
-                <Button Content="Rimuovi" 
-                        Command="{Binding Path=RemoveFileCommand}" 
-                        HorizontalAlignment="Right"
-                        VerticalAlignment="Top" 
-                        Margin="0,50,0,0"/>
-            </Grid>
-        </GroupBox>
+            
+        
+        
+        
+        
     </Grid>
 </UserControl>

@@ -18,6 +18,7 @@ namespace DBManager
         public PurchaseOrder()
         {
             this.po_file = new HashSet<PurchaseOrderFile>();
+            this.external_reports = new HashSet<ExternalReport>();
         }
     
         public int ID { get; set; }
@@ -30,5 +31,7 @@ namespace DBManager
         public virtual Organization organization { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PurchaseOrderFile> po_file { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ExternalReport> external_reports { get; set; }
     }
 }

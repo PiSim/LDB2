@@ -22,7 +22,6 @@ namespace DBManager
             this.Masters = new HashSet<Master>();
             this.Reports = new HashSet<Report>();
             this.Samples = new HashSet<Sample>();
-            this.Tests = new HashSet<Test>();
             this.Tasks = new HashSet<Task>();
             this.ExternalReportMapping = new HashSet<ExternalReportBatchMapping>();
         }
@@ -41,8 +40,6 @@ namespace DBManager
         public virtual ICollection<Report> Reports { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Sample> Samples { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Test> Tests { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Task> Tasks { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

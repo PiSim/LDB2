@@ -21,7 +21,6 @@ namespace DBManager
         }
     
         public int ID { get; set; }
-        public int batchID { get; set; }
         public int methodID { get; set; }
         public int reportID { get; set; }
         public string Notes { get; set; }
@@ -31,7 +30,6 @@ namespace DBManager
         public Nullable<int> instrumentID { get; set; }
         public Nullable<int> MethodIssueID { get; set; }
     
-        public virtual Batch Batch { get; set; }
         public virtual Person Person { get; set; }
         public virtual Report Report { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

@@ -134,7 +134,7 @@ namespace Projects.ViewModels
                     return null;
 
                 return new List<ExternalReport>
-                    (_entities.ExternalReports.Where(ext => ext.projectID == _projectInstance.ID));
+                    (_entities.ExternalReports.Where(ext => ext.ProjectID == _projectInstance.ID));
             }
         }
         

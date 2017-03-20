@@ -31,6 +31,7 @@ namespace Tasks.ViewModels
             _entities = entities;
             _materialServiceProvider = serviceProvider;
             _parentView = parentView;
+            _requirementList = new ObservableCollection<ReportItemWrapper>();
             
             _cancel = new DelegateCommand(
                 () => 
@@ -150,6 +151,11 @@ namespace Tasks.ViewModels
         public ObservableCollection<ReportItemWrapper> RequirementList
         {
             get { return _requirementList; }
+            set
+            {
+                _requirementList = value;
+                OnPropertyChanged("RequirementList");
+            }
         }
     }
 

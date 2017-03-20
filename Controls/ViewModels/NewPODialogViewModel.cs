@@ -15,7 +15,19 @@ namespace Controls.ViewModels
 
         public NewPODialogViewModel(Views.NewPODialog parentDialog) : base()
         {
+            _parentDialog = parentDialog;
 
+            _cancel = new DelegateCommand(
+                () =>
+                {
+
+                });
+
+            _confirm = new DelegateCommand(
+                () =>
+                {
+
+                });
         }
 
         public DelegateCommand CancelCommand

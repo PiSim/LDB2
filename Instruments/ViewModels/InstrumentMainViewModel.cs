@@ -22,11 +22,13 @@ namespace Instruments.ViewModels
         private Instrument _selectedInstrument;
         IUnityContainer _container;
 
-        public InstrumentMainViewModel(UnityContainer container) : base()
+        public InstrumentMainViewModel(EventAggregator eventAggregator,
+                                        DBEntities entities,
+                                        IUnityContainer container) : base()
         {
             _container = container;
-            _entities = _container.Resolve<DBEntities>();
-            _eventAggregator = _container.Resolve<EventAggregator>();
+            _entities = entities;
+            _eventAggregator = eventAggregator;
 
             _newInstrument = new DelegateCommand(
                 () =>
