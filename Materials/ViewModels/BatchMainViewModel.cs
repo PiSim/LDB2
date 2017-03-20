@@ -42,7 +42,10 @@ namespace Materials.ViewModels
                     Batch temp = _entities.Batches.FirstOrDefault(btc => btc.Number == _batchNumber);
 
                     if (temp != null)
+                    {
+                        NavigationToken token = new NavigationToken(ViewNames.BatchEditView, temp);
                         _eventAggregator.GetEvent<NavigationRequested>().Publish(token);
+                    }
 
                     else
                         _eventAggregator.GetEvent<StatusNotificationIssued>().Publish("Batch non trovato");
