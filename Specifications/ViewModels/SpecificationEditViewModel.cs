@@ -395,9 +395,9 @@ namespace Specifications.ViewModels
             }
         }
 
-        public List<SpecificationVersion> VersionList
+        public ObservableCollection<SpecificationVersion> VersionList
         {
-            get { return new List<SpecificationVersion>(_instance.SpecificationVersions); }
+            get { return _versionList; }
         }
     }
 }
