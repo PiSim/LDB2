@@ -485,6 +485,7 @@ namespace Specifications.ViewModels
                 SelectedVersion = null;
 
                 OnPropertyChanged("ControlPlanList");
+                OnPropertyChanged("IssueList");
                 OnPropertyChanged("MainVersion");
                 OnPropertyChanged("MainVersionRequirements");
                 OnPropertyChanged("ReportList");
