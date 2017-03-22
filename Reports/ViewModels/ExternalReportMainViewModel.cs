@@ -38,7 +38,7 @@ namespace Reports.ViewModels
                     {
                         ExternalReport tempReport = creationDialog.ExternalReportInstance;
                         _reportList.Add(tempReport);
-                        SelectedReport = tempReport;
+                        SelectedExternalReport = tempReport;
                         _openReport.Execute();
                     }
                 });
@@ -55,22 +55,22 @@ namespace Reports.ViewModels
                 () => _selectedReport != null);
         } 
         
-        public DelegateCommand NewReportCommand
+        public DelegateCommand NewExternalReportCommand
         {
             get { return _newReport; }
         }
 
-        public DelegateCommand OpenReportCommand
+        public DelegateCommand OpenExternalReportCommand
         {
             get { return _openReport; }
         }
 
-        public ObservableCollection<ExternalReport> ReportList
+        public ObservableCollection<ExternalReport> ExternalReportList
         {
             get { return _reportList; }
         }
 
-        public ExternalReport SelectedReport
+        public ExternalReport SelectedExternalReport
         {
             get { return _selectedReport; }
             set 

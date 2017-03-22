@@ -26,8 +26,10 @@ namespace Projects
 
             _container.RegisterType<ViewModels.ProjectInfoViewModel>();
 
-            _regionManager.RegisterViewWithRegion
-                (RegionNames.MainNavigationRegion , typeof(Views.ProjectsNavigationItem));
+            _regionManager.RegisterViewWithRegion(RegionNames.BatchProjectDetailsRegion,
+                                                typeof(Views.ProjectDetailsControl));
+            _regionManager.RegisterViewWithRegion(RegionNames.MainNavigationRegion, 
+                                                typeof(Views.ProjectsNavigationItem));
         }
     }
 }

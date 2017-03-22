@@ -105,6 +105,9 @@
   <ItemGroup>
     <Compile Include="ReportServiceProvider.cs" />
     <Compile Include="ViewModels\ReportCreationDialogViewModel.cs" />
+    <Compile Include="Views\ExternalReportList.xaml.cs">
+      <DependentUpon>ExternalReportList.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ReportCreationDialog.xaml.cs">
       <DependentUpon>ReportCreationDialog.xaml</DependentUpon>
     </Compile>
@@ -138,8 +141,8 @@
     <Compile Include="Views\ExternalReportEdit.xaml.cs">
       <DependentUpon>ExternalReportEdit.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\ExternalReportMainView.xaml.cs">
-      <DependentUpon>ExternalReportMainView.xaml</DependentUpon>
+    <Compile Include="Views\ExternalReportMain.xaml.cs">
+      <DependentUpon>ExternalReportMain.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ExternalReportsNavigationItem.xaml.cs">
       <DependentUpon>ExternalReportsNavigationItem.xaml</DependentUpon>
@@ -185,6 +188,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Views\ExternalReportList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\ReportCreationDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -201,7 +208,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\ExternalReportMainView.xaml">
+    <Page Include="Views\ExternalReportMain.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -1,12 +1,12 @@
 ﻿v 0.4.2 -- In corso
 
+-*Riorganizzata in Tab la vista Batch
 -Trasferiti i nomi delle viste nel progetto Infrastructure
 -*Modulo instruments: aggiunti NewCalibrationDialog e NewMaintenanceEventDialog 
 -Creati eventi ReportCreationRequested e ReportCreated
 -Creata classe di servizio ReportServiceProvider, registrata come singleton
 -Trasferito ReportCreationDialog dal modulo Controls a Reports
 -Creata classe di servizio TaskServiceProvider, registrata come singleton
--*Dialogo ConversionReview
 -Registrata classe di servizio MaterialServiceProvider come singleton
 -Spostate varie finestre di dialogo dal modulo Controls a Materials
 -Trasferito il controllo delle procedure di creazione log/batch/materiali/construction/ricette dai dialoghi alla classe MaterialServiceProvider

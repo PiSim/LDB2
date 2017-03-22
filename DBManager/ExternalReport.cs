@@ -32,7 +32,7 @@ namespace DBManager
         public double Price { get; set; }
         public string Samples { get; set; }
         public string Currency { get; set; }
-        public Nullable<bool> ReportReceived { get; set; }
+        public bool ReportReceived { get; set; }
         public Nullable<int> ProjectID { get; set; }
         public Nullable<int> PurchaseOrderID { get; set; }
         public Nullable<System.DateTime> ArrivalDate { get; set; }

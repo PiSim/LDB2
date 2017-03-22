@@ -20,6 +20,14 @@
                HorizontalAlignment="Left" VerticalAlignment="Top" Margin="100,25,0,0"/>
 
         <TabControl Margin="0,100,0,0">
+            <TabItem Header="Dettagli">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                </Grid>
+            </TabItem>
             <TabItem Header="Metodi">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -194,7 +202,8 @@
                                     <GridViewColumn Header="Note">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
-                                                <TextBox Text="{Binding Description, Mode=TwoWay}"/>
+                                                <TextBox Text="{Binding Description, Mode=TwoWay}"
+                                                         IsEnabled="{Binding CanModify}"/>
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
@@ -207,7 +216,9 @@
                                                         <DataTemplate>
                                                             <StackPanel Orientation="Horizontal">
                                                                 <Label Content="{Binding SubMethod.Name}"/>
-                                                                <TextBox Text="{Binding RequiredValue, Mode=TwoWay}"/>
+                                                                <TextBox Text="{Binding RequiredValue, Mode=TwoWay}"
+                                                                         IsEnabled="{Binding RelativeSource={RelativeSource AncestorType=ListView},
+                                                                                             Path=DataContext.CanModify}"/>
                                                             </StackPanel>
                                                         </DataTemplate>
                                                     </ListView.ItemTemplate>

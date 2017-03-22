@@ -135,6 +135,9 @@
     <Compile Include="Views\BatchInfo.xaml.cs">
       <DependentUpon>BatchInfo.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\BatchList.xaml.cs">
+      <DependentUpon>BatchList.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\BatchMain.xaml.cs">
       <DependentUpon>BatchMain.xaml</DependentUpon>
     </Compile>
@@ -202,6 +205,10 @@
     <Page Include="Views\BatchInfo.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\BatchList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\BatchMain.xaml">
       <Generator>MSBuild:Compile</Generator>

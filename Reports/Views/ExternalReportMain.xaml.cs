@@ -1,5 +1,5 @@
 ﻿using DBManager;
-using Microsoft.Practices.Unity;
+using Microsoft.Practices.Prism.Mvvm;
 using Prism.Events;
 using System;
 using System.Collections.Generic;
@@ -21,15 +21,10 @@ namespace Reports.Views
     /// <summary>
     /// Interaction logic for ExternalReportMainView.xaml
     /// </summary>
-    public partial class ExternalReportMainView : UserControl
+    public partial class ExternalReportMain : UserControl, IView
     {
-        public ExternalReportMainView(DBEntities entities, 
-                                    EventAggregator aggregator,
-                                    UnityContainer container)
+        public ExternalReportMain()
         {
-            DataContext = new ViewModels.ExternalReportMainViewModel(entities, 
-                                                                    aggregator,
-                                                                    container);
             InitializeComponent();
         }
     }

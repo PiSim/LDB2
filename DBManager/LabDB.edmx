@@ -1860,7 +1860,7 @@
           <Property Name="Price" Type="Double" Nullable="false" />
           <Property Name="Samples" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Currency" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="ReportReceived" Type="Boolean" />
+          <Property Name="ReportReceived" Type="Boolean" Nullable="false" />
           <Property Name="ProjectID" Type="Int32" />
           <NavigationProperty Name="ExternalReportFiles" Relationship="Self.external_report" FromRole="external_reports" ToRole="external_report_files" />
           <NavigationProperty Name="ExternalLab" Relationship="Self.external_lab" FromRole="external_reports" ToRole="organizations" />

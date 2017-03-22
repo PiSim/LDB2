@@ -41,6 +41,9 @@ namespace Materials
             _container.RegisterType<IMaterialServiceProvider, MaterialServiceProvider>(new ContainerControlledLifetimeManager());
             _container.Resolve<IMaterialServiceProvider>();
 
+            _regionManager.RegisterViewWithRegion(RegionNames.ProjectBatchListRegion,
+                                                typeof(Views.BatchList));
+
             _regionManager.RegisterViewWithRegion(RegionNames.MainNavigationRegion, 
                                                 typeof(Views.BatchesNavigationItem));
         }

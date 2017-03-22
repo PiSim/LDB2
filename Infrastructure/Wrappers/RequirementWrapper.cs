@@ -23,6 +23,18 @@ namespace Infrastructure.Wrappers
             _versionInstance = version;
         }
 
+        public bool CanModify
+        {
+            get
+            {
+                if (_versionInstance.IsMain)
+                    return true;
+
+                else
+                    return IsOverride;
+            }
+        }
+
         public bool CanSetOverride
         {
             get { return !_versionInstance.IsMain;  }

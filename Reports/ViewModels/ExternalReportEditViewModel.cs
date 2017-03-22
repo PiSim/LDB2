@@ -180,6 +180,55 @@ namespace Reports.ViewModels
             get { return _reportFiles; }
         }
 
+        public bool ReportReceived
+        {
+            get
+            {
+                if (_instance == null)
+                    return false;
+
+                else
+                    return _instance.ReportReceived;
+            }
+            set
+            {
+                _instance.ReportReceived = value;
+            }
+        }
+
+        public bool RequestDone
+        {
+            get
+            {
+                if (_instance == null)
+                    return false;
+
+                else
+                    return _instance.RequestDone;
+            }
+            set
+            {
+                _instance.RequestDone = value;
+            }
+        }
+
+        public bool SamplesSent
+        {
+            get
+            {
+                if (_instance == null)
+                    return false;
+
+                else
+                    return _instance.MaterialSent;
+            }
+
+            set
+            {
+                _instance.MaterialSent = value;
+            }
+        }
+
         public double Price
         {
             get 

@@ -209,22 +209,7 @@
                 </Grid>
             </TabItem>
             <TabItem Header="Commesse">
-                <ListView ItemsSource="{Binding Path=BatchList}">
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn Header="Odp" 
-                                            DisplayMemberBinding="{Binding Path=Number}"/>
-                            <GridViewColumn Header="Tipo"
-                                            DisplayMemberBinding="{Binding Path=Material.Construction.Type}"/>
-                            <GridViewColumn Header="Linea"
-                                            DisplayMemberBinding="{Binding Path=Material.Construction.Line}"/>
-                            <GridViewColumn Header="Aspetto"
-                                            DisplayMemberBinding="{Binding Path=Material.Construction.Aspect.Code}"/>
-                            <GridViewColumn Header="Mescola"
-                                            DisplayMemberBinding="{Binding Path=Material.Construction.Recipe.Code}"/>
-                        </GridView>
-                    </ListView.View>
-                </ListView>
+                <ContentControl prism:RegionManager.RegionName="ProjectBatchListRegion"/>
             </TabItem>
 
         </TabControl>

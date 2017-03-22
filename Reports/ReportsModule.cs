@@ -24,13 +24,19 @@ namespace Reports
         {
             _container.RegisterType<Object, Views.ReportMain>(ViewNames.ReportMain);
             _container.RegisterType<Object, Views.ReportEditView>(ViewNames.ReportEditView);
-            _container.RegisterType<Object, Views.ExternalReportMainView>(ViewNames.ExternalReportMainView);
+            _container.RegisterType<Object, Views.ExternalReportMain>(ViewNames.ExternalReportMainView);
             _container.RegisterType<Object, Views.ExternalReportEdit>(ViewNames.ExternalReportEditView);
             
             _container.RegisterType<ViewModels.ReportMainViewModel>();
             _container.RegisterType<ViewModels.ExternalReportEditViewModel>();
+            _container.RegisterType<ViewModels.ExternalReportMainViewModel>();
 
             _container.RegisterType<Views.ReportCreationDialog>();
+
+            _regionManager.RegisterViewWithRegion(RegionNames.BatchExternalReportListRegion,
+                                                typeof(Views.ExternalReportList));
+            _regionManager.RegisterViewWithRegion(RegionNames.MainExternalReportListRegion,
+                                                typeof(Views.ExternalReportList));
 
             _regionManager.RegisterViewWithRegion(RegionNames.BatchReportListRegion,
                                                 typeof(Views.ReportList));

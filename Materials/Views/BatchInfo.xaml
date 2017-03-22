@@ -13,8 +13,6 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
@@ -35,49 +33,7 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <GroupBox Header="Progetto"
-                      Grid.Column="1"
-                      Height="Auto">
-                <Grid DataContext="{Binding Project}">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                    </Grid.RowDefinitions>
-                    <Label Content="Nome:"
-                           Grid.Column="0"
-                           Grid.Row="0"/>
-                    <Label Content="{Binding Name}"
-                           Grid.Column="1"
-                           Grid.Row="0"/>
-
-                    <Label Content="OEM:"
-                           Grid.Column="0"
-                           Grid.Row="1"/>
-                    <Label Content="{Binding Oem.Name}"
-                           Grid.Column="1"
-                           Grid.Row="1"/>
-                    
-                    <Label Content="Descrizione:"
-                           Grid.Column="0"
-                           Grid.Row="2"/>
-                    <Label Content="{Binding Description}"
-                           Grid.Column="1"
-                           Grid.Row="2"/>
-
-                    <Label Content="CP:"
-                           Grid.Column="0"
-                           Grid.Row="3"/>
-                    <Label Content="{Binding Leader.Name}"
-                           Grid.Column="1"
-                           Grid.Row="3"/>
-                </Grid>
-            </GroupBox>
+            
             <Grid DataContext="{Binding Path=Material}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
@@ -136,42 +92,79 @@
                        Grid.Row="4"/>
             </Grid>
         </Grid>
+        <TabControl Grid.Row="2">
+            <TabItem Header="Dettagli">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
 
-        <GroupBox Header="Rotoli" Grid.Row="2">
-            <ListView ItemsSource="{Binding Path=Samples}"
+                    <ContentControl prism:RegionManager.RegionName="BatchProjectDetailsRegion"
+                                    Grid.Column="0"
+                                    Grid.Row="0"/>
+                    <GroupBox Header="Rotoli" 
+                              Grid.Column="1"
+                              Grid.Row="0">
+                        <ListView ItemsSource="{Binding Path=Samples}"
                       Margin="0,0,100,0">
-                <ListView.View>
-                    <GridView>
-                        <GridViewColumn DisplayMemberBinding="{Binding Path=Action}"/>
-                        <GridViewColumn DisplayMemberBinding="{Binding Path=Date}"/>
-                    </GridView>
-                </ListView.View>
-            </ListView>
-        </GroupBox>
-        <GroupBox Header="Report" Grid.Row="3">
-            <ContentControl prism:RegionManager.RegionName="BatchReportListRegion"/>
-        </GroupBox>
-        <GroupBox Grid.Row="4" Header="Richieste">
-            <Grid>
-                <Button Content="Apri" Command="{Binding Path=OpenRequestCommand}"
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn DisplayMemberBinding="{Binding Path=Action}"/>
+                                    <GridViewColumn DisplayMemberBinding="{Binding Path=Date}"/>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                    </GroupBox>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Report">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                    <GroupBox Header="Report Interni" Grid.Row="0">
+                        <ContentControl prism:RegionManager.RegionName="BatchReportListRegion"/>
+                    </GroupBox>
+                    <GroupBox Header="Report Esterni"
+                              Grid.Row="1">
+                        <ContentControl prism:RegionManager.RegionName="BatchExternalReportListRegion"/>
+                    </GroupBox>
+                    <GroupBox Header="Richiesti"
+                  Grid.Row="2">
+                        <Grid>
+                            <Button Content="Apri" Command="{Binding Path=OpenRequestCommand}"
                         HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,0,0"/>
-                <Button Content="Crea Nuova"
+                            <Button Content="Crea Nuova"
                         Command="{Binding Path=CreateRequestCommand}"
                         HorizontalAlignment="Right"
                         VerticalAlignment="Top"
                         Margin="0,25,0,0"/>
-                <ListView ItemsSource="{Binding Path=Tasks}"
+                            <ListView ItemsSource="{Binding Path=Tasks}"
                               SelectedItem="{Binding Path=SelectedTask, Mode=TwoWay}"
                               Margin="0,0,100,0">
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn Header="Specifica" DisplayMemberBinding="{Binding Path=Specification.Standard.Name}"/>
-                            <GridViewColumn Header="Versione" DisplayMemberBinding="{Binding Path=Specification.Label}"/>
-                            <GridViewColumn Header="Descrizione" DisplayMemberBinding="{Binding Path=Description}"/>
-                        </GridView>
-                    </ListView.View>
-                </ListView>
-            </Grid>
-        </GroupBox>
+                                <ListView.View>
+                                    <GridView>
+                                        <GridViewColumn Header="Specifica" DisplayMemberBinding="{Binding Path=Specification.Standard.Name}"/>
+                                        <GridViewColumn Header="Versione" DisplayMemberBinding="{Binding Path=Specification.Label}"/>
+                                        <GridViewColumn Header="Descrizione" DisplayMemberBinding="{Binding Path=Description}"/>
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
+                        </Grid>
+                    </GroupBox>
+
+                </Grid>
+            </TabItem>
+        </TabControl>
+        
+        
     </Grid>
 </UserControl>
