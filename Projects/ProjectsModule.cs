@@ -28,6 +28,8 @@ namespace Projects
 
             _regionManager.RegisterViewWithRegion(RegionNames.BatchProjectDetailsRegion,
                                                 typeof(Views.ProjectDetailsControl));
+            _regionManager.RegisterViewWithRegion(RegionNames.ExternalReportProjectDetailsRegion,
+                                                typeof(Views.ProjectDetailsControl));
             _regionManager.RegisterViewWithRegion(RegionNames.MainNavigationRegion, 
                                                 typeof(Views.ProjectsNavigationItem));
         }

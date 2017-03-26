@@ -7,102 +7,69 @@
              xmlns:prism="http://prismlibrary.com/"
              prism:ViewModelLocator.AutoWireViewModel="True"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="500" d:DesignWidth="600">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="150"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
-            <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        
+
         <Grid Grid.Column="0"
               Grid.Row="0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="108"/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="108"/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            
+
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition/>                
+                <RowDefinition/>
             </Grid.RowDefinitions>
-            
+
             <Label Content="Numero interno:"
                    Grid.Column="0"
                    Grid.Row="0" 
                    Margin="5"/>
-                   
+
             <Label Content="{Binding Path=InternalNumber}"
                    Grid.Column="1"
                    Grid.Row="0"
                    Margin="5"/>
-                   
-            <Label Content="Laboratorio:" 
-                   Grid.Column="0"
-                   Grid.Row="1"
+
+            <Label Content="Laboratorio:"
+                   Grid.Column="2"
+                   Grid.Row="0"
                    Margin="5"/>
-            <Label Content="{Binding Path=ExternalLab}" 
-                   Grid.Column="1"
-                   Grid.Row="1"
-                   Margin="5"/> 
-                   
             
+            <Label Content="{Binding Path=ExternalLab}" 
+                   Grid.Column="3"
+                   Grid.Row="0"
+                   Margin="5"/>
+            
+            <GroupBox Header="Campioni:"
+                      Grid.Column="0"
+                      Grid.ColumnSpan="2"
+                      Grid.Row="1">
+                <TextBox Text="{Binding Path=Samples}"
+                         TextWrapping="Wrap"
+                         AcceptsReturn="True"/>
+            </GroupBox>
+            <GroupBox Header="Prove:" 
+                      Grid.Column="2"
+                      Grid.ColumnSpan="2"
+                      Grid.Row="1">
+                <TextBox Text="{Binding Path=Description}"
+                         TextWrapping="Wrap"
+                         AcceptsReturn="True"/>
+            </GroupBox>
         </Grid>
-        <GroupBox Header="Progetto"
-                  Grid.Column="1"
-                  Grid.Row="0"
-                  Height="Auto">
-            <Grid DataContext="{Binding Project}">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
 
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-
-                <Label Content="Nome:"
-                       Grid.Column="0"
-                       Grid.Row="0"/>
-                <Label Content="{Binding Name}"
-                       Grid.Column="1"
-                       Grid.Row="0"/>
-
-                <Label Content="OEM"
-                       Grid.Column="0"
-                       Grid.Row="1"/>
-                <Label Content="{Binding Oem.Name}"
-                       Grid.Column="1"
-                       Grid.Row="1"/>
-
-                <Label Content="Descrizione:"
-                       Grid.Column="0"
-                       Grid.Row="2"/>
-                <Label Content="{Binding Description}"
-                       Grid.Column="1"
-                       Grid.Row="2"/>
-
-                <Label Content="CP:"
-                       Grid.Column="0"
-                       Grid.Row="3"/>
-                <Label Content="{Binding Leader.Name}"
-                       Grid.Column="1"
-                       Grid.Row="3"/>
-            </Grid>
-        </GroupBox>
-        
-        <TabControl Grid.Column="0"
-                    Grid.ColumnSpan="2"
-                    Grid.Row="1">
+        <TabControl Grid.Row="1">
             <TabItem Header="Dettagli">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -110,25 +77,56 @@
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition/>
+                        <RowDefinition Height="Auto"/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
 
-                    <GroupBox Header="Campioni:"
-                              Grid.Column="0"
-                              Grid.Row="0">
-                        <TextBox Text="{Binding Path=Samples}"
-                                 TextWrapping="Wrap"
-                                 AcceptsReturn="True"/>
-                    </GroupBox>
+                    <GroupBox Header="Stato">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <Label Content="RDA fatta:"
+                                   Grid.Column="0"
+                                   Grid.Row="0"
+                                   Margin="5"/>
+                            <CheckBox IsChecked="{Binding RequestDone, Mode=TwoWay}"
+                                      IsEnabled="{Binding CanModifyStatus}"
+                                      Grid.Column="1"
+                                      Grid.Row="0"
+                                      Margin="5"/>
 
-                    <GroupBox Header="Prove:" 
-                              Grid.Column="1"
-                              Grid.Row="0">
-                        <TextBox Text="{Binding Path=Description}"
-                                 TextWrapping="Wrap"
-                                 AcceptsReturn="True"/>
+                            <Label Content="Campioni inviati:"
+                                   Grid.Column="0"
+                                   Grid.Row="1"
+                                   Margin="5"/>
+                            <CheckBox IsChecked="{Binding SamplesSent, Mode=TwoWay}"
+                                      IsEnabled="{Binding CanModifyStatus}"
+                                      Grid.Column="1"
+                                      Grid.Row="1"
+                                      Margin="5"/>
+
+                            <Label Content="Report ricevuto:"
+                                   Grid.Column="0"
+                                   Grid.Row="2"
+                                   Margin="5"/>
+
+                            <CheckBox IsChecked="{Binding ReportReceived, Mode=TwoWay}"
+                                      Grid.Column="1"
+                                      Grid.Row="2"
+                                      Margin="5"/>
+                        </Grid>
                     </GroupBox>
+                     
+                    <ContentControl prism:RegionManager.RegionName="ExternalReportProjectDetailsRegion"
+                                    Grid.Column="1"
+                                    Grid.Row="0"/>
 
                     <GroupBox Header="Batch Inviati"
                               Grid.ColumnSpan="2"
@@ -140,7 +138,6 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
@@ -174,101 +171,12 @@
                                     Command="{Binding Path=RemoveBatchCommand}" 
                                     Grid.Column="1"
                                     Grid.Row="2"
-                                    Margin="5"/>    
+                                    Margin="5"/>
                         </Grid>
                     </GroupBox>
                 </Grid>
             </TabItem>
-            <TabItem Header="Stato">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition/>
-                    </Grid.RowDefinitions>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <Label Content="RDA fatta:"
-                               Grid.Column="0"
-                               Grid.Row="0"
-                               Margin="5"/>
-                        <CheckBox IsChecked="{Binding RequestDone, Mode=TwoWay}"
-                                  IsEnabled="{Binding CanModifyStatus}"
-                                  Grid.Column="1"
-                                  Grid.Row="0"
-                                  Margin="5"/>
-
-                        <Label Content="Campioni inviati:"
-                               Grid.Column="0"
-                               Grid.Row="1"
-                               Margin="5"/>
-                        <CheckBox IsChecked="{Binding SamplesSent, Mode=TwoWay}"
-                                  IsEnabled="{Binding CanModifyStatus}"
-                                  Grid.Column="1"
-                                  Grid.Row="1"
-                                  Margin="5"/>
-
-                        <Label Content="Report ricevuto:"
-                               Grid.Column="0"
-                               Grid.Row="2"
-                               Margin="5"/>
-
-                        <CheckBox IsChecked="{Binding ReportReceived, Mode=TwoWay}"
-                                  Grid.Column="1"
-                                  Grid.Row="2"
-                                  Margin="5"/>
-                    </Grid>
-                    <GroupBox Header="Dettagli ordine"
-                              Grid.Column="0"
-                              Grid.ColumnSpan="3"
-                              Grid.Row="2">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition MaxWidth="75"/>
-                                <ColumnDefinition/>
-                                <ColumnDefinition MaxWidth="50"/>
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                            </Grid.RowDefinitions>
-                            <Label Content="Numero:"
-                           Grid.Column="0"
-                           Grid.Row="0"
-                           Height="25"/>
-                            <TextBox Text="{Binding Path=PurchaseOrder, Mode=TwoWay}"
-                             Grid.ColumnSpan="2"
-                             Grid.Column="1"
-                             Grid.Row="0"
-                             Height="20"/>
-                            <Label Content="Costo:"
-                           Grid.Column="0"
-                           Grid.Row="1"
-                           Height="25"/>
-                            <TextBox Text="{Binding Path=CurrentInstance.Price, Mode=TwoWay}" 
-                             Grid.Column="1"
-                             Grid.Row="1"
-                             Height="20"/>
-                            <ComboBox ItemsSource="{Binding Path=CurrentInstance.Currencies}"
-                              SelectedItem="{Binding Path=Currency, Mode=TwoWay}"
-                              Grid.Column="2"
-                              Grid.Row="1"
-                              Height="25"/>
-                        </Grid>
-                    </GroupBox>
-                </Grid>
-            </TabItem>
+            
             <TabItem Header="File">
                 <GroupBox Header="File"
                           Grid.ColumnSpan="2"
@@ -296,7 +204,7 @@
                                 Command="{Binding Path=OpenFileCommand}" 
                                 HorizontalAlignment="Right"
                                 VerticalAlignment="Top" 
-                                Margin="0,0,0,0"/>  
+                                Margin="0,0,0,0"/>
                         <Button Content="Aggiungi" 
                                 Command="{Binding Path=AddFileCommand}" 
                                 HorizontalAlignment="Right"
@@ -311,11 +219,5 @@
                 </GroupBox>
             </TabItem>
         </TabControl>
-        
-            
-        
-        
-        
-        
     </Grid>
 </UserControl>

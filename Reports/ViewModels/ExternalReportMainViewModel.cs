@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Reports.ViewModels
 {
-    internal class ExternalReportMainViewModel : BindableBase
+    public class ExternalReportMainViewModel : BindableBase
     {
         private DBEntities _entities;
         private DelegateCommand _newReport, _openReport;
@@ -21,7 +21,7 @@ namespace Reports.ViewModels
         private ObservableCollection<ExternalReport> _reportList;      
         private UnityContainer _container; 
 
-        internal ExternalReportMainViewModel(DBEntities entities, 
+        public ExternalReportMainViewModel(DBEntities entities, 
                                             EventAggregator aggregator,
                                             UnityContainer container)
         {

@@ -16,6 +16,7 @@ namespace Reports.ViewModels
 {
     public class ExternalReportEditViewModel : BindableBase
     {
+        private Batch _selectedBatch;
         private DBEntities _entities;
         private DelegateCommand _addBatch, _addFile, _openBatch, _openFile, _removeBatch, _removeFile;
         private EventAggregator _eventAggregator;
@@ -37,7 +38,11 @@ namespace Reports.ViewModels
             _addBatch = new DelegateCommand(
                 () => 
                 {
-                    
+                    Batch tempBatch = _materialServiceProvider.StartBatchSelection();
+                    ExternalReportBatchMapping tempMap = new ExternalReportBatchMapping();
+                    tempMap.Batch = _entities.Batches.First(btc => btc.ID == tempBatch.ID);
+                    _instance.BatchMappings.Add(tempMap);
+                    _batchList.Add(tempBatch);
                 } );
 
             _addFile = new DelegateCommand(
@@ -57,6 +62,15 @@ namespace Reports.ViewModels
                         }
                     }
                 });
+            
+            _openBatch = new DelegateCommand(
+                () =>
+                {
+                    NavigationToken token = new NavigationToken(MaterialViewNames.BatchInfoView,
+                                                                _selectedBatch);
+                    _eventAggregator.GetEvent<NavigationRequested>().Publish(token);
+                },
+                () => _selectedBatch != null);
 
             _openFile = new DelegateCommand(
                 () =>
@@ -64,6 +78,17 @@ namespace Reports.ViewModels
                     System.Diagnostics.Process.Start(_selectedFile.Path);
                 },
                 () => _selectedFile != null);
+
+            _removeBatch = new DelegateCommand(
+                () =>
+                {
+                    ExternalReportBatchMapping tempMap = _instance.BatchMappings
+                        .First(btm => btm.BatchID == _selectedBatch.ID);
+                    _instance.BatchMappings.Remove(tempMap);
+                    _batchList.Remove(_selectedBatch);
+                    SelectedBatch = null;
+                },
+                () => _selectedBatch != null);
 
             _removeFile = new DelegateCommand(
                 () =>
@@ -116,7 +141,12 @@ namespace Reports.ViewModels
         
         public string ExternalLab
         {
-            get { return _instance.ExternalLab.Name; }
+            get
+            {
+                if (_instance == null)
+                    return null;
+                return _instance.ExternalLab.Name;
+            }
         }
 
         public ExternalReport ExternalReportInstance
@@ -128,6 +158,8 @@ namespace Reports.ViewModels
                 OnPropertyChanged("Currency");
                 OnPropertyChanged("Description");
 
+                SelectedBatch = null;
+
                 _batchList = new ObservableCollection<Batch>
                     (_instance.BatchMappings.Select(btm => btm.Batch));
                 OnPropertyChanged("BatchList");
@@ -135,6 +167,7 @@ namespace Reports.ViewModels
                 _reportFiles = new ObservableCollection<ExternalReportFile>
                     (_instance.ExternalReportFiles);
                 OnPropertyChanged("ReportFiles");
+                OnPropertyChanged("ExternalLab");
                 OnPropertyChanged("InternalNumber");
                 OnPropertyChanged("Price");
                 OnPropertyChanged("Project");
@@ -228,6 +261,19 @@ namespace Reports.ViewModels
                 _instance.MaterialSent = value;
             }
         }
+
+        public Batch SelectedBatch
+        {
+            get { return _selectedBatch;  }
+            set
+            {
+                _selectedBatch = value;
+                OnPropertyChanged("SelectedBatch");
+                _openBatch.RaiseCanExecuteChanged();
+                _removeBatch.RaiseCanExecuteChanged();
+            }
+        }
+        
 
         public double Price
         {

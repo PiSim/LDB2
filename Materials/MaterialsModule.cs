@@ -21,9 +21,9 @@ namespace Materials
 
         public void Initialize()
         {
-            _container.RegisterType<Object, Views.BatchInfo>(ViewNames.BatchInfoView);
-            _container.RegisterType<Object, Views.BatchMain>(ViewNames.BatchesView);
-            _container.RegisterType<Object, Views.SampleLogView>(ViewNames.SampleLogView);
+            _container.RegisterType<Object, Views.BatchInfo>(MaterialViewNames.BatchInfoView);
+            _container.RegisterType<Object, Views.BatchMain>(MaterialViewNames.BatchesView);
+            _container.RegisterType<Object, Views.SampleLogView>(MaterialViewNames.SampleLogView);
 
             _container.RegisterType<Views.BatchPickerDialog>();
             _container.RegisterType<Views.ColorCreationDialog>();

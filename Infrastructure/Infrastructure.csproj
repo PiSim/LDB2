@@ -116,6 +116,7 @@
     <Compile Include="IMaterialServiceProvider.cs" />
     <Compile Include="InfrastructureModule.cs" />
     <Compile Include="ITaskServiceProvider.cs" />
+    <Compile Include="MaterialViewNames.cs" />
     <Compile Include="NavigationToken.cs" />
     <Compile Include="RegionNames.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">

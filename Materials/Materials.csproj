@@ -128,7 +128,7 @@
     <Compile Include="ViewModels\ProjectPickerViewModel.cs" />
     <Compile Include="ViewModels\SampleLogDialogViewModel.cs" />
     <Compile Include="ViewModels\SampleLogViewModel.cs" />
-    <Compile Include="ViewNames.cs" />
+    <Compile Include="MaterialViewNames.cs" />
     <Compile Include="Views\BatchesNavigationItem.xaml.cs">
       <DependentUpon>BatchesNavigationItem.xaml</DependentUpon>
     </Compile>

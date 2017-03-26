@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Materials
+namespace Infrastructure
 {
-    public class ViewNames
+    public class MaterialViewNames
     {
         public static string BatchesView { get { return "BatchesView"; } }
         public static string BatchInfoView { get { return "BatchInfoView"; } }

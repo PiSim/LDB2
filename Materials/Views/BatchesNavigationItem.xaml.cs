@@ -32,7 +32,7 @@ namespace Materials.Views
 
         public string ViewName
         {
-            get { return ViewNames.BatchesView; }
+            get { return MaterialViewNames.BatchesView; }
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿v 0.4.2 -- In corso
 
--*Riorganizzata in Tab la vista Batch
+-Introdotte Regioni e controlli tramite ViewDiscovery in diverse viste 
+-Riorganizzata in Tab la vista Batch
 -Trasferiti i nomi delle viste nel progetto Infrastructure
 -*Modulo instruments: aggiunti NewCalibrationDialog e NewMaintenanceEventDialog 
 -Creati eventi ReportCreationRequested e ReportCreated

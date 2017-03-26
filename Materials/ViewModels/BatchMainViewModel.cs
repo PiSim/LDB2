@@ -33,7 +33,7 @@ namespace Materials.ViewModels
             _openSampleLogView = new DelegateCommand(
                 () =>
                 {
-                    _eventAggregator.GetEvent<NavigationRequested>().Publish(new NavigationToken(ViewNames.SampleLogView));
+                    _eventAggregator.GetEvent<NavigationRequested>().Publish(new NavigationToken(MaterialViewNames.SampleLogView));
                 });
             
             _quickOpen = new DelegateCommand(
@@ -43,7 +43,7 @@ namespace Materials.ViewModels
 
                     if (temp != null)
                     {
-                        NavigationToken token = new NavigationToken(ViewNames.BatchInfoView, temp);
+                        NavigationToken token = new NavigationToken(MaterialViewNames.BatchInfoView, temp);
                         _eventAggregator.GetEvent<NavigationRequested>().Publish(token);
                     }
 
