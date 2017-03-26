@@ -5,8 +5,71 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Instruments.Views"
         mc:Ignorable="d"
-        Title="NewMaintenanceEventDialog" Height="300" Width="300">
+        Title="Nuovo Intervento" Height="250" Width="350"
+        ResizeMode="NoResize">
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="60"/>
+            <ColumnDefinition Width="60"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Label Content="Descrizione:"
+               Grid.Column="0"
+               Grid.Row="0"
+               Margin="5"/>
+
+        <TextBox Text="{Binding Description, Mode=TwoWay}"
+                 TextWrapping="Wrap"
+                 AcceptsReturn="True"
+                 Grid.Column="1"
+                 Grid.ColumnSpan="3"
+                 Grid.Row="0"
+                 Margin="5"
+                 Height="90"/>
+
+        <Label Content="Data:"
+               Grid.Column="0"
+               Grid.Row="1"
+               Margin="5"/>
+
+        <DatePicker Text="{Binding Date, Mode=TwoWay}"
+                    Grid.Column="1"
+                    Grid.ColumnSpan="3"
+                    Grid.Row="1"
+                    Margin="5"/>
+
+        <Label Content="Tecnico:"
+               Grid.Column="0"
+               Grid.Row="2"
+               Margin="5"/>
+
+        <ComboBox ItemsSource="{Binding TechList}"
+                  SelectedItem="{Binding SelectedTech, Mode=TwoWay}"
+                  DisplayMemberPath="Name"
+                  Grid.Column="1"
+                  Grid.ColumnSpan="3"
+                  Grid.Row="2"
+                  Margin="5"/>
+
+        <Button Content="Annulla"
+                Command="{Binding CancelCommand}"
+                Grid.Column="2"
+                Grid.Row="4"
+                Margin="5"/>
+
+        <Button Content="Ok"
+                Command="{Binding ConfirmCommand}"
+                Grid.Column="3"
+                Grid.Row="4"
+                Margin="5"/>
     </Grid>
 </Window>
