@@ -144,19 +144,11 @@
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
 
-                            <ListView ItemsSource="{Binding Path=BatchList}" 
-                                      SelectedItem="{Binding Path=SelectedBatch, Mode=TwoWay}"
-                                      Grid.Column="0"
-                                      Grid.Row="0"
-                                      Grid.RowSpan="4"
-                                      Margin="5">
-                                <ListView.View>
-                                    <GridView>
-                                        <GridViewColumn Header="Numero" 
-                                                        DisplayMemberBinding="{Binding Number}"/>
-                                    </GridView>
-                                </ListView.View>
-                            </ListView>
+                            <ContentControl prism:RegionManager.RegionName="ExternalReportBatchListRegion"
+                                            Grid.Column="0"
+                                            Grid.Row="0"
+                                            Grid.RowSpan="4"/>
+                            
                             <Button Content="Apri" 
                                     Command="{Binding Path=OpenBatchCommand}" 
                                     Grid.Column="1"

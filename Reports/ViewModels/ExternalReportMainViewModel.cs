@@ -19,11 +19,11 @@ namespace Reports.ViewModels
         private EventAggregator _eventAggregator;
         private ExternalReport _selectedReport;
         private ObservableCollection<ExternalReport> _reportList;      
-        private UnityContainer _container; 
+        private IUnityContainer _container; 
 
         public ExternalReportMainViewModel(DBEntities entities, 
                                             EventAggregator aggregator,
-                                            UnityContainer container)
+                                            IUnityContainer container)
         {
             _container = container;
             _entities = entities;

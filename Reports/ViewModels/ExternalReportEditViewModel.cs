@@ -39,10 +39,13 @@ namespace Reports.ViewModels
                 () => 
                 {
                     Batch tempBatch = _materialServiceProvider.StartBatchSelection();
-                    ExternalReportBatchMapping tempMap = new ExternalReportBatchMapping();
-                    tempMap.Batch = _entities.Batches.First(btc => btc.ID == tempBatch.ID);
-                    _instance.BatchMappings.Add(tempMap);
-                    _batchList.Add(tempBatch);
+                    if (tempBatch != null)
+                    {
+                        ExternalReportBatchMapping tempMap = new ExternalReportBatchMapping();
+                        tempMap.Batch = _entities.Batches.First(btc => btc.ID == tempBatch.ID);
+                        _instance.BatchMappings.Add(tempMap);
+                        _batchList.Add(tempBatch);
+                    }
                 } );
 
             _addFile = new DelegateCommand(
@@ -83,8 +86,11 @@ namespace Reports.ViewModels
                 () =>
                 {
                     ExternalReportBatchMapping tempMap = _instance.BatchMappings
-                        .First(btm => btm.BatchID == _selectedBatch.ID);
-                    _instance.BatchMappings.Remove(tempMap);
+                        .FirstOrDefault(btm => btm.BatchID == _selectedBatch.ID);
+
+                    if (tempMap != null)
+                        _instance.BatchMappings.Remove(tempMap);
+
                     _batchList.Remove(_selectedBatch);
                     SelectedBatch = null;
                 },

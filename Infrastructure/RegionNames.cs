@@ -6,6 +6,7 @@ namespace Infrastructure
         public static string BatchExternalReportListRegion { get { return "BatchExternalReportListRegion"; } }
         public static string BatchReportListRegion { get { return "BatchReportListRegion"; } }
         public static string CurrentUserMainReportListRegion { get { return "CurrentUserMainReportListRegion"; } }
+        public static string ExternalReportBatchListRegion { get { return "ExternalReportBatchListRegion"; } }
         public static string ExternalReportProjectDetailsRegion { get { return "ExternalReportProjectDetailsRegion"; } }
         public static string MainNavigationRegion { get { return "MainNavigationRegion"; } }
         public static string MainRegion { get { return "MainRegion"; } }
