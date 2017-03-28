@@ -157,7 +157,7 @@ namespace Specifications.ViewModels
             _removeFile = new DelegateCommand(
                 () =>
                 {
-                    _selectedIssue.StandardFiles.Remove(_selectedFile);
+                    _entities.StandardFiles.Remove(_selectedFile);
                     SelectedFile = null;
                 },
                 () => _selectedFile != null );
