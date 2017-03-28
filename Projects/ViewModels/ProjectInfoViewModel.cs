@@ -203,6 +203,7 @@ namespace Projects.ViewModels
                 UnassignedConstructions = new ObservableCollection<Construction>(
                    _entities.Constructions.Where(cns => cns.Project == null));
 
+                OnPropertyChanged("BatchList");
                 OnPropertyChanged("Description");
                 OnPropertyChanged("ExternalReportList");
                 OnPropertyChanged("LeaderName");
