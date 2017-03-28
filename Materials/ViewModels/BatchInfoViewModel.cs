@@ -70,7 +70,7 @@ namespace Materials.ViewModels
                 OnPropertyChanged("ReportList");
             }
         }
-
+        
         public Material Material
         {
             get
