@@ -63,6 +63,7 @@ namespace Materials.ViewModels
                 _samplesList = new List<SamplesWrapper>();
                 foreach (Sample smp in _instance.Samples)
                     _samplesList.Add(new SamplesWrapper(smp));
+                OnPropertyChanged("ExternalReportList");
                 OnPropertyChanged("Samples");
                 OnPropertyChanged("Material");
                 OnPropertyChanged("Number");
