@@ -7,7 +7,8 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        <ListView ItemsSource="{Binding Path=BatchList}">
+        <ListView ItemsSource="{Binding Path=BatchList}",
+                  SelectedBatch="{Binding SelectedBatch, Mode=TwoWay}">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Odp" 
