@@ -19,16 +19,19 @@ namespace Materials.ViewModels
     public class BatchInfoViewModel : BindableBase
     {
         private Batch _instance;
+        private DBEntities _entities;
         private DelegateCommand _newReport, _openReport;
         private EventAggregator _eventAggregator;
         private List<SamplesWrapper> _samplesList;
         private Report _selectedReport;
         private IUnityContainer _container;
 
-        public BatchInfoViewModel(EventAggregator aggregator,
+        public BatchInfoViewModel(DBEntities entities,
+                                EventAggregator aggregator,
                                 IUnityContainer container) : base()
         {
             _container = container;
+            _entities = entities;
             _eventAggregator = aggregator;
 
             _eventAggregator.GetEvent<ReportCreated>().Subscribe(
