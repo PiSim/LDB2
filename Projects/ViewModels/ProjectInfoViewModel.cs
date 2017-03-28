@@ -114,7 +114,7 @@ namespace Projects.ViewModels
                 OnPropertyChanged("AssignedConstructions");
             }
         }
-        
+
         public string Description
         {
             get
