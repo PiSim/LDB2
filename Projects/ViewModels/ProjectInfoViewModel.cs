@@ -117,7 +117,13 @@ namespace Projects.ViewModels
 
         public List<Batch> BatchList
         {
-            get { return new List<Batch>(_entities.Batches.Where(btc => btc.Material.Construction.ProjectID == _projectInstance.ID));}
+            get 
+            { 
+                if (_projectInstance == null)
+                    return null;
+                    
+                return new List<Batch>(_entities.Batches.Where(btc => btc.Material.Construction.ProjectID == _projectInstance.ID));
+            }
         }
 
         public string Description
