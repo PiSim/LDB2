@@ -5,8 +5,74 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Controls.Views"
         mc:Ignorable="d"
-        Title="NewPODialog" Height="300" Width="300">
+        Title="Nuovo ordine di acquisto" Height="180" Width="300">
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="60"/>
+            <ColumnDefinition Width="60"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="35"/>
+            <RowDefinition Height="35"/>
+            <RowDefinition Height="35"/>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Label Content="Numero ordine:"
+               Grid.Column="0"
+               Grid.Row="0"
+               Margin="5"/>
+
+        <TextBox Text="{Binding OrderNumber, Mode=TwoWay}"
+                 TextWrapping="Wrap"
+                 AcceptsReturn="True"
+                 Grid.Column="1"
+                 Grid.ColumnSpan="3"
+                 Grid.Row="0"
+                 Margin="5"/>
+
+        <Label Content="Totale:"
+               Grid.Column="0"
+               Grid.Row="1"
+               Margin="5"/>
+
+        <TextBox Text="{Binding TotalCost, Mode=TwoWay}"
+                 Grid.Column="1"
+                 Grid.ColumnSpan="2"
+                 Grid.Row="1"
+                 Margin="5"/>
+
+        <Label Content="Data:"
+               Grid.Column="0"
+               Grid.Row="2"
+               Margin="5"/>
+
+        <DatePicker Text="{Binding Date, Mode=TwoWay}"
+                    Grid.Column="1"
+                    Grid.ColumnSpan="3"
+                    Grid.Row="2"
+                    Margin="5"/>
+
+        <ComboBox ItemsSource="{Binding CurrencyList}"
+                  SelectedItem="{Binding SelectedCurrency, Mode=TwoWay}"
+                  DisplayMemberPath="Code"
+                  Grid.Column="3"
+                  Grid.Row="1"
+                  Margin="5"/>
+
+        <Button Content="Annulla"
+                Command="{Binding CancelCommand}"
+                Grid.Column="2"
+                Grid.Row="4"
+                Margin="5"/>
+
+        <Button Content="Ok"
+                Command="{Binding ConfirmCommand}"
+                Grid.Column="3"
+                Grid.Row="4"
+                Margin="5"/>
     </Grid>
 </Window>
