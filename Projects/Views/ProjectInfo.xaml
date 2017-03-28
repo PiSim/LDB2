@@ -209,7 +209,8 @@
                 </Grid>
             </TabItem>
             <TabItem Header="Commesse">
-                <ContentControl prism:RegionManager.RegionName="ProjectBatchListRegion"/>
+                <ContentControl prism:RegionManager.RegionName="ProjectBatchListRegion"
+                                Margin="5"/>
             </TabItem>
 
         </TabControl>
