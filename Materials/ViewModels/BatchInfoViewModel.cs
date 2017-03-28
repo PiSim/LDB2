@@ -71,6 +71,13 @@ namespace Materials.ViewModels
             }
         }
         
+        public List<ExternalReport> ExternalReportList 
+        {
+            get { return new List<ExternalReport>(_entities.ExternalReports
+                                                            .Where(xtr => xtr.BatchMappings
+                                                            .Any(btm => btm.batchID == _instance.ID))); }
+        }
+
         public Material Material
         {
             get
