@@ -89,7 +89,7 @@ namespace Reports.ViewModels
                         .FirstOrDefault(btm => btm.BatchID == _selectedBatch.ID);
 
                     if (tempMap != null)
-                        _instance.BatchMappings.Remove(tempMap);
+                        _entities.ExternalReportBatchMappings.Remove(tempMap);
 
                     _batchList.Remove(_selectedBatch);
                     SelectedBatch = null;
