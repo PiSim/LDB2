@@ -36,7 +36,7 @@
                     <GridViewColumn Header="Camp. Inviati">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <CheckBox IsChecked="{Binding SamplesSent}"
+                                <CheckBox IsChecked="{Binding MaterialSent}"
                                           IsEnabled="False"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
