@@ -67,7 +67,7 @@ namespace Reports.ViewModels
                     foreach (Batch selectedBatch in _batchList)
                     {
                         ExternalReportBatchMapping tempMap = new ExternalReportBatchMapping();
-                        tempMap.Batch = _entities.Batches[_selectedBatch.ID];
+                        tempMap.Batch = _entities.Batches.First(extr => extr.ID == _selectedBatch.ID);
                         
                         output.BatchMappings.Add(tempMap);
                     }
