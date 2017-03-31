@@ -17,6 +17,7 @@
 -*Bozza NewPODialog
 -*Creato dialogo modifica dettagli progetto
 -*Aggiunto pulsante apertura batch da progetto
+-*Introdotti eventi notifica aggiornamenti per refresh liste
 
 v 0.4.1 -- 14/03/2017
 
