@@ -77,8 +77,7 @@ namespace Projects.ViewModels
                                                                 SelectedBatch);
                     _eventAggregator.GetEvent<NavigationRequested>().Publish(token);
                 },
-                () => SelectedBatch != null
-            )
+                () => SelectedBatch != null);
 
             _openExternalReport = new DelegateCommand(
                 () =>
