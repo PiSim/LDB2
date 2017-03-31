@@ -9,7 +9,7 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
-            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="100"/>
         </Grid.ColumnDefinitions>
 
         <ListView ItemsSource="{Binding TaskList}"
