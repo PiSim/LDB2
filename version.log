@@ -1,4 +1,9 @@
-﻿v 0.4.2 -- In corso
+﻿v 0.4.3 -- 
+
+-*Introdotti eventi notifica aggiornamenti per refresh liste
+-*Implementato comparatore per sorting delle colonne di ListView
+
+v 0.4.2 -- In corso
 
 -Introdotte Regioni e controlli tramite ViewDiscovery in diverse viste 
 -Riorganizzata in Tab la vista Batch
@@ -16,9 +21,7 @@
 -Creata regione ExternalReportBatchListRegion con registrata la vista BatchList
 -*Bozza NewPODialog
 -*Creato dialogo modifica dettagli progetto
--*Aggiunto pulsante apertura batch da progetto
--*Introdotti eventi notifica aggiornamenti per refresh liste
--*Implementato comparatore per sorting delle colonne di ListView
+-Aggiunto pulsante apertura batch da progetto
 
 v 0.4.1 -- 14/03/2017
 

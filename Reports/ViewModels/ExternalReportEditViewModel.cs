@@ -18,20 +18,23 @@ namespace Reports.ViewModels
     {
         private Batch _selectedBatch;
         private DBEntities _entities;
-        private DelegateCommand _addBatch, _addFile, _openBatch, _openFile, _removeBatch, _removeFile;
+        private DelegateCommand _addBatch, _addFile, _addPO, _openBatch, _openFile, _removeBatch, _removeFile;
         private EventAggregator _eventAggregator;
         private ExternalReport _instance;
         private ExternalReportFile _selectedFile;
         private IMaterialServiceProvider _materialServiceProvider;
+        private IReportServiceProvider _reportServiceProvider;
         private ObservableCollection<Batch> _batchList;
         private ObservableCollection<ExternalReportFile> _reportFiles;
 
         public ExternalReportEditViewModel(DBEntities entities,
                                             EventAggregator aggregator,
-                                            IMaterialServiceProvider materialServiceProvider) : base()
+                                            IMaterialServiceProvider materialServiceProvider,
+                                            IReportServiceProvider reportServiceProvider) : base()
         {
             _eventAggregator = aggregator;
             _materialServiceProvider = materialServiceProvider;
+            _reportServiceProvider = reportServiceProvider;
             _entities = entities;
             _eventAggregator.GetEvent<CommitRequested>().Subscribe(() => _entities.SaveChanges());
             
@@ -64,6 +67,13 @@ namespace Reports.ViewModels
                             _instance.ExternalReportFiles.Add(temp);
                         }
                     }
+                });
+
+            _addPO = new DelegateCommand(
+                () =>
+                {
+                    _reportServiceProvider.AddPOToExternalReport(_instance);
+                    OnPropertyChanged("PurchaseOrder");
                 });
             
             _openBatch = new DelegateCommand(
@@ -114,6 +124,11 @@ namespace Reports.ViewModels
         public DelegateCommand AddFileCommand
         {
             get { return _addFile; }
+        }
+
+        public DelegateCommand AddPOCommand
+        {
+            get { return _addPO; }
         }
         
         public ObservableCollection<Batch> BatchList
@@ -308,16 +323,15 @@ namespace Reports.ViewModels
             }
         }
 
-        public string PurchaseOrder
+        public PurchaseOrder PurchaseOrder
         {
             get 
             { 
                 if (_instance == null)
                     return null;
                     
-                return _instance.PurchaseOrder; 
+                return _instance.PO; 
             }
-            set { _instance.PurchaseOrder = value; }
         }
 
         public string Samples

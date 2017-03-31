@@ -143,6 +143,9 @@
     <Compile Include="ControlPlanItem.cs">
       <DependentUpon>LabDB.tt</DependentUpon>
     </Compile>
+    <Compile Include="Currency.cs">
+      <DependentUpon>LabDB.tt</DependentUpon>
+    </Compile>
     <Compile Include="DBManagerModule.cs" />
     <Compile Include="ExternalConstruction.cs">
       <DependentUpon>LabDB.tt</DependentUpon>

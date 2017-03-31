@@ -129,6 +129,8 @@
         <AssociationConnector Association="labdbModel.submethod_to_subreq1" />
         <AssociationConnector Association="labdbModel.method_issue_to_test" />
         <AssociationConnector Association="labdbModel.purchase_order_to_external_report" />
+        <EntityTypeShape EntityType="labdbModel.Currency" Width="1.5" PointX="0.5" PointY="35.5" />
+        <AssociationConnector Association="labdbModel.currency_to_purchase_order" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

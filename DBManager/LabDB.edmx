@@ -86,6 +86,15 @@
           <Property Name="name" Type="varchar" MaxLength="45" Nullable="false" />
           <Property Name="specificationID" Type="int" Nullable="false" />
         </EntityType>
+        <EntityType Name="currencies">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="code" Type="char" MaxLength="3" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="45" Nullable="false" />
+          <Property Name="exchange_rate" Type="float" Nullable="false" />
+        </EntityType>
         <EntityType Name="external_constructions">
           <Key>
             <PropertyRef Name="ID" />
@@ -244,7 +253,7 @@
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="path" Type="varchar" MaxLength="100" Nullable="false" />
           <Property Name="poID" Type="int" Nullable="false" />
         </EntityType>
@@ -271,10 +280,10 @@
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="number" Type="char" MaxLength="10" Nullable="false" />
           <Property Name="total" Type="float" Nullable="false" />
-          <Property Name="currency" Type="char" MaxLength="3" Nullable="false" />
+          <Property Name="currencyID" Type="int" Nullable="false" />
           <Property Name="date" Type="date" Nullable="false" />
           <Property Name="organizationID" Type="int" Nullable="false" />
         </EntityType>
@@ -639,6 +648,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="currency_to_purchase_order">
+          <End Role="currencies" Type="Self.currencies" Multiplicity="1" />
+          <End Role="purchase_orders" Type="Self.purchase_orders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="currencies">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="purchase_orders">
+              <PropertyRef Name="currencyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="current_issue_to_standard">
           <End Role="standard_issues" Type="Self.standard_issues" Multiplicity="0..1" />
           <End Role="standards" Type="Self.standards" Multiplicity="*" />
@@ -675,20 +696,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="external_report">
-          <End Role="external_reports" Type="Self.external_reports" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="external_report_files" Type="Self.external_report_files" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="external_reports">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="external_report_files">
-              <PropertyRef Name="external_reportID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="external_report_to_batch_mapping">
           <End Role="external_reports" Type="Self.external_reports" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -699,6 +706,20 @@
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="external_report_batch_mapping">
+              <PropertyRef Name="external_reportID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="external_report_to_file">
+          <End Role="external_reports" Type="Self.external_reports" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="external_report_files" Type="Self.external_report_files" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="external_reports">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="external_report_files">
               <PropertyRef Name="external_reportID" />
             </Dependent>
           </ReferentialConstraint>
@@ -991,6 +1012,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="po_to_external_report">
+          <End Role="purchase_orders" Type="Self.purchase_orders" Multiplicity="0..1" />
+          <End Role="external_reports" Type="Self.external_reports" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="purchase_orders">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="external_reports">
+              <PropertyRef Name="purchase_orderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="project">
           <End Role="projects" Type="Self.projects" Multiplicity="0..1" />
           <End Role="constructions" Type="Self.constructions" Multiplicity="*" />
@@ -1036,18 +1069,6 @@
             </Principal>
             <Dependent Role="methods">
               <PropertyRef Name="propertyID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="purchase_order_to_external_report">
-          <End Role="purchase_orders" Type="Self.purchase_orders" Multiplicity="0..1" />
-          <End Role="external_reports" Type="Self.external_reports" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="purchase_orders">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="external_reports">
-              <PropertyRef Name="purchase_orderID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1425,6 +1446,7 @@
           <EntitySet Name="constructions" EntityType="Self.constructions" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="control_plan_items" EntityType="Self.control_plan_items" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="control_plans" EntityType="Self.control_plans" Schema="labdb" store:Type="Tables" />
+          <EntitySet Name="currencies" EntityType="Self.currencies" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="external_constructions" EntityType="Self.external_constructions" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="external_report_batch_mapping" EntityType="Self.external_report_batch_mapping" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="external_report_files" EntityType="Self.external_report_files" Schema="labdb" store:Type="Tables" />
@@ -1516,6 +1538,10 @@
             <End Role="control_plans" EntitySet="control_plans" />
             <End Role="control_plan_items" EntitySet="control_plan_items" />
           </AssociationSet>
+          <AssociationSet Name="currency_to_purchase_order" Association="Self.currency_to_purchase_order">
+            <End Role="currencies" EntitySet="currencies" />
+            <End Role="purchase_orders" EntitySet="purchase_orders" />
+          </AssociationSet>
           <AssociationSet Name="current_issue_to_standard" Association="Self.current_issue_to_standard">
             <End Role="standard_issues" EntitySet="standard_issues" />
             <End Role="standards" EntitySet="standards" />
@@ -1528,13 +1554,13 @@
             <End Role="organizations" EntitySet="organizations" />
             <End Role="external_reports" EntitySet="external_reports" />
           </AssociationSet>
-          <AssociationSet Name="external_report" Association="Self.external_report">
-            <End Role="external_reports" EntitySet="external_reports" />
-            <End Role="external_report_files" EntitySet="external_report_files" />
-          </AssociationSet>
           <AssociationSet Name="external_report_to_batch_mapping" Association="Self.external_report_to_batch_mapping">
             <End Role="external_reports" EntitySet="external_reports" />
             <End Role="external_report_batch_mapping" EntitySet="external_report_batch_mapping" />
+          </AssociationSet>
+          <AssociationSet Name="external_report_to_file" Association="Self.external_report_to_file">
+            <End Role="external_reports" EntitySet="external_reports" />
+            <End Role="external_report_files" EntitySet="external_report_files" />
           </AssociationSet>
           <AssociationSet Name="instrument_to_calibration_report" Association="Self.instrument_to_calibration_report">
             <End Role="instruments" EntitySet="instruments" />
@@ -1628,6 +1654,10 @@
             <End Role="people" EntitySet="people" />
             <End Role="users" EntitySet="users" />
           </AssociationSet>
+          <AssociationSet Name="po_to_external_report" Association="Self.po_to_external_report">
+            <End Role="purchase_orders" EntitySet="purchase_orders" />
+            <End Role="external_reports" EntitySet="external_reports" />
+          </AssociationSet>
           <AssociationSet Name="project" Association="Self.project">
             <End Role="projects" EntitySet="projects" />
             <End Role="constructions" EntitySet="constructions" />
@@ -1643,10 +1673,6 @@
           <AssociationSet Name="property_to_method" Association="Self.property_to_method">
             <End Role="properties" EntitySet="properties" />
             <End Role="methods" EntitySet="methods" />
-          </AssociationSet>
-          <AssociationSet Name="purchase_order_to_external_report" Association="Self.purchase_order_to_external_report">
-            <End Role="purchase_orders" EntitySet="purchase_orders" />
-            <End Role="external_reports" EntitySet="external_reports" />
           </AssociationSet>
           <AssociationSet Name="purchase_order_to_file" Association="Self.purchase_order_to_file">
             <End Role="purchase_orders" EntitySet="purchase_orders" />
@@ -1913,7 +1939,7 @@
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" a:GetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:SetterAccess="Private" />
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" a:GetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:SetterAccess="Public" />
           <Property Name="Name" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Category" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="external_constructions" Relationship="Self.oemID" FromRole="organizations" ToRole="external_constructions" />
@@ -2963,6 +2989,11 @@
             <End Role="PurchaseOrder" EntitySet="PurchaseOrders" />
             <End Role="ExternalReport" EntitySet="ExternalReports" />
           </AssociationSet>
+          <EntitySet Name="Currencies" EntityType="labdbModel.Currency" />
+          <AssociationSet Name="currency_to_purchase_order" Association="labdbModel.currency_to_purchase_order">
+            <End Role="currency" EntitySet="Currencies" />
+            <End Role="PurchaseOrder" EntitySet="PurchaseOrders" />
+          </AssociationSet>
         </EntityContainer>
         <Association Name="overridden_to_requirement">
           <End Type="labdbModel.Requirement" Role="Requirement" Multiplicity="0..1">
@@ -3499,13 +3530,14 @@
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" />
           <Property Name="Number" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="total" Type="Single" Nullable="false" />
-          <Property Name="currency" Type="String" Nullable="false" MaxLength="3" FixedLength="false" Unicode="false" />
-          <Property Name="date" Type="DateTime" Nullable="false" />
+          <Property Name="Total" Type="Single" Nullable="false" />
+          <Property Name="Date" Type="DateTime" Nullable="false" />
           <Property Name="organizationID" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="organization" Relationship="labdbModel.organization_to_purchase_order" FromRole="purchase_orders" ToRole="Organization" />
-          <NavigationProperty Name="po_file" Relationship="labdbModel.purchase_order_to_file" FromRole="purchase_orders" ToRole="po_file" />
-          <NavigationProperty Name="external_reports" Relationship="labdbModel.purchase_order_to_external_report" FromRole="PurchaseOrder" ToRole="ExternalReport" />
+          <NavigationProperty Name="Organization" Relationship="labdbModel.organization_to_purchase_order" FromRole="purchase_orders" ToRole="Organization" />
+          <NavigationProperty Name="PoFile" Relationship="labdbModel.purchase_order_to_file" FromRole="purchase_orders" ToRole="po_file" />
+          <NavigationProperty Name="ExternalReports" Relationship="labdbModel.purchase_order_to_external_report" FromRole="PurchaseOrder" ToRole="ExternalReport" />
+          <Property Name="CurrencyID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Currency" Relationship="labdbModel.currency_to_purchase_order" FromRole="PurchaseOrder" ToRole="currency" />
         </EntityType>
         <Association Name="organization_to_purchase_order">
           <End Type="labdbModel.Organization" Role="Organization" Multiplicity="1" />
@@ -3667,6 +3699,28 @@
             </Principal>
             <Dependent Role="ExternalReport">
               <PropertyRef Name="PurchaseOrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Currency">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Code" Type="String" Nullable="false" MaxLength="3" FixedLength="false" Unicode="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="exchange_rate" Type="Single" Nullable="false" />
+          <NavigationProperty Name="purchase_orders" Relationship="labdbModel.currency_to_purchase_order" FromRole="currency" ToRole="PurchaseOrder" />
+        </EntityType>
+        <Association Name="currency_to_purchase_order">
+          <End Type="labdbModel.Currency" Role="currency" Multiplicity="1" />
+          <End Type="labdbModel.PurchaseOrder" Role="PurchaseOrder" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="currency">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PurchaseOrder">
+              <PropertyRef Name="CurrencyID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -4164,10 +4218,10 @@
           <EntitySetMapping Name="PurchaseOrders">
             <EntityTypeMapping TypeName="labdbModel.PurchaseOrder">
               <MappingFragment StoreEntitySet="purchase_orders">
+                <ScalarProperty Name="CurrencyID" ColumnName="currencyID" />
                 <ScalarProperty Name="organizationID" ColumnName="organizationID" />
-                <ScalarProperty Name="date" ColumnName="date" />
-                <ScalarProperty Name="currency" ColumnName="currency" />
-                <ScalarProperty Name="total" ColumnName="total" />
+                <ScalarProperty Name="Date" ColumnName="date" />
+                <ScalarProperty Name="Total" ColumnName="total" />
                 <ScalarProperty Name="Number" ColumnName="number" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
@@ -4190,6 +4244,16 @@
                 <ScalarProperty Name="UM" ColumnName="um" />
                 <ScalarProperty Name="Name" ColumnName="name" />
                 <ScalarProperty Name="MethodID" ColumnName="methodID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Currencies">
+            <EntityTypeMapping TypeName="labdbModel.Currency">
+              <MappingFragment StoreEntitySet="currencies">
+                <ScalarProperty Name="exchange_rate" ColumnName="exchange_rate" />
+                <ScalarProperty Name="Name" ColumnName="name" />
+                <ScalarProperty Name="Code" ColumnName="code" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

@@ -73,7 +73,7 @@
             <TabItem Header="Dettagli">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
+                        <ColumnDefinition Width="3*"/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
@@ -81,7 +81,13 @@
                         <RowDefinition/>
                     </Grid.RowDefinitions>
 
-                    <GroupBox Header="Stato">
+
+                    <ContentControl prism:RegionManager.RegionName="ExternalReportProjectDetailsRegion"
+                                    Grid.Column="0"
+                                    Grid.Row="0"/>
+                    
+                    <GroupBox Header="Stato"
+                              Grid.Column="1">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition/>
@@ -123,13 +129,8 @@
                                       Margin="5"/>
                         </Grid>
                     </GroupBox>
-                     
-                    <ContentControl prism:RegionManager.RegionName="ExternalReportProjectDetailsRegion"
-                                    Grid.Column="1"
-                                    Grid.Row="0"/>
 
                     <GroupBox Header="Batch Inviati"
-                              Grid.ColumnSpan="2"
                               Grid.Column="0"
                               Grid.Row="1">
                         <Grid>
@@ -166,6 +167,63 @@
                                     Margin="5"/>
                         </Grid>
                     </GroupBox>
+
+                    <GroupBox Header="Ordine di Acquisto"
+                              Grid.Column="1"
+                              Grid.Row="1">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <Label Content="Numero:"
+                                   Grid.Column="0"
+                                   Grid.Row="0"
+                                   Margin="05"/>
+
+                            <Label Content="{Binding PurchaseOrder.Number}"
+                                   Grid.Column="1"
+                                   Grid.Row="0"
+                                   Margin="5"/>
+
+                            <Label Content="Totale:"
+                                   Grid.Column="0"
+                                   Grid.Row="1"
+                                   Margin="5"/>
+
+                            <StackPanel Grid.Column="1"
+                                        Grid.Row="1"
+                                        Orientation="Horizontal"
+                                        Margin="5">
+                                <Label Content="{Binding PurchaseOrder.Total}"/>
+                                <Label Content="{Binding PurchaseOrder.Currency.Code}"/>
+                            </StackPanel>
+                            
+                            <Label Content="Data:"
+                                   Grid.Column="0"
+                                   Grid.Row="2"
+                                   Margin="5"/>
+
+                            <Label Content="{Binding PurchaseOrder.Date}"
+                                   Grid.Column="1"
+                                   Grid.Row="2"
+                                   Margin="5"/>
+
+                            <Button Command="{Binding AddPOCommand}"
+                                    Content="Aggiungi"
+                                    Grid.Column="1"
+                                    Grid.Row="3"
+                                    Margin="5"/>
+                        </Grid>
+                    </GroupBox>
+                    
                 </Grid>
             </TabItem>
             

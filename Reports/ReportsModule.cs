@@ -56,8 +56,8 @@ namespace Reports
             _regionManager.RegisterViewWithRegion(RegionNames.MainNavigationRegion
                                                 , typeof(Views.ReportsNavigationItem));
 
-            _container.RegisterType<ReportServiceProvider>(new ContainerControlledLifetimeManager());
-            _container.Resolve<ReportServiceProvider>();
+            _container.RegisterType<IReportServiceProvider, ReportServiceProvider>(new ContainerControlledLifetimeManager());
+            _container.Resolve<IReportServiceProvider>();
         }
     }
 }

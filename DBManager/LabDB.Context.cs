@@ -73,5 +73,6 @@ namespace DBManager
         public virtual DbSet<PurchaseOrder> PurchaseOrders { get; set; }
         public virtual DbSet<InstrumentMaintenanceEvent> InstrumentMaintenanceEvents { get; set; }
         public virtual DbSet<SubMethod> SubMethods { get; set; }
+        public virtual DbSet<Currency> Currencies { get; set; }
     }
 }

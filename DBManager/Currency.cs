@@ -12,27 +12,20 @@ namespace DBManager
     using System;
     using System.Collections.Generic;
     
-    public partial class PurchaseOrder
+    public partial class Currency
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public PurchaseOrder()
+        public Currency()
         {
-            this.PoFile = new HashSet<PurchaseOrderFile>();
-            this.ExternalReports = new HashSet<ExternalReport>();
+            this.purchase_orders = new HashSet<PurchaseOrder>();
         }
     
         public int ID { get; set; }
-        public string Number { get; set; }
-        public float Total { get; set; }
-        public System.DateTime Date { get; set; }
-        public int organizationID { get; set; }
-        public int CurrencyID { get; set; }
+        public string Code { get; set; }
+        public string Name { get; set; }
+        public float exchange_rate { get; set; }
     
-        public virtual Organization Organization { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PurchaseOrderFile> PoFile { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ExternalReport> ExternalReports { get; set; }
-        public virtual Currency Currency { get; set; }
+        public virtual ICollection<PurchaseOrder> purchase_orders { get; set; }
     }
 }
