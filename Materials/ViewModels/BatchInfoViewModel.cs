@@ -20,8 +20,9 @@ namespace Materials.ViewModels
     {
         private Batch _instance;
         private DBEntities _entities;
-        private DelegateCommand _newReport, _openReport;
+        private DelegateCommand _newReport, _openExternalReport, _openReport;
         private EventAggregator _eventAggregator;
+        private ExternalReport _selectedExternalReport;
         private List<SamplesWrapper> _samplesList;
         private Report _selectedReport;
         private IUnityContainer _container;
@@ -45,14 +46,23 @@ namespace Materials.ViewModels
                 }
             );
             
+            _openExternalReport = new DelegateCommand(
+                () => 
+                {
+                    NavigationToken token = new NavigationToken(ReportViewNames.ExternalReportEditView,
+                                                                _selectedExternalReport);
+                    _eventAggregator.GetEvent<NavigationRequested>().Publish(token);
+                },
+                () => _selectedExternalReport);
+
             _openReport = new DelegateCommand(
                 () => 
                 {
                     NavigationToken token = new NavigationToken(ReportViewNames.ReportEditView,
                                                                 _selectedReport);
                     _eventAggregator.GetEvent<NavigationRequested>().Publish(token);
-                }
-            );
+                },
+                () => _selectedReport != null);
                 
         }
 
@@ -66,6 +76,10 @@ namespace Materials.ViewModels
                 _samplesList = new List<SamplesWrapper>();
                 foreach (Sample smp in _instance.Samples)
                     _samplesList.Add(new SamplesWrapper(smp));
+
+                SelectedExternalReport = null;
+                SelectedReport = null;
+                
                 OnPropertyChanged("ExternalReportList");
                 OnPropertyChanged("Samples");
                 OnPropertyChanged("Material");
@@ -115,6 +129,11 @@ namespace Materials.ViewModels
             }
         }
 
+        public DelegateCommand OpenExternalReportCommand
+        {
+            get { return _openExternalReport; }
+        }
+
         public DelegateCommand OpenReportCommand
         {
             get { return _openReport; }
@@ -148,7 +167,21 @@ namespace Materials.ViewModels
         public Report SelectedReport
         {
             get { return _selectedReport; }
-            set { _selectedReport = value; }
+            set 
+            {
+                _selectedReport = value; 
+                _openReport.RaiseCanExecuteChanged();
+            }
+        }
+
+        public ExternalReport SelectedExternalReport
+        {
+            get { return _selectedExternalReport; }
+            set 
+            {
+                _selectedExternalReport;
+                _openExternalReport.RaiseCanExecuteChanged();
+            }
         }
     }
 }
