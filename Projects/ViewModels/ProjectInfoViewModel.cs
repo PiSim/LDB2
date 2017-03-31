@@ -197,6 +197,11 @@ namespace Projects.ViewModels
             }
         }
 
+        public DelegateCommand OpenBatchCommand
+        {
+            get { return _openBatch; }
+        }
+
         public DelegateCommand OpenExternalReportCommand
         {
             get { return _openExternalReport; }
