@@ -179,7 +179,7 @@ namespace Materials.ViewModels
             get { return _selectedExternalReport; }
             set 
             {
-                _selectedExternalReport;
+                _selectedExternalReport = value;
                 _openExternalReport.RaiseCanExecuteChanged();
             }
         }
