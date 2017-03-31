@@ -9,8 +9,7 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
-            <ColumnDefinition Width="100"
-                              IsVisible="{Binding ShowBatchButtons}"/>
+            <ColumnDefinition Width="100"/>
         </Grid.ColumnDefinitions>        
         <ListView ItemsSource="{Binding Path=BatchList}"
                   SelectedItem="{Binding SelectedBatch, Mode=TwoWay}"
