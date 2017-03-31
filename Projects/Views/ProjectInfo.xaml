@@ -214,18 +214,18 @@
                         <ColumnDefinition/>
                         <ColumnDefinition Width="100"/>
                     </Grid.ColumnDefinitions>
-                </Grid>
-                <ContentControl prism:RegionManager.RegionName="ProjectBatchListRegion"
-                                Grid.Column="0"
-                                Margin="5"/>
-                
 
-                <StackPanel Orientation="Vertical"
-                            Grid.Column="1">
+                    <ContentControl prism:RegionManager.RegionName="ProjectBatchListRegion"
+                                    Grid.Column="0"
+                                    Margin="5"/>                
+
+                    <StackPanel Orientation="Vertical"
+                                Grid.Column="1">
                     <Button Content="Apri"
                             Command="{Binding Path=OpenBatchCommand}"
                             Margin="5"/>
                 </StackPanel>
+                </Grid>
             </TabItem>
 
         </TabControl>
