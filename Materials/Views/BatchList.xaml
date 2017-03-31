@@ -7,8 +7,14 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition>
+            <ColumnDefinition Width="100"
+                              IsVisible="{Binding ShowBatchButtons}">
+        </Grid.ColumnDefinitions>        
         <ListView ItemsSource="{Binding Path=BatchList}"
-                  SelectedItem="{Binding SelectedBatch, Mode=TwoWay}">
+                  SelectedItem="{Binding SelectedBatch, Mode=TwoWay}"
+                  Grid.Column="0">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Odp" 
@@ -26,5 +32,16 @@
                 </GridView>
             </ListView.View>
         </ListView>
+
+        <StackPanel Orientation="Vertical"
+                    Grid.Column="1">
+            <Button Content="Apri"
+                    Command="{Binding Path=OpenBatchCommand}"
+                    Margin="5"/>
+            <Button Content="Crea Nuovo"
+                    Command="{Binding NewBatchCommand}"
+                    IsEnabled="{Binding EnableBatchCreation}"
+                    Margin="5"/>
+        </StackPanel>
     </Grid>
 </UserControl>
