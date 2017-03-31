@@ -53,7 +53,7 @@ namespace Materials.ViewModels
                                                                 _selectedExternalReport);
                     _eventAggregator.GetEvent<NavigationRequested>().Publish(token);
                 },
-                () => _selectedExternalReport);
+                () => _selectedExternalReport != null);
 
             _openReport = new DelegateCommand(
                 () => 
