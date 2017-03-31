@@ -8,8 +8,9 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition>
-            <ColumnDefinition Width="100">
+            <ColumnDefinition/>
+            <ColumnDefinition Width="100"
+                              IsVisible="{Binding ShowBatchButtons}"/>
         </Grid.ColumnDefinitions>        
         <ListView ItemsSource="{Binding Path=BatchList}"
                   SelectedItem="{Binding SelectedBatch, Mode=TwoWay}"
