@@ -106,7 +106,7 @@
                                    Grid.Column="0"
                                    Grid.Row="1"
                                    Margin="5"/>
-                            <CheckBox IsChecked="{Binding SamplesSent, Mode=TwoWay}"
+                            <CheckBox IsChecked="{Binding MaterialSent, Mode=TwoWay}"
                                       IsEnabled="{Binding CanModifyStatus}"
                                       Grid.Column="1"
                                       Grid.Row="1"
