@@ -18,8 +18,9 @@ namespace Projects.ViewModels
     public class ProjectInfoViewModel : BindableBase
     {
         private Construction _selectedAssigned, _selectedUnassigned;
+        private Batch _selectedBatch;
         private DBEntities _entities;
-        private DelegateCommand _assignConstruction, _newReport, _openExternalReport, _openReport, _unassignConstruction;
+        private DelegateCommand _assignConstruction, _newReport, _openBatch, _openExternalReport, _openReport, _unassignConstruction;
         private EventAggregator _eventAggregator;
         private ExternalReport _selectedExternal;
         private IUnityContainer _container;
@@ -68,6 +69,16 @@ namespace Projects.ViewModels
                     _eventAggregator.GetEvent<ReportCreationRequested>().Publish(token);
                 }
             );
+
+            _openBatch = new DelegateCommand(
+                () => 
+                {
+                    NavigationToken token = new NavigationToken(MaterialViewNames.BatchInfoView,
+                                                                SelectedBatch);
+                    _eventAggregator.GetEvent<NavigationRequested>().Publish(token);
+                },
+                () => SelectedBatch != null
+            )
 
             _openExternalReport = new DelegateCommand(
                 () =>
@@ -208,6 +219,8 @@ namespace Projects.ViewModels
 
                 UnassignedConstructions = new ObservableCollection<Construction>(
                    _entities.Constructions.Where(cns => cns.Project == null));
+                
+                SelectedBatch = null;
 
                 OnPropertyChanged("BatchList");
                 OnPropertyChanged("Description");
@@ -237,6 +250,17 @@ namespace Projects.ViewModels
                 _selectedAssigned = value; 
                 OnPropertyChanged("SelectedAssigned");
                 _unassignConstruction.RaiseCanExecuteChanged();
+            }
+        }
+
+        public Batch SelectedBatch
+        {
+            get { return _selectedBatch; }
+            set
+            {
+                _selectedBatch = value;
+                _openBatch.RaiseCanExecuteChanged();
+                OnPropertyChanged("SelectedBatch");
             }
         }
 
