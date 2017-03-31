@@ -175,7 +175,7 @@ namespace Reports.ViewModels
                 OnPropertyChanged("ReportFiles");
                 OnPropertyChanged("ExternalLab");
                 OnPropertyChanged("InternalNumber");
-                OnPropertyChanged("MaterialSent");
+                OnPropertyChanged("SamplesSent");
                 OnPropertyChanged("Price");
                 OnPropertyChanged("Project");
                 OnPropertyChanged("PurchaseOrder");
