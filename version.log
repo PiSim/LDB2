@@ -19,7 +19,7 @@ v 0.4.2 -- In corso
 -Corretto crash alla creazione di un nuovo report esterno
 -Corretto crash alla rimozione di un batch in un report esterno
 -Creata regione ExternalReportBatchListRegion con registrata la vista BatchList
--*Bozza NewPODialog
+-Implementato dialogo per aggiunta PO a test esterni
 -*Creato dialogo modifica dettagli progetto
 -Aggiunto pulsante apertura batch da progetto
 
