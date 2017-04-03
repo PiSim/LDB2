@@ -231,7 +231,7 @@
         </TabControl>
 
         <Button Content="Modifica"
-                Command="{Binding Path=ModifyCommand}"
+                Command="{Binding Path=ModifyDetailsCommand}"
                 Grid.Column="0"
                 Grid.Row="0"
                 HorizontalAlignment="Right"

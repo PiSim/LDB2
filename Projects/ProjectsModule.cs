@@ -19,12 +19,15 @@ namespace Projects
 
         public void Initialize()
         {
-            _container.RegisterType<Object, Views.ProjectMainView>
+            _container.RegisterType<Views.ModifyProjectDetailsDialog>();
+
+            _container.RegisterType<Object, Views.ProjectMain>
                 (ProjectsViewNames.ProjectMainView);
             _container.RegisterType<Object, Views.ProjectInfo>
                 (ProjectsViewNames.ProjectInfoView);
 
             _container.RegisterType<ViewModels.ProjectInfoViewModel>();
+            _container.RegisterType<ViewModels.ProjectMainViewModel>();
 
             _regionManager.RegisterViewWithRegion(RegionNames.BatchProjectDetailsRegion,
                                                 typeof(Views.ProjectDetailsControl));
@@ -32,6 +35,11 @@ namespace Projects
                                                 typeof(Views.ProjectDetailsControl));
             _regionManager.RegisterViewWithRegion(RegionNames.MainNavigationRegion, 
                                                 typeof(Views.ProjectsNavigationItem));
+
+            _container.RegisterType<IProjectServiceProvider, ProjectServiceProvider>
+                (new ContainerControlledLifetimeManager());
+
+            _container.Resolve<IProjectServiceProvider>();
         }
     }
 }

@@ -20,9 +20,11 @@ namespace Projects.ViewModels
         private Construction _selectedAssigned, _selectedUnassigned;
         private Batch _selectedBatch;
         private DBEntities _entities;
-        private DelegateCommand _assignConstruction, _newReport, _openBatch, _openExternalReport, _openReport, _unassignConstruction;
+        private DelegateCommand _assignConstruction, _openBatch, _modifyDetails, _newReport, 
+            _openExternalReport, _openReport, _unassignConstruction;
         private EventAggregator _eventAggregator;
         private ExternalReport _selectedExternal;
+        private IProjectServiceProvider _projectServiceProvider;
         private IUnityContainer _container;
         private ObservableCollection<Construction> _assignedConstructions, _unassignedConstructions;
         private Project _projectInstance;
@@ -30,12 +32,14 @@ namespace Projects.ViewModels
 
         public ProjectInfoViewModel(DBEntities entities,
                                     EventAggregator aggregator,
+                                    IProjectServiceProvider projectServiceProvider,
                                     IUnityContainer container)
             : base()
         {
             _entities = entities;
             _container = container;
             _eventAggregator = aggregator;
+            _projectServiceProvider = projectServiceProvider;
 
             #region EventSubscriptions
 
@@ -61,7 +65,13 @@ namespace Projects.ViewModels
                 },
                 () => _selectedUnassigned != null
             );
-            
+
+            _modifyDetails = new DelegateCommand(
+                () =>
+                {
+                    _projectServiceProvider.AlterProjectInfo(_projectInstance);
+                });
+
             _newReport = new DelegateCommand(
                 () =>
                 {
@@ -168,6 +178,11 @@ namespace Projects.ViewModels
 
                 return _projectInstance.Leader.Name;
             }
+        }
+
+        public DelegateCommand ModifyDetailsCommand
+        {
+            get { return _modifyDetails; }
         }
         
         public string Name

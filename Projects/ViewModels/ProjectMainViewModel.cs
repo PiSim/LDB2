@@ -12,30 +12,30 @@ using System.Threading.Tasks;
 
 namespace Projects.ViewModels
 {
-    internal class ProjectMainViewModel : BindableBase
+    public class ProjectMainViewModel : BindableBase
     {
         private DBEntities _entities;
         private DelegateCommand _newProject, _openProject;
         private EventAggregator _eventAggregator;
+        private IProjectServiceProvider _projectServiceProvider;
         private ObservableCollection<Project> _projectList;
         private Project _selectedProject;
 
-        internal ProjectMainViewModel(DBEntities entities, EventAggregator aggregator) 
+        public ProjectMainViewModel(DBEntities entities, 
+                                    EventAggregator aggregator, 
+                                    IProjectServiceProvider projectServiceProvider) 
             : base()
         {
             _entities = entities;
             _eventAggregator = aggregator;
+            _projectServiceProvider = projectServiceProvider;
 
             _newProject = new DelegateCommand(
                 () =>
                 {
-                    Views.ProjectCreationDialog creationDialog = new Views.ProjectCreationDialog(_entities);
-                    if (creationDialog.ShowDialog() == true)
-                    {
-                        Project temp_prj = creationDialog.ProjectInstance;
-                        _projectList.Add(temp_prj);
-                        SelectedProject = temp_prj;
-                    }
+                    Project tempProject = _projectServiceProvider.CreateNewProject();
+                    _projectList.Add(tempProject);
+                    SelectedProject = tempProject;
                 });
 
             _openProject = new DelegateCommand(

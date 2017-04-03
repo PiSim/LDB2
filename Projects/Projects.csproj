@@ -102,6 +102,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ProjectServiceProvider.cs" />
     <Compile Include="ProjectsModule.cs" />
     <Compile Include="ProjectsViewNames.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -117,9 +118,13 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="ViewModels\ModifyProjectDetailsDialogViewModel.cs" />
     <Compile Include="ViewModels\ProjectCreationViewModel.cs" />
     <Compile Include="ViewModels\ProjectInfoViewModel.cs" />
     <Compile Include="ViewModels\ProjectMainViewModel.cs" />
+    <Compile Include="Views\ModifyProjectDetailsDialog.xaml.cs">
+      <DependentUpon>ModifyProjectDetailsDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ProjectCreationDialog.xaml.cs">
       <DependentUpon>ProjectCreationDialog.xaml</DependentUpon>
     </Compile>
@@ -129,8 +134,8 @@
     <Compile Include="Views\ProjectInfo.xaml.cs">
       <DependentUpon>ProjectInfo.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\ProjectMainView.xaml.cs">
-      <DependentUpon>ProjectMainView.xaml</DependentUpon>
+    <Compile Include="Views\ProjectMain.xaml.cs">
+      <DependentUpon>ProjectMain.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ProjectsNavigationItem.xaml.cs">
       <DependentUpon>ProjectsNavigationItem.xaml</DependentUpon>
@@ -171,6 +176,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Views\ModifyProjectDetailsDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\ProjectCreationDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -183,7 +192,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\ProjectMainView.xaml">
+    <Page Include="Views\ProjectMain.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
