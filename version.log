@@ -3,6 +3,9 @@
 -*Introdotti eventi notifica aggiornamenti per refresh liste
 -*Implementato comparatore per sorting delle colonne di ListView
 -*Implementata classe InstrumentServiceProvider e interfaccia IInstrumentServiceProvider
+-*Aggiunti metodi a reportServiceProvider per creazione Report dato operatore/progetto/specifica/batch
+-*Implementati metodi creazione/modifica strumenti su InstrumentServiceProvider
+-*Implementati metodi gestione taratura/manutenzione su InstrumentServiceProvider
 
 v 0.4.2 -- 04/04/2017
 

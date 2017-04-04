@@ -113,6 +113,7 @@
     <Compile Include="Events\TaskCreated.cs" />
     <Compile Include="Events\TaskCreationRequested.cs" />
     <Compile Include="Events\UserAuthenticated.cs" />
+    <Compile Include="IInstrumentServiceProvider.cs" />
     <Compile Include="IMaterialServiceProvider.cs" />
     <Compile Include="InfrastructureModule.cs" />
     <Compile Include="IProjectServiceProvider.cs" />
