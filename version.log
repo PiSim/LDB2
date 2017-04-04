@@ -4,7 +4,7 @@
 -*Implementato comparatore per sorting delle colonne di ListView
 -*Implementata classe InstrumentServiceProvider e interfaccia IInstrumentServiceProvider
 
-v 0.4.2 -- In corso
+v 0.4.2 -- 04/04/2017
 
 -Introdotte Regioni e controlli tramite ViewDiscovery in diverse viste 
 -Riorganizzata in Tab la vista Batch
@@ -12,7 +12,7 @@ v 0.4.2 -- In corso
 -Modulo instruments: aggiunti NewCalibrationDialog e NewMaintenanceEventDialog 
 -Creati eventi ReportCreationRequested e ReportCreated
 -Creata classe di servizio ReportServiceProvider, registrata come singleton
--Trasferito ReportCreationDialog dal modulo Controls a Reports
+-Trasferito ReportCreationDi-alog dal modulo Controls a Reports
 -Creata classe di servizio TaskServiceProvider, registrata come singleton
 -Registrata classe di servizio MaterialServiceProvider come singleton
 -Spostate varie finestre di dialogo dal modulo Controls a Materials
