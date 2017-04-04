@@ -38,7 +38,11 @@ namespace Reports
             set
             {
                 _testInstance.IsComplete = value;
-                _testInstance.Date = DateTime.Now.Date;
+                if (value)
+                    _testInstance.Date = DateTime.Now.Date;
+                else
+                    _testInstance.Date = null;
+                    
                 OnPropertyChanged("CompletionDate");
             }
         }
