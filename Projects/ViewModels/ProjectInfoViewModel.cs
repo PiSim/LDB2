@@ -70,6 +70,9 @@ namespace Projects.ViewModels
                 () =>
                 {
                     _projectServiceProvider.AlterProjectInfo(_projectInstance);
+                    OnPropertyChanged("LeaderName");
+                    OnPropertyChanged("Name");
+                    OnPropertyChanged("OemName");
                 });
 
             _newReport = new DelegateCommand(
