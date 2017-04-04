@@ -2,6 +2,7 @@
 
 -*Introdotti eventi notifica aggiornamenti per refresh liste
 -*Implementato comparatore per sorting delle colonne di ListView
+-*Implementata classe InstrumentServiceProvider e interfaccia IInstrumentServiceProvider
 
 v 0.4.2 -- In corso
 
@@ -20,7 +21,7 @@ v 0.4.2 -- In corso
 -Corretto crash alla rimozione di un batch in un report esterno
 -Creata regione ExternalReportBatchListRegion con registrata la vista BatchList
 -Implementato dialogo per aggiunta PO a test esterni
--*Creato dialogo modifica dettagli progetto
+-Creato dialogo modifica dettagli progetto
 -Aggiunto pulsante apertura batch da progetto
 
 v 0.4.1 -- 14/03/2017
