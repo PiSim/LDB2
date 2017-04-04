@@ -48,7 +48,7 @@ namespace Projects.ViewModels
                 rpt =>
                 {
                     if (rpt.Batch.Material.Construction.ProjectID == _projectInstance.ID)
-                        OnPropertyChanged("ReportLsit");
+                        OnPropertyChanged("ReportList");
                 });
 
             #endregion
