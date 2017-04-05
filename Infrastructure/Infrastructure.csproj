@@ -107,6 +107,7 @@
     <Compile Include="Events\NavigateBackRequested.cs" />
     <Compile Include="Events\NavigateForwardRequested.cs" />
     <Compile Include="Events\NavigationRequested.cs" />
+    <Compile Include="Events\ProjectListUpdateRequested.cs" />
     <Compile Include="Events\ReportCreated.cs" />
     <Compile Include="Events\ReportCreationRequested.cs" />
     <Compile Include="Events\StatusNotificationIssued.cs" />
