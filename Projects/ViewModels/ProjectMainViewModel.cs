@@ -18,7 +18,7 @@ namespace Projects.ViewModels
         private DelegateCommand _newProject, _openProject;
         private EventAggregator _eventAggregator;
         private IProjectServiceProvider _projectServiceProvider;
-        private ObservableCollection<Project> _projectList;
+        private List<Project> _projectList;
         private Project _selectedProject;
 
         public ProjectMainViewModel(DBEntities entities, 
@@ -29,6 +29,8 @@ namespace Projects.ViewModels
             _entities = entities;
             _eventAggregator = aggregator;
             _projectServiceProvider = projectServiceProvider;
+
+            _eventAggregator.GetEvent<ProjectListUpdateRequested>().Subscribe(() => OnPropertyChanged("ProjectList"));
 
             _newProject = new DelegateCommand(
                 () =>
@@ -61,9 +63,9 @@ namespace Projects.ViewModels
             get { return _openProject; }
         }
         
-        public ObservableCollection<Project> ProjectList
+        public List<Project> ProjectList
         {
-            get { return _projectList; } 
+            get { return new List<Project>(_entities.Projects); } 
         }
         
         public Project SelectedProject
@@ -75,14 +77,5 @@ namespace Projects.ViewModels
                 _openProject.RaiseCanExecuteChanged();
             }
         }
-
-        #region Methods
-
-        private void RefreshProjectList()
-        {
-            _projectList = new ObservableCollection<Project>(_entities.Projects);
-        }
-
-        #endregion
     }
 }
