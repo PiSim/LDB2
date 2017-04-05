@@ -1,6 +1,8 @@
 ﻿using DBManager;
 using Infrastructure;
+using Infrastructure.Events;
 using Microsoft.Practices.Unity;
+using Prism.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,13 +14,16 @@ namespace Projects
     public class ProjectServiceProvider : IProjectServiceProvider
     {
         private DBEntities _entities;
+        private EventAggregator _eventAggregator;
         private IUnityContainer _container;
 
         public ProjectServiceProvider(DBEntities entities,
+                                        EventAggregator eventAggregator,
                                         IUnityContainer container)
         {
             _container = container;
             _entities = entities;
+            _eventAggregator = _eventAggregator
         }
 
         public bool AlterProjectInfo(Project target)
@@ -35,6 +40,7 @@ namespace Projects
 
             if (creationDialog.ShowDialog() == true)
             {
+                _eventAggregator.GetEvent<ProjectListUpdateRequested>().Publish();
                 return creationDialog.ProjectInstance;
             }
 
