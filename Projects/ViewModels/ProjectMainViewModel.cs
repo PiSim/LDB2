@@ -48,7 +48,7 @@ namespace Projects.ViewModels
                 () => _selectedProject != null
             );
             
-            _projectList = new ObservableCollection<Project>(_entities.Projects);
+            RefreshProjectList()
         }
 
         public DelegateCommand NewProjectCommand
@@ -75,5 +75,14 @@ namespace Projects.ViewModels
                 _openProject.RaiseCanExecuteChanged();
             }
         }
+
+        #region Methods
+
+        private void RefreshProjectList()
+        {
+            _projectList = new ObservableCollection<Project>(_entities.Projects);
+        }
+
+        #endregion
     }
 }
