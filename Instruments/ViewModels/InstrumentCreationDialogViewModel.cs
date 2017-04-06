@@ -70,6 +70,24 @@ namespace Instruments.ViewModels
             get { return _confirm; }
         }
 
+        public int ControlPeriod
+        {
+            get { return _controlPeriod; }
+            set
+            {
+                _controlPeriod = value;
+            }
+        }
+
+        public bool IsUnderControl
+        {
+            get { return _isUnderControl; }
+            set
+            {
+                _isUnderControl = value;
+            }
+        }
+
         private bool IsValidInput
         {
             get { return true; }
@@ -83,6 +101,15 @@ namespace Instruments.ViewModels
                 OrganizationRole _manufacturerRole = _entities.OrganizationRoles.First(rol => rol.Name == "MANUF");
                 return new List<Organization>(_entities.Organizations.Where(org => 
                                                         org.RoleMapping.Any(orm => orm.Role.ID == _manufacturerRole.ID && orm.IsSelected == true))); 
+            }
+        }
+
+        public string Model
+        {
+            get { return _model; }
+            set 
+            {
+                _model = value;
             }
         }
 
