@@ -12,12 +12,14 @@ namespace Instruments.ViewModels
 
     internal class InstrumentCreationDialogViewModel : BindableBase
     {
+        private bool _isUnderControl;
         private DBEntities _entities;
         private DelegateCommand _cancel, _confirm;
         private InstrumentType _selectedType;
-        private string _code;
+        private int _controlPeriod;
+        private Organization _manufacturer;
+        private string _code, _model, _serial;
         private Views.InstrumentCreationDialog _parentDialog;
-
 
         internal InstrumentCreationDialogViewModel(Views.InstrumentCreationDialog parentDialog,
                                                     DBEntities entities) : base()
@@ -71,6 +73,26 @@ namespace Instruments.ViewModels
         private bool IsValidInput
         {
             get { return true; }
+        }
+
+        public List<Organization> ManufacturerList
+        {
+            get 
+            { 
+
+                OrganizationRole _manufacturerRole = _entities.OrganizationRoles.First(rol => rol.Name == "MANUF");
+                return new List<Organization>(_entities.Organizations.Where(org => 
+                                                        org.RoleMapping.Any(orm => orm.Role.ID == _manufacturerRole.ID && orm.IsSelected == true))); 
+            }
+        }
+
+        public Organization SelectedManufacturer
+        {
+            get { return _manufacturer;}
+            set
+            {
+                _manufacturer = value;
+            }
         }
 
         public InstrumentType SelectedType
