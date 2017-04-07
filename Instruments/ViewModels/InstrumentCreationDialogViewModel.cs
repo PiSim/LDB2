@@ -39,11 +39,12 @@ namespace Instruments.ViewModels
                     Instrument newInstrument = new Instrument();
                     newInstrument.Code = _code;
                     newInstrument.Description = "";
-                    newInstrument.ControlPeriod = 0;
+                    newInstrument.ControlPeriod = ControlPeriod;
                     newInstrument.InstrumentType = _selectedType;
-                    newInstrument.IsUnderControl = false;
-                    newInstrument.Model = "";
-                    newInstrument.SerialNumber = "";
+                    newInstrument.IsUnderControl = IsUnderControl;
+                    newInstrument.Manufacturer = SelectedManufacturer;
+                    newInstrument.Model = Model;
+                    newInstrument.SerialNumber = SerialNumber;
 
                     _entities.Instruments.Add(newInstrument);
                     _entities.SaveChanges();
