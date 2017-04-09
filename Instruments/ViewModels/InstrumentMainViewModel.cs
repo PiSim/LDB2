@@ -20,27 +20,20 @@ namespace Instruments.ViewModels
         private DBEntities _entities;
         private EventAggregator _eventAggregator;
         private Instrument _selectedInstrument;
-        IUnityContainer _container;
+        private IInstrumentServiceProvider _instrumentServiceProvider;
 
         public InstrumentMainViewModel(EventAggregator eventAggregator,
                                         DBEntities entities,
-                                        IUnityContainer container) : base()
+                                        IInstrumentServiceProvider instrumentServiceProvider) : base()
         {
-            _container = container;
             _entities = entities;
             _eventAggregator = eventAggregator;
+            _instrumentServiceProvider = instrumentServiceProvider;
 
             _newInstrument = new DelegateCommand(
                 () =>
                 {
-                    Views.InstrumentCreationDialog creationDialog =
-                        _container.Resolve<Views.InstrumentCreationDialog>();
-
-                    if (creationDialog.ShowDialog() == true)
-                    {
-                        OnPropertyChanged("InstrumentList");
-                    }
-
+                    _instrumentServiceProvider.RegisterNewInstrument();
                 });
 
             _openInstrument = new DelegateCommand(
@@ -51,6 +44,10 @@ namespace Instruments.ViewModels
                     _eventAggregator.GetEvent<NavigationRequested>().Publish(token);
                 },
                 () => SelectedInstrument != null);
+
+            _eventAggregator.GetEvent<InstrumentListUpdateRequested>().Subscribe(
+                () => OnPropertyChanged("InstrumentList"));
+
         }
 
         public List<Instrument> InstrumentList

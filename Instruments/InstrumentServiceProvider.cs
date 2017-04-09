@@ -1,5 +1,7 @@
 ﻿using DBManager;
 using Infrastructure;
+using Infrastructure.Events;
+using Microsoft.Practices.Unity;
 using Prism.Events;
 using System;
 using System.Collections.Generic;
@@ -13,19 +15,27 @@ namespace Instruments
     {
         private DBEntities _entities;
         private EventAggregator _eventAggregator;
+        private IUnityContainer _container;
 
         public InstrumentServiceProvider(DBEntities entities,
-                                        EventAggregator aggregator)
+                                        EventAggregator aggregator,
+                                        IUnityContainer container)
         {
             _entities = entities;
             _eventAggregator = aggregator;
+            _container = container;
         }
 
         public Instrument RegisterNewInstrument()
         {
-
+            Views.InstrumentCreationDialog creationDialog = _container.Resolve<Views.InstrumentCreationDialog>();
+            if (creationDialog.ShowDialog() == true)
+            {
+                _eventAggregator.GetEvent<InstrumentListUpdateRequested>().Publish();
+                return creationDialog.InstrumentInstance;
+            }
+            else
+                return null;
         }
-
-
     }
 }

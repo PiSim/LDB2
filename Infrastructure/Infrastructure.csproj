@@ -104,6 +104,7 @@
   <ItemGroup>
     <Compile Include="AdminViewNames.cs" />
     <Compile Include="Events\CommitRequested.cs" />
+    <Compile Include="Events\InstrumentListUpdateRequested.cs" />
     <Compile Include="Events\NavigateBackRequested.cs" />
     <Compile Include="Events\NavigateForwardRequested.cs" />
     <Compile Include="Events\NavigationRequested.cs" />

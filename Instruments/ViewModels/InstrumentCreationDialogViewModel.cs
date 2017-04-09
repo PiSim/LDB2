@@ -39,12 +39,12 @@ namespace Instruments.ViewModels
                     Instrument newInstrument = new Instrument();
                     newInstrument.Code = _code;
                     newInstrument.Description = "";
-                    newInstrument.ControlPeriod = ControlPeriod;
+                    newInstrument.ControlPeriod = (sbyte)_controlPeriod;
                     newInstrument.InstrumentType = _selectedType;
                     newInstrument.IsUnderControl = IsUnderControl;
                     newInstrument.Manufacturer = SelectedManufacturer;
                     newInstrument.Model = Model;
-                    newInstrument.SerialNumber = SerialNumber;
+                    newInstrument.SerialNumber = _serial;
 
                     _entities.Instruments.Add(newInstrument);
                     _entities.SaveChanges();
@@ -86,6 +86,7 @@ namespace Instruments.ViewModels
             set
             {
                 _isUnderControl = value;
+                OnPropertyChanged("IsUnderControl");
             }
         }
 
@@ -127,6 +128,11 @@ namespace Instruments.ViewModels
         {
             get { return _selectedType; }
             set { _selectedType = value; }
+        }
+
+        public string SerialNumber
+        {
+            get { return _serial; }
         }
 
         public List<InstrumentType> TypeList
