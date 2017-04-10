@@ -6,6 +6,7 @@
 -*Aggiunti metodi a reportServiceProvider per creazione Report dato operatore/progetto/specifica/batch
 -*Implementati metodi creazione/modifica strumenti su InstrumentServiceProvider
 -*Implementati metodi gestione taratura/manutenzione su InstrumentServiceProvider
+-*Rimossa l'entità PendingCalibration, integrata funzionalità nell'entità Instrument
 
 v 0.4.2 -- 04/04/2017
 
