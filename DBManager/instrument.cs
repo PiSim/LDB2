@@ -19,7 +19,6 @@ namespace DBManager
         {
             this.CalibrationReports = new HashSet<CalibrationReport>();
             this.CalibrationReportsAsReference = new HashSet<CalibrationReport>();
-            this.PendingCalibrations = new HashSet<PendingCalibration>();
             this.Tests = new HashSet<Test>();
             this.MaintenanceEvent = new HashSet<InstrumentMaintenanceEvent>();
         }
@@ -34,14 +33,13 @@ namespace DBManager
         public Nullable<int> manufacturerID { get; set; }
         public string SerialNumber { get; set; }
         public string Model { get; set; }
+        public Nullable<System.DateTime> CalibrationDueDate { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CalibrationReport> CalibrationReports { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CalibrationReport> CalibrationReportsAsReference { get; set; }
         public virtual InstrumentType InstrumentType { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PendingCalibration> PendingCalibrations { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Test> Tests { get; set; }
         public virtual Organization Manufacturer { get; set; }

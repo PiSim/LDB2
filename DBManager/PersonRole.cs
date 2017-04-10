@@ -12,26 +12,19 @@ namespace DBManager
     using System;
     using System.Collections.Generic;
     
-    public partial class CalibrationReport
+    public partial class PersonRole
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public CalibrationReport()
+        public PersonRole()
         {
-            this.CalibrationFiles = new HashSet<CalibrationFiles>();
+            this.RoleMappings = new HashSet<PersonRoleMapping>();
         }
     
         public int ID { get; set; }
-        public System.DateTime Date { get; set; }
-        public Nullable<int> OperatorID { get; set; }
-        public int laboratoryID { get; set; }
-        public int referenceID { get; set; }
-        public int instrumentID { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
     
-        public virtual Instrument Instrument { get; set; }
-        public virtual Organization Laboratory { get; set; }
-        public virtual Person Tech { get; set; }
-        public virtual Instrument Reference { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<CalibrationFiles> CalibrationFiles { get; set; }
+        public virtual ICollection<PersonRoleMapping> RoleMappings { get; set; }
     }
 }

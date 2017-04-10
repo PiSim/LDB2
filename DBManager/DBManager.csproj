@@ -204,10 +204,13 @@
     <Compile Include="OrganizationRoleMapping.cs">
       <DependentUpon>LabDB.tt</DependentUpon>
     </Compile>
-    <Compile Include="PendingCalibration.cs">
+    <Compile Include="Person.cs">
       <DependentUpon>LabDB.tt</DependentUpon>
     </Compile>
-    <Compile Include="Person.cs">
+    <Compile Include="PersonRole.cs">
+      <DependentUpon>LabDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PersonRoleMapping.cs">
       <DependentUpon>LabDB.tt</DependentUpon>
     </Compile>
     <Compile Include="Project.cs">

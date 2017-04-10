@@ -171,6 +171,7 @@
           <Property Name="manufacturerID" Type="int" />
           <Property Name="serial_number" Type="varchar" MaxLength="45" />
           <Property Name="model" Type="varchar" MaxLength="45" />
+          <Property Name="calibration_due" Type="date" />
         </EntityType>
         <EntityType Name="masters">
           <Key>
@@ -233,14 +234,6 @@
           <Property Name="name" Type="varchar" MaxLength="45" Nullable="false" />
           <Property Name="category" Type="varchar" MaxLength="15" Nullable="false" />
         </EntityType>
-        <EntityType Name="pending_calibrations">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="expiry_date" Type="date" Nullable="false" />
-          <Property Name="instrumentID" Type="int" Nullable="false" />
-        </EntityType>
         <EntityType Name="people">
           <Key>
             <PropertyRef Name="ID" />
@@ -248,6 +241,23 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="name" Type="varchar" MaxLength="45" Nullable="false" />
           <Property Name="role" Type="char" MaxLength="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="person_role_mappings">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="personID" Type="int" Nullable="false" />
+          <Property Name="roleID" Type="int" Nullable="false" />
+          <Property Name="is_selected" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="person_roles">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="45" Nullable="false" />
+          <Property Name="description" Type="varchar" MaxLength="45" />
         </EntityType>
         <EntityType Name="po_file">
           <Key>
@@ -762,20 +772,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="intrument_to_pending_calibration">
-          <End Role="instruments" Type="Self.instruments" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="pending_calibrations" Type="Self.pending_calibrations" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="instruments">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="pending_calibrations">
-              <PropertyRef Name="instrumentID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="laboratory_to_calibration_report">
           <End Role="organizations" Type="Self.organizations" Multiplicity="1" />
           <End Role="calibration_reports" Type="Self.calibration_reports" Multiplicity="*" />
@@ -997,6 +993,34 @@
             </Principal>
             <Dependent Role="requirements1">
               <PropertyRef Name="overriddenID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="person_role_to_role_mapping">
+          <End Role="person_roles" Type="Self.person_roles" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="person_role_mappings" Type="Self.person_role_mappings" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="person_roles">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="person_role_mappings">
+              <PropertyRef Name="roleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="person_to_role_mapping">
+          <End Role="people" Type="Self.people" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="person_role_mappings" Type="Self.person_role_mappings" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="people">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="person_role_mappings">
+              <PropertyRef Name="personID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1461,8 +1485,9 @@
           <EntitySet Name="organization_role_mappings" EntityType="Self.organization_role_mappings" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="organization_roles" EntityType="Self.organization_roles" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="organizations" EntityType="Self.organizations" Schema="labdb" store:Type="Tables" />
-          <EntitySet Name="pending_calibrations" EntityType="Self.pending_calibrations" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="people" EntityType="Self.people" Schema="labdb" store:Type="Tables" />
+          <EntitySet Name="person_role_mappings" EntityType="Self.person_role_mappings" Schema="labdb" store:Type="Tables" />
+          <EntitySet Name="person_roles" EntityType="Self.person_roles" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="po_file" EntityType="Self.po_file" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="projects" EntityType="Self.projects" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="properties" EntityType="Self.properties" Schema="labdb" store:Type="Tables" />
@@ -1574,10 +1599,6 @@
             <End Role="instruments" EntitySet="instruments" />
             <End Role="tests" EntitySet="tests" />
           </AssociationSet>
-          <AssociationSet Name="intrument_to_pending_calibration" Association="Self.intrument_to_pending_calibration">
-            <End Role="instruments" EntitySet="instruments" />
-            <End Role="pending_calibrations" EntitySet="pending_calibrations" />
-          </AssociationSet>
           <AssociationSet Name="laboratory_to_calibration_report" Association="Self.laboratory_to_calibration_report">
             <End Role="organizations" EntitySet="organizations" />
             <End Role="calibration_reports" EntitySet="calibration_reports" />
@@ -1649,6 +1670,14 @@
           <AssociationSet Name="overridden_to_requirement" Association="Self.overridden_to_requirement">
             <End Role="requirements" EntitySet="requirements" />
             <End Role="requirements1" EntitySet="requirements" />
+          </AssociationSet>
+          <AssociationSet Name="person_role_to_role_mapping" Association="Self.person_role_to_role_mapping">
+            <End Role="person_roles" EntitySet="person_roles" />
+            <End Role="person_role_mappings" EntitySet="person_role_mappings" />
+          </AssociationSet>
+          <AssociationSet Name="person_to_role_mapping" Association="Self.person_to_role_mapping">
+            <End Role="people" EntitySet="people" />
+            <End Role="person_role_mappings" EntitySet="person_role_mappings" />
           </AssociationSet>
           <AssociationSet Name="person_to_user" Association="Self.person_to_user">
             <End Role="people" EntitySet="people" />
@@ -1966,6 +1995,7 @@
           <NavigationProperty Name="Tasks" Relationship="Self.requester_to_task" FromRole="people" ToRole="tasks" />
           <NavigationProperty Name="Users" Relationship="labdbModel.person_to_user" FromRole="Person" ToRole="User" />
           <NavigationProperty Name="calibration_reports" Relationship="labdbModel.operator_to_calibration_report" FromRole="Person" ToRole="calibration_reports" />
+          <NavigationProperty Name="person_role_mappings" Relationship="labdbModel.person_to_role_mapping" FromRole="Person" ToRole="person_role_mappings" />
         </EntityType>
         <EntityType Name="Project">
           <Key>
@@ -2889,7 +2919,6 @@
           <EntitySet Name="CalibrationReports" EntityType="labdbModel.CalibrationReport" />
           <EntitySet Name="InstrumentTypes" EntityType="labdbModel.InstrumentType" />
           <EntitySet Name="Instruments" EntityType="labdbModel.Instrument" />
-          <EntitySet Name="PendingCalibrations" EntityType="labdbModel.PendingCalibration" />
           <AssociationSet Name="instrument_to_calibration_report" Association="labdbModel.instrument_to_calibration_report">
             <End Role="instrument" EntitySet="Instruments" />
             <End Role="calibration_reports" EntitySet="CalibrationReports" />
@@ -2909,10 +2938,6 @@
           <AssociationSet Name="type_to_instrument" Association="labdbModel.type_to_instrument">
             <End Role="instrument_types" EntitySet="InstrumentTypes" />
             <End Role="instrument" EntitySet="Instruments" />
-          </AssociationSet>
-          <AssociationSet Name="intrument_to_pending_calibration" Association="labdbModel.intrument_to_pending_calibration">
-            <End Role="instrument" EntitySet="Instruments" />
-            <End Role="pending_calibrations" EntitySet="PendingCalibrations" />
           </AssociationSet>
           <AssociationSet Name="calibration_report_to_files" Association="labdbModel.calibration_report_to_files">
             <End Role="calibration_reports" EntitySet="CalibrationReports" />
@@ -2993,6 +3018,16 @@
           <AssociationSet Name="currency_to_purchase_order" Association="labdbModel.currency_to_purchase_order">
             <End Role="currency" EntitySet="Currencies" />
             <End Role="PurchaseOrder" EntitySet="PurchaseOrders" />
+          </AssociationSet>
+          <EntitySet Name="PersonRoleMappings" EntityType="labdbModel.PersonRoleMapping" />
+          <EntitySet Name="PersonRoles" EntityType="labdbModel.PersonRole" />
+          <AssociationSet Name="person_to_role_mapping" Association="labdbModel.person_to_role_mapping">
+            <End Role="Person" EntitySet="People" />
+            <End Role="person_role_mappings" EntitySet="PersonRoleMappings" />
+          </AssociationSet>
+          <AssociationSet Name="person_role_to_role_mapping" Association="labdbModel.person_role_to_role_mapping">
+            <End Role="person_roles" EntitySet="PersonRoles" />
+            <End Role="person_role_mappings" EntitySet="PersonRoleMappings" />
           </AssociationSet>
         </EntityContainer>
         <Association Name="overridden_to_requirement">
@@ -3286,8 +3321,8 @@
           <Property Name="referenceID" Type="Int32" Nullable="false" />
           <Property Name="instrumentID" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Instrument" Relationship="labdbModel.instrument_to_calibration_report" FromRole="calibration_reports" ToRole="instrument" />
-          <NavigationProperty Name="Organization" Relationship="labdbModel.laboratory_to_calibration_report" FromRole="calibration_reports" ToRole="Organization" />
-          <NavigationProperty Name="Person" Relationship="labdbModel.operator_to_calibration_report" FromRole="calibration_reports" ToRole="Person" />
+          <NavigationProperty Name="Laboratory" Relationship="labdbModel.laboratory_to_calibration_report" FromRole="calibration_reports" ToRole="Organization" />
+          <NavigationProperty Name="Tech" Relationship="labdbModel.operator_to_calibration_report" FromRole="calibration_reports" ToRole="Person" />
           <NavigationProperty Name="Reference" Relationship="labdbModel.reference_to_calibration_report" FromRole="calibration_reports" ToRole="instrument" />
           <NavigationProperty Name="CalibrationFiles" Relationship="labdbModel.calibration_report_to_files" FromRole="calibration_reports" ToRole="calibration_files" />
         </EntityType>
@@ -3311,7 +3346,6 @@
           <NavigationProperty Name="CalibrationReports" Relationship="labdbModel.instrument_to_calibration_report" FromRole="instrument" ToRole="calibration_reports" />
           <NavigationProperty Name="CalibrationReportsAsReference" Relationship="labdbModel.reference_to_calibration_report" FromRole="instrument" ToRole="calibration_reports" />
           <NavigationProperty Name="InstrumentType" Relationship="labdbModel.type_to_instrument" FromRole="instrument" ToRole="instrument_types" />
-          <NavigationProperty Name="PendingCalibrations" Relationship="labdbModel.intrument_to_pending_calibration" FromRole="instrument" ToRole="pending_calibrations" />
           <Property Name="IsUnderControl" Type="Boolean" Nullable="false" />
           <Property Name="supplierID" Type="Int32" />
           <Property Name="manufacturerID" Type="Int32" />
@@ -3321,15 +3355,7 @@
           <NavigationProperty Name="Manufacturer" Relationship="labdbModel.manufacturer_to_instrument" FromRole="instrument" ToRole="Organization" />
           <NavigationProperty Name="Supplier" Relationship="labdbModel.supplier_to_instrument" FromRole="instrument" ToRole="Organization" />
           <NavigationProperty Name="MaintenanceEvent" Relationship="labdbModel.instrument_to_maintenance_event" FromRole="Instrument" ToRole="instrument_maintenance_events" />
-        </EntityType>
-        <EntityType Name="PendingCalibration">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ExpiryDate" Type="DateTime" Nullable="false" />
-          <Property Name="instrumentID" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Instrument" Relationship="labdbModel.intrument_to_pending_calibration" FromRole="pending_calibrations" ToRole="instrument" />
+          <Property Name="CalibrationDueDate" Type="DateTime" />
         </EntityType>
         <Association Name="instrument_to_calibration_report">
           <End Type="labdbModel.Instrument" Role="instrument" Multiplicity="1" />
@@ -3388,20 +3414,6 @@
             </Principal>
             <Dependent Role="instrument">
               <PropertyRef Name="InstrumentTypeID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="intrument_to_pending_calibration">
-          <End Type="labdbModel.Instrument" Role="instrument" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Type="labdbModel.PendingCalibration" Role="pending_calibrations" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="instrument">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="pending_calibrations">
-              <PropertyRef Name="instrumentID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -3721,6 +3733,54 @@
             </Principal>
             <Dependent Role="PurchaseOrder">
               <PropertyRef Name="CurrencyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="PersonRoleMapping">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="personID" Type="Int32" Nullable="false" />
+          <Property Name="roleID" Type="Int32" Nullable="false" />
+          <Property Name="IsSelected" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Person" Relationship="labdbModel.person_to_role_mapping" FromRole="person_role_mappings" ToRole="Person" />
+          <NavigationProperty Name="Role" Relationship="labdbModel.person_role_to_role_mapping" FromRole="person_role_mappings" ToRole="person_roles" />
+        </EntityType>
+        <EntityType Name="PersonRole">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="Description" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="RoleMappings" Relationship="labdbModel.person_role_to_role_mapping" FromRole="person_roles" ToRole="person_role_mappings" />
+        </EntityType>
+        <Association Name="person_to_role_mapping">
+          <End Type="labdbModel.Person" Role="Person" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="labdbModel.PersonRoleMapping" Role="person_role_mappings" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Person">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="person_role_mappings">
+              <PropertyRef Name="personID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="person_role_to_role_mapping">
+          <End Type="labdbModel.PersonRole" Role="person_roles" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="labdbModel.PersonRoleMapping" Role="person_role_mappings" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="person_roles">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="person_role_mappings">
+              <PropertyRef Name="roleID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -4156,6 +4216,7 @@
           <EntitySetMapping Name="Instruments">
             <EntityTypeMapping TypeName="labdbModel.Instrument">
               <MappingFragment StoreEntitySet="instruments">
+                <ScalarProperty Name="CalibrationDueDate" ColumnName="calibration_due" />
                 <ScalarProperty Name="Model" ColumnName="model" />
                 <ScalarProperty Name="SerialNumber" ColumnName="serial_number" />
                 <ScalarProperty Name="manufacturerID" ColumnName="manufacturerID" />
@@ -4165,15 +4226,6 @@
                 <ScalarProperty Name="InstrumentTypeID" ColumnName="instrument_typeID" />
                 <ScalarProperty Name="Description" ColumnName="description" />
                 <ScalarProperty Name="Code" ColumnName="code" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="PendingCalibrations">
-            <EntityTypeMapping TypeName="labdbModel.PendingCalibration">
-              <MappingFragment StoreEntitySet="pending_calibrations">
-                <ScalarProperty Name="instrumentID" ColumnName="instrumentID" />
-                <ScalarProperty Name="ExpiryDate" ColumnName="expiry_date" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -4254,6 +4306,25 @@
                 <ScalarProperty Name="exchange_rate" ColumnName="exchange_rate" />
                 <ScalarProperty Name="Name" ColumnName="name" />
                 <ScalarProperty Name="Code" ColumnName="code" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PersonRoleMappings">
+            <EntityTypeMapping TypeName="labdbModel.PersonRoleMapping">
+              <MappingFragment StoreEntitySet="person_role_mappings">
+                <ScalarProperty Name="IsSelected" ColumnName="is_selected" />
+                <ScalarProperty Name="roleID" ColumnName="roleID" />
+                <ScalarProperty Name="personID" ColumnName="personID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PersonRoles">
+            <EntityTypeMapping TypeName="labdbModel.PersonRole">
+              <MappingFragment StoreEntitySet="person_roles">
+                <ScalarProperty Name="Description" ColumnName="description" />
+                <ScalarProperty Name="Name" ColumnName="name" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

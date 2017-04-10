@@ -123,6 +123,8 @@
     <Compile Include="ITaskServiceProvider.cs" />
     <Compile Include="MaterialViewNames.cs" />
     <Compile Include="NavigationToken.cs" />
+    <Compile Include="OrganizationRoleNames.cs" />
+    <Compile Include="PersonRoleNames.cs" />
     <Compile Include="RegionNames.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

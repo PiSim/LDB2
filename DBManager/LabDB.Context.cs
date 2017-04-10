@@ -65,7 +65,6 @@ namespace DBManager
         public virtual DbSet<CalibrationReport> CalibrationReports { get; set; }
         public virtual DbSet<InstrumentType> InstrumentTypes { get; set; }
         public virtual DbSet<Instrument> Instruments { get; set; }
-        public virtual DbSet<PendingCalibration> PendingCalibrations { get; set; }
         public virtual DbSet<ExternalReportBatchMapping> ExternalReportBatchMappings { get; set; }
         public virtual DbSet<OrganizationRoleMapping> OrganizationRoleMappings { get; set; }
         public virtual DbSet<OrganizationRole> OrganizationRoles { get; set; }
@@ -74,5 +73,7 @@ namespace DBManager
         public virtual DbSet<InstrumentMaintenanceEvent> InstrumentMaintenanceEvents { get; set; }
         public virtual DbSet<SubMethod> SubMethods { get; set; }
         public virtual DbSet<Currency> Currencies { get; set; }
+        public virtual DbSet<PersonRoleMapping> PersonRoleMappings { get; set; }
+        public virtual DbSet<PersonRole> PersonRoles { get; set; }
     }
 }

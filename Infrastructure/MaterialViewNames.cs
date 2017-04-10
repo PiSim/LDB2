@@ -10,6 +10,7 @@ namespace Infrastructure
     {
         public static string BatchesView { get { return "BatchesView"; } }
         public static string BatchInfoView { get { return "BatchInfoView"; } }
+        public static string ColoursView { get { return "ColoursMainView"; } }
         public static string SampleLogView { get { return "SampleLogView"; } }
     }
 }

@@ -23,7 +23,7 @@ namespace Projects
         {
             _container = container;
             _entities = entities;
-            _eventAggregator = _eventAggregator
+            _eventAggregator = _eventAggregator;
         }
 
         public bool AlterProjectInfo(Project target)

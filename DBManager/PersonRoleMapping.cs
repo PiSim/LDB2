@@ -12,12 +12,14 @@ namespace DBManager
     using System;
     using System.Collections.Generic;
     
-    public partial class PendingCalibration
+    public partial class PersonRoleMapping
     {
         public int ID { get; set; }
-        public System.DateTime ExpiryDate { get; set; }
-        public int instrumentID { get; set; }
+        public int personID { get; set; }
+        public int roleID { get; set; }
+        public bool IsSelected { get; set; }
     
-        public virtual Instrument Instrument { get; set; }
+        public virtual Person Person { get; set; }
+        public virtual PersonRole Role { get; set; }
     }
 }

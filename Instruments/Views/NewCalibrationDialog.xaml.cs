@@ -20,6 +20,8 @@ namespace Instruments.Views
     /// </summary>
     public partial class NewCalibrationDialog : Window
     {
+        private CalibrationReport _reportInstance;
+
         public NewCalibrationDialog(DBEntities entities)
         {
             DataContext = new ViewModels.NewCalibrationDialogViewModel(entities, this);
@@ -29,6 +31,12 @@ namespace Instruments.Views
         public Instrument InstrumentInstance
         {
             get { return (DataContext as ViewModels.NewCalibrationDialogViewModel).InstrumentInstance; }
+        }
+
+        public CalibrationReport ReportInstance
+        {
+            get { return _reportInstance; }
+            set { _reportInstance = value; }
         }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using Infrastructure;
-using Microsoft.Practices.Unity;
 using Navigation;
 using System;
 using System.Collections.Generic;
@@ -19,18 +18,18 @@ using System.Windows.Shapes;
 namespace Materials.Views
 {
     /// <summary>
-    /// Interaction logic for BatchesNavigationItem.xaml
+    /// Interaction logic for ColoursNavigationItem.xaml
     /// </summary>
-    public partial class BatchesNavigationItem : UserControl, IModuleNavigationTag
+    public partial class ColoursNavigationItem : UserControl, IModuleNavigationTag
     {
-        public BatchesNavigationItem()
+        public ColoursNavigationItem()
         {
             InitializeComponent();
         }
 
         public string ViewName
         {
-            get { return MaterialViewNames.BatchesView; }
+            get { return MaterialViewNames.ColoursView; }
         }
     }
 }
