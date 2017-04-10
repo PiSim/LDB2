@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DBManager;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,8 +20,9 @@ namespace Instruments.Views
     /// </summary>
     public partial class NewCalibrationDialog : Window
     {
-        public NewCalibrationDialog()
+        public NewCalibrationDialog(DBEntities entities)
         {
+            DataContext = new ViewModels.NewCalibrationDialogViewModel(entities, this);
             InitializeComponent();
         }
     }
