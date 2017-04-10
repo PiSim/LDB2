@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DBManager;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,8 +20,9 @@ namespace Instruments.Views
     /// </summary>
     public partial class NewMaintenanceEventDialog : Window
     {
-        public NewMaintenanceEventDialog()
+        public NewMaintenanceEventDialog(DBEntities entities)
         {
+            DataContext = new ViewModels.NewMaintenanceEventDialogViewModel(entities, this);
             InitializeComponent();
         }
     }
