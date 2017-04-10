@@ -26,6 +26,11 @@ namespace Instruments
             _container = container;
         }
 
+        public void RegisterNewCalibration(Instrument target)
+        {
+            
+        }
+
         public Instrument RegisterNewInstrument()
         {
             Views.InstrumentCreationDialog creationDialog = _container.Resolve<Views.InstrumentCreationDialog>();
@@ -36,6 +41,11 @@ namespace Instruments
             }
             else
                 return null;
+        }
+
+        public void RegisterNewMaintenanceEvent(Instrument target)
+        {
+
         }
     }
 }
