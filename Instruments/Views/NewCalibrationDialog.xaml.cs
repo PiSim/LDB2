@@ -25,5 +25,10 @@ namespace Instruments.Views
             DataContext = new ViewModels.NewCalibrationDialogViewModel(entities, this);
             InitializeComponent();
         }
+
+        public Instrument InstrumentInstance
+        {
+            get { return (DataContext as ViewModels.NewCalibrationDialogViewModel).InstrumentInstance; }
+        }
     }
 }
