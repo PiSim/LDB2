@@ -324,7 +324,7 @@ namespace Reports.ViewModels
             }
         }
 
-        public PurchaseOrder PurchaseOrder
+        public PurchaseOrder PO
         {
             get 
             { 
