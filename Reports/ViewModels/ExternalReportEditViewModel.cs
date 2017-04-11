@@ -63,6 +63,7 @@ namespace Reports.ViewModels
                         {
                             ExternalReportFile temp = new ExternalReportFile();
                             temp.Path = pth;
+                            temp.Description = "";
                             ReportFiles.Add(temp);   
                             _instance.ExternalReportFiles.Add(temp);
                         }
