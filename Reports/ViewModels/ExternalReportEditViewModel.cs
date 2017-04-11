@@ -111,7 +111,7 @@ namespace Reports.ViewModels
                 () =>
                 {
                     ReportFiles.Remove(_selectedFile);
-                    _instance.ExternalReportFiles.Remove(_selectedFile);
+                    _entities.ExternalReportFiles.Remove(_selectedFile);
                     SelectedFile = null;
                 },
                 () => _selectedFile != null);
