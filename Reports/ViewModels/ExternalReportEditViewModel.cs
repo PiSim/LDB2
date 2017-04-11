@@ -74,7 +74,7 @@ namespace Reports.ViewModels
                 () =>
                 {
                     _reportServiceProvider.AddPOToExternalReport(_instance);
-                    OnPropertyChanged("PurchaseOrder");
+                    OnPropertyChanged("PO");
                 });
             
             _openBatch = new DelegateCommand(
@@ -194,7 +194,7 @@ namespace Reports.ViewModels
                 OnPropertyChanged("SamplesSent");
                 OnPropertyChanged("Price");
                 OnPropertyChanged("Project");
-                OnPropertyChanged("PurchaseOrder");
+                OnPropertyChanged("PO");
                 OnPropertyChanged("ReportReceived");
                 OnPropertyChanged("RequestDone");
                 OnPropertyChanged("Samples");
