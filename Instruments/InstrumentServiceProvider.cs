@@ -26,9 +26,15 @@ namespace Instruments
             _container = container;
         }
 
-        public void RegisterNewCalibration(Instrument target)
+        public CalibrationReport RegisterNewCalibration(Instrument target)
         {
-            
+            Views.NewCalibrationDialog calibrationDialog = _container.Resolve<Views.NewCalibrationDialog>();
+            calibrationDialog.InstrumentInstance = target;
+            if (calibrationDialog.ShowDialog() == true)
+            {
+                return calibrationDialog.ReportInstance;
+            }
+            else return null;
         }
 
         public Instrument RegisterNewInstrument()
