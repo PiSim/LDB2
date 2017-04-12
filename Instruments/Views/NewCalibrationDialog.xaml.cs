@@ -31,6 +31,7 @@ namespace Instruments.Views
         public Instrument InstrumentInstance
         {
             get { return (DataContext as ViewModels.NewCalibrationDialogViewModel).InstrumentInstance; }
+            set { (DataContext as ViewModels.NewCalibrationDialogViewModel).InstrumentInstance = value; }
         }
 
         public CalibrationReport ReportInstance
