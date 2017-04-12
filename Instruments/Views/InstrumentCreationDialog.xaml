@@ -65,7 +65,7 @@
                Grid.Row="3"
                Margin="5"/>
 
-        <TextBox Text="{Binding CalibrationPeriod, Mode=TwoWay}"
+        <TextBox Text="{Binding ControlPeriod, Mode=TwoWay}"
                  IsEnabled="{Binding IsUnderControl}"
                  Grid.Column="1"
                  Grid.ColumnSpan="2"
@@ -106,7 +106,7 @@
                Grid.Row="6"
                Margin="5"/>
 
-        <TextBox Text="{Binding Serial, Mode=TwoWay}"
+        <TextBox Text="{Binding SerialNumber, Mode=TwoWay}"
                  Grid.Column="1"
                  Grid.ColumnSpan="3"
                  Grid.Row="6"
