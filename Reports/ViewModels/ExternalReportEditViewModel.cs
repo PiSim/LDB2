@@ -74,7 +74,11 @@ namespace Reports.ViewModels
                 () =>
                 {
                     _reportServiceProvider.AddPOToExternalReport(_instance);
-                    OnPropertyChanged("PO");
+                    _entities.Entry<ExternalReport>(_instance).Reload();
+                    OnPropertyChanged("OrderCurrency");
+                    OnPropertyChanged("OrderDate");
+                    OnPropertyChanged("OrderNumber");
+                    OnPropertyChanged("OrderPrice");
                 });
             
             _openBatch = new DelegateCommand(
@@ -192,9 +196,11 @@ namespace Reports.ViewModels
                 OnPropertyChanged("ExternalLab");
                 OnPropertyChanged("InternalNumber");
                 OnPropertyChanged("SamplesSent");
-                OnPropertyChanged("Price");
+                OnPropertyChanged("OrderCurrency");
+                OnPropertyChanged("OrderDate");
+                OnPropertyChanged("OrderNumber");
+                OnPropertyChanged("OrderPrice");
                 OnPropertyChanged("Project");
-                OnPropertyChanged("PO");
                 OnPropertyChanged("ReportReceived");
                 OnPropertyChanged("RequestDone");
                 OnPropertyChanged("Samples");
@@ -221,6 +227,66 @@ namespace Reports.ViewModels
         public DelegateCommand OpenFileCommand
         {
             get { return _openFile; }
+        }
+
+        public string OrderCurrency
+        {
+            get
+            {
+                try
+                {
+                    return _instance.PO.Currency.Code;
+                }
+                catch
+                {
+                    return null;
+                }
+            }
+        }
+
+        public string OrderDate
+        {
+            get
+            {
+                try
+                {
+                    return _instance.PO.OrderDate.ToShortDateString();
+                }
+                catch
+                {
+                    return null;
+                }
+            }
+        }
+
+        public string OrderNumber
+        {
+            get
+            {
+                try
+                {
+                    return _instance.PO.Number;
+                }
+                catch
+                {
+                    return null;
+                }
+            }
+        }
+
+        public string OrderPrice
+        {
+            get
+            {
+                try
+                {
+                    return _instance.PO.Total.ToString();
+                }
+                catch
+                {
+                    return null;
+                }
+            }
         }
 
         public DelegateCommand RemoveBatchCommand

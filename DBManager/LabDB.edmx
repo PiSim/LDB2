@@ -3543,7 +3543,7 @@
           <Property Name="ID" Type="Int32" Nullable="false" />
           <Property Name="Number" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="Total" Type="Single" Nullable="false" />
-          <Property Name="Date" Type="DateTime" Nullable="false" />
+          <Property Name="OrderDate" Type="DateTime" Nullable="false" />
           <Property Name="organizationID" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Organization" Relationship="labdbModel.organization_to_purchase_order" FromRole="purchase_orders" ToRole="Organization" />
           <NavigationProperty Name="PoFile" Relationship="labdbModel.purchase_order_to_file" FromRole="purchase_orders" ToRole="po_file" />
@@ -4272,7 +4272,7 @@
               <MappingFragment StoreEntitySet="purchase_orders">
                 <ScalarProperty Name="CurrencyID" ColumnName="currencyID" />
                 <ScalarProperty Name="organizationID" ColumnName="organizationID" />
-                <ScalarProperty Name="Date" ColumnName="date" />
+                <ScalarProperty Name="OrderDate" ColumnName="date" />
                 <ScalarProperty Name="Total" ColumnName="total" />
                 <ScalarProperty Name="Number" ColumnName="number" />
                 <ScalarProperty Name="ID" ColumnName="ID" />

@@ -28,8 +28,8 @@ namespace Instruments
             _container.RegisterType<ViewModels.InstrumentEditViewModel>();
             _container.RegisterType<ViewModels.InstrumentMainViewModel>();
 
-            _container.RegisterType<Object, Views.InstrumentEdit>(ViewNames.InstrumentEditView);
-            _container.RegisterType<Object, Views.InstrumentMain>(ViewNames.InstrumentsMainView);
+            _container.RegisterType<Object, Views.InstrumentEdit>(InstrumentViewNames.InstrumentEditView);
+            _container.RegisterType<Object, Views.InstrumentMain>(InstrumentViewNames.InstrumentsMainView);
             
             _regionManager.RegisterViewWithRegion(RegionNames.MainNavigationRegion, 
                                                 typeof(Views.InstrumentsNavigationItem));

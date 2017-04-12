@@ -8,9 +8,10 @@
 -*Implementati metodi gestione taratura/manutenzione su InstrumentServiceProvider
 -Rimossa l'entità PendingCalibration, integrata funzionalità nell'entità Instrument
 -Corretto crash legato all'aggiunta di file a report esterni
--*Corretto binding OA in vista report esterni
+-Corretto mancato aggiornamento OA in vista report esterni
+-Corretto errore salvataggio data OA
 -*Introdotto evento per aggiornamento lista report esterni
--*Corretto crash alla creazione di un nuovo strumento
+-Corretto crash alla creazione di un nuovo strumento
 
 v 0.4.2 -- 04/04/2017
 

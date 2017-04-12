@@ -1,4 +1,5 @@
-﻿using Navigation;
+﻿using Infrastructure;
+using Navigation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,7 +29,7 @@ namespace Instruments.Views
 
         public string ViewName
         {
-            get { return ViewNames.InstrumentsMainView; }
+            get { return InstrumentViewNames.InstrumentsMainView; }
         }
     }
 }

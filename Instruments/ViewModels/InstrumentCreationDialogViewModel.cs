@@ -133,6 +133,10 @@ namespace Instruments.ViewModels
         public string SerialNumber
         {
             get { return _serial; }
+            set
+            {
+                _serial = value;
+            }
         }
 
         public List<InstrumentType> TypeList

@@ -25,7 +25,7 @@ namespace Controls.ViewModels
         {
             _entities = entities;
             _parentDialog = parentDialog;
-            _date = DateTime.Now.Date;
+            _date = DateTime.Now;
             _selectedCurrency = _entities.Currencies.First(cur => cur.Code == "EUR");
 
             _cancel = new DelegateCommand(

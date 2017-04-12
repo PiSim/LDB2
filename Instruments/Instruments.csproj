@@ -122,7 +122,6 @@
     <Compile Include="ViewModels\InstrumentMainViewModel.cs" />
     <Compile Include="ViewModels\NewCalibrationDialogViewModel.cs" />
     <Compile Include="ViewModels\NewMaintenanceEventDialogViewModel.cs" />
-    <Compile Include="ViewNames.cs" />
     <Compile Include="Views\InstrumentCreationDialog.xaml.cs">
       <DependentUpon>InstrumentCreationDialog.xaml</DependentUpon>
     </Compile>

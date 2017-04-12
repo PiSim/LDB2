@@ -188,7 +188,7 @@
                                    Grid.Row="0"
                                    Margin="05"/>
 
-                            <Label Content="{Binding PO.Number}"
+                            <Label Content="{Binding OrderNumber}"
                                    Grid.Column="1"
                                    Grid.Row="0"
                                    Margin="5"/>
@@ -202,8 +202,8 @@
                                         Grid.Row="1"
                                         Orientation="Horizontal"
                                         Margin="5">
-                                <Label Content="{Binding PO.Total}"/>
-                                <Label Content="{Binding PO.Currency.Code}"/>
+                                <Label Content="{Binding OrderPrice}"/>
+                                <Label Content="{Binding OrderCurrency}"/>
                             </StackPanel>
                             
                             <Label Content="Data:"
@@ -211,7 +211,7 @@
                                    Grid.Row="2"
                                    Margin="5"/>
 
-                            <Label Content="{Binding PO.Date}"
+                            <Label Content="{Binding OrderDate}"
                                    Grid.Column="1"
                                    Grid.Row="2"
                                    Margin="5"/>

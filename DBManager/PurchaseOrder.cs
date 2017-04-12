@@ -24,7 +24,7 @@ namespace DBManager
         public int ID { get; set; }
         public string Number { get; set; }
         public float Total { get; set; }
-        public System.DateTime Date { get; set; }
+        public System.DateTime OrderDate { get; set; }
         public int organizationID { get; set; }
         public int CurrencyID { get; set; }
     

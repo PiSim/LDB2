@@ -57,6 +57,7 @@ namespace Reports
                     output.Currency = _entities.Currencies
                          .First(crn => crn.ID == poDialog.Currency.ID);
                     output.Number = poDialog.Number;
+                    output.OrderDate = poDialog.Date;
                     output.Organization = _entities.Organizations
                         .First(sup => sup.ID == poDialog.Supplier.ID);
                     output.Total = poDialog.Total;
