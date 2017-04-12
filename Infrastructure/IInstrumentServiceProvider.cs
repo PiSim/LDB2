@@ -9,6 +9,7 @@ namespace Infrastructure
 {
     public interface IInstrumentServiceProvider
     {
+        CalibrationReport RegisterNewCalibration(Instrument target);
         Instrument RegisterNewInstrument();
     }
 }
