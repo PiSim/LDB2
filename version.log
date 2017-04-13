@@ -12,6 +12,7 @@
 -Corretto errore salvataggio data OA
 -*Introdotto evento per aggiornamento lista report esterni
 -Corretto crash alla creazione di un nuovo strumento
+-*Corretto errore che impediva la creazione di nuovi progetti
 
 v 0.4.2 -- 04/04/2017
 
