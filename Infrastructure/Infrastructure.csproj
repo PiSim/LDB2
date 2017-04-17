@@ -104,6 +104,7 @@
   <ItemGroup>
     <Compile Include="AdminViewNames.cs" />
     <Compile Include="Events\CommitRequested.cs" />
+    <Compile Include="Events\ExternalReportListUpdateRequested.cs" />
     <Compile Include="Events\InstrumentListUpdateRequested.cs" />
     <Compile Include="Events\NavigateBackRequested.cs" />
     <Compile Include="Events\NavigateForwardRequested.cs" />
@@ -118,12 +119,14 @@
     <Compile Include="IInstrumentServiceProvider.cs" />
     <Compile Include="IMaterialServiceProvider.cs" />
     <Compile Include="InfrastructureModule.cs" />
+    <Compile Include="IOrganizationServiceProvider.cs" />
     <Compile Include="IProjectServiceProvider.cs" />
     <Compile Include="IReportServiceProvider.cs" />
     <Compile Include="ITaskServiceProvider.cs" />
     <Compile Include="MaterialViewNames.cs" />
     <Compile Include="NavigationToken.cs" />
     <Compile Include="OrganizationRoleNames.cs" />
+    <Compile Include="OrganizationViewNames.cs" />
     <Compile Include="PersonRoleNames.cs" />
     <Compile Include="RegionNames.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -158,10 +161,7 @@
     </None>
     <AppDesigner Include="Properties\" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ViewModels\" />
-    <Folder Include="Views\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\DBManager\DBManager.csproj">
       <Project>{ab8b448c-dd74-4d60-a041-3e5d03a32180}</Project>

@@ -20,12 +20,10 @@ namespace Organizations.Views
     /// <summary>
     /// Interaction logic for OrganizationsMainView.xaml
     /// </summary>
-    public partial class OrganizationsMainView : UserControl
+    public partial class OrganizationsMain : UserControl
     {
-        public OrganizationsMainView(DBEntities entities,
-                                    EventAggregator aggregator)
+        public OrganizationsMain()
         {
-            DataContext = new ViewModels.OrganizationsMainViewModel(entities, aggregator);
             InitializeComponent();
         }
     }

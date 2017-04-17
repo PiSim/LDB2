@@ -1,5 +1,4 @@
-﻿using Infrastructure;
-using Navigation;
+﻿using DBManager;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,24 +11,24 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace Organizations.Views
 {
     /// <summary>
-    /// Interaction logic for OrganizationsNavigationItem.xaml
+    /// Interaction logic for OrganizationCreationDialog.xaml
     /// </summary>
-    public partial class OrganizationsNavigationItem : UserControl, IModuleNavigationTag
+    public partial class OrganizationCreationDialog : Window
     {
-        public OrganizationsNavigationItem()
+        public OrganizationCreationDialog(DBEntities entities)
         {
+            DataContext = new ViewModels.OrganizationCreationViewModel(entities, this);
             InitializeComponent();
         }
 
-        public string ViewName
+        public string OrganizationName
         {
-            get { return OrganizationViewNames.OrganizationMainView; }
+            get { return (DataContext as ViewModels.OrganizationCreationViewModel).OrganizationName; }
         }
     }
 }

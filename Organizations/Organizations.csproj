@@ -102,6 +102,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="OrganizationServiceProvider.cs" />
     <Compile Include="OrganizationsModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -116,10 +117,13 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="ViewModels\OrganizationCreationViewModel.cs" />
     <Compile Include="ViewModels\OrganizationsMainViewModel.cs" />
-    <Compile Include="ViewNames.cs" />
-    <Compile Include="Views\OrganizationsMainView.xaml.cs">
-      <DependentUpon>OrganizationsMainView.xaml</DependentUpon>
+    <Compile Include="Views\OrganizationCreationDialog.xaml.cs">
+      <DependentUpon>OrganizationCreationDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\OrganizationsMain.xaml.cs">
+      <DependentUpon>OrganizationsMain.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\OrganizationsNavigationItem.xaml.cs">
       <DependentUpon>OrganizationsNavigationItem.xaml</DependentUpon>
@@ -160,7 +164,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Views\OrganizationsMainView.xaml">
+    <Page Include="Views\OrganizationCreationDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\OrganizationsMain.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

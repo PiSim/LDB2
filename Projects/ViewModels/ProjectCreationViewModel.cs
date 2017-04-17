@@ -58,16 +58,6 @@ namespace Projects.ViewModels
             get { return _confirm; }
         }
 
-        public string Description
-        {
-            get { return _description; }
-            set
-            {
-                _description = value;
-                _confirm.RaiseCanExecuteChanged();
-            }
-        }
-
         public bool IsValidInput
         {
             get
@@ -79,16 +69,6 @@ namespace Projects.ViewModels
             }
         }
 
-        public string Name
-        {
-            get { return _name; }
-            set
-            {
-                _name = value;
-                _confirm.RaiseCanExecuteChanged();
-            }
-        }
-
         public List<Person> LeaderList
         {
             get { return new List<Person>(_entities.People.Where(per => per.Role == "CP")); }
@@ -97,6 +77,26 @@ namespace Projects.ViewModels
         public List<Organization> OemList
         {
             get { return new List<Organization>(_entities.Organizations.Where(org => org.Category == "OEM")); }
+        }
+
+        public string ProjectDescription
+        {
+            get { return _description; }
+            set
+            {
+                _description = value;
+                _confirm.RaiseCanExecuteChanged();
+            }
+        }
+
+        public string ProjectName
+        {
+            get { return _name; }
+            set
+            {
+                _name = value;
+                _confirm.RaiseCanExecuteChanged();
+            }
         }
 
         public Person SelectedLeader

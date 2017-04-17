@@ -20,10 +20,18 @@ namespace Organizations
 
         public void Initialize()
         {
-            _container.RegisterType<Object, Views.OrganizationsMainView>(ViewNames.OrganizationsMainView);
+            _container.RegisterType<ViewModels.OrganizationsMainViewModel>();
+
+            _container.RegisterType<Object, Views.OrganizationsMain>(OrganizationViewNames.OrganizationMainView);
+
+            _container.RegisterType<Views.OrganizationCreationDialog>();
 
             _regionManager.RegisterViewWithRegion(RegionNames.MainNavigationRegion,
                                                 typeof(Views.OrganizationsNavigationItem));
+
+            _container.RegisterType<IOrganizationServiceProvider, OrganizationServiceProvider>(
+                new ContainerControlledLifetimeManager());
+            _container.Resolve<IOrganizationServiceProvider>();
         }
     }
 }

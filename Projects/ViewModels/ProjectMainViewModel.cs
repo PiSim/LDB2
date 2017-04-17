@@ -36,8 +36,11 @@ namespace Projects.ViewModels
                 () =>
                 {
                     Project tempProject = _projectServiceProvider.CreateNewProject();
-                    _projectList.Add(tempProject);
-                    SelectedProject = tempProject;
+                    if (tempProject != null)
+                    {
+                        _projectList.Add(tempProject);
+                        SelectedProject = tempProject;
+                    }
                 });
 
             _openProject = new DelegateCommand(

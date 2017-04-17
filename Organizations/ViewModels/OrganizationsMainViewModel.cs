@@ -1,4 +1,5 @@
 ﻿using DBManager;
+using Infrastructure;
 using Infrastructure.Events;
 using Prism.Commands;
 using Prism.Events;
@@ -12,20 +13,37 @@ using System.Threading.Tasks;
 
 namespace Organizations.ViewModels
 {
-    internal class OrganizationsMainViewModel : BindableBase
+    public class OrganizationsMainViewModel : BindableBase
     {
         private DBEntities _entities;
+        private DelegateCommand _createNewOrganization;
         private EventAggregator _eventAggregator;
+        private IOrganizationServiceProvider _organizationServiceProvider;
         private Organization _selectedOrganization;
 
-        internal OrganizationsMainViewModel(DBEntities entities,
-                                            EventAggregator aggregator) : base()
+        public OrganizationsMainViewModel(DBEntities entities,
+                                            EventAggregator aggregator,
+                                            IOrganizationServiceProvider organizationServiceProvider) : base()
         {
             _entities = entities;
             _eventAggregator = aggregator;
+            _organizationServiceProvider = organizationServiceProvider;
 
             _eventAggregator.GetEvent<CommitRequested>()
                             .Subscribe(() => _entities.SaveChanges());
+
+            _createNewOrganization = new DelegateCommand(
+                () =>
+                {
+                    Organization tempOrg = _organizationServiceProvider.CreateNewOrganization();
+                    if (tempOrg != null)
+                        OnPropertyChanged("OrganizationList");
+                });
+        }
+
+        public DelegateCommand CreateNewOrganizationCommand
+        {
+            get { return _createNewOrganization; }
         }
 
         public Organization SelectedOrganization
@@ -39,11 +57,11 @@ namespace Organizations.ViewModels
             }
         }
 
-        public ObservableCollection<Organization> OrganizationList
+        public List<Organization> OrganizationList
         {
             get
             {
-                return new ObservableCollection<Organization>
+                return new List<Organization>
                     (_entities.Organizations.OrderBy(org => org.Name));
             }
         }
