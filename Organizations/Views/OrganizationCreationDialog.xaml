@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Organizations.Views"
         mc:Ignorable="d"
-        Title="Nuovo Ente" Height="300" Width="300">
+        Title="Nuovo Ente" Height="200" Width="300"
+        ResizeMode="NoResize">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
