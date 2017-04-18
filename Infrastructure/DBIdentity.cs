@@ -6,7 +6,7 @@ using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Security
+namespace Infrastructure
 {
     public class DBIdentity : IIdentity
     {
