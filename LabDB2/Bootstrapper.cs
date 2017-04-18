@@ -4,6 +4,7 @@ using Microsoft.Practices.Unity;
 using Prism.Modularity;
 using Prism.Unity;
 using LabDB2.Views;
+using Security;
 using Security.Views;
 using System;
 using System.Threading;
