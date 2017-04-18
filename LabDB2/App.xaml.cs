@@ -16,7 +16,7 @@ namespace LabDB2
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-            Thread.CurrentPrincipal = new Security.DBPrincipal();
+            Thread.CurrentPrincipal = new Infrastructure.DBPrincipal();
             var bootstrapper = new Bootstrapper();
             bootstrapper.Run();
         }
