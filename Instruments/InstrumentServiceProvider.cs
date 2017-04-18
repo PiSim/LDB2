@@ -26,6 +26,18 @@ namespace Instruments
             _container = container;
         }
 
+        public InstrumentMaintenanceEvent AddMaintenanceEvent(Instrument target)
+        {
+            Views.NewMaintenanceEventDialog newEventDialog = _container.Resolve<Views.NewMaintenanceEventDialog>();
+            if (newEventDialog.ShowDialog() == true)
+            {
+                return newEventDialog.EventInstance;
+            }
+
+            else
+                return null;
+        }
+
         public CalibrationReport RegisterNewCalibration(Instrument target)
         {
             Views.NewCalibrationDialog calibrationDialog = _container.Resolve<Views.NewCalibrationDialog>();
@@ -47,11 +59,6 @@ namespace Instruments
             }
             else
                 return null;
-        }
-
-        public void RegisterNewMaintenanceEvent(Instrument target)
-        {
-
         }
     }
 }

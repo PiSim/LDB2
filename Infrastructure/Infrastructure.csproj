@@ -147,6 +147,7 @@
     <Compile Include="Tokens\NewReportToken.cs" />
     <Compile Include="Tokens\NewTaskToken.cs" />
     <Compile Include="ReportViewNames.cs" />
+    <Compile Include="UserRoleNames.cs" />
     <Compile Include="Wrappers\ReportItemWrapper.cs" />
     <Compile Include="Wrappers\RequirementWrapper.cs" />
     <Compile Include="UserViewNames.cs" />

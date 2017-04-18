@@ -27,11 +27,6 @@ namespace Infrastructure
             }
         }
 
-        public bool IsInRole(string role)
-        {
-            return _identity.User.RoleMappings.Any(urm => urm.UserRole.Name == role);
-        }
-
         public Person CurrentPerson
         {
             get { return _identity.User.Person; }
@@ -40,6 +35,13 @@ namespace Infrastructure
         public User CurrentUser
         {
             get { return _identity.User; }
+        }
+
+        public bool IsInRole(string role)
+        {
+            UserRoleMapping tempURM = _identity.User.RoleMappings.First(urm => urm.UserRole.Name == role);
+
+            return tempURM.IsSelected;
         }
     }
 }

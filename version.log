@@ -3,8 +3,8 @@
 -Introdotti eventi notifica aggiornamenti per refresh liste
 -*Implementato comparatore per sorting delle colonne di ListView
 -Implementata classe InstrumentServiceProvider e interfaccia IInstrumentServiceProvider
--*Impostato recupero istanza utente in ReportCreationDialogViewModel
--*Aggiunti metodi a reportServiceProvider per creazione Report dato operatore/progetto/specifica/batch
+-Impostato recupero istanza utente in ReportCreationDialogViewModel
+-*Aggiunti metodi a reportServiceProvider per creazione Report dato progetto/specifica/batch
 -Implementato metodo creazione strumenti su InstrumentServiceProvider
 -*Implementati metodi gestione taratura/manutenzione su InstrumentServiceProvider
 -Rimossa l'entità PendingCalibration, integrata funzionalità nell'entità Instrument

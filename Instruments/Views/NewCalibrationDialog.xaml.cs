@@ -1,4 +1,5 @@
 ﻿using DBManager;
+using Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,9 +23,12 @@ namespace Instruments.Views
     {
         private CalibrationReport _reportInstance;
 
-        public NewCalibrationDialog(DBEntities entities)
+        public NewCalibrationDialog(DBEntities entities,
+                                    DBPrincipal principal)
         {
-            DataContext = new ViewModels.NewCalibrationDialogViewModel(entities, this);
+            DataContext = new ViewModels.NewCalibrationDialogViewModel(entities,
+                                                                        principal,
+                                                                        this);
             InitializeComponent();
         }
 

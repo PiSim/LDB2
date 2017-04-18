@@ -14,6 +14,7 @@ namespace Instruments.ViewModels
     {
         private DateTime _calibrationDate;
         private DBEntities _entities;
+        private DBPrincipal _principal;
         private DelegateCommand _cancel, _confirm;
         private Instrument _instumentInstance, _selectedReference;
         private Person _selectedTech;
@@ -21,9 +22,12 @@ namespace Instruments.ViewModels
         private Views.NewCalibrationDialog _parentDialog;
 
         public NewCalibrationDialogViewModel(DBEntities entities,
+                                            DBPrincipal principal,
                                             Views.NewCalibrationDialog parentDialog) : base()
         {
             _entities = entities;
+            _principal = principal;
+
             _cancel = new DelegateCommand(
                 () =>
                 {
@@ -62,6 +66,14 @@ namespace Instruments.ViewModels
         public DelegateCommand CancelCommand
         {
             get { return _cancel; }
+        }
+
+        public bool CanChangeTech
+        {
+            get
+            {
+                return _principal.IsInRole(UserRoleNames.ReportAdmin); 
+            }
         }
 
         public DelegateCommand ConfirmCommand

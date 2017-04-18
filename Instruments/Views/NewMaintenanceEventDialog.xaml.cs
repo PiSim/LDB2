@@ -20,10 +20,18 @@ namespace Instruments.Views
     /// </summary>
     public partial class NewMaintenanceEventDialog : Window
     {
+        private InstrumentMaintenanceEvent _eventInstance;
+
         public NewMaintenanceEventDialog(DBEntities entities)
         {
             DataContext = new ViewModels.NewMaintenanceEventDialogViewModel(entities, this);
             InitializeComponent();
+        }
+
+        public InstrumentMaintenanceEvent EventInstance
+        {
+            get { return _eventInstance; }
+            internal set { _eventInstance = value; } 
         }
     }
 }

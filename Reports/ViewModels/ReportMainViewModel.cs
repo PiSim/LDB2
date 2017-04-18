@@ -19,20 +19,20 @@ namespace Reports.ViewModels
     {
         private bool _isActive;
         private DBEntities _entities;
+        private DBPrincipal _principal;
         private DelegateCommand _newReport, _openReport;
         private EventAggregator _eventAggregator;
         private ObservableCollection<Report> _reportList;
         private Report _selectedReport;
-        private UnityContainer _container;
 
         public ReportMainViewModel(DBEntities entities, 
-                            EventAggregator eventAggregator,
-                            UnityContainer container) : base()
+                            DBPrincipal principal,
+                            EventAggregator eventAggregator) : base()
         {
-            _container = container;
             _entities = entities;
             _eventAggregator = eventAggregator;
             _isActive = false;
+            _principal = principal;
             _reportList = new ObservableCollection<Report>(entities.Reports);
 
             _openReport = new DelegateCommand(
@@ -47,7 +47,8 @@ namespace Reports.ViewModels
                 () =>
                 {
                     _eventAggregator.GetEvent<ReportCreationRequested>().Publish(new NewReportToken());
-                });
+                },
+                () => CanCreateReport);
 
             _eventAggregator.GetEvent<ReportCreated>().Subscribe(
                 rpt => 
@@ -57,6 +58,14 @@ namespace Reports.ViewModels
                 } ); 
         }
 
+        public bool CanCreateReport
+        {
+            get
+            {
+                return _principal.IsInRole(UserRoleNames.ReportEdit);
+            }
+        }
+            
         public DelegateCommand NewReportCommand
         {
             get { return _newReport; }

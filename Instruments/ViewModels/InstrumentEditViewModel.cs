@@ -1,4 +1,5 @@
 ﻿using DBManager;
+using Infrastructure;
 using Infrastructure.Events;
 using Prism.Commands;
 using Prism.Events;
@@ -16,25 +17,29 @@ namespace Instruments.ViewModels
         private DBEntities _entities;
         private DelegateCommand _addCalibration, _addMaintenanceEvent;
         private EventAggregator _eventAggregator;
+        private IInstrumentServiceProvider _instrumentServiceProvider;
         private Instrument _instance;
 
-        public InstrumentEditViewModel(DBEntities entities, EventAggregator aggregator) : base()
+        public InstrumentEditViewModel(DBEntities entities, 
+                                    EventAggregator aggregator,
+                                    IInstrumentServiceProvider instrumentServiceProvider) : base()
         {
             _entities = entities;
             _eventAggregator = aggregator;
+            _instrumentServiceProvider = instrumentServiceProvider;
 
             _eventAggregator.GetEvent<CommitRequested>().Subscribe(() => _entities.SaveChanges());
 
             _addCalibration = new DelegateCommand(
                 () =>
                 {
-                    
+                    _instrumentServiceProvider.RegisterNewCalibration(_instance);
                 });
 
             _addMaintenanceEvent = new DelegateCommand(
                 () =>
                 {
-
+                    _instrumentServiceProvider.AddMaintenanceEvent(_instance);
                 });
         }
 
