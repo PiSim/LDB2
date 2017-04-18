@@ -103,8 +103,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AuthenticationService.cs" />
-    <Compile Include="DBIdentity.cs" />
-    <Compile Include="DBPrincipal.cs" />
     <Compile Include="RoleNames.cs" />
     <Compile Include="SecurityModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
