@@ -1,4 +1,5 @@
 ﻿using DBManager;
+using Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,9 +23,9 @@ namespace Instruments.Views
     {
         private InstrumentMaintenanceEvent _eventInstance;
 
-        public NewMaintenanceEventDialog(DBEntities entities)
+        public NewMaintenanceEventDialog(DBEntities entities, DBPrincipal principal)
         {
-            DataContext = new ViewModels.NewMaintenanceEventDialogViewModel(entities, this);
+            DataContext = new ViewModels.NewMaintenanceEventDialogViewModel(entities, principal, this);
             InitializeComponent();
         }
 

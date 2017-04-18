@@ -7,17 +7,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Specifications
+namespace Infrastructure
 {
 
-    internal class ControlPlanItemWrapper : BindableBase
+    public class ControlPlanItemWrapper : BindableBase
     {
         private bool _isSelected;
         private ControlPlan _parent;
         private ControlPlanItem _item;
         private Requirement _requirement;
 
-        internal ControlPlanItemWrapper(ControlPlan parent,
+        public ControlPlanItemWrapper(ControlPlan parent,
                                         Requirement requirement) : base()
         {
             _parent = parent;

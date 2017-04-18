@@ -17,11 +17,11 @@ using System.Windows.Shapes;
 namespace Materials.Views
 {
     /// <summary>
-    /// Interaction logic for ColourMain.xaml
+    /// Interaction logic for ColourEdit.xaml
     /// </summary>
-    public partial class ColourMain : UserControl, IView
+    public partial class ColourEdit : UserControl, IView
     {
-        public ColourMain()
+        public ColourEdit()
         {
             InitializeComponent();
         }

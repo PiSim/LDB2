@@ -1,4 +1,5 @@
 ﻿using DBManager;
+using Infrastructure;
 using Prism.Commands;
 using Prism.Mvvm;
 using System;
@@ -13,16 +14,19 @@ namespace Instruments.ViewModels
     {
         private DateTime _date;
         private DBEntities _entities;
+        private DBPrincipal _principal;
         private DelegateCommand _cancel, _confirm;
         private Person _selectedTech;
         private string _description;
         private Views.NewMaintenanceEventDialog _parentDialog;
 
         public NewMaintenanceEventDialogViewModel(DBEntities entities,
+                                                DBPrincipal principal,
                                                 Views.NewMaintenanceEventDialog parentDialog) : base()
         {
             _date = DateTime.Now.Date;
             _entities = entities;
+            _principal = principal;
             _parentDialog = parentDialog;
 
             _cancel = new DelegateCommand(
@@ -68,7 +72,10 @@ namespace Instruments.ViewModels
 
         public List<Person> TechList
         {
-            get { return new List<Person>(_entities.People.Where(per => per.Role == "TL")); }
+            get
+            {
+                return new List<Person>(_entities.People.Where(per => per.Role == "TL"));
+            }
         }
 
         public Person SelectedTech

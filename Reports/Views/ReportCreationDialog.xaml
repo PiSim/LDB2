@@ -5,12 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Reports.Views"
         mc:Ignorable="d"
-        Title="Crea Report" Height="250" Width="600">
+        Title="Crea Report" Height="500" Width="600"
+        ResizeMode="NoResize">
     <Grid Background="LightGray">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"
-                              MinWidth="200"/>
-            <ColumnDefinition MinWidth="200"/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
         </Grid.ColumnDefinitions>
        
         <Grid.RowDefinitions>
@@ -19,10 +19,11 @@
         </Grid.RowDefinitions>
         
         <Grid Grid.Column="0"
-              Grid.Row="0">
+              Grid.Row="0"
+              Margin="5">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition MinWidth="200"/>
+                <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -30,6 +31,8 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
             </Grid.RowDefinitions>
 
             <Label Content="Numero:"
@@ -86,6 +89,17 @@
                       DisplayMemberPath="Name"
                       Grid.Column="1"
                       Grid.Row="4"
+                      Margin="5"/>
+
+            <Label Content="Piano di controllo:"
+                   Grid.Column="0"
+                   Grid.Row="5"
+                   Margin="5"/>
+            <ComboBox ItemsSource="{Binding ControlPlanList}"
+                      SelectedItem="{Binding SelectedControlPlan, Mode=TwoWay}"
+                      DisplayMemberPath="Name"
+                      Grid.Column="1"
+                      Grid.Row="5"
                       Margin="5"/>
         </Grid>
         

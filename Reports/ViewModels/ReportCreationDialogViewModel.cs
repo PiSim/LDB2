@@ -17,6 +17,7 @@ namespace Reports.ViewModels
 {   
     public class ReportCreationDialogViewModel : BindableBase
     {
+        private ControlPlan _selectedControlPlan;
         private DBEntities _entities;
         private DBPrincipal _principal;
         private DelegateCommand _cancel, _confirm;
@@ -104,6 +105,17 @@ namespace Reports.ViewModels
         {
             get { return _confirm; }
         }
+
+        public List<ControlPlan> ControlPlanList
+        {
+            get
+            {
+                if (_selectedSpecification == null)
+                    return null;
+                else
+                    return new List<ControlPlan>(_selectedSpecification.ControlPlans);
+            }
+        }
         
         public bool IsValidInput
         {
@@ -121,6 +133,16 @@ namespace Reports.ViewModels
             get { return new List<Person>(_entities.People.Where(pp => pp.Role == "TL" )); }
         }        
 
+        public ControlPlan SelectedControlPlan
+        {
+            get { return _selectedControlPlan; }
+            set
+            {
+                _selectedControlPlan = value;
+                OnPropertyChanged("SelectedControlPlan");
+            }
+        }
+
         public Specification SelectedSpecification
         {
             get { return _selectedSpecification; }
@@ -135,12 +157,13 @@ namespace Reports.ViewModels
                     
                     OnPropertyChanged("VersionList");
                 }
-                    
                 
                 else
                     _versionList.Clear();
                     
                 SelectedVersion = _versionList.FirstOrDefault(sv => sv.IsMain);
+                SelectedControlPlan = null;
+                OnPropertyChanged("ControlPlanList");
             }
         }
 

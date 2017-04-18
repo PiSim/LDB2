@@ -103,7 +103,6 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ControlPlanItemWrapper.cs" />
     <Compile Include="SpecificationServiceProvider.cs" />
     <Compile Include="SpecificationsModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">

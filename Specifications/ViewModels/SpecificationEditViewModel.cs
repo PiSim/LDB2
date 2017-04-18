@@ -388,8 +388,11 @@ namespace Specifications.ViewModels
                 _selectedControlPlan = value;
 
                 _controlPlanItemsList = new List<ControlPlanItemWrapper>();
-                foreach (Requirement rr in _instance.SpecificationVersions.First(sve => sve.IsMain).Requirements)
-                    _controlPlanItemsList.Add(new ControlPlanItemWrapper(_selectedControlPlan, rr));
+                if (value != null)
+                {
+                    foreach (Requirement rr in _instance.SpecificationVersions.First(sve => sve.IsMain).Requirements)
+                        _controlPlanItemsList.Add(new ControlPlanItemWrapper(_selectedControlPlan, rr));
+                }
 
                 OnPropertyChanged("SelectedControlPlan");
                 OnPropertyChanged("ControlPlanItemsList");
@@ -479,6 +482,7 @@ namespace Specifications.ViewModels
             set
             {
                 _instance = _entities.Specifications.FirstOrDefault(spec => spec.ID == value.ID);
+                SelectedControlPlan = null;
                 _issueList = new ObservableCollection<StandardIssue>(_instance.Standard.StandardIssues);
                 SelectedIssue = null;
                 _versionList = new ObservableCollection<SpecificationVersion>(_instance.SpecificationVersions);

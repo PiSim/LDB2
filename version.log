@@ -6,15 +6,17 @@
 -Impostato recupero istanza utente in ReportCreationDialogViewModel
 -*Aggiunti metodi a reportServiceProvider per creazione Report dato progetto/specifica/batch
 -Implementato metodo creazione strumenti su InstrumentServiceProvider
--*Implementati metodi gestione taratura/manutenzione su InstrumentServiceProvider
+-Implementati metodi per nuova taratura/manutenzione su InstrumentServiceProvider
 -Rimossa l'entità PendingCalibration, integrata funzionalità nell'entità Instrument
 -Corretto crash legato all'aggiunta di file a report esterni
 -Corretto mancato aggiornamento OA in vista report esterni
 -Corretto errore salvataggio data OA
--*Introdotto evento per aggiornamento lista report esterni
+-Introdotto evento per aggiornamento lista report esterni
 -Corretto crash alla creazione di un nuovo strumento
 -Corretto errore in ProjectCreationDialog che impediva la creazione di nuovi progetti
 -Aggiunta procedura creazione nuova organizzazione
+-*Rivista implementazione piani di controllo per evitare errori in caso di metodi ripetuti
+-*Aggiunta funzionalità piano di controllo alla creazione di un report
 
 v 0.4.2 -- 04/04/2017
 

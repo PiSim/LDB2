@@ -124,6 +124,7 @@
     <Compile Include="ViewModels\BatchPickerDialogViewModel.cs" />
     <Compile Include="ViewModels\ColorCreationDialogViewModel.cs" />
     <Compile Include="ViewModels\ColorPickerDialogViewModel.cs" />
+    <Compile Include="ViewModels\ColourEditViewModel.cs" />
     <Compile Include="ViewModels\ColourMainViewModel.cs" />
     <Compile Include="ViewModels\MaterialCreationViewModel.cs" />
     <Compile Include="ViewModels\ProjectPickerViewModel.cs" />
@@ -149,6 +150,9 @@
     </Compile>
     <Compile Include="Views\ColorPickerDialog.xaml.cs">
       <DependentUpon>ColorPickerDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ColourEdit.xaml.cs">
+      <DependentUpon>ColourEdit.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ColourMain.xaml.cs">
       <DependentUpon>ColourMain.xaml</DependentUpon>
@@ -231,6 +235,10 @@
     <Page Include="Views\ColorPickerDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\ColourEdit.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ColourMain.xaml">
       <SubType>Designer</SubType>

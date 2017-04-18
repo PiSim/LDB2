@@ -54,6 +54,7 @@
 
         <ComboBox ItemsSource="{Binding TechList}"
                   SelectedItem="{Binding SelectedTech, Mode=TwoWay}"
+                  IsEnabled="{Binding CanChangeTech}"
                   DisplayMemberPath="Name"
                   Grid.Column="1"
                   Grid.ColumnSpan="3"

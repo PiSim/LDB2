@@ -23,6 +23,8 @@ namespace Materials
         {
             _container.RegisterType<Object, Views.BatchInfo>(MaterialViewNames.BatchInfoView);
             _container.RegisterType<Object, Views.BatchMain>(MaterialViewNames.BatchesView);
+            _container.RegisterType<Views.ColourEdit>(MaterialViewNames.ColourEdit);
+            _container.RegisterType<Views.ColourMain>(MaterialViewNames.ColourMain);
             _container.RegisterType<Object, Views.SampleLogView>(MaterialViewNames.SampleLogView);
 
             _container.RegisterType<Views.BatchPickerDialog>();
@@ -36,6 +38,8 @@ namespace Materials
             _container.RegisterType<ViewModels.BatchMainViewModel>();
             _container.RegisterType<ViewModels.BatchPickerDialogViewModel>();
             _container.RegisterType<ViewModels.ColorCreationDialogViewModel>();
+            _container.RegisterType<ViewModels.ColourEditViewModel>();
+            _container.RegisterType<ViewModels.ColourMainViewModel>();
             _container.RegisterType<ViewModels.SampleLogDialogViewModel>();
 
             _container.RegisterType<IMaterialServiceProvider, MaterialServiceProvider>(new ContainerControlledLifetimeManager());
@@ -48,6 +52,8 @@ namespace Materials
 
             _regionManager.RegisterViewWithRegion(RegionNames.MainNavigationRegion, 
                                                 typeof(Views.BatchesNavigationItem));
+            _regionManager.RegisterViewWithRegion(RegionNames.MainNavigationRegion,
+                                                typeof(Views.ColoursNavigationItem));
         }
     }
 }
