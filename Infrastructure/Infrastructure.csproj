@@ -103,6 +103,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AdminViewNames.cs" />
+    <Compile Include="DBIdentity.cs" />
+    <Compile Include="DBPrincipal.cs" />
     <Compile Include="Events\CommitRequested.cs" />
     <Compile Include="Events\ExternalReportListUpdateRequested.cs" />
     <Compile Include="Events\InstrumentListUpdateRequested.cs" />
