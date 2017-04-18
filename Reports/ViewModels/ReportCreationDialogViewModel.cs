@@ -5,6 +5,7 @@ using Infrastructure.Wrappers;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
+
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -30,6 +31,7 @@ namespace Reports.ViewModels
         private Views.ReportCreationDialog _parentDialog;
         
         public ReportCreationDialogViewModel(DBEntities entities,
+                                        DBPrincipal principal,
                                         IMaterialServiceProvider serviceProvider,
                                         Views.ReportCreationDialog parentDialog) : base()
         {
