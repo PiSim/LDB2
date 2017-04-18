@@ -5,7 +5,6 @@ using Infrastructure.Wrappers;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
-
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -19,6 +18,7 @@ namespace Reports.ViewModels
     public class ReportCreationDialogViewModel : BindableBase
     {
         private DBEntities _entities;
+        private DBPrincipal _principal;
         private DelegateCommand _cancel, _confirm;
         private IMaterialServiceProvider _materialServiceProvider;
         private Int32 _number;
@@ -38,6 +38,8 @@ namespace Reports.ViewModels
             _entities = entities;
             _materialServiceProvider = serviceProvider;
             _parentDialog = parentDialog;
+            _principal = principal;
+            _author = _entities.People.First(prs => prs.ID == _principal.CurrentPerson.ID);
             _versionList = new ObservableCollection<SpecificationVersion>();
             _requirementList = new ObservableCollection<ReportItemWrapper>();
 
@@ -74,7 +76,11 @@ namespace Reports.ViewModels
         public Person Author
         {
             get { return _author; }
-            set { _author = value; }
+            set 
+            { 
+                _author = value; 
+                OnPropertyChanged("Author");
+            }
         }
 
         public string BatchNumber
