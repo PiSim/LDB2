@@ -9,6 +9,26 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-            
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        
+        <StackPanel Orientation="Horizontal">
+            <Label Content="Colore:"/>
+            <Label Content="{Binding ColourName}"/>
+        </StackPanel>
+        
+        <GroupBox Header="Commesse"
+                  Grid.Row="1">
+            <ContentControl prism:RegionManager.RegionName="ColourEditBatchListRegion"/>
+        </GroupBox>
+        <GroupBox Header="Ricette"
+                  Grid.Row="2">
+            <ListView ItemsSource="{Binding RecipeList}"
+                      SelectedItem="{Binding SelectedRecipe, Mode=TwoWay}"
+                      DisplayMemberPath="Code"/>
+        </GroupBox>
     </Grid>
 </UserControl>

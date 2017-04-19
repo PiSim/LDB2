@@ -1,4 +1,5 @@
 ﻿using DBManager;
+using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Wrappers
 {
-    public class ReportItemWrapper
+    public class ReportItemWrapper : BindableBase
     {
         private bool _isSelected;
         private Requirement _instance;
@@ -31,7 +32,11 @@ namespace Infrastructure.Wrappers
         public bool IsSelected
         {
             get { return _isSelected; }
-            set { _isSelected = value; }
+            set
+            {
+                _isSelected = value;
+                OnPropertyChanged("IsSelected");
+            }
         }
 
         public string Property

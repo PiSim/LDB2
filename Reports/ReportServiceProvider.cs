@@ -34,6 +34,9 @@ namespace Reports
                     Views.ReportCreationDialog creationDialog =
                         _container.Resolve<Views.ReportCreationDialog>();
 
+                    if (token.TargetBatch != null)
+                        creationDialog.Batch = token.TargetBatch;
+
                     if (creationDialog.ShowDialog() == true)
                     {
                         _eventAggregator.GetEvent<ReportCreated>().Publish(creationDialog.ReportInstance);

@@ -4,7 +4,7 @@
 -*Implementato comparatore per sorting delle colonne di ListView
 -Implementata classe InstrumentServiceProvider e interfaccia IInstrumentServiceProvider
 -Impostato recupero istanza utente in ReportCreationDialogViewModel
--*Aggiunti metodi a reportServiceProvider per creazione Report dato progetto/specifica/batch
+-*Implementata gestione richieste report per batch/prog/spec in handler ReportCreationRequested
 -Implementato metodo creazione strumenti su InstrumentServiceProvider
 -Implementati metodi per nuova taratura/manutenzione su InstrumentServiceProvider
 -Rimossa l'entità PendingCalibration, integrata funzionalità nell'entità Instrument
@@ -15,9 +15,9 @@
 -Corretto crash alla creazione di un nuovo strumento
 -Corretto errore in ProjectCreationDialog che impediva la creazione di nuovi progetti
 -Aggiunta procedura creazione nuova organizzazione
--*Rivista implementazione piani di controllo per evitare errori in caso di metodi ripetuti
--*Aggiunto metodo per l'applicazione di un piano di controllo ad una lista requisiti in ReportServiceProvider
--*Aggiunta funzionalità piano di controllo alla creazione di un report
+-Rivista implementazione piani di controllo per evitare errori in caso di metodi ripetuti
+-Aggiunto metodo per l'applicazione di un piano di controllo ad una lista requisiti in ReportServiceProvider
+-Aggiunta funzionalità piano di controllo alla creazione di un report
 
 v 0.4.2 -- 04/04/2017
 

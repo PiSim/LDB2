@@ -30,6 +30,11 @@ namespace Reports.Views
             InitializeComponent();
         }
 
+        public Batch Batch
+        {
+            set { (DataContext as ViewModels.ReportCreationDialogViewModel).BatchNumber = value.Number; }
+        }
+
         public Report ReportInstance
         {
             get { return _reportInstance; }

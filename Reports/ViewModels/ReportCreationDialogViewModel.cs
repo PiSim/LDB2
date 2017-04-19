@@ -90,7 +90,11 @@ namespace Reports.ViewModels
         public string BatchNumber
         {
             get { return _batchNumber; }
-            set { _batchNumber = value; }
+            set
+            {
+                _batchNumber = value;
+                OnPropertyChanged("BatchNumber");
+            }
         }
         
         public DelegateCommand CancelCommand
@@ -144,7 +148,9 @@ namespace Reports.ViewModels
                 _selectedControlPlan = value;
                 OnPropertyChanged("SelectedControlPlan");
                 if (value != null)
+                {
                     _reportServiceProvider.ApplyControlPlan(_requirementList, _selectedControlPlan);
+                }
             }
         }
 

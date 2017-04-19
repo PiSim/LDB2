@@ -9,9 +9,21 @@ namespace Infrastructure.Tokens
 {
     public class NewReportToken
     {
+        private Batch _batch;
+
         public NewReportToken()
         {
 
+        }
+
+        public NewReportToken(Batch target)
+        {
+            _batch = target;
+        }
+
+        public Batch TargetBatch
+        {
+            get { return _batch; }
         }
     }
 }

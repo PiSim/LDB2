@@ -41,7 +41,7 @@ namespace Materials.ViewModels
             _newReport = new DelegateCommand(
                 () => 
                 {
-                    NewReportToken token = new NewReportToken();
+                    NewReportToken token = new NewReportToken(_instance);
                     _eventAggregator.GetEvent<ReportCreationRequested>().Publish(token);
                 }
             );
