@@ -73,6 +73,23 @@ namespace Reports
                 return null;
         } 
 
+        public void ApplyControlPlan(List<ReportItemWrapper> reqList, ControlPlan conPlan)
+        {
+            foreach (riw in reqList)
+                riw.IsSelected = false;
+
+            foreach (ControlPlanItem cpi in conPlan.ControlPlanItems)
+            {
+                tempRIW = reqList.FirstOrDefault(riw => riw.Instance.ID == cpi.Requirement.ID || 
+                                                ( riw.Instance.IsOverride && riw.Instance.Overridden.ID == cpi.Requirement.ID));
+                if (tempRIW != null)
+                    tempRIW.IsSelected = true;
+                
+                else
+                    _eventAggregator.GetEvent<StatusNotificationIssued>().Publish("Alcuni requisiti richiesti non sono stati trovati");
+            }
+        }
+
         public List<Requirement> GenerateRequirementList(SpecificationVersion version)
         {
             if (version.IsMain)
@@ -90,23 +107,6 @@ namespace Reports
                 }
 
                 return output;
-            }
-        }
-
-        public void ApplyControlPlan(List<ReportItemWrapper> reqList, ControlPlan conPlan)
-        {
-            foreach (riw in reqList)
-                riw.IsSelected = false;
-
-            foreach (ControlPlanItem cpi in conPlan.ControlPlanItems)
-            {
-                tempRIW = reqList.FirstOrDefault(riw => riw.Instance.ID == cpi.Requirement.ID || 
-                                                ( riw.Instance.IsOverride && riw.Instance.Overridden.ID == cpi.Requirement.ID));
-                if (tempRIW != null)
-                    tempRIW.IsSelected = true;
-                
-                else
-                    _eventAggregator.GetEvent<StatusNotificationIssued>().Publish("Alcuni requisiti richiesti non sono stati trovati");
             }
         }
     }
