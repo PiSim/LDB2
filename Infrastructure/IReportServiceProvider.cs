@@ -10,5 +10,6 @@ namespace Infrastructure
     public interface IReportServiceProvider
     {
         PurchaseOrder AddPOToExternalReport(ExternalReport target);
+        void ApplyControlPlan(List<ReportItemWrapper> reqList, ControlPlan conPlan);
     }
 }
