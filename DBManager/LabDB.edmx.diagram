@@ -92,7 +92,6 @@
         <EntityTypeShape EntityType="labdbModel.ControlPlanItem" Width="1.5" PointX="4.75" PointY="2.75" />
         <EntityTypeShape EntityType="labdbModel.ControlPlan" Width="1.5" PointX="2.625" PointY="2.75" />
         <AssociationConnector Association="labdbModel.control_plan_to_item" />
-        <AssociationConnector Association="labdbModel.method_to_control_plan_item" />
         <AssociationConnector Association="labdbModel.specification_to_control_plan" />
         <EntityTypeShape EntityType="labdbModel.CalibrationFiles" Width="1.5" PointX="10.875" PointY="28.375" />
         <EntityTypeShape EntityType="labdbModel.CalibrationReport" Width="1.5" PointX="8.25" PointY="25.625" />
@@ -133,6 +132,7 @@
         <EntityTypeShape EntityType="labdbModel.PersonRole" Width="1.5" PointX="11" PointY="21.375" />
         <AssociationConnector Association="labdbModel.person_to_role_mapping" />
         <AssociationConnector Association="labdbModel.person_role_to_role_mapping" />
+        <AssociationConnector Association="labdbModel.requirement_to_control_plan" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

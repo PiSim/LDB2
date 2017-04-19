@@ -18,7 +18,6 @@ namespace Projects.ViewModels
         private DelegateCommand _newProject, _openProject;
         private EventAggregator _eventAggregator;
         private IProjectServiceProvider _projectServiceProvider;
-        private List<Project> _projectList;
         private Project _selectedProject;
 
         public ProjectMainViewModel(DBEntities entities, 
@@ -38,8 +37,7 @@ namespace Projects.ViewModels
                     Project tempProject = _projectServiceProvider.CreateNewProject();
                     if (tempProject != null)
                     {
-                        _projectList.Add(tempProject);
-                        SelectedProject = tempProject;
+                        OnPropertyChanged("ProjectList");
                     }
                 });
 

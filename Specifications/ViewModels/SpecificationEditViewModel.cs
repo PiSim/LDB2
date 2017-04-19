@@ -181,6 +181,14 @@ namespace Specifications.ViewModels
 
                 () => _selectedToRemove != null);
 
+            _removeVersion = new DelegateCommand(
+                () =>
+                {
+                    _entities.SpecificationVersions.Remove(_selectedVersion);
+                    _entities.SaveChanges();
+                },
+                () => _selectedVersion != null);
+
             _setCurrent = new DelegateCommand(
                 () =>
                 {

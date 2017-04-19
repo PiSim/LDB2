@@ -23,6 +23,7 @@ namespace Reports.ViewModels
         private DelegateCommand _cancel, _confirm;
         private IMaterialServiceProvider _materialServiceProvider;
         private Int32 _number;
+        private IReportServiceProvider _reportServiceProvider;
         private ObservableCollection<ReportItemWrapper> _requirementList;
         private ObservableCollection<SpecificationVersion> _versionList;
         private Person _author;
@@ -33,13 +34,15 @@ namespace Reports.ViewModels
         
         public ReportCreationDialogViewModel(DBEntities entities,
                                         DBPrincipal principal,
-                                        IMaterialServiceProvider serviceProvider,
+                                        IMaterialServiceProvider materialServiceProvider,
+                                        IReportServiceProvider reportServiceProvider,
                                         Views.ReportCreationDialog parentDialog) : base()
         {
             _entities = entities;
-            _materialServiceProvider = serviceProvider;
+            _materialServiceProvider = materialServiceProvider;
             _parentDialog = parentDialog;
             _principal = principal;
+            _reportServiceProvider = reportServiceProvider;
             _author = _entities.People.First(prs => prs.ID == _principal.CurrentPerson.ID);
             _versionList = new ObservableCollection<SpecificationVersion>();
             _requirementList = new ObservableCollection<ReportItemWrapper>();
@@ -140,6 +143,8 @@ namespace Reports.ViewModels
             {
                 _selectedControlPlan = value;
                 OnPropertyChanged("SelectedControlPlan");
+                if (value != null)
+                    _reportServiceProvider.ApplyControlPlan(_requirementList, _selectedControlPlan);
             }
         }
 

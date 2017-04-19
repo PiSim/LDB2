@@ -17,7 +17,6 @@ namespace Reports.ViewModels
 {
     class ReportMainViewModel : BindableBase
     {
-        private bool _isActive;
         private DBEntities _entities;
         private DBPrincipal _principal;
         private DelegateCommand _newReport, _openReport;
@@ -31,7 +30,6 @@ namespace Reports.ViewModels
         {
             _entities = entities;
             _eventAggregator = eventAggregator;
-            _isActive = false;
             _principal = principal;
             _reportList = new ObservableCollection<Report>(entities.Reports);
 

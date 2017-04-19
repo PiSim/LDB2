@@ -2,6 +2,7 @@
 using DBManager;
 using Infrastructure;
 using Infrastructure.Events;
+using Infrastructure.Wrappers;
 using Infrastructure.Tokens;
 using Microsoft.Practices.Unity;
 using Prism.Events;
@@ -73,14 +74,14 @@ namespace Reports
                 return null;
         } 
 
-        public void ApplyControlPlan(List<ReportItemWrapper> reqList, ControlPlan conPlan)
+        public void ApplyControlPlan(IEnumerable<ReportItemWrapper> reqList, ControlPlan conPlan)
         {
-            foreach (riw in reqList)
+            foreach (ReportItemWrapper riw in reqList)
                 riw.IsSelected = false;
 
             foreach (ControlPlanItem cpi in conPlan.ControlPlanItems)
             {
-                tempRIW = reqList.FirstOrDefault(riw => riw.Instance.ID == cpi.Requirement.ID || 
+                ReportItemWrapper tempRIW = reqList.FirstOrDefault(riw => riw.Instance.ID == cpi.Requirement.ID || 
                                                 ( riw.Instance.IsOverride && riw.Instance.Overridden.ID == cpi.Requirement.ID));
                 if (tempRIW != null)
                     tempRIW.IsSelected = true;

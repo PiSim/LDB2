@@ -19,9 +19,14 @@ namespace Reports.Views
 
         public ReportCreationDialog(DBEntities entities, 
                                     DBPrincipal principal,
-                                    IMaterialServiceProvider serviceProvider)
+                                    IMaterialServiceProvider materialServiceProvider,
+                                    IReportServiceProvider reportServiceProvider)
         {
-            DataContext = new ViewModels.ReportCreationDialogViewModel(entities, principal, serviceProvider, this);
+            DataContext = new ViewModels.ReportCreationDialogViewModel(entities, 
+                                                                    principal, 
+                                                                    materialServiceProvider,
+                                                                    reportServiceProvider, 
+                                                                    this);
             InitializeComponent();
         }
 

@@ -29,7 +29,7 @@ namespace Materials.Views
 
         public string ViewName
         {
-            get { return MaterialViewNames.ColoursView; }
+            get { return MaterialViewNames.ColourMain; }
         }
     }
 }

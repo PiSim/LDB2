@@ -11,8 +11,6 @@ namespace Specifications
     public class SpecificationServiceProvider
     {
         private DBEntities _entities;
-        private Organization _oem;
-        private string _name;
         private UnityContainer _container;
 
         public SpecificationServiceProvider(DBEntities entities,

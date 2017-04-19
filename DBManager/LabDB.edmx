@@ -76,7 +76,7 @@
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="control_planID" Type="int" Nullable="false" />
-          <Property Name="methodID" Type="int" Nullable="false" />
+          <Property Name="requirementID" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="control_plans">
           <Key>
@@ -294,7 +294,7 @@
           <Property Name="number" Type="char" MaxLength="10" Nullable="false" />
           <Property Name="total" Type="float" Nullable="false" />
           <Property Name="currencyID" Type="int" Nullable="false" />
-          <Property Name="date" Type="date" Nullable="false" />
+          <Property Name="date" Type="date" />
           <Property Name="organizationID" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="recipes">
@@ -832,18 +832,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="method_to_control_plan_item">
-          <End Role="methods" Type="Self.methods" Multiplicity="1" />
-          <End Role="control_plan_items" Type="Self.control_plan_items" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="methods">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="control_plan_items">
-              <PropertyRef Name="methodID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="method_to_measurement">
           <End Role="methods" Type="Self.methods" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -1183,6 +1171,20 @@
             </Principal>
             <Dependent Role="tasks">
               <PropertyRef Name="requesterID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="requirement_to_control_plan">
+          <End Role="requirements" Type="Self.requirements" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="control_plan_items" Type="Self.control_plan_items" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="requirements">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="control_plan_items">
+              <PropertyRef Name="requirementID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1619,10 +1621,6 @@
             <End Role="standard_issues" EntitySet="standard_issues" />
             <End Role="tests" EntitySet="tests" />
           </AssociationSet>
-          <AssociationSet Name="method_to_control_plan_item" Association="Self.method_to_control_plan_item">
-            <End Role="methods" EntitySet="methods" />
-            <End Role="control_plan_items" EntitySet="control_plan_items" />
-          </AssociationSet>
           <AssociationSet Name="method_to_measurement" Association="Self.method_to_measurement">
             <End Role="methods" EntitySet="methods" />
             <End Role="sub_methods" EntitySet="sub_methods" />
@@ -1730,6 +1728,10 @@
           <AssociationSet Name="requester_to_task" Association="Self.requester_to_task">
             <End Role="people" EntitySet="people" />
             <End Role="tasks" EntitySet="tasks" />
+          </AssociationSet>
+          <AssociationSet Name="requirement_to_control_plan" Association="Self.requirement_to_control_plan">
+            <End Role="requirements" EntitySet="requirements" />
+            <End Role="control_plan_items" EntitySet="control_plan_items" />
           </AssociationSet>
           <AssociationSet Name="requirement_to_subreq" Association="Self.requirement_to_subreq">
             <End Role="requirements" EntitySet="requirements" />
@@ -1961,7 +1963,6 @@
           <NavigationProperty Name="Property" Relationship="Self.property_to_method" FromRole="methods" ToRole="properties" />
           <NavigationProperty Name="Standard" Relationship="Self.standard_to_method" FromRole="methods" ToRole="standards" />
           <NavigationProperty Name="Tests" Relationship="labdbModel.method_to_test" FromRole="Method" ToRole="Test" />
-          <NavigationProperty Name="ControlPlanItems" Relationship="labdbModel.method_to_control_plan_item" FromRole="Method" ToRole="control_plan_items" />
           <NavigationProperty Name="SubMethods" Relationship="labdbModel.method_to_measurement1" FromRole="Method" ToRole="sub_methods" />
         </EntityType>
         <EntityType Name="Organization">
@@ -2086,6 +2087,7 @@
           <NavigationProperty Name="Overrides" Relationship="labdbModel.overridden_to_requirement" FromRole="Requirement" ToRole="Requirement1" />
           <NavigationProperty Name="Overridden" Relationship="labdbModel.overridden_to_requirement" FromRole="Requirement1" ToRole="Requirement" />
           <NavigationProperty Name="TaskItems" Relationship="labdbModel.requirement_to_task_item" FromRole="Requirement" ToRole="task_items" />
+          <NavigationProperty Name="control_plan_items" Relationship="labdbModel.requirement_to_control_plan" FromRole="Requirement" ToRole="ControlPlanItem" />
         </EntityType>
         <EntityType Name="Sample">
           <Key>
@@ -2907,10 +2909,6 @@
             <End Role="control_plans" EntitySet="ControlPlans" />
             <End Role="control_plan_items" EntitySet="ControlPlanItems1" />
           </AssociationSet>
-          <AssociationSet Name="method_to_control_plan_item" Association="labdbModel.method_to_control_plan_item">
-            <End Role="Method" EntitySet="Methods" />
-            <End Role="control_plan_items" EntitySet="ControlPlanItems1" />
-          </AssociationSet>
           <AssociationSet Name="specification_to_control_plan" Association="labdbModel.specification_to_control_plan">
             <End Role="Specification" EntitySet="Specifications" />
             <End Role="control_plans" EntitySet="ControlPlans" />
@@ -3028,6 +3026,10 @@
           <AssociationSet Name="person_role_to_role_mapping" Association="labdbModel.person_role_to_role_mapping">
             <End Role="person_roles" EntitySet="PersonRoles" />
             <End Role="person_role_mappings" EntitySet="PersonRoleMappings" />
+          </AssociationSet>
+          <AssociationSet Name="requirement_to_control_plan" Association="labdbModel.requirement_to_control_plan">
+            <End Role="Requirement" EntitySet="Requirements" />
+            <End Role="ControlPlanItem" EntitySet="ControlPlanItems1" />
           </AssociationSet>
         </EntityContainer>
         <Association Name="overridden_to_requirement">
@@ -3246,9 +3248,9 @@
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" a:SetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <Property Name="ControlPlanID" Type="Int32" Nullable="false" a:SetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
-          <Property Name="MethodID" Type="Int32" Nullable="false" a:SetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="ControlPlan" Relationship="labdbModel.control_plan_to_item" FromRole="control_plan_items" ToRole="control_plans" />
-          <NavigationProperty Name="Method" Relationship="labdbModel.method_to_control_plan_item" FromRole="control_plan_items" ToRole="Method" />
+          <Property Name="RequirementID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Requirement" Relationship="labdbModel.requirement_to_control_plan" FromRole="ControlPlanItem" ToRole="Requirement" />
         </EntityType>
         <EntityType Name="ControlPlan">
           <Key>
@@ -3271,18 +3273,6 @@
             </Principal>
             <Dependent Role="control_plan_items">
               <PropertyRef Name="ControlPlanID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="method_to_control_plan_item">
-          <End Type="labdbModel.Method" Role="Method" Multiplicity="1" />
-          <End Type="labdbModel.ControlPlanItem" Role="control_plan_items" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Method">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="control_plan_items">
-              <PropertyRef Name="MethodID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -3784,6 +3774,20 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="requirement_to_control_plan">
+          <End Type="labdbModel.Requirement" Role="Requirement" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="labdbModel.ControlPlanItem" Role="ControlPlanItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Requirement">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ControlPlanItem">
+              <PropertyRef Name="RequirementID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -4168,7 +4172,7 @@
           <EntitySetMapping Name="ControlPlanItems1">
             <EntityTypeMapping TypeName="labdbModel.ControlPlanItem">
               <MappingFragment StoreEntitySet="control_plan_items">
-                <ScalarProperty Name="MethodID" ColumnName="methodID" />
+                <ScalarProperty Name="RequirementID" ColumnName="requirementID" />
                 <ScalarProperty Name="ControlPlanID" ColumnName="control_planID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>

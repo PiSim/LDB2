@@ -27,6 +27,7 @@ namespace Instruments.ViewModels
         {
             _entities = entities;
             _principal = principal;
+            _parentDialog = parentDialog;
 
             _cancel = new DelegateCommand(
                 () =>

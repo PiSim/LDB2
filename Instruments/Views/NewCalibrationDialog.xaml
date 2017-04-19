@@ -15,13 +15,13 @@
             <ColumnDefinition Width="60"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="35"/>
-            <RowDefinition Height="35"/>
-            <RowDefinition Height="35"/>
-            <RowDefinition Height="35"/>
-            <RowDefinition Height="35"/>
             <RowDefinition/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
         </Grid.RowDefinitions>
 
         <Label Content="Numero report:"
@@ -81,6 +81,19 @@
                   Grid.Column="1"
                   Grid.ColumnSpan="3"
                   Grid.Row="4"
+                  Margin="5"/>
+
+        <Label Content="Primario:"
+               Grid.Column="0"
+               Grid.Row="5"
+               Margin="5"/>
+
+        <ComboBox ItemsSource="{Binding PrimaryList}"
+                  SelectedItem="{Binding SelectedPrimary, Mode=TwoWay}"
+                  DisplayMemberPath="Code"
+                  Grid.Column="1"
+                  Grid.ColumnSpan="3"
+                  Grid.Row="5"
                   Margin="5"/>
 
         <Button Content="Annulla"

@@ -1,4 +1,5 @@
 ﻿using DBManager;
+using Infrastructure.Wrappers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,6 @@ namespace Infrastructure
     public interface IReportServiceProvider
     {
         PurchaseOrder AddPOToExternalReport(ExternalReport target);
-        void ApplyControlPlan(List<ReportItemWrapper> reqList, ControlPlan conPlan);
+        void ApplyControlPlan(IEnumerable<ReportItemWrapper> reqList, ControlPlan conPlan);
     }
 }

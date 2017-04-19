@@ -16,9 +16,9 @@ namespace DBManager
     {
         public int ID { get; private set; }
         public int ControlPlanID { get; private set; }
-        public int MethodID { get; private set; }
+        public int RequirementID { get; set; }
     
         public virtual ControlPlan ControlPlan { get; set; }
-        public virtual Method Method { get; set; }
+        public virtual Requirement Requirement { get; set; }
     }
 }

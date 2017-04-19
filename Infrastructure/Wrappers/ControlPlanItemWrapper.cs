@@ -22,7 +22,7 @@ namespace Infrastructure
         {
             _parent = parent;
             _requirement = requirement;
-            _item = _parent.ControlPlanItems.FirstOrDefault(cpi => cpi.MethodID == _requirement.MethodID);
+            _item = _parent.ControlPlanItems.FirstOrDefault(cpi => cpi.Requirement.ID == _requirement.ID);
             _isSelected = _item != null;
         }
 
@@ -34,7 +34,7 @@ namespace Infrastructure
                 if (value)
                 {
                     _item = new ControlPlanItem();
-                    _item.Method = _requirement.Method;
+                    _item.Requirement = _requirement;
                     _parent.ControlPlanItems.Add(_item);
                 }
 

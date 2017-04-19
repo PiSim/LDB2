@@ -23,8 +23,8 @@ namespace Materials
         {
             _container.RegisterType<Object, Views.BatchInfo>(MaterialViewNames.BatchInfoView);
             _container.RegisterType<Object, Views.BatchMain>(MaterialViewNames.BatchesView);
-            _container.RegisterType<Views.ColourEdit>(MaterialViewNames.ColourEdit);
-            _container.RegisterType<Views.ColourMain>(MaterialViewNames.ColourMain);
+            _container.RegisterType<Object, Views.ColourEdit>(MaterialViewNames.ColourEdit);
+            _container.RegisterType<Object, Views.ColourMain>(MaterialViewNames.ColourMain);
             _container.RegisterType<Object, Views.SampleLogView>(MaterialViewNames.SampleLogView);
 
             _container.RegisterType<Views.BatchPickerDialog>();
