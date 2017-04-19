@@ -16,6 +16,7 @@
 -Corretto errore in ProjectCreationDialog che impediva la creazione di nuovi progetti
 -Aggiunta procedura creazione nuova organizzazione
 -*Rivista implementazione piani di controllo per evitare errori in caso di metodi ripetuti
+-*Aggiunto metodo per l'applicazione di un piano di controllo ad una lista requisiti in ReportServiceProvider
 -*Aggiunta funzionalità piano di controllo alla creazione di un report
 
 v 0.4.2 -- 04/04/2017
