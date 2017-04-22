@@ -24,6 +24,9 @@ namespace User
             _container.RegisterType<Object, Views.CurrentUserMain>(UserViewNames.CurrentUserMain);
 
             _container.RegisterType<ViewModels.CurrentUserMainViewModel>();
+
+            _container.RegisterType<IUserServiceProvider, UserServiceProvider>(new ContainerControlledLifetimeManager());
+            _container.Resolve<IUserServiceProvider>();
         }
     }
 }

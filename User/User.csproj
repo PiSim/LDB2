@@ -116,6 +116,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="UserServiceProvider.cs" />
     <Compile Include="ViewModels\CurrentUserMainViewModel.cs" />
     <Compile Include="Views\CurrentUserMain.xaml.cs">
       <DependentUpon>CurrentUserMain.xaml</DependentUpon>

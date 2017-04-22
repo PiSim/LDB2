@@ -13,7 +13,7 @@
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        
+
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -22,12 +22,6 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        
-        <Button Content="Esegui"
-                Command="{Binding RunMethodCommand}"
-                Grid.Column="0"
-                Grid.Row="0"
-                Margin="5"/>
 
         <TextBox Text="{Binding Name, Mode=TwoWay}"
                  Grid.Column="0"

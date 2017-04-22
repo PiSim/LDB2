@@ -22,8 +22,8 @@ namespace DBManager
             this.Tests = new HashSet<Test>();
             this.Tasks = new HashSet<Task>();
             this.Users = new HashSet<User>();
-            this.calibration_reports = new HashSet<CalibrationReport>();
-            this.person_role_mappings = new HashSet<PersonRoleMapping>();
+            this.CalibrationReports = new HashSet<CalibrationReport>();
+            this.RoleMappings = new HashSet<PersonRoleMapping>();
         }
     
         public int ID { get; private set; }
@@ -41,8 +41,8 @@ namespace DBManager
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<User> Users { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<CalibrationReport> calibration_reports { get; set; }
+        public virtual ICollection<CalibrationReport> CalibrationReports { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PersonRoleMapping> person_role_mappings { get; set; }
+        public virtual ICollection<PersonRoleMapping> RoleMappings { get; set; }
     }
 }

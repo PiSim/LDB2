@@ -257,7 +257,7 @@
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="name" Type="varchar" MaxLength="45" Nullable="false" />
           <Property Name="description" Type="varchar" MaxLength="45" />
         </EntityType>
@@ -1997,8 +1997,8 @@
           <NavigationProperty Name="Tests" Relationship="Self.operatorID" FromRole="people" ToRole="tests" />
           <NavigationProperty Name="Tasks" Relationship="Self.requester_to_task" FromRole="people" ToRole="tasks" />
           <NavigationProperty Name="Users" Relationship="labdbModel.person_to_user" FromRole="Person" ToRole="User" />
-          <NavigationProperty Name="calibration_reports" Relationship="labdbModel.operator_to_calibration_report" FromRole="Person" ToRole="calibration_reports" />
-          <NavigationProperty Name="person_role_mappings" Relationship="labdbModel.person_to_role_mapping" FromRole="Person" ToRole="person_role_mappings" />
+          <NavigationProperty Name="CalibrationReports" Relationship="labdbModel.operator_to_calibration_report" FromRole="Person" ToRole="calibration_reports" />
+          <NavigationProperty Name="RoleMappings" Relationship="labdbModel.person_to_role_mapping" FromRole="Person" ToRole="person_role_mappings" />
         </EntityType>
         <EntityType Name="Project">
           <Key>

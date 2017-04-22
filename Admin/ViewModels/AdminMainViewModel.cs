@@ -1,4 +1,6 @@
-﻿using Microsoft.Practices.Unity;
+﻿using DBManager;
+using Infrastructure;
+using Microsoft.Practices.Unity;
 using Prism.Commands;
 using Prism.Mvvm;
 using System;
@@ -11,14 +13,19 @@ namespace Admin.ViewModels
 {
     public class AdminMainViewModel : BindableBase
     {
-        DelegateCommand _newOrganizationRole, _newUser, _newUserRole, _runMethod;
+        private AdminServiceProvider _adminServiceProvider;
+        private DBEntities _entities;
+        private DelegateCommand _newOrganizationRole, _newPersonRole, _newUser, _newUserRole, _runMethod;
+        private IUserServiceProvider _userServiceProvider;
         private string _name;
-        private UnityContainer _container;
 
-        public AdminMainViewModel(ServiceProvider services,
-                                    UnityContainer container) : base()
+        public AdminMainViewModel(AdminServiceProvider services,
+                                    DBEntities entities,
+                                    IUserServiceProvider userServiceProvider) : base()
         {
-            _container = container;
+            _adminServiceProvider = services;
+            _entities = entities;
+            _userServiceProvider = userServiceProvider;
 
             _newOrganizationRole = new DelegateCommand(
                 () =>
@@ -26,15 +33,17 @@ namespace Admin.ViewModels
                     services.AddOrganizationRole(_name);
                 });
 
+            _newPersonRole = new DelegateCommand(
+                () =>
+                {
+                    services.AddPersonRole();
+                    OnPropertyChanged("PersonRoleList");
+                });
+
             _newUser = new DelegateCommand(
                 () =>
                 {
-                    Views.NewUserDialog dialog = _container.Resolve<Views.NewUserDialog>();
-
-                    if (dialog.ShowDialog() == true)
-                    {
-
-                    }
+                    
                 });
 
             _newUserRole = new DelegateCommand(
@@ -59,6 +68,11 @@ namespace Admin.ViewModels
             }
         }
 
+        public DelegateCommand AddPersonRoleCommand
+        {
+            get { return _newPersonRole; }
+        }
+
         public DelegateCommand NewOrganizationRoleCommand
         {
             get { return _newOrganizationRole; }
@@ -72,6 +86,11 @@ namespace Admin.ViewModels
         public DelegateCommand NewUserCommand
         {
             get { return _newUser; }
+        }
+
+        public List<PersonRole> PersonRoleList
+        {
+            get { return new List<PersonRole>(_entities.PersonRoles); }
         }
 
         public DelegateCommand RunMethodCommand

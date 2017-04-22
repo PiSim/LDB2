@@ -125,6 +125,7 @@
     <Compile Include="IProjectServiceProvider.cs" />
     <Compile Include="IReportServiceProvider.cs" />
     <Compile Include="ITaskServiceProvider.cs" />
+    <Compile Include="IUserServiceProvider.cs" />
     <Compile Include="MaterialViewNames.cs" />
     <Compile Include="NavigationToken.cs" />
     <Compile Include="OrganizationRoleNames.cs" />
