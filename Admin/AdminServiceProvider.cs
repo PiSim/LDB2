@@ -1,16 +1,21 @@
+using Controls.Views;
 using DBManager;
+using Microsoft.Practices.Unity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 
-public class ServiceProvider
+public class AdminServiceProvider
 {
     private DBEntities _entities;
-    
-    public ServiceProvider(DBEntities entities)
+    private IUnityContainer _container;
+
+    public AdminServiceProvider(DBEntities entities,
+                                IUnityContainer container)
     {
         _entities = entities;
+        _container = container;
     }
 
     public void AddOrganizationRole(string name)
@@ -52,7 +57,33 @@ public class ServiceProvider
 
         _entities.SaveChanges();
     }
-       
+
+    public void AddPersonRole()
+    {
+        StringInputDialog addPersonRoleDialog = _container.Resolve<StringInputDialog>();
+        addPersonRoleDialog.Title = "Creazione nuovo Ruolo Persona";
+        addPersonRoleDialog.Message = "Nome:";
+
+        if (addPersonRoleDialog.ShowDialog() != true)
+            return;
+
+        PersonRole newRole = new PersonRole();
+        newRole.Name = addPersonRoleDialog.InputString;
+        newRole.Description = "";
+
+        _entities.PersonRoles.Add(newRole);
+
+        foreach (Person per in _entities.People)
+        {
+            PersonRoleMapping newMapping = new PersonRoleMapping();
+            newMapping.Person = per;
+            newMapping.IsSelected = false;
+            newRole.RoleMappings.Add(newMapping);
+        }
+
+        _entities.SaveChanges();
+    }
+
     public void BuildOrganizationRoles()
     {
         List<Organization> tempOrgList = new List<Organization>(_entities.Organizations);

@@ -26,6 +26,8 @@ namespace DBManager
         public int laboratoryID { get; set; }
         public int referenceID { get; set; }
         public int instrumentID { get; set; }
+        public string Notes { get; set; }
+        public string Result { get; set; }
     
         public virtual Instrument Instrument { get; set; }
         public virtual Organization Laboratory { get; set; }

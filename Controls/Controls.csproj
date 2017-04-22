@@ -118,6 +118,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="ViewModels\NewPODialogViewModel.cs" />
+    <Compile Include="ViewModels\StringInputDialogViewModel.cs" />
     <Compile Include="ViewModels\StatusBarViewModel.cs" />
     <Compile Include="ViewModels\ToolbarViewModel.cs" />
     <Compile Include="Views\FileList.xaml.cs">
@@ -125,6 +126,9 @@
     </Compile>
     <Compile Include="Views\NewPODialog.xaml.cs">
       <DependentUpon>NewPODialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\StringInputDialog.xaml.cs">
+      <DependentUpon>StringInputDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\StatusBar.xaml.cs">
       <DependentUpon>StatusBar.xaml</DependentUpon>
@@ -166,6 +170,10 @@
     <Page Include="Views\NewPODialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\StringInputDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\StatusBar.xaml">
       <SubType>Designer</SubType>

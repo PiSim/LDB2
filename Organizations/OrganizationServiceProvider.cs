@@ -1,4 +1,5 @@
-﻿using DBManager;
+﻿using Controls.Views;
+using DBManager;
 using Infrastructure;
 using Microsoft.Practices.Unity;
 using Prism.Events;
@@ -27,12 +28,14 @@ namespace Organizations
         
         public Organization CreateNewOrganization()
         {
-            Views.OrganizationCreationDialog creationDialog = _container.Resolve<Views.OrganizationCreationDialog>();
+            StringInputDialog creationDialog = _container.Resolve<StringInputDialog>();
+            creationDialog.Title = "Crea nuovo Ente";
+
             if (creationDialog.ShowDialog() == true)
             {
                 Organization output = new Organization();
                 output.Category = "";
-                output.Name = creationDialog.OrganizationName;
+                output.Name = creationDialog.InputString;
                 foreach (OrganizationRole orr in _entities.OrganizationRoles)
                 {
                     OrganizationRoleMapping tempORM = new OrganizationRoleMapping();

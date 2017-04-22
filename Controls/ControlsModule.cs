@@ -19,6 +19,8 @@ namespace Controls
 
         public void Initialize()
         {
+            _container.RegisterType<Views.StringInputDialog>();
+
             _container.RegisterType<ViewModels.StatusBarViewModel>();
 
             _regionManager.RegisterViewWithRegion(RegionNames.ToolbarRegion, 

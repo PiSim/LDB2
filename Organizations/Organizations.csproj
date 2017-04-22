@@ -117,11 +117,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="ViewModels\OrganizationCreationViewModel.cs" />
     <Compile Include="ViewModels\OrganizationsMainViewModel.cs" />
-    <Compile Include="Views\OrganizationCreationDialog.xaml.cs">
-      <DependentUpon>OrganizationCreationDialog.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\OrganizationsMain.xaml.cs">
       <DependentUpon>OrganizationsMain.xaml</DependentUpon>
     </Compile>
@@ -164,10 +160,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Views\OrganizationCreationDialog.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\OrganizationsMain.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

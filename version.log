@@ -18,6 +18,8 @@
 -Rivista implementazione piani di controllo per evitare errori in caso di metodi ripetuti
 -Aggiunto metodo per l'applicazione di un piano di controllo ad una lista requisiti in ReportServiceProvider
 -Aggiunta funzionalità piano di controllo alla creazione di un report
+-Implementato dialogo generico per l'inserimento stringhe
+-Implementato metodo per la creazione di Ruoli persona
 
 v 0.4.2 -- 04/04/2017
 

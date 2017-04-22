@@ -13,22 +13,28 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace Organizations.Views
+namespace Controls.Views
 {
     /// <summary>
     /// Interaction logic for OrganizationCreationDialog.xaml
     /// </summary>
-    public partial class OrganizationCreationDialog : Window
+    public partial class StringInputDialog : Window
     {
-        public OrganizationCreationDialog(DBEntities entities)
+        public StringInputDialog()
         {
-            DataContext = new ViewModels.OrganizationCreationViewModel(entities, this);
+            DataContext = new ViewModels.StringInputDialogViewModel(this);
             InitializeComponent();
         }
 
-        public string OrganizationName
+        public string InputString
         {
-            get { return (DataContext as ViewModels.OrganizationCreationViewModel).OrganizationName; }
+            get { return (DataContext as ViewModels.StringInputDialogViewModel).InputString; }
+        }
+
+        public string Message
+        {
+            get { return (DataContext as ViewModels.StringInputDialogViewModel).Message; }
+            set { (DataContext as ViewModels.StringInputDialogViewModel).Message = value; }
         }
     }
 }

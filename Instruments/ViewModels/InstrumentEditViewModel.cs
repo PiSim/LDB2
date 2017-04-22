@@ -15,18 +15,21 @@ namespace Instruments.ViewModels
     public class InstrumentEditViewModel : BindableBase
     {
         private DBEntities _entities;
+        private DBPrincipal _principal;
         private DelegateCommand _addCalibration, _addMaintenanceEvent;
         private EventAggregator _eventAggregator;
         private IInstrumentServiceProvider _instrumentServiceProvider;
         private Instrument _instance;
 
         public InstrumentEditViewModel(DBEntities entities, 
+                                    DBPrincipal principal,
                                     EventAggregator aggregator,
                                     IInstrumentServiceProvider instrumentServiceProvider) : base()
         {
             _entities = entities;
             _eventAggregator = aggregator;
             _instrumentServiceProvider = instrumentServiceProvider;
+            _principal = principal;
 
             _eventAggregator.GetEvent<CommitRequested>().Subscribe(() => _entities.SaveChanges());
 

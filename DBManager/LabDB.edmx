@@ -50,6 +50,8 @@
           <Property Name="laboratoryID" Type="int" Nullable="false" />
           <Property Name="referenceID" Type="int" Nullable="false" />
           <Property Name="instrumentID" Type="int" Nullable="false" />
+          <Property Name="notes" Type="varchar" MaxLength="200" />
+          <Property Name="result" Type="varchar" MaxLength="45" Nullable="false" />
         </EntityType>
         <EntityType Name="colours">
           <Key>
@@ -294,7 +296,7 @@
           <Property Name="number" Type="char" MaxLength="10" Nullable="false" />
           <Property Name="total" Type="float" Nullable="false" />
           <Property Name="currencyID" Type="int" Nullable="false" />
-          <Property Name="date" Type="date" />
+          <Property Name="date" Type="date" Nullable="false" />
           <Property Name="organizationID" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="recipes">
@@ -1174,7 +1176,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="requirement_to_control_plan">
+        <Association Name="requirement_to_control_plan_item">
           <End Role="requirements" Type="Self.requirements" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
@@ -1729,7 +1731,7 @@
             <End Role="people" EntitySet="people" />
             <End Role="tasks" EntitySet="tasks" />
           </AssociationSet>
-          <AssociationSet Name="requirement_to_control_plan" Association="Self.requirement_to_control_plan">
+          <AssociationSet Name="requirement_to_control_plan_item" Association="Self.requirement_to_control_plan_item">
             <End Role="requirements" EntitySet="requirements" />
             <End Role="control_plan_items" EntitySet="control_plan_items" />
           </AssociationSet>
@@ -3315,6 +3317,8 @@
           <NavigationProperty Name="Tech" Relationship="labdbModel.operator_to_calibration_report" FromRole="calibration_reports" ToRole="Person" />
           <NavigationProperty Name="Reference" Relationship="labdbModel.reference_to_calibration_report" FromRole="calibration_reports" ToRole="instrument" />
           <NavigationProperty Name="CalibrationFiles" Relationship="labdbModel.calibration_report_to_files" FromRole="calibration_reports" ToRole="calibration_files" />
+          <Property Name="Notes" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="Result" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="InstrumentType">
           <Key>
@@ -4200,6 +4204,8 @@
           <EntitySetMapping Name="CalibrationReports">
             <EntityTypeMapping TypeName="labdbModel.CalibrationReport">
               <MappingFragment StoreEntitySet="calibration_reports">
+                <ScalarProperty Name="Result" ColumnName="result" />
+                <ScalarProperty Name="Notes" ColumnName="notes" />
                 <ScalarProperty Name="instrumentID" ColumnName="instrumentID" />
                 <ScalarProperty Name="referenceID" ColumnName="referenceID" />
                 <ScalarProperty Name="laboratoryID" ColumnName="laboratoryID" />

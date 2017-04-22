@@ -23,9 +23,7 @@ namespace Organizations
             _container.RegisterType<ViewModels.OrganizationsMainViewModel>();
 
             _container.RegisterType<Object, Views.OrganizationsMain>(OrganizationViewNames.OrganizationMainView);
-
-            _container.RegisterType<Views.OrganizationCreationDialog>();
-
+            
             _regionManager.RegisterViewWithRegion(RegionNames.MainNavigationRegion,
                                                 typeof(Views.OrganizationsNavigationItem));
 

@@ -7,20 +7,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Organizations.ViewModels
+namespace Controls.ViewModels
 {
-    public class OrganizationCreationViewModel : BindableBase
+    public class StringInputDialogViewModel : BindableBase
     {
         private DBEntities _entities;
         private DelegateCommand _cancel, _confirm;
-        private string _organizationName;
-        private Views.OrganizationCreationDialog _parentDialog;
+        private string _message, _payload;
+        private Views.StringInputDialog _parentDialog;
 
-        public OrganizationCreationViewModel(DBEntities entities,
-                                            Views.OrganizationCreationDialog parentDialog) : base()
+        public StringInputDialogViewModel(Views.StringInputDialog parentDialog) : base()
         {
-            _entities = entities;
             _parentDialog = parentDialog;
+            _message = "Generic message";
 
             _cancel = new DelegateCommand(
                 () =>
@@ -45,12 +44,22 @@ namespace Organizations.ViewModels
             get { return _confirm; }
         }
         
-        public string OrganizationName
+        public string InputString
         {
-            get { return _organizationName; }
+            get { return _payload; }
             set
             {
-                _organizationName = value;
+                _payload = value;
+            }
+        }
+
+        public string Message
+        {
+            get { return _message; }
+            set
+            {
+                _message = value;
+                OnPropertyChanged("Message");
             }
         }
     }
