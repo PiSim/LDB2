@@ -48,7 +48,7 @@ namespace Projects.ViewModels
                 rpt =>
                 {
                     if (rpt.Batch.Material.Construction.ProjectID == _projectInstance.ID)
-                        OnPropertyChanged("ReportList");
+                        RaisePropertyChanged("ReportList");
                 });
 
             #endregion
@@ -70,9 +70,9 @@ namespace Projects.ViewModels
                 () =>
                 {
                     _projectServiceProvider.AlterProjectInfo(_projectInstance);
-                    OnPropertyChanged("LeaderName");
-                    OnPropertyChanged("Name");
-                    OnPropertyChanged("OemName");
+                    RaisePropertyChanged("LeaderName");
+                    RaisePropertyChanged("Name");
+                    RaisePropertyChanged("OemName");
                 });
 
             _newReport = new DelegateCommand(
@@ -134,7 +134,7 @@ namespace Projects.ViewModels
             private set
             {
                 _assignedConstructions = value;
-                OnPropertyChanged("AssignedConstructions");
+                RaisePropertyChanged("AssignedConstructions");
             }
         }
 
@@ -244,14 +244,14 @@ namespace Projects.ViewModels
                 
                 SelectedBatch = null;
 
-                OnPropertyChanged("BatchList");
-                OnPropertyChanged("Description");
-                OnPropertyChanged("ExternalReportList");
-                OnPropertyChanged("LeaderName");
-                OnPropertyChanged("Name");
-                OnPropertyChanged("OemName");
-                OnPropertyChanged("ReportList");
-                OnPropertyChanged("TaskList");
+                RaisePropertyChanged("BatchList");
+                RaisePropertyChanged("Description");
+                RaisePropertyChanged("ExternalReportList");
+                RaisePropertyChanged("LeaderName");
+                RaisePropertyChanged("Name");
+                RaisePropertyChanged("OemName");
+                RaisePropertyChanged("ReportList");
+                RaisePropertyChanged("TaskList");
             }
         }
 
@@ -270,7 +270,7 @@ namespace Projects.ViewModels
             set 
             { 
                 _selectedAssigned = value; 
-                OnPropertyChanged("SelectedAssigned");
+                RaisePropertyChanged("SelectedAssigned");
                 _unassignConstruction.RaiseCanExecuteChanged();
             }
         }
@@ -282,7 +282,7 @@ namespace Projects.ViewModels
             {
                 _selectedBatch = value;
                 _openBatch.RaiseCanExecuteChanged();
-                OnPropertyChanged("SelectedBatch");
+                RaisePropertyChanged("SelectedBatch");
             }
         }
 
@@ -312,7 +312,7 @@ namespace Projects.ViewModels
             set 
             { 
                 _selectedUnassigned = value; 
-                OnPropertyChanged("SelectedUnassigned");
+                RaisePropertyChanged("SelectedUnassigned");
                 _assignConstruction.RaiseCanExecuteChanged();
             }
         }
@@ -339,7 +339,7 @@ namespace Projects.ViewModels
             private set
             {
                 _unassignedConstructions = value;
-                OnPropertyChanged("UnassignedConstructions");
+                RaisePropertyChanged("UnassignedConstructions");
             }
         }
     }        

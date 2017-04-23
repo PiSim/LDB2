@@ -48,7 +48,7 @@ namespace Specifications.ViewModels
                             _selectedIssue.StandardFiles.Add(temp);
                         }
 
-                        OnPropertyChanged("FileList");
+                        RaisePropertyChanged("FileList");
                     }
                 },
                 () => SelectedIssue != null);
@@ -169,7 +169,7 @@ namespace Specifications.ViewModels
             private set
             {
                 _issueList = value;
-                OnPropertyChanged("IssueList");
+                RaisePropertyChanged("IssueList");
             }
         }
 
@@ -181,11 +181,11 @@ namespace Specifications.ViewModels
                 _methodInstance = _entities.Methods.First(mtd => mtd.ID == value.ID);
                 Measurements = new ObservableCollection<SubMethod>(_methodInstance.SubMethods);
                 IssueList = new ObservableCollection<StandardIssue>(_methodInstance.Standard.StandardIssues);
-                OnPropertyChanged("Name");
-                OnPropertyChanged("Oem");
-                OnPropertyChanged("Property");
-                OnPropertyChanged("SpecificationList");
-                OnPropertyChanged("ResultList");
+                RaisePropertyChanged("Name");
+                RaisePropertyChanged("Oem");
+                RaisePropertyChanged("Property");
+                RaisePropertyChanged("SpecificationList");
+                RaisePropertyChanged("ResultList");
             }
         }
 
@@ -199,7 +199,7 @@ namespace Specifications.ViewModels
             private set 
             {
                 _measurementList = value;
-                OnPropertyChanged("Measurements");
+                RaisePropertyChanged("Measurements");
             }
         }
 
@@ -269,7 +269,7 @@ namespace Specifications.ViewModels
             set
             {
                 _selectedIssue = value;
-                OnPropertyChanged("FileList");
+                RaisePropertyChanged("FileList");
                 _addFile.RaiseCanExecuteChanged();
                 _removeIssue.RaiseCanExecuteChanged();
                 _setCurrent.RaiseCanExecuteChanged();
@@ -286,7 +286,7 @@ namespace Specifications.ViewModels
             {
                 _selectedMeasurement = value;
                 _removeMeasurement.RaiseCanExecuteChanged();
-                OnPropertyChanged("SelectedMeasurement");
+                RaisePropertyChanged("SelectedMeasurement");
             }
         }
 

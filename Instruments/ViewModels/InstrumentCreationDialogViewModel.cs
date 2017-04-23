@@ -86,7 +86,7 @@ namespace Instruments.ViewModels
             set
             {
                 _isUnderControl = value;
-                OnPropertyChanged("IsUnderControl");
+                RaisePropertyChanged("IsUnderControl");
             }
         }
 

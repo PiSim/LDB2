@@ -43,7 +43,7 @@ namespace Reports
                 else
                     _testInstance.Date = null;
                     
-                OnPropertyChanged("CompletionDate");
+                RaisePropertyChanged("CompletionDate");
             }
         }
 

@@ -83,7 +83,7 @@ namespace Reports.ViewModels
             set 
             { 
                 _author = value; 
-                OnPropertyChanged("Author");
+                RaisePropertyChanged("Author");
             }
         }
 
@@ -93,7 +93,7 @@ namespace Reports.ViewModels
             set
             {
                 _batchNumber = value;
-                OnPropertyChanged("BatchNumber");
+                RaisePropertyChanged("BatchNumber");
             }
         }
         
@@ -146,7 +146,7 @@ namespace Reports.ViewModels
             set
             {
                 _selectedControlPlan = value;
-                OnPropertyChanged("SelectedControlPlan");
+                RaisePropertyChanged("SelectedControlPlan");
                 if (value != null)
                 {
                     _reportServiceProvider.ApplyControlPlan(_requirementList, _selectedControlPlan);
@@ -166,7 +166,7 @@ namespace Reports.ViewModels
                     _versionList = new ObservableCollection<SpecificationVersion>(
                         _entities.SpecificationVersions.Where(sv => sv.SpecificationID == _selectedSpecification.ID));
                     
-                    OnPropertyChanged("VersionList");
+                    RaisePropertyChanged("VersionList");
                 }
                 
                 else
@@ -174,7 +174,7 @@ namespace Reports.ViewModels
                     
                 SelectedVersion = _versionList.FirstOrDefault(sv => sv.IsMain);
                 SelectedControlPlan = null;
-                OnPropertyChanged("ControlPlanList");
+                RaisePropertyChanged("ControlPlanList");
             }
         }
 
@@ -192,7 +192,7 @@ namespace Reports.ViewModels
                     foreach (Requirement rq in tempReq)
                         RequirementList.Add(new ReportItemWrapper(rq));
                 }
-                OnPropertyChanged("SelectedVersion");
+                RaisePropertyChanged("SelectedVersion");
             }
         }
         

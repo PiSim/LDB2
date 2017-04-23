@@ -46,7 +46,7 @@ namespace Instruments.ViewModels
                 () => SelectedInstrument != null);
 
             _eventAggregator.GetEvent<InstrumentListUpdateRequested>().Subscribe(
-                () => OnPropertyChanged("InstrumentList"));
+                () => RaisePropertyChanged("InstrumentList"));
 
         }
 

@@ -11,7 +11,6 @@ namespace Controls.ViewModels
 {
     public class StringInputDialogViewModel : BindableBase
     {
-        private DBEntities _entities;
         private DelegateCommand _cancel, _confirm;
         private string _message, _payload;
         private Views.StringInputDialog _parentDialog;
@@ -59,7 +58,7 @@ namespace Controls.ViewModels
             set
             {
                 _message = value;
-                OnPropertyChanged("Message");
+                RaisePropertyChanged("Message");
             }
         }
     }

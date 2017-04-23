@@ -1,10 +1,10 @@
 ﻿using DBManager;
 using Infrastructure;
 using Infrastructure.Events;
-using Microsoft.Practices.Prism.Mvvm;
 using Microsoft.Practices.Unity;
 using Prism.Commands;
 using Prism.Events;
+using Prism.Mvvm;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -70,7 +70,7 @@ namespace Specifications.ViewModels
             set
             {
                 _selectedMethod = value;
-                OnPropertyChanged("SelectedMethod");
+                RaisePropertyChanged("SelectedMethod");
                 NavigationToken token = new NavigationToken(ViewNames.MethodEditView,
                                                             _selectedMethod,
                                                             RegionNames.MethodEditRegion);

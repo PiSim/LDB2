@@ -82,7 +82,7 @@ namespace Admin.ViewModels
             set
             {
                 _password = value;
-                OnPropertyChanged("Password");
+                RaisePropertyChanged("Password");
                 _confirm.RaiseCanExecuteChanged();
             }
         }
@@ -93,7 +93,7 @@ namespace Admin.ViewModels
             set
             {
                 _passwordConfirmation = value;
-                OnPropertyChanged("PasswordConfirmation");
+                RaisePropertyChanged("PasswordConfirmation");
                 _confirm.RaiseCanExecuteChanged();
             }
         }

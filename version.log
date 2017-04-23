@@ -19,7 +19,9 @@
 -Aggiunto metodo per l'applicazione di un piano di controllo ad una lista requisiti in ReportServiceProvider
 -Aggiunta funzionalità piano di controllo alla creazione di un report
 -Implementato dialogo generico per l'inserimento stringhe
+-Aggiunto modulo People
 -Implementato metodo per la creazione di Ruoli persona
+-Implementazione parziale vista selezione ruoli persona, derivata da OrganizationsMain
 
 v 0.4.2 -- 04/04/2017
 
@@ -29,7 +31,7 @@ v 0.4.2 -- 04/04/2017
 -Modulo instruments: aggiunti NewCalibrationDialog e NewMaintenanceEventDialog 
 -Creati eventi ReportCreationRequested e ReportCreated
 -Creata classe di servizio ReportServiceProvider, registrata come singleton
--Trasferito ReportCreationDi-alog dal modulo Controls a Reports
+-Trasferito ReportCreationDialog dal modulo Controls a Reports
 -Creata classe di servizio TaskServiceProvider, registrata come singleton
 -Registrata classe di servizio MaterialServiceProvider come singleton
 -Spostate varie finestre di dialogo dal modulo Controls a Materials

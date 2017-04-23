@@ -10,7 +10,6 @@ namespace Infrastructure.Tokens
     public class NewTaskToken
     {
         private readonly Batch _batch;
-        private readonly Person _requester;
         private readonly Project _project;
         private readonly Specification _specification;
         private readonly SpecificationVersion _specVersion;
@@ -30,6 +29,16 @@ namespace Infrastructure.Tokens
             _project = prj;
         }
         
+        public NewTaskToken(Specification spec)
+        {
+            _specification = spec;
+        }
+
+        public NewTaskToken(SpecificationVersion specVersion)
+        {
+            _specVersion = specVersion;
+        }
+
         public Batch Batch
         {
             get { return _batch; }
@@ -38,11 +47,6 @@ namespace Infrastructure.Tokens
         public Project Project
         {
             get { return _project; }
-        }
-
-        public Person Requester
-        {
-            get { return _requester; }
         }
 
         public Specification Specification

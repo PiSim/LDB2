@@ -109,7 +109,7 @@ namespace Tasks.ViewModels
                     _versionList = new ObservableCollection<SpecificationVersion>(
                         _entities.SpecificationVersions.Where(sv => sv.SpecificationID == _selectedSpecification.ID));
 
-                    OnPropertyChanged("VersionList");
+                    RaisePropertyChanged("VersionList");
                 }
 
 
@@ -134,7 +134,7 @@ namespace Tasks.ViewModels
                     foreach (Requirement rq in tempReq)
                         RequirementList.Add(new ReportItemWrapper(rq));
                 }
-                OnPropertyChanged("SelectedVersion");
+                RaisePropertyChanged("SelectedVersion");
             }
         }
 
@@ -154,7 +154,7 @@ namespace Tasks.ViewModels
             set
             {
                 _requirementList = value;
-                OnPropertyChanged("RequirementList");
+                RaisePropertyChanged("RequirementList");
             }
         }
     }

@@ -1,6 +1,5 @@
 ﻿using Infrastructure;
 using Microsoft.Practices.Unity;
-using Navigation;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -36,7 +36,7 @@ namespace Materials.ViewModels
             _eventAggregator = aggregator;
 
             _eventAggregator.GetEvent<ReportCreated>().Subscribe(
-                rpt => OnPropertyChanged("ReportList")); 
+                rpt => RaisePropertyChanged("ReportList")); 
                
             _newReport = new DelegateCommand(
                 () => 
@@ -80,12 +80,12 @@ namespace Materials.ViewModels
                 SelectedExternalReport = null;
                 SelectedReport = null;
                 
-                OnPropertyChanged("ExternalReportList");
-                OnPropertyChanged("Samples");
-                OnPropertyChanged("Material");
-                OnPropertyChanged("Number");
-                OnPropertyChanged("Project");
-                OnPropertyChanged("ReportList");
+                RaisePropertyChanged("ExternalReportList");
+                RaisePropertyChanged("Samples");
+                RaisePropertyChanged("Material");
+                RaisePropertyChanged("Number");
+                RaisePropertyChanged("Project");
+                RaisePropertyChanged("ReportList");
             }
         }
         

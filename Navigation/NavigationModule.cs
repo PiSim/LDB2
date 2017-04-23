@@ -1,6 +1,4 @@
-﻿using Infrastructure;
-using Infrastructure.Events;
-using Prism.Events;
+﻿using Microsoft.Practices.Unity;
 using Prism.Modularity;
 using Prism.Regions;
 using System;
@@ -9,43 +7,18 @@ namespace Navigation
 {
     public class NavigationModule : IModule
     {
-        IRegionManager _regionManager;
-        IEventAggregator _eventAggregator;
+        private IUnityContainer _container;
 
-        public NavigationModule(RegionManager regionManager, IEventAggregator eventAggregator)
+        public NavigationModule(IUnityContainer container)
         {
-            _eventAggregator = eventAggregator;
-            _regionManager = regionManager;
+            _container = container;
         }
 
         public void Initialize()
         {
-            _eventAggregator.GetEvent<NavigateBackRequested>().Subscribe(() => OnNavigateBackRequested(), true);
-            _eventAggregator.GetEvent<NavigateForwardRequested>().Subscribe(() => OnNavigateForwardRequested(), true);
-            _eventAggregator.GetEvent<NavigationRequested>().Subscribe(tkn => OnNavigationRequested(tkn), true);
-        }
+            _container.RegisterType<NavigationServiceProvider>(new ContainerControlledLifetimeManager());
 
-        public void OnNavigateBackRequested()
-        {
-            var mainregion = _regionManager.Regions[RegionNames.MainRegion];
-            mainregion.NavigationService.Journal.GoBack();
-        }
-
-        public void OnNavigateForwardRequested()
-        {
-            var mainregion = _regionManager.Regions[RegionNames.MainRegion];
-            mainregion.NavigationService.Journal.GoForward();
-        }
-
-        public void OnNavigationRequested(NavigationToken token)
-        {
-            NavigationParameters parameters = new NavigationParameters();
-            parameters.Add("ObjectInstance", token.ObjectInstance);
-            _regionManager.RequestNavigate(
-                token.RegionName,
-                new Uri(token.ViewName, UriKind.Relative),
-                parameters
-                );
+            _container.Resolve<NavigationServiceProvider>();
         }
     }
 }

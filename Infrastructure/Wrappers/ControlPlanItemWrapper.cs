@@ -45,7 +45,7 @@ namespace Infrastructure
                 }
 
                 _isSelected = value;
-                OnPropertyChanged("IsSelected");
+                RaisePropertyChanged("IsSelected");
             }
         }
 

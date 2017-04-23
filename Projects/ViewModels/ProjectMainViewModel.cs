@@ -29,7 +29,7 @@ namespace Projects.ViewModels
             _eventAggregator = aggregator;
             _projectServiceProvider = projectServiceProvider;
 
-            _eventAggregator.GetEvent<ProjectListUpdateRequested>().Subscribe(() => OnPropertyChanged("ProjectList"));
+            _eventAggregator.GetEvent<ProjectListUpdateRequested>().Subscribe(() => RaisePropertyChanged("ProjectList"));
 
             _newProject = new DelegateCommand(
                 () =>
@@ -37,7 +37,7 @@ namespace Projects.ViewModels
                     Project tempProject = _projectServiceProvider.CreateNewProject();
                     if (tempProject != null)
                     {
-                        OnPropertyChanged("ProjectList");
+                        RaisePropertyChanged("ProjectList");
                     }
                 });
 

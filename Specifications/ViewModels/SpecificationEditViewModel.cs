@@ -56,7 +56,7 @@ namespace Specifications.ViewModels
                     temp.Name = "Nuovo Piano di Controllo";
                     _instance.ControlPlans.Add(temp);
                     SelectedControlPlan = temp;
-                    OnPropertyChanged("ControlPlanList");
+                    RaisePropertyChanged("ControlPlanList");
                 });
 
             _addFile = new DelegateCommand(
@@ -75,7 +75,7 @@ namespace Specifications.ViewModels
                             _selectedIssue.StandardFiles.Add(temp);
                         }
 
-                        OnPropertyChanged("FileList");
+                        RaisePropertyChanged("FileList");
                     }
                 });
 
@@ -100,7 +100,7 @@ namespace Specifications.ViewModels
                     _entities.AddTest(_instance, _selectedToAdd);
                     if (_requirementList != null)
                         
-                    OnPropertyChanged("MainVersionRequirements");
+                    RaisePropertyChanged("MainVersionRequirements");
                 },
                 () => _selectedToAdd != null);
 
@@ -175,8 +175,8 @@ namespace Specifications.ViewModels
                 () =>
                 {
                     _entities.Requirements.Remove(_selectedToRemove);
-                    OnPropertyChanged("MainVersionRequirements");
-                    OnPropertyChanged("RequirementList");
+                    RaisePropertyChanged("MainVersionRequirements");
+                    RaisePropertyChanged("RequirementList");
                 },
 
                 () => _selectedToRemove != null);
@@ -209,7 +209,7 @@ namespace Specifications.ViewModels
                 rpt =>
                 {
                     if (rpt.SpecificationVersion.SpecificationID == _instance.ID)
-                        OnPropertyChanged("ReportList");
+                        RaisePropertyChanged("ReportList");
                 });
 
         }
@@ -294,7 +294,7 @@ namespace Specifications.ViewModels
             set
             {
                 _filterProperty = value;
-                OnPropertyChanged("FilteredMethods");
+                RaisePropertyChanged("FilteredMethods");
             }
         }
 
@@ -402,8 +402,8 @@ namespace Specifications.ViewModels
                         _controlPlanItemsList.Add(new ControlPlanItemWrapper(_selectedControlPlan, rr));
                 }
 
-                OnPropertyChanged("SelectedControlPlan");
-                OnPropertyChanged("ControlPlanItemsList");
+                RaisePropertyChanged("SelectedControlPlan");
+                RaisePropertyChanged("ControlPlanItemsList");
                 _removeControlPlan.RaiseCanExecuteChanged();
             }
         }
@@ -414,7 +414,7 @@ namespace Specifications.ViewModels
             set 
             { 
                 _selectedFile = value;
-                OnPropertyChanged("SelectedFile");
+                RaisePropertyChanged("SelectedFile");
                 OpenFileCommand.RaiseCanExecuteChanged();
                 RemoveFileCommand.RaiseCanExecuteChanged();
             }
@@ -428,8 +428,8 @@ namespace Specifications.ViewModels
                 _selectedIssue = value;
                 _setCurrent.RaiseCanExecuteChanged();
                 _removeIssue.RaiseCanExecuteChanged();
-                OnPropertyChanged("SelectedIssue");
-                OnPropertyChanged("FileList");
+                RaisePropertyChanged("SelectedIssue");
+                RaisePropertyChanged("FileList");
             }
         }
 
@@ -449,11 +449,11 @@ namespace Specifications.ViewModels
             set
             {
                 _selectedVersion = value;
-                OnPropertyChanged("SelectedVersionIsNotMain");
+                RaisePropertyChanged("SelectedVersionIsNotMain");
                 if (_selectedVersion != null)
                 {
                     GenerateRequirementList();
-                    OnPropertyChanged("RequirementList");
+                    RaisePropertyChanged("RequirementList");
                 }
             }
         }
@@ -480,7 +480,7 @@ namespace Specifications.ViewModels
             {
                 _selectedToRemove = value;
                 _removeTest.RaiseCanExecuteChanged();
-                OnPropertyChanged("SelectedToRemove");
+                RaisePropertyChanged("SelectedToRemove");
             }
         }
 
@@ -496,13 +496,13 @@ namespace Specifications.ViewModels
                 _versionList = new ObservableCollection<SpecificationVersion>(_instance.SpecificationVersions);
                 SelectedVersion = null;
 
-                OnPropertyChanged("ControlPlanList");
-                OnPropertyChanged("IssueList");
-                OnPropertyChanged("MainVersion");
-                OnPropertyChanged("MainVersionRequirements");
-                OnPropertyChanged("ReportList");
-                OnPropertyChanged("Standard");
-                OnPropertyChanged("VersionList");
+                RaisePropertyChanged("ControlPlanList");
+                RaisePropertyChanged("IssueList");
+                RaisePropertyChanged("MainVersion");
+                RaisePropertyChanged("MainVersionRequirements");
+                RaisePropertyChanged("ReportList");
+                RaisePropertyChanged("Standard");
+                RaisePropertyChanged("VersionList");
             }
         }
 

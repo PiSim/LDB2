@@ -54,6 +54,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		version.log = version.log
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "People", "People\People.csproj", "{133BCC97-79E7-4926-9852-2BB02E395189}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -120,6 +122,10 @@ Global
 		{C08F0724-A1A8-490D-BE56-2D196B0F877F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C08F0724-A1A8-490D-BE56-2D196B0F877F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C08F0724-A1A8-490D-BE56-2D196B0F877F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{133BCC97-79E7-4926-9852-2BB02E395189}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{133BCC97-79E7-4926-9852-2BB02E395189}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{133BCC97-79E7-4926-9852-2BB02E395189}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{133BCC97-79E7-4926-9852-2BB02E395189}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -139,5 +145,6 @@ Global
 		{820441F7-4E40-4536-9B31-6A30C7811E92} = {8F1F5AA4-B46F-4661-AAB0-490B2C80DA5C}
 		{8D1D2E26-45C1-421A-A2E0-0299CEAF1C42} = {8F1F5AA4-B46F-4661-AAB0-490B2C80DA5C}
 		{C08F0724-A1A8-490D-BE56-2D196B0F877F} = {8F1F5AA4-B46F-4661-AAB0-490B2C80DA5C}
+		{133BCC97-79E7-4926-9852-2BB02E395189} = {8F1F5AA4-B46F-4661-AAB0-490B2C80DA5C}
 	EndGlobalSection
 EndGlobal

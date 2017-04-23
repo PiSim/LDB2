@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Infrastructure;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,7 +19,7 @@ namespace Tasks.Views
     /// <summary>
     /// Interaction logic for TaskNavigationItem.xaml
     /// </summary>
-    public partial class TaskNavigationItem : UserControl, Navigation.IModuleNavigationTag
+    public partial class TaskNavigationItem : UserControl, IModuleNavigationTag
     {
         public TaskNavigationItem()
         {

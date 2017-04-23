@@ -1,9 +1,9 @@
 ﻿using DBManager;
 using Infrastructure;
 using Infrastructure.Events;
-using Microsoft.Practices.Prism.Mvvm;
 using Prism.Commands;
 using Prism.Events;
+using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -75,10 +75,10 @@ namespace Reports.ViewModels
                 {
                     _reportServiceProvider.AddPOToExternalReport(_instance);
                     _entities.Entry<ExternalReport>(_instance).Reload();
-                    OnPropertyChanged("OrderCurrency");
-                    OnPropertyChanged("OrderDate");
-                    OnPropertyChanged("OrderNumber");
-                    OnPropertyChanged("OrderPrice");
+                    RaisePropertyChanged("OrderCurrency");
+                    RaisePropertyChanged("OrderDate");
+                    RaisePropertyChanged("OrderNumber");
+                    RaisePropertyChanged("OrderPrice");
                 });
             
             _openBatch = new DelegateCommand(
@@ -181,29 +181,29 @@ namespace Reports.ViewModels
             set 
             {
                 _instance = value;
-                OnPropertyChanged("Currency");
-                OnPropertyChanged("Description");
+                RaisePropertyChanged("Currency");
+                RaisePropertyChanged("Description");
 
                 SelectedBatch = null;
 
                 _batchList = new ObservableCollection<Batch>
                     (_instance.BatchMappings.Select(btm => btm.Batch));
-                OnPropertyChanged("BatchList");
+                RaisePropertyChanged("BatchList");
 
                 _reportFiles = new ObservableCollection<ExternalReportFile>
                     (_instance.ExternalReportFiles);
-                OnPropertyChanged("ReportFiles");
-                OnPropertyChanged("ExternalLab");
-                OnPropertyChanged("InternalNumber");
-                OnPropertyChanged("SamplesSent");
-                OnPropertyChanged("OrderCurrency");
-                OnPropertyChanged("OrderDate");
-                OnPropertyChanged("OrderNumber");
-                OnPropertyChanged("OrderPrice");
-                OnPropertyChanged("Project");
-                OnPropertyChanged("ReportReceived");
-                OnPropertyChanged("RequestDone");
-                OnPropertyChanged("Samples");
+                RaisePropertyChanged("ReportFiles");
+                RaisePropertyChanged("ExternalLab");
+                RaisePropertyChanged("InternalNumber");
+                RaisePropertyChanged("SamplesSent");
+                RaisePropertyChanged("OrderCurrency");
+                RaisePropertyChanged("OrderDate");
+                RaisePropertyChanged("OrderNumber");
+                RaisePropertyChanged("OrderPrice");
+                RaisePropertyChanged("Project");
+                RaisePropertyChanged("ReportReceived");
+                RaisePropertyChanged("RequestDone");
+                RaisePropertyChanged("Samples");
             }
         }
         
@@ -359,7 +359,7 @@ namespace Reports.ViewModels
             set
             {
                 _selectedBatch = value;
-                OnPropertyChanged("SelectedBatch");
+                RaisePropertyChanged("SelectedBatch");
                 _openBatch.RaiseCanExecuteChanged();
                 _removeBatch.RaiseCanExecuteChanged();
             }

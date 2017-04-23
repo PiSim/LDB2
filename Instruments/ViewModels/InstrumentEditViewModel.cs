@@ -62,7 +62,7 @@ namespace Instruments.ViewModels
             set
             {
                 _instance = value;
-                OnPropertyChanged("Code");
+                RaisePropertyChanged("Code");
             }
         }
 

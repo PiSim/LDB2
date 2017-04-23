@@ -32,7 +32,7 @@ namespace Controls.ViewModels
             set
             {
                 _shownMessage = value;
-                OnPropertyChanged("ShownMessage");
+                RaisePropertyChanged("ShownMessage");
             }
         }
 

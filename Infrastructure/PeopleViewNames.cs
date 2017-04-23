@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Controls;
 
-namespace Navigation
+namespace Infrastructure
 {
-    public interface IModuleNavigationTag
+    public class PeopleViewNames
     {
-        string ViewName { get; }
+        public static string PeopleMainView { get { return "PeopleMain"; } }
     }
 }

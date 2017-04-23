@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Infrastructure;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,7 +19,7 @@ namespace Projects.Views
     /// <summary>
     /// Interaction logic for ProjectsNavigationItem.xaml
     /// </summary>
-    public partial class ProjectsNavigationItem : UserControl, Navigation.IModuleNavigationTag
+    public partial class ProjectsNavigationItem : UserControl, IModuleNavigationTag
     {
         public ProjectsNavigationItem()
         {

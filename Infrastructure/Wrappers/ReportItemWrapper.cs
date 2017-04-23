@@ -35,7 +35,7 @@ namespace Infrastructure.Wrappers
             set
             {
                 _isSelected = value;
-                OnPropertyChanged("IsSelected");
+                RaisePropertyChanged("IsSelected");
             }
         }
 

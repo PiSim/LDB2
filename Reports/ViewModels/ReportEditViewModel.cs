@@ -64,7 +64,7 @@ namespace Reports.ViewModels
                             _instance.ReportFiles.Add(temp);
                         }
 
-                        OnPropertyChanged("FileList");
+                        RaisePropertyChanged("FileList");
                     }
                 });
 

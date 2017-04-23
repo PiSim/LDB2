@@ -113,7 +113,7 @@ namespace Controls.ViewModels
         public void SetOrganization(Organization target)
         {
             _selectedOrganization = OrganizationList.Find(org => org.ID == target.ID);
-            OnPropertyChanged("SelectedOrganization");
+            RaisePropertyChanged("SelectedOrganization");
         }
 
         public float Total

@@ -50,7 +50,7 @@ namespace Tasks.ViewModels
             set 
             {
                 _selectedTask = value;
-                OnPropertyChanged("SelectedTask");
+                RaisePropertyChanged("SelectedTask");
             }       
         }
         

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Infrastructure;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,7 +19,7 @@ namespace Specifications.Views
     /// <summary>
     /// Interaction logic for SpecificationNavigationItem.xaml
     /// </summary>
-    public partial class SpecificationNavigationItem : UserControl, Navigation.IModuleNavigationTag
+    public partial class SpecificationNavigationItem : UserControl, IModuleNavigationTag
     {
         public SpecificationNavigationItem()
         {

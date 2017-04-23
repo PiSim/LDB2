@@ -37,7 +37,7 @@ namespace Organizations.ViewModels
                 {
                     Organization tempOrg = _organizationServiceProvider.CreateNewOrganization();
                     if (tempOrg != null)
-                        OnPropertyChanged("OrganizationList");
+                        RaisePropertyChanged("OrganizationList");
                 });
         }
 
@@ -52,8 +52,8 @@ namespace Organizations.ViewModels
             set
             {
                 _selectedOrganization = value;
-                OnPropertyChanged("SelectedOrganization");
-                OnPropertyChanged("RoleList");
+                RaisePropertyChanged("SelectedOrganization");
+                RaisePropertyChanged("RoleList");
             }
         }
 

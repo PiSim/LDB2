@@ -68,7 +68,7 @@ namespace Materials.ViewModels
             set
             {
                 _batchNumber = value;
-                OnPropertyChanged("BatchNumber");
+                RaisePropertyChanged("BatchNumber");
             }
         }
     }

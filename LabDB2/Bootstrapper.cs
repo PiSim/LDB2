@@ -102,6 +102,15 @@ namespace LabDB2
                     InitializationMode = InitializationMode.OnDemand
                 });
 
+            Type PeopleModuleType = typeof(People.PeopleModule);
+            ModuleCatalog.AddModule(
+                new ModuleInfo()
+                {
+                    ModuleName = PeopleModuleType.Name,
+                    ModuleType = PeopleModuleType.AssemblyQualifiedName,
+                    InitializationMode = InitializationMode.OnDemand
+                });
+
             Type ProjectsModuleType = typeof(Projects.ProjectsModule);
             ModuleCatalog.AddModule(
                 new Prism.Modularity.ModuleInfo()
@@ -179,6 +188,7 @@ namespace LabDB2
             moduleManager.LoadModule(typeof(Instruments.InstrumentsModule).Name);
             moduleManager.LoadModule(typeof(Materials.MaterialsModule).Name);
             moduleManager.LoadModule(typeof(Organizations.OrganizationsModule).Name);
+            moduleManager.LoadModule(typeof(People.PeopleModule).Name);
             moduleManager.LoadModule(typeof(Projects.ProjectsModule).Name);
             moduleManager.LoadModule(typeof(Reports.ReportsModule).Name);
             moduleManager.LoadModule(typeof(Specifications.SpecificationsModule).Name);

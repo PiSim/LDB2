@@ -141,7 +141,7 @@ namespace Reports.ViewModels
             {
                 _selectedBatch = value;
                 RemoveBatchCommand.RaiseCanExecuteChanged();
-                OnPropertyChanged("SelectedBatch");
+                RaisePropertyChanged("SelectedBatch");
             }
         }
         

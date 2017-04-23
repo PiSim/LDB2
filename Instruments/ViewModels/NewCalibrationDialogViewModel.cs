@@ -112,8 +112,8 @@ namespace Instruments.ViewModels
             set
             {
                 _selectedLab = value;
-                OnPropertyChanged("SelectedLab");
-                OnPropertyChanged("IsExternalLab");
+                RaisePropertyChanged("SelectedLab");
+                RaisePropertyChanged("IsExternalLab");
             }
         }
 

@@ -84,10 +84,10 @@ namespace Projects.ViewModels
             set
             {
                 _projectInstance = _entities.Projects.First(prj => prj.ID == value.ID);
-                OnPropertyChanged("ProjectDescription");
-                OnPropertyChanged("ProjectName");
-                OnPropertyChanged("SelectedLeader");
-                OnPropertyChanged("SelectedOem");
+                RaisePropertyChanged("ProjectDescription");
+                RaisePropertyChanged("ProjectName");
+                RaisePropertyChanged("SelectedLeader");
+                RaisePropertyChanged("SelectedOem");
             }
         }
 

@@ -37,7 +37,7 @@ namespace Admin.ViewModels
                 () =>
                 {
                     services.AddPersonRole();
-                    OnPropertyChanged("PersonRoleList");
+                    RaisePropertyChanged("PersonRoleList");
                 });
 
             _newUser = new DelegateCommand(
