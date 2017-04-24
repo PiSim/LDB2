@@ -1,5 +1,6 @@
 ﻿using DBManager;
 using Infrastructure;
+using Prism.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,10 +25,12 @@ namespace Instruments.Views
         private CalibrationReport _reportInstance;
 
         public NewCalibrationDialog(DBEntities entities,
-                                    DBPrincipal principal)
+                                    DBPrincipal principal,
+                                    EventAggregator eventAggregator)
         {
             DataContext = new ViewModels.NewCalibrationDialogViewModel(entities,
                                                                         principal,
+                                                                        eventAggregator,
                                                                         this);
             InitializeComponent();
         }
