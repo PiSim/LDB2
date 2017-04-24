@@ -22,6 +22,7 @@
 -Aggiunto modulo People
 -Implementato metodo per la creazione di Ruoli persona
 -Implementazione parziale vista selezione ruoli persona, derivata da OrganizationsMain
+-*Aggiunto UserControl FileListControl al modulo Controls, include generica lista file e pulsanti Aggiungi, rimuovi e apri
 
 v 0.4.2 -- 04/04/2017
 
