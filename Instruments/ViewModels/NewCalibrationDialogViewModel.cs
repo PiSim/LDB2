@@ -50,7 +50,7 @@ namespace Instruments.ViewModels
                     {
                         foreach (string pth in fileDialog.FileNames)
                         {
-                            CalibrationFile temp = new CalibrationFile();
+                            CalibrationFiles temp = new CalibrationFiles();
                             temp.Path = pth;
                             temp.Description = "";
                             _calibrationFileList.Add(temp);
@@ -167,6 +167,11 @@ namespace Instruments.ViewModels
         {
             get { return RegionNames.NewCalibrationFileListRegion; }
         }
+        
+        public string InstrumentCode
+        {
+            get { return _instumentInstance.Code; }
+        }
 
         public Instrument InstrumentInstance
         {
@@ -174,6 +179,7 @@ namespace Instruments.ViewModels
             set
             {
                 _instumentInstance = _entities.Instruments.First(ins => ins.ID == value.ID);
+                RaisePropertyChanged("InstrumentCode");
             }
         }
 
