@@ -42,6 +42,10 @@ namespace Instruments.ViewModels
                     newInstrument.ControlPeriod = (sbyte)_controlPeriod;
                     newInstrument.InstrumentType = _selectedType;
                     newInstrument.IsUnderControl = IsUnderControl;
+
+                    if (_isUnderControl)
+                        newInstrument.CalibrationDueDate = DateTime.Now.Date;
+
                     newInstrument.Manufacturer = SelectedManufacturer;
                     newInstrument.Model = Model;
                     newInstrument.SerialNumber = _serial;

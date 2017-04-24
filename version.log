@@ -7,7 +7,7 @@
 -*Implementata gestione richieste report per batch/prog/spec in handler ReportCreationRequested
 -Implementato metodo creazione strumenti su InstrumentServiceProvider
 -Implementati metodi per nuova taratura/manutenzione su InstrumentServiceProvider
--********************Modificata PendingCalibration, introdotta creazione istanze /// 
+-Rimossa entità PendingCalibration, integrata la sua funzionalità nell'entità Instrument 
 -Corretto crash legato all'aggiunta di file a report esterni
 -Corretto mancato aggiornamento OA in vista report esterni
 -Corretto errore salvataggio data OA
@@ -22,7 +22,8 @@
 -Aggiunto modulo People
 -Implementato metodo per la creazione di Ruoli persona
 -Implementazione parziale vista selezione ruoli persona, derivata da OrganizationsMain
--*Aggiunto UserControl FileListControl al modulo Controls, include generica lista file e pulsanti Aggiungi, rimuovi e apri
+-Aggiunto UserControl FileListControl al modulo Controls, include generica lista file e pulsanti Aggiungi, rimuovi e apri
+-Implementata funzionalità calendario tarature
 
 v 0.4.2 -- 04/04/2017
 

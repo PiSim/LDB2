@@ -17,16 +17,16 @@ namespace DBManager
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Organization()
         {
-            this.external_constructions = new HashSet<ExternalConstruction>();
-            this.external_reports = new HashSet<ExternalReport>();
+            this.ExternalConstructions = new HashSet<ExternalConstruction>();
+            this.ExternalReports = new HashSet<ExternalReport>();
             this.Projects = new HashSet<Project>();
             this.Standards = new HashSet<Std>();
             this.CalibrationReports = new HashSet<CalibrationReport>();
             this.RoleMapping = new HashSet<OrganizationRoleMapping>();
-            this.purchase_orders = new HashSet<PurchaseOrder>();
-            this.instruments = new HashSet<Instrument>();
-            this.instruments1 = new HashSet<Instrument>();
-            this.instrument_maintenance_events = new HashSet<InstrumentMaintenanceEvent>();
+            this.PurchaseOrders = new HashSet<PurchaseOrder>();
+            this.ManufacturedInstruments = new HashSet<Instrument>();
+            this.SuppliedInstruments = new HashSet<Instrument>();
+            this.InstrumentMaintenanceEvents = new HashSet<InstrumentMaintenanceEvent>();
         }
     
         public int ID { get; set; }
@@ -34,9 +34,9 @@ namespace DBManager
         public string Category { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ExternalConstruction> external_constructions { get; set; }
+        public virtual ICollection<ExternalConstruction> ExternalConstructions { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ExternalReport> external_reports { get; set; }
+        public virtual ICollection<ExternalReport> ExternalReports { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Project> Projects { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -46,12 +46,12 @@ namespace DBManager
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OrganizationRoleMapping> RoleMapping { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PurchaseOrder> purchase_orders { get; set; }
+        public virtual ICollection<PurchaseOrder> PurchaseOrders { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Instrument> instruments { get; set; }
+        public virtual ICollection<Instrument> ManufacturedInstruments { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Instrument> instruments1 { get; set; }
+        public virtual ICollection<Instrument> SuppliedInstruments { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<InstrumentMaintenanceEvent> instrument_maintenance_events { get; set; }
+        public virtual ICollection<InstrumentMaintenanceEvent> InstrumentMaintenanceEvents { get; set; }
     }
 }

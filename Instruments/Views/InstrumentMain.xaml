@@ -76,11 +76,11 @@
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Header="Codice"
-                                        DisplayMemberBinding="{Binding Name}"/>
+                                        DisplayMemberBinding="{Binding Code}"/>
                         <GridViewColumn Header="Tipo"
-                                        DisplayMemberBinding="{Binding Type}"/>
+                                        DisplayMemberBinding="{Binding InstrumentType.Name}"/>
                         <GridViewColumn Header="Scadenza"
-                                        DisplayMemberBinding="{Binding ExpiryDate}"/> 
+                                        DisplayMemberBinding="{Binding CalibrationDueDate, StringFormat=d}"/> 
                     </GridView>
                 </ListView.View>   
             </ListView>

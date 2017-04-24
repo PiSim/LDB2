@@ -17,15 +17,15 @@ namespace DBManager
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Currency()
         {
-            this.purchase_orders = new HashSet<PurchaseOrder>();
+            this.PurchaseOrders = new HashSet<PurchaseOrder>();
         }
     
         public int ID { get; set; }
         public string Code { get; set; }
         public string Name { get; set; }
-        public float exchange_rate { get; set; }
+        public float ExchangeRate { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PurchaseOrder> purchase_orders { get; set; }
+        public virtual ICollection<PurchaseOrder> PurchaseOrders { get; set; }
     }
 }

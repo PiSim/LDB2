@@ -29,7 +29,7 @@ namespace Instruments.ViewModels
             _entities = entities;
             _eventAggregator = eventAggregator;
             _instrumentServiceProvider = instrumentServiceProvider;
-
+            
             _newInstrument = new DelegateCommand(
                 () =>
                 {
@@ -63,6 +63,14 @@ namespace Instruments.ViewModels
         public DelegateCommand OpenInstrumentCommand
         {
             get { return _openInstrument; }
+        }
+
+        public List<Instrument> PendingCalibrationsList
+        {
+            get
+            {
+                return new List<Instrument>(_entities.Instruments.Where(inst => inst.IsUnderControl).OrderBy(inst => inst.CalibrationDueDate));
+            }
         }
 
         public Instrument SelectedInstrument

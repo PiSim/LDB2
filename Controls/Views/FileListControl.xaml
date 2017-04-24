@@ -25,14 +25,17 @@
             </ListView.View>
         </ListView>
         <StackPanel Grid.Column="1"
-                    Orientation="Horizontal"
+                    Orientation="Vertical"
                     Margin="5">
             <Button Content="Apri"
-                    Command="{Binding OpenFileCommand}"/>
+                    Command="{Binding OpenFileCommand}"
+                    Margin="5"/>
             <Button Content="Aggiungi"
-                    Command="{Binding AddFileCommand}"/>
+                    Command="{Binding AddFileCommand}"
+                    Margin="5"/>
             <Button Content="Rimuovi"
-                    Command="{Binding RemoveFileCommand}"/>
+                    Command="{Binding RemoveFileCommand}"
+                    Margin="5"/>
         </StackPanel>
     </Grid>
 </UserControl>

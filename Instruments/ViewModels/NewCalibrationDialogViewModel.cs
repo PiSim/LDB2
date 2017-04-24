@@ -73,11 +73,16 @@ namespace Instruments.ViewModels
                     output.Date = _calibrationDate;
                     output.Instrument = _instumentInstance;
                     output.Laboratory = _selectedLab;
-                    if (!IsExternalLab)
+
+                    if (IsNotExternalLab)
                     {
                         output.Tech = _selectedTech;
                         output.Reference = _selectedReference;
                     }
+
+                    foreach (CalibrationFiles calFile in _calibrationFileList)
+                        output.CalibrationFiles.Add(calFile);
+
                     _entities.CalibrationReports.Add(output);
                     _entities.SaveChanges();
 
@@ -170,7 +175,13 @@ namespace Instruments.ViewModels
         
         public string InstrumentCode
         {
-            get { return _instumentInstance.Code; }
+            get
+            {
+                if (_instumentInstance == null)
+                    return null;
+
+                return _instumentInstance.Code;
+            }
         }
 
         public Instrument InstrumentInstance
@@ -183,9 +194,15 @@ namespace Instruments.ViewModels
             }
         }
 
-        public bool IsExternalLab
+        public bool IsNotExternalLab
         {
-            get { return _selectedLab.Name != "Vulcaflex"; }
+            get
+            {
+                if (_selectedLab == null)
+                    return false;
+
+                return _selectedLab.Name == "Vulcaflex";
+            }
         }
 
         public List<Organization> LabList
@@ -225,7 +242,7 @@ namespace Instruments.ViewModels
             {
                 _selectedLab = value;
                 RaisePropertyChanged("SelectedLab");
-                RaisePropertyChanged("IsExternalLab");
+                RaisePropertyChanged("IsNotExternalLab");
             }
         }
 

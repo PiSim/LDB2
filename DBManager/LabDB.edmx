@@ -1974,16 +1974,16 @@
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" a:GetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:SetterAccess="Public" />
           <Property Name="Name" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Category" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
-          <NavigationProperty Name="external_constructions" Relationship="Self.oemID" FromRole="organizations" ToRole="external_constructions" />
-          <NavigationProperty Name="external_reports" Relationship="Self.external_lab" FromRole="organizations" ToRole="external_reports" />
+          <NavigationProperty Name="ExternalConstructions" Relationship="Self.oemID" FromRole="organizations" ToRole="external_constructions" />
+          <NavigationProperty Name="ExternalReports" Relationship="Self.external_lab" FromRole="organizations" ToRole="external_reports" />
           <NavigationProperty Name="Projects" Relationship="Self.oem1" FromRole="organizations" ToRole="projects" />
           <NavigationProperty Name="Standards" Relationship="Self.organization_to_standard" FromRole="organizations" ToRole="standards" />
           <NavigationProperty Name="CalibrationReports" Relationship="labdbModel.laboratory_to_calibration_report" FromRole="Organization" ToRole="calibration_reports" />
           <NavigationProperty Name="RoleMapping" Relationship="labdbModel.organization_to_role_mapping" FromRole="Organization" ToRole="organization_role_mappings" />
-          <NavigationProperty Name="purchase_orders" Relationship="labdbModel.organization_to_purchase_order" FromRole="Organization" ToRole="purchase_orders" />
-          <NavigationProperty Name="instruments" Relationship="labdbModel.manufacturer_to_instrument" FromRole="Organization" ToRole="instrument" />
-          <NavigationProperty Name="instruments1" Relationship="labdbModel.supplier_to_instrument" FromRole="Organization" ToRole="instrument" />
-          <NavigationProperty Name="instrument_maintenance_events" Relationship="labdbModel.organization_to_maintenance_event" FromRole="Organization" ToRole="instrument_maintenance_events" />
+          <NavigationProperty Name="PurchaseOrders" Relationship="labdbModel.organization_to_purchase_order" FromRole="Organization" ToRole="purchase_orders" />
+          <NavigationProperty Name="ManufacturedInstruments" Relationship="labdbModel.manufacturer_to_instrument" FromRole="Organization" ToRole="instrument" />
+          <NavigationProperty Name="SuppliedInstruments" Relationship="labdbModel.supplier_to_instrument" FromRole="Organization" ToRole="instrument" />
+          <NavigationProperty Name="InstrumentMaintenanceEvents" Relationship="labdbModel.organization_to_maintenance_event" FromRole="Organization" ToRole="instrument_maintenance_events" />
         </EntityType>
         <EntityType Name="Person">
           <Key>
@@ -2089,7 +2089,7 @@
           <NavigationProperty Name="Overrides" Relationship="labdbModel.overridden_to_requirement" FromRole="Requirement" ToRole="Requirement1" />
           <NavigationProperty Name="Overridden" Relationship="labdbModel.overridden_to_requirement" FromRole="Requirement1" ToRole="Requirement" />
           <NavigationProperty Name="TaskItems" Relationship="labdbModel.requirement_to_task_item" FromRole="Requirement" ToRole="task_items" />
-          <NavigationProperty Name="control_plan_items" Relationship="labdbModel.requirement_to_control_plan" FromRole="Requirement" ToRole="ControlPlanItem" />
+          <NavigationProperty Name="ControlPlanItems" Relationship="labdbModel.requirement_to_control_plan" FromRole="Requirement" ToRole="ControlPlanItem" />
         </EntityType>
         <EntityType Name="Sample">
           <Key>
@@ -3715,8 +3715,8 @@
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Code" Type="String" Nullable="false" MaxLength="3" FixedLength="false" Unicode="false" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
-          <Property Name="exchange_rate" Type="Single" Nullable="false" />
-          <NavigationProperty Name="purchase_orders" Relationship="labdbModel.currency_to_purchase_order" FromRole="currency" ToRole="PurchaseOrder" />
+          <Property Name="ExchangeRate" Type="Single" Nullable="false" />
+          <NavigationProperty Name="PurchaseOrders" Relationship="labdbModel.currency_to_purchase_order" FromRole="currency" ToRole="PurchaseOrder" />
         </EntityType>
         <Association Name="currency_to_purchase_order">
           <End Type="labdbModel.Currency" Role="currency" Multiplicity="1" />
@@ -4313,7 +4313,7 @@
           <EntitySetMapping Name="Currencies">
             <EntityTypeMapping TypeName="labdbModel.Currency">
               <MappingFragment StoreEntitySet="currencies">
-                <ScalarProperty Name="exchange_rate" ColumnName="exchange_rate" />
+                <ScalarProperty Name="ExchangeRate" ColumnName="exchange_rate" />
                 <ScalarProperty Name="Name" ColumnName="name" />
                 <ScalarProperty Name="Code" ColumnName="code" />
                 <ScalarProperty Name="ID" ColumnName="ID" />

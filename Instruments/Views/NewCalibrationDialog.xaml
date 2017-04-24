@@ -6,7 +6,8 @@
         xmlns:prism="http://prismlibrary.com/"
         xmlns:local="clr-namespace:Instruments.Views"
         mc:Ignorable="d"
-        Title="Nuovo Rapporto di Taratura" Height="400" Width="300"
+        Title="Nuovo Rapporto di Taratura" 
+        Height="400" Width="400"
         ResizeMode="NoResize">
     <Grid>
         <Grid.ColumnDefinitions>
@@ -79,6 +80,7 @@
 
         <ComboBox ItemsSource="{Binding TechList}"
                   SelectedItem="{Binding SelectedTech, Mode=TwoWay}"
+                  IsEnabled="{Binding IsNotExternalLab}"
                   DisplayMemberPath="Name"
                   Grid.Column="1"
                   Grid.ColumnSpan="3"
@@ -92,13 +94,17 @@
 
         <ComboBox ItemsSource="{Binding PrimaryList}"
                   SelectedItem="{Binding SelectedPrimary, Mode=TwoWay}"
+                  IsEnabled="{Binding IsNotExternalLab}"
                   DisplayMemberPath="Code"
                   Grid.Column="1"
                   Grid.ColumnSpan="3"
                   Grid.Row="5"
                   Margin="5"/>
 
-        <ContentControl prism:RegionManager.RegionName="{Binding FileListRegionName}"/>
+        <ContentControl prism:RegionManager.RegionName="{Binding FileListRegionName}"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="4"
+                        Grid.Row="6"/>
 
         <Button Content="Annulla"
                 Command="{Binding CancelCommand}"
