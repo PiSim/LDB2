@@ -13,7 +13,7 @@ namespace Instruments.ViewModels
 {
     public class NewCalibrationDialogViewModel : BindableBase
     {
-        private CalibrationFile _selectedFile;
+        private CalibrationFiles _selectedFile;
         private DateTime _calibrationDate;
         private DBEntities _entities;
         private DBPrincipal _principal;
@@ -116,7 +116,7 @@ namespace Instruments.ViewModels
             }
         }
 
-        public ObservableCollection<CalibrationFile> CalibrationFileList
+        public ObservableCollection<CalibrationFiles> CalibrationFileList
         {
             get { return _calibrationFileList; }
         }
@@ -196,7 +196,7 @@ namespace Instruments.ViewModels
             get { return _removeFile; }
         }
 
-        public CalibrationFile SelectedFile
+        public CalibrationFiles SelectedFile
         {
             get { return _selectedFile; }
             set
