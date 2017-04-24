@@ -157,6 +157,11 @@ namespace Instruments.ViewModels
             get { return _confirm; }
         }
 
+        public string FileListRegionName
+        {
+            get { return RegionNames.NewCalibrationFileListRegion; }
+        }
+
         public Instrument InstrumentInstance
         {
             get { return _instumentInstance; }
