@@ -1,6 +1,8 @@
 ﻿using DBManager;
 using Infrastructure;
+usign Infrastructure.Events;
 using Prism.Commands;
+using Prism.Events;
 using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
@@ -8,6 +10,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Instruments.ViewModels
 {
@@ -18,6 +21,7 @@ namespace Instruments.ViewModels
         private DBEntities _entities;
         private DBPrincipal _principal;
         private DelegateCommand _addFile, _cancel, _confirm, _openFile, _removeFile;
+        private EventAggregator _eventAggregator;
         private Instrument _instumentInstance, _selectedReference;
         private Person _selectedTech;
         private string _calibrationNotes, _calibrationResult;
@@ -27,10 +31,12 @@ namespace Instruments.ViewModels
 
         public NewCalibrationDialogViewModel(DBEntities entities,
                                             DBPrincipal principal,
+                                            EventAggregator eventAggregator,
                                             Views.NewCalibrationDialog parentDialog) : base()
         {
             _entities = entities;
-            _filePathList = new ObservableCollection<CalibrationFiles>();
+            _calibrationFileList = new ObservableCollection<CalibrationFiles>();
+            _eventAggregator = eventAggregator;
             _principal = principal;
             _parentDialog = parentDialog;
 
@@ -97,7 +103,7 @@ namespace Instruments.ViewModels
             _removeFile = new DelegateCommand(
                 () =>
                 {
-                    _filePathList.Remove(_selectedFile);
+                    _calibrationFileList.Remove(_selectedFile);
                 },
                 () => _selectedFile != null);
         }
