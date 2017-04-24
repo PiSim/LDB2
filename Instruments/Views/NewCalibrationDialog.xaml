@@ -3,9 +3,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:prism="http://prismlibrary.com/"
         xmlns:local="clr-namespace:Instruments.Views"
         mc:Ignorable="d"
-        Title="Nuovo Rapporto di Taratura" Height="300" Width="300"
+        Title="Nuovo Rapporto di Taratura" Height="400" Width="300"
         ResizeMode="NoResize">
     <Grid>
         <Grid.ColumnDefinitions>
@@ -21,6 +22,7 @@
             <RowDefinition/>
             <RowDefinition/>
             <RowDefinition/>
+            <RowDefinition Height="3*"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
 
@@ -96,16 +98,18 @@
                   Grid.Row="5"
                   Margin="5"/>
 
+        <ContentControl prism:RegionManager.RegionName="{Binding FileListRegionName}"/>
+
         <Button Content="Annulla"
                 Command="{Binding CancelCommand}"
                 Grid.Column="2"
-                Grid.Row="6"
+                Grid.Row="7"
                 Margin="5"/>
 
         <Button Content="Ok"
                 Command="{Binding ConfirmCommand}"
                 Grid.Column="3"
-                Grid.Row="6"
+                Grid.Row="7"
                 Margin="5"/>
     </Grid>
 </Window>
