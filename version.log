@@ -7,7 +7,7 @@
 -*Implementata gestione richieste report per batch/prog/spec in handler ReportCreationRequested
 -Implementato metodo creazione strumenti su InstrumentServiceProvider
 -Implementati metodi per nuova taratura/manutenzione su InstrumentServiceProvider
--Rimossa l'entità PendingCalibration, integrata funzionalità nell'entità Instrument
+-********************Rimossa l'entità PendingCalibration, integrata funzionalità nell'entità Instrument
 -Corretto crash legato all'aggiunta di file a report esterni
 -Corretto mancato aggiornamento OA in vista report esterni
 -Corretto errore salvataggio data OA
