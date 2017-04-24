@@ -4,6 +4,7 @@ using Prism.Commands;
 using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,12 +13,15 @@ namespace Instruments.ViewModels
 {
     public class NewCalibrationDialogViewModel : BindableBase
     {
+        private CalibrationFile _selectedFile;
         private DateTime _calibrationDate;
         private DBEntities _entities;
         private DBPrincipal _principal;
-        private DelegateCommand _cancel, _confirm;
+        private DelegateCommand _addFile, _cancel, _confirm, _openFile, _removeFile;
         private Instrument _instumentInstance, _selectedReference;
         private Person _selectedTech;
+        private string _calibrationNotes, _calibrationResult;
+        private ObservableCollection<CalibrationFiles> _calibrationFileList;
         private Organization _selectedLab;
         private Views.NewCalibrationDialog _parentDialog;
 
@@ -26,8 +30,29 @@ namespace Instruments.ViewModels
                                             Views.NewCalibrationDialog parentDialog) : base()
         {
             _entities = entities;
+            _filePathList = new ObservableCollection<CalibrationFiles>();
             _principal = principal;
             _parentDialog = parentDialog;
+
+            _addFile = new DelegateCommand(
+                () =>
+                {
+                    OpenFileDialog fileDialog = new OpenFileDialog();
+                    fileDialog.Multiselect = true;
+                    
+                    if (fileDialog.ShowDialog() == DialogResult.OK)
+                    {
+                        foreach (string pth in fileDialog.FileNames)
+                        {
+                            CalibrationFile temp = new CalibrationFile();
+                            temp.Path = pth;
+                            temp.Description = "";
+                            _calibrationFileList.Add(temp);
+                        }
+
+                        RaisePropertyChanged("FileList");
+                    }
+                });
 
             _cancel = new DelegateCommand(
                 () =>
@@ -53,6 +78,33 @@ namespace Instruments.ViewModels
                     _parentDialog.ReportInstance = output;
                     _parentDialog.DialogResult = true;
                 });
+
+            _openFile = new DelegateCommand(
+                () =>
+                {
+                    try
+                    {
+                        System.Diagnostics.Process.Start(_selectedFile.Path);
+                    }
+
+                    catch (Exception)
+                    {
+                        _eventAggregator.GetEvent<StatusNotificationIssued>().Publish("File non trovato");
+                    }
+                },
+                () => _selectedFile != null);
+
+            _removeFile = new DelegateCommand(
+                () =>
+                {
+                    _filePathList.Remove(_selectedFile);
+                },
+                () => _selectedFile != null);
+        }
+
+        public DelegateCommand AddFileCommand
+        {
+            get { return _addFile; }
         }
 
         public DateTime CalibrationDate
@@ -61,6 +113,29 @@ namespace Instruments.ViewModels
             set
             {
                 _calibrationDate = value;
+            }
+        }
+
+        public ObservableCollection<CalibrationFile> CalibrationFileList
+        {
+            get { return _calibrationFileList; }
+        }
+
+        public string CalibrationNotes
+        {
+            get { return _calibrationNotes; }
+            set 
+            {
+                _calibrationNotes = value;
+            }
+        }
+
+        public string CalibrationResult
+        {
+            get { return _calibrationResult; }
+            set 
+            {
+                _calibrationResult = value;
             }
         }
 
@@ -103,6 +178,26 @@ namespace Instruments.ViewModels
                 OrganizationRole tempOr = _entities.OrganizationRoles.First(orr => orr.Name == OrganizationRoleNames.CalibrationLab);
                 return new List<Organization>(tempOr.OrganizationMappings.Where(orm => orm.IsSelected)
                                                 .Select(orm => orm.Organization));
+            }
+        }
+
+        public DelegateCommand OpenFileCommand
+        {
+            get { return _openFile; }
+        }
+
+        public DelegateCommand RemoveFileCommand
+        {
+            get { return _removeFile; }
+        }
+
+        public CalibrationFile SelectedFile
+        {
+            get { return _selectedFile; }
+            set
+            {
+                _selectedFile = value;
+                RaisePropertyChanged("SelectedFile");
             }
         }
 
