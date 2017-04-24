@@ -16,10 +16,12 @@
                   Grid.Column="0"
                   Margin="5">
             <ListView.View>
-                <ListViewColumn Header="Percorso"
-                                DisplayMemberBinding="{Binding Path}"/>
-                <ListViewColumn Header="Descrizione"
-                                DisplayMemberBinding="{Binding Description}"/>
+                <GridView>
+                    <GridViewColumn Header="Percorso"
+                                    DisplayMemberBinding="{Binding Path}"/>
+                    <GridViewColumn Header="Descrizione"
+                                    DisplayMemberBinding="{Binding Description}"/>
+                </GridView>
             </ListView.View>
         </ListView>
         <StackPanel Grid.Column="1"
