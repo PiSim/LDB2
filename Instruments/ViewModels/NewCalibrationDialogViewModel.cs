@@ -1,6 +1,6 @@
 ﻿using DBManager;
 using Infrastructure;
-usign Infrastructure.Events;
+using Infrastructure.Events;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
