@@ -121,8 +121,8 @@
     <Compile Include="ViewModels\StringInputDialogViewModel.cs" />
     <Compile Include="ViewModels\StatusBarViewModel.cs" />
     <Compile Include="ViewModels\ToolbarViewModel.cs" />
-    <Compile Include="Views\FileList.xaml.cs">
-      <DependentUpon>FileList.xaml</DependentUpon>
+    <Compile Include="Views\FileListControl.xaml.cs">
+      <DependentUpon>FileListControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\NewPODialog.xaml.cs">
       <DependentUpon>NewPODialog.xaml</DependentUpon>
@@ -163,7 +163,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Views\FileList.xaml">
+    <Page Include="Views\FileListControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
