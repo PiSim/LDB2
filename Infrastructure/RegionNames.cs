@@ -18,6 +18,7 @@ namespace Infrastructure
         public static string MethodEditRegion { get { return "MethodEditRegion"; } }
         public static string MethodIssueRegion { get { return "MethodIssueRegion"; } }
         public static string MethodReportListRegion { get { return "MethodReportListRegion"; } }
+        public static string NewCalibrationFileListRegion { get { return "NewCalibrationFileListRegion"; } }
         public static string ProjectBatchListRegion { get { return "ProjectBatchListRegion"; } }
         public static string ProjectReportListRegion { get { return "ProjectReportListRegion"; } }
         public static string SpecificationIssueRegion { get { return "SpecificationIssueRegion"; } }
