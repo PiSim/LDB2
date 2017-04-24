@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace Controls.Views
 {
     /// <summary>
-    /// Interaction logic for FileList.xaml
+    /// Interaction logic for FileListControl.xaml
     /// </summary>
-    public partial class FileList : UserControl
+    public partial class FileListControl : UserControl
     {
-        public FileList()
+        public FileListControl()
         {
             InitializeComponent();
         }
