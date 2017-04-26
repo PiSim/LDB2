@@ -11,8 +11,10 @@
             <ColumnDefinition />
             <ColumnDefinition Width="100"/>
         </Grid.ColumnDefinitions>
-        <ListView ItemsSource="{Binding ExternalReportList}"
+        <ListView x:Name="XRepList"
+                  ItemsSource="{Binding ExternalReportList}"
                   SelectedItem="{Binding SelectedExternalReport, Mode=TwoWay}"
+                  GridViewColumnHeader.Click="Header_Click"
                   Grid.Column="0">
             <ListView.View>
                 <GridView>

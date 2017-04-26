@@ -1,10 +1,9 @@
 ﻿v 0.4.3 -- 
 
 -Introdotti eventi notifica aggiornamenti per refresh liste
--*Implementato comparatore per sorting delle colonne di ListView
 -Implementata classe InstrumentServiceProvider e interfaccia IInstrumentServiceProvider
 -Impostato recupero istanza utente in ReportCreationDialogViewModel
--*Implementata gestione richieste report per batch/prog/spec in handler ReportCreationRequested
+-Implementata gestione richieste report per batch in handler ReportCreationRequested
 -Implementato metodo creazione strumenti su InstrumentServiceProvider
 -Implementati metodi per nuova taratura/manutenzione su InstrumentServiceProvider
 -Rimossa entità PendingCalibration, integrata la sua funzionalità nell'entità Instrument 
@@ -24,6 +23,7 @@
 -Implementazione parziale vista selezione ruoli persona, derivata da OrganizationsMain
 -Aggiunto UserControl FileListControl al modulo Controls, include generica lista file e pulsanti Aggiungi, rimuovi e apri
 -Implementata funzionalità calendario tarature
+-*Comando sorting per lista report
 
 v 0.4.2 -- 04/04/2017
 
