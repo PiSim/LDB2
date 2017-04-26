@@ -45,6 +45,9 @@ namespace Instruments.ViewModels
                 },
                 () => SelectedInstrument != null);
 
+            _eventAggregator.GetEvent<CalibrationIssued>().Subscribe(
+                calRep => RaisePropertyChanged("PendingCalibrationsList"));
+
             _eventAggregator.GetEvent<InstrumentListUpdateRequested>().Subscribe(
                 () => RaisePropertyChanged("InstrumentList"));
 
