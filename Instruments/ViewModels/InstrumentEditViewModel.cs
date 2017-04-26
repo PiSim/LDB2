@@ -62,8 +62,8 @@ namespace Instruments.ViewModels
         {
             get 
             { 
-                if (_instance = null)
-                    return new Linq<CalibrationReport>();
+                if (_instance == null)
+                    return new List<CalibrationReport>();
                     
                 return new List<CalibrationReport>(_instance.CalibrationReports); 
             }
