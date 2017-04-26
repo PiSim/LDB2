@@ -48,7 +48,9 @@ namespace Instruments
                 tempTarget.CalibrationDueDate = DateTime.Now.Date;
                 tempTarget.CalibrationDueDate.Value.AddMonths(target.ControlPeriod);
                 _entities.SaveChanges();
-                return calibrationDialog.ReportInstance;
+                CalibrationReport output = calibrationDialog.ReportInstance;
+                _eventAggregator.GetEvent<CalibrationIssued>().Publish(output);
+                return output;
             }
             else return null;
         }
