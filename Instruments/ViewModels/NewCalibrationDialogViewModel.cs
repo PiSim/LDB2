@@ -73,6 +73,8 @@ namespace Instruments.ViewModels
                     output.Date = _calibrationDate;
                     output.Instrument = _instumentInstance;
                     output.Laboratory = _selectedLab;
+                    output.Notes = "";
+                    output.Result = "";
 
                     if (IsNotExternalLab)
                     {
