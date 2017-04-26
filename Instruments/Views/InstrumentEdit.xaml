@@ -48,8 +48,8 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
                     
-                    <ListView ItemsSource="{Binding CalibrationList}"
-                              SelectedItem="{Binding SelectedCalibration}">
+                    <ListView ItemsSource="{Binding CalibrationReportList}"
+                              SelectedItem="{Binding SelectedCalibration, Mode=TwoWay}">
                         <ListView.View>
                             <GridView>
                                 <GridViewColumn Header="Report"
