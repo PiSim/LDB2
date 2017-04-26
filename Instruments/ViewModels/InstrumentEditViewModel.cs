@@ -60,7 +60,13 @@ namespace Instruments.ViewModels
 
         public List<CalibrationReport> CalibrationReportList
         {
-            get { return new List<CalibrationReport>(_entities.CalibrationReports); }
+            get 
+            { 
+                if (_instance = null)
+                    return new Linq<CalibrationReport>();
+                    
+                return new List<CalibrationReport>(_instance.CalibrationReports); 
+            }
         }
 
         public string Code
