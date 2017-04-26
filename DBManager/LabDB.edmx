@@ -48,7 +48,7 @@
           <Property Name="date" Type="date" Nullable="false" />
           <Property Name="operatorID" Type="int" />
           <Property Name="laboratoryID" Type="int" Nullable="false" />
-          <Property Name="referenceID" Type="int" Nullable="false" />
+          <Property Name="referenceID" Type="int" Nullable="true" />
           <Property Name="instrumentID" Type="int" Nullable="false" />
           <Property Name="notes" Type="varchar" MaxLength="200" />
           <Property Name="number" Type="int" Nullable="false" />
@@ -1114,7 +1114,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="reference_to_calibration_report">
-          <End Role="instruments" Type="Self.instruments" Multiplicity="1" />
+          <End Role="instruments" Type="Self.instruments" Multiplicity="0..1" />
           <End Role="calibration_reports" Type="Self.calibration_reports" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="instruments">
@@ -3390,7 +3390,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="reference_to_calibration_report">
-          <End Type="labdbModel.Instrument" Role="instrument" Multiplicity="1" />
+          <End Type="labdbModel.Instrument" Role="instrument" Multiplicity="0..1" />
           <End Type="labdbModel.CalibrationReport" Role="calibration_reports" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="instrument">
