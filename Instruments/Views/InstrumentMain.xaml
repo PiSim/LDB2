@@ -32,6 +32,8 @@
                     <GridView>
                         <GridViewColumn Header="Codice"
                                         DisplayMemberBinding="{Binding Code}"/>
+                        <GridViewColumn Header="Tipo"
+                                        DisplayMemberBinding="{Binding InstrumentType.Name}"/>
                     </GridView>
                 </ListView.View>             
             </ListView>
