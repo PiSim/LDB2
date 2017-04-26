@@ -23,6 +23,7 @@ namespace Instruments.ViewModels
         private DelegateCommand _addFile, _cancel, _confirm, _openFile, _removeFile;
         private EventAggregator _eventAggregator;
         private Instrument _instumentInstance;
+        private Int32 _reportNumber;
         private Person _selectedTech;
         private string _calibrationNotes, _calibrationResult, _referenceCode;
         private ObservableCollection<CalibrationFiles> _calibrationFileList;
@@ -75,6 +76,7 @@ namespace Instruments.ViewModels
                     output.Date = _calibrationDate;
                     output.Instrument = _instumentInstance;
                     output.Laboratory = _selectedLab;
+                    output.Number = ReportNumber;
                     output.Notes = "";
                     output.Result = "";
 
@@ -235,6 +237,12 @@ namespace Instruments.ViewModels
             {
                 _referenceCode = value;
             }
+        }
+
+        public Int32 ReportNumber
+        {
+            get { return _reportNumber; }
+            set { _reportNumber = value; }
         }
 
         public DelegateCommand RemoveFileCommand
