@@ -22,9 +22,9 @@ namespace Instruments.ViewModels
         private DBPrincipal _principal;
         private DelegateCommand _addFile, _cancel, _confirm, _openFile, _removeFile;
         private EventAggregator _eventAggregator;
-        private Instrument _instumentInstance, _selectedReference;
+        private Instrument _instumentInstance;
         private Person _selectedTech;
-        private string _calibrationNotes, _calibrationResult;
+        private string _calibrationNotes, _calibrationResult, _referenceCode;
         private ObservableCollection<CalibrationFiles> _calibrationFileList;
         private Organization _selectedLab;
         private Views.NewCalibrationDialog _parentDialog;
@@ -77,7 +77,10 @@ namespace Instruments.ViewModels
                     if (IsNotExternalLab)
                     {
                         output.Tech = _selectedTech;
-                        output.Reference = _selectedReference;
+                        Instrument tempReference = _entities.Instrument.FirstOrDefault(prm => prm.Code == _referenceCode);
+                        if (tempReference == null)
+                            return;
+                        output.Reference = tempReference;
                     }
 
                     foreach (CalibrationFiles calFile in _calibrationFileList)
@@ -127,11 +130,6 @@ namespace Instruments.ViewModels
             }
         }
 
-        public ObservableCollection<CalibrationFiles> CalibrationFileList
-        {
-            get { return _calibrationFileList; }
-        }
-
         public string CalibrationNotes
         {
             get { return _calibrationNotes; }
@@ -166,6 +164,11 @@ namespace Instruments.ViewModels
         public DelegateCommand ConfirmCommand
         {
             get { return _confirm; }
+        }
+
+        public ObservableCollection<CalibrationFiles> FileList
+        {
+            get { return _calibrationFileList; }
         }
 
         public string FileListRegionName
@@ -220,6 +223,15 @@ namespace Instruments.ViewModels
             get { return _openFile; }
         }
 
+        public string ReferenceCode
+        {
+            get { return _referenceCode; }
+            set
+            {
+                _referenceCode = value;
+            }
+        }
+
         public DelegateCommand RemoveFileCommand
         {
             get { return _removeFile; }
@@ -243,15 +255,6 @@ namespace Instruments.ViewModels
                 _selectedLab = value;
                 RaisePropertyChanged("SelectedLab");
                 RaisePropertyChanged("IsNotExternalLab");
-            }
-        }
-
-        public Instrument SelectedReference
-        {
-            get { return _selectedReference; }
-            set
-            {
-                _selectedReference = value;
             }
         }
 
