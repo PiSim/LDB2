@@ -55,7 +55,7 @@
                                 <GridViewColumn Header="Report"
                                                 DisplayMemberBinding="{Binding Number}"/>
                                 <GridViewColumn Header="Data"
-                                                DisplayMemberBinding="{Binding Date}"/>
+                                                DisplayMemberBinding="{Binding Date, StringFormat=d}"/>
                                 <GridViewColumn Header="Ente"
                                                 DisplayMemberBinding="{Binding Laboratory.Name}"/>
                             </GridView>
@@ -83,7 +83,7 @@
                                 <GridViewColumn Header="Descrizione"
                                                 DisplayMemberBinding="{Binding Description}"/>
                                 <GridViewColumn Header="Data"
-                                                DisplayMemberBinding="{Binding Date}"/>
+                                                DisplayMemberBinding="{Binding Date, StringFormat=d}"/>
                                 <GridViewColumn Header="Tecnico"
                                                 DisplayMemberBinding="{Binding Person.Name}"/>
                             </GridView>
