@@ -92,14 +92,12 @@
                Grid.Row="5"
                Margin="5"/>
 
-        <ComboBox ItemsSource="{Binding PrimaryList}"
-                  SelectedItem="{Binding SelectedPrimary, Mode=TwoWay}"
-                  IsEnabled="{Binding IsNotExternalLab}"
-                  DisplayMemberPath="Code"
-                  Grid.Column="1"
-                  Grid.ColumnSpan="3"
-                  Grid.Row="5"
-                  Margin="5"/>
+        <TextBox Text="{Binding ReferenceCode, Mode=TwoWay}"
+                 IsEnabled="{Binding IsNotExternalLab}"
+                 Grid.Column="1"
+                 Grid.ColumnSpan="3"
+                 Grid.Row="5"
+                 Margin="5"/>
 
         <ContentControl prism:RegionManager.RegionName="{Binding FileListRegionName}"
                         Grid.Column="0"
