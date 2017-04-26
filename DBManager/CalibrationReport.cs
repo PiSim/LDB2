@@ -22,6 +22,7 @@ namespace DBManager
     
         public int ID { get; set; }
         public System.DateTime Date { get; set; }
+        public int Number { get; set; }
         public Nullable<int> OperatorID { get; set; }
         public int laboratoryID { get; set; }
         public Nullable<int> referenceID { get; set; }
