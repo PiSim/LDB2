@@ -116,6 +116,7 @@ namespace Instruments.ViewModels
                 () =>
                 {
                     _calibrationFileList.Remove(_selectedFile);
+                    SelectedFile = null;
                 },
                 () => _selectedFile != null);
         }
@@ -248,6 +249,8 @@ namespace Instruments.ViewModels
             {
                 _selectedFile = value;
                 RaisePropertyChanged("SelectedFile");
+                _openFile.RaiseCanExecuteChanged();
+                _removeFile.RaiseCanExecuteChanged();
             }
         }
 
