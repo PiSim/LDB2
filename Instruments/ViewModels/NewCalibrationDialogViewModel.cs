@@ -77,7 +77,7 @@ namespace Instruments.ViewModels
                     if (IsNotExternalLab)
                     {
                         output.Tech = _selectedTech;
-                        Instrument tempReference = _entities.Instrument.FirstOrDefault(prm => prm.Code == _referenceCode);
+                        Instrument tempReference = _entities.Instruments.FirstOrDefault(prm => prm.Code == _referenceCode);
                         if (tempReference == null)
                             return;
                         output.Reference = tempReference;
