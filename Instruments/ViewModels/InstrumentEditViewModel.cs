@@ -14,6 +14,7 @@ namespace Instruments.ViewModels
 {
     public class InstrumentEditViewModel : BindableBase
     {
+        private CalibrationReport _selectedCalibration;
         private DBEntities _entities;
         private DBPrincipal _principal;
         private DelegateCommand _addCalibration, _addMaintenanceEvent;
@@ -37,6 +38,7 @@ namespace Instruments.ViewModels
                 () =>
                 {
                     _instrumentServiceProvider.RegisterNewCalibration(_instance);
+                    RaisePropertyChanged("CalibrationReportList");
                 });
 
             _addMaintenanceEvent = new DelegateCommand(
@@ -56,6 +58,21 @@ namespace Instruments.ViewModels
             get { return _addMaintenanceEvent; }
         }
 
+        public List<CalibrationReport> CalibrationReportList
+        {
+            get { return new List<CalibrationReport>(_entities.CalibrationReports); }
+        }
+
+        public string Code
+        {
+            get
+            {
+                if (_instance == null)
+                    return null;
+                return _instance.Code;
+            }
+        }
+
         public Instrument InstrumentInstance
         {
             get { return _instance; }
@@ -66,13 +83,13 @@ namespace Instruments.ViewModels
             }
         }
 
-        public string Code
+        public CalibrationReport SelectedCalibration
         {
-            get
+            get { return _selectedCalibration; }
+            set
             {
-                if (_instance == null)
-                    return null;
-                return _instance.Code;
+                _selectedCalibration = value;
+                RaisePropertyChanged("SelectedCalibration");
             }
         }
     }
