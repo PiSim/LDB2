@@ -3310,7 +3310,7 @@
           <Property Name="Date" Type="DateTime" Nullable="false" />
           <Property Name="OperatorID" Type="Int32" />
           <Property Name="laboratoryID" Type="Int32" Nullable="false" />
-          <Property Name="referenceID" Type="Int32" Nullable="false" />
+          <Property Name="referenceID" Type="Int32" Nullable="true" />
           <Property Name="instrumentID" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Instrument" Relationship="labdbModel.instrument_to_calibration_report" FromRole="calibration_reports" ToRole="instrument" />
           <NavigationProperty Name="Laboratory" Relationship="labdbModel.laboratory_to_calibration_report" FromRole="calibration_reports" ToRole="Organization" />
