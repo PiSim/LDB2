@@ -80,6 +80,7 @@ namespace Instruments.ViewModels
             {
                 _instance = value;
                 RaisePropertyChanged("Code");
+                RaisePropertyChanged("CalibrationReportList");
             }
         }
 
