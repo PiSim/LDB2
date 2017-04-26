@@ -23,7 +23,8 @@
 -Implementazione parziale vista selezione ruoli persona, derivata da OrganizationsMain
 -Aggiunto UserControl FileListControl al modulo Controls, include generica lista file e pulsanti Aggiungi, rimuovi e apri
 -Implementata funzionalità calendario tarature
--*Comando sorting per lista report
+-Aggiunto SortingBehavior da http://chrigas.blogspot.it/2014/04/sorting-evolution-8.html
+-Implementato SortingBehavior in ExternalReportList, ReportList, ProjectMain
 
 v 0.4.2 -- 04/04/2017
 

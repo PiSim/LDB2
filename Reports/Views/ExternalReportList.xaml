@@ -3,6 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:sort="clr-namespace:Infrastructure.Sorting;assembly=Infrastructure"
              xmlns:local="clr-namespace:Reports.Views"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
@@ -14,8 +16,10 @@
         <ListView x:Name="XRepList"
                   ItemsSource="{Binding ExternalReportList}"
                   SelectedItem="{Binding SelectedExternalReport, Mode=TwoWay}"
-                  GridViewColumnHeader.Click="Header_Click"
                   Grid.Column="0">
+            <i:Interaction.Behaviors>
+                <sort:SortingBehavior/>
+            </i:Interaction.Behaviors>
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Numero"
@@ -26,7 +30,9 @@
                                     DisplayMemberBinding="{Binding Description}"/>
                     <GridViewColumn Header="Laboratorio"
                                     DisplayMemberBinding="{Binding ExternalLab.Name}"/>
-                    <GridViewColumn Header="RDA">
+                    <GridViewColumn>
+                        <GridViewColumnHeader Content="RDA"
+                                              IsEnabled="False"/>
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <CheckBox IsChecked="{Binding RequestDone}"
@@ -35,7 +41,9 @@
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
                     
-                    <GridViewColumn Header="Camp. Inviati">
+                    <GridViewColumn>
+                        <GridViewColumnHeader Content="Invio"
+                                              IsEnabled="False"/>
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <CheckBox IsChecked="{Binding MaterialSent}"
@@ -44,7 +52,9 @@
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
                     
-                    <GridViewColumn Header="Ricevuto">
+                    <GridViewColumn>
+                        <GridViewColumnHeader Content="Ricevuto"
+                                              IsEnabled="False"/>
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <CheckBox IsChecked="{Binding ReportReceived}"

@@ -4,6 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Projects.Views"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:sort="clr-namespace:Infrastructure.Sorting;assembly=Infrastructure"
              xmlns:prism="http://prismlibrary.com/"
              prism:ViewModelLocator.AutoWireViewModel="True"
              mc:Ignorable="d" 
@@ -17,6 +19,9 @@
         <ListView ItemsSource="{Binding ProjectList}"
                   SelectedItem="{Binding SelectedProject, Mode=TwoWay}"
                   Grid.Column="0">
+            <i:Interaction.Behaviors>
+                <sort:SortingBehavior/>
+            </i:Interaction.Behaviors>
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Progetto"

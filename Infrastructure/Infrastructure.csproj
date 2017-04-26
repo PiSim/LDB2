@@ -148,6 +148,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="Sorting\Sorting.cs" />
+    <Compile Include="Sorting\SortingAdorner.cs" />
+    <Compile Include="Sorting\SortingBehavior.cs" />
     <Compile Include="Tokens\NewReportToken.cs" />
     <Compile Include="Tokens\NewTaskToken.cs" />
     <Compile Include="ReportViewNames.cs" />
