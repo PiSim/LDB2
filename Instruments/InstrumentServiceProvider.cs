@@ -44,10 +44,10 @@ namespace Instruments
             calibrationDialog.InstrumentInstance = target;
             if (calibrationDialog.ShowDialog() == true)
             {
-                Instrument tempTarget = _entities.Instruments.First(ins => ins.ID == target.ID);
-                tempTarget.CalibrationDueDate = DateTime.Now.Date.AddMonths(target.ControlPeriod);
-                _entities.SaveChanges();
                 CalibrationReport output = calibrationDialog.ReportInstance;
+                Instrument tempTarget = _entities.Instruments.First(ins => ins.ID == target.ID);
+                tempTarget.CalibrationDueDate = output.Date.AddMonths(target.ControlPeriod);
+                _entities.SaveChanges();
                 _eventAggregator.GetEvent<CalibrationIssued>().Publish(output);
                 return output;
             }
