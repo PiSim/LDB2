@@ -51,6 +51,7 @@
           <Property Name="referenceID" Type="int" Nullable="false" />
           <Property Name="instrumentID" Type="int" Nullable="false" />
           <Property Name="notes" Type="varchar" MaxLength="200" />
+          <Property Name="number" Type="int" Nullable="false" />
           <Property Name="result" Type="varchar" MaxLength="45" Nullable="false" />
         </EntityType>
         <EntityType Name="colours">
@@ -3318,6 +3319,7 @@
           <NavigationProperty Name="Reference" Relationship="labdbModel.reference_to_calibration_report" FromRole="calibration_reports" ToRole="instrument" />
           <NavigationProperty Name="CalibrationFiles" Relationship="labdbModel.calibration_report_to_files" FromRole="calibration_reports" ToRole="calibration_files" />
           <Property Name="Notes" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="Number" Type="Int32" Nullable="false" />
           <Property Name="Result" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="InstrumentType">
@@ -4204,6 +4206,7 @@
           <EntitySetMapping Name="CalibrationReports">
             <EntityTypeMapping TypeName="labdbModel.CalibrationReport">
               <MappingFragment StoreEntitySet="calibration_reports">
+                <ScalarProperty Name="Number" ColumnName="number" />
                 <ScalarProperty Name="Result" ColumnName="result" />
                 <ScalarProperty Name="Notes" ColumnName="notes" />
                 <ScalarProperty Name="instrumentID" ColumnName="instrumentID" />
