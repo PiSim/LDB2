@@ -57,7 +57,7 @@
                                 <GridViewColumn Header="Data"
                                                 DisplayMemberBinding="{Binding Date}"/>
                                 <GridViewColumn Header="Ente"
-                                                DisplayMemberBinding="{Binding Organization.Name}"/>
+                                                DisplayMemberBinding="{Binding Laboratory.Name}"/>
                             </GridView>
                         </ListView.View>
                     </ListView>
