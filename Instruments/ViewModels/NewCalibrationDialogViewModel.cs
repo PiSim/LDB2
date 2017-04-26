@@ -40,6 +40,8 @@ namespace Instruments.ViewModels
             _principal = principal;
             _parentDialog = parentDialog;
 
+            _calibrationDate = DateTime.Now.Date;
+
             _addFile = new DelegateCommand(
                 () =>
                 {
