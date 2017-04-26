@@ -24,7 +24,7 @@ namespace DBManager
         public System.DateTime Date { get; set; }
         public Nullable<int> OperatorID { get; set; }
         public int laboratoryID { get; set; }
-        public int referenceID { get; set; }
+        public Nullable<int> referenceID { get; set; }
         public int instrumentID { get; set; }
         public string Notes { get; set; }
         public string Result { get; set; }
