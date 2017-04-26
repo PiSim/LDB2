@@ -1,4 +1,4 @@
-﻿v 0.4.3 -- 
+﻿v 0.4.3 -- 26/04/2017
 
 -Introdotti eventi notifica aggiornamenti per refresh liste
 -Implementata classe InstrumentServiceProvider e interfaccia IInstrumentServiceProvider
