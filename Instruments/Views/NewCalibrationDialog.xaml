@@ -54,7 +54,7 @@
                Grid.Column="1"
                Grid.Row="1"
                Margin="5"/>
-        <DatePicker Text="{Binding Date, Mode=TwoWay}"
+        <DatePicker Text="{Binding CalibrationDate, Mode=TwoWay}"
                     Grid.Column="1"
                     Grid.ColumnSpan="3"
                     Grid.Row="2"
