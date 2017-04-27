@@ -4,6 +4,7 @@
 -Alla creazione di un report viene presa come descrizione il nome del PDC, se selezionato
 -*Aggiunta FK e proprietà di navigazione CalibrationResponsible agli strumenti
 -*Implementata funzionalità creazione nuova persona
+-In tutti i controlli DatePicker corretti binding (precedentemente a proprietà Text, ora SelectedDate)
 
 v 0.4.3 -- 26/04/2017
 
