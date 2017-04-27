@@ -54,7 +54,10 @@ namespace Reports.ViewModels
                     Batch tempBatch = _materialServiceProvider.GetBatch(_batchNumber);
                     temp.Batch = _entities.Batches.First(btc => btc.ID == tempBatch.ID);
                     temp.Category = "TR";
-                    temp.Description = _selectedSpecification.Description;
+                    if (_selectedControlPlan != null)
+                        temp.Description = _selectedControlPlan.Name;
+                    else
+                        temp.Description = _selectedSpecification.Description;
                     temp.IsComplete = false;
                     temp.Number = _number;
                     temp.SpecificationVersion = _selectedVersion;
