@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Instruments.ViewModels
 {
@@ -69,13 +70,53 @@ namespace Instruments.ViewModels
             }
         }
 
-        public string Code
+        public Visibility CalibrationTabVisible
+        {
+            get
+            {
+                if (_instance == null)
+                    return Visibility.Visible;
+
+                else if (_instance.IsUnderControl)
+                    return Visibility.Visible;
+
+                else
+                    return Visibility.Hidden;
+            }
+        }
+
+        public bool CanModifyInstrumentInfo
+        {
+            get { return true; }
+        }
+
+        public string InstrumentCode
         {
             get
             {
                 if (_instance == null)
                     return null;
                 return _instance.Code;
+            }
+        }
+
+        public string InstrumentDescription
+        {
+            get
+            {
+                if (_instance == null)
+                    return null;
+
+                else
+                    return _instance.Description;
+            }
+
+            set
+            {
+                if (_instance == null)
+                    return;
+
+                _instance.Description = value;
             }
         }
 
@@ -87,6 +128,59 @@ namespace Instruments.ViewModels
                 _instance = value;
                 RaisePropertyChanged("Code");
                 RaisePropertyChanged("CalibrationReportList");
+                RaisePropertyChanged("CalibrationTabVisible");
+                RaisePropertyChanged("InstrumentDescription");
+                RaisePropertyChanged("InstrumentManufacturer");
+                RaisePropertyChanged("InstrumentSerialNumber");
+                RaisePropertyChanged("InstrumentType");
+            }
+        }
+
+        public string InstrumentManufacturer
+        {
+            get
+            {
+                if (_instance == null)
+                    return null;
+
+                else
+                    return _instance.Manufacturer.Name;
+            }
+        }
+
+        public string InstrumentModel
+        {
+            get
+            {
+                if (_instance == null)
+                    return null;
+
+                else
+                    return _instance.Model;
+            }
+        }
+
+        public string InstrumentSerialNumber
+        {
+            get
+            {
+                if (_instance == null)
+                    return null;
+
+                else
+                    return _instance.SerialNumber;
+            }
+        }
+
+        public string InstrumentType
+        {
+            get
+            {
+                if (_instance == null)
+                    return null;
+
+                else
+                    return _instance.InstrumentType.Name;
             }
         }
 

@@ -10,38 +10,111 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="150"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
 
-            <Label Content="Codice:"
+            <Grid Grid.Column="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                
+                <Label Content="Codice:"
                    Grid.Column="0"
                    Grid.Row="0"
                    Margin="5"/>
 
-            <Label Content="{Binding Code}"
+                <Label Content="{Binding InstrumentCode}"
                    Grid.Column="1"
                    Grid.Row="0"
                    Margin="5"/>
+
+                <Label Content="Tipo:"
+                   Grid.Column="0"
+                   Grid.Row="1"
+                   Margin="5"/>
+
+                <Label Content="{Binding InstrumentType}"
+                   Grid.Column="1"
+                   Grid.Row="1"
+                   Margin="5"/>
+
+                <Label Content="Descrizione:"
+                       Grid.Column="0"
+                       Grid.Row="2"
+                       Margin="5"/>
+
+                <TextBox Text="{Binding InstrumentDescription, Mode=TwoWay}"
+                         AcceptsReturn="True"
+                         TextWrapping="Wrap"
+                         IsEnabled="{Binding CanModifyInstrumentInfo}"
+                         Grid.Column="1"
+                         Grid.Row="2"
+                         Margin="5"/>
+            </Grid>
+
+            <Grid Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Label Content="Costruttore:"
+                   Grid.Column="0"
+                   Grid.Row="0"
+                   Margin="5"/>
+
+                <Label Content="{Binding InstrumentManufacturer}"
+                   Grid.Column="1"
+                   Grid.Row="1"
+                   Margin="5"/>
+
+                <Label Content="Modello:"
+                   Grid.Column="0"
+                   Grid.Row="1"
+                   Margin="5"/>
+
+                <Label Content="{Binding InstrumentModel}"
+                   Grid.Column="1"
+                   Grid.Row="1"
+                   Margin="5"/>
+
+                <Label Content="Matricola:"
+                   Grid.Column="0"
+                   Grid.Row="2"
+                   Margin="5"/>
+
+                <Label Content="{Binding InstrumentSerialNumber}"
+                       Grid.Column="1"
+                       Grid.Row="2"
+                       Margin="5"/>
+            </Grid>
+            
+            
+
+            
+
+            
         </Grid>
 
         <TabControl Grid.Row="1">
-            <TabItem Header="Tarature">
+            <TabItem Header="Tarature"
+                     Visibility="{Binding CalibrationTabVisible}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
