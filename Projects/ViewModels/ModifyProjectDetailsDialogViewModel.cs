@@ -59,7 +59,9 @@ namespace Projects.ViewModels
         {
             get
             {
-                return new List<Organization>(_entities.Organizations.Where(org => org.Category == "OEM"));
+                OrganizationRole oemRole = _entities.OrganizationRoles.First(rol => rol.Name == "OEM");
+                return new List<Organization>(oemRole.OrganizationMappings.Where(orm => orm.IsSelected)
+                                                                            .Select(orm => orm.Organization)); 
             }
         }
 
