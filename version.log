@@ -3,6 +3,7 @@
 -Aggiunto filtro OEM tramite ruolo nel dialogo creazione progetti
 -Alla creazione di un report viene presa come descrizione il nome del PDC, se selezionato
 -*Aggiunta FK e proprietà di navigazione CalibrationResponsible agli strumenti
+-*Implementata funzionalità creazione nuova persona
 
 v 0.4.3 -- 26/04/2017
 
