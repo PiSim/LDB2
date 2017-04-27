@@ -34,6 +34,7 @@ namespace DBManager
         public string SerialNumber { get; set; }
         public string Model { get; set; }
         public Nullable<System.DateTime> CalibrationDueDate { get; set; }
+        public Nullable<int> calibration_responsibleID { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CalibrationReport> CalibrationReports { get; set; }
@@ -46,5 +47,6 @@ namespace DBManager
         public virtual Organization Supplier { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<InstrumentMaintenanceEvent> MaintenanceEvent { get; set; }
+        public virtual Organization CalibrationResponsible { get; set; }
     }
 }

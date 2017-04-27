@@ -45,13 +45,13 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="number" Type="int" Nullable="false" />
           <Property Name="date" Type="date" Nullable="false" />
           <Property Name="operatorID" Type="int" />
           <Property Name="laboratoryID" Type="int" Nullable="false" />
-          <Property Name="referenceID" Type="int" Nullable="true" />
+          <Property Name="referenceID" Type="int" />
           <Property Name="instrumentID" Type="int" Nullable="false" />
           <Property Name="notes" Type="varchar" MaxLength="200" />
-          <Property Name="number" Type="int" Nullable="false" />
           <Property Name="result" Type="varchar" MaxLength="45" Nullable="false" />
         </EntityType>
         <EntityType Name="colours">
@@ -175,6 +175,7 @@
           <Property Name="serial_number" Type="varchar" MaxLength="45" />
           <Property Name="model" Type="varchar" MaxLength="45" />
           <Property Name="calibration_due" Type="date" />
+          <Property Name="calibration_responsibleID" Type="int" />
         </EntityType>
         <EntityType Name="masters">
           <Key>
@@ -243,7 +244,6 @@
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="name" Type="varchar" MaxLength="45" Nullable="false" />
-          <Property Name="role" Type="char" MaxLength="2" Nullable="false" />
         </EntityType>
         <EntityType Name="person_role_mappings">
           <Key>
@@ -620,6 +620,18 @@
             </Principal>
             <Dependent Role="calibration_files">
               <PropertyRef Name="reportID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="calibration_responsible_to_instrument">
+          <End Role="organizations" Type="Self.organizations" Multiplicity="0..1" />
+          <End Role="instruments" Type="Self.instruments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="organizations">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="instruments">
+              <PropertyRef Name="calibration_responsibleID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1556,6 +1568,10 @@
             <End Role="calibration_reports" EntitySet="calibration_reports" />
             <End Role="calibration_files" EntitySet="calibration_files" />
           </AssociationSet>
+          <AssociationSet Name="calibration_responsible_to_instrument" Association="Self.calibration_responsible_to_instrument">
+            <End Role="organizations" EntitySet="organizations" />
+            <End Role="instruments" EntitySet="instruments" />
+          </AssociationSet>
           <AssociationSet Name="color_to_recipe" Association="Self.color_to_recipe">
             <End Role="colours" EntitySet="colours" />
             <End Role="recipes" EntitySet="recipes" />
@@ -1985,6 +2001,7 @@
           <NavigationProperty Name="ManufacturedInstruments" Relationship="labdbModel.manufacturer_to_instrument" FromRole="Organization" ToRole="instrument" />
           <NavigationProperty Name="SuppliedInstruments" Relationship="labdbModel.supplier_to_instrument" FromRole="Organization" ToRole="instrument" />
           <NavigationProperty Name="InstrumentMaintenanceEvents" Relationship="labdbModel.organization_to_maintenance_event" FromRole="Organization" ToRole="instrument_maintenance_events" />
+          <NavigationProperty Name="instruments" Relationship="labdbModel.calibration_responsible_to_instrument" FromRole="Organization" ToRole="Instrument" />
         </EntityType>
         <EntityType Name="Person">
           <Key>
@@ -1992,7 +2009,6 @@
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" a:SetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <Property Name="Name" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Role" Type="String" MaxLength="2" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="Reports" Relationship="Self.author_to_report" FromRole="people" ToRole="reports" />
           <NavigationProperty Name="Projects" Relationship="Self.leader" FromRole="people" ToRole="projects" />
           <NavigationProperty Name="Tests" Relationship="Self.operatorID" FromRole="people" ToRole="tests" />
@@ -3034,6 +3050,10 @@
             <End Role="Requirement" EntitySet="Requirements" />
             <End Role="ControlPlanItem" EntitySet="ControlPlanItems1" />
           </AssociationSet>
+          <AssociationSet Name="calibration_responsible_to_instrument" Association="labdbModel.calibration_responsible_to_instrument">
+            <End Role="Organization" EntitySet="Organizations" />
+            <End Role="Instrument" EntitySet="Instruments" />
+          </AssociationSet>
         </EntityContainer>
         <Association Name="overridden_to_requirement">
           <End Type="labdbModel.Requirement" Role="Requirement" Multiplicity="0..1">
@@ -3352,6 +3372,8 @@
           <NavigationProperty Name="Supplier" Relationship="labdbModel.supplier_to_instrument" FromRole="instrument" ToRole="Organization" />
           <NavigationProperty Name="MaintenanceEvent" Relationship="labdbModel.instrument_to_maintenance_event" FromRole="Instrument" ToRole="instrument_maintenance_events" />
           <Property Name="CalibrationDueDate" Type="DateTime" />
+          <Property Name="calibration_responsibleID" Type="Int32" />
+          <NavigationProperty Name="CalibrationResponsible" Relationship="labdbModel.calibration_responsible_to_instrument" FromRole="Instrument" ToRole="Organization" />
         </EntityType>
         <Association Name="instrument_to_calibration_report">
           <End Type="labdbModel.Instrument" Role="instrument" Multiplicity="1" />
@@ -3794,6 +3816,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="calibration_responsible_to_instrument">
+          <End Type="labdbModel.Organization" Role="Organization" Multiplicity="0..1" />
+          <End Type="labdbModel.Instrument" Role="Instrument" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Organization">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Instrument">
+              <PropertyRef Name="calibration_responsibleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -3935,7 +3969,6 @@
               <MappingFragment StoreEntitySet="people">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Name" ColumnName="name" />
-                <ScalarProperty Name="Role" ColumnName="role" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -4229,6 +4262,7 @@
           <EntitySetMapping Name="Instruments">
             <EntityTypeMapping TypeName="labdbModel.Instrument">
               <MappingFragment StoreEntitySet="instruments">
+                <ScalarProperty Name="calibration_responsibleID" ColumnName="calibration_responsibleID" />
                 <ScalarProperty Name="CalibrationDueDate" ColumnName="calibration_due" />
                 <ScalarProperty Name="Model" ColumnName="model" />
                 <ScalarProperty Name="SerialNumber" ColumnName="serial_number" />

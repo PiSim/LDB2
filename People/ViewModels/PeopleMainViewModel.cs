@@ -18,13 +18,16 @@ namespace People.ViewModels
         private DBEntities _entities;
         private DelegateCommand _newPerson;
         private EventAggregator _eventAggregator;
+        private IAdminServiceProvider _adminServiceProvider;
         private Person _selectedPerson;
 
         public PeopleMainViewModel(DBEntities entities,
-                                    EventAggregator aggregator) : base()
+                                    EventAggregator aggregator,
+                                    IAdminServiceProvider adminServiceProvider) : base()
         {
             _entities = entities;
             _eventAggregator = aggregator;
+            _adminServiceProvider = adminServiceProvider;
 
             _eventAggregator.GetEvent<CommitRequested>()
                             .Subscribe(() => _entities.SaveChanges());
@@ -32,7 +35,8 @@ namespace People.ViewModels
             _newPerson = new DelegateCommand(
                 () =>
                 {
-
+                    _adminServiceProvider.AddPerson();
+                    RaisePropertyChanged("PeopleList");
                 });
         }
 

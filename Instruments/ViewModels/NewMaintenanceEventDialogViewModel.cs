@@ -74,7 +74,9 @@ namespace Instruments.ViewModels
         {
             get
             {
-                return new List<Person>(_entities.People.Where(per => per.Role == "TL"));
+                PersonRole techRole = _entities.PersonRoles.First(prr => prr.Name == PersonRoleNames.MaterialTestingTech);
+                return new List<Person>(techRole.RoleMappings.Where(prm => prm.IsSelected)
+                                                            .Select(prm => prm.Person));
             }
         }
 

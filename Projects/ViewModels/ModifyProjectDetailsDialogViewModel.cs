@@ -1,4 +1,5 @@
 ﻿using DBManager;
+using Infrastructure;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
@@ -51,7 +52,9 @@ namespace Projects.ViewModels
         {
             get
             {
-                return new List<Person>(_entities.People.Where(per => per.Role == "CP"));
+                PersonRole techRole = _entities.PersonRoles.First(prr => prr.Name == PersonRoleNames.ProjectLeader);
+                return new List<Person>(techRole.RoleMappings.Where(prm => prm.IsSelected)
+                                                            .Select(prm => prm.Person));
             }
         }
 

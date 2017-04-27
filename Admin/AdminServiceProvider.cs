@@ -1,12 +1,13 @@
 using Controls.Views;
 using DBManager;
+using Infrastructure;
 using Microsoft.Practices.Unity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 
-public class AdminServiceProvider
+public class AdminServiceProvider : IAdminServiceProvider
 {
     private DBEntities _entities;
     private IUnityContainer _container;
@@ -56,6 +57,32 @@ public class AdminServiceProvider
         }
 
         _entities.SaveChanges();
+    }
+
+    public Person AddPerson()
+    {
+        StringInputDialog addPersonDialog = _container.Resolve<StringInputDialog>();
+        addPersonDialog.Title = "Creazione nuova Persona";
+        addPersonDialog.Message = "Nome:";
+
+        if (addPersonDialog.ShowDialog() != true)
+            return null;
+
+        Person newPerson = new Person();
+        newPerson.Name = addPersonDialog.InputString;
+
+        foreach (PersonRole prr in _entities.PersonRoles)
+        {
+            PersonRoleMapping tempPRM = new PersonRoleMapping();
+            tempPRM.Role = prr;
+            tempPRM.IsSelected = false;
+            newPerson.RoleMappings.Add(tempPRM);
+        }
+
+        _entities.People.Add(newPerson);
+        _entities.SaveChanges();
+
+        return newPerson;
     }
 
     public void AddPersonRole()

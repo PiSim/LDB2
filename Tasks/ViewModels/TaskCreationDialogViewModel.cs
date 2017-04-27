@@ -88,7 +88,12 @@ namespace Tasks.ViewModels
 
         public List<Person> LeaderList
         {
-            get { return new List<Person>(_entities.People.Where(pp => pp.Role == "CP")); }
+            get
+            {
+                PersonRole techRole = _entities.PersonRoles.First(prr => prr.Name == PersonRoleNames.ProjectLeader);
+                return new List<Person>(techRole.RoleMappings.Where(prm => prm.IsSelected)
+                                                            .Select(prm => prm.Person));
+            }
         }
 
         public Person Requester

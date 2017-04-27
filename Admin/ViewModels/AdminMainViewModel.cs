@@ -13,14 +13,14 @@ namespace Admin.ViewModels
 {
     public class AdminMainViewModel : BindableBase
     {
-        private AdminServiceProvider _adminServiceProvider;
         private DBEntities _entities;
         private DelegateCommand _newOrganizationRole, _newPersonRole, _newUser, _newUserRole, _runMethod;
+        private IAdminServiceProvider _adminServiceProvider;
         private IUserServiceProvider _userServiceProvider;
         private string _name;
 
-        public AdminMainViewModel(AdminServiceProvider services,
-                                    DBEntities entities,
+        public AdminMainViewModel(DBEntities entities,
+                                    IAdminServiceProvider services,
                                     IUserServiceProvider userServiceProvider) : base()
         {
             _adminServiceProvider = services;
@@ -55,7 +55,6 @@ namespace Admin.ViewModels
             _runMethod = new DelegateCommand(
                 () =>
                 {
-                    services.BuildOrganizationRoles();
                 } );
         }
 

@@ -140,7 +140,12 @@ namespace Reports.ViewModels
         
         public List<Person> TechList
         {
-            get { return new List<Person>(_entities.People.Where(pp => pp.Role == "TL" )); }
+            get
+            {
+                PersonRole techRole = _entities.PersonRoles.First(prr => prr.Name == PersonRoleNames.MaterialTestingTech);
+                return new List<Person>(techRole.RoleMappings.Where(prm => prm.IsSelected)
+                                                            .Select(prm => prm.Person));
+            }
         }        
 
         public ControlPlan SelectedControlPlan
