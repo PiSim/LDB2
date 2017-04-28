@@ -81,7 +81,7 @@
 
                 <Label Content="{Binding InstrumentManufacturer}"
                    Grid.Column="1"
-                   Grid.Row="1"
+                   Grid.Row="0"
                    Margin="5"/>
 
                 <Label Content="Modello:"
