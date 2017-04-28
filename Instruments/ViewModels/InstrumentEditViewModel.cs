@@ -126,11 +126,12 @@ namespace Instruments.ViewModels
             set
             {
                 _instance = value;
-                RaisePropertyChanged("Code");
                 RaisePropertyChanged("CalibrationReportList");
                 RaisePropertyChanged("CalibrationTabVisible");
+                RaisePropertyChanged("InstrumentCode");
                 RaisePropertyChanged("InstrumentDescription");
                 RaisePropertyChanged("InstrumentManufacturer");
+                RaisePropertyChanged("InstrumentModel");
                 RaisePropertyChanged("InstrumentSerialNumber");
                 RaisePropertyChanged("InstrumentType");
             }
