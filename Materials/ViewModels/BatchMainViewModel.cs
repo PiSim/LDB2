@@ -19,6 +19,7 @@ namespace Materials.ViewModels
         private DelegateCommand _quickOpen, _openSampleLogView;
         private IEventAggregator _eventAggregator;
         private IMaterialServiceProvider _materialServiceProvider;
+        private Sample _selectedSampleArrival;
         private string _batchNumber;
 
         public BatchMainViewModel(IEventAggregator eventAggregator, 
@@ -52,6 +53,16 @@ namespace Materials.ViewModels
                 });
         }
 
+        public string BatchNumber
+        {
+            get { return _batchNumber; }
+            set
+            {
+                _batchNumber = value;
+                RaisePropertyChanged("BatchNumber");
+            }
+        }
+
         public DelegateCommand OpenSampleLogViewCommand
         {
             get { return _openSampleLogView; }
@@ -62,13 +73,22 @@ namespace Materials.ViewModels
             get { return _quickOpen; }
         }
 
-        public string BatchNumber
+        public List<Sample> RecentArrivalsList
         {
-            get { return _batchNumber; }
+            get
+            {
+                return new List<Sample>(_entities.Samples.Where(sle => sle.Code== "A")
+                                                        .OrderByDescending(sle => sle.Date)
+                                                        .Take(25));
+            }
+        }
+
+        public Sample SelectedSampleArrival
+        {
+            get { return _selectedSampleArrival; }
             set
             {
-                _batchNumber = value;
-                RaisePropertyChanged("BatchNumber");
+                _selectedSampleArrival = value;
             }
         }
     }

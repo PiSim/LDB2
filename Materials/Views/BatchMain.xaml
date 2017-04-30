@@ -44,10 +44,22 @@
                 Grid.Row="2"
                 Margin="5"/>
         </Grid>
-        <GroupBox Header="Ricerca"
+        <GroupBox Header="Ultimi arrivi"
                   Grid.Column="1">
             <Grid>
-                
+
+                <ListView ItemsSource="{Binding RecentArrivalsList}"
+                          SelectedItem="{Binding SelectedSampleArrival, Mode=TwoWay}">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Data"
+                                            DisplayMemberBinding="{Binding Date, StringFormat=d}"/>
+                            <GridViewColumn Header="Batch"
+                                            DisplayMemberBinding="{Binding Batch.Number}"/>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+                          
             </Grid>
         </GroupBox>
     </Grid>

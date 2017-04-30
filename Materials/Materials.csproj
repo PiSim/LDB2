@@ -130,6 +130,9 @@
     <Compile Include="ViewModels\ProjectPickerViewModel.cs" />
     <Compile Include="ViewModels\SampleLogDialogViewModel.cs" />
     <Compile Include="ViewModels\SampleLogViewModel.cs" />
+    <Compile Include="Views\AspectsNavigationItem.xaml.cs">
+      <DependentUpon>AspectsNavigationItem.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\BatchesNavigationItem.xaml.cs">
       <DependentUpon>BatchesNavigationItem.xaml</DependentUpon>
     </Compile>
@@ -162,6 +165,9 @@
     </Compile>
     <Compile Include="Views\MaterialCreationDialog.xaml.cs">
       <DependentUpon>MaterialCreationDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MaterialsNavigationItem.xaml.cs">
+      <DependentUpon>MaterialsNavigationItem.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ProjectPickerDialog.xaml.cs">
       <DependentUpon>ProjectPickerDialog.xaml</DependentUpon>
@@ -208,6 +214,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Views\AspectsNavigationItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\BatchesNavigationItem.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -251,6 +261,10 @@
     <Page Include="Views\MaterialCreationDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\MaterialsNavigationItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ProjectPickerDialog.xaml">
       <Generator>MSBuild:Compile</Generator>

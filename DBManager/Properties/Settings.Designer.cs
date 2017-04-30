@@ -22,5 +22,23 @@ namespace DBManager.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string server_ip {
+            get {
+                return ((string)(this["server_ip"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string server_port {
+            get {
+                return ((string)(this["server_port"]));
+            }
+        }
     }
 }
