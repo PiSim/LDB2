@@ -1,7 +1,9 @@
 ﻿using Controls.Views;
 using DBManager;
 using Infrastructure;
+using Infrastructure.Events;
 using Microsoft.Practices.Unity;
+using Prism.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,13 +15,16 @@ namespace Materials
     public class MaterialServiceProvider : IMaterialServiceProvider
     {
         private DBEntities _entities;
+        private EventAggregator _eventAggregator;
         private IUnityContainer _container;
 
         public MaterialServiceProvider(DBEntities entities,
+                                    EventAggregator eventAggregator,
                                     IUnityContainer container)
         {
             _container = container;
             _entities = entities;
+            _eventAggregator = eventAggregator;
         }
 
         public Sample AddSampleLog(string batchNumber, string actionCode)
@@ -146,6 +151,21 @@ namespace Materials
 
             else
                 return null;
+        }
+
+        public void TryQuickBatchVisualize(string batchNumber)
+        {
+
+            Batch temp = _entities.Batches.FirstOrDefault(btc => btc.Number == batchNumber);
+
+            if (temp != null)
+            {
+                NavigationToken token = new NavigationToken(MaterialViewNames.BatchInfoView, temp);
+                _eventAggregator.GetEvent<NavigationRequested>().Publish(token);
+            }
+
+            else
+                _eventAggregator.GetEvent<StatusNotificationIssued>().Publish("Batch non trovato");
         }
     }
 }

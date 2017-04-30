@@ -16,11 +16,15 @@ namespace Controls.ViewModels
     {
         private DelegateCommand _navigateBack, _navigateForward, _openCurrentUserMenu, _save;
         private DelegateCommand<IModuleNavigationTag> _requestNavigation;
+        private DelegateCommand<string> _runSearch;
         private IEventAggregator _eventAggregator;
+        private IMaterialServiceProvider _materialServiceProvider;
 
-        public ToolbarViewModel(IEventAggregator eventAggregator) : base()
+        public ToolbarViewModel(IEventAggregator eventAggregator,
+                                IMaterialServiceProvider materialServiceProvider) : base()
         {
             _eventAggregator = eventAggregator;
+            _materialServiceProvider = materialServiceProvider;
 
             _openCurrentUserMenu = new DelegateCommand(
                 () =>
@@ -47,7 +51,13 @@ namespace Controls.ViewModels
                     NavigationToken token = new NavigationToken(view.ViewName);
                     _eventAggregator.GetEvent<NavigationRequested>().Publish(token);
                 });
-                
+
+            _runSearch = new DelegateCommand<string>(
+                sString =>
+                {
+                    _materialServiceProvider.TryQuickBatchVisualize(sString);
+                });    
+
            _save = new DelegateCommand(
                () => 
                {
@@ -76,11 +86,14 @@ namespace Controls.ViewModels
             get { return _requestNavigation; }
         }
         
+        public DelegateCommand<string> RunSearchCommand
+        {
+            get { return _runSearch; }
+        }
+
         public DelegateCommand SaveCommand
         {
             get { return _save; }
         }
-
-
     }
 }

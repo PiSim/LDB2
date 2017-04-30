@@ -15,6 +15,8 @@
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition/>
             <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
 
         </Grid.ColumnDefinitions>
         <ComboBox x:Name="MainNavigationComboBox"
@@ -34,9 +36,22 @@
                 Command="{Binding SaveCommand}"
                 Grid.Column="3"
                 Margin="5"/>
+
+        <TextBox x:Name="SearchBox"
+                 KeyDown="SearchBox_KeyDown"
+                 Grid.Column="5"
+                 Margin="5,5,0,5"
+                 Width="150"/>
+        
+        <Button Content=">"
+                Command="{Binding RunSearchCommand}"
+                CommandParameter="{Binding ElementName=SearchBox, Path=Text}"
+                Grid.Column="6"
+                Margin="0,5,5,5"/>
+
         <Button Content="Menu Utente"
                 Command="{Binding OpenCurrentUserMenuCommand}"
-                Grid.Column="5"
+                Grid.Column="7"
                 Margin="5"/>
     </Grid>
 </UserControl>

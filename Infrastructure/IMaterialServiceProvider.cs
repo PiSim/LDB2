@@ -12,5 +12,6 @@ namespace Infrastructure
         Sample AddSampleLog(string batchNumber, string actionCode);
         Batch GetBatch(string batchNumber);
         Batch StartBatchSelection();
+        void TryQuickBatchVisualize(string batchNumber);
     }
 }

@@ -29,11 +29,13 @@ namespace Controls.Views
         private IEventAggregator _eventAggregator;
         private IRegionManager _regionManager;
 
-        public ToolbarView(IRegionManager regionManager, IEventAggregator eventAggregator)
+        public ToolbarView(IRegionManager regionManager, 
+                            IEventAggregator eventAggregator,
+                            IMaterialServiceProvider materialServiceProvider)
         {
             _eventAggregator = eventAggregator;
             _regionManager = regionManager;
-            DataContext = new ViewModels.ToolbarViewModel(eventAggregator);
+            DataContext = new ViewModels.ToolbarViewModel(eventAggregator, materialServiceProvider);
             InitializeComponent();
         }
 
@@ -42,6 +44,12 @@ namespace Controls.Views
         {
             NavigationToken token = new NavigationToken((MainNavigationComboBox.SelectedItem as IModuleNavigationTag).ViewName);
             _eventAggregator.GetEvent<NavigationRequested>().Publish(token);
+        }
+
+        private void SearchBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+                (DataContext as ViewModels.ToolbarViewModel).RunSearchCommand.Execute(SearchBox.Text);
         }
     }
 }

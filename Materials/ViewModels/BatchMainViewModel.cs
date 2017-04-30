@@ -40,16 +40,6 @@ namespace Materials.ViewModels
             _quickOpen = new DelegateCommand(
                 () =>
                 {
-                    Batch temp = _entities.Batches.FirstOrDefault(btc => btc.Number == _batchNumber);
-
-                    if (temp != null)
-                    {
-                        NavigationToken token = new NavigationToken(MaterialViewNames.BatchInfoView, temp);
-                        _eventAggregator.GetEvent<NavigationRequested>().Publish(token);
-                    }
-
-                    else
-                        _eventAggregator.GetEvent<StatusNotificationIssued>().Publish("Batch non trovato");
                 });
         }
 
