@@ -38,9 +38,7 @@ namespace Reports
                         creationDialog.Batch = token.TargetBatch;
 
                     if (creationDialog.ShowDialog() == true)
-                    {
-                        _eventAggregator.GetEvent<ReportCreated>().Publish(creationDialog.ReportInstance);
-                    }
+                        _eventAggregator.GetEvent<ReportListUpdateRequested>().Publish();
                 });
         }
 
