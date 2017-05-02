@@ -59,11 +59,9 @@
                     Margin="5"/>
             <Button Content="Crea Nuovo"
                     Command="{Binding NewReportCommand}"
-                    Command="{Binding CanCreateReport}"
                     Margin="5"/>
             <Button Content="Elimina"
                     Command="{Binding RemoveReportCommand}"
-                    IsEnabled="{Binding CanRemoveReport}"
                     Margin="5"/>
         </StackPanel>
         
