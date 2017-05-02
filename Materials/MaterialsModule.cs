@@ -51,6 +51,9 @@ namespace Materials
                                                 typeof(Views.BatchList));
             _regionManager.RegisterViewWithRegion(RegionNames.ProjectBatchListRegion,
                                                 typeof(Views.BatchList));
+            
+            _regionManager.RegisterViewWithRegion(RegionNames.ColourEditRegion,
+                                                typeof(Views.ColourEdit));
 
             _regionManager.RegisterViewWithRegion(RegionNames.MainNavigationRegion, 
                                                 typeof(Views.BatchesNavigationItem));
