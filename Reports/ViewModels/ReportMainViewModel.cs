@@ -19,7 +19,7 @@ namespace Reports.ViewModels
     {
         private DBEntities _entities;
         private DBPrincipal _principal;
-        private DelegateCommand _newReport, _openReport;
+        private DelegateCommand _newReport, _openReport, _removeReport;
         private EventAggregator _eventAggregator;
         private ObservableCollection<Report> _reportList;
         private Report _selectedReport;
@@ -48,6 +48,15 @@ namespace Reports.ViewModels
                 },
                 () => CanCreateReport);
 
+            _removeReport = new DelegateCommand(
+                () =>
+                {
+                    _eventAggregator.GetEvent<ReportCreationRequested>().Publish(new NewReportToken());
+                },
+                () => CanRemoveReport);
+
+            
+
             _eventAggregator.GetEvent<ReportCreated>().Subscribe(
                 rpt => 
                 {
@@ -61,6 +70,22 @@ namespace Reports.ViewModels
             get
             {
                 return _principal.IsInRole(UserRoleNames.ReportEdit);
+            }
+        }
+
+        public bool CanRemoveReport
+        {
+            get
+            {
+                if (SelectedReport == null)
+                    return false;
+                
+                else if (_principal.IsInRole.(UserRoleNames.ReportAdmin))
+                    return true;
+                    
+                else
+                    return _principal.IsInRole(UserRoleNames.ReportEdit)
+                            && SelectedReport.Author.ID == _principal.CurrentPerson.ID;
             }
         }
             
