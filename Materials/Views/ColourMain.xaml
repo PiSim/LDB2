@@ -16,8 +16,19 @@
 
         <ListView ItemsSource="{Binding ColourList}"
                   SelectedItem="{Binding SelectedColour, Mode=TwoWay}"
-                  DisplayMemberPath="Name"
+                  Grid.Column="0"
                   Margin="5">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Name"
+                                    DisplayMemberBinding="{Binding Name}">/
+                </GridView>
+            </ListView.View>
         </ListView>
+
+        
+
+        <ContentControl prism:RegionManager.RegionName="{Binding ColourEditRegionName}"
+                        Grid.Column="1"/>
     </Grid>
 </UserControl>
