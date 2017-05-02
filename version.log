@@ -7,7 +7,8 @@
 -In tutti i controlli DatePicker corretti binding (precedentemente a proprietà Text, ora SelectedDate)
 -Rimosso campo Person.Role , reimplementata funzionalità tramite PersonRoleMapping
 -Preparati NaviagationItems per viste Aspetti e Materiali
--*Introdotta lista ultimi arrivi in vista BatchMain
+-Introdotta lista ultimi arrivi in vista BatchMain
+-Aggiunto controllo per ricerca rapida batch nella toolbar
 
 v 0.4.3 -- 26/04/2017
 
