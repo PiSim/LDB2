@@ -21,7 +21,7 @@ namespace Infrastructure.Wrappers
 
         public string Method
         {
-            get { return _instance.Method.Standard.Organization.Name + " " + _instance.Method.Standard.Name; }
+            get { return _instance.Method.Standard.Name; }
         }
 
         public Requirement Instance
