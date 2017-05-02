@@ -1,4 +1,5 @@
-﻿using Prism.Mvvm;
+﻿using DBManager;
+using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,8 @@ namespace Materials.ViewModels
 {
     public class ColourEditViewModel :BindableBase
     {
+        private Colour _colourInstance;
+
         public ColourEditViewModel() : base()
         {
 
