@@ -21,7 +21,6 @@ namespace Reports.ViewModels
         private DBPrincipal _principal;
         private DelegateCommand _newReport, _openReport, _removeReport;
         private EventAggregator _eventAggregator;
-        private ObservableCollection<Report> _reportList;
         private Report _selectedReport;
 
         public ReportMainViewModel(DBEntities entities, 
@@ -31,7 +30,6 @@ namespace Reports.ViewModels
             _entities = entities;
             _eventAggregator = eventAggregator;
             _principal = principal;
-            _reportList = new ObservableCollection<Report>(entities.Reports);
 
             _openReport = new DelegateCommand(
                 () =>
@@ -51,14 +49,15 @@ namespace Reports.ViewModels
             _removeReport = new DelegateCommand(
                 () =>
                 {
-                    _eventAggregator.GetEvent<ReportCreationRequested>().Publish(new NewReportToken());
+                    _entities.Reports.Remove(_selectedReport);
+                    _eventAggregator.GetEvent<ReportListUpdateRequested>().Publish();
                 },
                 () => CanRemoveReport && SelectedReport != null);
 
             
 
-            _eventAggregator.GetEvent<ReportCreated>().Subscribe(
-                rpt => 
+            _eventAggregator.GetEvent<ReportListUpdateRequested>().Subscribe(
+                () => 
                 {
                     _reportList.Add(rpt);
                     SelectedReport = rpt;
@@ -104,9 +103,9 @@ namespace Reports.ViewModels
             get { return _removeReport; }
         }
 
-        public ObservableCollection<Report> ReportList
+        public List<Report> ReportList
         {
-            get { return _reportList; }
+            get { return new List<Report>(entities.Reports); }
         }
 
         public Report SelectedReport
