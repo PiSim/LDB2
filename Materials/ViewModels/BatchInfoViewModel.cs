@@ -29,7 +29,7 @@ namespace Materials.ViewModels
         private IUnityContainer _container;
 
         public BatchInfoViewModel(DBEntities entities,
-                                DBPrincipal principal
+                                DBPrincipal principal,
                                 EventAggregator aggregator,
                                 IUnityContainer container) : base()
         {
