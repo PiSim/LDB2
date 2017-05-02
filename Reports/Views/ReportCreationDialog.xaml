@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Reports.Views"
         mc:Ignorable="d"
-        Title="Crea Report" Height="500" Width="600"
+        Title="Crea Report" Height="550" Width="750"
         ResizeMode="NoResize">
     <Grid Background="LightGray">
         <Grid.ColumnDefinitions>
@@ -75,7 +75,7 @@
                         <StackPanel Orientation="Horizontal">
                             <Label Content="{Binding Standard.Organization.Name}"/>
                             <Label Content="{Binding Standard.Name}"/>
-                            <Label Content="{Binding Standard.Issue}"/>
+                            <Label Content="{Binding Standard.CurrentIssue.Issue}"/>
                         </StackPanel>
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
