@@ -1,4 +1,6 @@
-﻿using Microsoft.Practices.Prism.Mvvm;
+﻿using DBManager;
+using Microsoft.Practices.Prism.Mvvm;
+using Prism.Regions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,11 +21,27 @@ namespace Materials.Views
     /// <summary>
     /// Interaction logic for ColourEdit.xaml
     /// </summary>
-    public partial class ColourEdit : UserControl, IView
+    public partial class ColourEdit : UserControl, IView, INavigationAware
     {
         public ColourEdit()
         {
             InitializeComponent();
+        }
+
+        public bool IsNavigationTarget(NavigationContext ncontext)
+        {
+            return true;
+        }
+
+        public void OnNavigatedFrom(NavigationContext ncontext)
+        {
+
+        }
+
+        public void OnNavigatedTo(NavigationContext ncontext)
+        {
+            (DataContext as ViewModels.ColourEditViewModel).ColourInstance =
+               ncontext.Parameters["ObjectInstance"] as Colour;
         }
     }
 }
