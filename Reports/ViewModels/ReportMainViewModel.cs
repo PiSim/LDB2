@@ -54,14 +54,12 @@ namespace Reports.ViewModels
                 },
                 () => CanRemoveReport && SelectedReport != null);
 
-            
-
             _eventAggregator.GetEvent<ReportListUpdateRequested>().Subscribe(
                 () => 
                 {
-                    _reportList.Add(rpt);
-                    SelectedReport = rpt;
-                } ); 
+                    RaisePropertyChanged("ReportList");
+                    SelectedReport = null;
+                }); 
         }
 
         public bool CanCreateReport
