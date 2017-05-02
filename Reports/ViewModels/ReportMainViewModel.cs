@@ -53,7 +53,7 @@ namespace Reports.ViewModels
                 {
                     _eventAggregator.GetEvent<ReportCreationRequested>().Publish(new NewReportToken());
                 },
-                () => CanRemoveReport);
+                () => CanRemoveReport && SelectedReport != null);
 
             
 
@@ -99,6 +99,11 @@ namespace Reports.ViewModels
             get { return _openReport; }
         }
 
+        public DelegateCommand RemoveReportCommand
+        {
+            get { return _removeReport; }
+        }
+
         public ObservableCollection<Report> ReportList
         {
             get { return _reportList; }
@@ -111,6 +116,7 @@ namespace Reports.ViewModels
             { 
                 _selectedReport = value; 
                 OpenReportCommand.RaiseCanExecuteChanged();
+                RemoveReportCommand.RaiseCanExecuteChanged();
                 RaisePropertyChanged("SelectedReport");                
             }
         }
