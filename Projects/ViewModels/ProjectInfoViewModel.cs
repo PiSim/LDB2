@@ -44,12 +44,12 @@ namespace Projects.ViewModels
             #region EventSubscriptions
 
             _eventAggregator.GetEvent<CommitRequested>().Subscribe(() => _entities.SaveChanges());
-            _eventAggregator.GetEvent<ReportCreated>().Subscribe(
-                rpt =>
+            _eventAggregator.GetEvent<ReportListUpdateRequested>().Subscribe(
+                () => 
                 {
-                    if (rpt.Batch.Material.Construction.ProjectID == _projectInstance.ID)
-                        RaisePropertyChanged("ReportList");
-                });
+                    RaisePropertyChanged("ReportList");
+                    SelectedReport = null;
+                }); 
 
             #endregion
 
