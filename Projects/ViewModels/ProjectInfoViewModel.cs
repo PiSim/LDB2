@@ -20,8 +20,9 @@ namespace Projects.ViewModels
         private Construction _selectedAssigned, _selectedUnassigned;
         private Batch _selectedBatch;
         private DBEntities _entities;
+        private DBPrincipal _principal;
         private DelegateCommand _assignConstruction, _openBatch, _modifyDetails, _newReport, 
-            _openExternalReport, _openReport, _unassignConstruction;
+            _openExternalReport, _openReport, _removeReport, _unassignConstruction;
         private EventAggregator _eventAggregator;
         private ExternalReport _selectedExternal;
         private IProjectServiceProvider _projectServiceProvider;
@@ -31,6 +32,7 @@ namespace Projects.ViewModels
         private Report _selectedReport;
 
         public ProjectInfoViewModel(DBEntities entities,
+                                    DBPrincipal principal,
                                     EventAggregator aggregator,
                                     IProjectServiceProvider projectServiceProvider,
                                     IUnityContainer container)
@@ -39,6 +41,7 @@ namespace Projects.ViewModels
             _entities = entities;
             _container = container;
             _eventAggregator = aggregator;
+            _principal = principal;
             _projectServiceProvider = projectServiceProvider;
 
             #region EventSubscriptions
@@ -108,6 +111,14 @@ namespace Projects.ViewModels
                                                                 _selectedReport);
                     _eventAggregator.GetEvent<NavigationRequested>().Publish(token);
                 });
+
+            _removeReport = new DelegateCommand(
+                () =>
+                {
+                    _entities.Reports.Remove(_selectedReport);
+                    _eventAggregator.GetEvent<ReportListUpdateRequested>().Publish();
+                },
+                () => CanRemoveReport && SelectedReport != null);
                 
             _unassignConstruction = new DelegateCommand(
                 () => 
@@ -146,6 +157,30 @@ namespace Projects.ViewModels
                     return null;
                     
                 return new List<Batch>(_entities.Batches.Where(btc => btc.Material.Construction.ProjectID == _projectInstance.ID));
+            }
+        }
+
+        public bool CanCreateReport
+        {
+            get
+            {
+                return _principal.IsInRole(UserRoleNames.ReportEdit);
+            }
+        }
+
+        public bool CanRemoveReport
+        {
+            get
+            {
+                if (SelectedReport == null)
+                    return false;
+                
+                else if (_principal.IsInRole.(UserRoleNames.ReportAdmin))
+                    return true;
+                    
+                else
+                    return _principal.IsInRole(UserRoleNames.ReportEdit)
+                            && SelectedReport.Author.ID == _principal.CurrentPerson.ID;
             }
         }
 
@@ -255,6 +290,11 @@ namespace Projects.ViewModels
             }
         }
 
+        public DelegateCommand RemoveReportCommand
+        {
+            get { return _removeReport; }
+        }
+
         public List<Report> ReportList
         {
             get
@@ -303,6 +343,7 @@ namespace Projects.ViewModels
             { 
                 _selectedReport = value; 
                 _openReport.RaiseCanExecuteChanged();
+                _removeReport.RaiseCanExecuteChanged(),
             }
         }
         
