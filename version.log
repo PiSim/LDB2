@@ -10,7 +10,8 @@
 -Introdotta lista ultimi arrivi in vista BatchMain
 -Aggiunto controllo per ricerca rapida batch nella toolbar
 -Dialog Creazione report: rimosso OEM metodi, aggiunta edizione specifica, ridimensionata finestra
--*Aggiunto pulsante elimina Report in ReportMain
+-Aggiunto pulsante elimina Report in ReportMain
+-Implementate restrizioni per creazione/rimozione report in base a ruoli utente
 -*Vista dettagli colore
 -*SEPARAZIONE REPORT INTERNI/PUBBLICATI?????????
 
