@@ -38,8 +38,12 @@ namespace Materials.ViewModels
             _eventAggregator = aggregator;
             _principal = principal;
 
-            _eventAggregator.GetEvent<ReportCreated>().Subscribe(
-                rpt => RaisePropertyChanged("ReportList")); 
+            _eventAggregator.GetEvent<ReportListUpdateRequested>().Subscribe(
+                () => 
+                {
+                    RaisePropertyChanged("ReportList");
+                    SelectedReport = null;
+                }); 
                
             _newReport = new DelegateCommand(
                 () => 
