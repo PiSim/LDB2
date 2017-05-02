@@ -20,7 +20,8 @@ namespace Materials.ViewModels
     {
         private Batch _instance;
         private DBEntities _entities;
-        private DelegateCommand _newReport, _openExternalReport, _openReport;
+        private DBPrincipal _principal;
+        private DelegateCommand _newReport, _openExternalReport, _openReport, _removeReport;
         private EventAggregator _eventAggregator;
         private ExternalReport _selectedExternalReport;
         private List<SamplesWrapper> _samplesList;
@@ -28,12 +29,14 @@ namespace Materials.ViewModels
         private IUnityContainer _container;
 
         public BatchInfoViewModel(DBEntities entities,
+                                DBPrincipal principal
                                 EventAggregator aggregator,
                                 IUnityContainer container) : base()
         {
             _container = container;
             _entities = entities;
             _eventAggregator = aggregator;
+            _principal = principal;
 
             _eventAggregator.GetEvent<ReportCreated>().Subscribe(
                 rpt => RaisePropertyChanged("ReportList")); 
@@ -63,6 +66,13 @@ namespace Materials.ViewModels
                     _eventAggregator.GetEvent<NavigationRequested>().Publish(token);
                 },
                 () => _selectedReport != null);
+
+            _removeReport = new DelegateCommand(
+                () =>
+                {
+                    _eventAggregator.GetEvent<ReportCreationRequested>().Publish(new NewReportToken());
+                },
+                () => CanRemoveReport && SelectedReport != null);
                 
         }
 
@@ -86,6 +96,32 @@ namespace Materials.ViewModels
                 RaisePropertyChanged("Number");
                 RaisePropertyChanged("Project");
                 RaisePropertyChanged("ReportList");
+            }
+        }
+
+
+
+        public bool CanCreateReport
+        {
+            get
+            {
+                return _principal.IsInRole(UserRoleNames.ReportEdit);
+            }
+        }
+
+        public bool CanRemoveReport
+        {
+            get
+            {
+                if (SelectedReport == null)
+                    return false;
+                
+                else if (_principal.IsInRole.(UserRoleNames.ReportAdmin))
+                    return true;
+                    
+                else
+                    return _principal.IsInRole(UserRoleNames.ReportEdit)
+                            && SelectedReport.Author.ID == _principal.CurrentPerson.ID;
             }
         }
         
@@ -159,6 +195,11 @@ namespace Materials.ViewModels
             get { return _samplesList; }
         }
 
+        public DelegateCommand RemoveReportCommand
+        {
+            get { return _removeReport; }
+        }
+
         public ObservableCollection<DBManager.Report> ReportList
         {
             get { return new ObservableCollection<Report>(_instance.Reports); }
@@ -171,6 +212,7 @@ namespace Materials.ViewModels
             {
                 _selectedReport = value; 
                 _openReport.RaiseCanExecuteChanged();
+                _removeReport.RaiseCanExecuteChanged();
             }
         }
 
