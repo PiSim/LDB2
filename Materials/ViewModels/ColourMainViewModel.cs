@@ -1,4 +1,5 @@
 ﻿using DBManager;
+using Prism.Events;
 using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
@@ -12,10 +13,13 @@ namespace Materials.ViewModels
     {
         private Colour _selectedColour;
         private DBEntities _entities;
+        private EventAggregator _eventAggregator;
 
-        public ColourMainViewModel(DBEntities entities) : base()
+        public ColourMainViewModel(DBEntities entities,
+                                    EventAggregator eventAggregator) : base()
         {
             _entities = entities;
+            _eventAggregator = eventAggregator;
         }   
 
         public string ColourEditRegionName
@@ -30,10 +34,20 @@ namespace Materials.ViewModels
 
         public Colour SelectedColour
         {
-            get { return _selectedColour; }
+            get
+            {
+                return _selectedColour;
+            }
+
             set
             {
                 _selectedColour = value;
+                RaisePropertyChanged("SelectedColour");
+                NavigationToken token = new NavigationToken(ViewNames.ColourEditView,
+                                                            _selectedColour,
+                                                            RegionNames.ColourEditRegion);
+
+                _eventAggregator.GetEvent<NavigationRequested>().Publish(token);
             }
         }
     }
