@@ -2,7 +2,6 @@
 using DBManager;
 using Infrastructure;
 using Infrastructure.Events;
-using Infrastructure.Tokens;
 using Microsoft.Practices.Unity;
 using Prism.Commands;
 using Prism.Events;
@@ -120,7 +119,7 @@ namespace Materials.ViewModels
                 if (SelectedReport == null)
                     return false;
                 
-                else if (_principal.IsInRole.(UserRoleNames.ReportAdmin))
+                else if (_principal.IsInRole(UserRoleNames.ReportAdmin))
                     return true;
                     
                 else

@@ -1,6 +1,5 @@
 ﻿using DBManager;
 using Infrastructure.Events;
-using Infrastructure.Tokens;
 using Microsoft.Practices.Unity;
 using Prism.Events;
 using System;

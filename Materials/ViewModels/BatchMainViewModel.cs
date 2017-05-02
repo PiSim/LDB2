@@ -40,6 +40,7 @@ namespace Materials.ViewModels
             _quickOpen = new DelegateCommand(
                 () =>
                 {
+                    _materialServiceProvider.TryQuickBatchVisualize(_batchNumber);
                 });
         }
 

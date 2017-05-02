@@ -1,5 +1,4 @@
-﻿using Infrastructure.Tokens;
-using Prism.Events;
+﻿using Prism.Events;
 
 namespace Infrastructure.Events
 {

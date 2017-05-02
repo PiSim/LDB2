@@ -1,7 +1,6 @@
 using DBManager;
 using Infrastructure;
 using Infrastructure.Events;
-using Infrastructure.Tokens;
 using Microsoft.Practices.Unity;
 using Prism.Commands;
 using Prism.Events;
@@ -175,12 +174,12 @@ namespace Projects.ViewModels
                 if (SelectedReport == null)
                     return false;
                 
-                else if (_principal.IsInRole.(UserRoleNames.ReportAdmin))
+                else if (_principal.IsInRole(UserRoleNames.ReportAdmin))
                     return true;
                     
                 else
-                    return _principal.IsInRole(UserRoleNames.ReportEdit)
-                            && SelectedReport.Author.ID == _principal.CurrentPerson.ID;
+                    return (_principal.IsInRole(UserRoleNames.ReportEdit)
+                            && (SelectedReport.Author.ID == _principal.CurrentPerson.ID));
             }
         }
 
@@ -343,7 +342,7 @@ namespace Projects.ViewModels
             { 
                 _selectedReport = value; 
                 _openReport.RaiseCanExecuteChanged();
-                _removeReport.RaiseCanExecuteChanged(),
+                _removeReport.RaiseCanExecuteChanged();
             }
         }
         

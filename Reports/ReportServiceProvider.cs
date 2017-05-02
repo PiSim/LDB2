@@ -3,7 +3,6 @@ using DBManager;
 using Infrastructure;
 using Infrastructure.Events;
 using Infrastructure.Wrappers;
-using Infrastructure.Tokens;
 using Microsoft.Practices.Unity;
 using Prism.Events;
 using System;

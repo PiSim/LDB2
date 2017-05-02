@@ -1,4 +1,6 @@
 ﻿using DBManager;
+using Infrastructure;
+using Infrastructure.Events;
 using Prism.Events;
 using Prism.Mvvm;
 using System;
@@ -43,7 +45,7 @@ namespace Materials.ViewModels
             {
                 _selectedColour = value;
                 RaisePropertyChanged("SelectedColour");
-                NavigationToken token = new NavigationToken(ViewNames.ColourEditView,
+                NavigationToken token = new NavigationToken(MaterialViewNames.ColourEdit,
                                                             _selectedColour,
                                                             RegionNames.ColourEditRegion);
 

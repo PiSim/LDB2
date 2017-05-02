@@ -12,7 +12,7 @@
 -Dialog Creazione report: rimosso OEM metodi, aggiunta edizione specifica, ridimensionata finestra
 -Aggiunto pulsante elimina Report in ReportMain
 -Implementate restrizioni per creazione/rimozione report in base a ruoli utente
--*Vista dettagli colore
+-Vista dettagli colore
 -*SEPARAZIONE REPORT INTERNI/PUBBLICATI?????????
 
 v 0.4.3 -- 26/04/2017

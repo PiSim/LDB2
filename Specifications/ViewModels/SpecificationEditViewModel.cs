@@ -1,7 +1,6 @@
 ﻿using DBManager;
 using Infrastructure;
 using Infrastructure.Events;
-using Infrastructure.Tokens;
 using Infrastructure.Wrappers;
 using Prism.Commands;
 using Prism.Events;
@@ -205,12 +204,8 @@ namespace Specifications.ViewModels
 
             // Event Subscriptions
 
-            _eventAggregator.GetEvent<ReportCreated>().Subscribe(
-                rpt =>
-                {
-                    if (rpt.SpecificationVersion.SpecificationID == _instance.ID)
-                        RaisePropertyChanged("ReportList");
-                });
+            _eventAggregator.GetEvent<ReportListUpdateRequested>().Subscribe(
+                () => RaisePropertyChanged("ReportList"));
 
         }
         

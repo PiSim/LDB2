@@ -1,5 +1,5 @@
 ﻿using DBManager;
-using Infrastructure;
+using Infrastructure.Events;
 using Microsoft.Practices.Unity;
 using Prism.Commands;
 using Prism.Events;
@@ -49,8 +49,7 @@ namespace Reports.ViewModels
                     NavigationToken token = new NavigationToken(ViewNames.ExternalReportEditView,
                                                                 _selectedReport);
 
-                    _eventAggregator.GetEvent<Infrastructure.Events.NavigationRequested>()
-                        .Publish(token);
+                    _eventAggregator.GetEvent<NavigationRequested>().Publish(token);
                 },
                 () => _selectedReport != null);
         } 

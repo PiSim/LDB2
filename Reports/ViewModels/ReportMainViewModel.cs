@@ -2,13 +2,12 @@
 using Controls.Views;
 using Infrastructure;
 using Infrastructure.Events;
-using Infrastructure.Tokens;
 using Microsoft.Practices.Unity;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
 using System;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -77,7 +76,7 @@ namespace Reports.ViewModels
                 if (SelectedReport == null)
                     return false;
                 
-                else if (_principal.IsInRole.(UserRoleNames.ReportAdmin))
+                else if (_principal.IsInRole(UserRoleNames.ReportAdmin))
                     return true;
                     
                 else
@@ -103,7 +102,7 @@ namespace Reports.ViewModels
 
         public List<Report> ReportList
         {
-            get { return new List<Report>(entities.Reports); }
+            get { return new List<Report>(_entities.Reports); }
         }
 
         public Report SelectedReport

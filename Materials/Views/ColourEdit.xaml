@@ -22,7 +22,19 @@
         
         <GroupBox Header="Commesse"
                   Grid.Row="1">
-            <ContentControl prism:RegionManager.RegionName="ColourEditBatchListRegion"/>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="50"/>
+                </Grid.ColumnDefinitions>
+                <ContentControl prism:RegionManager.RegionName="ColourEditBatchListRegion"/>
+                <StackPanel Orientation="Vertical"
+                                Grid.Column="1">
+                    <Button Content="Apri"
+                            Command="{Binding Path=OpenBatchCommand}"
+                            Margin="5"/>
+                </StackPanel>
+            </Grid>
         </GroupBox>
         <GroupBox Header="Ricette"
                   Grid.Row="2">

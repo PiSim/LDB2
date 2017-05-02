@@ -130,7 +130,7 @@
     <Compile Include="ITaskServiceProvider.cs" />
     <Compile Include="IUserServiceProvider.cs" />
     <Compile Include="MaterialViewNames.cs" />
-    <Compile Include="NavigationToken.cs" />
+    <Compile Include="Events\NavigationToken.cs" />
     <Compile Include="OrganizationRoleNames.cs" />
     <Compile Include="OrganizationViewNames.cs" />
     <Compile Include="PeopleViewNames.cs" />
@@ -152,8 +152,8 @@
     <Compile Include="Sorting\Sorting.cs" />
     <Compile Include="Sorting\SortingAdorner.cs" />
     <Compile Include="Sorting\SortingBehavior.cs" />
-    <Compile Include="Tokens\NewReportToken.cs" />
-    <Compile Include="Tokens\NewTaskToken.cs" />
+    <Compile Include="Events\NewReportToken.cs" />
+    <Compile Include="Events\NewTaskToken.cs" />
     <Compile Include="ReportViewNames.cs" />
     <Compile Include="UserRoleNames.cs" />
     <Compile Include="Wrappers\ControlPlanItemWrapper.cs" />

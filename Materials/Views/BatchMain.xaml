@@ -57,15 +57,15 @@
                             <GridViewColumn Header="Batch"
                                             DisplayMemberBinding="{Binding Batch.Number}"/>
                             <GridViewColumn Header="Tipo"
-                                            DisplayMemberBinding="{Binding Path=Material.Construction.Type.Code}"/>
+                                            DisplayMemberBinding="{Binding Batch.Material.Construction.Type.Code}"/>
                             <GridViewColumn Header="Linea"
-                                            DisplayMemberBinding="{Binding Path=Material.Construction.Line}"/>
+                                            DisplayMemberBinding="{Binding Batch.Material.Construction.Line}"/>
                             <GridViewColumn Header="Aspetto"
-                                            DisplayMemberBinding="{Binding Path=Material.Construction.Aspect.Code}"/>
+                                            DisplayMemberBinding="{Binding Batch.Material.Construction.Aspect.Code}"/>
                             <GridViewColumn Header="Mescola"
-                                            DisplayMemberBinding="{Binding Path=Material.Recipe.Code}"/>
+                                            DisplayMemberBinding="{Binding Batch.Material.Recipe.Code}"/>
                             <GridViewColumn Header="Colore"
-                                            DisplayMemberBinding="{Binding Material.Recipe.Colour.Name}"/>
+                                            DisplayMemberBinding="{Binding Batch.Material.Recipe.Colour.Name}"/>
                         </GridView>
                     </ListView.View>
                 </ListView>
