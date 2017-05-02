@@ -18,6 +18,11 @@ namespace Materials.ViewModels
             _entities = entities;
         }   
 
+        public string ColourEditRegionName
+        {
+            get { return RegionNames.ColourEditRegion; }
+        }
+
         public List<Colour> ColourList
         {
             get { return new List<Colour>(_entities.Colours); }
