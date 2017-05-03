@@ -1,5 +1,5 @@
 ﻿using DBManager;
-using Microsoft.Practices.Prism;
+using Microsoft.Practices.Prism.Mvvm;
 using Prism.Events;
 using Prism.Regions;
 using System;
