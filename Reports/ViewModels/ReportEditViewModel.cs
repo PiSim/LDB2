@@ -88,7 +88,7 @@ namespace Reports.ViewModels
         {
             get 
             { 
-                if (_instance != null)
+                if (_instance == null)
                     return null;
                 else
                     return _instance.Batch.Number; 
@@ -99,7 +99,7 @@ namespace Reports.ViewModels
         {
             get 
             { 
-                if (_instance != null)
+                if (_instance == null)
                     return null;
                 else
                     return _instance.Category; 
@@ -110,7 +110,7 @@ namespace Reports.ViewModels
         {
             get 
             { 
-                if (_instance != null)
+                if (_instance == null)
                     return null;
                 else
                     return _instance.Description; 
@@ -122,7 +122,7 @@ namespace Reports.ViewModels
         {
             get 
             { 
-                if (_instance != null)
+                if (_instance == null)
                     return null;
                 else
                      return new List<ReportFile>(_instance.ReportFiles); 
@@ -157,7 +157,7 @@ namespace Reports.ViewModels
         {
             get 
             { 
-                if (_instance != null)
+                if (_instance == null)
                     return null;
                 else
                      return _instance.Batch.Material; 
@@ -168,7 +168,7 @@ namespace Reports.ViewModels
         {
             get 
             { 
-                if (_instance != null)
+                if (_instance == null)
                     return null;
                 else
                       return _instance.Number.ToString(); 
@@ -204,7 +204,7 @@ namespace Reports.ViewModels
         {
             get 
             { 
-                if (_instance != null)
+                if (_instance == null)
                     return null;
                 else
                      return _instance.SpecificationVersion.Specification.Standard.Organization.Name + " " + 
@@ -216,7 +216,7 @@ namespace Reports.ViewModels
         {
             get 
             { 
-                if (_instance != null)
+                if (_instance == null)
                     return null;
                 else
                      return _instance.SpecificationVersion.Name; 
