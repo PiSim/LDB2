@@ -1,4 +1,5 @@
 ﻿using DBManager;
+using Infrastructure;
 using Infrastructure.Events;
 using Prism.Commands;
 using Prism.Events;
@@ -13,29 +14,22 @@ using System.Windows.Forms;
 
 namespace Reports.ViewModels
 {
-    internal class ReportEditViewModel : BindableBase
+    public class ReportEditViewModel : BindableBase
     {
         private DBEntities _entities;
+        private DBPrincipal _principal;
         private DelegateCommand _addFile, _openFile, _removeFile;
         private EventAggregator _eventAggregator;
-        Report _instance;
-        List<TestWrapper> _testList;
-        ReportFile _selectedFile;
+        private Report _instance;
+        private List<TestWrapper> _testList;
+        private ReportFile _selectedFile;
         
         public ReportEditViewModel(DBEntities entities,
-                                    EventAggregator aggregator,
-                                    Report target) : base()
+                                    DBPrincipal principal,
+                                    EventAggregator aggregator) : base()
         {
-            if (!(target is Report))
-                throw new InvalidOperationException("Not a Report Object");
-
             _entities = entities;
             _eventAggregator = aggregator;
-            _instance = _entities.Reports.FirstOrDefault(rep => rep.ID == target.ID);
-
-            _testList = new List<TestWrapper>();
-            foreach (Test tst in _instance.Tests)
-                _testList.Add(new TestWrapper(tst));
 
             _eventAggregator.GetEvent<CommitRequested>()
                 .Subscribe(() =>
@@ -79,6 +73,7 @@ namespace Reports.ViewModels
                 () =>
                 {
                     _instance.ReportFiles.Remove(_selectedFile);
+                    RaisePropertyChanged("FileList");
                 },
                 () => _selectedFile != null);
 
@@ -91,39 +86,93 @@ namespace Reports.ViewModels
 
         public string BatchNumber
         {
-            get { return _instance.Batch.Number; }
+            get 
+            { 
+                if (_instance != null)
+                    return null;
+                else
+                    return _instance.Batch.Number; 
+            }
         }
 
         public string Category
         {
-            get { return _instance.Category; }
-            set { _instance.Category = value; }
+            get 
+            { 
+                if (_instance != null)
+                    return null;
+                else
+                    return _instance.Category; 
+            }
         }
         
         public string Description
         {
-            get { return _instance.Description; }
+            get 
+            { 
+                if (_instance != null)
+                    return null;
+                else
+                    return _instance.Description; 
+            }
             set { _instance.Description = value; }
         }
 
         public List<ReportFile> FileList
         {
-            get { return new List<ReportFile>(_instance.ReportFiles); }
+            get 
+            { 
+                if (_instance != null)
+                    return null;
+                else
+                     return new List<ReportFile>(_instance.ReportFiles); 
+            }
         }
 
         public Report Instance
         {
             get { return _instance; }
+            set
+            {
+                _instance = _entities.Reports.FirstOrDefault(rep => rep.ID == value.ID);
+
+                _testList = new List<TestWrapper>();
+                foreach (Test tst in _instance.Tests)
+                    _testList.Add(new TestWrapper(tst));
+
+                RaisePropertyChanged("BatchNumber");
+                RaisePropertyChanged("Category");
+                RaisePropertyChanged("Description");
+                RaisePropertyChanged("FileList");
+                RaisePropertyChanged("Material");
+                RaisePropertyChanged("Number");
+                RaisePropertyChanged("Project");
+                RaisePropertyChanged("Specification");
+                RaisePropertyChanged("SpecificationVersion");
+                RaisePropertyChanged("TestList");
+            }
         }
 
         public Material Material
         {
-            get { return _instance.Batch.Material; }
+            get 
+            { 
+                if (_instance != null)
+                    return null;
+                else
+                     return _instance.Batch.Material; 
+            }
         }
 
         public string Number
         {
-            get { return _instance.Number.ToString(); }
+            get 
+            { 
+                if (_instance != null)
+                    return null;
+                else
+                      return _instance.Number.ToString(); 
+            }
         }
 
         public DelegateCommand OpenFileCommand
@@ -153,13 +202,25 @@ namespace Reports.ViewModels
 
         public string Specification
         {
-            get { return _instance.SpecificationVersion.Specification.Standard.Organization.Name + " " + 
-                    _instance.SpecificationVersion.Specification.Standard.Name; }
+            get 
+            { 
+                if (_instance != null)
+                    return null;
+                else
+                     return _instance.SpecificationVersion.Specification.Standard.Organization.Name + " " + 
+                            _instance.SpecificationVersion.Specification.Standard.Name; 
+            }
         }
 
         public string SpecificationVersion
         {
-            get { return _instance.SpecificationVersion.Name; }
+            get 
+            { 
+                if (_instance != null)
+                    return null;
+                else
+                     return _instance.SpecificationVersion.Name; 
+            }
         }
 
         public ReportFile SelectedFile
@@ -170,6 +231,8 @@ namespace Reports.ViewModels
                 _selectedFile = value;
                 _openFile.RaiseCanExecuteChanged();
                 _removeFile.RaiseCanExecuteChanged();
+
+                RaisePropertyChanged("SelectedFile");
             }
         } 
 
