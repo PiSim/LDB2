@@ -105,6 +105,7 @@ namespace Materials.ViewModels
             set
             {
                 _selectedBatch = value;
+                _openBatch.RaiseCanExecuteChanged();
                 RaisePropertyChanged("SelectedBatch");
             }
         }
