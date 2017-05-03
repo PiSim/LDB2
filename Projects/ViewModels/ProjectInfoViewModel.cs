@@ -115,6 +115,7 @@ namespace Projects.ViewModels
                 () =>
                 {
                     _entities.Reports.Remove(_selectedReport);
+                    _entities.SaveChanges();
                     _eventAggregator.GetEvent<ReportListUpdateRequested>().Publish();
                 },
                 () => CanRemoveReport && SelectedReport != null);
