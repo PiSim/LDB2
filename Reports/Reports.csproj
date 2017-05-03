@@ -147,8 +147,8 @@
     <Compile Include="Views\ExternalReportsNavigationItem.xaml.cs">
       <DependentUpon>ExternalReportsNavigationItem.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\ReportEditView.xaml.cs">
-      <DependentUpon>ReportEditView.xaml</DependentUpon>
+    <Compile Include="Views\ReportEdit.xaml.cs">
+      <DependentUpon>ReportEdit.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ReportMain.xaml.cs">
       <DependentUpon>ReportMain.xaml</DependentUpon>
@@ -216,7 +216,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\ReportEditView.xaml">
+    <Page Include="Views\ReportEdit.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
