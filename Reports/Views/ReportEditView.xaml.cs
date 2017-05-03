@@ -22,9 +22,9 @@ namespace Reports.Views
     /// <summary>
     /// Interaction logic for ReportEditView.xaml
     /// </summary>
-    public partial class ReportEditView : UserControl, INavigationAware, IView
+    public partial class ReportEdit : UserControl, INavigationAware, IView
     {
-        public ReportEditView()
+        public ReportEdit()
         {
             InitializeComponent();
         }
