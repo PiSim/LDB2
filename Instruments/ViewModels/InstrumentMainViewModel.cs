@@ -83,6 +83,7 @@ namespace Instruments.ViewModels
             {
                 _selectedInstrument = value;
                 _openInstrument.RaiseCanExecuteChanged();
+                RaisePropertyChanged("SelectedInstrument");
             }
         }
 
