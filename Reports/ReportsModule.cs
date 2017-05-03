@@ -23,10 +23,11 @@ namespace Reports
         public void Initialize()
         {
             _container.RegisterType<Object, Views.ReportMain>(ViewNames.ReportMain);
-            _container.RegisterType<Object, Views.ReportEditView>(ViewNames.ReportEditView);
+            _container.RegisterType<Object, Views.ReportEdit>(ViewNames.ReportEditView);
             _container.RegisterType<Object, Views.ExternalReportMain>(ViewNames.ExternalReportMainView);
             _container.RegisterType<Object, Views.ExternalReportEdit>(ViewNames.ExternalReportEditView);
             
+            _container.RegisterType<ViewModels.ReportEditViewModel>();
             _container.RegisterType<ViewModels.ReportMainViewModel>();
             _container.RegisterType<ViewModels.ExternalReportEditViewModel>();
             _container.RegisterType<ViewModels.ExternalReportMainViewModel>();
