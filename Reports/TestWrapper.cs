@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Reports
 {
-    class TestWrapper : BindableBase
+    public class TestWrapper : BindableBase
     {
         private bool _canModify;
         private Test _testInstance;
