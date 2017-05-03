@@ -40,6 +40,7 @@ namespace Materials.ViewModels
             _eventAggregator.GetEvent<ReportListUpdateRequested>().Subscribe(
                 () => 
                 {
+                    _entities.Entry(BatchInstance).Refresh();
                     RaisePropertyChanged("ReportList");
                     SelectedReport = null;
                 }); 
