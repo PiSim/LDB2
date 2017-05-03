@@ -54,10 +54,6 @@
 
         <StackPanel Orientation="Vertical"
                     Grid.Column="1">
-            <StackPanel Orientation="Horizontal">
-                <ChackBox IsChecked="{Binding FilterComplete, Mode=TwoWay"/>
-                <Label Content="Filtra Completi"/>
-            </StackPanel>
             <Button Content="Apri"
                     Command="{Binding Path=OpenReportCommand}"
                     Margin="5"/>
