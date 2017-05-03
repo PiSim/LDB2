@@ -73,7 +73,7 @@
                   Grid.Column="1"
                   Grid.Row="1">
             <ListView ItemsSource="{Binding PendingCalibrationsList}"
-                          SelectedItem="{Binding SelectedCalibration, Mode=TwoWay}"
+                          SelectedItem="{Binding SelectedInstrument, Mode=TwoWay}"
                           Grid.Row="1">
                 <ListView.View>
                     <GridView>
