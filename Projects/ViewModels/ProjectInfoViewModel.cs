@@ -49,6 +49,7 @@ namespace Projects.ViewModels
             _eventAggregator.GetEvent<ReportListUpdateRequested>().Subscribe(
                 () => 
                 {
+                     _entities.Entry(ProjectInstance).Refresh();
                     RaisePropertyChanged("ReportList");
                     SelectedReport = null;
                 }); 
