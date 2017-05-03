@@ -73,10 +73,11 @@ namespace Materials.ViewModels
             _removeReport = new DelegateCommand(
                 () =>
                 {
-                    _eventAggregator.GetEvent<ReportCreationRequested>().Publish(new NewReportToken());
+                    _entities.Reports.Remove(_selectedReport);
+                    _entities.SaveChanges();
+                    _eventAggregator.GetEvent<ReportListUpdateRequested>().Publish();
                 },
                 () => CanRemoveReport && SelectedReport != null);
-                
         }
 
         public Batch BatchInstance
