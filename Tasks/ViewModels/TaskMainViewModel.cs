@@ -1,4 +1,5 @@
 ﻿using DBManager;
+using Infrastructure;
 using Infrastructure.Events;
 using Microsoft.Practices.Unity;
 using Prism.Commands;
@@ -36,6 +37,11 @@ namespace Tasks.ViewModels
                     _eventAggregator.GetEvent<TaskCreationRequested>().
                         Publish(token);
                 } );
+        }
+
+        public string MainTaskListRegionName
+        {
+            get { return RegionNames.TaskMainListRegion; }
         }
         
         public DelegateCommand NewTaskCommand

@@ -23,9 +23,13 @@ namespace Tasks.Views
         private Task _taskInstance;
         
         public TaskCreationDialog(DBEntities entities,
-                                IMaterialServiceProvider serviceProvider)
+                                IMaterialServiceProvider serviceProvider,
+                                IReportServiceProvider reportServiceProvider)
         {
-            DataContext = new ViewModels.TaskCreationDialogViewModel(entities, serviceProvider, this);
+            DataContext = new ViewModels.TaskCreationDialogViewModel(entities, 
+                                                                    serviceProvider, 
+                                                                    reportServiceProvider, 
+                                                                    this);
             InitializeComponent();
         }
         

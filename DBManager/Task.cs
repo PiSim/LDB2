@@ -25,13 +25,13 @@ namespace DBManager
         public int projectID { get; set; }
         public int SpecificationVersionID { get; set; }
         public int batchID { get; set; }
-        public string notes { get; set; }
+        public string Notes { get; set; }
         public Nullable<int> reportID { get; set; }
-        public Nullable<int> progress { get; set; }
-        public Nullable<int> priority_modifier { get; set; }
+        public Nullable<int> Progress { get; set; }
+        public Nullable<int> PriorityModifier { get; set; }
         public string PipelineOrder { get; set; }
-        public Nullable<System.DateTime> start_date { get; set; }
-        public Nullable<System.DateTime> end_date { get; set; }
+        public Nullable<System.DateTime> StartDate { get; set; }
+        public Nullable<System.DateTime> EndDate { get; set; }
         public sbyte IsComplete { get; set; }
     
         public virtual Person Requester { get; set; }

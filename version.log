@@ -13,7 +13,9 @@
 -Aggiunto pulsante elimina Report in ReportMain
 -Implementate restrizioni per creazione/rimozione report in base a ruoli utente
 -Vista dettagli colore
--*Reimplementata funzionalità Task
+-Rifatto TaskCreationDialog sulla base di ReportCreationDialog
+-*Rivista entità task: eliminato campo progetto, cambiato tipo al campo IsComplete
+-*Implementata funzionalità Task
 -*Supporto primari multipli per taratura
 
 v 0.4.3 -- 26/04/2017

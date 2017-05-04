@@ -156,6 +156,7 @@
     <Compile Include="Events\NewTaskToken.cs" />
     <Compile Include="ReportViewNames.cs" />
     <Compile Include="UserRoleNames.cs" />
+    <Compile Include="TaskViewNames.cs" />
     <Compile Include="Wrappers\ControlPlanItemWrapper.cs" />
     <Compile Include="Wrappers\ReportItemWrapper.cs" />
     <Compile Include="Wrappers\RequirementWrapper.cs" />

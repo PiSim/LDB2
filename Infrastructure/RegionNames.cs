@@ -25,6 +25,7 @@ namespace Infrastructure
         public static string SpecificationIssueRegion { get { return "SpecificationIssueRegion"; } }
         public static string SpecificationReportListRegion { get { return "SpecificationReportListRegion"; } }
         public static string StatusbarRegion { get { return "StatusBarRegion"; } }
+        public static string TaskMainListRegion { get { return "TaskMainListRegion"; } }
         public static string ToolbarRegion { get { return "ToolbarRegion"; } }
     }
 }

@@ -15,7 +15,7 @@ using System.Windows.Forms;
 
 namespace Specifications.ViewModels
 {
-    internal class SpecificationEditViewModel : BindableBase
+    public class SpecificationEditViewModel : BindableBase
     {
         private ControlPlan _selectedControlPlan;
         private DBEntities _entities;

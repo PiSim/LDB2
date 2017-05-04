@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tasks
+namespace Infrastructure
 {
-    class ViewNames
+    public class TaskViewNames
     {
         public static string TaskMainView
         {

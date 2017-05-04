@@ -28,7 +28,7 @@ namespace Tasks.Views
 
         public string ViewName
         {
-            get { return ViewNames.TaskMainView; }
+            get { return TaskViewNames.TaskMainView; }
         }
     }
 }

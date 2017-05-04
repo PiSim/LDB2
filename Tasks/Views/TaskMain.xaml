@@ -14,7 +14,7 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         
-        <ContentControl prism:RegionManager.RegionName="MainTaskListRegion"
+        <ContentControl prism:RegionManager.RegionName="{Binding MainTaskListRegionName}"
                         Grid.Column="0"/>
         
         <Button Content="Nuovo"

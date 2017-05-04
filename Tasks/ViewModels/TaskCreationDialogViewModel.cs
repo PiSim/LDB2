@@ -13,10 +13,12 @@ namespace Tasks.ViewModels
 {
     public class TaskCreationDialogViewModel : BindableBase
     {
-        private string _batchNumber;
+        private string _batchNumber, _notes;
+        private ControlPlan _selectedControlPlan;
         private DBEntities _entities;
         private DelegateCommand _cancel, _confirm;
         private IMaterialServiceProvider _materialServiceProvider;
+        private IReportServiceProvider _reportServiceProvider;
         private ObservableCollection<ReportItemWrapper> _requirementList;
         private ObservableCollection<SpecificationVersion> _versionList;
         private Person _requester;
@@ -26,10 +28,12 @@ namespace Tasks.ViewModels
 
         public TaskCreationDialogViewModel(DBEntities entities,
                                     IMaterialServiceProvider serviceProvider,
+                                    IReportServiceProvider reportServiceProvider,
                                     Views.TaskCreationDialog parentView) : base()
         {
             _entities = entities;
             _materialServiceProvider = serviceProvider;
+            _reportServiceProvider = reportServiceProvider;
             _parentView = parentView;
             _requirementList = new ObservableCollection<ReportItemWrapper>();
             
@@ -43,12 +47,24 @@ namespace Tasks.ViewModels
                 () => 
                 {
                     Task output = new Task();
+                    Batch tempBatch = _materialServiceProvider.GetBatch(_batchNumber);
+
+                    output.Batch = _entities.Batches.First(btc => btc.ID == tempBatch.ID);
+                    output.IsComplete = 0;
+                    output.Notes = _notes;
+                    output.PipelineOrder = "";
+                    output.PriorityModifier = 0;
+                    output.Progress = 0;
+                    output.PriorityModifier = 0;
                     output.Requester = _requester;
                     output.SpecificationVersion = _selectedVersion;
-                    output.Batch = _materialServiceProvider.GetBatch(_batchNumber);
-                    
+                    output.StartDate = DateTime.Now.Date;
+
                     foreach (ReportItemWrapper req in _requirementList)
                     {
+                        if (!req.IsSelected)
+                            continue;
+
                         TaskItem temp = new TaskItem();
                         temp.Requirement = req.Instance;
                         output.TaskItems.Add(temp);
@@ -96,11 +112,39 @@ namespace Tasks.ViewModels
             }
         }
 
+        public string Notes
+        {
+            get { return _notes; }
+            set
+            {
+                _notes = value;
+            }
+        }
+
         public Person Requester
         {
             get { return _requester; }
-            set { _requester = value; }
+            set
+            {
+                _requester = value;
+                RaisePropertyChanged();
+            }
         }
+
+        public ControlPlan SelectedControlPlan
+        {
+            get { return _selectedControlPlan; }
+            set
+            {
+                _selectedControlPlan = value;
+                RaisePropertyChanged("SelectedControlPlan");
+                if (value != null)
+                {
+                    _reportServiceProvider.ApplyControlPlan(_requirementList, _selectedControlPlan);
+                }
+            }
+        }
+
 
         public Specification SelectedSpecification
         {
@@ -122,6 +166,8 @@ namespace Tasks.ViewModels
                     _versionList.Clear();
 
                 SelectedVersion = _versionList.FirstOrDefault(sv => sv.IsMain);
+                SelectedControlPlan = null;
+                RaisePropertyChanged("ControlPlanList");
             }
         }
 

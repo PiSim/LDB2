@@ -2198,17 +2198,17 @@
           <Property Name="projectID" Type="Int32" Nullable="false" />
           <Property Name="SpecificationVersionID" Type="Int32" Nullable="false" />
           <Property Name="batchID" Type="Int32" Nullable="false" />
-          <Property Name="notes" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="Notes" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
           <Property Name="reportID" Type="Int32" />
-          <Property Name="progress" Type="Int32" />
-          <Property Name="priority_modifier" Type="Int32" />
+          <Property Name="Progress" Type="Int32" />
+          <Property Name="PriorityModifier" Type="Int32" />
           <Property Name="PipelineOrder" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Requester" Relationship="Self.requester_to_task" FromRole="tasks" ToRole="people" />
           <NavigationProperty Name="Project" Relationship="Self.project_to_task" FromRole="tasks" ToRole="projects" />
           <NavigationProperty Name="Report" Relationship="Self.report_to_task" FromRole="tasks" ToRole="reports" />
           <NavigationProperty Name="SpecificationVersion" Relationship="Self.specversion_to_task" FromRole="tasks" ToRole="specification_versions" />
-          <Property Name="start_date" Type="DateTime" />
-          <Property Name="end_date" Type="DateTime" />
+          <Property Name="StartDate" Type="DateTime" />
+          <Property Name="EndDate" Type="DateTime" />
           <Property Name="IsComplete" Type="SByte" Nullable="false" />
           <NavigationProperty Name="TaskItems" Relationship="labdbModel.task_to_item" FromRole="Task" ToRole="task_items" />
           <NavigationProperty Name="Batch" Relationship="labdbModel.batch_to_task" FromRole="Task" ToRole="Batch" />
@@ -4120,17 +4120,17 @@
             <EntityTypeMapping TypeName="labdbModel.Task">
               <MappingFragment StoreEntitySet="tasks">
                 <ScalarProperty Name="IsComplete" ColumnName="is_complete" />
-                <ScalarProperty Name="end_date" ColumnName="end_date" />
-                <ScalarProperty Name="start_date" ColumnName="start_date" />
+                <ScalarProperty Name="EndDate" ColumnName="end_date" />
+                <ScalarProperty Name="StartDate" ColumnName="start_date" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="RequesterID" ColumnName="requesterID" />
                 <ScalarProperty Name="projectID" ColumnName="projectID" />
                 <ScalarProperty Name="SpecificationVersionID" ColumnName="specification_versionID" />
                 <ScalarProperty Name="batchID" ColumnName="batchID" />
-                <ScalarProperty Name="notes" ColumnName="notes" />
+                <ScalarProperty Name="Notes" ColumnName="notes" />
                 <ScalarProperty Name="reportID" ColumnName="reportID" />
-                <ScalarProperty Name="progress" ColumnName="progress" />
-                <ScalarProperty Name="priority_modifier" ColumnName="priority_modifier" />
+                <ScalarProperty Name="Progress" ColumnName="progress" />
+                <ScalarProperty Name="PriorityModifier" ColumnName="priority_modifier" />
                 <ScalarProperty Name="PipelineOrder" ColumnName="pipeline_order" />
               </MappingFragment>
             </EntityTypeMapping>
