@@ -13,7 +13,7 @@
 -Aggiunto pulsante elimina Report in ReportMain
 -Implementate restrizioni per creazione/rimozione report in base a ruoli utente
 -Vista dettagli colore
--*SEPARAZIONE REPORT INTERNI/PUBBLICATI?????????
+-*Reimplementata funzionalità Task
 
 v 0.4.3 -- 26/04/2017
 
