@@ -14,6 +14,7 @@
 -Implementate restrizioni per creazione/rimozione report in base a ruoli utente
 -Vista dettagli colore
 -*Reimplementata funzionalità Task
+-*Supporto primari multipli per taratura
 
 v 0.4.3 -- 26/04/2017
 
