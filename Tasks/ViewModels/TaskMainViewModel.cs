@@ -30,6 +30,8 @@ namespace Tasks.ViewModels
             _entities = entities;
             _eventAggregator = eventAggregator;
 
+            _eventAggregator.GetEvent<TaskListUpdateRequested>().Subscribe(() => RaisePropertyChanged("TaskList"));
+
             _newTask = new DelegateCommand(
                 () =>
                 {
