@@ -46,6 +46,7 @@ namespace Projects.ViewModels
             #region EventSubscriptions
 
             _eventAggregator.GetEvent<CommitRequested>().Subscribe(() => _entities.SaveChanges());
+            
             _eventAggregator.GetEvent<ReportListUpdateRequested>().Subscribe(
                 () => 
                 {
@@ -53,6 +54,8 @@ namespace Projects.ViewModels
                     RaisePropertyChanged("ReportList");
                     SelectedReport = null;
                 }); 
+
+            _eventAggregator.GetEvent<TaskListUpdateRequested>().Subscribe(() => RaisePropertyChanged("TaskList"));
 
             #endregion
 
