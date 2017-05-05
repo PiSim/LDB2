@@ -14,15 +14,25 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         
-        <ContentControl prism:RegionManager.RegionName="{Binding MainTaskListRegionName}"
-                        Grid.Column="0"/>
-        
-        <Button Content="Nuovo"
-                Command="{Binding NewTaskCommand}"
-                Grid.Column="1"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top"
-                Margin="0,0,0,0"/>
+        <GroupBox Grid.Column="0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                
+                <ContentControl prism:RegionManager.RegionName="{Binding MainTaskListRegionName}"
+                                Grid.Column="0"/>
+            
+                <Button Content="Nuovo"
+                        Command="{Binding NewTaskCommand}"
+                        Grid.Column="1"
+                        Margin="5"/>
+            </Grid>
+        </GroupBox>
+
+        <ContentControl prism:RegionManager.RegionName="{Binding TaskViewRegionName}"
+                        Grid.Column="1"/>
                         
     </Grid>
 </UserControl>
