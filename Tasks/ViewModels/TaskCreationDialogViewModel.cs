@@ -50,9 +50,9 @@ namespace Tasks.ViewModels
                     Batch tempBatch = _materialServiceProvider.GetBatch(_batchNumber);
 
                     output.Batch = _entities.Batches.First(btc => btc.ID == tempBatch.ID);
-                    output.IsComplete = 0;
+                    output.IsComplete = false;
                     output.Notes = _notes;
-                    output.PipelineOrder = "";
+                    output.PipelineOrder = 0;
                     output.PriorityModifier = 0;
                     output.Progress = 0;
                     output.PriorityModifier = 0;
