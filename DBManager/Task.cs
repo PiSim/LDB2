@@ -29,7 +29,7 @@ namespace DBManager
         public Nullable<int> Progress { get; set; }
         public Nullable<int> PriorityModifier { get; set; }
         public Nullable<int> PipelineOrder { get; set; }
-        public Nullable<System.DateTime> StartDate { get; set; }
+        public System.DateTime StartDate { get; set; }
         public Nullable<System.DateTime> EndDate { get; set; }
         public bool IsComplete { get; set; }
     
