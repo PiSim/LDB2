@@ -36,7 +36,5 @@ namespace DBManager
         public virtual ICollection<ExternalReport> ExternalReports { get; set; }
         public virtual Organization Oem { get; set; }
         public virtual Person Leader { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Task> Tasks { get; set; }
     }
 }
