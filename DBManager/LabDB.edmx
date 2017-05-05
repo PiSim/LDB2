@@ -2189,7 +2189,7 @@
           <NavigationProperty Name="SpecificationVersion" Relationship="Self.specversion_to_task" FromRole="tasks" ToRole="specification_versions" />
           <Property Name="StartDate" Type="DateTime"  Nullable="false" />
           <Property Name="EndDate" Type="DateTime" />
-          <Property Name="IsComplete" Type="bool" Nullable="false" />
+          <Property Name="IsComplete" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="TaskItems" Relationship="labdbModel.task_to_item" FromRole="Task" ToRole="task_items" />
           <NavigationProperty Name="Batch" Relationship="labdbModel.batch_to_task" FromRole="Task" ToRole="Batch" />
         </EntityType>
