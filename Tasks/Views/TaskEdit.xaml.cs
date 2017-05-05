@@ -42,7 +42,7 @@ namespace Tasks.Views
         public void OnNavigatedTo(NavigationContext ncontext)
         {
             (DataContext as ViewModels.TaskEditViewModel).TaskInstance =
-                 ncontext.Parameters["ObjectInstance"] as Task;
+                 ncontext.Parameters["ObjectInstance"] as DBManager.Task;
         }
     }
 }
