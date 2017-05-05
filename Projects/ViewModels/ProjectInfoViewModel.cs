@@ -366,7 +366,7 @@ namespace Projects.ViewModels
                 if (_projectInstance == null)
                     return null;
 
-                return new List<DBManager.Task>(_projectInstance.Tasks);
+                return new List<DBManager.Task>(_entities.Tasks.Where(tsk => tsk.Batch.Material.Project.ID == _projectInstance.ID));
             }
         }
         
