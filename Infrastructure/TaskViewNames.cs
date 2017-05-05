@@ -8,6 +8,7 @@ namespace Infrastructure
 {
     public class TaskViewNames
     {
+        public static string TaskEditView { get { return "TaskEditView"; } }
         public static string TaskMainView
         {
             get { return "TaskMainView"; }
