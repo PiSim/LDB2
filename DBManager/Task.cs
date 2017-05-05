@@ -22,7 +22,6 @@ namespace DBManager
     
         public int ID { get; set; }
         public int RequesterID { get; private set; }
-        public int projectID { get; set; }
         public int SpecificationVersionID { get; set; }
         public int batchID { get; set; }
         public string Notes { get; set; }
