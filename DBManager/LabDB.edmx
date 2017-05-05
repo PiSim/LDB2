@@ -444,17 +444,16 @@
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="requesterID" Type="int" Nullable="false" />
-          <Property Name="projectID" Type="int" Nullable="false" />
           <Property Name="specification_versionID" Type="int" Nullable="false" />
           <Property Name="batchID" Type="int" Nullable="false" />
           <Property Name="notes" Type="text" />
           <Property Name="reportID" Type="int" />
           <Property Name="progress" Type="int" />
           <Property Name="priority_modifier" Type="int" />
-          <Property Name="pipeline_order" Type="text" />
-          <Property Name="start_date" Type="date" />
+          <Property Name="pipeline_order" Type="int" />
+          <Property Name="start_date" Type="date" Nullable="false" />
           <Property Name="end_date" Type="date" />
-          <Property Name="is_complete" Type="tinyint" Nullable="false" />
+          <Property Name="is_complete" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="tests">
           <Key>
@@ -1071,18 +1070,6 @@
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="external_reports">
-              <PropertyRef Name="projectID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="project_to_task">
-          <End Role="projects" Type="Self.projects" Multiplicity="1" />
-          <End Role="tasks" Type="Self.tasks" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="projects">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="tasks">
               <PropertyRef Name="projectID" />
             </Dependent>
           </ReferentialConstraint>
@@ -1712,10 +1699,6 @@
             <End Role="projects" EntitySet="projects" />
             <End Role="external_reports" EntitySet="external_reports" />
           </AssociationSet>
-          <AssociationSet Name="project_to_task" Association="Self.project_to_task">
-            <End Role="projects" EntitySet="projects" />
-            <End Role="tasks" EntitySet="tasks" />
-          </AssociationSet>
           <AssociationSet Name="property_to_method" Association="Self.property_to_method">
             <End Role="properties" EntitySet="properties" />
             <End Role="methods" EntitySet="methods" />
@@ -2032,7 +2015,6 @@
           <NavigationProperty Name="ExternalReports" Relationship="Self.project_to_report" FromRole="projects" ToRole="external_reports" />
           <NavigationProperty Name="Oem" Relationship="Self.oem1" FromRole="projects" ToRole="organizations" />
           <NavigationProperty Name="Leader" Relationship="Self.leader" FromRole="projects" ToRole="people" />
-          <NavigationProperty Name="Tasks" Relationship="Self.project_to_task" FromRole="projects" ToRole="tasks" />
         </EntityType>
         <EntityType Name="Property">
           <Key>
@@ -2195,21 +2177,19 @@
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="RequesterID" Type="Int32" Nullable="false" a:SetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
-          <Property Name="projectID" Type="Int32" Nullable="false" />
           <Property Name="SpecificationVersionID" Type="Int32" Nullable="false" />
           <Property Name="batchID" Type="Int32" Nullable="false" />
           <Property Name="Notes" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
           <Property Name="reportID" Type="Int32" />
           <Property Name="Progress" Type="Int32" />
           <Property Name="PriorityModifier" Type="Int32" />
-          <Property Name="PipelineOrder" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="PipelineOrder" Type="Int32" />
           <NavigationProperty Name="Requester" Relationship="Self.requester_to_task" FromRole="tasks" ToRole="people" />
-          <NavigationProperty Name="Project" Relationship="Self.project_to_task" FromRole="tasks" ToRole="projects" />
           <NavigationProperty Name="Report" Relationship="Self.report_to_task" FromRole="tasks" ToRole="reports" />
           <NavigationProperty Name="SpecificationVersion" Relationship="Self.specversion_to_task" FromRole="tasks" ToRole="specification_versions" />
-          <Property Name="StartDate" Type="DateTime" />
+          <Property Name="StartDate" Type="DateTime"  Nullable="false" />
           <Property Name="EndDate" Type="DateTime" />
-          <Property Name="IsComplete" Type="SByte" Nullable="false" />
+          <Property Name="IsComplete" Type="bool" Nullable="false" />
           <NavigationProperty Name="TaskItems" Relationship="labdbModel.task_to_item" FromRole="Task" ToRole="task_items" />
           <NavigationProperty Name="Batch" Relationship="labdbModel.batch_to_task" FromRole="Task" ToRole="Batch" />
         </EntityType>
@@ -2553,18 +2533,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="project_to_task">
-          <End Role="projects" Type="labdbModel.Project" Multiplicity="1" />
-          <End Role="tasks" Type="labdbModel.Task" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="projects">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="tasks">
-              <PropertyRef Name="projectID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="report_to_reportfile">
           <End Role="reports" Type="labdbModel.Report" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -2823,10 +2791,6 @@
           </AssociationSet>
           <AssociationSet Name="requester_to_task" Association="Self.requester_to_task">
             <End Role="people" EntitySet="People" />
-            <End Role="tasks" EntitySet="Tasks" />
-          </AssociationSet>
-          <AssociationSet Name="project_to_task" Association="Self.project_to_task">
-            <End Role="projects" EntitySet="Projects" />
             <End Role="tasks" EntitySet="Tasks" />
           </AssociationSet>
           <AssociationSet Name="report_to_reportfile" Association="Self.report_to_reportfile">
@@ -4124,7 +4088,6 @@
                 <ScalarProperty Name="StartDate" ColumnName="start_date" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="RequesterID" ColumnName="requesterID" />
-                <ScalarProperty Name="projectID" ColumnName="projectID" />
                 <ScalarProperty Name="SpecificationVersionID" ColumnName="specification_versionID" />
                 <ScalarProperty Name="batchID" ColumnName="batchID" />
                 <ScalarProperty Name="Notes" ColumnName="notes" />
