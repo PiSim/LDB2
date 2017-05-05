@@ -14,7 +14,7 @@
 -Implementate restrizioni per creazione/rimozione report in base a ruoli utente
 -Vista dettagli colore
 -Rifatto TaskCreationDialog sulla base di ReportCreationDialog
--*Rivista entità task: eliminato campo progetto, cambiato tipo al campo IsComplete
+-Rivista entità task: eliminato campo progetto, cambiato tipo ai campi IsComplete e PipelineOrder
 -*Implementata funzionalità Task
 -*Supporto primari multipli per taratura
 
