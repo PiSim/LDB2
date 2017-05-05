@@ -64,7 +64,7 @@ namespace Tasks.ViewModels
                 _selectedTask = value;
                 RaisePropertyChanged("SelectedTask");
 
-                NavigationToken token = new NavigationToken(TaskViewNames.TaskEdit,
+                NavigationToken token = new NavigationToken(TaskViewNames.TaskEditView,
                                                             _selectedTask,
                                                             RegionNames.TaskViewRegion);
 
