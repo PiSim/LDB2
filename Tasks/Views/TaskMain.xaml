@@ -14,7 +14,8 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         
-        <GroupBox Grid.Column="0">
+        <GroupBox Header="Report Richiesti"
+                  Grid.Column="0">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
@@ -27,12 +28,18 @@
                 <Button Content="Nuovo"
                         Command="{Binding NewTaskCommand}"
                         Grid.Column="1"
-                        Margin="5"/>
+                        Margin="5"
+                        Padding="5,2"/>
+
+                <Button Content="Elimina"
+                        Command="{Binding RemoveTaskCommand}"
+                        Grid.Column="1"
+                        Margin="5"
+                        Padding="5,2"/>
             </Grid>
         </GroupBox>
 
         <ContentControl prism:RegionManager.RegionName="{Binding TaskViewRegionName}"
-                        Grid.Column="1"/>
-                        
+                        Grid.Column="1"/>      
     </Grid>
 </UserControl>
