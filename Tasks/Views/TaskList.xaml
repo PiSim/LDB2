@@ -9,7 +9,6 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
-            <ColumnDefinition Width="100"/>
         </Grid.ColumnDefinitions>
 
         <ListView ItemsSource="{Binding TaskList}"
@@ -43,16 +42,6 @@
                 </GridView>
             </ListView.View>
         </ListView>
-
-        <StackPanel Orientation="Vertical"
-                    Grid.Column="1">
-            <Button Content="Apri"
-                    Command="{Binding Path=OpenTaskCommand}"
-                    Margin="5"/>
-            <Button Content="Crea Nuovo"
-                    Command="{Binding NewTaskCommand}"
-                    Margin="5"/>
-        </StackPanel>
         
         
     </Grid>
