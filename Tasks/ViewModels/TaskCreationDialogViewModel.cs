@@ -97,6 +97,17 @@ namespace Tasks.ViewModels
             get { return _confirm; }
         }
 
+        public List<ControlPlan> ControlPlanList
+        {
+            get
+            {
+                if (_selectedSpecification == null)
+                    return new List<ControlPlan>();
+                else
+                    return new List<ControlPlan>(_selectedSpecification.ControlPlans);
+            }
+        }
+
         public bool IsValidInput
         {
             get { return true; }

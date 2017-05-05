@@ -15,14 +15,14 @@
         </Grid.ColumnDefinitions>
 
         <Grid.RowDefinitions>
-            <RowDefinition/>
+            <RowDefinition Height="250"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
         
         <Grid Grid.Column="0" 
               Grid.Row="0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
@@ -90,7 +90,7 @@
                    Margin="5"/>
 
             <TextBox Text="{Binding Notes, Mode=TwoWay}"
-                     IsEnabled="{Binding EditMode}"
+                     IsEnabled="{Binding CanEdit}"
                      Grid.Column="1"
                      Grid.Row="6"
                      Margin="5"/>          
@@ -109,9 +109,9 @@
                     <ListView.View>
                         <GridView>
                             <GridViewColumn Header="Tipo"
-                                            DisplayMemberBinding="{Binding Property}"/>
+                                            DisplayMemberBinding="{Binding Requirement.Method.Property.Name}"/>
                             <GridViewColumn Header="Metodo"
-                                            DisplayMemberBinding="{Binding Method}"/>
+                                            DisplayMemberBinding="{Binding Requirement.Method.Standard.Name}"/>
                         </GridView>
                     </ListView.View>
                 </ListView>

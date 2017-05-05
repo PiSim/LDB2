@@ -1,4 +1,9 @@
-﻿v 0.4.4 --
+﻿v ???
+
+-*Supporto connessione da LAN
+-*Supporto primari multipli per taratura
+
+v 0.4.4 --
 
 -Aggiunto filtro OEM tramite ruolo nel dialogo creazione progetti
 -Alla creazione di un report viene presa come descrizione il nome del PDC, se selezionato
@@ -16,7 +21,6 @@
 -Rifatto TaskCreationDialog sulla base di ReportCreationDialog
 -Rivista entità task: eliminato campo progetto, cambiato tipo ai campi IsComplete e PipelineOrder
 -*Implementata funzionalità Task
--*Supporto primari multipli per taratura
 
 v 0.4.3 -- 26/04/2017
 
