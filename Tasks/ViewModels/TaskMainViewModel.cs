@@ -43,6 +43,11 @@ namespace Tasks.ViewModels
         {
             get { return RegionNames.TaskMainListRegion; }
         }
+
+        public string TaskViewRegionName
+        {
+            get { return RegionNames.TaskViewRegion; }
+        }
         
         public DelegateCommand NewTaskCommand
         {
@@ -56,6 +61,12 @@ namespace Tasks.ViewModels
             {
                 _selectedTask = value;
                 RaisePropertyChanged("SelectedTask");
+
+                NavigationToken token = new NavigationToken(TaskViewNames.TaskEdit,
+                                                            _selectedTask,
+                                                            RegionNames.TaskViewRegion);
+
+                _eventAggregator.GetEvent<NavigationRequested>().Publish(token);
             }       
         }
         
