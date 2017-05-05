@@ -15,6 +15,7 @@ namespace Tasks.ViewModels
         private DBEntities _entities;
         private DelegateCommand _convert;
         private EventAggregator _eventAggregator;
+        private Task _instance;
 
         public TaskEditViewModel(DBEntities entities,
                                 EventAggregator aggregator) : base()
@@ -33,6 +34,15 @@ namespace Tasks.ViewModels
         public DelegateCommand ConvertCommand
         {
             get { return _convert; }
+        }
+
+        public Task TaskInstance
+        {
+            get { return _instance; }
+            set
+            {
+                _instance = _entities.Tasks.First(tsk => tsk.ID == value.ID);
+            }
         }
     }
 }
