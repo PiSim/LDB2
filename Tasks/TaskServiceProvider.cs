@@ -33,7 +33,7 @@ namespace Tasks
 
             if (creationDialog.ShowDialog() == true)
             {
-                _eventAggregator.GetEvent<TaskCreated>().Publish(creationDialog.TaskInstance);
+                _eventAggregator.GetEvent<TaskListUpdateRequested>().Publish();
             }
         }
     }
