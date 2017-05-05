@@ -19,7 +19,6 @@ namespace DBManager
         {
             this.Constructions = new HashSet<Construction>();
             this.ExternalReports = new HashSet<ExternalReport>();
-            this.Tasks = new HashSet<Task>();
         }
     
         public int ID { get; set; }
