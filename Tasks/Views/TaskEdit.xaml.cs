@@ -1,4 +1,8 @@
-﻿using System;
+﻿using DBManager;
+using Microsoft.Practices.Prism.Mvvm;
+using Prism.Events;
+using Prism.Regions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,11 +22,27 @@ namespace Tasks.Views
     /// <summary>
     /// Interaction logic for TaskEdit.xaml
     /// </summary>
-    public partial class TaskEdit : UserControl
+    public partial class TaskEdit : UserControl, INavigationAware, IView
     {
         public TaskEdit()
         {
             InitializeComponent();
+        }
+
+        public bool IsNavigationTarget(NavigationContext ncontext)
+        {
+            return true;
+        }
+
+        public void OnNavigatedFrom(NavigationContext ncontext)
+        {
+
+        }
+
+        public void OnNavigatedTo(NavigationContext ncontext)
+        {
+            (DataContext as ViewModels.TaskEditViewModel).TaskInstance =
+                 ncontext.Parameters["ObjectInstance"] as Task;
         }
     }
 }
