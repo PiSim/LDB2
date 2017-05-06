@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="9fa1cdb38a7949d89850433ccf2fcd72" Name="Diagram1" ZoomLevel="71">
+      <Diagram DiagramId="9fa1cdb38a7949d89850433ccf2fcd72" Name="Diagram1" ZoomLevel="47">
         <EntityTypeShape EntityType="labdbModel.Aspect" Width="1.5" PointX="16.5" PointY="29.375" IsExpanded="true" />
         <EntityTypeShape EntityType="labdbModel.BatchFile" Width="1.5" PointX="25.875" PointY="10.5" IsExpanded="true" />
         <EntityTypeShape EntityType="labdbModel.Batch" Width="1.5" PointX="25.875" PointY="13.125" IsExpanded="true" />
@@ -17,12 +17,12 @@
         <EntityTypeShape EntityType="labdbModel.Material" Width="1.5" PointX="27.75" PointY="15.125" IsExpanded="true" />
         <EntityTypeShape EntityType="labdbModel.Method" Width="1.5" PointX="6.75" PointY="3.125" IsExpanded="true" />
         <EntityTypeShape EntityType="labdbModel.Organization" Width="1.5" PointX="5.625" PointY="22.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="labdbModel.Person" Width="1.5" PointX="8.875" PointY="18.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="labdbModel.Person" Width="1.5" PointX="10.125" PointY="17.625" IsExpanded="true" />
         <EntityTypeShape EntityType="labdbModel.Project" Width="1.5" PointX="16.5" PointY="19.875" IsExpanded="true" />
         <EntityTypeShape EntityType="labdbModel.Property" Width="1.5" PointX="4.75" PointY="5" IsExpanded="true" />
         <EntityTypeShape EntityType="labdbModel.Recipe" Width="1.5" PointX="30" PointY="15" IsExpanded="true" />
-        <EntityTypeShape EntityType="labdbModel.ReportFile" Width="1.5" PointX="11.25" PointY="13.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="labdbModel.Report" Width="1.5" PointX="9.25" PointY="11.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="labdbModel.ReportFile" Width="1.5" PointX="13" PointY="13.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="labdbModel.Report" Width="1.5" PointX="11" PointY="11.875" IsExpanded="true" />
         <EntityTypeShape EntityType="labdbModel.Requirement" Width="1.5" PointX="14.625" PointY="3.125" IsExpanded="true" />
         <EntityTypeShape EntityType="labdbModel.Sample" Width="1.5" PointX="23.375" PointY="13.5" IsExpanded="true" />
         <EntityTypeShape EntityType="labdbModel.SpecificationVersion" Width="1.5" PointX="12.125" PointY="6.125" IsExpanded="true" />
@@ -63,7 +63,6 @@
         <AssociationConnector Association="labdbModel.requester_to_task" ManuallyRouted="false" />
         <AssociationConnector Association="labdbModel.project_to_task" ManuallyRouted="false" />
         <AssociationConnector Association="labdbModel.report_to_reportfile" ManuallyRouted="false" />
-        <AssociationConnector Association="labdbModel.report_to_task" ManuallyRouted="false" />
         <AssociationConnector Association="labdbModel.report_to_test" ManuallyRouted="false" />
         <AssociationConnector Association="labdbModel.specversion_to_report" ManuallyRouted="false" />
         <AssociationConnector Association="labdbModel.requirement_to_subreq" ManuallyRouted="false" />
@@ -128,12 +127,13 @@
         <AssociationConnector Association="labdbModel.purchase_order_to_external_report" />
         <EntityTypeShape EntityType="labdbModel.Currency" Width="1.5" PointX="23.625" PointY="24.25" />
         <AssociationConnector Association="labdbModel.currency_to_purchase_order" />
-        <EntityTypeShape EntityType="labdbModel.PersonRoleMapping" Width="1.5" PointX="10.75" PointY="18.625" />
-        <EntityTypeShape EntityType="labdbModel.PersonRole" Width="1.5" PointX="12.625" PointY="18.875" />
+        <EntityTypeShape EntityType="labdbModel.PersonRoleMapping" Width="1.5" PointX="12" PointY="17.875" />
+        <EntityTypeShape EntityType="labdbModel.PersonRole" Width="1.5" PointX="13.875" PointY="18.125" />
         <AssociationConnector Association="labdbModel.person_to_role_mapping" />
         <AssociationConnector Association="labdbModel.person_role_to_role_mapping" />
         <AssociationConnector Association="labdbModel.requirement_to_control_plan" />
         <AssociationConnector Association="labdbModel.calibration_responsible_to_instrument" />
+        <AssociationConnector Association="labdbModel.task_to_report" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

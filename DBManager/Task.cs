@@ -18,6 +18,7 @@ namespace DBManager
         public Task()
         {
             this.TaskItems = new HashSet<TaskItem>();
+            this.Reports = new HashSet<Report>();
         }
     
         public int ID { get; set; }
@@ -25,7 +26,6 @@ namespace DBManager
         public int SpecificationVersionID { get; set; }
         public int batchID { get; set; }
         public string Notes { get; set; }
-        public Nullable<int> reportID { get; set; }
         public Nullable<int> Progress { get; set; }
         public Nullable<int> PriorityModifier { get; set; }
         public Nullable<int> PipelineOrder { get; set; }
@@ -34,11 +34,11 @@ namespace DBManager
         public bool IsComplete { get; set; }
     
         public virtual Person Requester { get; set; }
-        public virtual Project Project { get; set; }
-        public virtual Report Report { get; set; }
         public virtual SpecificationVersion SpecificationVersion { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<TaskItem> TaskItems { get; set; }
         public virtual Batch Batch { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Report> Reports { get; set; }
     }
 }

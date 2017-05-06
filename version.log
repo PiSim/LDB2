@@ -20,7 +20,7 @@ v 0.4.4 --
 -Vista dettagli colore
 -Rifatto TaskCreationDialog sulla base di ReportCreationDialog
 -Rivista entità task: eliminato campo progetto, cambiato tipo ai campi IsComplete e PipelineOrder
--*Implementata funzionalità Task
+-Implementato dialog per la creazione di Report a partire da una entità task
 
 v 0.4.3 -- 26/04/2017
 

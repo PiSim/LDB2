@@ -334,6 +334,7 @@
           <Property Name="start_date" Type="text" Nullable="false" />
           <Property Name="is_complete" Type="bit" Nullable="false" />
           <Property Name="specification_issueID" Type="int" />
+          <Property Name="parent_taskID" Type="int" />
         </EntityType>
         <EntityType Name="requirements">
           <Key>
@@ -447,11 +448,10 @@
           <Property Name="specification_versionID" Type="int" Nullable="false" />
           <Property Name="batchID" Type="int" Nullable="false" />
           <Property Name="notes" Type="text" />
-          <Property Name="reportID" Type="int" />
           <Property Name="progress" Type="int" />
           <Property Name="priority_modifier" Type="int" />
           <Property Name="pipeline_order" Type="int" />
-          <Property Name="start_date" Type="date" Nullable="false" />
+          <Property Name="start_date" Type="date" />
           <Property Name="end_date" Type="date" />
           <Property Name="is_complete" Type="bit" Nullable="false" />
         </EntityType>
@@ -1138,18 +1138,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="report_to_task">
-          <End Role="reports" Type="Self.reports" Multiplicity="0..1" />
-          <End Role="tasks" Type="Self.tasks" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="reports">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="tasks">
-              <PropertyRef Name="reportID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="report_to_test">
           <End Role="reports" Type="Self.reports" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -1409,6 +1397,18 @@
             </Principal>
             <Dependent Role="task_items">
               <PropertyRef Name="taskID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="task_to_report">
+          <End Role="tasks" Type="Self.tasks" Multiplicity="0..1" />
+          <End Role="reports" Type="Self.reports" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tasks">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="reports">
+              <PropertyRef Name="parent_taskID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1719,10 +1719,6 @@
             <End Role="reports" EntitySet="reports" />
             <End Role="report_files" EntitySet="report_files" />
           </AssociationSet>
-          <AssociationSet Name="report_to_task" Association="Self.report_to_task">
-            <End Role="reports" EntitySet="reports" />
-            <End Role="tasks" EntitySet="tasks" />
-          </AssociationSet>
           <AssociationSet Name="report_to_test" Association="Self.report_to_test">
             <End Role="reports" EntitySet="reports" />
             <End Role="tests" EntitySet="tests" />
@@ -1802,6 +1798,10 @@
           <AssociationSet Name="task_to_item" Association="Self.task_to_item">
             <End Role="tasks" EntitySet="tasks" />
             <End Role="task_items" EntitySet="task_items" />
+          </AssociationSet>
+          <AssociationSet Name="task_to_report" Association="Self.task_to_report">
+            <End Role="tasks" EntitySet="tasks" />
+            <End Role="reports" EntitySet="reports" />
           </AssociationSet>
           <AssociationSet Name="test" Association="Self.test">
             <End Role="tests" EntitySet="tests" />
@@ -2063,12 +2063,13 @@
           <NavigationProperty Name="Batch" Relationship="Self.batch_to_report" FromRole="reports" ToRole="batches" />
           <NavigationProperty Name="Author" Relationship="Self.author_to_report" FromRole="reports" ToRole="people" />
           <NavigationProperty Name="ReportFiles" Relationship="Self.report_to_reportfile" FromRole="reports" ToRole="report_files" />
-          <NavigationProperty Name="Tasks" Relationship="Self.report_to_task" FromRole="reports" ToRole="tasks" />
           <NavigationProperty Name="Tests" Relationship="Self.report_to_test" FromRole="reports" ToRole="tests" />
           <NavigationProperty Name="SpecificationVersion" Relationship="Self.specversion_to_report" FromRole="reports" ToRole="specification_versions" />
           <Property Name="IsComplete" Type="Boolean" Nullable="false" />
           <Property Name="SpecificationIssueID" Type="Int32" />
           <NavigationProperty Name="SpecificationIssues" Relationship="labdbModel.specissue_to_report1" FromRole="Report" ToRole="StandardIssue" />
+          <Property Name="parent_taskID" Type="Int32" />
+          <NavigationProperty Name="task" Relationship="labdbModel.task_to_report" FromRole="Report" ToRole="Task" />
         </EntityType>
         <EntityType Name="Requirement">
           <Key>
@@ -2180,18 +2181,17 @@
           <Property Name="SpecificationVersionID" Type="Int32" Nullable="false" />
           <Property Name="batchID" Type="Int32" Nullable="false" />
           <Property Name="Notes" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
-          <Property Name="reportID" Type="Int32" />
           <Property Name="Progress" Type="Int32" />
           <Property Name="PriorityModifier" Type="Int32" />
           <Property Name="PipelineOrder" Type="Int32" />
           <NavigationProperty Name="Requester" Relationship="Self.requester_to_task" FromRole="tasks" ToRole="people" />
-          <NavigationProperty Name="Report" Relationship="Self.report_to_task" FromRole="tasks" ToRole="reports" />
           <NavigationProperty Name="SpecificationVersion" Relationship="Self.specversion_to_task" FromRole="tasks" ToRole="specification_versions" />
           <Property Name="StartDate" Type="DateTime"  Nullable="false" />
           <Property Name="EndDate" Type="DateTime" />
           <Property Name="IsComplete" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="TaskItems" Relationship="labdbModel.task_to_item" FromRole="Task" ToRole="task_items" />
           <NavigationProperty Name="Batch" Relationship="labdbModel.batch_to_task" FromRole="Task" ToRole="Batch" />
+          <NavigationProperty Name="Reports" Relationship="labdbModel.task_to_report" FromRole="Task" ToRole="Report" />
         </EntityType>
         <EntityType Name="Test">
           <Key>
@@ -2547,18 +2547,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="report_to_task">
-          <End Role="reports" Type="labdbModel.Report" Multiplicity="0..1" />
-          <End Role="tasks" Type="labdbModel.Task" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="reports">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="tasks">
-              <PropertyRef Name="reportID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="report_to_test">
           <End Role="reports" Type="labdbModel.Report" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -2797,10 +2785,6 @@
             <End Role="reports" EntitySet="Reports" />
             <End Role="report_files" EntitySet="ReportFiles" />
           </AssociationSet>
-          <AssociationSet Name="report_to_task" Association="Self.report_to_task">
-            <End Role="reports" EntitySet="Reports" />
-            <End Role="tasks" EntitySet="Tasks" />
-          </AssociationSet>
           <AssociationSet Name="report_to_test" Association="Self.report_to_test">
             <End Role="reports" EntitySet="Reports" />
             <End Role="tests" EntitySet="Tests" />
@@ -3017,6 +3001,10 @@
           <AssociationSet Name="calibration_responsible_to_instrument" Association="labdbModel.calibration_responsible_to_instrument">
             <End Role="Organization" EntitySet="Organizations" />
             <End Role="Instrument" EntitySet="Instruments" />
+          </AssociationSet>
+          <AssociationSet Name="task_to_report" Association="labdbModel.task_to_report">
+            <End Role="Task" EntitySet="Tasks" />
+            <End Role="Report" EntitySet="Reports" />
           </AssociationSet>
         </EntityContainer>
         <Association Name="overridden_to_requirement">
@@ -3792,6 +3780,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="task_to_report">
+          <End Type="labdbModel.Task" Role="Task" Multiplicity="0..1" />
+          <End Type="labdbModel.Report" Role="Report" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Task">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Report">
+              <PropertyRef Name="parent_taskID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -3980,6 +3980,7 @@
           <EntitySetMapping Name="Reports">
             <EntityTypeMapping TypeName="labdbModel.Report">
               <MappingFragment StoreEntitySet="reports">
+                <ScalarProperty Name="parent_taskID" ColumnName="parent_taskID" />
                 <ScalarProperty Name="SpecificationIssueID" ColumnName="specification_issueID" />
                 <ScalarProperty Name="IsComplete" ColumnName="is_complete" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
@@ -4091,7 +4092,6 @@
                 <ScalarProperty Name="SpecificationVersionID" ColumnName="specification_versionID" />
                 <ScalarProperty Name="batchID" ColumnName="batchID" />
                 <ScalarProperty Name="Notes" ColumnName="notes" />
-                <ScalarProperty Name="reportID" ColumnName="reportID" />
                 <ScalarProperty Name="Progress" ColumnName="progress" />
                 <ScalarProperty Name="PriorityModifier" ColumnName="priority_modifier" />
                 <ScalarProperty Name="PipelineOrder" ColumnName="pipeline_order" />
