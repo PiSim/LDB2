@@ -31,6 +31,7 @@ namespace Instruments
             Views.NewMaintenanceEventDialog newEventDialog = _container.Resolve<Views.NewMaintenanceEventDialog>();
             if (newEventDialog.ShowDialog() == true)
             {
+                _eventAggregator.GetEvent<InstrumentListUpdateRequested>().Publish();
                 return newEventDialog.EventInstance;
             }
 
@@ -48,7 +49,7 @@ namespace Instruments
                 Instrument tempTarget = _entities.Instruments.First(ins => ins.ID == target.ID);
                 tempTarget.CalibrationDueDate = output.Date.AddMonths(target.ControlPeriod);
                 _entities.SaveChanges();
-                _eventAggregator.GetEvent<CalibrationIssued>().Publish(output);
+                _eventAggregator.GetEvent<InstrumentListUpdateRequested>().Publish();
                 return output;
             }
             else return null;
