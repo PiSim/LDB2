@@ -86,6 +86,7 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="is_default" Type="bit" Nullable="false"/>
           <Property Name="name" Type="varchar" MaxLength="45" Nullable="false" />
           <Property Name="specificationID" Type="int" Nullable="false" />
         </EntityType>
@@ -3232,6 +3233,7 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IsDefault" Type="Boolean" Nullable="false"/>
           <Property Name="Name" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
           <Property Name="SpecificationID" Type="Int32" Nullable="false" a:SetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="ControlPlanItems" Relationship="labdbModel.control_plan_to_item" FromRole="control_plans" ToRole="control_plan_items" />
@@ -4185,6 +4187,7 @@
               <MappingFragment StoreEntitySet="control_plans">
                 <ScalarProperty Name="SpecificationID" ColumnName="specificationID" />
                 <ScalarProperty Name="Name" ColumnName="name" />
+                <ScalarProperty Name="IsDefault" ColumnName="is_default" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
