@@ -25,6 +25,9 @@ namespace Tasks
 
             _eventAggregator.GetEvent<TaskCreationRequested>().Subscribe(
                 token => OnTaskCreationRequested(token));
+
+            _eventAggregator.GetEvent<TaskToReportConversionRequested>().Subscribe(
+                target => StartTaskToReportConversion(target));
         }
 
         private void OnTaskCreationRequested(NewTaskToken token)
