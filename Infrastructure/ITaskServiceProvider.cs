@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Infrastructure
 {
-    public class ITaskServiceProvider
+    public interface ITaskServiceProvider
     {
-    }
+        public Report StartTaskToReportConversion(DBManager.Task target)
+    } 
 }
