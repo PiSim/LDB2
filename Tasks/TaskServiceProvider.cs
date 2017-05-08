@@ -38,7 +38,7 @@ namespace Tasks
             }
         }
 
-        private Report StartTaskToReportConversion(DBManager.Task target)
+        public Report StartTaskToReportConversion(DBManager.Task target)
         {
             Views.ConversionReviewDialog conversionDialog = _container.Resolve<ConversionReviewDialog>();
             conversionDialog.TaskInstance = target;
