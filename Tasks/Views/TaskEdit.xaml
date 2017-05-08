@@ -17,6 +17,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="250"/>
             <RowDefinition/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         
         <Grid Grid.Column="0" 
@@ -118,5 +119,11 @@
 
             </Grid>
         </GroupBox>
+
+        <Button Content="Crea Report per questa richiesta"
+                Command="{Binding ConvertToReportCommand}"
+                Grid.Column="1"
+                Grid.Row="2"
+                Margin="5"/>
     </Grid>
 </UserControl>
