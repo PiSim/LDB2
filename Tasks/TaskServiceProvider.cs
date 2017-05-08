@@ -36,5 +36,22 @@ namespace Tasks
                 _eventAggregator.GetEvent<TaskListUpdateRequested>().Publish();
             }
         }
+
+        private Report StartTaskToReportConversion(DBManager.Task target)
+        {
+            Views.ConversionReviewDialog conversionDialog = _container.Resolve<ConversionReviewDialog>();
+            conversionDialog.TaskInstance = target;
+
+            if (conversionDialog.ShowDialog() == true)
+            {
+                _eventAggregator.GetEvent<ReportListUpdateRequested>().Publish();
+
+                NavigationToken token = new NavigationToken(ReportViewNames.ReportEditView,
+                                                            conversionDialog.ReportInstance);
+                _eventAggregator.GetEvent<NavigationRequested>().Publish(token);
+                
+                return conversionDialog.ReportInstance;
+            }
+        }
     }
 }
