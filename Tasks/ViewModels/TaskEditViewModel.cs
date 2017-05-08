@@ -159,7 +159,10 @@ namespace Tasks.ViewModels
             get { return _instance; }
             set
             {
-                _instance = _entities.Tasks.First(tsk => tsk.ID == value.ID);
+                if (value == null)
+                    _instance = null;
+                else
+                    _instance = _entities.Tasks.FirstOrDefault(tsk => tsk.ID == value.ID);
                 RaisePropertyChanged("BatchNumber");
                 RaisePropertyChanged("CanEdit");
                 RaisePropertyChanged("Notes");

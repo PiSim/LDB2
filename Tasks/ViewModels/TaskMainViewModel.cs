@@ -45,6 +45,7 @@ namespace Tasks.ViewModels
                 {
                     _entities.Tasks.Remove(SelectedTask);
                     _entities.SaveChanges();
+                    SelectedTask = null;
                     RaisePropertyChanged("TaskList");
                 },
                 () => SelectedTask != null);
