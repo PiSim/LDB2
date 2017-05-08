@@ -1,4 +1,5 @@
-﻿using Microsoft.Practices.Prism.Mvvm;
+﻿using DBManager;
+using Microsoft.Practices.Prism.Mvvm;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +24,20 @@ namespace Tasks.Views
         public ConversionReviewDialog()
         {
             InitializeComponent();
+        }
+
+        public Report ReportInstance
+        {
+            get { return (DataContext as ConversionReviewDialogViewModel).ReportInstance; }
+        }
+
+        public DBManager.Task TaskInstance
+        {
+            get { return (DataContext as ConversionReviewDialogViewModel).TaskInstance; }
+            set
+            {
+                (DataContext as ConversionReviewDialogViewModel).TaskInstance = value;
+            }
         }
     }
 }
