@@ -19,6 +19,7 @@ namespace Tasks.ViewModels
         private DelegateCommand _cancel, _confirm;
         private IMaterialServiceProvider _materialServiceProvider;
         private IReportServiceProvider _reportServiceProvider;
+        private List<ControlPlan> _controlPlanList;
         private ObservableCollection<ReportItemWrapper> _requirementList;
         private ObservableCollection<SpecificationVersion> _versionList;
         private Person _requester;
@@ -31,12 +32,14 @@ namespace Tasks.ViewModels
                                     IReportServiceProvider reportServiceProvider,
                                     Views.TaskCreationDialog parentView) : base()
         {
+            _controlPlanList = new List<ControlPlan>();
             _entities = entities;
             _materialServiceProvider = serviceProvider;
             _reportServiceProvider = reportServiceProvider;
             _parentView = parentView;
             _requirementList = new ObservableCollection<ReportItemWrapper>();
-            
+            _versionList = new ObservableCollection<SpecificationVersion>();
+
             _cancel = new DelegateCommand(
                 () => 
                 {
@@ -101,10 +104,7 @@ namespace Tasks.ViewModels
         {
             get
             {
-                if (_selectedSpecification == null)
-                    return new List<ControlPlan>();
-                else
-                    return new List<ControlPlan>(_selectedSpecification.ControlPlans);
+                return _controlPlanList;
             }
         }
 
@@ -168,17 +168,20 @@ namespace Tasks.ViewModels
                 {
                     _versionList = new ObservableCollection<SpecificationVersion>(
                         _entities.SpecificationVersions.Where(sv => sv.SpecificationID == _selectedSpecification.ID));
-
                     RaisePropertyChanged("VersionList");
+                    
+                    _controlPlanList = new List<ControlPlan>(_selectedSpecification.ControlPlans);
+                    RaisePropertyChanged("ControlPlanList");
                 }
 
-
                 else
+                {
+                    _controlPlanList.Clear();
                     _versionList.Clear();
+                }
 
+                SelectedControlPlan = _controlPlanList.FirstOrDefault(cp => cp.IsDefault);
                 SelectedVersion = _versionList.FirstOrDefault(sv => sv.IsMain);
-                SelectedControlPlan = null;
-                RaisePropertyChanged("ControlPlanList");
             }
         }
 
