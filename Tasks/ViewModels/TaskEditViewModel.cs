@@ -1,6 +1,6 @@
 ﻿using DBManager;
 using Infrastructure;
-
+using Infrastructure.Events;
 using Infrastructure.Wrappers;
 using Prism.Commands;
 using Prism.Events;
@@ -29,7 +29,7 @@ namespace Tasks.ViewModels
             _eventAggregator = aggregator;
             _principal = principal;
 
-            _convert = new DelegateCommand(
+            _convertToReport = new DelegateCommand(
                 () =>
                 {
                     _eventAggregator.GetEvent<TaskToReportConversionRequested>().Publish(_instance);
