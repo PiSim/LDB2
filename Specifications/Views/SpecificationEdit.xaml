@@ -266,7 +266,9 @@
                                       Grid.RowSpan="5">
                                 <ListView.ItemTemplate>
                                     <DataTemplate>
-                                        <TextBox Text="{Binding Path=Name, Mode=TwoWay}"/>
+                                        <TextBox Text="{Binding Path=Name, Mode=TwoWay}"
+                                                 IsEnabled="{Binding RelativeSource={RelativeSource AncestorType=ListView},
+                                                                     Path=DataContext.CanModifyControlPlan}"/>
                                     </DataTemplate>
                                 </ListView.ItemTemplate>
                             </ListView>
@@ -306,11 +308,11 @@
                                     <GridViewColumn Header="Tipo Prova"
                                                     DisplayMemberBinding="{Binding Path=Property}"
                                                     IsEnabled="{Binding RelativeSource={RelativeSource AncestorType=ListView},
-                                                                                             Path=DataContext.CanModifyControlPlan}"/>/>
+                                                                                             Path=DataContext.CanModifyControlPlan}"/>
                                     <GridViewColumn Header="Standard"
                                                     DisplayMemberBinding="{Binding Path=Method}"
                                                     IsEnabled="{Binding RelativeSource={RelativeSource AncestorType=ListView},
-                                                                                             Path=DataContext.CanModifyControlPlan}"/>/>
+                                                                                             Path=DataContext.CanModifyControlPlan}"/>
                                 </GridView>
                             </ListView.View>
                         </ListView>
