@@ -21,6 +21,7 @@ namespace DBManager
         }
     
         public int ID { get; set; }
+        public bool IsDefault { get; set; }
         public string Name { get; set; }
         public int SpecificationID { get; private set; }
     
