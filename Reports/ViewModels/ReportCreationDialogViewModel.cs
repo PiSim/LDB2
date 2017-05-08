@@ -24,6 +24,7 @@ namespace Reports.ViewModels
         private IMaterialServiceProvider _materialServiceProvider;
         private Int32 _number;
         private IReportServiceProvider _reportServiceProvider;
+        private List<ControlPlan> _controlPlanList;
         private ObservableCollection<ReportItemWrapper> _requirementList;
         private ObservableCollection<SpecificationVersion> _versionList;
         private Person _author;
@@ -38,6 +39,7 @@ namespace Reports.ViewModels
                                         IReportServiceProvider reportServiceProvider,
                                         Views.ReportCreationDialog parentDialog) : base()
         {
+            _controlPlanList = new List<ControlPlan>();
             _entities = entities;
             _materialServiceProvider = materialServiceProvider;
             _parentDialog = parentDialog;
@@ -120,10 +122,7 @@ namespace Reports.ViewModels
         {
             get
             {
-                if (_selectedSpecification == null)
-                    return null;
-                else
-                    return new List<ControlPlan>(_selectedSpecification.ControlPlans);
+                return _controlPlanList;
             }
         }
         
@@ -165,25 +164,28 @@ namespace Reports.ViewModels
         public Specification SelectedSpecification
         {
             get { return _selectedSpecification; }
-            set 
-            { 
-                _selectedSpecification = value; 
-                
+            set
+            {
+                _selectedSpecification = value;
+
                 if (_selectedSpecification != null)
                 {
                     _versionList = new ObservableCollection<SpecificationVersion>(
                         _entities.SpecificationVersions.Where(sv => sv.SpecificationID == _selectedSpecification.ID));
-                    
                     RaisePropertyChanged("VersionList");
-                }
-                
-                else
-                    _versionList.Clear();
                     
+                    _controlPlanList = new List<ControlPlan>(_selectedSpecification.ControlPlans);
+                    RaisePropertyChanged("ControlPlanList");
+                }
+
+                else
+                {
+                    _controlPlanList.Clear();
+                    _versionList.Clear();
+                }
+
+                SelectedControlPlan = _controlPlanList.FirstOrDefault(cp => cp.IsDefault);
                 SelectedVersion = _versionList.FirstOrDefault(sv => sv.IsMain);
-                SelectedControlPlan = null;
-                RaisePropertyChanged("ControlPlanList");
-            }
         }
 
         public SpecificationVersion SelectedVersion
