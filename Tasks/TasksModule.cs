@@ -29,8 +29,8 @@ namespace Tasks
             _container.RegisterType<Views.ConversionReviewDialog>();
             _container.RegisterType<Views.TaskCreationDialog>();
 
-            _container.RegisterType<TaskServiceProvider>(new ContainerControlledLifetimeManager());
-            _container.Resolve<TaskServiceProvider>();
+            _container.RegisterType<ITaskServiceProvider, TaskServiceProvider>(new ContainerControlledLifetimeManager());
+            _container.Resolve<ITaskServiceProvider>();
 
             _regionManager.RegisterViewWithRegion(RegionNames.TaskMainListRegion,
                                                 typeof(Views.TaskList));
