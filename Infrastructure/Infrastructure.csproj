@@ -118,6 +118,7 @@
     <Compile Include="Events\StatusNotificationIssued.cs" />
     <Compile Include="Events\TaskCreationRequested.cs" />
     <Compile Include="Events\TaskListUpdateRequested.cs" />
+    <Compile Include="Events\TaskToReportConversionRequested.cs" />
     <Compile Include="Events\UserAuthenticated.cs" />
     <Compile Include="IAdminServiceProvider.cs" />
     <Compile Include="IInstrumentServiceProvider.cs" />
