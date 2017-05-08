@@ -28,12 +28,11 @@ namespace DBManager
         public string Description { get; set; }
         public Nullable<System.DateTime> EndDate { get; set; }
         public int Number { get; set; }
-        public Nullable<int> ProjectID { get; set; }
         public int SpecificationVersionID { get; private set; }
         public string StartDate { get; set; }
         public bool IsComplete { get; set; }
         public Nullable<int> SpecificationIssueID { get; set; }
-        public Nullable<int> parent_taskID { get; set; }
+        public Nullable<int> ParentTaskID { get; set; }
     
         public virtual Batch Batch { get; set; }
         public virtual Person Author { get; set; }
@@ -43,6 +42,6 @@ namespace DBManager
         public virtual ICollection<Test> Tests { get; set; }
         public virtual SpecificationVersion SpecificationVersion { get; set; }
         public virtual StandardIssue SpecificationIssues { get; set; }
-        public virtual Task task { get; set; }
+        public virtual Task ParentTask { get; set; }
     }
 }

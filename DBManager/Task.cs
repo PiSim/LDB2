@@ -32,6 +32,7 @@ namespace DBManager
         public System.DateTime StartDate { get; set; }
         public Nullable<System.DateTime> EndDate { get; set; }
         public bool IsComplete { get; set; }
+        public bool AllItemsAssigned { get; set; }
     
         public virtual Person Requester { get; set; }
         public virtual SpecificationVersion SpecificationVersion { get; set; }

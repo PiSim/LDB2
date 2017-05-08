@@ -17,6 +17,7 @@ namespace DBManager
         public int ID { get; set; }
         public int TaskID { get; private set; }
         public int RequirementID { get; set; }
+        public bool IsAssignedToReport { get; set; }
     
         public virtual Requirement Requirement { get; set; }
         public virtual Task Task { get; set; }

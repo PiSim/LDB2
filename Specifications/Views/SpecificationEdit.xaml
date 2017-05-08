@@ -301,18 +301,16 @@
                                     <GridViewColumn>
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
-                                                <CheckBox IsChecked="{Binding Path=IsSelected}"/>
+                                                <CheckBox IsChecked="{Binding Path=IsSelected}"
+                                                          IsEnabled="{Binding RelativeSource={RelativeSource AncestorType=ListView},
+                                                                              Path=DataContext.CanModifyControlPlan}"/>
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
                                     <GridViewColumn Header="Tipo Prova"
-                                                    DisplayMemberBinding="{Binding Path=Property}"
-                                                    IsEnabled="{Binding RelativeSource={RelativeSource AncestorType=ListView},
-                                                                                             Path=DataContext.CanModifyControlPlan}"/>
+                                                    DisplayMemberBinding="{Binding Path=Property}"/>
                                     <GridViewColumn Header="Standard"
-                                                    DisplayMemberBinding="{Binding Path=Method}"
-                                                    IsEnabled="{Binding RelativeSource={RelativeSource AncestorType=ListView},
-                                                                                             Path=DataContext.CanModifyControlPlan}"/>
+                                                    DisplayMemberBinding="{Binding Path=Method}"/>
                                 </GridView>
                             </ListView.View>
                         </ListView>

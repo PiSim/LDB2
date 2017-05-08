@@ -24,7 +24,7 @@ namespace DBManager
         public int methodID { get; set; }
         public int reportID { get; set; }
         public string Notes { get; set; }
-        public int operatorID { get; set; }
+        public Nullable<int> operatorID { get; set; }
         public Nullable<System.DateTime> Date { get; set; }
         public bool IsComplete { get; set; }
         public Nullable<int> instrumentID { get; set; }

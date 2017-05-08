@@ -16,7 +16,7 @@ namespace Tasks.ViewModels
     public class TaskMainViewModel : BindableBase
     {
         private DBEntities _entities;
-        private DelegateCommand _newTask;
+        private DelegateCommand _newTask, _removeTask;
         private EventAggregator _eventAggregator;
         private DBManager.Task _selectedTask;
         private UnityContainer _container;
@@ -39,6 +39,15 @@ namespace Tasks.ViewModels
                     _eventAggregator.GetEvent<TaskCreationRequested>().
                         Publish(token);
                 } );
+
+            _removeTask = new DelegateCommand(
+                () =>
+                {
+                    _entities.Tasks.Remove(SelectedTask);
+                    _entities.SaveChanges();
+                    RaisePropertyChanged("TaskList");
+                },
+                () => SelectedTask != null);
         }
 
         public string MainTaskListRegionName
@@ -55,6 +64,11 @@ namespace Tasks.ViewModels
         {
             get { return _newTask; }
         }
+
+        public DelegateCommand RemoveTaskCommand
+        {
+            get { return _removeTask; }
+        }
         
         public DBManager.Task SelectedTask 
         {
@@ -63,6 +77,7 @@ namespace Tasks.ViewModels
             {
                 _selectedTask = value;
                 RaisePropertyChanged("SelectedTask");
+                _removeTask.RaiseCanExecuteChanged();
 
                 NavigationToken token = new NavigationToken(TaskViewNames.TaskEditView,
                                                             _selectedTask,

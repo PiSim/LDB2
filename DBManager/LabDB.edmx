@@ -86,9 +86,9 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="is_default" Type="bit" Nullable="false"/>
           <Property Name="name" Type="varchar" MaxLength="45" Nullable="false" />
           <Property Name="specificationID" Type="int" Nullable="false" />
+          <Property Name="is_default" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="currencies">
           <Key>
@@ -439,6 +439,7 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="taskID" Type="int" Nullable="false" />
           <Property Name="requirementID" Type="int" Nullable="false" />
+          <Property Name="is_assigned_to_report" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="tasks">
           <Key>
@@ -455,6 +456,7 @@
           <Property Name="start_date" Type="date" />
           <Property Name="end_date" Type="date" />
           <Property Name="is_complete" Type="bit" Nullable="false" />
+          <Property Name="all_items_assigned" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="tests">
           <Key>
@@ -464,7 +466,7 @@
           <Property Name="methodID" Type="int" Nullable="false" />
           <Property Name="reportID" Type="int" Nullable="false" />
           <Property Name="notes" Type="text" />
-          <Property Name="operatorID" Type="int" Nullable="false" />
+          <Property Name="operatorID" Type="int" />
           <Property Name="date" Type="date" />
           <Property Name="is_complete" Type="bit" Nullable="false" />
           <Property Name="instrumentID" Type="int" />
@@ -924,7 +926,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="operatorID">
-          <End Role="people" Type="Self.people" Multiplicity="1" />
+          <End Role="people" Type="Self.people" Multiplicity="0..1" />
           <End Role="tests" Type="Self.tests" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="people">
@@ -2058,7 +2060,6 @@
           <Property Name="Description" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="EndDate" Type="DateTime" />
           <Property Name="Number" Type="Int32" Nullable="false" />
-          <Property Name="ProjectID" Type="Int32" a:GetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:SetterAccess="Public" />
           <Property Name="SpecificationVersionID" Type="Int32" Nullable="false" a:GetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:SetterAccess="Private" />
           <Property Name="StartDate" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="Batch" Relationship="Self.batch_to_report" FromRole="reports" ToRole="batches" />
@@ -2069,8 +2070,8 @@
           <Property Name="IsComplete" Type="Boolean" Nullable="false" />
           <Property Name="SpecificationIssueID" Type="Int32" />
           <NavigationProperty Name="SpecificationIssues" Relationship="labdbModel.specissue_to_report1" FromRole="Report" ToRole="StandardIssue" />
-          <Property Name="parent_taskID" Type="Int32" />
-          <NavigationProperty Name="task" Relationship="labdbModel.task_to_report" FromRole="Report" ToRole="Task" />
+          <Property Name="ParentTaskID" Type="Int32" />
+          <NavigationProperty Name="ParentTask" Relationship="labdbModel.task_to_report" FromRole="Report" ToRole="Task" />
         </EntityType>
         <EntityType Name="Requirement">
           <Key>
@@ -2193,6 +2194,7 @@
           <NavigationProperty Name="TaskItems" Relationship="labdbModel.task_to_item" FromRole="Task" ToRole="task_items" />
           <NavigationProperty Name="Batch" Relationship="labdbModel.batch_to_task" FromRole="Task" ToRole="Batch" />
           <NavigationProperty Name="Reports" Relationship="labdbModel.task_to_report" FromRole="Task" ToRole="Report" />
+          <Property Name="AllItemsAssigned" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="Test">
           <Key>
@@ -2202,9 +2204,9 @@
           <Property Name="methodID" Type="Int32" Nullable="false" />
           <Property Name="reportID" Type="Int32" Nullable="false" />
           <Property Name="Notes" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
-          <Property Name="operatorID" Type="Int32" Nullable="false" />
+          <Property Name="operatorID" Type="Int32" Nullable="true" />
           <Property Name="Date" Type="DateTime" />
-          <NavigationProperty Name="Person" Relationship="Self.operatorID" FromRole="tests" ToRole="people" />
+          <NavigationProperty Name="Person" Relationship="labdbModel.operatorID" FromRole="tests" ToRole="people" />
           <NavigationProperty Name="Report" Relationship="Self.report_to_test" FromRole="tests" ToRole="reports" />
           <NavigationProperty Name="SubTests" Relationship="Self.test1" FromRole="tests" ToRole="sub_tests" />
           <NavigationProperty Name="Method" Relationship="labdbModel.method_to_test" FromRole="Test" ToRole="Method" />
@@ -2511,7 +2513,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="operatorID">
-          <End Role="people" Type="labdbModel.Person" Multiplicity="1" />
+          <End Role="people" Type="labdbModel.Person" Multiplicity="0..1" />
           <End Role="tests" Type="labdbModel.Test" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="people">
@@ -3131,6 +3133,7 @@
           <Property Name="RequirementID" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Requirement" Relationship="labdbModel.requirement_to_task_item" FromRole="task_items" ToRole="Requirement" />
           <NavigationProperty Name="Task" Relationship="labdbModel.task_to_item" FromRole="task_items" ToRole="Task" />
+          <Property Name="IsAssignedToReport" Type="Boolean" Nullable="false" />
         </EntityType>
         <Association Name="requirement_to_task_item">
           <End Type="labdbModel.Requirement" Role="Requirement" Multiplicity="1" />
@@ -3790,7 +3793,7 @@
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="Report">
-              <PropertyRef Name="parent_taskID" />
+              <PropertyRef Name="ParentTaskID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -3982,7 +3985,7 @@
           <EntitySetMapping Name="Reports">
             <EntityTypeMapping TypeName="labdbModel.Report">
               <MappingFragment StoreEntitySet="reports">
-                <ScalarProperty Name="parent_taskID" ColumnName="parent_taskID" />
+                <ScalarProperty Name="ParentTaskID" ColumnName="parent_taskID" />
                 <ScalarProperty Name="SpecificationIssueID" ColumnName="specification_issueID" />
                 <ScalarProperty Name="IsComplete" ColumnName="is_complete" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
@@ -3992,7 +3995,6 @@
                 <ScalarProperty Name="Description" ColumnName="description" />
                 <ScalarProperty Name="EndDate" ColumnName="end_date" />
                 <ScalarProperty Name="Number" ColumnName="number" />
-                <ScalarProperty Name="ProjectID" ColumnName="projectID" />
                 <ScalarProperty Name="SpecificationVersionID" ColumnName="specification_versionID" />
                 <ScalarProperty Name="StartDate" ColumnName="start_date" />
               </MappingFragment>
@@ -4086,6 +4088,7 @@
           <EntitySetMapping Name="Tasks">
             <EntityTypeMapping TypeName="labdbModel.Task">
               <MappingFragment StoreEntitySet="tasks">
+                <ScalarProperty Name="AllItemsAssigned" ColumnName="all_items_assigned" />
                 <ScalarProperty Name="IsComplete" ColumnName="is_complete" />
                 <ScalarProperty Name="EndDate" ColumnName="end_date" />
                 <ScalarProperty Name="StartDate" ColumnName="start_date" />
@@ -4148,6 +4151,7 @@
           <EntitySetMapping Name="TaskItems">
             <EntityTypeMapping TypeName="labdbModel.TaskItem">
               <MappingFragment StoreEntitySet="task_items">
+                <ScalarProperty Name="IsAssignedToReport" ColumnName="is_assigned_to_report" />
                 <ScalarProperty Name="RequirementID" ColumnName="requirementID" />
                 <ScalarProperty Name="TaskID" ColumnName="taskID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />

@@ -19,6 +19,7 @@ namespace Specifications.ViewModels
     {
         private ControlPlan _selectedControlPlan;
         private DBEntities _entities;
+        private DBPrincipal _principal;
         private DelegateCommand _addControlPlan, _addFile, _addIssue,
             _addTest, _addVersion, _newReport, _openFile, _openReport, _removeControlPlan, _removeFile, _removeIssue, _removeTest, _removeVersion, _setCurrent;
         private EventAggregator _eventAggregator;
@@ -250,11 +251,11 @@ namespace Specifications.ViewModels
             get
             {
                 if (!_principal.IsInRole(UserRoleNames.SpecificationAdmin))
-                    return false
-
-                else if (_selectedControlPlan.IsDefault)    
                     return false;
-                    
+
+                else if (_selectedControlPlan.IsDefault)
+                    return false;
+
                 else
                     return true;
             }

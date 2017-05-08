@@ -116,5 +116,31 @@ namespace Reports
                 return output;
             }
         }
+
+        public List<Test> GenerateTestList(List<ISelectableRequirement> reqList)
+        {
+            List<Test> output = new List<Test>();
+
+            foreach (ISelectableRequirement req in reqList.Where(isr => isr.IsSelected))
+            {
+                Test tempTest = new Test();
+                tempTest.IsComplete = false;
+                tempTest.Method = req.RequirementInstance.Method;
+                tempTest.MethodIssue = tempTest.Method.Standard.CurrentIssue;
+                tempTest.Notes = req.RequirementInstance.Description;
+                
+                foreach (SubRequirement subReq in req.RequirementInstance.SubRequirements)
+                {
+                    SubTest tempSubTest = new SubTest();
+                    tempSubTest.Name = subReq.SubMethod.Name;
+                    tempSubTest.Requirement = subReq.RequiredValue;
+                    tempSubTest.UM = subReq.SubMethod.UM;
+                    tempTest.SubTests.Add(tempSubTest);
+                }
+                output.Add(tempTest);
+            }
+
+            return output;
+        }
     }
 }

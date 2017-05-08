@@ -16,6 +16,15 @@
                   Grid.Column="0">
             <ListView.View>
                 <GridView>
+                    <GridViewColumn Header="Assegnato">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox IsChecked="{Binding AllItemsAssigned}"
+                                          IsEnabled="False"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
                     <GridViewColumn Header="Completo">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
@@ -24,7 +33,6 @@
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn Header="TR" DisplayMemberBinding="{Binding Report.Number}"/>
                     <GridViewColumn Header="Commessa" DisplayMemberBinding="{Binding Batch.Number}"/>
                     <GridViewColumn Header="Progetto" DisplayMemberBinding="{Binding Batch.Material.Construction.Project.Name}"/>
                     <GridViewColumn Header="Materiale"
@@ -38,7 +46,7 @@
                     <GridViewColumn Header="Specifica" DisplayMemberBinding="{Binding SpecificationVersion.Specification.Standard.Name}"/>
                     <GridViewColumn Header="Versione" DisplayMemberBinding="{Binding SpecificationVersion.Name}"/>
                     <GridViewColumn Header="Descrizione" DisplayMemberBinding="{Binding Notes}"/>
-                    <GridViewColumn Header="Richiedente" DisplayMemberBinding="{Binding Author.Name}"/>
+                    <GridViewColumn Header="Richiedente" DisplayMemberBinding="{Binding Requester.Name}"/>
                 </GridView>
             </ListView.View>
         </ListView>

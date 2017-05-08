@@ -40,7 +40,7 @@
                    Grid.Column="0"
                    Grid.Row="0"
                    Margin="5"/>
-            <TextBox Text="{Binding Number, Mode=TwoWay}"
+            <TextBox Text="{Binding ReportNumber, Mode=TwoWay}"
                      Grid.Column="1"
                      Grid.Row="0"
                      Margin="5"/>
@@ -48,7 +48,7 @@
                    Grid.Column="0"
                    Grid.Row="1"
                    Margin="5"/>
-            <TextBox Text="{Binding BatchNumber, Mode=TwoWay}"
+            <TextBox Text="{Binding BatchNumber, Mode=OneWay}"
                      IsEnabled="False"
                      Grid.Column="1"
                      Grid.Row="1"
@@ -58,7 +58,8 @@
                    Grid.Row="2"
                    Margin="5"/>
             <ComboBox ItemsSource="{Binding TechList}"
-                      SelectedItem="{Binding Author, Mode=TwoWay}"
+                      SelectedItem="{Binding SelectedAuthor, Mode=TwoWay}"
+                      IsEnabled="{Binding CanChangeAuthor}"
                       DisplayMemberPath="Name"
                       Grid.Column="1"
                       Grid.Row="2"
@@ -67,7 +68,7 @@
                    Grid.Column="0"
                    Grid.Row="3"
                    Margin="5"/>
-            <TextBox Text="{Binding Specification}"
+            <TextBox Text="{Binding Specification, Mode=OneWay}"
                      IsEnabled="False"
                      Grid.Column="1"
                      Grid.Row="3"
@@ -78,7 +79,7 @@
                    Grid.Row="4"
                    Margin="5"/>
 
-            <TextBox Text="{Binding SpecVersion}"
+            <TextBox Text="{Binding SpecificationVersion, Mode=OneWay}"
                      IsEnabled="False"
                      Grid.Column="1"
                      Grid.Row="4"
@@ -108,7 +109,7 @@
                     <RowDefinition/>
                 </Grid.RowDefinitions>
 
-                <ListView ItemsSource="{Binding RequirementList}"
+                <ListView ItemsSource="{Binding TestList}"
                           Grid.Row="2">
                     <ListView.View>
                         <GridView>
