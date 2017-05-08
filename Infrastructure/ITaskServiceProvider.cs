@@ -8,6 +8,6 @@ namespace Infrastructure
 {
     public interface ITaskServiceProvider
     {
-        public Report StartTaskToReportConversion(DBManager.Task target)
+        public Report StartTaskToReportConversion(DBManager.Task target);
     } 
 }
