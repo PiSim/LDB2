@@ -54,6 +54,10 @@ namespace Specifications.ViewModels
                     SpecificationVersion tempMain = new SpecificationVersion();
                     tempMain.Name = "Generica";
                     tempMain.IsMain = true;
+                    
+                    ControlPlan tempControlPlan = new ControlPlan();
+                    tempControlPlan.Name = "Completo";
+                    tempControlPlan.IsDefault = true;
 
                     Specification tempSpec = new Specification();
                     tempSpec.Description = "";
