@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DBManager;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,6 @@ namespace Infrastructure
 {
     public interface ITaskServiceProvider
     {
-        public Report StartTaskToReportConversion(DBManager.Task target);
+        Report StartTaskToReportConversion(DBManager.Task target);
     } 
 }
