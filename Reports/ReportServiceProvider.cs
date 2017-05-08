@@ -76,18 +76,24 @@ namespace Reports
 
         public void ApplyControlPlan(IEnumerable<ReportItemWrapper> reqList, ControlPlan conPlan)
         {
-            foreach (ReportItemWrapper riw in reqList)
-                riw.IsSelected = false;
-
-            foreach (ControlPlanItem cpi in conPlan.ControlPlanItems)
+            if (conPlan.IsDefault)
+                foreach (ReportItemWrapper riw in reqList)
+                    riw.IsSelected = true;
+            else
             {
-                ReportItemWrapper tempRIW = reqList.FirstOrDefault(riw => riw.Instance.ID == cpi.Requirement.ID || 
-                                                ( riw.Instance.IsOverride && riw.Instance.Overridden.ID == cpi.Requirement.ID));
-                if (tempRIW != null)
-                    tempRIW.IsSelected = true;
-                
-                else
-                    _eventAggregator.GetEvent<StatusNotificationIssued>().Publish("Alcuni requisiti richiesti non sono stati trovati");
+                foreach (ReportItemWrapper riw in reqList)
+                    riw.IsSelected = false;
+
+                foreach (ControlPlanItem cpi in conPlan.ControlPlanItems)
+                {
+                    ReportItemWrapper tempRIW = reqList.FirstOrDefault(riw => riw.Instance.ID == cpi.Requirement.ID || 
+                                                    ( riw.Instance.IsOverride && riw.Instance.Overridden.ID == cpi.Requirement.ID));
+                    if (tempRIW != null)
+                        tempRIW.IsSelected = true;
+                    
+                    else
+                        _eventAggregator.GetEvent<StatusNotificationIssued>().Publish("Alcuni requisiti richiesti non sono stati trovati");
+                }
             }
         }
 
