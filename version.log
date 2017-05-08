@@ -21,6 +21,7 @@ v 0.4.4 --
 -Rifatto TaskCreationDialog sulla base di ReportCreationDialog
 -Rivista entità task: eliminato campo progetto, cambiato tipo ai campi IsComplete e PipelineOrder
 -Implementato dialog per la creazione di Report a partire da una entità task
+-*Creazione piano controllo "Completo" di default alla creazione di una specifica
 
 v 0.4.3 -- 26/04/2017
 
