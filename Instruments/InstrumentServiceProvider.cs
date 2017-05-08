@@ -49,7 +49,7 @@ namespace Instruments
                 Instrument tempTarget = _entities.Instruments.First(ins => ins.ID == target.ID);
                 tempTarget.CalibrationDueDate = output.Date.AddMonths(target.ControlPeriod);
                 _entities.SaveChanges();
-                _eventAggregator.GetEvent<InstrumentListUpdateRequested>().Publish();
+                _eventAggregator.GetEvent<CalibrationIssued>().Publish(output);
                 return output;
             }
             else return null;
