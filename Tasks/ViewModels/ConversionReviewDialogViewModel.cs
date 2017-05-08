@@ -41,6 +41,30 @@ namespace Tasks.ViewModels
                 });
         }
 
+        public DelegateCommand<Window> CancelCommand
+        {
+            get { return _cancel; }
+        }
+
+        public DelegateCommand<Window> ConfirmCommand
+        {
+            get { return _confirm; }
+        }
+
+        public Report ReportInstance
+        {
+            get { return _reportInstance; }
+        }
+
+        public DBManager.Task TaskInstance
+        {
+            get { return _taskInstance; }
+            set
+            {
+                _taskInstance = _entities.Tasks.First(tsk => tsk.ID == value.ID);
+                RaisePropertyChanged("TaskInstance");
+            }
+        }
 
     }
 }
