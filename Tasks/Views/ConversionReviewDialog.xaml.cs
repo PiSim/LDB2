@@ -28,15 +28,15 @@ namespace Tasks.Views
 
         public Report ReportInstance
         {
-            get { return (DataContext as ConversionReviewDialogViewModel).ReportInstance; }
+            get { return (DataContext as ViewModels.ConversionReviewDialogViewModel).ReportInstance; }
         }
 
         public DBManager.Task TaskInstance
         {
-            get { return (DataContext as ConversionReviewDialogViewModel).TaskInstance; }
+            get { return (DataContext as ViewModels.ConversionReviewDialogViewModel).TaskInstance; }
             set
             {
-                (DataContext as ConversionReviewDialogViewModel).TaskInstance = value;
+                (DataContext as ViewModels.ConversionReviewDialogViewModel).TaskInstance = value;
             }
         }
     }
