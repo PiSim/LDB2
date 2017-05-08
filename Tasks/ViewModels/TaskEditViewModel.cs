@@ -1,5 +1,6 @@
 ﻿using DBManager;
 using Infrastructure;
+
 using Infrastructure.Wrappers;
 using Prism.Commands;
 using Prism.Events;
@@ -16,7 +17,7 @@ namespace Tasks.ViewModels
     {
         private DBEntities _entities;
         private DBPrincipal _principal;
-        private DelegateCommand _convert;
+        private DelegateCommand _convertToReport;
         private EventAggregator _eventAggregator;
         private DBManager.Task _instance;
 
@@ -31,9 +32,8 @@ namespace Tasks.ViewModels
             _convert = new DelegateCommand(
                 () =>
                 {
-
+                    _eventAggregator.GetEvent<TaskToReportConversionRequested>().Publish(_instance);
                 });
-
         }
 
         public string BatchNumber
@@ -64,9 +64,9 @@ namespace Tasks.ViewModels
             }
         }
 
-        public DelegateCommand ConvertCommand
+        public DelegateCommand ConvertToReportCommand
         {
-            get { return _convert; }
+            get { return _convertToReport; }
         }
 
         public string Notes
