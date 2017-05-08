@@ -36,11 +36,13 @@ namespace Specifications.ViewModels
         private StandardIssue _selectedIssue;
 
         public SpecificationEditViewModel(DBEntities entities,
+                                            DBPrincipal principal,
                                             EventAggregator aggregator) 
             : base()
         {
             _entities = entities;
             _eventAggregator = aggregator;
+            _principal = principal;
 
             _eventAggregator.GetEvent<CommitRequested>().Subscribe(
                 () =>
@@ -241,6 +243,21 @@ namespace Specifications.ViewModels
         public DelegateCommand AddVersionCommand
         {
             get { return _addVersion; }
+        }
+
+        public bool CanModifyControlPlan
+        {
+            get
+            {
+                if (!_principal.IsInRole(UserRoleNames.SpecificationAdmin))
+                    return false
+
+                else if (_selectedControlPlan.IsDefault)    
+                    return false;
+                    
+                else
+                    return true;
+            }
         }
 
         public List<ControlPlanItemWrapper> ControlPlanItemsList
