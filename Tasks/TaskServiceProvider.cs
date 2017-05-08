@@ -1,4 +1,5 @@
 ﻿using DBManager;
+using Infrastructure;
 using Infrastructure.Events;
 using Microsoft.Practices.Unity;
 using Prism.Events;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Tasks
 {
-    public class TaskServiceProvider
+    public class TaskServiceProvider : ITaskServiceProvider
     {
         private EventAggregator _eventAggregator;
         private IUnityContainer _container;
