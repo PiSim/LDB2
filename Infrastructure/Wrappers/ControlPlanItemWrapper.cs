@@ -23,7 +23,7 @@ namespace Infrastructure
             _parent = parent;
             _requirement = requirement;
             _item = _parent.ControlPlanItems.FirstOrDefault(cpi => cpi.Requirement.ID == _requirement.ID);
-            _isSelected = _item != null;
+            _isSelected = (_parent.IsDefault) || (_item != null);
         }
 
         public bool IsSelected
