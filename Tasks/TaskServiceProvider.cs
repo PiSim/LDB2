@@ -56,6 +56,8 @@ namespace Tasks
                 
                 return conversionDialog.ReportInstance;
             }
+
+            return null;
         }
     }
 }
