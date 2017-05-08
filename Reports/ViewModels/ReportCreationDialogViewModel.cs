@@ -186,6 +186,7 @@ namespace Reports.ViewModels
 
                 SelectedControlPlan = _controlPlanList.FirstOrDefault(cp => cp.IsDefault);
                 SelectedVersion = _versionList.FirstOrDefault(sv => sv.IsMain);
+            }
         }
 
         public SpecificationVersion SelectedVersion
