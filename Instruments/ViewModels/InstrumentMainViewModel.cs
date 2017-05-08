@@ -49,7 +49,11 @@ namespace Instruments.ViewModels
                 calRep => RaisePropertyChanged("PendingCalibrationsList"));
 
             _eventAggregator.GetEvent<InstrumentListUpdateRequested>().Subscribe(
-                () => RaisePropertyChanged("InstrumentList"));
+                () =>
+                {
+                     RaisePropertyChanged("InstrumentList");
+                     RaisePropertyChanged("PendingCalibrationsList");
+                });
 
         }
 
