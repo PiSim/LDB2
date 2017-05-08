@@ -43,7 +43,7 @@ namespace Tasks
 
         public Report StartTaskToReportConversion(DBManager.Task target)
         {
-            Views.ConversionReviewDialog conversionDialog = _container.Resolve<ConversionReviewDialog>();
+            Views.ConversionReviewDialog conversionDialog = _container.Resolve<Views.ConversionReviewDialog>();
             conversionDialog.TaskInstance = target;
 
             if (conversionDialog.ShowDialog() == true)
