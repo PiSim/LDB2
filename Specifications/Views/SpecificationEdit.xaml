@@ -304,9 +304,13 @@
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
                                     <GridViewColumn Header="Tipo Prova"
-                                                    DisplayMemberBinding="{Binding Path=Property}"/>
+                                                    DisplayMemberBinding="{Binding Path=Property}"
+                                                    IsEnabled="{Binding RelativeSource={RelativeSource AncestorType=ListView},
+                                                                                             Path=DataContext.CanModifyControlPlan}"/>/>
                                     <GridViewColumn Header="Standard"
-                                                    DisplayMemberBinding="{Binding Path=Method}"/>
+                                                    DisplayMemberBinding="{Binding Path=Method}"
+                                                    IsEnabled="{Binding RelativeSource={RelativeSource AncestorType=ListView},
+                                                                                             Path=DataContext.CanModifyControlPlan}"/>/>
                                 </GridView>
                             </ListView.View>
                         </ListView>
