@@ -25,7 +25,7 @@ namespace Reports.ViewModels
         private Int32 _number;
         private IReportServiceProvider _reportServiceProvider;
         private List<ControlPlan> _controlPlanList;
-        private ObservableCollection<ReportItemWrapper> _requirementList;
+        private List<ISelectableRequirement> _requirementList;
         private ObservableCollection<SpecificationVersion> _versionList;
         private Person _author;
         private Specification _selectedSpecification;
@@ -47,7 +47,7 @@ namespace Reports.ViewModels
             _reportServiceProvider = reportServiceProvider;
             _author = _entities.People.First(prs => prs.ID == _principal.CurrentPerson.ID);
             _versionList = new ObservableCollection<SpecificationVersion>();
-            _requirementList = new ObservableCollection<ReportItemWrapper>();
+            _requirementList = new List<ISelectableRequirement>();
 
             _confirm = new DelegateCommand(
                 () => {
@@ -65,8 +65,7 @@ namespace Reports.ViewModels
                     temp.SpecificationVersion = _selectedVersion;
                     temp.StartDate = DateTime.Now.ToShortDateString();
                     
-                    _entities.GenerateTestList(temp, 
-                                            _requirementList.Where(req => req.IsSelected).Select(req => req.Instance));
+                    _reportServiceProvider.GenerateTestList(_requirementList);
                     
                     _entities.Reports.Add(temp);
                     _entities.SaveChanges();
@@ -194,15 +193,17 @@ namespace Reports.ViewModels
             get { return _selectedVersion; }
             set 
             { 
-                _selectedVersion = value; 
-                RequirementList.Clear();
+                _selectedVersion = value;
+                _requirementList = new List<ISelectableRequirement>();
                 
                 if (_selectedVersion != null)
                 {
-                    List<Requirement> tempReq = _entities.GenerateRequirementList(_selectedVersion);
+                    List<Requirement> tempReq = _reportServiceProvider.GenerateRequirementList(_selectedVersion);
                     foreach (Requirement rq in tempReq)
                         RequirementList.Add(new ReportItemWrapper(rq));
                 }
+
+                RaisePropertyChanged("RequirementList");
                 RaisePropertyChanged("SelectedVersion");
             }
         }
@@ -217,7 +218,7 @@ namespace Reports.ViewModels
             get { return _versionList; }
         }
             
-        public ObservableCollection<ReportItemWrapper> RequirementList
+        public List<ISelectableRequirement> RequirementList
         {
             get { return _requirementList; }
         }

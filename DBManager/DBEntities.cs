@@ -51,53 +51,6 @@ namespace DBManager
 
             specification.SpecificationVersions.First(ver => ver.IsMain).Requirements.Add(tempReq);
         }
-        
-        public List<Requirement> GenerateRequirementList(SpecificationVersion version)
-        {
-            if (version.IsMain)
-                return new List<Requirement>(version.Requirements);
-
-            else
-            {
-                List<Requirement> output = new List<Requirement>(
-                    version.Specification.SpecificationVersions.First(sv => sv.IsMain).Requirements);
-                
-                foreach (Requirement requirement in version.Requirements)
-                {
-                    int ii = output.FindIndex(rr => rr.Method.ID == requirement.Method.ID);
-                    output[ii] = requirement;
-                }
-
-                return output;
-            }
-        }
-
-        public void GenerateTestList(Report report,
-                                    IEnumerable<Requirement> requirements)
-        {
-            Test tempTest;
-            SubTest tempSub;
-            foreach (Requirement rq in requirements)
-            {
-                tempTest = new Test();
-                tempTest.IsComplete = false;
-                tempTest.Method = rq.Method;
-                tempTest.MethodIssue = rq.Method.Standard.CurrentIssue;
-                tempTest.Notes = rq.Description;
-                tempTest.Person = report.Author;
-                
-                foreach (SubRequirement subReq in rq.SubRequirements)
-                {
-                    tempSub = new SubTest();
-                    tempSub.Name = subReq.SubMethod.Name;
-                    tempSub.Requirement = subReq.RequiredValue;
-                    tempSub.UM = subReq.SubMethod.UM;
-                    tempTest.SubTests.Add(tempSub);
-                }
-
-                report.Tests.Add(tempTest);
-            }
-        }
 
         public Aspect GetAspect(string code,
                                 bool new_instance_if_not_found = true)

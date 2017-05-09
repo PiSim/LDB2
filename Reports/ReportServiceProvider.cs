@@ -74,7 +74,7 @@ namespace Reports
                 return null;
         } 
 
-        public void ApplyControlPlan(IEnumerable<ReportItemWrapper> reqList, ControlPlan conPlan)
+        public void ApplyControlPlan(IEnumerable<ISelectableRequirement> reqList, ControlPlan conPlan)
         {
             if (conPlan.IsDefault)
                 foreach (ReportItemWrapper riw in reqList)
@@ -86,8 +86,8 @@ namespace Reports
 
                 foreach (ControlPlanItem cpi in conPlan.ControlPlanItems)
                 {
-                    ReportItemWrapper tempRIW = reqList.FirstOrDefault(riw => riw.Instance.ID == cpi.Requirement.ID || 
-                                                    ( riw.Instance.IsOverride && riw.Instance.Overridden.ID == cpi.Requirement.ID));
+                    ISelectableRequirement tempRIW = reqList.FirstOrDefault(riw => riw.RequirementInstance.ID == cpi.Requirement.ID || 
+                                                    ( riw.RequirementInstance.IsOverride && riw.RequirementInstance.Overridden.ID == cpi.Requirement.ID));
                     if (tempRIW != null)
                         tempRIW.IsSelected = true;
                     

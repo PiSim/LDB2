@@ -11,7 +11,8 @@ namespace Infrastructure
     public interface IReportServiceProvider
     {
         PurchaseOrder AddPOToExternalReport(ExternalReport target);
-        void ApplyControlPlan(IEnumerable<ReportItemWrapper> reqList, ControlPlan conPlan);
+        void ApplyControlPlan(IEnumerable<ISelectableRequirement> reqList, ControlPlan conPlan);
+        List<Requirement> GenerateRequirementList(SpecificationVersion version);
         List<Test> GenerateTestList(List<ISelectableRequirement> reqList);
     }
 }

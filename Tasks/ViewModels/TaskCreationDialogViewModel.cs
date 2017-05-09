@@ -69,7 +69,7 @@ namespace Tasks.ViewModels
                             continue;
 
                         TaskItem temp = new TaskItem();
-                        temp.Requirement = req.Instance;
+                        temp.Requirement = req.RequirementInstance;
                         output.TaskItems.Add(temp);
                     }
                     
@@ -195,7 +195,7 @@ namespace Tasks.ViewModels
 
                 if (_selectedVersion != null)
                 {
-                    List<Requirement> tempReq = _entities.GenerateRequirementList(_selectedVersion);
+                    List<Requirement> tempReq = _reportServiceProvider.GenerateRequirementList(_selectedVersion);
                     foreach (Requirement rq in tempReq)
                         RequirementList.Add(new ReportItemWrapper(rq));
                 }

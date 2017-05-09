@@ -60,6 +60,7 @@ namespace Infrastructure.Wrappers
                 else
                     _requirementInstance = _entities.RemoveOverride(_requirementInstance);
 
+                RaisePropertyChanged("CanModify");
                 RaisePropertyChanged("SubRequirements");
             }
         }

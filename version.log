@@ -3,7 +3,7 @@
 -*Supporto connessione da LAN
 -*Supporto primari multipli per taratura
 
-v 0.4.4 --
+v 0.4.4 -- 9/5/2017
 
 -Aggiunto filtro OEM tramite ruolo nel dialogo creazione progetti
 -Alla creazione di un report viene presa come descrizione il nome del PDC, se selezionato
@@ -22,9 +22,10 @@ v 0.4.4 --
 -Rivista entità task: eliminato campo progetto, cambiato tipo ai campi IsComplete e PipelineOrder
 -Implementato dialog per la creazione di Report a partire da una entità task
 -Creazione piano controllo "Completo" di default alla creazione di una specifica
--*errore alla creazione di un report da vista batch
--*Aggiornamento proprietà nella definizione delle versioni specifica
--*Algoritmo creazione requisiti in definizione specifica che tenga conto della possibilità di avere più requisiti con lo stesso metodo
+-BatchInfoView utilizzava Batch di altri DBContext, corretto
+-Corretto mancato aggiornamento della proprietà CanModify nella definizione delle versioni specifica
+-Rimosso metodi per liste Test e Requirement da DBEntities e rimpiazzati con nuove implementazioni in ReportServiceProvider
+-Creata Interfaccia ISelectableRequirement per standardizzare selezione ed utilizzo di test e requisiti
 
 v 0.4.3 -- 26/04/2017
 

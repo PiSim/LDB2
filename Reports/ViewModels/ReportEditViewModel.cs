@@ -30,6 +30,7 @@ namespace Reports.ViewModels
         {
             _entities = entities;
             _eventAggregator = aggregator;
+            _principal = principal;
 
             _eventAggregator.GetEvent<CommitRequested>()
                 .Subscribe(() =>

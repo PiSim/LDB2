@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Wrappers
 {
-    public class ReportItemWrapper : BindableBase
+    public class ReportItemWrapper : BindableBase, ISelectableRequirement
     {
         private bool _isSelected;
         private Requirement _instance;
@@ -24,7 +24,7 @@ namespace Infrastructure.Wrappers
             get { return _instance.Method.Standard.Name; }
         }
 
-        public Requirement Instance
+        public Requirement RequirementInstance
         {
             get { return _instance; }
         }

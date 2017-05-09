@@ -86,7 +86,7 @@ namespace Materials.ViewModels
             get { return _instance; }
             set
             {
-                _instance = value;
+                _instance = (value == null) ? null : _entities.Batches.First(btc => btc.ID == value.ID);
 
                 _samplesList = new List<SamplesWrapper>();
                 foreach (Sample smp in _instance.Samples)

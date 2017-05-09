@@ -23,6 +23,7 @@ namespace Specifications.ViewModels
         private DelegateCommand _addControlPlan, _addFile, _addIssue,
             _addTest, _addVersion, _newReport, _openFile, _openReport, _removeControlPlan, _removeFile, _removeIssue, _removeTest, _removeVersion, _setCurrent;
         private EventAggregator _eventAggregator;
+        private IReportServiceProvider _reportServiceProvider;
         private List<ControlPlanItemWrapper> _controlPlanItemsList;
         private Method _selectedToAdd;
         private List<RequirementWrapper> _requirementList;
@@ -38,18 +39,14 @@ namespace Specifications.ViewModels
 
         public SpecificationEditViewModel(DBEntities entities,
                                             DBPrincipal principal,
-                                            EventAggregator aggregator) 
+                                            EventAggregator aggregator,
+                                            IReportServiceProvider reportServiceProvider) 
             : base()
         {
             _entities = entities;
             _eventAggregator = aggregator;
             _principal = principal;
-
-            _eventAggregator.GetEvent<CommitRequested>().Subscribe(
-                () =>
-                {
-                    _entities.SaveChanges();
-                });
+            _reportServiceProvider = reportServiceProvider;
 
             _addControlPlan = new DelegateCommand(
                 () =>
@@ -207,6 +204,12 @@ namespace Specifications.ViewModels
 
             // Event Subscriptions
 
+            _eventAggregator.GetEvent<CommitRequested>().Subscribe(
+                () =>
+                {
+                    _entities.SaveChanges();
+                });
+
             _eventAggregator.GetEvent<ReportListUpdateRequested>().Subscribe(
                 () => RaisePropertyChanged("ReportList"));
 
@@ -214,7 +217,7 @@ namespace Specifications.ViewModels
         
         private void GenerateRequirementList()
         {
-            List<Requirement> tempReqList = _entities.GenerateRequirementList(_selectedVersion);
+            List<Requirement> tempReqList = _reportServiceProvider.GenerateRequirementList(_selectedVersion);
             _requirementList = new List<RequirementWrapper>();
             foreach (Requirement rr in tempReqList)
                 _requirementList.Add(new RequirementWrapper(rr, _selectedVersion, _entities));
