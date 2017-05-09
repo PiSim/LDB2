@@ -22,6 +22,9 @@ v 0.4.4 --
 -Rivista entità task: eliminato campo progetto, cambiato tipo ai campi IsComplete e PipelineOrder
 -Implementato dialog per la creazione di Report a partire da una entità task
 -Creazione piano controllo "Completo" di default alla creazione di una specifica
+-*errore alla creazione di un report da vista batch
+-*Aggiornamento proprietà nella definizione delle versioni specifica
+-*Algoritmo creazione requisiti in definizione specifica che tenga conto della possibilità di avere più requisiti con lo stesso metodo
 
 v 0.4.3 -- 26/04/2017
 
