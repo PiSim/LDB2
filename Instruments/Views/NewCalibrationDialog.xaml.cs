@@ -1,5 +1,6 @@
 ﻿using DBManager;
 using Infrastructure;
+using Microsoft.Practices.Prism.Mvvm;
 using Prism.Events;
 using System;
 using System.Collections.Generic;
@@ -20,18 +21,10 @@ namespace Instruments.Views
     /// <summary>
     /// Interaction logic for NewCalibrationDialog.xaml
     /// </summary>
-    public partial class NewCalibrationDialog : Window
+    public partial class NewCalibrationDialog : Window, IView
     {
-        private CalibrationReport _reportInstance;
-
-        public NewCalibrationDialog(DBEntities entities,
-                                    DBPrincipal principal,
-                                    EventAggregator eventAggregator)
+        public NewCalibrationDialog()
         {
-            DataContext = new ViewModels.NewCalibrationDialogViewModel(entities,
-                                                                        principal,
-                                                                        eventAggregator,
-                                                                        this);
             InitializeComponent();
         }
 
@@ -43,8 +36,13 @@ namespace Instruments.Views
 
         public CalibrationReport ReportInstance
         {
-            get { return _reportInstance; }
-            set { _reportInstance = value; }
+            get { return (DataContext as ViewModels.NewCalibrationDialogViewModel).ReportInstance; }
+        }
+
+        private void ReferenceTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+                AddReferenceButton.Command.Execute(AddReferenceButton.CommandParameter);
         }
     }
 }

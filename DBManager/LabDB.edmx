@@ -40,6 +40,14 @@
           <Property Name="description" Type="varchar" MaxLength="45" Nullable="false" />
           <Property Name="reportID" Type="int" Nullable="false" />
         </EntityType>
+        <EntityType Name="calibration_reference_mappings">
+          <Key>
+            <PropertyRef Name="calibration_reportID" />
+            <PropertyRef Name="referenceID" />
+          </Key>
+          <Property Name="calibration_reportID" Type="int" Nullable="false" />
+          <Property Name="referenceID" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="calibration_reports">
           <Key>
             <PropertyRef Name="ID" />
@@ -49,7 +57,6 @@
           <Property Name="date" Type="date" Nullable="false" />
           <Property Name="operatorID" Type="int" />
           <Property Name="laboratoryID" Type="int" Nullable="false" />
-          <Property Name="referenceID" Type="int" />
           <Property Name="instrumentID" Type="int" Nullable="false" />
           <Property Name="notes" Type="varchar" MaxLength="200" />
           <Property Name="result" Type="varchar" MaxLength="45" Nullable="false" />
@@ -358,6 +365,7 @@
           <Property Name="batchID" Type="int" Nullable="false" />
           <Property Name="code" Type="char" MaxLength="1" Nullable="false" />
           <Property Name="date" Type="date" Nullable="false" />
+          <Property Name="personID" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="specification_versions">
           <Key>
@@ -622,6 +630,20 @@
             </Principal>
             <Dependent Role="calibration_files">
               <PropertyRef Name="reportID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="calibration_report_to_reference_mapping">
+          <End Role="calibration_reports" Type="Self.calibration_reports" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="calibration_reference_mappings" Type="Self.calibration_reference_mappings" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="calibration_reports">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="calibration_reference_mappings">
+              <PropertyRef Name="calibration_reportID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1029,6 +1051,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="person_to_sample_log">
+          <End Role="people" Type="Self.people" Multiplicity="1" />
+          <End Role="samples" Type="Self.samples" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="people">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="samples">
+              <PropertyRef Name="personID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="person_to_user">
           <End Role="people" Type="Self.people" Multiplicity="0..1" />
           <End Role="users" Type="Self.users" Multiplicity="*" />
@@ -1115,14 +1149,14 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="reference_to_calibration_report">
-          <End Role="instruments" Type="Self.instruments" Multiplicity="0..1" />
-          <End Role="calibration_reports" Type="Self.calibration_reports" Multiplicity="*" />
+        <Association Name="reference_to_calibration_report_mapping">
+          <End Role="instruments" Type="Self.instruments" Multiplicity="1" />
+          <End Role="calibration_reference_mappings" Type="Self.calibration_reference_mappings" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="instruments">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="calibration_reports">
+            <Dependent Role="calibration_reference_mappings">
               <PropertyRef Name="referenceID" />
             </Dependent>
           </ReferentialConstraint>
@@ -1472,6 +1506,7 @@
           <EntitySet Name="batch_files" EntityType="Self.batch_files" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="batches" EntityType="Self.batches" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="calibration_files" EntityType="Self.calibration_files" Schema="labdb" store:Type="Tables" />
+          <EntitySet Name="calibration_reference_mappings" EntityType="Self.calibration_reference_mappings" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="calibration_reports" EntityType="Self.calibration_reports" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="colours" EntityType="Self.colours" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="constructions" EntityType="Self.constructions" Schema="labdb" store:Type="Tables" />
@@ -1557,6 +1592,10 @@
           <AssociationSet Name="calibration_report_to_files" Association="Self.calibration_report_to_files">
             <End Role="calibration_reports" EntitySet="calibration_reports" />
             <End Role="calibration_files" EntitySet="calibration_files" />
+          </AssociationSet>
+          <AssociationSet Name="calibration_report_to_reference_mapping" Association="Self.calibration_report_to_reference_mapping">
+            <End Role="calibration_reports" EntitySet="calibration_reports" />
+            <End Role="calibration_reference_mappings" EntitySet="calibration_reference_mappings" />
           </AssociationSet>
           <AssociationSet Name="calibration_responsible_to_instrument" Association="Self.calibration_responsible_to_instrument">
             <End Role="organizations" EntitySet="organizations" />
@@ -1686,6 +1725,10 @@
             <End Role="people" EntitySet="people" />
             <End Role="person_role_mappings" EntitySet="person_role_mappings" />
           </AssociationSet>
+          <AssociationSet Name="person_to_sample_log" Association="Self.person_to_sample_log">
+            <End Role="people" EntitySet="people" />
+            <End Role="samples" EntitySet="samples" />
+          </AssociationSet>
           <AssociationSet Name="person_to_user" Association="Self.person_to_user">
             <End Role="people" EntitySet="people" />
             <End Role="users" EntitySet="users" />
@@ -1714,9 +1757,9 @@
             <End Role="recipes" EntitySet="recipes" />
             <End Role="materials" EntitySet="materials" />
           </AssociationSet>
-          <AssociationSet Name="reference_to_calibration_report" Association="Self.reference_to_calibration_report">
+          <AssociationSet Name="reference_to_calibration_report_mapping" Association="Self.reference_to_calibration_report_mapping">
             <End Role="instruments" EntitySet="instruments" />
-            <End Role="calibration_reports" EntitySet="calibration_reports" />
+            <End Role="calibration_reference_mappings" EntitySet="calibration_reference_mappings" />
           </AssociationSet>
           <AssociationSet Name="report_to_reportfile" Association="Self.report_to_reportfile">
             <End Role="reports" EntitySet="reports" />
@@ -2002,6 +2045,7 @@
           <NavigationProperty Name="Users" Relationship="labdbModel.person_to_user" FromRole="Person" ToRole="User" />
           <NavigationProperty Name="CalibrationReports" Relationship="labdbModel.operator_to_calibration_report" FromRole="Person" ToRole="calibration_reports" />
           <NavigationProperty Name="RoleMappings" Relationship="labdbModel.person_to_role_mapping" FromRole="Person" ToRole="person_role_mappings" />
+          <NavigationProperty Name="SamplesLogged" Relationship="labdbModel.person_to_sample_log" FromRole="Person" ToRole="Sample" />
         </EntityType>
         <EntityType Name="Project">
           <Key>
@@ -2102,6 +2146,8 @@
           <Property Name="Code" Type="String" MaxLength="1" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Date" Type="DateTime" Nullable="false" />
           <NavigationProperty Name="Batch" Relationship="Self.batch_to_sample" FromRole="samples" ToRole="batches" />
+          <Property Name="personID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="LogAuthor" Relationship="labdbModel.person_to_sample_log" FromRole="Sample" ToRole="Person" />
         </EntityType>
         <EntityType Name="SpecificationVersion">
           <Key>
@@ -2899,10 +2945,6 @@
             <End Role="Person" EntitySet="People" />
             <End Role="calibration_reports" EntitySet="CalibrationReports" />
           </AssociationSet>
-          <AssociationSet Name="reference_to_calibration_report" Association="labdbModel.reference_to_calibration_report">
-            <End Role="instrument" EntitySet="Instruments" />
-            <End Role="calibration_reports" EntitySet="CalibrationReports" />
-          </AssociationSet>
           <AssociationSet Name="type_to_instrument" Association="labdbModel.type_to_instrument">
             <End Role="instrument_types" EntitySet="InstrumentTypes" />
             <End Role="instrument" EntitySet="Instruments" />
@@ -3008,6 +3050,14 @@
           <AssociationSet Name="task_to_report" Association="labdbModel.task_to_report">
             <End Role="Task" EntitySet="Tasks" />
             <End Role="Report" EntitySet="Reports" />
+          </AssociationSet>
+          <AssociationSet Name="calibration_reference_mappings" Association="labdbModel.calibration_reference_mappings">
+            <End Role="CalibrationReport" EntitySet="CalibrationReports" />
+            <End Role="Instrument" EntitySet="Instruments" />
+          </AssociationSet>
+          <AssociationSet Name="person_to_sample_log" Association="labdbModel.person_to_sample_log">
+            <End Role="Person" EntitySet="People" />
+            <End Role="Sample" EntitySet="Samples" />
           </AssociationSet>
         </EntityContainer>
         <Association Name="overridden_to_requirement">
@@ -3288,16 +3338,15 @@
           <Property Name="Date" Type="DateTime" Nullable="false" />
           <Property Name="OperatorID" Type="Int32" />
           <Property Name="laboratoryID" Type="Int32" Nullable="false" />
-          <Property Name="referenceID" Type="Int32" Nullable="true" />
           <Property Name="instrumentID" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Instrument" Relationship="labdbModel.instrument_to_calibration_report" FromRole="calibration_reports" ToRole="instrument" />
           <NavigationProperty Name="Laboratory" Relationship="labdbModel.laboratory_to_calibration_report" FromRole="calibration_reports" ToRole="Organization" />
           <NavigationProperty Name="Tech" Relationship="labdbModel.operator_to_calibration_report" FromRole="calibration_reports" ToRole="Person" />
-          <NavigationProperty Name="Reference" Relationship="labdbModel.reference_to_calibration_report" FromRole="calibration_reports" ToRole="instrument" />
           <NavigationProperty Name="CalibrationFiles" Relationship="labdbModel.calibration_report_to_files" FromRole="calibration_reports" ToRole="calibration_files" />
           <Property Name="Notes" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
           <Property Name="Number" Type="Int32" Nullable="false" />
           <Property Name="Result" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="ReferenceInstruments" Relationship="labdbModel.calibration_reference_mappings" FromRole="CalibrationReport" ToRole="Instrument" />
         </EntityType>
         <EntityType Name="InstrumentType">
           <Key>
@@ -3317,7 +3366,6 @@
           <Property Name="InstrumentTypeID" Type="Int32" Nullable="false" />
           <Property Name="ControlPeriod" Type="SByte" Nullable="false" />
           <NavigationProperty Name="CalibrationReports" Relationship="labdbModel.instrument_to_calibration_report" FromRole="instrument" ToRole="calibration_reports" />
-          <NavigationProperty Name="CalibrationReportsAsReference" Relationship="labdbModel.reference_to_calibration_report" FromRole="instrument" ToRole="calibration_reports" />
           <NavigationProperty Name="InstrumentType" Relationship="labdbModel.type_to_instrument" FromRole="instrument" ToRole="instrument_types" />
           <Property Name="IsUnderControl" Type="Boolean" Nullable="false" />
           <Property Name="supplierID" Type="Int32" />
@@ -3331,6 +3379,7 @@
           <Property Name="CalibrationDueDate" Type="DateTime" />
           <Property Name="calibration_responsibleID" Type="Int32" />
           <NavigationProperty Name="CalibrationResponsible" Relationship="labdbModel.calibration_responsible_to_instrument" FromRole="Instrument" ToRole="Organization" />
+          <NavigationProperty Name="CalibrationReportAsReference" Relationship="labdbModel.calibration_reference_mappings" FromRole="Instrument" ToRole="CalibrationReport" />
         </EntityType>
         <Association Name="instrument_to_calibration_report">
           <End Type="labdbModel.Instrument" Role="instrument" Multiplicity="1" />
@@ -3365,18 +3414,6 @@
             </Principal>
             <Dependent Role="calibration_reports">
               <PropertyRef Name="OperatorID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="reference_to_calibration_report">
-          <End Type="labdbModel.Instrument" Role="instrument" Multiplicity="0..1" />
-          <End Type="labdbModel.CalibrationReport" Role="calibration_reports" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="instrument">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="calibration_reports">
-              <PropertyRef Name="referenceID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -3797,6 +3834,22 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="calibration_reference_mappings">
+          <End Type="labdbModel.CalibrationReport" Role="CalibrationReport" Multiplicity="*" />
+          <End Type="labdbModel.Instrument" Role="Instrument" Multiplicity="*" />
+        </Association>
+        <Association Name="person_to_sample_log">
+          <End Type="labdbModel.Person" Role="Person" Multiplicity="1" />
+          <End Type="labdbModel.Sample" Role="Sample" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Person">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Sample">
+              <PropertyRef Name="personID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -4017,6 +4070,7 @@
           <EntitySetMapping Name="Samples">
             <EntityTypeMapping TypeName="labdbModel.Sample">
               <MappingFragment StoreEntitySet="samples">
+                <ScalarProperty Name="personID" ColumnName="personID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="BatchID" ColumnName="batchID" />
                 <ScalarProperty Name="Code" ColumnName="code" />
@@ -4213,7 +4267,6 @@
                 <ScalarProperty Name="Result" ColumnName="result" />
                 <ScalarProperty Name="Notes" ColumnName="notes" />
                 <ScalarProperty Name="instrumentID" ColumnName="instrumentID" />
-                <ScalarProperty Name="referenceID" ColumnName="referenceID" />
                 <ScalarProperty Name="laboratoryID" ColumnName="laboratoryID" />
                 <ScalarProperty Name="OperatorID" ColumnName="operatorID" />
                 <ScalarProperty Name="Date" ColumnName="date" />
@@ -4346,6 +4399,14 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <AssociationSetMapping Name="calibration_reference_mappings" TypeName="labdbModel.calibration_reference_mappings" StoreEntitySet="calibration_reference_mappings">
+            <EndProperty Name="Instrument">
+              <ScalarProperty Name="ID" ColumnName="referenceID" />
+            </EndProperty>
+            <EndProperty Name="CalibrationReport">
+              <ScalarProperty Name="ID" ColumnName="calibration_reportID" />
+            </EndProperty>
+          </AssociationSetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

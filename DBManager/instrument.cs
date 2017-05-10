@@ -18,9 +18,9 @@ namespace DBManager
         public Instrument()
         {
             this.CalibrationReports = new HashSet<CalibrationReport>();
-            this.CalibrationReportsAsReference = new HashSet<CalibrationReport>();
             this.Tests = new HashSet<Test>();
             this.MaintenanceEvent = new HashSet<InstrumentMaintenanceEvent>();
+            this.CalibrationReportAsReference = new HashSet<CalibrationReport>();
         }
     
         public int ID { get; set; }
@@ -38,8 +38,6 @@ namespace DBManager
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CalibrationReport> CalibrationReports { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<CalibrationReport> CalibrationReportsAsReference { get; set; }
         public virtual InstrumentType InstrumentType { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Test> Tests { get; set; }
@@ -48,5 +46,7 @@ namespace DBManager
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<InstrumentMaintenanceEvent> MaintenanceEvent { get; set; }
         public virtual Organization CalibrationResponsible { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<CalibrationReport> CalibrationReportAsReference { get; set; }
     }
 }

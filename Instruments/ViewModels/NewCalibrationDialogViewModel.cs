@@ -10,6 +10,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Forms;
 
 namespace Instruments.ViewModels
@@ -17,29 +18,31 @@ namespace Instruments.ViewModels
     public class NewCalibrationDialogViewModel : BindableBase
     {
         private CalibrationFiles _selectedFile;
+        private CalibrationReport _reportInstance;
         private DateTime _calibrationDate;
         private DBEntities _entities;
         private DBPrincipal _principal;
-        private DelegateCommand _addFile, _cancel, _confirm, _openFile, _removeFile;
+        private DelegateCommand _addFile, _openFile, _removeFile, _removeReference;
+        private DelegateCommand<string> _addReference;
+        private DelegateCommand<Window> _cancel, _confirm;
         private EventAggregator _eventAggregator;
-        private Instrument _instumentInstance;
+        private Instrument _instumentInstance, _selectedReference;
         private Int32 _reportNumber;
         private Person _selectedTech;
         private string _calibrationNotes, _calibrationResult, _referenceCode;
         private ObservableCollection<CalibrationFiles> _calibrationFileList;
+        private ObservableCollection<Instrument> _referenceList;
         private Organization _selectedLab;
-        private Views.NewCalibrationDialog _parentDialog;
 
         public NewCalibrationDialogViewModel(DBEntities entities,
                                             DBPrincipal principal,
-                                            EventAggregator eventAggregator,
-                                            Views.NewCalibrationDialog parentDialog) : base()
+                                            EventAggregator eventAggregator) : base()
         {
             _entities = entities;
             _calibrationFileList = new ObservableCollection<CalibrationFiles>();
+            _referenceList = new ObservableCollection<Instrument>();
             _eventAggregator = eventAggregator;
             _principal = principal;
-            _parentDialog = parentDialog;
 
             _calibrationDate = DateTime.Now.Date;
 
@@ -63,40 +66,49 @@ namespace Instruments.ViewModels
                     }
                 });
 
-            _cancel = new DelegateCommand(
-                () =>
+            _addReference = new DelegateCommand<string>(
+                code =>
+                {
+                    Instrument tempRef = _entities.Instruments.FirstOrDefault(inst => inst.Code == code);
+                    if (tempRef != null)
+                    {
+                        _referenceList.Add(tempRef);
+                        ReferenceCode = "";
+                    }
+                });
+
+            _cancel = new DelegateCommand<Window>(
+                parentDialog =>
                 {
                     parentDialog.DialogResult = false;
                 });
 
-            _confirm = new DelegateCommand(
-                () =>
+            _confirm = new DelegateCommand<Window>(
+                parentDialog =>
                 {
-                    CalibrationReport output = new CalibrationReport();
-                    output.Date = _calibrationDate;
-                    output.Instrument = _instumentInstance;
-                    output.Laboratory = _selectedLab;
-                    output.Number = ReportNumber;
-                    output.Notes = "";
-                    output.Result = "";
+                    _reportInstance = new CalibrationReport();
+                    _reportInstance.Date = _calibrationDate;
+                    _reportInstance.Instrument = _instumentInstance;
+                    _reportInstance.Laboratory = _selectedLab;
+                    _reportInstance.Number = ReportNumber;
+                    _reportInstance.Notes = "";
+                    _reportInstance.Result = "";
 
                     if (IsNotExternalLab)
                     {
-                        output.Tech = _selectedTech;
-                        Instrument tempReference = _entities.Instruments.FirstOrDefault(prm => prm.Code == _referenceCode);
-                        if (tempReference == null)
-                            return;
-                        output.Reference = tempReference;
+                        _reportInstance.Tech = _selectedTech;
+
+                        foreach (Instrument refInstrument in _referenceList)
+                            _reportInstance.ReferenceInstruments.Add(refInstrument);
                     }
 
                     foreach (CalibrationFiles calFile in _calibrationFileList)
-                        output.CalibrationFiles.Add(calFile);
+                        _reportInstance.CalibrationFiles.Add(calFile);
 
-                    _entities.CalibrationReports.Add(output);
+                    _entities.CalibrationReports.Add(_reportInstance);
                     _entities.SaveChanges();
 
-                    _parentDialog.ReportInstance = output;
-                    _parentDialog.DialogResult = true;
+                    parentDialog.DialogResult = true;
                 });
 
             _openFile = new DelegateCommand(
@@ -121,11 +133,24 @@ namespace Instruments.ViewModels
                     SelectedFile = null;
                 },
                 () => _selectedFile != null);
+
+            _removeReference = new DelegateCommand(
+                () =>
+                {
+                    _referenceList.Remove(_selectedReference);
+                    SelectedReference = null;
+                },
+                () => _selectedReference != null);
         }
 
         public DelegateCommand AddFileCommand
         {
             get { return _addFile; }
+        }
+
+        public DelegateCommand<string> AddReferenceCommand
+        {
+            get { return _addReference; }
         }
 
         public DateTime CalibrationDate
@@ -155,7 +180,7 @@ namespace Instruments.ViewModels
             }
         }
 
-        public DelegateCommand CancelCommand
+        public DelegateCommand<Window> CancelCommand
         {
             get { return _cancel; }
         }
@@ -168,7 +193,7 @@ namespace Instruments.ViewModels
             }
         }
 
-        public DelegateCommand ConfirmCommand
+        public DelegateCommand<Window> ConfirmCommand
         {
             get { return _confirm; }
         }
@@ -221,6 +246,7 @@ namespace Instruments.ViewModels
             {
                 OrganizationRole tempOr = _entities.OrganizationRoles.First(orr => orr.Name == OrganizationRoleNames.CalibrationLab);
                 return new List<Organization>(tempOr.OrganizationMappings.Where(orm => orm.IsSelected)
+                                                .OrderBy(orm => orm.Organization.Name)
                                                 .Select(orm => orm.Organization));
             }
         }
@@ -236,7 +262,23 @@ namespace Instruments.ViewModels
             set
             {
                 _referenceCode = value;
+                RaisePropertyChanged();
             }
+        }
+
+        public ObservableCollection<Instrument> ReferenceList
+        {
+            get { return _referenceList; }
+        }
+
+        public DelegateCommand RemoveReference
+        {
+            get { return _removeReference; }
+        }
+
+        public CalibrationReport ReportInstance
+        {
+            get { return _reportInstance; }
         }
 
         public Int32 ReportNumber
@@ -270,6 +312,21 @@ namespace Instruments.ViewModels
                 _selectedLab = value;
                 RaisePropertyChanged("SelectedLab");
                 RaisePropertyChanged("IsNotExternalLab");
+            }
+        }
+
+        public Instrument SelectedReference
+        {
+            get
+            {
+                return _selectedReference;
+            }
+
+            set
+            {
+                _selectedReference = value;
+                _removeReference.RaiseCanExecuteChanged();
+                RaisePropertyChanged();
             }
         }
 

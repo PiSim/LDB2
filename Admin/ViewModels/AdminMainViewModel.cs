@@ -54,8 +54,7 @@ namespace Admin.ViewModels
 
             _runMethod = new DelegateCommand(
                 () =>
-                {
-                } );
+                {} );
         }
 
         public string Name

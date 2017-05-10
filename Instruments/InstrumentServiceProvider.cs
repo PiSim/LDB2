@@ -47,7 +47,9 @@ namespace Instruments
             {
                 CalibrationReport output = calibrationDialog.ReportInstance;
                 Instrument tempTarget = _entities.Instruments.First(ins => ins.ID == target.ID);
-                tempTarget.CalibrationDueDate = output.Date.AddMonths(target.ControlPeriod);
+                DateTime tempNewDueDate = output.Date.AddMonths(target.ControlPeriod);
+                if (tempTarget.CalibrationDueDate.Value <= tempNewDueDate)
+                    tempTarget.CalibrationDueDate = tempNewDueDate;
                 _entities.SaveChanges();
                 _eventAggregator.GetEvent<CalibrationIssued>().Publish(output);
                 return output;

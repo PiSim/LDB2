@@ -7,7 +7,7 @@
 -*Associazione Norma/strumento
 -*Modifica dati e parametri strumento
 -*Funzionalità storico strumento
--*Associazione persona a SampleLogEntry
+-Aggiunto riferimento all'autore nelle entità SampleLogEntry
 
 v 0.4.4 -- 9/5/2017
 

@@ -18,13 +18,13 @@ namespace DBManager
         public CalibrationReport()
         {
             this.CalibrationFiles = new HashSet<CalibrationFiles>();
+            this.ReferenceInstruments = new HashSet<Instrument>();
         }
     
         public int ID { get; set; }
         public System.DateTime Date { get; set; }
         public Nullable<int> OperatorID { get; set; }
         public int laboratoryID { get; set; }
-        public Nullable<int> referenceID { get; set; }
         public int instrumentID { get; set; }
         public string Notes { get; set; }
         public int Number { get; set; }
@@ -33,8 +33,9 @@ namespace DBManager
         public virtual Instrument Instrument { get; set; }
         public virtual Organization Laboratory { get; set; }
         public virtual Person Tech { get; set; }
-        public virtual Instrument Reference { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CalibrationFiles> CalibrationFiles { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Instrument> ReferenceInstruments { get; set; }
     }
 }

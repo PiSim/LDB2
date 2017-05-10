@@ -15,16 +15,19 @@ namespace Materials
     public class MaterialServiceProvider : IMaterialServiceProvider
     {
         private DBEntities _entities;
+        private DBPrincipal _principal;
         private EventAggregator _eventAggregator;
         private IUnityContainer _container;
 
         public MaterialServiceProvider(DBEntities entities,
+                                    DBPrincipal principal,
                                     EventAggregator eventAggregator,
                                     IUnityContainer container)
         {
             _container = container;
             _entities = entities;
             _eventAggregator = eventAggregator;
+            _principal = principal;
         }
 
         public Sample AddSampleLog(string batchNumber, string actionCode)
@@ -36,6 +39,7 @@ namespace Materials
             output.Batch = temp;
             output.Date = DateTime.Now;
             output.Code = actionCode;
+            output.LogAuthor = _entities.People.First(ppl => ppl.ID == _principal.CurrentPerson.ID);
 
             _entities.Samples.Add(output);
             _entities.SaveChanges();

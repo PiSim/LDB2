@@ -18,7 +18,9 @@ namespace DBManager
         public int BatchID { get; private set; }
         public string Code { get; set; }
         public System.DateTime Date { get; set; }
+        public int personID { get; set; }
     
         public virtual Batch Batch { get; set; }
+        public virtual Person LogAuthor { get; set; }
     }
 }

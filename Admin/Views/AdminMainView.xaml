@@ -28,6 +28,13 @@
                  Grid.Row="1"
                  Margin="5"
                  Width="100"/>
+
+        <Button Content="Esegui"
+                Command="{Binding RunMethodCommand}"
+                Grid.Column="1"
+                Grid.Row="0"
+                Margin="5"/>
+
         <Button Content="Nuovo Ruolo Utente"
                 Command="{Binding NewUserRoleCommand}"
                 Grid.Column="0"

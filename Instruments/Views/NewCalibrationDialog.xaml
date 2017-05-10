@@ -5,9 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:prism="http://prismlibrary.com/"
         xmlns:local="clr-namespace:Instruments.Views"
+        prism:ViewModelLocator.AutoWireViewModel="True"
         mc:Ignorable="d"
         Title="Nuovo Rapporto di Taratura" 
-        Height="400" Width="400"
+        Height="500" Width="425"
         ResizeMode="NoResize">
     <Grid>
         <Grid.ColumnDefinitions>
@@ -17,14 +18,14 @@
             <ColumnDefinition Width="60"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="5*"/>
             <RowDefinition Height="3*"/>
-            <RowDefinition/>
+            <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
 
         <Label Content="Numero report:"
@@ -86,17 +87,65 @@
                   Grid.Row="4"
                   Margin="5"/>
 
-        <Label Content="Primario:"
-               Grid.Column="0"
-               Grid.Row="5"
-               Margin="5"/>
+        <GroupBox Header="Primari"
+                  IsEnabled="{Binding IsNotExternalLab}"
+                  Grid.Column="0"
+                  Grid.ColumnSpan="4"
+                  Grid.Row="5">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition Height="3*"/>
+                </Grid.RowDefinitions>
 
-        <TextBox Text="{Binding ReferenceCode, Mode=TwoWay}"
-                 IsEnabled="{Binding IsNotExternalLab}"
-                 Grid.Column="1"
-                 Grid.ColumnSpan="3"
-                 Grid.Row="5"
-                 Margin="5"/>
+                <TextBox Text="{Binding ReferenceCode, Mode=TwoWay}"
+                         x:Name="ReferenceTextBox"
+                         KeyDown="ReferenceTextBox_KeyDown"
+                         Grid.Column="0"
+                         Grid.Row="0"
+                         Margin="5"/>
+
+                <Button Content="Aggiungi"
+                        Command="{Binding AddReferenceCommand}"
+                        CommandParameter="{Binding ElementName=ReferenceTextBox, Path=Text}"
+                        x:Name="AddReferenceButton"
+                        Grid.Column="1"
+                        Grid.Row="0"
+                        Margin="5"/>
+
+                <ListView ItemsSource="{Binding ReferenceList}"
+                          SelectedItem="{Binding SelectedReference, Mode=TwoWay}"
+                          Grid.Column="0"
+                          Grid.Row="1"
+                          Grid.RowSpan="2"
+                          Margin="5">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Codice"
+                                            DisplayMemberBinding="{Binding Code}"
+                                            Width="Auto"/>
+                            <GridViewColumn Header="Tipo"
+                                            DisplayMemberBinding="{Binding InstrumentType.Name}"
+                                            Width="Auto"/>
+                            <GridViewColumn Header="Scadenza Taratura"
+                                            DisplayMemberBinding="{Binding CalibrationDueDate, StringFormat=d}"
+                                            Width="Auto"/>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+
+                <Button Content="Rimuovi"
+                            Command="{Binding RemoveReferenceCommand}"
+                            Grid.Column="1"
+                            Grid.Row="1"
+                            Margin="5"/>
+            </Grid>
+        </GroupBox>
 
         <ContentControl prism:RegionManager.RegionName="{Binding FileListRegionName}"
                         Grid.Column="0"
