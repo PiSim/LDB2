@@ -39,6 +39,7 @@ namespace Reports.ViewModels
                     {
                         _instance.IsComplete = true;
                         _instance.EndDate = DateTime.Now.Date;
+                        _eventAggregator.GetEvent<ReportCompleted>().Publish(_instance);                           
                     }
                     _entities.SaveChanges();
                 }, true);

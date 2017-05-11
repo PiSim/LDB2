@@ -183,6 +183,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>LabDB.edmx</DependentUpon>
     </Compile>
+    <Compile Include="LabDBConfig.cs" />
     <Compile Include="Master.cs">
       <DependentUpon>LabDB.tt</DependentUpon>
     </Compile>

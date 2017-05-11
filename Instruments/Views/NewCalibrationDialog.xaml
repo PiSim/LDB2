@@ -154,12 +154,14 @@
 
         <Button Content="Annulla"
                 Command="{Binding CancelCommand}"
+                CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
                 Grid.Column="2"
                 Grid.Row="7"
                 Margin="5"/>
 
         <Button Content="Ok"
                 Command="{Binding ConfirmCommand}"
+                CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
                 Grid.Column="3"
                 Grid.Row="7"
                 Margin="5"/>

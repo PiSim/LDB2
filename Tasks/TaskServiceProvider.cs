@@ -13,21 +13,36 @@ namespace Tasks
 {
     public class TaskServiceProvider : ITaskServiceProvider
     {
+        private DBEntities _entities;
         private EventAggregator _eventAggregator;
         private IUnityContainer _container;
 
-        public TaskServiceProvider(EventAggregator aggregator,
+        public TaskServiceProvider(DBEntities entities,
+                                    EventAggregator aggregator,
                                     IUnityContainer container)
         {
+            _entities = entities;
             _eventAggregator = aggregator;
             _container = container;
 
+            _eventAggregator.GetEvent<ReportCompleted>().Subscribe(
+                report => UpdateTaskStatus(report.ParentTask));
 
             _eventAggregator.GetEvent<TaskCreationRequested>().Subscribe(
                 token => OnTaskCreationRequested(token));
 
             _eventAggregator.GetEvent<TaskToReportConversionRequested>().Subscribe(
                 target => StartTaskToReportConversion(target));
+        }
+
+        public void UpdateTaskStatus(DBManager.Task target)
+        {
+            if (target.AllItemsAssigned && !target.Reports.Any(rep => !rep.IsComplete))
+            {
+                DBManager.Task tempTask = _entities.Tasks.First(tsk => tsk.ID == target.ID);
+                tempTask.IsComplete = true;
+                _eventAggregator.GetEvent<TaskListUpdateRequested>().Publish();
+            }
         }
 
         private void OnTaskCreationRequested(NewTaskToken token)

@@ -6,127 +6,146 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-
-public class AdminServiceProvider : IAdminServiceProvider
+namespace Admin
 {
-    private DBEntities _entities;
-    private IUnityContainer _container;
-
-    public AdminServiceProvider(DBEntities entities,
-                                IUnityContainer container)
+    public class AdminServiceProvider : IAdminServiceProvider
     {
-        _entities = entities;
-        _container = container;
-    }
+        private DBEntities _entities;
+        private DBPrincipal _principal;
+        private IUnityContainer _container;
 
-    public void AddOrganizationRole(string name)
-    {
-        OrganizationRole newRole = new OrganizationRole();
-        newRole.Name = name;
-        newRole.Description = "";
-
-        _entities.OrganizationRoles.Add(newRole);
-
-        foreach (Organization org in _entities.Organizations)
+        public AdminServiceProvider(DBEntities entities,
+                                    DBPrincipal principal,
+                                    IUnityContainer container)
         {
-            OrganizationRoleMapping newMapping = new OrganizationRoleMapping();
-            newMapping.Role = newRole;
-            newMapping.Organization = org;
-            newMapping.IsSelected = false;
-            _entities.OrganizationRoleMappings.Add(newMapping);
+            _entities = entities;
+            _container = container;
+            _principal = principal;
         }
 
-        _entities.SaveChanges();
-    }
-
-    public void AddUserRole(string name)
-    {
-        UserRole newRole = new UserRole();
-        newRole.Name = name;
-        newRole.Description = "";
-
-        _entities.UserRoles.Add(newRole);
-
-        foreach (User usr in _entities.Users)
+        public void AddOrganizationRole(string name)
         {
-            UserRoleMapping newMapping = new UserRoleMapping();
-            newMapping.UserRole = newRole;
-            newMapping.User = usr;
-            newMapping.IsSelected = false;
-            _entities.UserRoleMappings.Add(newMapping);
-        }
+            OrganizationRole newRole = new OrganizationRole();
+            newRole.Name = name;
+            newRole.Description = "";
 
-        _entities.SaveChanges();
-    }
+            _entities.OrganizationRoles.Add(newRole);
 
-    public Person AddPerson()
-    {
-        StringInputDialog addPersonDialog = _container.Resolve<StringInputDialog>();
-        addPersonDialog.Title = "Creazione nuova Persona";
-        addPersonDialog.Message = "Nome:";
-
-        if (addPersonDialog.ShowDialog() != true)
-            return null;
-
-        Person newPerson = new Person();
-        newPerson.Name = addPersonDialog.InputString;
-
-        foreach (PersonRole prr in _entities.PersonRoles)
-        {
-            PersonRoleMapping tempPRM = new PersonRoleMapping();
-            tempPRM.Role = prr;
-            tempPRM.IsSelected = false;
-            newPerson.RoleMappings.Add(tempPRM);
-        }
-
-        _entities.People.Add(newPerson);
-        _entities.SaveChanges();
-
-        return newPerson;
-    }
-
-    public void AddPersonRole()
-    {
-        StringInputDialog addPersonRoleDialog = _container.Resolve<StringInputDialog>();
-        addPersonRoleDialog.Title = "Creazione nuovo Ruolo Persona";
-        addPersonRoleDialog.Message = "Nome:";
-
-        if (addPersonRoleDialog.ShowDialog() != true)
-            return;
-
-        PersonRole newRole = new PersonRole();
-        newRole.Name = addPersonRoleDialog.InputString;
-        newRole.Description = "";
-
-        _entities.PersonRoles.Add(newRole);
-
-        foreach (Person per in _entities.People)
-        {
-            PersonRoleMapping newMapping = new PersonRoleMapping();
-            newMapping.Person = per;
-            newMapping.IsSelected = false;
-            newRole.RoleMappings.Add(newMapping);
-        }
-
-        _entities.SaveChanges();
-    }
-
-    public void BuildOrganizationRoles()
-    {
-        List<Organization> tempOrgList = new List<Organization>(_entities.Organizations);
-        List<OrganizationRole> tempRoles = new List<OrganizationRole>(_entities.OrganizationRoles);
-        foreach (Organization org in tempOrgList)
-        {
-            foreach (OrganizationRole rol in tempRoles)
+            foreach (Organization org in _entities.Organizations)
             {
-                OrganizationRoleMapping temp = new OrganizationRoleMapping();
-                temp.Role = rol;
-                temp.IsSelected = false;
-                org.RoleMapping.Add(temp);
+                OrganizationRoleMapping newMapping = new OrganizationRoleMapping();
+                newMapping.Role = newRole;
+                newMapping.Organization = org;
+                newMapping.IsSelected = false;
+                _entities.OrganizationRoleMappings.Add(newMapping);
             }
+
+            _entities.SaveChanges();
         }
 
-        _entities.SaveChanges();
+        public void AddUserRole(string name)
+        {
+            UserRole newRole = new UserRole();
+            newRole.Name = name;
+            newRole.Description = "";
+
+            _entities.UserRoles.Add(newRole);
+
+            foreach (User usr in _entities.Users)
+            {
+                UserRoleMapping newMapping = new UserRoleMapping();
+                newMapping.UserRole = newRole;
+                newMapping.User = usr;
+                newMapping.IsSelected = false;
+                _entities.UserRoleMappings.Add(newMapping);
+            }
+
+            _entities.SaveChanges();
+        }
+
+        public Person AddPerson()
+        {
+            StringInputDialog addPersonDialog = _container.Resolve<StringInputDialog>();
+            addPersonDialog.Title = "Creazione nuova Persona";
+            addPersonDialog.Message = "Nome:";
+
+            if (addPersonDialog.ShowDialog() != true)
+                return null;
+
+            Person newPerson = new Person();
+            newPerson.Name = addPersonDialog.InputString;
+
+            foreach (PersonRole prr in _entities.PersonRoles)
+            {
+                PersonRoleMapping tempPRM = new PersonRoleMapping();
+                tempPRM.Role = prr;
+                tempPRM.IsSelected = false;
+                newPerson.RoleMappings.Add(tempPRM);
+            }
+
+            _entities.People.Add(newPerson);
+            _entities.SaveChanges();
+
+            return newPerson;
+        }
+
+        public void AddPersonRole()
+        {
+            StringInputDialog addPersonRoleDialog = _container.Resolve<StringInputDialog>();
+            addPersonRoleDialog.Title = "Creazione nuovo Ruolo Persona";
+            addPersonRoleDialog.Message = "Nome:";
+
+            if (addPersonRoleDialog.ShowDialog() != true)
+                return;
+
+            PersonRole newRole = new PersonRole();
+            newRole.Name = addPersonRoleDialog.InputString;
+            newRole.Description = "";
+
+            _entities.PersonRoles.Add(newRole);
+
+            foreach (Person per in _entities.People)
+            {
+                PersonRoleMapping newMapping = new PersonRoleMapping();
+                newMapping.Person = per;
+                newMapping.IsSelected = false;
+                newRole.RoleMappings.Add(newMapping);
+            }
+
+            _entities.SaveChanges();
+        }
+
+        public void BuildOrganizationRoles()
+        {
+            List<Organization> tempOrgList = new List<Organization>(_entities.Organizations);
+            List<OrganizationRole> tempRoles = new List<OrganizationRole>(_entities.OrganizationRoles);
+            foreach (Organization org in tempOrgList)
+            {
+                foreach (OrganizationRole rol in tempRoles)
+                {
+                    OrganizationRoleMapping temp = new OrganizationRoleMapping();
+                    temp.Role = rol;
+                    temp.IsSelected = false;
+                    org.RoleMapping.Add(temp);
+                }
+            }
+
+            _entities.SaveChanges();
+        }
+
+        public User NewUserRegistration()
+        {
+            Views.NewUserDialog newUserDialog = _container.Resolve<Views.NewUserDialog>();
+
+            if (newUserDialog.ShowDialog() == true)
+                return newUserDialog.NewUserInstance;
+
+            else
+                return null;
+        }
+
     }
 
 }
+
+

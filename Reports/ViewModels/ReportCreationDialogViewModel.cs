@@ -65,7 +65,7 @@ namespace Reports.ViewModels
                     temp.SpecificationVersion = _selectedVersion;
                     temp.StartDate = DateTime.Now.ToShortDateString();
                     
-                    _reportServiceProvider.GenerateTestList(_requirementList);
+                    temp.Tests =  _reportServiceProvider.GenerateTestList(_requirementList);
                     
                     _entities.Reports.Add(temp);
                     _entities.SaveChanges();

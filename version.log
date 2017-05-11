@@ -2,18 +2,18 @@
 
 -*Supporto connessione da LAN
 -*Creato dialog per parametri di connessione
--*Creazione e gestione profili utente
+-Implementata funzionalità per la registrazione di nuovi profili utente
 -Supporto primari multipli per taratura
--*Corretto crash all'aggiornamento della data dopo la calibrazione di uno strumento
+-Corretto crash alla creazione di un report di calibrazione
 -*Associazione Norma/strumento
 -*Modifica dati e parametri strumento
 -*Funzionalità storico strumento
 -Aggiunto riferimento all'autore nelle entità SampleLogEntry
 -Aggiunto SortingBehavior alla lista strumenti
--Impostato AutoWireViewModel per il dialog tarature
--*I REPORT CREATI SONO VUOTI (In conversione sono OK)
+-Impostato AutoWireViewModel per NewCalibrationDialog, NewUserDialog
+-Corretta mancata attribuzione della lista prove alla creazione di un report
 -*Funzione elimina/aggiungi prove a/da report
--*Aggiornamento flag completamento Task
+-Implementato evento per aggiornamento Task al completamento di un report 
 -*Trasporto note PDC/Task/Report
 -*Filtro Pipeline per completi
 

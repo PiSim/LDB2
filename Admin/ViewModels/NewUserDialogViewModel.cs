@@ -8,6 +8,7 @@ using System.Linq;
 using System.Security;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Admin.ViewModels
 {
@@ -15,52 +16,51 @@ namespace Admin.ViewModels
     {
         AuthenticationService _authenticator;
         private DBEntities _entities;
-        private DelegateCommand _cancel, _confirm;
-        private Views.NewUserDialog _parentDialog;
+        private DelegateCommand<Window> _cancel, _confirm;
         private Person _selectedPerson;
-        private string _password, _passwordConfirmation, _userName;
+        private string _userName;
+        private User _userInstance;
 
         public NewUserDialogViewModel(AuthenticationService authenticator,
-                                        DBEntities entities,
-                                        Views.NewUserDialog parentDialog) : base()
+                                        DBEntities entities) : base()
         {
             _authenticator = authenticator;
             _entities = entities;
-            _parentDialog = parentDialog;
 
-            _cancel = new DelegateCommand(
-                () =>
+            _cancel = new DelegateCommand<Window>(
+                parentDialog =>
                 {
-                    _parentDialog.DialogResult = false;
+                    parentDialog.DialogResult = false;
                 });
 
-            _confirm = new DelegateCommand(
-                () =>
+            _confirm = new DelegateCommand<Window>(
+                parentDialog =>
                 {
-                    if (_password != _passwordConfirmation)
+                    
+                    if ((parentDialog as Views.NewUserDialog).PasswordBox1.Password 
+                        != (parentDialog as Views.NewUserDialog).PasswordBox2.Password)
                     {
-                        Password = null;
-                        PasswordConfirmation = null;
+                        (parentDialog as Views.NewUserDialog).PasswordBox1.Clear();
+                        (parentDialog as Views.NewUserDialog).PasswordBox1.Clear();
                     }
 
                     else
                     {
-                        User output = _authenticator.CreateNewUser(_selectedPerson,
+                        _userInstance = _authenticator.CreateNewUser(_selectedPerson,
                                                                     _userName,
-                                                                    _password);
-                        _parentDialog.NewUserInstance = output;
-                        _parentDialog.DialogResult = true;
+                                                                    (parentDialog as Views.NewUserDialog).PasswordBox1.Password);
+                        parentDialog.DialogResult = true;
                     }
                 }, 
-                () => IsValidInput);
+                parentDialog => IsValidInput);
         }
 
-        public DelegateCommand CancelCommand
+        public DelegateCommand<Window> CancelCommand
         {
             get { return _cancel; }
         }
 
-        public DelegateCommand ConfirmCommand
+        public DelegateCommand<Window> ConfirmCommand
         {
             get { return _confirm; }
         }
@@ -70,31 +70,7 @@ namespace Admin.ViewModels
             get
             {
                 return _userName != null && 
-                        _password != null &&
-                        _passwordConfirmation != null &&
                         _selectedPerson != null;
-            }
-        }
-
-        public string Password
-        {
-            get { return _password; }
-            set
-            {
-                _password = value;
-                RaisePropertyChanged("Password");
-                _confirm.RaiseCanExecuteChanged();
-            }
-        }
-
-        public string PasswordConfirmation
-        {
-            get { return _passwordConfirmation; }
-            set
-            {
-                _passwordConfirmation = value;
-                RaisePropertyChanged("PasswordConfirmation");
-                _confirm.RaiseCanExecuteChanged();
             }
         }
 
@@ -111,6 +87,11 @@ namespace Admin.ViewModels
                 _selectedPerson = value;
                 _confirm.RaiseCanExecuteChanged();
             }
+        }
+
+        public User UserInstance
+        {
+            get { return _userInstance; }
         }
 
         public string UserName

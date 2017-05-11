@@ -41,10 +41,7 @@ namespace Admin.ViewModels
                 });
 
             _newUser = new DelegateCommand(
-                () =>
-                {
-                    
-                });
+                () => services.NewUserRegistration() );
 
             _newUserRole = new DelegateCommand(
                 () =>

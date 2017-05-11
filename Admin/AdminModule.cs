@@ -25,6 +25,8 @@ namespace Admin
                 (AdminViewNames.AdminMainView);
 
             _container.RegisterType<ViewModels.AdminMainViewModel>();
+            _container.RegisterType<ViewModels.NewUserDialogViewModel>();
+
             _container.RegisterType<Views.NewUserDialog>();
 
             _regionManager.RegisterViewWithRegion(RegionNames.MainNavigationRegion, 

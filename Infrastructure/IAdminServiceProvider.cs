@@ -8,5 +8,6 @@ namespace Infrastructure
         void AddPersonRole();
         void AddOrganizationRole(string name);
         void AddUserRole(string name);
+        User NewUserRegistration();
     }
 }
