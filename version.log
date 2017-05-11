@@ -3,7 +3,8 @@
 -*Supporto connessione da LAN
 -*Creato dialog per parametri di connessione
 -*Creazione e gestione profili utente
--*Supporto primari multipli per taratura
+-Supporto primari multipli per taratura
+-*Corretto crash all'aggiornamento della data dopo la calibrazione di uno strumento
 -*Associazione Norma/strumento
 -*Modifica dati e parametri strumento
 -*Funzionalità storico strumento
