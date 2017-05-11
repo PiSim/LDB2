@@ -11,7 +11,9 @@
 -Aggiunto riferimento all'autore nelle entità SampleLogEntry
 -Aggiunto SortingBehavior alla lista strumenti
 -Impostato AutoWireViewModel per il dialog tarature
--*I REPORT CREATI SONO VUOTI
+-*I REPORT CREATI SONO VUOTI (In conversione sono OK)
+-*Funzione elimina/aggiungi prove a/da report
+-*Aggiornamento flag completamento Task
 
 v 0.4.4 -- 9/5/2017
 
