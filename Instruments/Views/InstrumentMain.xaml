@@ -3,6 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:sort="clr-namespace:Infrastructure.Sorting;assembly=Infrastructure"
              xmlns:local="clr-namespace:Instruments.Views"
              xmlns:prism="http://prismlibrary.com/"
              prism:ViewModelLocator.AutoWireViewModel="True"
@@ -28,6 +30,9 @@
             <ListView ItemsSource="{Binding InstrumentList}"
                           SelectedItem="{Binding SelectedInstrument, Mode=TwoWay}"
                           Grid.Row="1">
+                <i:Interaction.Behaviors>
+                    <sort:SortingBehavior/>
+                </i:Interaction.Behaviors>
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Header="Codice"
