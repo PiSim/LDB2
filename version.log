@@ -14,6 +14,8 @@
 -*I REPORT CREATI SONO VUOTI (In conversione sono OK)
 -*Funzione elimina/aggiungi prove a/da report
 -*Aggiornamento flag completamento Task
+-*Trasporto note PDC/Task/Report
+-*Filtro Pipeline per completi
 
 v 0.4.4 -- 9/5/2017
 
