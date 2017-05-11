@@ -45,7 +45,7 @@ namespace Instruments
             calibrationDialog.InstrumentInstance = target;
             if (calibrationDialog.ShowDialog() == true)
             {
-                CalibrationReport output = calibrationDialog.ReportInstance;
+                CalibrationReport output = _entities.CalibrationReports.FirstOrDefault(crep => crep.ID == calibrationDialog.ReportInstance.ID);
                 Instrument tempTarget = _entities.Instruments.First(ins => ins.ID == target.ID);
                 DateTime tempNewDate = output.Date.AddMonths(target.ControlPeriod);
                 int dateComparer = tempTarget.CalibrationDueDate.Value.CompareTo(tempNewDate);
