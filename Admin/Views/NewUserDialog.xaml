@@ -40,7 +40,6 @@
                Margin="5"/>
         
         <PasswordBox Name="PasswordBox1"
-                     PasswordChanged="PasswordBox1_PasswordChanged"
                      Grid.Column="1"
                      Grid.ColumnSpan="3"
                      Grid.Row="1"
@@ -52,7 +51,6 @@
                Margin="5"/>
         
         <PasswordBox Name="PasswordBox2"
-                     PasswordChanged="PasswordBox2_PasswordChanged"
                      Grid.Column="1"
                      Grid.ColumnSpan="3"
                      Grid.Row="2"

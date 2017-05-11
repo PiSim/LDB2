@@ -256,7 +256,7 @@ namespace Specifications.ViewModels
                 if (!_principal.IsInRole(UserRoleNames.SpecificationAdmin))
                     return false;
 
-                else if (_selectedControlPlan.IsDefault)
+                else if (_selectedControlPlan == null || _selectedControlPlan.IsDefault)
                     return false;
 
                 else
