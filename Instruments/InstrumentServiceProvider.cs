@@ -50,8 +50,10 @@ namespace Instruments
                 DateTime tempNewDate = output.Date.AddMonths(target.ControlPeriod);
                 int dateComparer = tempTarget.CalibrationDueDate.Value.CompareTo(tempNewDate);
                 if (dateComparer < 0)
+                {
                     tempTarget.CalibrationDueDate = tempNewDate;
-                _entities.SaveChanges();
+                    _entities.SaveChanges();
+                }
                 _eventAggregator.GetEvent<CalibrationIssued>().Publish(output);
                 return output;
             }
