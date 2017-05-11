@@ -9,6 +9,8 @@
 -*Modifica dati e parametri strumento
 -*Funzionalità storico strumento
 -Aggiunto riferimento all'autore nelle entità SampleLogEntry
+-Aggiunto SortingBehavior alla lista strumenti
+-Impostato AutoWireViewModel per il dialog tarature
 
 v 0.4.4 -- 9/5/2017
 
