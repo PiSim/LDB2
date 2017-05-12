@@ -8,6 +8,7 @@ namespace Infrastructure
 {
     public class UserRoleNames
     {
+        public static string Admin { get { return "ADMIN"; } }
         public static string ReportAdmin { get { return "REPORT_ADMIN"; } }
         public static string ReportEdit { get { return "REPORT_EDIT"; } }
         public static string SpecificationAdmin { get { return "SPEC_ADMIN"; } }
