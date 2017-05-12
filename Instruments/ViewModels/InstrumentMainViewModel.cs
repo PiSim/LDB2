@@ -46,7 +46,12 @@ namespace Instruments.ViewModels
                 () => SelectedInstrument != null);
 
             _eventAggregator.GetEvent<CalibrationIssued>().Subscribe(
-                calRep => RaisePropertyChanged("PendingCalibrationsList"));
+                calRep => 
+                {
+                    Instrument tempInstrument = _entities.Instruments(ins => ins.ID == calRep.Instrument.ID);
+                    _entities.Entry(tempInstrument).Reload();
+                    RaisePropertyChanged("PendingCalibrationsList");
+                });
 
             _eventAggregator.GetEvent<InstrumentListUpdateRequested>().Subscribe(
                 () =>
