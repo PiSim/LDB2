@@ -18,6 +18,7 @@ namespace Reports.ViewModels
     {
         private Batch _selectedBatch;
         private DBEntities _entities;
+        private DBPrincipal _principal;
         private DelegateCommand _addBatch, _addFile, _addPO, _openBatch, _openFile, _removeBatch, _removeFile;
         private EventAggregator _eventAggregator;
         private ExternalReport _instance;
@@ -28,6 +29,7 @@ namespace Reports.ViewModels
         private ObservableCollection<ExternalReportFile> _reportFiles;
 
         public ExternalReportEditViewModel(DBEntities entities,
+                                            DBPrincipal principal,
                                             EventAggregator aggregator,
                                             IMaterialServiceProvider materialServiceProvider,
                                             IReportServiceProvider reportServiceProvider) : base()
@@ -36,6 +38,8 @@ namespace Reports.ViewModels
             _materialServiceProvider = materialServiceProvider;
             _reportServiceProvider = reportServiceProvider;
             _entities = entities;
+            _principal = principal;
+
             _eventAggregator.GetEvent<CommitRequested>().Subscribe(() => _entities.SaveChanges());
             
             _addBatch = new DelegateCommand(
