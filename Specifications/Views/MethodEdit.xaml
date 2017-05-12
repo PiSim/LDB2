@@ -65,8 +65,8 @@
                     </Grid.ColumnDefinitions>
 
                     <ListView ItemsSource="{Binding Measurements}"
-                            SelectedItem="{Binding SelectedMeasurement, Mode=TwoWay}"
-                            Grid.Column="0">
+                              SelectedItem="{Binding SelectedMeasurement, Mode=TwoWay}"
+                              Grid.Column="0">
                         <ListView.View>
                             <GridView>
                                 <GridViewColumn Header="Nome">
@@ -104,7 +104,48 @@
                     <ListView.View>
                         <GridView>
                             <GridViewColumn Header="Odp"
-                                            DisplayMemberBinding="{Binding Batch.Number}"/>
+                                            DisplayMemberBinding="{Binding Report.Batch.Number}"/>
+
+                            <GridViewColumn Header="Prova" 
+                                            DisplayMemberBinding="{Binding Method.Property.Name}"/>
+
+                            <GridViewColumn Header="Risultati">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <ListView ItemsSource="{Binding SubTests}">
+                                            <ListView.ItemTemplate>
+                                                <DataTemplate>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <Label Content="{Binding Path=Name}"/>
+                                                        <TextBox Text="{Binding Path=Result, Mode=TwoWay}"
+                                                                 IsEnabled="False"/>
+                                                        <Label Content="{Binding Path=Requirement}"/>
+                                                        <Label Content="{Binding UM}"/>
+                                                    </StackPanel>
+                                                </DataTemplate>
+                                            </ListView.ItemTemplate>
+                                        </ListView>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            
+                            <GridViewColumn Header="Note"
+                                            DisplayMemberBinding="{Binding Notes}"/>
+
+                            <GridViewColumn Header="Metodo"
+                                            DisplayMemberBinding="{Binding Method}"/>
+
+                            <GridViewColumn Header="Completo">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <CheckBox IsChecked="{Binding IsComplete, Mode=TwoWay}"
+                                                  IsEnabled="False"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+
+                            <GridViewColumn Header="Data Completamento" 
+                                            DisplayMemberBinding="{Binding CompletionDate}"/>
                         </GridView>
                     </ListView.View>
                 </ListView>
