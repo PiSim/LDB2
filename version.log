@@ -13,9 +13,10 @@
 -Impostato AutoWireViewModel per NewCalibrationDialog, NewUserDialog
 -Corretta mancata attribuzione della lista prove alla creazione di un report
 -*Funzione elimina/aggiungi prove a/da report
--Implementato evento per aggiornamento Task al completamento di un report 
+-********************Implementato evento per aggiornamento Task al completamento di un report 
 -*Trasporto note PDC/Task/Report
 -*Filtro Pipeline per completi
+-Impostati check di autorizzazione per numerose funzioni
 
 v 0.4.4 -- 9/5/2017
 
