@@ -10,7 +10,7 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
         <ListView ItemsSource="{Binding ExternalReportList}"
-                  SelectedItem="{Binding SelectedExternalReport, Mode=TwoWay">
+                  SelectedItem="{Binding SelectedExternalReport, Mode=TwoWay}">
             <i:Interaction.Behaviors>
                 <sort:SortingBehavior/>
             </i:Interaction.Behaviors>
