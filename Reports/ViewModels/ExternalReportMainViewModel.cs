@@ -15,6 +15,7 @@ namespace Reports.ViewModels
     public class ExternalReportMainViewModel : BindableBase
     {
         private DBEntities _entities;
+        private DBPrincipal _principal;
         private DelegateCommand _newReport, _openReport;
         private EventAggregator _eventAggregator;
         private ExternalReport _selectedReport;
@@ -22,12 +23,15 @@ namespace Reports.ViewModels
         private IUnityContainer _container; 
 
         public ExternalReportMainViewModel(DBEntities entities, 
+                                            DBPrincipal principal,
                                             EventAggregator aggregator,
                                             IUnityContainer container)
         {
             _container = container;
             _entities = entities;
             _eventAggregator = aggregator;
+            _principal = principal;
+            
             _reportList = new ObservableCollection<ExternalReport>(_entities.ExternalReports);
             
             _newReport = new DelegateCommand(
@@ -53,6 +57,18 @@ namespace Reports.ViewModels
                 },
                 () => _selectedReport != null);
         } 
+
+        public bool CanCreateExternalReport
+        {
+            get 
+            {
+                if (_principal.IsInRole(UserRoleNames.ExternalReportAdmin))
+                    return true;
+                
+                else 
+                    return false;
+            }
+        }
         
         public DelegateCommand NewExternalReportCommand
         {
