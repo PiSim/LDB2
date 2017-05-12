@@ -20,7 +20,8 @@ namespace Instruments
         }
 
         public void Initialize()
-        {
+        {     
+
             _container.RegisterType<Views.InstrumentCreationDialog>();
             _container.RegisterType<Views.NewCalibrationDialog>();
             _container.RegisterType<Views.NewMaintenanceEventDialog>();
