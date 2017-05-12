@@ -46,7 +46,7 @@ namespace Security
             User output = new User();
             output.UserName = userName;
             output.HashedPassword = CalculateHash(password, userName);
-            output.PersonID = personInstance.ID;
+            output.Person = _entities.People.First(per => per.ID == personInstance.ID);
 
             foreach (UserRole role in _entities.UserRoles)
             {
