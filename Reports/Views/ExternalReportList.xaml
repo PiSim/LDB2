@@ -9,14 +9,9 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition />
-            <ColumnDefinition Width="100"/>
-        </Grid.ColumnDefinitions>
         <ListView x:Name="XRepList"
                   ItemsSource="{Binding ExternalReportList}"
-                  SelectedItem="{Binding SelectedExternalReport, Mode=TwoWay}"
-                  Grid.Column="0">
+                  SelectedItem="{Binding SelectedExternalReport, Mode=TwoWay">
             <i:Interaction.Behaviors>
                 <sort:SortingBehavior/>
             </i:Interaction.Behaviors>
@@ -64,20 +59,6 @@
                     </GridViewColumn>
                 </GridView>
             </ListView.View>
-        </ListView>
-
-        <Button Content="Nuovo"
-                Command="{Binding NewExternalReportCommand}"
-                Grid.Column="1"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top"
-                Margin="5,5,0,0"/>
-
-        <Button Content="Apri"
-                Command="{Binding OpenExternalReportCommand}"
-                Grid.Column="1"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top"
-                Margin="5,30,0,0"/>            
+        </ListView>    
     </Grid>
 </UserControl>
