@@ -21,12 +21,15 @@ namespace People
 
         public void Initialize()
         {
+            DBPrincipal principal = _container.Resolve<DBPrincipal>();
+
+            if (principal.IsInRole(UserRoleNames.Admin))
+                _regionManager.RegisterViewWithRegion(RegionNames.MainNavigationRegion,
+                                                    typeof(Views.PeopleNavigationItem));
+
             _container.RegisterType<Object, Views.PeopleMain>(PeopleViewNames.PeopleMainView);
 
             _container.RegisterType<ViewModels.PeopleMainViewModel>();
-
-            _regionManager.RegisterViewWithRegion(RegionNames.MainNavigationRegion,
-                                                    typeof(Views.PeopleNavigationItem));
         }
     }
 }
