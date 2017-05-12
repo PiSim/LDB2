@@ -9,8 +9,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        <ListView x:Name="XRepList"
-                  ItemsSource="{Binding ExternalReportList}"
+        <ListView ItemsSource="{Binding ExternalReportList}"
                   SelectedItem="{Binding SelectedExternalReport, Mode=TwoWay">
             <i:Interaction.Behaviors>
                 <sort:SortingBehavior/>
