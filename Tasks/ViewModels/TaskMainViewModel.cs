@@ -16,12 +16,14 @@ namespace Tasks.ViewModels
     public class TaskMainViewModel : BindableBase
     {
         private DBEntities _entities;
+        private DBPrincipal _principal;
         private DelegateCommand _newTask, _removeTask;
         private EventAggregator _eventAggregator;
         private DBManager.Task _selectedTask;
         private UnityContainer _container;
 
         public TaskMainViewModel(DBEntities entities, 
+                                    DBPrincipal principal,
                                     EventAggregator eventAggregator,
                                     UnityContainer container) 
             : base()
@@ -29,6 +31,7 @@ namespace Tasks.ViewModels
             _container = container;
             _entities = entities;
             _eventAggregator = eventAggregator;
+            _principal = principal;
 
             _eventAggregator.GetEvent<TaskListUpdateRequested>().Subscribe(() => RaisePropertyChanged("TaskList"));
 
@@ -38,7 +41,8 @@ namespace Tasks.ViewModels
                     NewTaskToken token = new NewTaskToken();
                     _eventAggregator.GetEvent<TaskCreationRequested>().
                         Publish(token);
-                } );
+                },
+                () => CanCreateTask );
 
             _removeTask = new DelegateCommand(
                 () =>
@@ -48,7 +52,30 @@ namespace Tasks.ViewModels
                     SelectedTask = null;
                     RaisePropertyChanged("TaskList");
                 },
-                () => SelectedTask != null);
+                () => CanDeleteTask );
+        }
+
+        public bool CanCreateTask
+        {
+            get { return _principal.IsInRole(UserRoleNames.TaskEdit) || _principal.IsInRole(UserRoleNames.TaskAdmin); }
+        }
+
+        public bool CanDeleteTask
+        {
+            get 
+            {
+                if (_selectedTask == null)
+                    return false;
+                
+                else if (_selectedTask.Requester.ID == _principal.CurrentPerson.ID && _principal.IsInRole(UserRoleNames.TaskEdit))
+                    return true;
+
+                else if (_principal.IsInRole(UserRoleNames.TaskAdmin))
+                    return true;
+
+                else
+                    return false;
+            }
         }
 
         public string MainTaskListRegionName
