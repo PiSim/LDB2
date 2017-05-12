@@ -122,7 +122,6 @@
 
         <Button Content="Crea Report per questa richiesta"
                 Command="{Binding ConvertToReportCommand}"
-                IsEnabled="{Binding CanCreateReport}"
                 Grid.Column="1"
                 Grid.Row="2"
                 Margin="5"
