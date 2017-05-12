@@ -20,12 +20,15 @@ namespace Organizations
 
         public void Initialize()
         {
+            DBPrincipal principal = _container.Resolve<DBPrincipal>();
+            if (principal.IsInRole(UserRoleNames.Admin))
+                _regionManager.RegisterViewWithRegion(RegionNames.MainNavigationRegion,
+                                                typeof(Views.OrganizationsNavigationItem));
+            
             _container.RegisterType<ViewModels.OrganizationsMainViewModel>();
 
             _container.RegisterType<Object, Views.OrganizationsMain>(OrganizationViewNames.OrganizationMainView);
             
-            _regionManager.RegisterViewWithRegion(RegionNames.MainNavigationRegion,
-                                                typeof(Views.OrganizationsNavigationItem));
 
             _container.RegisterType<IOrganizationServiceProvider, OrganizationServiceProvider>(
                 new ContainerControlledLifetimeManager());
