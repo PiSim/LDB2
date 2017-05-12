@@ -92,6 +92,8 @@
 
             <TextBox Text="{Binding Notes, Mode=TwoWay}"
                      IsEnabled="{Binding CanEdit}"
+                     TextWrapping="Wrap"
+                     AcceptsReturn="True"
                      Grid.Column="1"
                      Grid.Row="6"
                      Margin="5"/>          
