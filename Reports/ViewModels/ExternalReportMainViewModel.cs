@@ -1,4 +1,5 @@
 ﻿using DBManager;
+using Infrastructure;
 using Infrastructure.Events;
 using Microsoft.Practices.Unity;
 using Prism.Commands;
