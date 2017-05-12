@@ -19,11 +19,12 @@
         <StackPanel Grid.Column="1">
             <Button Content="Nuovo"
                     Command="{Binding NewExternalReportCommand}"
+                    IsEnabled="{Binding CanCreateExternalReport}"
                     Margin="5"/>
 
             <Button Content="Apri"
                     Command="{Binding OpenExternalReportCommand}"
-                    Margin="5,30,0,0"/>        
+                    Margin="5"/>        
         </StackPanel>
     </Grid>
 </UserControl>
