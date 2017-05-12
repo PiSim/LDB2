@@ -33,7 +33,8 @@ namespace Tasks.ViewModels
                 () =>
                 {
                     _eventAggregator.GetEvent<TaskToReportConversionRequested>().Publish(_instance);
-                });
+                },
+                () => CanCreateReport);
         }
 
         public string BatchNumber
@@ -45,6 +46,14 @@ namespace Tasks.ViewModels
 
                 else
                     return _instance.Batch.Number;
+            }
+        }
+
+        public bool CanCreateReport
+        {
+            get
+            {
+                return _principal.IsInRole(UserRoleNames.ReportEdit) || _principal.IsInRole(UserRoleNames.ReportAdmin);
             }
         }
 
