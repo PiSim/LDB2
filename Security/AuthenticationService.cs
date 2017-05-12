@@ -44,6 +44,7 @@ namespace Security
                                 string password)
         {
             User output = new User();
+            output.FullName = "";
             output.UserName = userName;
             output.HashedPassword = CalculateHash(password, userName);
             output.Person = _entities.People.First(per => per.ID == personInstance.ID);
