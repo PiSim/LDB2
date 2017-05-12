@@ -153,6 +153,18 @@ namespace Reports.ViewModels
             set { _instance.Description = value; }
         }
 
+        public bool CanModify
+        {
+            get 
+            {
+                if (_principal.IsInRole(UserRoleNames.ExternalReportAdmin))
+                    return true;
+                
+                else 
+                    return false;
+            }
+        }
+
         public string Currency
         {
             get 
