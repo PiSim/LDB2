@@ -56,6 +56,7 @@
                       Grid.ColumnSpan="2"
                       Grid.Row="1">
                 <TextBox Text="{Binding Path=Samples}"
+                         IsEnabled="{Binding CanModify}"
                          TextWrapping="Wrap"
                          AcceptsReturn="True"/>
             </GroupBox>
@@ -64,6 +65,7 @@
                       Grid.ColumnSpan="2"
                       Grid.Row="1">
                 <TextBox Text="{Binding Path=Description}"
+                         IsEnabled="{Binding CanModify}"
                          TextWrapping="Wrap"
                          AcceptsReturn="True"/>
             </GroupBox>
@@ -81,13 +83,13 @@
                         <RowDefinition/>
                     </Grid.RowDefinitions>
 
-
                     <ContentControl prism:RegionManager.RegionName="ExternalReportProjectDetailsRegion"
                                     Grid.Column="0"
                                     Grid.Row="0"/>
                     
                     <GroupBox Header="Stato"
-                              Grid.Column="1">
+                              Grid.Column="1"
+                              IsEnabled="{Binding CanModify}">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition/>
@@ -103,7 +105,6 @@
                                    Grid.Row="0"
                                    Margin="5"/>
                             <CheckBox IsChecked="{Binding RequestDone, Mode=TwoWay}"
-                                      IsEnabled="{Binding CanModifyStatus}"
                                       Grid.Column="1"
                                       Grid.Row="0"
                                       Margin="5"/>
@@ -112,8 +113,8 @@
                                    Grid.Column="0"
                                    Grid.Row="1"
                                    Margin="5"/>
+
                             <CheckBox IsChecked="{Binding SamplesSent, Mode=TwoWay}"
-                                      IsEnabled="{Binding CanModifyStatus}"
                                       Grid.Column="1"
                                       Grid.Row="1"
                                       Margin="5"/>
@@ -157,11 +158,13 @@
                                     Margin="5"/>
                             <Button Content="Aggiungi" 
                                     Command="{Binding Path=AddBatchCommand}" 
+                                    IsEnabled="{Binding CanModify}"
                                     Grid.Column="1"
                                     Grid.Row="1"
                                     Margin="5"/>
                             <Button Content="Rimuovi" 
                                     Command="{Binding Path=RemoveBatchCommand}" 
+                                    IsEnabled="{Binding CanModify}"
                                     Grid.Column="1"
                                     Grid.Row="2"
                                     Margin="5"/>
@@ -218,6 +221,7 @@
 
                             <Button Command="{Binding AddPOCommand}"
                                     Content="Aggiungi"
+                                    IsEnabled="{Binding CanModify}"
                                     Grid.Column="1"
                                     Grid.Row="3"
                                     Margin="5"/>
@@ -257,11 +261,13 @@
                                 Margin="0,0,0,0"/>
                         <Button Content="Aggiungi" 
                                 Command="{Binding Path=AddFileCommand}" 
+                                IsEnabled="{Binding CanModify}"
                                 HorizontalAlignment="Right"
                                 VerticalAlignment="Top" 
                                 Margin="0,25,0,0"/>
                         <Button Content="Rimuovi" 
                                 Command="{Binding Path=RemoveFileCommand}" 
+                                IsEnabled="{Binding CanModify}"
                                 HorizontalAlignment="Right"
                                 VerticalAlignment="Top" 
                                 Margin="0,50,0,0"/>
