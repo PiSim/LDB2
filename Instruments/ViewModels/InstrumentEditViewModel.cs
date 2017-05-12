@@ -38,8 +38,10 @@ namespace Instruments.ViewModels
             _addCalibration = new DelegateCommand(
                 () =>
                 {
-                    _instrumentServiceProvider.RegisterNewCalibration(_instance);
-                    RaisePropertyChanged("CalibrationReportList");
+                    Instrument tempInstrument = _instrumentServiceProvider.RegisterNewCalibration(_instance);
+                    
+                    if (tempInstrument != null)
+                        InstrumentInstance = tempInstrument;
                 });
 
             _addMaintenanceEvent = new DelegateCommand(
