@@ -37,11 +37,15 @@ namespace Tasks
 
         public void UpdateTaskStatus(DBManager.Task target)
         {
+            if (target == null)
+                return;
+
             if (target.AllItemsAssigned && !target.Reports.Any(rep => !rep.IsComplete))
             {
                 DBManager.Task tempTask = _entities.Tasks.First(tsk => tsk.ID == target.ID);
                 tempTask.IsComplete = true;
-                _eventAggregator.GetEvent<TaskListUpdateRequested>().Publish();
+                _entities.SaveChanges();
+                _eventAggregator.GetEvent<TaskCompleted>().Publish(tempTask);
             }
         }
 

@@ -38,13 +38,10 @@ namespace Instruments.ViewModels
             _addCalibration = new DelegateCommand(
                 () =>
                 {
-                    Calibration tempCalibration = _instrumentServiceProvider.RegisterNewCalibration(_instance);
-                    
-                    if (tempInstrument != null)
-                    {
-                        _entities.Entry(_instance).Reload();
+                    CalibrationReport tempCalibration = _instrumentServiceProvider.RegisterNewCalibration(_instance);
+
+                    if (tempCalibration != null)
                         RaisePropertyChanged("CalibrationReportList");
-                    }
                 });
 
             _addMaintenanceEvent = new DelegateCommand(
@@ -130,7 +127,12 @@ namespace Instruments.ViewModels
             get { return _instance; }
             set
             {
-                _instance = value;
+                if (value == null)
+                    _instance = null;
+
+                else
+                    _instance = _entities.Instruments.First(ins => ins.ID == value.ID);
+
                 RaisePropertyChanged("CalibrationReportList");
                 RaisePropertyChanged("CalibrationTabVisible");
                 RaisePropertyChanged("InstrumentCode");

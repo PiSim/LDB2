@@ -35,6 +35,14 @@ namespace Tasks.ViewModels
 
             _eventAggregator.GetEvent<TaskListUpdateRequested>().Subscribe(() => RaisePropertyChanged("TaskList"));
 
+            _eventAggregator.GetEvent<TaskCompleted>().Subscribe(
+                task =>
+                {
+                    DBManager.Task tempTask = _entities.Tasks.First<DBManager.Task>(tsk => tsk.ID == task.ID);
+                    _entities.Entry<DBManager.Task>(tempTask).Reload();
+                    RaisePropertyChanged("TaskList");
+                });
+
             _newTask = new DelegateCommand(
                 () =>
                 {

@@ -117,6 +117,7 @@
     <Compile Include="Events\ReportListUpdateRequested.cs" />
     <Compile Include="Events\ReportCreationRequested.cs" />
     <Compile Include="Events\StatusNotificationIssued.cs" />
+    <Compile Include="Events\TaskCompleted.cs" />
     <Compile Include="Events\TaskCreationRequested.cs" />
     <Compile Include="Events\TaskListUpdateRequested.cs" />
     <Compile Include="Events\TaskToReportConversionRequested.cs" />
