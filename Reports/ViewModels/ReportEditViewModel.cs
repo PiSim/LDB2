@@ -67,7 +67,14 @@ namespace Reports.ViewModels
             _openFile = new DelegateCommand(
                 () =>
                 {
-                    System.Diagnostics.Process.Start(_selectedFile.Path);
+                    try
+                    {
+                        System.Diagnostics.Process.Start(_selectedFile.Path);
+                    }
+                    catch (Exception)
+                    {
+                        _eventAggregator.GetEvent<StatusNotificationIssued>().Publish("File non trovato");
+                    }
                 },
                 () => _selectedFile != null);
 
@@ -94,6 +101,24 @@ namespace Reports.ViewModels
                     return null;
                 else
                     return _instance.Batch.Number; 
+            }
+        }
+
+        public bool CanModify
+        {
+            get 
+            {
+                if (_instance == null)
+                    return false;
+
+                else if (_instance.Author.ID == _principal.CurrentPerson.ID && _principal.IsInRole(UserRoleNames.ReportEdit))
+                    return true;
+                
+                else if (_principal.IsInRole(UserRoleNames.ReportAdmin))
+                    return true;
+                
+                else 
+                    return false;
             }
         }
 
@@ -143,6 +168,7 @@ namespace Reports.ViewModels
                     _testList.Add(new TestWrapper(tst));
 
                 RaisePropertyChanged("BatchNumber");
+                RaisePropertyChanged("CanModify");
                 RaisePropertyChanged("Category");
                 RaisePropertyChanged("Description");
                 RaisePropertyChanged("FileList");
