@@ -111,7 +111,7 @@
                               Grid.Column="1"
                               Grid.Row="0">
                         <ListView ItemsSource="{Binding Path=Samples}"
-                      Margin="0,0,100,0">
+                                  Margin="0,0,100,0">
                             <ListView.View>
                                 <GridView>
                                     <GridViewColumn DisplayMemberBinding="{Binding Path=Action}"/>
@@ -130,41 +130,56 @@
                         <RowDefinition/>
                     </Grid.RowDefinitions>
 
-                    <GroupBox Header="Report Interni" Grid.Row="0">
+                    <GroupBox Header="Report Interni" 
+                              Grid.Row="0">
                         <ContentControl prism:RegionManager.RegionName="BatchReportListRegion"/>
                     </GroupBox>
+
                     <GroupBox Header="Report Esterni"
                               Grid.Row="1">
-                        <ContentControl prism:RegionManager.RegionName="BatchExternalReportListRegion"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <ContentControl prism:RegionManager.RegionName="BatchExternalReportListRegion"/>
+
+                            <StackPanel Grid.Column="1">
+                                <Button Content="Apri"
+                                        Command="{Binding OpenExternalReportCommand}"
+                                        Margin="5,30,0,0"/>        
+                            </StackPanel>
+                        </Grid>
                     </GroupBox>
                     <GroupBox Header="Richiesti"
-                  Grid.Row="2">
+                              Grid.Row="2">
                         <Grid>
                             <Button Content="Apri" Command="{Binding Path=OpenRequestCommand}"
-                        HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,0,0"/>
+                                    HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,0,0"/>
                             <Button Content="Crea Nuova"
-                        Command="{Binding Path=CreateRequestCommand}"
-                        HorizontalAlignment="Right"
-                        VerticalAlignment="Top"
-                        Margin="0,25,0,0"/>
+                                    Command="{Binding Path=CreateRequestCommand}"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Top"
+                                    Margin="0,25,0,0"/>
                             <ListView ItemsSource="{Binding Path=Tasks}"
-                              SelectedItem="{Binding Path=SelectedTask, Mode=TwoWay}"
-                              Margin="0,0,100,0">
+                                      SelectedItem="{Binding Path=SelectedTask, Mode=TwoWay}"
+                                      Margin="0,0,100,0">
                                 <ListView.View>
                                     <GridView>
-                                        <GridViewColumn Header="Specifica" DisplayMemberBinding="{Binding Path=Specification.Standard.Name}"/>
-                                        <GridViewColumn Header="Versione" DisplayMemberBinding="{Binding Path=Specification.Label}"/>
-                                        <GridViewColumn Header="Descrizione" DisplayMemberBinding="{Binding Path=Description}"/>
+                                        <GridViewColumn Header="Specifica" 
+                                                        DisplayMemberBinding="{Binding Path=Specification.Standard.Name}"/>
+                                        <GridViewColumn Header="Versione" 
+                                                        DisplayMemberBinding="{Binding Path=Specification.Label}"/>
+                                        <GridViewColumn Header="Descrizione" 
+                                                        DisplayMemberBinding="{Binding Path=Description}"/>
                                     </GridView>
                                 </ListView.View>
                             </ListView>
                         </Grid>
                     </GroupBox>
-
                 </Grid>
             </TabItem>
         </TabControl>
-        
-        
     </Grid>
 </UserControl>
