@@ -32,20 +32,20 @@ namespace LabDB2
                     ModuleType = DBManagerModuleType.AssemblyQualifiedName
                 });
 
-            DBManagerModuleType = typeof(Infrastructure.InfrastructureModule);
+            Type InfrastructureModuleType = typeof(Infrastructure.InfrastructureModule);
             ModuleCatalog.AddModule(
                 new Prism.Modularity.ModuleInfo()
                 {
-                    ModuleName = DBManagerModuleType.Name,
-                    ModuleType = DBManagerModuleType.AssemblyQualifiedName
+                    ModuleName = InfrastructureModuleType.Name,
+                    ModuleType = InfrastructureModuleType.AssemblyQualifiedName
                 });
 
-            DBManagerModuleType = typeof(Navigation.NavigationModule);
+            Type NavigationModuleType = typeof(Navigation.NavigationModule);
             ModuleCatalog.AddModule(
                 new ModuleInfo()
                 {
-                    ModuleName = DBManagerModuleType.Name,
-                    ModuleType = DBManagerModuleType.AssemblyQualifiedName,
+                    ModuleName = NavigationModuleType.Name,
+                    ModuleType = NavigationModuleType.AssemblyQualifiedName,
                 });
 
             Type ControlsModuleType = typeof(Controls.ControlsModule);
@@ -54,6 +54,14 @@ namespace LabDB2
                 {
                     ModuleName = ControlsModuleType.Name,
                     ModuleType = ControlsModuleType.AssemblyQualifiedName
+                });
+
+            Type ReportingModuleType = typeof(Reporting.ReportingModule);
+            ModuleCatalog.AddModule(
+                new ModuleInfo()
+                {
+                    ModuleName = ReportingModuleType.Name,
+                    ModuleType = ReportingModuleType.AssemblyQualifiedName
                 });
 
             Type SecurityModuleType = typeof(Security.SecurityModule);

@@ -161,6 +161,14 @@
           <Property Name="organizationID" Type="int" Nullable="false" />
           <Property Name="instrumentID" Type="int" Nullable="false" />
         </EntityType>
+        <EntityType Name="instrument_method_mappings">
+          <Key>
+            <PropertyRef Name="methodID" />
+            <PropertyRef Name="instrumentID" />
+          </Key>
+          <Property Name="methodID" Type="int" Nullable="false" />
+          <Property Name="instrumentID" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="instrument_types">
           <Key>
             <PropertyRef Name="ID" />
@@ -799,6 +807,20 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="instrument_to_method_mapping">
+          <End Role="instruments" Type="Self.instruments" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="instrument_method_mappings" Type="Self.instrument_method_mappings" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="instruments">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="instrument_method_mappings">
+              <PropertyRef Name="instrumentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="instrument_to_test">
           <End Role="instruments" Type="Self.instruments" Multiplicity="0..1" />
           <End Role="tests" Type="Self.tests" Multiplicity="*" />
@@ -868,6 +890,20 @@
             </Principal>
             <Dependent Role="tests">
               <PropertyRef Name="method_issueID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="method_to_instrument_mapping">
+          <End Role="methods" Type="Self.methods" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="instrument_method_mappings" Type="Self.instrument_method_mappings" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="methods">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="instrument_method_mappings">
+              <PropertyRef Name="methodID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1518,6 +1554,7 @@
           <EntitySet Name="external_report_files" EntityType="Self.external_report_files" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="external_reports" EntityType="Self.external_reports" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="instrument_maintenance_events" EntityType="Self.instrument_maintenance_events" Schema="labdb" store:Type="Tables" />
+          <EntitySet Name="instrument_method_mappings" EntityType="Self.instrument_method_mappings" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="instrument_types" EntityType="Self.instrument_types" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="instruments" EntityType="Self.instruments" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="masters" EntityType="Self.masters" Schema="labdb" store:Type="Tables" />
@@ -1645,6 +1682,10 @@
             <End Role="instruments" EntitySet="instruments" />
             <End Role="instrument_maintenance_events" EntitySet="instrument_maintenance_events" />
           </AssociationSet>
+          <AssociationSet Name="instrument_to_method_mapping" Association="Self.instrument_to_method_mapping">
+            <End Role="instruments" EntitySet="instruments" />
+            <End Role="instrument_method_mappings" EntitySet="instrument_method_mappings" />
+          </AssociationSet>
           <AssociationSet Name="instrument_to_test" Association="Self.instrument_to_test">
             <End Role="instruments" EntitySet="instruments" />
             <End Role="tests" EntitySet="tests" />
@@ -1668,6 +1709,10 @@
           <AssociationSet Name="method_issue_to_test" Association="Self.method_issue_to_test">
             <End Role="standard_issues" EntitySet="standard_issues" />
             <End Role="tests" EntitySet="tests" />
+          </AssociationSet>
+          <AssociationSet Name="method_to_instrument_mapping" Association="Self.method_to_instrument_mapping">
+            <End Role="methods" EntitySet="methods" />
+            <End Role="instrument_method_mappings" EntitySet="instrument_method_mappings" />
           </AssociationSet>
           <AssociationSet Name="method_to_measurement" Association="Self.method_to_measurement">
             <End Role="methods" EntitySet="methods" />
@@ -2012,6 +2057,7 @@
           <NavigationProperty Name="Standard" Relationship="Self.standard_to_method" FromRole="methods" ToRole="standards" />
           <NavigationProperty Name="Tests" Relationship="labdbModel.method_to_test" FromRole="Method" ToRole="Test" />
           <NavigationProperty Name="SubMethods" Relationship="labdbModel.method_to_measurement1" FromRole="Method" ToRole="sub_methods" />
+          <NavigationProperty Name="AssociatedInstruments" Relationship="labdbModel.instrument_method_mappings" FromRole="Method" ToRole="Instrument" />
         </EntityType>
         <EntityType Name="Organization">
           <Key>
@@ -3059,6 +3105,10 @@
             <End Role="Person" EntitySet="People" />
             <End Role="Sample" EntitySet="Samples" />
           </AssociationSet>
+          <AssociationSet Name="instrument_method_mappings" Association="labdbModel.instrument_method_mappings">
+            <End Role="Instrument" EntitySet="Instruments" />
+            <End Role="Method" EntitySet="Methods" />
+          </AssociationSet>
         </EntityContainer>
         <Association Name="overridden_to_requirement">
           <End Type="labdbModel.Requirement" Role="Requirement" Multiplicity="0..1">
@@ -3380,6 +3430,7 @@
           <Property Name="calibration_responsibleID" Type="Int32" />
           <NavigationProperty Name="CalibrationResponsible" Relationship="labdbModel.calibration_responsible_to_instrument" FromRole="Instrument" ToRole="Organization" />
           <NavigationProperty Name="CalibrationReportAsReference" Relationship="labdbModel.calibration_reference_mappings" FromRole="Instrument" ToRole="CalibrationReport" />
+          <NavigationProperty Name="AssociatedMethods" Relationship="labdbModel.instrument_method_mappings" FromRole="Instrument" ToRole="Method" />
         </EntityType>
         <Association Name="instrument_to_calibration_report">
           <End Type="labdbModel.Instrument" Role="instrument" Multiplicity="1" />
@@ -3849,6 +3900,10 @@
               <PropertyRef Name="personID" />
             </Dependent>
           </ReferentialConstraint>
+        </Association>
+        <Association Name="instrument_method_mappings">
+          <End Type="labdbModel.Instrument" Role="Instrument" Multiplicity="*" />
+          <End Type="labdbModel.Method" Role="Method" Multiplicity="*" />
         </Association>
       </Schema>
     </edmx:ConceptualModels>
@@ -4405,6 +4460,14 @@
             </EndProperty>
             <EndProperty Name="CalibrationReport">
               <ScalarProperty Name="ID" ColumnName="calibration_reportID" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="instrument_method_mappings" TypeName="labdbModel.instrument_method_mappings" StoreEntitySet="instrument_method_mappings">
+            <EndProperty Name="Method">
+              <ScalarProperty Name="ID" ColumnName="methodID" />
+            </EndProperty>
+            <EndProperty Name="Instrument">
+              <ScalarProperty Name="ID" ColumnName="instrumentID" />
             </EndProperty>
           </AssociationSetMapping>
           </EntityContainerMapping>

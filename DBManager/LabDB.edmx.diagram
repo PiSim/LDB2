@@ -135,6 +135,7 @@
         <AssociationConnector Association="labdbModel.task_to_report" />
         <AssociationConnector Association="labdbModel.calibration_reference_mappings" />
         <AssociationConnector Association="labdbModel.person_to_sample_log" />
+        <AssociationConnector Association="labdbModel.instrument_method_mappings" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

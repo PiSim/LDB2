@@ -18,7 +18,7 @@ namespace Reports.ViewModels
     {
         private DBEntities _entities;
         private DBPrincipal _principal;
-        private DelegateCommand _addFile, _openFile, _removeFile;
+        private DelegateCommand _addFile, _generateRawDataSheet, _openFile, _removeFile;
         private EventAggregator _eventAggregator;
         private Report _instance;
         private List<TestWrapper> _testList;
@@ -35,7 +35,7 @@ namespace Reports.ViewModels
             _eventAggregator.GetEvent<CommitRequested>()
                 .Subscribe(() =>
                 {
-                    if (!_testList.Any(tst => !tst.IsComplete))
+                    if (!_instance.IsComplete && !_testList.Any(tst => !tst.IsComplete))
                     {
                         _instance.IsComplete = true;
                         _instance.EndDate = DateTime.Now.Date;
@@ -62,6 +62,12 @@ namespace Reports.ViewModels
 
                         RaisePropertyChanged("FileList");
                     }
+                });
+
+            _generateRawDataSheet = new DelegateCommand(
+                () =>
+                {
+                    _eventAggregator.GetEvent<GenerateReportDataSheetRequested>().Publish(_instance);
                 });
 
             _openFile = new DelegateCommand(
@@ -154,6 +160,11 @@ namespace Reports.ViewModels
                 else
                      return new List<ReportFile>(_instance.ReportFiles); 
             }
+        }
+
+        public DelegateCommand GenerateRawDataSheetCommand
+        {
+            get { return _generateRawDataSheet; }
         }
 
         public Report Instance

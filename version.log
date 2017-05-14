@@ -4,6 +4,7 @@
 -Implementata funzionalità per la registrazione di nuovi profili utente
 -Supporto primari multipli per taratura
 -Corretto crash alla creazione di un report di calibrazione
+-Inserita associazione n-m per strumenti-metodi 
 -*Associazione Norma/strumento
 -*Modifica dati e parametri strumento
 -*Funzionalità storico strumento
