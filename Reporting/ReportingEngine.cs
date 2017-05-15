@@ -93,11 +93,11 @@ namespace Reporting
             Table titletable = new Table(UnitValue.CreatePercentArray(new float[] { 1, 2}));
             
             titletable.AddCell(new Cell().Add(new Paragraph("LOGO_VUL"))
-                                        .SetBorder(Border.NO_BORDER));
+                                        .SetBorder(Rectangle.NO_BORDER));
             titletable.AddCell(new Cell().Add(new Paragraph("CONTROLLO PRODOTTO FINITO"))
                                         .Add(new Paragraph("Modulo raccolta dati")
                                         .SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER))
-                                        .SetBorder(Border.NO_BORDER));
+                                        .SetBorder(Rectangle.NO_BORDER));
 
             dataSheet.Add(titletable);
 
