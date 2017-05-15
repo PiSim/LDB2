@@ -173,7 +173,7 @@
                     Orientation="Vertical">
             <Button Command="{Binding GenerateRawDataSheetCommand}"
                     Margin="5">
-                <Image Source="{StaticResource x:Key=DatasheetIcon}"
+                <Image Source="{StaticResource DatasheetIcon}"
                        ToolTip="Genera un foglio raccolta dati vuoto per questo report"
                        Height="30"
                        Width="25"/>
