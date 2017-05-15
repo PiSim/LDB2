@@ -169,7 +169,7 @@
                     Orientation="Vertical">
             <Button Command="{Binding GenerateRawDataSheetCommand}"
                     Margin="5">
-                <Image Source="C:\Source\Repos\LabDB2\Reports\Resources\Datasheet_icon.png"
+                <Image Source="{StaticResource x:Key=DataSheetIcon}"
                        ToolTip="Genera un foglio raccolta dati vuoto per questo report"
                        Height="30"
                        Width="25"/>
