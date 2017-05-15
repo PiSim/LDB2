@@ -4,9 +4,9 @@ using Infrastructure.Events;
 using iText;
 using iText.Kernel.Pdf;
 using iText.Layout;
+using iText.Layout.Borders;
 using iText.Layout.Element;
 using iText.Layout.Properties;
-using iText.Layout.Rectangle;
 using Prism.Events;
 using System;
 using System.Collections.Generic;
@@ -95,11 +95,11 @@ namespace Reporting
             Table titletable = new Table(UnitValue.CreatePercentArray(new float[] { 1, 2}));
             
             titletable.AddCell(new Cell().Add(new Paragraph("LOGO_VUL"))
-                                        .SetBorder(Rectangle.NO_BORDER));
+                                        .SetBorder(iText.Layout.Borders.Border.NO_BORDER));
             titletable.AddCell(new Cell().Add(new Paragraph("CONTROLLO PRODOTTO FINITO"))
                                         .Add(new Paragraph("Modulo raccolta dati")
                                         .SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER))
-                                        .SetBorder(Rectangle.NO_BORDER));
+                                        .SetBorder(iText.Layout.Borders.Border.NO_BORDER));
 
             dataSheet.Add(titletable);
 
