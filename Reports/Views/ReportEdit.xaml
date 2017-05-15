@@ -9,8 +9,8 @@
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="600">
     <UserControl.Resources>
-        <Image x:Key="DatasheetIcon"
-               Source="..\Resources\Datasheet_icon.png"/>
+        <BitmapImage x:Key="DatasheetIcon"
+                     UriSource="..\Resources\Datasheet_icon.png"/>
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
