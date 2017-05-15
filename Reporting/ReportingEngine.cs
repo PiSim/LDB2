@@ -57,8 +57,9 @@ namespace Reporting
                 testCell.Add(new Paragraph(testLabel).SetTextAlignment(iText.Layout.Properties.TextAlignment.RIGHT)
                                                     .SetVerticalAlignment(iText.Layout.Properties.VerticalAlignment.TOP));
 
-                testCell.Add(new Paragraph("[" + sTest.Requirement + "]").SetTextAlignment(iText.Layout.Properties.TextAlignment.RIGHT)
-                                                                        .SetVerticalAlignment(iText.Layout.Properties.VerticalAlignment.BOTTOM));
+                if (sTest.Requirement != "")
+                    testCell.Add(new Paragraph("[" + sTest.Requirement + "]").SetTextAlignment(iText.Layout.Properties.TextAlignment.RIGHT)
+                                                                            .SetVerticalAlignment(iText.Layout.Properties.VerticalAlignment.BOTTOM));
 
                 table.AddCell(testCell);
                 table.AddCell(new Cell().Add(new Paragraph(sTest.UM))
