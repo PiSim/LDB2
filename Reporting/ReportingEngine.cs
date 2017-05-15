@@ -94,7 +94,7 @@ namespace Reporting
             titletable.AddCell(new Cell().Add(new Paragraph("LOGO_VUL")));
             titletable.AddCell(new Cell().Add(new Paragraph("CONTROLLO PRODOTTO FINITO"))
                                         .Add(new Paragraph("Modulo raccolta dati")
-                                        .SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER));
+                                        .SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER)));
 
             dataSheet.Add(titletable);
 
@@ -144,7 +144,7 @@ namespace Reporting
             Table footerTable = new Table(UnitValue.CreatePercentArray(new float[] { 1, 2, 1, 2}));
             footerTable.SetWidthPercent(100);
 
-            footerTable.AddCell(new Cell().Add(new Paragraph("Note:")))
+            footerTable.AddCell(new Cell().Add(new Paragraph("Note:"))
                                             .SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER)
                                             .SetVerticalAlignment(iText.Layout.Properties.VerticalAlignment.MIDDLE));
             footerTable.AddCell(new Cell(1, 3));
@@ -171,7 +171,7 @@ namespace Reporting
             footerTable.AddCell(new Cell());
             footerTable.AddCell(new Cell().Add(new Paragraph("Approvato:")));
             footerTable.AddCell(new Cell().Add(new Paragraph("\u25A0  SI  \u25A0  NO")));
-            footerTable.AddCell(new Cell().Add(new Paragraph("Data:"));
+            footerTable.AddCell(new Cell().Add(new Paragraph("Data:")));
             footerTable.AddCell(new Cell().Add(new Paragraph(DateTime.Now.ToShortDateString())));
 
             dataSheet.Add(footerTable);
