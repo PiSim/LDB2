@@ -103,6 +103,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AdminViewNames.cs" />
+    <Compile Include="Resources\CommonResourceDictionary.xaml.cs" />
     <Compile Include="DBIdentity.cs" />
     <Compile Include="DBPrincipal.cs" />
     <Compile Include="Events\CalibrationIssued.cs" />
@@ -153,6 +154,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="Resources\CommonResourceKeys.cs" />
     <Compile Include="Sorting\Sorting.cs" />
     <Compile Include="Sorting\SortingAdorner.cs" />
     <Compile Include="Sorting\SortingBehavior.cs" />
@@ -180,12 +182,20 @@
     </None>
     <AppDesigner Include="Properties\" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Resources\vulca_logo.jpg" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DBManager\DBManager.csproj">
       <Project>{ab8b448c-dd74-4d60-a041-3e5d03a32180}</Project>
       <Name>DBManager</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Resources\CommonResourceDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

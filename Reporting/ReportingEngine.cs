@@ -1,7 +1,9 @@
 ﻿using DBManager;
 using Infrastructure;
 using Infrastructure.Events;
+using Infrastructure.Resources;
 using iText;
+using iText.IO.Image;
 using iText.Kernel.Pdf;
 using iText.Layout;
 using iText.Layout.Borders;
@@ -13,6 +15,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Reporting
 {
@@ -95,8 +98,9 @@ namespace Reporting
             // Adds company logo and title at the top of the page
 
             Table titletable = new Table(UnitValue.CreatePercentArray(new float[] { 1, 2}));
-            
-            titletable.AddCell(new Cell().Add(new Paragraph("LOGO_VUL"))
+
+
+            titletable.AddCell(new Cell().Add(new Paragraph("VULCA_LOGO"))
                                         .SetBorder(iText.Layout.Borders.Border.NO_BORDER));
             titletable.AddCell(new Cell().Add(new Paragraph("CONTROLLO PRODOTTO FINITO"))
                                         .SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER)
