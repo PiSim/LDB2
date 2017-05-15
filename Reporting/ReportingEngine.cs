@@ -92,6 +92,8 @@ namespace Reporting
             PdfDocument pdfDoc = new PdfDocument(writer);
             Document dataSheet = new Document(pdfDoc);
             
+            // Adds company logo and title at the top of the page
+
             Table titletable = new Table(UnitValue.CreatePercentArray(new float[] { 1, 2}));
             
             titletable.AddCell(new Cell().Add(new Paragraph("LOGO_VUL"))
@@ -104,12 +106,56 @@ namespace Reporting
 
             dataSheet.Add(titletable);
 
+            // Attempts to retrieve relevant material info
+
+            string colourName, materialCode, prjName, recipeCode;
+            
+            try 
+            {
+                colourName = target.Batch.Material.Recipe.Colour.Name;
+            }
+            catch(NullReferenceException)
+            {
+                colourName = "";
+            }
+
+            try
+            {
+                materialCode = target.Batch.Material.Construction.Type.Code
+                                + target.Batch.Material.Construction.Line
+                                + target.Batch.Material.Construction.Aspect.Code;
+            }
+            catch(NullReferenceException)
+            {
+               materialCode = "";
+            }
+            
+            try 
+            {
+                prjName = target.Batch.Material.Construction.Project.Name;
+            }
+            catch(NullReferenceException)
+            {
+                prjName = "";
+            }
+            
+            try 
+            {
+                recipeCode = target.Batch.Material.Recipe.Code;
+            }
+            catch(NullReferenceException)
+            {
+                recipeCode = "";
+            }
+
+            // Composes the header table with the report and material info            
+
             Table headerTable = new Table(new float[] {1, 2, 1, 2 });
             headerTable.SetWidthPercent(100);
             headerTable.AddCell(new Cell().Add(new Paragraph("Report N. :")));
             headerTable.AddCell(new Cell().Add(new Paragraph(target.Category + target.Number)));
             headerTable.AddCell(new Cell().Add(new Paragraph("Progetto:")));
-            headerTable.AddCell(new Cell().Add(new Paragraph(target.Batch.Material.Construction.Project.Name)));
+            headerTable.AddCell(new Cell().Add(new Paragraph(prjName)));
             headerTable.AddCell(new Cell().Add(new Paragraph("Batch:")));
             headerTable.AddCell(new Cell().Add(new Paragraph(target.Batch.Number)));
             headerTable.AddCell(new Cell().Add(new Paragraph("Specifica:")));
@@ -117,12 +163,10 @@ namespace Reporting
                                                             + " : " + target.SpecificationIssues.Issue
                                                             + " - " + target.SpecificationVersion.Name)));
             headerTable.AddCell(new Cell().Add(new Paragraph("Materiale:")));
-            headerTable.AddCell(new Cell().Add(new Paragraph(target.Batch.Material.Construction.Type.Code
-                                                            + target.Batch.Material.Construction.Line
-                                                            + target.Batch.Material.Construction.Aspect.Code)));
+            headerTable.AddCell(new Cell().Add(new Paragraph(materialCode)));
             headerTable.AddCell(new Cell().Add(new Paragraph("Colore:")));
-            headerTable.AddCell(new Cell().Add(new Paragraph(target.Batch.Material.Recipe.Code + " "
-                                                            + target.Batch.Material.Recipe.Colour.Name)));
+            headerTable.AddCell(new Cell().Add(new Paragraph( recipeCode + " "
+                                                            + colourName)));
 
             dataSheet.Add(headerTable);
 
