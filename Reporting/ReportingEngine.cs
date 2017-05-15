@@ -89,6 +89,15 @@ namespace Reporting
             PdfDocument pdfDoc = new PdfDocument(writer);
             Document dataSheet = new Document(pdfDoc);
             
+            Table titletable = new Table(UnitValue.CreatePercentArray(new float[] { 1, 2}));
+            titletable.setBorder(Border.NO_BORDER);
+            titletable.AddCell(new Cell().Add(new Paragraph("LOGO_VUL")));
+            titletable.AddCell(new Cell().Add(new Paragraph("CONTROLLO PRODOTTO FINITO"))
+                                        .Add(new Paragraph("Modulo raccolta dati")
+                                        .SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER));
+
+            dataSheet.Add(titletable);
+
             Table headerTable = new Table(new float[] {1, 2, 1, 2 });
             headerTable.SetWidthPercent(100);
             headerTable.AddCell(new Cell().Add(new Paragraph("Report N. :")));
@@ -108,8 +117,6 @@ namespace Reporting
             headerTable.AddCell(new Cell().Add(new Paragraph("Colore:")));
             headerTable.AddCell(new Cell().Add(new Paragraph(target.Batch.Material.Recipe.Code + " "
                                                             + target.Batch.Material.Recipe.Colour.Name)));
-            headerTable.AddCell(new Cell().Add(new Paragraph("Autore:")));
-            headerTable.AddCell(new Cell().Add(new Paragraph(target.Author.Name)));
 
             dataSheet.Add(headerTable);
 
@@ -134,15 +141,38 @@ namespace Reporting
 
             dataSheet.Add(testTable);
 
-            Table footerTable = new Table(new float[] {1, 2, 1, 2 });
+            Table footerTable = new Table(UnitValue.CreatePercentArray(new float[] { 1, 2, 1, 2}));
             footerTable.SetWidthPercent(100);
 
-            footerTable.AddCell(new Cell().Add(new Paragraph("Note:")));
+            footerTable.AddCell(new Cell().Add(new Paragraph("Note:")))
+                                            .SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER)
+                                            .SetVerticalAlignment(iText.Layout.Properties.VerticalAlignment.MIDDLE));
             footerTable.AddCell(new Cell(1, 3));
+            footerTable.AddCell(new Cell().Add(new Paragraph("TL:")));
+            headerTable.AddCell(new Cell().Add(new Paragraph(target.Author.Name)));
             footerTable.AddCell(new Cell().Add(new Paragraph("Firma TL:")));
-            footerTable.AddCell(new Cell());
+            footerTable.AddCell(new Cell()); 
+            footerTable.AddCell(new Cell().Add(new Paragraph("RL:")));
+
+            try
+            {
+                string rlName = _entities.PersonRoles.First(pr => pr.Name == PersonRoleNames.LabManager)
+                                        .RoleMappings.FirstOrDefault(prm => prm.IsSelected)
+                                        .Person
+                                        .Name;
+            }
+            catch (NullReferenceException)
+            {
+                string rlName = "";
+            }
+
+            footerTable.AddCell(new Cell().Add(new Paragraph(rlName)));
             footerTable.AddCell(new Cell().Add(new Paragraph("Firma RL:")));
             footerTable.AddCell(new Cell());
+            footerTable.AddCell(new Cell().Add(new Paragraph("Approvato:")));
+            footerTable.AddCell(new Cell().Add(new Paragraph("\u25A0  SI  \u25A0  NO")));
+            footerTable.AddCell(new Cell().Add(new Paragraph("Data:"));
+            footerTable.AddCell(new Cell().Add(new Paragraph(DateTime.Now.ToShortDateString())));
 
             dataSheet.Add(footerTable);
 
