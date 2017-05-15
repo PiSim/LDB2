@@ -1,4 +1,5 @@
 ﻿using DBManager;
+using Infrastructure;
 using Infrastructure.Events;
 using iText;
 using iText.Kernel.Pdf;
@@ -90,11 +91,13 @@ namespace Reporting
             Document dataSheet = new Document(pdfDoc);
             
             Table titletable = new Table(UnitValue.CreatePercentArray(new float[] { 1, 2}));
-            titletable.setBorder(Border.NO_BORDER);
-            titletable.AddCell(new Cell().Add(new Paragraph("LOGO_VUL")));
+            
+            titletable.AddCell(new Cell().Add(new Paragraph("LOGO_VUL"))
+                                        .setBorder(Cell.NO_BORDER));
             titletable.AddCell(new Cell().Add(new Paragraph("CONTROLLO PRODOTTO FINITO"))
                                         .Add(new Paragraph("Modulo raccolta dati")
-                                        .SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER)));
+                                        .SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER))
+                                        .setBorder(Cell.NO_BORDER));
 
             dataSheet.Add(titletable);
 
@@ -154,16 +157,17 @@ namespace Reporting
             footerTable.AddCell(new Cell()); 
             footerTable.AddCell(new Cell().Add(new Paragraph("RL:")));
 
+            string rlName;
+
             try
             {
-                string rlName = _entities.PersonRoles.First(pr => pr.Name == PersonRoleNames.LabManager)
-                                        .RoleMappings.FirstOrDefault(prm => prm.IsSelected)
-                                        .Person
-                                        .Name;
+                rlName = _entities.PersonRoles.First(pr => pr.Name == PersonRoleNames.LabManager)
+                                            .RoleMappings.FirstOrDefault(prm => prm.IsSelected)
+                                            .Person
+                                            .Name;
             }
             catch (NullReferenceException)
             {
-                string rlName = "";
             }
 
             footerTable.AddCell(new Cell().Add(new Paragraph(rlName)));
