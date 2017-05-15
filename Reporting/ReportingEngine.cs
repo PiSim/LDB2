@@ -4,7 +4,6 @@ using Infrastructure.Events;
 using iText;
 using iText.Kernel.Pdf;
 using iText.Layout;
-using iText.Layout.Border;
 using iText.Layout.Element;
 using iText.Layout.Properties;
 using Prism.Events;
