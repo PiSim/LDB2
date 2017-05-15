@@ -1,6 +1,5 @@
 ﻿v 0.5.0 -- In corso
 
--*Creato dialog per parametri di connessione
 -Implementata funzionalità per la registrazione di nuovi profili utente
 -Supporto primari multipli per taratura
 -Corretto crash alla creazione di un report di calibrazione
@@ -18,7 +17,8 @@
 -*Filtro Pipeline per completi
 -Impostati check di autorizzazione per numerose funzioni
 -Aggiornamento strumenti Post calibrazione
--*Stampa report
+-Aggiunto Modulo Reporting per la generazione procedurale di documenti 
+-Implementato ReportingEngine con funzionalità base per la creazione di fogli di raccolta dati per report
 
 v 0.4.4 -- 9/5/2017
 
