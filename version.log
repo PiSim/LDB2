@@ -19,6 +19,7 @@
 -Aggiornamento strumenti Post calibrazione
 -Aggiunto Modulo Reporting per la generazione procedurale di documenti 
 -Implementato ReportingEngine con funzionalità base per la creazione di fogli di raccolta dati per report
+-*Corretto aggiornamento proprietà SpecificationEdit
 
 v 0.4.4 -- 9/5/2017
 
