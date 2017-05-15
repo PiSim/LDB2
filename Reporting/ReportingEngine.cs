@@ -168,6 +168,7 @@ namespace Reporting
             }
             catch (NullReferenceException)
             {
+                rlName = "";
             }
 
             footerTable.AddCell(new Cell().Add(new Paragraph(rlName)));
