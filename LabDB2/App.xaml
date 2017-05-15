@@ -3,7 +3,5 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:LabDB2">
     <Application.Resources>
-        <Image x:Key="Datasheet_icon"
-               Source="Resources\Datasheet_icon.png"/>
     </Application.Resources>
 </Application>
