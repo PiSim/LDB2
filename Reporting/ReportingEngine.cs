@@ -110,43 +110,34 @@ namespace Reporting
 
             string colourName, materialCode, prjName, recipeCode;
             
-            try 
+            if (target.Batch.Material != null)
             {
-                colourName = target.Batch.Material.Recipe.Colour.Name;
-            }
-            catch(NullReferenceException)
-            {
-                colourName = "";
-            }
-
-            try
-            {
-                materialCode = target.Batch.Material.Construction.Type.Code
+                materialCode = target.Batch.Material.Construction.Type.Code 
                                 + target.Batch.Material.Construction.Line
                                 + target.Batch.Material.Construction.Aspect.Code;
-            }
-            catch(NullReferenceException)
-            {
-               materialCode = "";
-            }
-            
-            try 
-            {
-                prjName = target.Batch.Material.Construction.Project.Name;
-            }
-            catch(NullReferenceException)
-            {
-                prjName = "";
-            }
-            
-            try 
-            {
+                
                 recipeCode = target.Batch.Material.Recipe.Code;
+                
+                if (target.Batch.Material.Recipe.Colour != null)
+                    colourName = target.Batch.Material.Recipe.Colour.Name;
+                
+                else
+                    colourName = "";
+
+                if (target.Batch.Material.Construction.Project != null)
+                    prjName = target.Batch.Material.Construction.Project.Name;
+                
+                else
+                    prjName = "";
             }
-            catch(NullReferenceException)
+            else 
             {
+                colourName = "";
+                materialCode = "";
+                prjName = "";
                 recipeCode = "";
             }
+
 
             // Composes the header table with the report and material info            
 
