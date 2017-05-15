@@ -97,7 +97,7 @@ namespace Reporting
             titletable.AddCell(new Cell().Add(new Paragraph("LOGO_VUL"))
                                         .SetBorder(iText.Layout.Borders.Border.NO_BORDER));
             titletable.AddCell(new Cell().Add(new Paragraph("CONTROLLO PRODOTTO FINITO"))
-                                        .SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER))
+                                        .SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER)
                                         .Add(new Paragraph("Modulo raccolta dati")
                                         .SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER))
                                         .SetBorder(iText.Layout.Borders.Border.NO_BORDER));
