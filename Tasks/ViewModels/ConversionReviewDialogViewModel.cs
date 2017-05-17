@@ -18,7 +18,7 @@ namespace Tasks.ViewModels
         private DBPrincipal _principal;
         private DelegateCommand<Window> _cancel, _confirm;
         private int _reportNumber;
-        private List<ISelectableRequirement> _testList;
+        private List<TaskItemWrapper> _testList;
         private IReportServiceProvider _reportServiceProvider;
         private Person _selectedAuthor;
         private Report _reportInstance;
@@ -34,7 +34,7 @@ namespace Tasks.ViewModels
             _reportServiceProvider = reportServiceProvider;
             _selectedAuthor = _entities.People.First(pt => pt.ID == _principal.CurrentPerson.ID);
 
-            _testList = new List<ISelectableRequirement>();
+            _testList = new List<TaskItemWrapper>();
 
             _cancel = new DelegateCommand<Window>(
                 parentDialog =>
@@ -58,7 +58,7 @@ namespace Tasks.ViewModels
                     _reportInstance.StartDate = DateTime.Now.Date.ToShortDateString();
 
                     foreach (Test tst in _reportServiceProvider.GenerateTestList(_testList))
-                        _reportInstance.Tests.Add(tst); 
+                        _reportInstance.Tests.Add(tst);
 
                     foreach (TaskItemWrapper riw in _testList.Where(tiw => tiw.IsSelected))
                         riw.TaskItemInstance.IsAssignedToReport = true;
@@ -164,7 +164,7 @@ namespace Tasks.ViewModels
             {
                 _taskInstance = _entities.Tasks.First(tsk => tsk.ID == value.ID);
 
-                _testList = new List<ISelectableRequirement>();
+                _testList = new List<TaskItemWrapper>();
                 foreach (TaskItem tsi in _taskInstance.TaskItems.Where(tsi => !tsi.IsAssignedToReport))
                     _testList.Add(new TaskItemWrapper(tsi));
 
@@ -189,7 +189,7 @@ namespace Tasks.ViewModels
             }
         }
 
-        public List<ISelectableRequirement> TestList
+        public List<TaskItemWrapper> TestList
         {
             get { return _testList; }
         }

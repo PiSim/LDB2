@@ -1,5 +1,4 @@
-﻿using Infrastructure;
-using Navigation;
+﻿using Microsoft.Practices.Prism.Mvvm;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,18 +17,13 @@ using System.Windows.Shapes;
 namespace Materials.Views
 {
     /// <summary>
-    /// Interaction logic for ColoursNavigationItem.xaml
+    /// Logica di interazione per MaterialInfoMain.xaml
     /// </summary>
-    public partial class ColoursNavigationItem : UserControl, IModuleNavigationTag
+    public partial class MaterialInfoMain : UserControl, IView
     {
-        public ColoursNavigationItem()
+        public MaterialInfoMain()
         {
             InitializeComponent();
-        }
-
-        public string ViewName
-        {
-            get { return MaterialViewNames.ColourMain; }
         }
     }
 }

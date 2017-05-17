@@ -118,6 +118,8 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="SamplesWrapper.cs" />
+    <Compile Include="ViewModels\AspectDetailViewModel.cs" />
+    <Compile Include="ViewModels\AspectMainViewModel.cs" />
     <Compile Include="ViewModels\BatchesNavigationItemViewModel.cs" />
     <Compile Include="ViewModels\BatchInfoViewModel.cs" />
     <Compile Include="ViewModels\BatchMainViewModel.cs" />
@@ -126,12 +128,18 @@
     <Compile Include="ViewModels\ColorPickerDialogViewModel.cs" />
     <Compile Include="ViewModels\ColourEditViewModel.cs" />
     <Compile Include="ViewModels\ColourMainViewModel.cs" />
+    <Compile Include="ViewModels\ConstructionDetailViewModel.cs" />
+    <Compile Include="ViewModels\ConstructionMainViewModel.cs" />
     <Compile Include="ViewModels\MaterialCreationViewModel.cs" />
+    <Compile Include="ViewModels\MaterialInfoMainViewModel.cs" />
     <Compile Include="ViewModels\ProjectPickerViewModel.cs" />
     <Compile Include="ViewModels\SampleLogDialogViewModel.cs" />
     <Compile Include="ViewModels\SampleLogViewModel.cs" />
-    <Compile Include="Views\AspectsNavigationItem.xaml.cs">
-      <DependentUpon>AspectsNavigationItem.xaml</DependentUpon>
+    <Compile Include="Views\AspectDetail.xaml.cs">
+      <DependentUpon>AspectDetail.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\AspectMain.xaml.cs">
+      <DependentUpon>AspectMain.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\BatchesNavigationItem.xaml.cs">
       <DependentUpon>BatchesNavigationItem.xaml</DependentUpon>
@@ -160,11 +168,17 @@
     <Compile Include="Views\ColourMain.xaml.cs">
       <DependentUpon>ColourMain.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\ColoursNavigationItem.xaml.cs">
-      <DependentUpon>ColoursNavigationItem.xaml</DependentUpon>
+    <Compile Include="Views\ConstructionDetail.xaml.cs">
+      <DependentUpon>ConstructionDetail.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ConstructionMain.xaml.cs">
+      <DependentUpon>ConstructionMain.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MaterialCreationDialog.xaml.cs">
       <DependentUpon>MaterialCreationDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MaterialInfoMain.xaml.cs">
+      <DependentUpon>MaterialInfoMain.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MaterialsNavigationItem.xaml.cs">
       <DependentUpon>MaterialsNavigationItem.xaml</DependentUpon>
@@ -214,7 +228,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Views\AspectsNavigationItem.xaml">
+    <Page Include="Views\AspectDetail.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\AspectMain.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -254,13 +272,21 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\ColoursNavigationItem.xaml">
+    <Page Include="Views\ConstructionDetail.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ConstructionMain.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MaterialCreationDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\MaterialInfoMain.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MaterialsNavigationItem.xaml">
       <SubType>Designer</SubType>

@@ -128,6 +128,33 @@ namespace Reports
                 tempTest.Method = req.RequirementInstance.Method;
                 tempTest.MethodIssue = tempTest.Method.Standard.CurrentIssue;
                 tempTest.Notes = req.RequirementInstance.Description;
+
+                foreach (SubRequirement subReq in req.RequirementInstance.SubRequirements)
+                {
+                    SubTest tempSubTest = new SubTest();
+                    tempSubTest.Name = subReq.SubMethod.Name;
+                    tempSubTest.Requirement = subReq.RequiredValue;
+                    tempSubTest.UM = subReq.SubMethod.UM;
+                    tempTest.SubTests.Add(tempSubTest);
+                }
+                output.Add(tempTest);
+            }
+
+            return output;
+        }
+
+        public IEnumerable<Test> GenerateTestList(List<TaskItemWrapper> reqList)
+        {
+            List<Test> output = new List<Test>();
+
+            foreach (TaskItemWrapper req in reqList.Where(isr => isr.IsSelected))
+            {
+                Test tempTest = new Test();
+                tempTest.IsComplete = false;
+                tempTest.Method = req.RequirementInstance.Method;
+                tempTest.MethodIssue = tempTest.Method.Standard.CurrentIssue;
+                tempTest.Notes = req.RequirementInstance.Description;
+                tempTest.TaskItems.Add(req.TaskItemInstance);
                 
                 foreach (SubRequirement subReq in req.RequirementInstance.SubRequirements)
                 {

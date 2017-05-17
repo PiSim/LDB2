@@ -456,6 +456,7 @@
           <Property Name="taskID" Type="int" Nullable="false" />
           <Property Name="requirementID" Type="int" Nullable="false" />
           <Property Name="is_assigned_to_report" Type="bit" Nullable="false" />
+          <Property Name="testID" Type="int" />
         </EntityType>
         <EntityType Name="tasks">
           <Key>
@@ -1499,6 +1500,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="test_to_task_item">
+          <End Role="tests" Type="Self.tests" Multiplicity="0..1" />
+          <End Role="task_items" Type="Self.task_items" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tests">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="task_items">
+              <PropertyRef Name="testID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="type_to_construction">
           <End Role="material_types" Type="Self.material_types" Multiplicity="1" />
           <End Role="constructions" Type="Self.constructions" Multiplicity="*" />
@@ -1897,6 +1910,10 @@
           <AssociationSet Name="test" Association="Self.test">
             <End Role="tests" EntitySet="tests" />
             <End Role="sub_tests" EntitySet="sub_tests" />
+          </AssociationSet>
+          <AssociationSet Name="test_to_task_item" Association="Self.test_to_task_item">
+            <End Role="tests" EntitySet="tests" />
+            <End Role="task_items" EntitySet="task_items" />
           </AssociationSet>
           <AssociationSet Name="type_to_construction" Association="Self.type_to_construction">
             <End Role="material_types" EntitySet="material_types" />
@@ -2307,6 +2324,7 @@
           <NavigationProperty Name="instrument" Relationship="labdbModel.instrument_to_test" FromRole="Test" ToRole="instrument" />
           <Property Name="MethodIssueID" Type="Int32" />
           <NavigationProperty Name="MethodIssue" Relationship="labdbModel.method_issue_to_test" FromRole="Test" ToRole="StandardIssue" />
+          <NavigationProperty Name="TaskItems" Relationship="labdbModel.test_to_task_item" FromRole="Test" ToRole="TaskItem" />
         </EntityType>
         <EntityType Name="User">
           <Key>
@@ -3109,6 +3127,10 @@
             <End Role="Instrument" EntitySet="Instruments" />
             <End Role="Method" EntitySet="Methods" />
           </AssociationSet>
+          <AssociationSet Name="test_to_task_item" Association="labdbModel.test_to_task_item">
+            <End Role="Test" EntitySet="Tests" />
+            <End Role="TaskItem" EntitySet="TaskItems" />
+          </AssociationSet>
         </EntityContainer>
         <Association Name="overridden_to_requirement">
           <End Type="labdbModel.Requirement" Role="Requirement" Multiplicity="0..1">
@@ -3234,6 +3256,8 @@
           <NavigationProperty Name="Requirement" Relationship="labdbModel.requirement_to_task_item" FromRole="task_items" ToRole="Requirement" />
           <NavigationProperty Name="Task" Relationship="labdbModel.task_to_item" FromRole="task_items" ToRole="Task" />
           <Property Name="IsAssignedToReport" Type="Boolean" Nullable="false" />
+          <Property Name="testID" Type="Int32" />
+          <NavigationProperty Name="Test" Relationship="labdbModel.test_to_task_item" FromRole="TaskItem" ToRole="Test" />
         </EntityType>
         <Association Name="requirement_to_task_item">
           <End Type="labdbModel.Requirement" Role="Requirement" Multiplicity="1" />
@@ -3905,6 +3929,18 @@
           <End Type="labdbModel.Instrument" Role="Instrument" Multiplicity="*" />
           <End Type="labdbModel.Method" Role="Method" Multiplicity="*" />
         </Association>
+        <Association Name="test_to_task_item">
+          <End Type="labdbModel.Test" Role="Test" Multiplicity="0..1" />
+          <End Type="labdbModel.TaskItem" Role="TaskItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Test">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="TaskItem">
+              <PropertyRef Name="testID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -4260,6 +4296,7 @@
           <EntitySetMapping Name="TaskItems">
             <EntityTypeMapping TypeName="labdbModel.TaskItem">
               <MappingFragment StoreEntitySet="task_items">
+                <ScalarProperty Name="testID" ColumnName="testID" />
                 <ScalarProperty Name="IsAssignedToReport" ColumnName="is_assigned_to_report" />
                 <ScalarProperty Name="RequirementID" ColumnName="requirementID" />
                 <ScalarProperty Name="TaskID" ColumnName="taskID" />
