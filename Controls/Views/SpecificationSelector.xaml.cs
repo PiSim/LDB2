@@ -1,5 +1,4 @@
-﻿using Infrastructure;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,21 +13,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Materials.Views
+namespace Controls.Views
 {
     /// <summary>
-    /// Interaction logic for AspectsNavigationItem.xaml
+    /// Logica di interazione per SpecificationSelector.xaml
     /// </summary>
-    public partial class AspectsNavigationItem : UserControl, IModuleNavigationTag
+    public partial class SpecificationSelector : UserControl
     {
-        public AspectsNavigationItem()
+        public SpecificationSelector()
         {
             InitializeComponent();
-        }
-
-        public string ViewName
-        {
-            get { return MaterialViewNames.AspectView; }
         }
     }
 }

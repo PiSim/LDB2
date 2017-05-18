@@ -112,7 +112,8 @@
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="name" Type="varchar" MaxLength="45" Nullable="false" />
-          <Property Name="oemID" Type="int" Nullable="false" />
+          <Property Name="oemID" Type="int" />
+          <Property Name="default_spec_versionID" Type="int" />
         </EntityType>
         <EntityType Name="external_report_batch_mapping">
           <Key>
@@ -130,6 +131,14 @@
           <Property Name="path" Type="varchar" MaxLength="100" Nullable="false" />
           <Property Name="description" Type="varchar" MaxLength="45" Nullable="false" />
           <Property Name="external_reportID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="external_report_method_mappings">
+          <Key>
+            <PropertyRef Name="external_reportID" />
+            <PropertyRef Name="methodID" />
+          </Key>
+          <Property Name="external_reportID" Type="int" Nullable="false" />
+          <Property Name="methodID" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="external_reports">
           <Key>
@@ -456,6 +465,7 @@
           <Property Name="taskID" Type="int" Nullable="false" />
           <Property Name="requirementID" Type="int" Nullable="false" />
           <Property Name="is_assigned_to_report" Type="bit" Nullable="false" />
+          <Property Name="testID" Type="int" />
         </EntityType>
         <EntityType Name="tasks">
           <Key>
@@ -729,6 +739,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="default_spec_version_to_ex_construction">
+          <End Role="specification_versions" Type="Self.specification_versions" Multiplicity="0..1" />
+          <End Role="external_constructions" Type="Self.external_constructions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="specification_versions">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="external_constructions">
+              <PropertyRef Name="default_spec_versionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="external_construction">
           <End Role="external_constructions" Type="Self.external_constructions" Multiplicity="0..1" />
           <End Role="constructions" Type="Self.constructions" Multiplicity="*" />
@@ -777,6 +799,20 @@
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="external_report_files">
+              <PropertyRef Name="external_reportID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="external_report_to_method_mapping">
+          <End Role="external_reports" Type="Self.external_reports" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="external_report_method_mappings" Type="Self.external_report_method_mappings" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="external_reports">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="external_report_method_mappings">
               <PropertyRef Name="external_reportID" />
             </Dependent>
           </ReferentialConstraint>
@@ -893,6 +929,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="method_to_external_report_mapping">
+          <End Role="methods" Type="Self.methods" Multiplicity="1" />
+          <End Role="external_report_method_mappings" Type="Self.external_report_method_mappings" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="methods">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="external_report_method_mappings">
+              <PropertyRef Name="methodID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="method_to_instrument_mapping">
           <End Role="methods" Type="Self.methods" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -958,7 +1006,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="oemID">
-          <End Role="organizations" Type="Self.organizations" Multiplicity="1">
+          <End Role="organizations" Type="Self.organizations" Multiplicity="0..1">
             <OnDelete Action="Cascade" />
           </End>
           <End Role="external_constructions" Type="Self.external_constructions" Multiplicity="*" />
@@ -1499,6 +1547,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="test_to_task_item">
+          <End Role="tests" Type="Self.tests" Multiplicity="0..1" />
+          <End Role="task_items" Type="Self.task_items" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tests">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="task_items">
+              <PropertyRef Name="testID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="type_to_construction">
           <End Role="material_types" Type="Self.material_types" Multiplicity="1" />
           <End Role="constructions" Type="Self.constructions" Multiplicity="*" />
@@ -1552,6 +1612,7 @@
           <EntitySet Name="external_constructions" EntityType="Self.external_constructions" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="external_report_batch_mapping" EntityType="Self.external_report_batch_mapping" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="external_report_files" EntityType="Self.external_report_files" Schema="labdb" store:Type="Tables" />
+          <EntitySet Name="external_report_method_mappings" EntityType="Self.external_report_method_mappings" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="external_reports" EntityType="Self.external_reports" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="instrument_maintenance_events" EntityType="Self.instrument_maintenance_events" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="instrument_method_mappings" EntityType="Self.instrument_method_mappings" Schema="labdb" store:Type="Tables" />
@@ -1658,6 +1719,10 @@
             <End Role="standard_issues" EntitySet="standard_issues" />
             <End Role="standards" EntitySet="standards" />
           </AssociationSet>
+          <AssociationSet Name="default_spec_version_to_ex_construction" Association="Self.default_spec_version_to_ex_construction">
+            <End Role="specification_versions" EntitySet="specification_versions" />
+            <End Role="external_constructions" EntitySet="external_constructions" />
+          </AssociationSet>
           <AssociationSet Name="external_construction" Association="Self.external_construction">
             <End Role="external_constructions" EntitySet="external_constructions" />
             <End Role="constructions" EntitySet="constructions" />
@@ -1673,6 +1738,10 @@
           <AssociationSet Name="external_report_to_file" Association="Self.external_report_to_file">
             <End Role="external_reports" EntitySet="external_reports" />
             <End Role="external_report_files" EntitySet="external_report_files" />
+          </AssociationSet>
+          <AssociationSet Name="external_report_to_method_mapping" Association="Self.external_report_to_method_mapping">
+            <End Role="external_reports" EntitySet="external_reports" />
+            <End Role="external_report_method_mappings" EntitySet="external_report_method_mappings" />
           </AssociationSet>
           <AssociationSet Name="instrument_to_calibration_report" Association="Self.instrument_to_calibration_report">
             <End Role="instruments" EntitySet="instruments" />
@@ -1709,6 +1778,10 @@
           <AssociationSet Name="method_issue_to_test" Association="Self.method_issue_to_test">
             <End Role="standard_issues" EntitySet="standard_issues" />
             <End Role="tests" EntitySet="tests" />
+          </AssociationSet>
+          <AssociationSet Name="method_to_external_report_mapping" Association="Self.method_to_external_report_mapping">
+            <End Role="methods" EntitySet="methods" />
+            <End Role="external_report_method_mappings" EntitySet="external_report_method_mappings" />
           </AssociationSet>
           <AssociationSet Name="method_to_instrument_mapping" Association="Self.method_to_instrument_mapping">
             <End Role="methods" EntitySet="methods" />
@@ -1898,6 +1971,10 @@
             <End Role="tests" EntitySet="tests" />
             <End Role="sub_tests" EntitySet="sub_tests" />
           </AssociationSet>
+          <AssociationSet Name="test_to_task_item" Association="Self.test_to_task_item">
+            <End Role="tests" EntitySet="tests" />
+            <End Role="task_items" EntitySet="task_items" />
+          </AssociationSet>
           <AssociationSet Name="type_to_construction" Association="Self.type_to_construction">
             <End Role="material_types" EntitySet="material_types" />
             <End Role="constructions" EntitySet="constructions" />
@@ -1981,9 +2058,11 @@
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="OemID" Type="Int32" Nullable="false" a:SetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+          <Property Name="OemID" Type="Int32" Nullable="true" a:SetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="Constructions" Relationship="Self.external_construction" FromRole="external_constructions" ToRole="constructions" />
           <NavigationProperty Name="Organization" Relationship="Self.oemID" FromRole="external_constructions" ToRole="organizations" />
+          <Property Name="DefaultSpecVersionID" Type="Int32" />
+          <NavigationProperty Name="DefaultSpecVersion" Relationship="labdbModel.default_spec_version_to_ex_construction" FromRole="ExternalConstruction" ToRole="SpecificationVersion" />
         </EntityType>
         <EntityType Name="ExternalReportFile">
           <Key>
@@ -2019,6 +2098,7 @@
           <Property Name="PurchaseOrderID" Type="Int32" />
           <Property Name="ArrivalDate" Type="DateTime" />
           <NavigationProperty Name="PO" Relationship="labdbModel.purchase_order_to_external_report" FromRole="ExternalReport" ToRole="PurchaseOrder" />
+          <NavigationProperty Name="Methods" Relationship="labdbModel.external_report_method_mappings" FromRole="ExternalReport" ToRole="Method" />
         </EntityType>
         <EntityType Name="Master">
           <Key>
@@ -2058,6 +2138,7 @@
           <NavigationProperty Name="Tests" Relationship="labdbModel.method_to_test" FromRole="Method" ToRole="Test" />
           <NavigationProperty Name="SubMethods" Relationship="labdbModel.method_to_measurement1" FromRole="Method" ToRole="sub_methods" />
           <NavigationProperty Name="AssociatedInstruments" Relationship="labdbModel.instrument_method_mappings" FromRole="Method" ToRole="Instrument" />
+          <NavigationProperty Name="ExternalReports" Relationship="labdbModel.external_report_method_mappings" FromRole="Method" ToRole="ExternalReport" />
         </EntityType>
         <EntityType Name="Organization">
           <Key>
@@ -2207,6 +2288,7 @@
           <NavigationProperty Name="Requirements" Relationship="Self.specversion_to_requirement" FromRole="specification_versions" ToRole="requirements" />
           <NavigationProperty Name="Specification" Relationship="Self.specification_to_specversion" FromRole="specification_versions" ToRole="specifications" />
           <NavigationProperty Name="Tasks" Relationship="Self.specversion_to_task" FromRole="specification_versions" ToRole="tasks" />
+          <NavigationProperty Name="ExternalConstructions" Relationship="labdbModel.default_spec_version_to_ex_construction" FromRole="SpecificationVersion" ToRole="ExternalConstruction" />
         </EntityType>
         <EntityType Name="Specification">
           <Key>
@@ -2307,6 +2389,7 @@
           <NavigationProperty Name="instrument" Relationship="labdbModel.instrument_to_test" FromRole="Test" ToRole="instrument" />
           <Property Name="MethodIssueID" Type="Int32" />
           <NavigationProperty Name="MethodIssue" Relationship="labdbModel.method_issue_to_test" FromRole="Test" ToRole="StandardIssue" />
+          <NavigationProperty Name="TaskItems" Relationship="labdbModel.test_to_task_item" FromRole="Test" ToRole="TaskItem" />
         </EntityType>
         <EntityType Name="User">
           <Key>
@@ -2445,7 +2528,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="oemID">
-          <End Role="organizations" Type="labdbModel.Organization" Multiplicity="1">
+          <End Role="organizations" Type="labdbModel.Organization" Multiplicity="0..1">
             <OnDelete Action="Cascade" />
           </End>
           <End Role="external_constructions" Type="labdbModel.ExternalConstruction" Multiplicity="*" />
@@ -3109,6 +3192,18 @@
             <End Role="Instrument" EntitySet="Instruments" />
             <End Role="Method" EntitySet="Methods" />
           </AssociationSet>
+          <AssociationSet Name="test_to_task_item" Association="labdbModel.test_to_task_item">
+            <End Role="Test" EntitySet="Tests" />
+            <End Role="TaskItem" EntitySet="TaskItems" />
+          </AssociationSet>
+          <AssociationSet Name="default_spec_version_to_ex_construction" Association="labdbModel.default_spec_version_to_ex_construction">
+            <End Role="SpecificationVersion" EntitySet="SpecificationVersions" />
+            <End Role="ExternalConstruction" EntitySet="ExternalConstructions" />
+          </AssociationSet>
+          <AssociationSet Name="external_report_method_mappings" Association="labdbModel.external_report_method_mappings">
+            <End Role="ExternalReport" EntitySet="ExternalReports" />
+            <End Role="Method" EntitySet="Methods" />
+          </AssociationSet>
         </EntityContainer>
         <Association Name="overridden_to_requirement">
           <End Type="labdbModel.Requirement" Role="Requirement" Multiplicity="0..1">
@@ -3234,6 +3329,8 @@
           <NavigationProperty Name="Requirement" Relationship="labdbModel.requirement_to_task_item" FromRole="task_items" ToRole="Requirement" />
           <NavigationProperty Name="Task" Relationship="labdbModel.task_to_item" FromRole="task_items" ToRole="Task" />
           <Property Name="IsAssignedToReport" Type="Boolean" Nullable="false" />
+          <Property Name="testID" Type="Int32" />
+          <NavigationProperty Name="Test" Relationship="labdbModel.test_to_task_item" FromRole="TaskItem" ToRole="Test" />
         </EntityType>
         <Association Name="requirement_to_task_item">
           <End Type="labdbModel.Requirement" Role="Requirement" Multiplicity="1" />
@@ -3905,6 +4002,34 @@
           <End Type="labdbModel.Instrument" Role="Instrument" Multiplicity="*" />
           <End Type="labdbModel.Method" Role="Method" Multiplicity="*" />
         </Association>
+        <Association Name="test_to_task_item">
+          <End Type="labdbModel.Test" Role="Test" Multiplicity="0..1" />
+          <End Type="labdbModel.TaskItem" Role="TaskItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Test">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="TaskItem">
+              <PropertyRef Name="testID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="default_spec_version_to_ex_construction">
+          <End Type="labdbModel.SpecificationVersion" Role="SpecificationVersion" Multiplicity="0..1" />
+          <End Type="labdbModel.ExternalConstruction" Role="ExternalConstruction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SpecificationVersion">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ExternalConstruction">
+              <PropertyRef Name="DefaultSpecVersionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="external_report_method_mappings">
+          <End Type="labdbModel.ExternalReport" Role="ExternalReport" Multiplicity="*" />
+          <End Type="labdbModel.Method" Role="Method" Multiplicity="*" />
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -3964,6 +4089,7 @@
           <EntitySetMapping Name="ExternalConstructions">
             <EntityTypeMapping TypeName="labdbModel.ExternalConstruction">
               <MappingFragment StoreEntitySet="external_constructions">
+                <ScalarProperty Name="DefaultSpecVersionID" ColumnName="default_spec_versionID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Name" ColumnName="name" />
                 <ScalarProperty Name="OemID" ColumnName="oemID" />
@@ -4260,6 +4386,7 @@
           <EntitySetMapping Name="TaskItems">
             <EntityTypeMapping TypeName="labdbModel.TaskItem">
               <MappingFragment StoreEntitySet="task_items">
+                <ScalarProperty Name="testID" ColumnName="testID" />
                 <ScalarProperty Name="IsAssignedToReport" ColumnName="is_assigned_to_report" />
                 <ScalarProperty Name="RequirementID" ColumnName="requirementID" />
                 <ScalarProperty Name="TaskID" ColumnName="taskID" />
@@ -4468,6 +4595,14 @@
             </EndProperty>
             <EndProperty Name="Instrument">
               <ScalarProperty Name="ID" ColumnName="instrumentID" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="external_report_method_mappings" TypeName="labdbModel.external_report_method_mappings" StoreEntitySet="external_report_method_mappings">
+            <EndProperty Name="Method">
+              <ScalarProperty Name="ID" ColumnName="methodID" />
+            </EndProperty>
+            <EndProperty Name="ExternalReport">
+              <ScalarProperty Name="ID" ColumnName="external_reportID" />
             </EndProperty>
           </AssociationSetMapping>
           </EntityContainerMapping>

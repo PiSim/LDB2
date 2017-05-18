@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Wrappers
 {
-    public class TaskItemWrapper : ISelectableRequirement
+    public class TaskItemWrapper
     {
         private bool _isSelected;
         private TaskItem _taskItemInstance;

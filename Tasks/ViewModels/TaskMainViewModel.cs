@@ -15,6 +15,7 @@ namespace Tasks.ViewModels
 {
     public class TaskMainViewModel : BindableBase
     {
+        private bool _showAssigned, _showComplete;
         private DBEntities _entities;
         private DBPrincipal _principal;
         private DelegateCommand _newTask, _removeTask;
@@ -32,6 +33,8 @@ namespace Tasks.ViewModels
             _entities = entities;
             _eventAggregator = eventAggregator;
             _principal = principal;
+            _showAssigned = false;
+            _showComplete = false;
 
             _eventAggregator.GetEvent<TaskListUpdateRequested>().Subscribe(() => RaisePropertyChanged("TaskList"));
 
@@ -122,10 +125,50 @@ namespace Tasks.ViewModels
                 _eventAggregator.GetEvent<NavigationRequested>().Publish(token);
             }       
         }
+
+        public bool ShowAssigned
+        {
+            get { return _showAssigned; }
+            set
+            {
+                _showAssigned = value;
+
+                if (!_showAssigned && _showComplete)
+                    ShowComplete = false;
+
+                RaisePropertyChanged();
+                RaisePropertyChanged("TaskList");
+            }
+        }
+
+        public bool ShowComplete
+        {
+            get { return _showComplete; }
+            set
+            {
+                _showComplete = value;
+
+                if (_showComplete && !_showAssigned)
+                    ShowAssigned = true;
+
+                RaisePropertyChanged();
+                RaisePropertyChanged("TaskList");
+            }
+        }
         
         public List<DBManager.Task> TaskList
         {
-            get { return new List<DBManager.Task>(_entities.Tasks); }
+            get
+            {
+                if (_showComplete)
+                    return new List<DBManager.Task>(_entities.Tasks);
+
+                if (!_showComplete && _showAssigned)
+                    return new List<DBManager.Task>(_entities.Tasks.Where(tsk => !tsk.IsComplete));
+
+                else
+                    return new List<DBManager.Task>(_entities.Tasks.Where(tsk => !tsk.AllItemsAssigned));
+            }
         }
     }
 }

@@ -14,12 +14,13 @@
 -*Funzione elimina/aggiungi prove a/da report
 -Implementato evento per aggiornamento Task al completamento di un report 
 -*Trasporto note PDC/Task/Report
--*Filtro Pipeline per completi
+-Filtro Pipeline per completi
 -Impostati check di autorizzazione per numerose funzioni
 -Aggiornamento strumenti Post calibrazione
 -Aggiunto Modulo Reporting per la generazione procedurale di documenti 
 -Implementato ReportingEngine con funzionalità base per la creazione di fogli di raccolta dati per report
 -*Corretto aggiornamento proprietà SpecificationEdit
+-Creata videata info materiali che unifica Colori, Aspetti e Construction
 
 v 0.4.4 -- 9/5/2017
 
