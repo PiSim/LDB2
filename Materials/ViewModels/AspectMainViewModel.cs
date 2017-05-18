@@ -1,6 +1,7 @@
 ﻿using DBManager;
 using Infrastructure;
 using Infrastructure.Events;
+using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
 using System;
@@ -15,6 +16,7 @@ namespace Materials.ViewModels
     {
         private Aspect _selectedAspect;
         private DBEntities _entities;
+        private DelegateCommand _createAspect, _removeAspect;
         private EventAggregator _eventAggregator;
 
         public AspectMainViewModel(DBEntities entities,
@@ -22,6 +24,20 @@ namespace Materials.ViewModels
         {
             _entities = entities;
             _eventAggregator = eventAggregator;
+
+            _createAspect = new DelegateCommand(
+                () =>
+                {
+                    
+                },
+                () => CanModify);
+
+            _removeAspect = new DelegateCommand(
+                () =>
+                {
+
+                },
+                () => _selectedAspect != null && CanModify);
         }
 
         public string AspectDetailRegionName
@@ -32,6 +48,11 @@ namespace Materials.ViewModels
         public List<Aspect> AspectList
         {
             get { return new List<Aspect>(_entities.Aspects); }
+        }
+
+        public bool CanModify
+        {
+            get { return true; }
         }
 
         public Aspect SelectedAspect

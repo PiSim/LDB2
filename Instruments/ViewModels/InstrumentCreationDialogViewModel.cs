@@ -105,8 +105,9 @@ namespace Instruments.ViewModels
             { 
 
                 OrganizationRole _manufacturerRole = _entities.OrganizationRoles.First(rol => rol.Name == "MANUF");
-                return new List<Organization>(_entities.Organizations.Where(org => 
-                                                        org.RoleMapping.Any(orm => orm.Role.ID == _manufacturerRole.ID && orm.IsSelected == true))); 
+                return new List<Organization>(_entities.Organizations.Where(org => org.RoleMapping
+                                                                    .Any(orm => orm.Role.ID == _manufacturerRole.ID && orm.IsSelected == true))
+                                                                    .OrderBy(oor => oor.Name)); 
             }
         }
 
@@ -145,7 +146,7 @@ namespace Instruments.ViewModels
 
         public List<InstrumentType> TypeList
         {
-            get { return new List<InstrumentType>(_entities.InstrumentTypes); }
+            get { return new List<InstrumentType>(_entities.InstrumentTypes.OrderBy(inty => inty.Name)); }
         }
     }
 }

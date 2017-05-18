@@ -21,6 +21,7 @@ namespace DBManager
             this.Tests = new HashSet<Test>();
             this.SubMethods = new HashSet<SubMethod>();
             this.AssociatedInstruments = new HashSet<Instrument>();
+            this.ExternalReports = new HashSet<ExternalReport>();
         }
     
         public int ID { get; private set; }
@@ -40,5 +41,7 @@ namespace DBManager
         public virtual ICollection<SubMethod> SubMethods { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Instrument> AssociatedInstruments { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ExternalReport> ExternalReports { get; set; }
     }
 }

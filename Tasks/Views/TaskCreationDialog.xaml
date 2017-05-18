@@ -5,8 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Tasks.Views"
         mc:Ignorable="d"
-        Title="Crea Richiesta Report" Height="550" Width="750"
-        ResizeMode="NoResize">
+        Title="Crea Richiesta Report" Height="550" Width="750">
     <Grid Background="LightGray">
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -26,11 +25,12 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="35"/>
+                <RowDefinition Height="35"/>
+                <RowDefinition Height="35"/>
+                <RowDefinition Height="35"/>
+                <RowDefinition Height="35"/>
+                <RowDefinition Height="1*"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <Label Content="Batch:"

@@ -19,6 +19,7 @@ namespace DBManager
         {
             this.ExternalReportFiles = new HashSet<ExternalReportFile>();
             this.BatchMappings = new HashSet<ExternalReportBatchMapping>();
+            this.Methods = new HashSet<Method>();
         }
     
         public int ID { get; private set; }
@@ -44,5 +45,7 @@ namespace DBManager
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ExternalReportBatchMapping> BatchMappings { get; set; }
         public virtual PurchaseOrder PO { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Method> Methods { get; set; }
     }
 }

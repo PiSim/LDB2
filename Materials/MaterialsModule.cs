@@ -27,6 +27,7 @@ namespace Materials
             _container.RegisterType<Object, Views.ColourEdit>(MaterialViewNames.ColourEdit);
             _container.RegisterType<Object, Views.ColourMain>(MaterialViewNames.ColourMain);
             _container.RegisterType<Object, Views.ConstructionDetail>(MaterialViewNames.ConstructionDetail);
+            _container.RegisterType<Object, Views.ExternalConstructionDetail>(MaterialViewNames.ExternalConstructionDetail);
             _container.RegisterType<Object, Views.MaterialInfoMain>(MaterialViewNames.MaterialView);
             _container.RegisterType<Object, Views.SampleLogView>(MaterialViewNames.SampleLogView);
 
@@ -47,6 +48,8 @@ namespace Materials
             _container.RegisterType<ViewModels.ColourMainViewModel>();
             _container.RegisterType<ViewModels.ConstructionDetailViewModel>();
             _container.RegisterType<ViewModels.ConstructionMainViewModel>();
+            _container.RegisterType<ViewModels.ExternalConstructionDetailViewModel>();
+            _container.RegisterType<ViewModels.ExternalConstructionMainViewModel>();
             _container.RegisterType<ViewModels.MaterialInfoMainViewModel>();
             _container.RegisterType<ViewModels.SampleLogDialogViewModel>();
 
@@ -59,6 +62,8 @@ namespace Materials
                                                 typeof(Views.BatchList));
             _regionManager.RegisterViewWithRegion(RegionNames.ConstructionDetailBatchListRegion,
                                                 typeof(Views.BatchList));
+            _regionManager.RegisterViewWithRegion(RegionNames.ExternalConstructionBatchListRegion,
+                                                typeof(Views.BatchList));
             _regionManager.RegisterViewWithRegion(RegionNames.ExternalReportBatchListRegion,
                                                 typeof(Views.BatchList));
             _regionManager.RegisterViewWithRegion(RegionNames.MaterialInfoAspectRegion,
@@ -67,6 +72,8 @@ namespace Materials
                                                 typeof(Views.ColourMain));
             _regionManager.RegisterViewWithRegion(RegionNames.MaterialInfoCostructionRegion,
                                                 typeof(Views.ConstructionMain));
+            _regionManager.RegisterViewWithRegion(RegionNames.MaterialInfoExternalCostructionRegion,
+                                                typeof(Views.ExternalConstructionMain));
             _regionManager.RegisterViewWithRegion(RegionNames.ProjectBatchListRegion,
                                                 typeof(Views.BatchList));
 

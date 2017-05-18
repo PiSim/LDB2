@@ -29,5 +29,10 @@ namespace Materials.ViewModels
         {
             get { return RegionNames.MaterialInfoCostructionRegion; }
         }
+
+        public string MaterialInfoExternalConstructionRegionName
+        {
+            get { return RegionNames.MaterialInfoExternalCostructionRegion; }
+        }
     }
 }

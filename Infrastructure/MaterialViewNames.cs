@@ -14,6 +14,7 @@ namespace Infrastructure
         public static string ColourEdit { get { return "ColourEditView"; } }
         public static string ColourMain { get { return "ColourMainView"; } }
         public static string ConstructionDetail { get { return "ConstructionDetailView"; } }
+        public static string ExternalConstructionDetail { get { return "ExternalConstructionDetailView"; } }
         public static string MaterialView { get { return "MaterialMainView"; } }
         public static string SampleLogView { get { return "SampleLogView"; } }
     }

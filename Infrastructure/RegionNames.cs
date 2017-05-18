@@ -12,6 +12,8 @@ namespace Infrastructure
         public static string ConstructionDetailBatchListRegion { get { return "ConstructionDetailBatchListRegionName"; } }
         public static string ConstructionDetailRegion { get { return "ConstructionDetailRegion"; } }
         public static string CurrentUserMainReportListRegion { get { return "CurrentUserMainReportListRegion"; } }
+        public static string ExternalConstructionDetailRegion { get { return "ExternalConstructionDetailRegion"; } }
+        public static string ExternalConstructionBatchListRegion { get { return "ExternalConstructionBatchListRegion"; } }
         public static string ExternalReportBatchListRegion { get { return "ExternalReportBatchListRegion"; } }
         public static string ExternalReportProjectDetailsRegion { get { return "ExternalReportProjectDetailsRegion"; } }
         public static string MainNavigationRegion { get { return "MainNavigationRegion"; } }
@@ -23,6 +25,7 @@ namespace Infrastructure
         public static string MaterialInfoAspectRegion { get { return "MaterialInfoAspectRegion"; } }
         public static string MaterialInfoColourRegion { get { return "MaterialInfoColourRegion"; } }
         public static string MaterialInfoCostructionRegion { get { return "MaterialInfoConstructionRegion"; } }
+        public static string MaterialInfoExternalCostructionRegion { get { return "MaterialInfoExternalCostructionRegion"; } }
         public static string MethodEditRegion { get { return "MethodEditRegion"; } }
         public static string MethodIssueRegion { get { return "MethodIssueRegion"; } }
         public static string MethodReportListRegion { get { return "MethodReportListRegion"; } }

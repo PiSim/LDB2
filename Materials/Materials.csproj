@@ -130,6 +130,8 @@
     <Compile Include="ViewModels\ColourMainViewModel.cs" />
     <Compile Include="ViewModels\ConstructionDetailViewModel.cs" />
     <Compile Include="ViewModels\ConstructionMainViewModel.cs" />
+    <Compile Include="ViewModels\ExternalConstructionDetailViewModel.cs" />
+    <Compile Include="ViewModels\ExternalConstructionMainViewModel.cs" />
     <Compile Include="ViewModels\MaterialCreationViewModel.cs" />
     <Compile Include="ViewModels\MaterialInfoMainViewModel.cs" />
     <Compile Include="ViewModels\ProjectPickerViewModel.cs" />
@@ -173,6 +175,12 @@
     </Compile>
     <Compile Include="Views\ConstructionMain.xaml.cs">
       <DependentUpon>ConstructionMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ExternalConstructionDetail.xaml.cs">
+      <DependentUpon>ExternalConstructionDetail.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ExternalConstructionMain.xaml.cs">
+      <DependentUpon>ExternalConstructionMain.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MaterialCreationDialog.xaml.cs">
       <DependentUpon>MaterialCreationDialog.xaml</DependentUpon>
@@ -277,6 +285,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ConstructionMain.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ExternalConstructionDetail.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ExternalConstructionMain.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

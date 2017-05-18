@@ -20,6 +20,7 @@ namespace DBManager
             this.Reports = new HashSet<Report>();
             this.Requirements = new HashSet<Requirement>();
             this.Tasks = new HashSet<Task>();
+            this.ExternalConstructions = new HashSet<ExternalConstruction>();
         }
     
         public int ID { get; private set; }
@@ -34,5 +35,7 @@ namespace DBManager
         public virtual Specification Specification { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Task> Tasks { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ExternalConstruction> ExternalConstructions { get; set; }
     }
 }
