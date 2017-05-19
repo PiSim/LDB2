@@ -62,6 +62,8 @@ namespace Specifications.ViewModels
                     Specification tempSpec = new Specification();
                     tempSpec.Description = "";
                     tempSpec.Standard = tempStd;
+
+                    tempSpec.ControlPlans.Add(tempControlPlan);
                     tempSpec.SpecificationVersions.Add(tempMain);
 
                     _entities.Specifications.Add(tempSpec);

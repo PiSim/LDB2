@@ -115,6 +115,8 @@
                                             DisplayMemberBinding="{Binding Requirement.Method.Property.Name}"/>
                             <GridViewColumn Header="Metodo"
                                             DisplayMemberBinding="{Binding Requirement.Method.Standard.Name}"/>
+                            <GridViewColumn Header="Assegnato a Report"
+                                            DisplayMemberBinding="{Binding Test.Report.Number}"/>
                         </GridView>
                     </ListView.View>
                 </ListView>
