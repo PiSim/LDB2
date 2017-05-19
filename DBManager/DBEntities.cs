@@ -51,21 +51,7 @@ namespace DBManager
 
             specification.SpecificationVersions.First(ver => ver.IsMain).Requirements.Add(tempReq);
         }
-
-        public Aspect GetAspect(string code,
-                                bool new_instance_if_not_found = true)
-        {
-            Aspect output = Aspects.FirstOrDefault(asp => asp.Code == code);
-
-            if (output == null && new_instance_if_not_found)
-            {
-                output = new Aspect();
-                output.Code = code;
-            }
-
-            return output;
-        }
-
+        
         public Requirement RemoveOverride(Requirement toBeRemoved)
         {
             Requirement output = toBeRemoved.Overridden;

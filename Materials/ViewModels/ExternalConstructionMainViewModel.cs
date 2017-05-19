@@ -53,7 +53,12 @@ namespace Materials.ViewModels
                     _entities.SaveChanges();
 
                     RaisePropertyChanged("ExternalConstructionList");
-                });
+                },
+                () => _selectedExternalConstruction != null);
+
+
+            _eventAggregator.GetEvent<ExternalConstructionModified>().Subscribe(
+                () => RaisePropertyChanged("ExternalConstructionList"));
         }
 
         public DelegateCommand CreateExternalConstructionCommand

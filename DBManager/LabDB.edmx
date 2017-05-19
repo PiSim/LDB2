@@ -2061,7 +2061,7 @@
           <Property Name="OemID" Type="Int32" Nullable="true" a:SetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="Constructions" Relationship="Self.external_construction" FromRole="external_constructions" ToRole="constructions" />
           <NavigationProperty Name="Organization" Relationship="Self.oemID" FromRole="external_constructions" ToRole="organizations" />
-          <Property Name="DefaultSpecVersionID" Type="Int32" />
+          <Property Name="DefaultSpecVersionID" Type="Int32" Nullable="true" />
           <NavigationProperty Name="DefaultSpecVersion" Relationship="labdbModel.default_spec_version_to_ex_construction" FromRole="ExternalConstruction" ToRole="SpecificationVersion" />
         </EntityType>
         <EntityType Name="ExternalReportFile">

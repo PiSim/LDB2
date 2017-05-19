@@ -1,5 +1,6 @@
 ﻿using DBManager;
 using Microsoft.Practices.Prism.Mvvm;
+using Microsoft.Practices.Unity;
 using Prism.Regions;
 using System;
 using System.Collections.Generic;
@@ -23,7 +24,7 @@ namespace Materials.Views
     /// </summary>
     public partial class ExternalConstructionDetail : UserControl, IView, INavigationAware
     {
-        public ExternalConstructionDetail()
+        public ExternalConstructionDetail(IUnityContainer container)
         {
             InitializeComponent();
         }

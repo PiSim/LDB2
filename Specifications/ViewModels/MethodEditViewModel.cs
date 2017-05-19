@@ -114,10 +114,7 @@ namespace Specifications.ViewModels
             _removeMeasurement = new DelegateCommand(
                 () => 
                 {
-                    if (SelectedMeasurement.SubRequirements.Any())
-                        throw new NotImplementedException();
-
-                    Measurements.Remove(SelectedMeasurement);
+                    _entities.SubMethods.Remove(_selectedMeasurement);
                     SelectedMeasurement = null;
                 },
                 () => SelectedMeasurement != null );

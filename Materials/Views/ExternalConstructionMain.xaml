@@ -45,9 +45,9 @@
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Nome"
-                                DisplayMemberBinding="{Binding Name}"/>
+                                    DisplayMemberBinding="{Binding Name}"/>
                     <GridViewColumn Header="OEM"
-                                DisplayMemberBinding="{Binding Oem.Name}"/>
+                                    DisplayMemberBinding="{Binding Organization.Name}"/>
                 </GridView>
             </ListView.View>
         </ListView>

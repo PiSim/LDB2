@@ -1,4 +1,5 @@
 ﻿using DBManager;
+using Microsoft.Practices.Unity;
 using Infrastructure;
 using Infrastructure.Events;
 using Prism.Commands;
@@ -17,43 +18,55 @@ namespace Materials.ViewModels
         private bool _isEditMode;
         private Construction _selectedAssignedConstruction, _selectedUnassignedConstruction;
         private DBEntities _entities;
+        private DBPrincipal _principal;
         private DelegateCommand _assignConstructionToExternal, _setModify, _unassignConstructionToExternal;
         private EventAggregator _eventAggregator;
         private ExternalConstruction _externalConstructionInstance;
         private Specification _selectedSpecification;
 
         public ExternalConstructionDetailViewModel(DBEntities entities,
+                                                    DBPrincipal principal,
                                                     EventAggregator eventAggregator) : base()
         {
             _entities = entities;
             _eventAggregator = eventAggregator;
+            _principal = principal;
             _isEditMode = false;
 
             _assignConstructionToExternal = new DelegateCommand(
                 () =>
                 {
-                    _externalConstructionInstance.Constructions.Add(_selectedAssignedConstruction);
-                    SelectedUnassignedconstruction = null;
+                    
+                    _externalConstructionInstance.Constructions.Add(_selectedUnassignedConstruction);
+                    SelectedUnassignedConstruction = null;
+                    _entities.SaveChanges();
                     RaisePropertyChanged("AssignedConstructions");
+                    RaisePropertyChanged("BatchList");
                     RaisePropertyChanged("UnassignedConstructions");
                 },
-                () => _selectedUnassignedConstruction != null && _externalConstructionInstance != null);
+                () => _selectedUnassignedConstruction != null 
+                    && _externalConstructionInstance != null
+                    && CanModify);
 
             _setModify = new DelegateCommand(
                 () =>
                 {
                     EditMode = true;
-                });
+                },
+                () => CanModify);
 
             _unassignConstructionToExternal = new DelegateCommand(
                 () =>
                 {
                     _externalConstructionInstance.Constructions.Remove(_selectedAssignedConstruction);
                     SelectedAssignedConstruction = null;
+                    _entities.SaveChanges();
                     RaisePropertyChanged("AssignedConstructions");
+                    RaisePropertyChanged("BatchList");
                     RaisePropertyChanged("UnassignedConstructions");
                 },
-                () => _selectedAssignedConstruction != null);
+                () => _selectedAssignedConstruction != null
+                    && CanModify);
 
             _eventAggregator.GetEvent<CommitRequested>().Subscribe(
                 () =>
@@ -62,7 +75,7 @@ namespace Materials.ViewModels
                         return;
                     else
                     {
-                        _entities.SaveChanges();
+                        _entities.Database.CurrentTransaction.Commit();
                         EditMode = false;
                     }
                 });
@@ -77,7 +90,32 @@ namespace Materials.ViewModels
         {
             get
             {
-                return new List<Construction>(_externalConstructionInstance.Constructions);
+                if (_externalConstructionInstance == null)
+                    return new List<Construction>();
+
+                else
+                    return new List<Construction>(_externalConstructionInstance.Constructions);
+            }
+        }
+
+        public List<Batch> BatchList
+        {
+            get
+            {
+                if (_externalConstructionInstance == null)
+                    return new List<Batch>();
+
+                else
+                    return new List<Batch>(_entities.Batches
+                        .Where(btc => btc.Material.Construction.ExternalConstruction.ID == _externalConstructionInstance.ID));
+            }
+        }
+
+        public bool CanModify
+        {
+            get
+            {
+                return _principal.IsInRole(UserRoleNames.MaterialAdmin);
             }
         }
 
@@ -87,9 +125,17 @@ namespace Materials.ViewModels
             set
             {
                 _isEditMode = value;
+
+                if (value)
+                    _entities.Database.BeginTransaction();
+
+                else if (_entities.Database.CurrentTransaction != null)
+                    _entities.Database.CurrentTransaction.Dispose();
+
                 _assignConstructionToExternal.RaiseCanExecuteChanged();
                 _unassignConstructionToExternal.RaiseCanExecuteChanged();
                 RaisePropertyChanged("EditMode");
+                RaisePropertyChanged("EnableVersionSelection");
             }
         }
 
@@ -116,24 +162,37 @@ namespace Materials.ViewModels
                 else
                 {
                     _externalConstructionInstance = _entities.ExternalConstructions.First(exc => exc.ID == value.ID);
-                    _selectedSpecification = _externalConstructionInstance.DefaultSpecVersion.Specification;
+
+                    _selectedSpecification = (_externalConstructionInstance.DefaultSpecVersion != null) ?
+                        _externalConstructionInstance.DefaultSpecVersion.Specification : null;
                 }       
 
                 SelectedAssignedConstruction = null;
-                SelectedUnassignedconstruction = null;
+                SelectedUnassignedConstruction = null;
+
+                EditMode = false;
 
                 RaisePropertyChanged("AssignedConstructions");
+                RaisePropertyChanged("BatchList");
                 RaisePropertyChanged("ExternalConstructionInstance");
-                RaisePropertyChanged("ExternalConstructionSpecificationVersion");
                 RaisePropertyChanged("ExternalConstructionName");
                 RaisePropertyChanged("SelectedOEM");
                 RaisePropertyChanged("SelectedSpecification");
+                RaisePropertyChanged("SpecificationVersionList");
+                RaisePropertyChanged("ExternalConstructionSpecificationVersion");
             }
         }
 
         public string ExternalConstructionName
         {
-            get { return _externalConstructionInstance.Name; }
+            get
+            {
+                if (_externalConstructionInstance == null)
+                    return null;
+
+                else
+                    return _externalConstructionInstance.Name;
+            }
             set
             {
                 _externalConstructionInstance.Name = value;
@@ -170,6 +229,11 @@ namespace Materials.ViewModels
             }
         }
 
+        private void RaiseExternalConstructionModified()
+        {
+            _eventAggregator.GetEvent<ExternalConstructionModified>().Publish();
+        }
+
         public Construction SelectedAssignedConstruction
         {
             get { return _selectedAssignedConstruction; }
@@ -188,7 +252,7 @@ namespace Materials.ViewModels
                 if (_externalConstructionInstance == null)
                     return null;
                 else
-                    return OEMList.First();
+                    return _externalConstructionInstance.Organization;
             }
             set
             {
@@ -215,7 +279,7 @@ namespace Materials.ViewModels
             }
         }
 
-        public Construction SelectedUnassignedconstruction
+        public Construction SelectedUnassignedConstruction
         {
             get { return _selectedUnassignedConstruction; }
             set
@@ -241,9 +305,10 @@ namespace Materials.ViewModels
             get
             {
                 if (_selectedSpecification == null)
-                    return null;
-
-                return new List<SpecificationVersion>(_selectedSpecification.SpecificationVersions);
+                    return new List<SpecificationVersion>();
+                
+                else
+                    return new List<SpecificationVersion>(_selectedSpecification.SpecificationVersions);
             }
         }
 
