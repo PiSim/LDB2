@@ -1,4 +1,5 @@
 ﻿using DBManager;
+using DBManager.Services;
 using Infrastructure;
 using Infrastructure.Events;
 using Infrastructure.Wrappers;
@@ -23,7 +24,7 @@ namespace Specifications.ViewModels
         private DelegateCommand _addControlPlan, _addFile, _addIssue,
             _addTest, _addVersion, _newReport, _openFile, _openReport, _removeControlPlan, _removeFile, _removeIssue, _removeTest, _removeVersion, _setCurrent;
         private EventAggregator _eventAggregator;
-        private IReportServiceProvider _reportServiceProvider;
+        private IEnumerable<Report> _reportList;
         private List<ControlPlanItemWrapper> _controlPlanItemsList;
         private Method _selectedToAdd;
         private List<RequirementWrapper> _requirementList;
@@ -39,14 +40,13 @@ namespace Specifications.ViewModels
 
         public SpecificationEditViewModel(DBEntities entities,
                                             DBPrincipal principal,
-                                            EventAggregator aggregator,
-                                            IReportServiceProvider reportServiceProvider) 
+                                            EventAggregator aggregator) 
             : base()
         {
             _entities = entities;
             _eventAggregator = aggregator;
             _principal = principal;
-            _reportServiceProvider = reportServiceProvider;
+            _reportList = new List<Report>();
 
             _addControlPlan = new DelegateCommand(
                 () =>
@@ -217,7 +217,7 @@ namespace Specifications.ViewModels
         
         private void GenerateRequirementList()
         {
-            List<Requirement> tempReqList = _reportServiceProvider.GenerateRequirementList(_selectedVersion);
+            List<Requirement> tempReqList = ReportService.GenerateRequirementList(_selectedVersion);
             _requirementList = new List<RequirementWrapper>();
             foreach (Requirement rr in tempReqList)
                 _requirementList.Add(new RequirementWrapper(rr, _selectedVersion, _entities));
@@ -387,15 +387,11 @@ namespace Specifications.ViewModels
             get { return _removeTest; }
         }
 
-        public List<Report> ReportList
+        public IEnumerable<Report> ReportList
         {
             get
             {
-                if(_instance == null)
-                    return null;
-
-                return new List<Report>(_entities.Reports.Where
-                    (rep => rep.SpecificationVersion.Specification.ID == _instance.ID));
+                return _reportList;
             }
         }
 
@@ -411,12 +407,14 @@ namespace Specifications.ViewModels
             {
                 _selectedControlPlan = value;
 
-                _controlPlanItemsList = new List<ControlPlanItemWrapper>();
-                if (value != null)
-                {
-                    foreach (Requirement rr in _instance.SpecificationVersions.First(sve => sve.IsMain).Requirements)
-                        _controlPlanItemsList.Add(new ControlPlanItemWrapper(_selectedControlPlan, rr));
-                }
+                if (value == null)
+                    _controlPlanItemsList = new List<ControlPlanItemWrapper>();
+                
+                else   
+                    _controlPlanItemsList = new List<ControlPlanItemWrapper>(_instance.SpecificationVersions
+                                                                                .First(sve => sve.IsMain)
+                                                                                .Requirements
+                                                                                .Select(req => new ControlPlanItemWrapper(_selectedControlPlan, req)));
 
                 RaisePropertyChanged("SelectedControlPlan");
                 RaisePropertyChanged("ControlPlanItemsList");

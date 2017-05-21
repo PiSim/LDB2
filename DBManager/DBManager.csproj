@@ -257,6 +257,7 @@
       <DependentUpon>LabDB.tt</DependentUpon>
     </Compile>
     <Compile Include="Services\MaterialService.cs" />
+    <Compile Include="Services\ReportService.cs" />
     <Compile Include="Services\SpecificationService.cs" />
     <Compile Include="Specification.cs">
       <DependentUpon>LabDB.tt</DependentUpon>

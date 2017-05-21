@@ -34,12 +34,12 @@ namespace Materials.ViewModels
             _isEditMode = false;
 
             _oemList = new List<Organization>(DataService.GetOEMs());
-            _specificationList = new List<Specification>(DataService.GetSpecifications());
+            _specificationList = new List<Specification>(SpecificationService.GetSpecifications());
 
             _assignConstructionToExternal = new DelegateCommand(
                 () =>
                 {
-                    _externalConstructionInstance.Constructions.Add(_selectedUnassignedConstruction);
+                    _externalConstructionInstance.AddConstruction(_selectedUnassignedConstruction);
                     SelectedUnassignedConstruction = null;
                     RaisePropertyChanged("AssignedConstructions");
                     RaisePropertyChanged("BatchList");
@@ -47,6 +47,7 @@ namespace Materials.ViewModels
                 },
                 () => _selectedUnassignedConstruction != null 
                     && _externalConstructionInstance != null
+                    && !EditMode
                     && CanModify);
 
             _setModify = new DelegateCommand(
@@ -59,14 +60,15 @@ namespace Materials.ViewModels
             _unassignConstructionToExternal = new DelegateCommand(
                 () =>
                 {
-                    _externalConstructionInstance.Constructions.Remove(_selectedAssignedConstruction);
+                    _externalConstructionInstance.RemoveConstruction(_selectedAssignedConstruction);
                     SelectedAssignedConstruction = null;
                     RaisePropertyChanged("AssignedConstructions");
                     RaisePropertyChanged("BatchList");
                     RaisePropertyChanged("UnassignedConstructions");
                 },
                 () => _selectedAssignedConstruction != null
-                    && CanModify);
+                    && CanModify
+                    && !EditMode);
 
             _eventAggregator.GetEvent<CommitRequested>().Subscribe(
                 () =>
@@ -94,7 +96,7 @@ namespace Materials.ViewModels
                     return new List<Construction>();
 
                 else
-                    return _externalConstructionInstance.Constructions;
+                    return new List<Construction>(_externalConstructionInstance.Constructions);
             }
         }
 

@@ -97,26 +97,6 @@ namespace Reports
             }
         }
 
-        public List<Requirement> GenerateRequirementList(SpecificationVersion version)
-        {
-            if (version.IsMain)
-                return new List<Requirement>(version.Requirements);
-
-            else
-            {
-                List<Requirement> output = new List<Requirement>(
-                    version.Specification.SpecificationVersions.First(sv => sv.IsMain).Requirements);
-                
-                foreach (Requirement requirement in version.Requirements)
-                {
-                    int ii = output.FindIndex(rr => rr.Method.ID == requirement.Method.ID);
-                    output[ii] = requirement;
-                }
-
-                return output;
-            }
-        }
-
         public List<Test> GenerateTestList(List<ISelectableRequirement> reqList)
         {
             List<Test> output = new List<Test>();

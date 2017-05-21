@@ -9,7 +9,6 @@ namespace DBManager
 {
     public static class DataService
     {
-
         public static IEnumerable<Batch> GetBatchesForExternalConstruction(ExternalConstruction target,
                                                                     bool lazyLoadingEnabled = false)
         {
@@ -47,19 +46,6 @@ namespace DBManager
                             .Select(orm => orm.Organization)
                             .OrderBy(org => org.Name)
                             .ToList();
-            }
-        }
-
-        public static IEnumerable<Specification> GetSpecifications()
-        {
-            using (var entities = new DBEntities())
-            {
-                entities.Configuration.LazyLoadingEnabled = false;
-                return entities.Specifications.Include(spec => spec.Standard)
-                                                .Include(spec => spec.Standard.CurrentIssue)
-                                                .Include(spec => spec.Standard.Organization)
-                                                .OrderBy(spec => spec.Standard.Name)
-                                                .ToList();
             }
         }
     }

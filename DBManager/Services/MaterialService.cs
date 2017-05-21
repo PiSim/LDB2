@@ -68,7 +68,25 @@ namespace DBManager.Services
         }
 
         #endregion
+
         #region Operations for ExternalConstruction entities
+
+        public static void AddConstruction(this ExternalConstruction entry,
+                                            Construction toBeAdded)
+        {
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.AutoDetectChangesEnabled = false;
+
+                entities.Constructions.Attach(toBeAdded);
+                toBeAdded.ExternalConstruction = entry;
+                toBeAdded.ExternalConstructionID = entry.ID;
+                entry.Constructions.Add(toBeAdded);
+
+                entities.Entry(toBeAdded).State = EntityState.Modified;
+                entities.SaveChanges();
+            }
+        }
 
         public static ExternalConstruction GetExternalConstruction(int ID)
         {
@@ -119,6 +137,27 @@ namespace DBManager.Services
 
                 entities.Entry(entry).CurrentValues.SetValues(tempEntry);
 
+            }
+        }
+
+        public static void RemoveConstruction(this ExternalConstruction entry,
+                                            Construction toBeRemoved)
+        {
+            if (!entry.Constructions.Any(cns => cns.ID == toBeRemoved.ID))
+                return;
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.AutoDetectChangesEnabled = false;
+
+                entities.Constructions.Attach(toBeRemoved);
+                toBeRemoved.ExternalConstruction = null;
+                toBeRemoved.ExternalConstructionID = null;
+                entry.Constructions.Remove(entry.Constructions
+                                    .First(cns => cns.ID == toBeRemoved.ID));
+
+                entities.Entry(toBeRemoved).State = EntityState.Modified;
+                entities.SaveChanges();
             }
         }
 
