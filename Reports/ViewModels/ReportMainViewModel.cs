@@ -51,6 +51,9 @@ namespace Reports.ViewModels
                     _entities.Reports.Remove(_selectedReport);
                     _entities.SaveChanges();
                     _eventAggregator.GetEvent<ReportListUpdateRequested>().Publish();
+
+                    if (_selectedReport.ParentTask != null)
+                        _eventAggregator.GetEvent<TaskStatusCheckRequested>().Publish(_selectedReport.ParentTask);
                 },
                 () => CanRemoveReport && SelectedReport != null);
 

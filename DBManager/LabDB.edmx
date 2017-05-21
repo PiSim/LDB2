@@ -4137,15 +4137,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Materials">
-            <EntityTypeMapping TypeName="labdbModel.Material">
-              <MappingFragment StoreEntitySet="materials">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="ConstructionID" ColumnName="constructionID" />
-                <ScalarProperty Name="RecipeID" ColumnName="recipeID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Methods">
             <EntityTypeMapping TypeName="labdbModel.Method">
               <MappingFragment StoreEntitySet="methods">
@@ -4605,6 +4596,15 @@
               <ScalarProperty Name="ID" ColumnName="external_reportID" />
             </EndProperty>
           </AssociationSetMapping>
+          <EntitySetMapping Name="Materials">
+            <EntityTypeMapping TypeName="IsTypeOf(labdbModel.Material)">
+              <MappingFragment StoreEntitySet="materials">
+                <ScalarProperty Name="RecipeID" ColumnName="recipeID" />
+                <ScalarProperty Name="ConstructionID" ColumnName="constructionID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

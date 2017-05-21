@@ -1,4 +1,5 @@
 ﻿using DBManager;
+using DBManager.Services;
 using Microsoft.Practices.Unity;
 using Infrastructure;
 using Infrastructure.Events;
@@ -17,29 +18,29 @@ namespace Materials.ViewModels
     {
         private bool _isEditMode;
         private Construction _selectedAssignedConstruction, _selectedUnassignedConstruction;
-        private DBEntities _entities;
         private DBPrincipal _principal;
         private DelegateCommand _assignConstructionToExternal, _setModify, _unassignConstructionToExternal;
         private EventAggregator _eventAggregator;
         private ExternalConstruction _externalConstructionInstance;
+        private IEnumerable<Organization> _oemList;
+        private IEnumerable<Specification> _specificationList;
         private Specification _selectedSpecification;
 
-        public ExternalConstructionDetailViewModel(DBEntities entities,
-                                                    DBPrincipal principal,
+        public ExternalConstructionDetailViewModel(DBPrincipal principal,
                                                     EventAggregator eventAggregator) : base()
         {
-            _entities = entities;
             _eventAggregator = eventAggregator;
             _principal = principal;
             _isEditMode = false;
 
+            _oemList = new List<Organization>(DataService.GetOEMs());
+            _specificationList = new List<Specification>(DataService.GetSpecifications());
+
             _assignConstructionToExternal = new DelegateCommand(
                 () =>
                 {
-                    
                     _externalConstructionInstance.Constructions.Add(_selectedUnassignedConstruction);
                     SelectedUnassignedConstruction = null;
-                    _entities.SaveChanges();
                     RaisePropertyChanged("AssignedConstructions");
                     RaisePropertyChanged("BatchList");
                     RaisePropertyChanged("UnassignedConstructions");
@@ -60,7 +61,6 @@ namespace Materials.ViewModels
                 {
                     _externalConstructionInstance.Constructions.Remove(_selectedAssignedConstruction);
                     SelectedAssignedConstruction = null;
-                    _entities.SaveChanges();
                     RaisePropertyChanged("AssignedConstructions");
                     RaisePropertyChanged("BatchList");
                     RaisePropertyChanged("UnassignedConstructions");
@@ -75,7 +75,7 @@ namespace Materials.ViewModels
                         return;
                     else
                     {
-                        _entities.Database.CurrentTransaction.Commit();
+                        _externalConstructionInstance.Update();
                         EditMode = false;
                     }
                 });
@@ -86,7 +86,7 @@ namespace Materials.ViewModels
             get { return _assignConstructionToExternal; }
         }
 
-        public List<Construction> AssignedConstructions
+        public IEnumerable<Construction> AssignedConstructions
         {
             get
             {
@@ -94,11 +94,11 @@ namespace Materials.ViewModels
                     return new List<Construction>();
 
                 else
-                    return new List<Construction>(_externalConstructionInstance.Constructions);
+                    return _externalConstructionInstance.Constructions;
             }
         }
 
-        public List<Batch> BatchList
+        public IEnumerable<Batch> BatchList
         {
             get
             {
@@ -106,8 +106,7 @@ namespace Materials.ViewModels
                     return new List<Batch>();
 
                 else
-                    return new List<Batch>(_entities.Batches
-                        .Where(btc => btc.Material.Construction.ExternalConstruction.ID == _externalConstructionInstance.ID));
+                    return new List<Batch>(DataService.GetBatchesForExternalConstruction(_externalConstructionInstance));
             }
         }
 
@@ -125,12 +124,6 @@ namespace Materials.ViewModels
             set
             {
                 _isEditMode = value;
-
-                if (value)
-                    _entities.Database.BeginTransaction();
-
-                else if (_entities.Database.CurrentTransaction != null)
-                    _entities.Database.CurrentTransaction.Dispose();
 
                 _assignConstructionToExternal.RaiseCanExecuteChanged();
                 _unassignConstructionToExternal.RaiseCanExecuteChanged();
@@ -161,10 +154,14 @@ namespace Materials.ViewModels
                 }
                 else
                 {
-                    _externalConstructionInstance = _entities.ExternalConstructions.First(exc => exc.ID == value.ID);
+                    _externalConstructionInstance = MaterialService.GetExternalConstruction(value.ID);
+                    _externalConstructionInstance.Load();
 
-                    _selectedSpecification = (_externalConstructionInstance.DefaultSpecVersion != null) ?
-                        _externalConstructionInstance.DefaultSpecVersion.Specification : null;
+                    if (_externalConstructionInstance.DefaultSpecVersion != null)
+                    {
+                        _selectedSpecification = _specificationList.First(spec => spec.ID == _externalConstructionInstance.DefaultSpecVersion.Specification.ID);
+                        _selectedSpecification.Load();
+                    }
                 }       
 
                 SelectedAssignedConstruction = null;
@@ -188,7 +185,7 @@ namespace Materials.ViewModels
             get
             {
                 if (_externalConstructionInstance == null)
-                    return null;
+                   return null;
 
                 else
                     return _externalConstructionInstance.Name;
@@ -205,27 +202,23 @@ namespace Materials.ViewModels
         {
             get
             {
-                if (_externalConstructionInstance == null)
+                if (_externalConstructionInstance == null || _externalConstructionInstance.DefaultSpecVersion == null)
                     return null;
                 else
-                    return _externalConstructionInstance.DefaultSpecVersion;
+                    return SpecificationVersionList.FirstOrDefault(spcv => spcv.ID == _externalConstructionInstance.DefaultSpecVersion.ID);
             }
             set
             {
                 _externalConstructionInstance.DefaultSpecVersion = value;
+                _externalConstructionInstance.DefaultSpecVersionID = (value == null) ? 0 : value.ID;
             }
         }
 
-        public List<Organization> OEMList
+        public IEnumerable<Organization> OEMList
         {
             get
             {
-                OrganizationRole tempRole = _entities.OrganizationRoles.First
-                    (orgr => orgr.Name == OrganizationRoleNames.OEM);
-
-                return new List<Organization>(tempRole.OrganizationMappings.Where(orm => orm.IsSelected)
-                                                                            .Select(orm => orm.Organization)
-                                                                            .OrderBy(org => org.Name));
+                return _oemList;
             }
         }
 
@@ -252,7 +245,7 @@ namespace Materials.ViewModels
                 if (_externalConstructionInstance == null)
                     return null;
                 else
-                    return _externalConstructionInstance.Organization;
+                    return _oemList.FirstOrDefault(org => org.ID == _externalConstructionInstance.Organization.ID);
             }
             set
             {
@@ -267,10 +260,17 @@ namespace Materials.ViewModels
 
         public Specification SelectedSpecification
         {
-            get { return _selectedSpecification; }
+            get
+            {
+                if (_externalConstructionInstance == null || _externalConstructionInstance.DefaultSpecVersion == null)
+                    return null;
+                else
+                    return _selectedSpecification;
+            }
             set
             {
                 _selectedSpecification = value;
+                _selectedSpecification.Load();
                 ExternalConstructionSpecificationVersion = _selectedSpecification.SpecificationVersions.FirstOrDefault(spcv => spcv.IsMain);
 
                 RaisePropertyChanged("EnableVersionSelection");
@@ -295,12 +295,12 @@ namespace Materials.ViewModels
             get { return _setModify; }
         }
 
-        public List<Specification> SpecificationList
+        public IEnumerable<Specification> SpecificationList
         {
-            get { return new List<Specification>(_entities.Specifications.OrderBy(spec => spec.Standard.Name)); }
+            get { return _specificationList; }
         }
 
-        public List<SpecificationVersion> SpecificationVersionList
+        public IEnumerable<SpecificationVersion> SpecificationVersionList
         {
             get
             {
@@ -308,7 +308,7 @@ namespace Materials.ViewModels
                     return new List<SpecificationVersion>();
                 
                 else
-                    return new List<SpecificationVersion>(_selectedSpecification.SpecificationVersions);
+                    return _selectedSpecification.SpecificationVersions;
             }
         }
 
@@ -321,7 +321,7 @@ namespace Materials.ViewModels
         {
             get
             {
-                return new List<Construction>(_entities.Constructions.Where(cns => cns.ExternalConstruction == null));
+                return new List<Construction>(DataService.GetConstructionsWithoutExternal());
             }
         }
     }

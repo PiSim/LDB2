@@ -104,6 +104,8 @@
   <ItemGroup>
     <Compile Include="AdminViewNames.cs" />
     <Compile Include="Events\ExternalConstructionModified.cs" />
+    <Compile Include="Events\TaskStatusCheckRequested.cs" />
+    <Compile Include="ISpecificationServiceProvider.cs" />
     <Compile Include="Resources\CommonResourceDictionary.xaml.cs" />
     <Compile Include="DBIdentity.cs" />
     <Compile Include="DBPrincipal.cs" />

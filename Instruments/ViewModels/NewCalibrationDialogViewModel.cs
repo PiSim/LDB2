@@ -244,7 +244,7 @@ namespace Instruments.ViewModels
         {
             get
             {
-                OrganizationRole tempOr = _entities.OrganizationRoles.First(orr => orr.Name == OrganizationRoleNames.CalibrationLab);
+                OrganizationRole tempOr = _entities.OrganizationRoles.First(orr => orr.Name == DBManager.OrganizationRoleNames.CalibrationLab);
                 return new List<Organization>(tempOr.OrganizationMappings.Where(orm => orm.IsSelected)
                                                 .OrderBy(orm => orm.Organization.Name)
                                                 .Select(orm => orm.Organization));

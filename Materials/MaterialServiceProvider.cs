@@ -6,6 +6,7 @@ using Microsoft.Practices.Unity;
 using Prism.Events;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,9 +21,9 @@ namespace Materials
         private IUnityContainer _container;
 
         public MaterialServiceProvider(DBEntities entities,
-                                    DBPrincipal principal,
-                                    EventAggregator eventAggregator,
-                                    IUnityContainer container)
+                                        DBPrincipal principal,
+                                        EventAggregator eventAggregator,
+                                        IUnityContainer container)
         {
             _container = container;
             _entities = entities;
@@ -171,5 +172,8 @@ namespace Materials
             else
                 _eventAggregator.GetEvent<StatusNotificationIssued>().Publish("Batch non trovato");
         }
+
+        
+
     }
 }

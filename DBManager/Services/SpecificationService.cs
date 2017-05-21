@@ -1,39 +1,25 @@
-﻿using DBManager;
-using Infrastructure;
-using Microsoft.Practices.Unity;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Data.Entity;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Specifications
+namespace DBManager.Services
 {
-    public class SpecificationServiceProvider : ISpecificationServiceProvider
+    public static class SpecificationService
     {
-        private DBEntities _entities;
-        private UnityContainer _container;
-
-        public SpecificationServiceProvider(DBEntities entities,
-                                            UnityContainer container)
-        {
-            _entities = entities;
-            _container = container;
-        }
-
-
         #region Operations for Specification entities
 
-        public Specification GetSpecification(int ID)
+        public static Specification GetSpecification(int ID)
         {
             using (DBEntities entities = new DBEntities())
-            { 
+            {
                 return entities.Specifications.First(entry => entry.ID == ID);
             }
         }
 
-        public void CreateSpecification(Specification entry)
+        public static void Create(this Specification entry)
         {
             using (DBEntities entities = new DBEntities())
             {
@@ -43,7 +29,7 @@ namespace Specifications
             }
         }
 
-        public void DeleteSpecification(Specification entry)
+        public static void Delete(this Specification entry)
         {
             using (DBEntities entities = new DBEntities())
             {
@@ -53,22 +39,24 @@ namespace Specifications
             }
         }
 
-        public void LoadSpecification(ref Specification entry)
+        public static void Load(this Specification entry)
         {
             using (DBEntities entities = new DBEntities())
             {
                 entities.Configuration.LazyLoadingEnabled = false;
 
-                int entryID = entry.ID;
+                entities.Specifications.Attach(entry);
 
-                entry = entities.Specifications.Include(spec => spec.SpecificationVersions)
-                                                .Include(spec => spec.Standard)
-                                                .Include(spec => spec.Standard.CurrentIssue)
-                                                .First(spec => spec.ID == entryID);   
+                Specification tempEntry = entities.Specifications.Include(spec => spec.SpecificationVersions)
+                                                                .Include(spec => spec.Standard)
+                                                                .Include(spec => spec.Standard.CurrentIssue)
+                                                                .First(spec => spec.ID == entry.ID);
+
+                entities.Entry(entry).CurrentValues.SetValues(tempEntry);
             }
         }
 
-        public void UpdateSpecification(Specification entry)
+        public static void Update(this Specification entry)
         {
             using (DBEntities entities = new DBEntities())
             {

@@ -33,19 +33,40 @@ namespace Tasks
 
             _eventAggregator.GetEvent<TaskToReportConversionRequested>().Subscribe(
                 target => StartTaskToReportConversion(target));
+
+            _eventAggregator.GetEvent<TaskStatusCheckRequested>().Subscribe(
+                taskEntry => UpdateTaskStatus(taskEntry));
         }
 
         public void UpdateTaskStatus(DBManager.Task target)
         {
-            if (target == null)
+
+            DBManager.Task tempTask = _entities.Tasks.FirstOrDefault(tsk => tsk.ID == target.ID);
+
+            if (tempTask == null)
                 return;
 
-            if (target.AllItemsAssigned && !target.Reports.Any(rep => !rep.IsComplete))
+            else if (!tempTask.AllItemsAssigned && tempTask.TaskItems.All(tski => tski.IsAssignedToReport))
             {
-                DBManager.Task tempTask = _entities.Tasks.First(tsk => tsk.ID == target.ID);
-                tempTask.IsComplete = true;
+                tempTask.AllItemsAssigned = true;
                 _entities.SaveChanges();
-                _eventAggregator.GetEvent<TaskCompleted>().Publish(tempTask);
+            }
+
+            else
+            {
+                if (tempTask.Reports.Any(rep => !rep.IsComplete))
+                {
+                    tempTask.AllItemsAssigned = false;
+                    _entities.SaveChanges();
+                }
+
+                else
+                {
+                    tempTask.IsComplete = true;
+                    tempTask.EndDate = DateTime.Now.Date;
+                    _entities.SaveChanges();
+                    _eventAggregator.GetEvent<TaskCompleted>().Publish(tempTask);
+                }
             }
         }
 

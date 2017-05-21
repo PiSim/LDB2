@@ -21,10 +21,9 @@
 -Implementato ReportingEngine con funzionalità base per la creazione di fogli di raccolta dati per report
 -*Corretto aggiornamento proprietà SpecificationEdit
 -Creata videata info materiali che unifica Colori, Aspetti e Construction
--*Problema aggiornamento proprietà in ExternalConstructionDetailView
--*Externalcosntructions
--*Togliere assegnazione alla cancellazione di un report
--*CheckTaskStatus
+-Aggiunta videata Externalconstructions
+-Creato metodo per vrificare lo stato di un Task + l'evento per richiamarlo
+-Iniziata la reimplementazione delle modalità di accesso al db tramite servizi statici e metodi di estensione
 
 v 0.4.4 -- 9/5/2017
 

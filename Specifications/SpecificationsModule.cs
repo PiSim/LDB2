@@ -19,6 +19,9 @@ namespace Specifications
 
         public void Initialize()
         {
+            _container.RegisterType<ISpecificationServiceProvider, SpecificationServiceProvider>(new ContainerControlledLifetimeManager());
+            _container.Resolve<ISpecificationServiceProvider>();
+
             _container.RegisterType<Object, Views.MethodEdit>(ViewNames.MethodEditView);
             _container.RegisterType<Object, Views.MethodMain>(ViewNames.MethodMainView);
             _container.RegisterType<Object, Views.SpecificationEdit>(ViewNames.SpecificationsEditView);
