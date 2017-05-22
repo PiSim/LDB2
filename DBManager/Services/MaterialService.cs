@@ -15,7 +15,29 @@ namespace DBManager.Services
         {
             using (DBEntities entities = new DBEntities())
             {
-                return entities.Batches.First(entry => entry.ID == ID);
+                return entities.Batches.FirstOrDefault(entry => entry.ID == ID);
+            }
+        }
+
+        public static Batch GetBatch(string batchNumber)
+        {
+            using (DBEntities entities = new DBEntities())
+            {
+                return entities.Batches.FirstOrDefault(entry => entry.Number == batchNumber);
+            }
+        }
+
+        public static IEnumerable<Construction> GetConstructionsWithoutProject()
+        {
+            // returns all Construction entities unassigned to a Project
+
+            using (DBEntities entities = new DBEntities())
+            {
+                return entities.Constructions.Where(cns => cns.Project == null)
+                                            .Include(cns => cns.Aspect)
+                                            .Include(cns => cns.ExternalConstruction)
+                                            .Include(cns => cns.Type)
+                                            .ToList();
             }
         }
 
@@ -46,12 +68,25 @@ namespace DBManager.Services
                 entities.Batches.Attach(entry);
                 entities.Configuration.LazyLoadingEnabled = false;
 
-                entities.Entry(entry).Collection(ent => ent.BatchFiles).Load();
-                entities.Entry(entry).Collection(ent => ent.ExternalReportMapping).Load();
-                entities.Entry(entry).Collection(ent => ent.Reports).Load();
-                entities.Entry(entry).Collection(ent => ent.Tasks).Load();
+                Batch tempEntry = entities.Batches.Include(btc => btc.BatchFiles)
+                                                    .Include(btc => btc.ExternalReports
+                                                    .Select(extr => extr.ExternalLab))
+                                                    .Include(btc => btc.Masters)
+                                                    .Include(btc => btc.Material.Construction.Aspect)
+                                                    .Include(btc => btc.Material.Construction.Project.Leader)
+                                                    .Include(btc => btc.Material.Construction.Project.Oem)
+                                                    .Include(btc => btc.Material.Construction.Type)
+                                                    .Include(btc => btc.Material.Recipe.Colour)
+                                                    .Include(btc => btc.Reports
+                                                    .Select(rep => rep.Author))
+                                                    .Include(btc => btc.Reports
+                                                    .Select(rep => rep.SpecificationVersion.Specification.Standard))
+                                                    .Include(btc => btc.Samples)
+                                                    .Include(btc => btc.Tasks
+                                                    .Select(tsk => tsk.SpecificationVersion.Specification.Standard))
+                                                    .First(btc => btc.ID == entry.ID);
 
-                entities.Entry(entry).Reference(ent => ent.Material.Construction.Aspect).Load();
+                entities.Entry(entry).CurrentValues.SetValues(tempEntry);
             }
         }
 
@@ -68,6 +103,45 @@ namespace DBManager.Services
         }
 
         #endregion
+
+        #region Operations for Construction entities
+
+        public static IEnumerable<Batch> GetBatches(this Construction entry)
+        {
+            // Gets all batches for a given Construction entity, 
+            // returns empty list if instance is null
+
+            using (DBEntities entities = new DBEntities())
+            {
+                if (entry == null)
+                    return new List<Batch>();
+
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.Batches.Where(btc => btc.Material.Construction.ID == entry.ID)
+                                        .Include(btc => btc.Material.Construction)
+                                        .Include(btc => btc.Material.Recipe.Colour)
+                                        .ToList();
+            }
+        }
+
+        public static IEnumerable<Construction> GetConstructions()
+        {
+            // Returns all Construction entities
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.Constructions.Include(con => con.Aspect)
+                                            .Include(con => con.ExternalConstruction)
+                                            .Include(con => con.Project)
+                                            .Include(con => con.Type)
+                                            .ToList();
+            }
+        }
+
+        #endregion 
 
         #region Operations for ExternalConstruction entities
 
@@ -93,6 +167,17 @@ namespace DBManager.Services
             using (DBEntities entities = new DBEntities())
             {
                 return entities.ExternalConstructions.First(entry => entry.ID == ID);
+            }
+        }
+
+        public static IEnumerable<ExternalConstruction> GetExternalConstructions()
+        {
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.ExternalConstructions.Include(exc => exc.Organization)
+                                                    .ToList();
             }
         }
 
@@ -171,6 +256,25 @@ namespace DBManager.Services
                 entities.Entry(tempEntry).CurrentValues.SetValues(entry);
                 entities.Entry(tempEntry).State = EntityState.Modified; 
                 entities.SaveChanges();
+            }
+        }
+
+        #endregion
+
+        #region Operations for Sample entities
+        
+        public static IEnumerable<Sample> GetRecentlyArrivedSamples(int number = 25)
+        {
+            using (DBEntities entities = new DBEntities())
+            {
+                return entities.Samples.Where(sle => sle.Code == "A")
+                                        .Include(samp => samp.Batch.Material.Construction.Aspect)
+                                        .Include(samp => samp.Batch.Material.Construction.Project)
+                                        .Include(samp => samp.Batch.Material.Construction.Type)
+                                        .Include(samp => samp.Batch.Material.Recipe.Colour)
+                                        .OrderByDescending(sle => sle.Date)
+                                        .Take(number)
+                                        .ToList();
             }
         }
 

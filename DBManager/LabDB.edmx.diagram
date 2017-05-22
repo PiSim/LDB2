@@ -7,7 +7,7 @@
       <Diagram DiagramId="9fa1cdb38a7949d89850433ccf2fcd72" Name="Diagram1" ZoomLevel="101">
         <EntityTypeShape EntityType="labdbModel.Aspect" Width="1.5" PointX="18.25" PointY="29.375" IsExpanded="true" />
         <EntityTypeShape EntityType="labdbModel.BatchFile" Width="1.5" PointX="25.875" PointY="10.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="labdbModel.Batch" Width="1.5" PointX="25.875" PointY="13.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="labdbModel.Batch" Width="1.5" PointX="25.875" PointY="13.25" IsExpanded="true" />
         <EntityTypeShape EntityType="labdbModel.Colour" Width="1.5" PointX="32.125" PointY="15.375" IsExpanded="true" />
         <EntityTypeShape EntityType="labdbModel.Construction" Width="1.5" PointX="18.25" PointY="25.375" IsExpanded="true" />
         <EntityTypeShape EntityType="labdbModel.ExternalConstruction" Width="1.5" PointX="16.375" PointY="25.5" IsExpanded="true" />
@@ -101,9 +101,6 @@
         <AssociationConnector Association="labdbModel.operator_to_calibration_report" />
         <AssociationConnector Association="labdbModel.type_to_instrument" />
         <AssociationConnector Association="labdbModel.calibration_report_to_files" />
-        <EntityTypeShape EntityType="labdbModel.ExternalReportBatchMapping" Width="1.5" PointX="25.5" PointY="17.75" />
-        <AssociationConnector Association="labdbModel.batch_to_external_report_mapping" />
-        <AssociationConnector Association="labdbModel.external_report_to_batch_mapping" />
         <AssociationConnector Association="labdbModel.specissue_to_report1" />
         <EntityTypeShape EntityType="labdbModel.OrganizationRoleMapping" Width="1.5" PointX="2.375" PointY="23.875" />
         <EntityTypeShape EntityType="labdbModel.OrganizationRole" Width="1.5" PointX="2.375" PointY="26.875" />
@@ -139,6 +136,7 @@
         <AssociationConnector Association="labdbModel.test_to_task_item" />
         <AssociationConnector Association="labdbModel.default_spec_version_to_ex_construction" />
         <AssociationConnector Association="labdbModel.external_report_method_mappings" />
+        <AssociationConnector Association="labdbModel.external_report_batch_mapping" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

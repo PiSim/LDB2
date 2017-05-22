@@ -1,4 +1,5 @@
 ﻿using DBManager;
+using DBManager.Services;
 using Infrastructure;
 using Infrastructure.Events;
 using Prism.Events;
@@ -14,13 +15,10 @@ namespace Materials.ViewModels
     public class ConstructionMainViewModel : BindableBase
     {
         private Construction _selectedConstruction;
-        private DBEntities _entities;
         private EventAggregator _eventAggregator;
 
-        public ConstructionMainViewModel(DBEntities entities,
-                                        EventAggregator eventAggregator)
+        public ConstructionMainViewModel(EventAggregator eventAggregator)
         {
-            _entities = entities;
             _eventAggregator = eventAggregator;
         }
 
@@ -29,9 +27,9 @@ namespace Materials.ViewModels
             get { return RegionNames.ConstructionDetailRegion; }
         }
 
-        public List<Construction> ConstructionList
+        public IEnumerable<Construction> ConstructionList
         {
-            get { return new List<Construction>(_entities.Constructions); }
+            get { return MaterialService.GetConstructions(); }
         }
 
         public Construction SelectedConstruction

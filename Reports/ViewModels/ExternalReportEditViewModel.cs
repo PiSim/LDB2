@@ -48,12 +48,10 @@ namespace Reports.ViewModels
                     Batch tempBatch = _materialServiceProvider.StartBatchSelection();
                     if (tempBatch != null)
                     {
-                        ExternalReportBatchMapping tempMap = new ExternalReportBatchMapping();
-                        tempMap.Batch = _entities.Batches.First(btc => btc.ID == tempBatch.ID);
-                        _instance.BatchMappings.Add(tempMap);
-                        _batchList.Add(tempBatch);
+                        _instance.Batches.Add(tempBatch);
                     }
-                } );
+                },
+                () => _instance != null);
 
             _addFile = new DelegateCommand(
                 () =>
@@ -104,11 +102,7 @@ namespace Reports.ViewModels
             _removeBatch = new DelegateCommand(
                 () =>
                 {
-                    ExternalReportBatchMapping tempMap = _instance.BatchMappings
-                        .FirstOrDefault(btm => btm.BatchID == _selectedBatch.ID);
-
-                    if (tempMap != null)
-                        _entities.ExternalReportBatchMappings.Remove(tempMap);
+                    _entities.Batches.Remove(SelectedBatch);
 
                     _batchList.Remove(_selectedBatch);
                     SelectedBatch = null;
@@ -202,8 +196,7 @@ namespace Reports.ViewModels
 
                 SelectedBatch = null;
 
-                _batchList = new ObservableCollection<Batch>
-                    (_instance.BatchMappings.Select(btm => btm.Batch));
+                _batchList = new ObservableCollection<Batch>(_instance.Batches);
                 RaisePropertyChanged("BatchList");
 
                 _reportFiles = new ObservableCollection<ExternalReportFile>

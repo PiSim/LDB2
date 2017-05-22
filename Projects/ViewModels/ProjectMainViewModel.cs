@@ -1,4 +1,5 @@
 ﻿using DBManager;
+using DBManager.Services;
 using Infrastructure;
 using Infrastructure.Events;
 using Prism.Commands;
@@ -14,31 +15,23 @@ namespace Projects.ViewModels
 {
     public class ProjectMainViewModel : BindableBase
     {
-        private DBEntities _entities;
         private DelegateCommand _newProject, _openProject;
         private EventAggregator _eventAggregator;
-        private IProjectServiceProvider _projectServiceProvider;
         private Project _selectedProject;
 
-        public ProjectMainViewModel(DBEntities entities, 
-                                    EventAggregator aggregator, 
-                                    IProjectServiceProvider projectServiceProvider) 
+        public ProjectMainViewModel(DBPrincipal principal,
+                                    EventAggregator aggregator) 
             : base()
         {
-            _entities = entities;
             _eventAggregator = aggregator;
-            _projectServiceProvider = projectServiceProvider;
 
-            _eventAggregator.GetEvent<ProjectListUpdateRequested>().Subscribe(() => RaisePropertyChanged("ProjectList"));
+            _eventAggregator.GetEvent<ProjectListUpdateRequested>().Subscribe(
+                () => RaisePropertyChanged("ProjectList"));
 
             _newProject = new DelegateCommand(
                 () =>
                 {
-                    Project tempProject = _projectServiceProvider.CreateNewProject();
-                    if (tempProject != null)
-                    {
-                        RaisePropertyChanged("ProjectList");
-                    }
+                    _eventAggregator.GetEvent<ProjectCreationRequested>().Publish();
                 });
 
             _openProject = new DelegateCommand(
@@ -62,9 +55,9 @@ namespace Projects.ViewModels
             get { return _openProject; }
         }
         
-        public List<Project> ProjectList
+        public IEnumerable<Project> ProjectList
         {
-            get { return new List<Project>(_entities.Projects); } 
+            get { return ProjectService.GetProjects(); } 
         }
         
         public Project SelectedProject

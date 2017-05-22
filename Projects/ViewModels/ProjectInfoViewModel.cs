@@ -1,4 +1,5 @@
 using DBManager;
+using DBManager.Services;
 using Infrastructure;
 using Infrastructure.Events;
 using Microsoft.Practices.Unity;
@@ -18,41 +19,39 @@ namespace Projects.ViewModels
     {
         private Construction _selectedAssigned, _selectedUnassigned;
         private Batch _selectedBatch;
-        private DBEntities _entities;
         private DBPrincipal _principal;
-        private DelegateCommand _assignConstruction, _openBatch, _modifyDetails, _newReport, 
-            _openExternalReport, _openReport, _removeReport, _unassignConstruction;
+        private DelegateCommand _assignConstruction, _openBatch, _modifyDetails, 
+            _openExternalReport, _openReport, _unassignConstruction;
         private EventAggregator _eventAggregator;
         private ExternalReport _selectedExternal;
-        private IProjectServiceProvider _projectServiceProvider;
-        private IUnityContainer _container;
         private ObservableCollection<Construction> _assignedConstructions, _unassignedConstructions;
         private Project _projectInstance;
         private Report _selectedReport;
 
-        public ProjectInfoViewModel(DBEntities entities,
-                                    DBPrincipal principal,
+        private IProjectServiceProvider _prjService;  // DA ELIMINARE
+
+        public ProjectInfoViewModel(DBPrincipal principal,
                                     EventAggregator aggregator,
-                                    IProjectServiceProvider projectServiceProvider,
-                                    IUnityContainer container)
+                                    IProjectServiceProvider prjService)
             : base()
         {
-            _entities = entities;
-            _container = container;
             _eventAggregator = aggregator;
             _principal = principal;
-            _projectServiceProvider = projectServiceProvider;
+            _prjService = prjService;
 
             #region EventSubscriptions
 
-            _eventAggregator.GetEvent<CommitRequested>().Subscribe(() => _entities.SaveChanges());
+            _eventAggregator.GetEvent<CommitRequested>().Subscribe
+                (() =>
+                {
+                    _projectInstance.Update();
+                });
             
             _eventAggregator.GetEvent<ReportListUpdateRequested>().Subscribe(
-                () => 
+                () =>
                 {
-                     _entities.Entry(ProjectInstance).Reload();
-                    RaisePropertyChanged("ReportList");
                     SelectedReport = null;
+                    RaisePropertyChanged("ReportList");
                 }); 
 
             _eventAggregator.GetEvent<TaskListUpdateRequested>().Subscribe(() => RaisePropertyChanged("TaskList"));
@@ -75,19 +74,11 @@ namespace Projects.ViewModels
             _modifyDetails = new DelegateCommand(
                 () =>
                 {
-                    _projectServiceProvider.AlterProjectInfo(_projectInstance);
+                    _prjService.AlterProjectInfo(_projectInstance);
                     RaisePropertyChanged("LeaderName");
                     RaisePropertyChanged("Name");
                     RaisePropertyChanged("OemName");
                 });
-
-            _newReport = new DelegateCommand(
-                () =>
-                {
-                    NewReportToken token = new NewReportToken();
-                    _eventAggregator.GetEvent<ReportCreationRequested>().Publish(token);
-                }
-            );
 
             _openBatch = new DelegateCommand(
                 () => 
@@ -114,15 +105,6 @@ namespace Projects.ViewModels
                                                                 _selectedReport);
                     _eventAggregator.GetEvent<NavigationRequested>().Publish(token);
                 });
-
-            _removeReport = new DelegateCommand(
-                () =>
-                {
-                    _entities.Reports.Remove(_selectedReport);
-                    _entities.SaveChanges();
-                    _eventAggregator.GetEvent<ReportListUpdateRequested>().Publish();
-                },
-                () => CanRemoveReport && SelectedReport != null);
                 
             _unassignConstruction = new DelegateCommand(
                 () => 
@@ -153,14 +135,11 @@ namespace Projects.ViewModels
             }
         }
 
-        public List<Batch> BatchList
+        public IEnumerable<Batch> BatchList
         {
             get 
-            { 
-                if (_projectInstance == null)
-                    return null;
-                    
-                return new List<Batch>(_entities.Batches.Where(btc => btc.Material.Construction.ProjectID == _projectInstance.ID));
+            {
+                return _projectInstance.GetBatches();
             }
         }
 
@@ -199,15 +178,14 @@ namespace Projects.ViewModels
             }
         }
 
-        public List<ExternalReport> ExternalReportList
+        public IEnumerable<ExternalReport> ExternalReportList
         {
             get
             {
                 if (_projectInstance == null)
                     return null;
 
-                return new List<ExternalReport>
-                    (_entities.ExternalReports.Where(ext => ext.ProjectID == _projectInstance.ID));
+                return _projectInstance.ExternalReports;
             }
         }
         
@@ -236,11 +214,6 @@ namespace Projects.ViewModels
 
                 return _projectInstance.Name;
             }
-        }
-        
-        public DelegateCommand NewReportCommand
-        {
-            get { return _newReport; }
         }
 
         public string OemName
@@ -275,11 +248,11 @@ namespace Projects.ViewModels
             set
             {
                 _projectInstance = value;
+                _projectInstance.Load();
 
                 AssignedConstructions = new ObservableCollection<Construction>(_projectInstance.Constructions);
 
-                UnassignedConstructions = new ObservableCollection<Construction>(
-                   _entities.Constructions.Where(cns => cns.Project == null));
+                UnassignedConstructions = new ObservableCollection<Construction>(MaterialService.GetConstructionsWithoutProject());
                 
                 SelectedBatch = null;
 
@@ -294,17 +267,11 @@ namespace Projects.ViewModels
             }
         }
 
-        public DelegateCommand RemoveReportCommand
-        {
-            get { return _removeReport; }
-        }
-
-        public List<Report> ReportList
+        public IEnumerable<Report> ReportList
         {
             get
             {
-                return new List<Report>(_entities.Reports
-                    .Where(rpt => rpt.Batch.Material.Construction.ProjectID == _projectInstance.ID));
+                return _projectInstance.GetReports();
             }
         }
 
@@ -347,7 +314,6 @@ namespace Projects.ViewModels
             { 
                 _selectedReport = value; 
                 _openReport.RaiseCanExecuteChanged();
-                _removeReport.RaiseCanExecuteChanged();
             }
         }
         
@@ -362,14 +328,14 @@ namespace Projects.ViewModels
             }
         }
 
-        public List<DBManager.Task> TaskList
+        public IEnumerable<DBManager.Task> TaskList
         {
             get
             {
                 if (_projectInstance == null)
                     return null;
 
-                return new List<DBManager.Task>(_entities.Tasks.Where(tsk => tsk.Batch.Material.Construction.Project.ID == _projectInstance.ID));
+                return _projectInstance.GetTasks();
             }
         }
         

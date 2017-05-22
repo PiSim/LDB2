@@ -1,4 +1,5 @@
 ﻿using DBManager;
+using DBManager.Services;
 using Infrastructure;
 using Infrastructure.Events;
 using Microsoft.Practices.Unity;
@@ -16,21 +17,15 @@ namespace Tasks.ViewModels
     public class TaskMainViewModel : BindableBase
     {
         private bool _showAssigned, _showComplete;
-        private DBEntities _entities;
         private DBPrincipal _principal;
         private DelegateCommand _newTask, _removeTask;
         private EventAggregator _eventAggregator;
         private DBManager.Task _selectedTask;
-        private UnityContainer _container;
 
-        public TaskMainViewModel(DBEntities entities, 
-                                    DBPrincipal principal,
-                                    EventAggregator eventAggregator,
-                                    UnityContainer container) 
+        public TaskMainViewModel(DBPrincipal principal,
+                                EventAggregator eventAggregator) 
             : base()
         {
-            _container = container;
-            _entities = entities;
             _eventAggregator = eventAggregator;
             _principal = principal;
             _showAssigned = false;
@@ -41,8 +36,6 @@ namespace Tasks.ViewModels
             _eventAggregator.GetEvent<TaskCompleted>().Subscribe(
                 task =>
                 {
-                    DBManager.Task tempTask = _entities.Tasks.First<DBManager.Task>(tsk => tsk.ID == task.ID);
-                    _entities.Entry<DBManager.Task>(tempTask).Reload();
                     RaisePropertyChanged("TaskList");
                 });
 
@@ -58,8 +51,7 @@ namespace Tasks.ViewModels
             _removeTask = new DelegateCommand(
                 () =>
                 {
-                    _entities.Tasks.Remove(SelectedTask);
-                    _entities.SaveChanges();
+                    SelectedTask.Delete();
                     SelectedTask = null;
                     RaisePropertyChanged("TaskList");
                 },
@@ -68,7 +60,11 @@ namespace Tasks.ViewModels
 
         public bool CanCreateTask
         {
-            get { return _principal.IsInRole(UserRoleNames.TaskEdit) || _principal.IsInRole(UserRoleNames.TaskAdmin); }
+            get
+            {
+                return _principal.IsInRole(UserRoleNames.TaskEdit) 
+                    || _principal.IsInRole(UserRoleNames.TaskAdmin);
+            }
         }
 
         public bool CanDeleteTask
@@ -156,18 +152,12 @@ namespace Tasks.ViewModels
             }
         }
         
-        public List<DBManager.Task> TaskList
+        public IEnumerable<DBManager.Task> TaskList
         {
             get
             {
-                if (_showComplete)
-                    return new List<DBManager.Task>(_entities.Tasks);
-
-                if (!_showComplete && _showAssigned)
-                    return new List<DBManager.Task>(_entities.Tasks.Where(tsk => !tsk.IsComplete));
-
-                else
-                    return new List<DBManager.Task>(_entities.Tasks.Where(tsk => !tsk.AllItemsAssigned));
+                return TaskService.GetTasks(_showComplete,
+                                            _showAssigned);
             }
         }
     }

@@ -1,4 +1,5 @@
 ﻿using DBManager;
+using DBManager.Services;
 using Infrastructure;
 using Infrastructure.Wrappers;
 using Prism.Commands;
@@ -195,7 +196,7 @@ namespace Tasks.ViewModels
 
                 if (_selectedVersion != null)
                 {
-                    List<Requirement> tempReq = _reportServiceProvider.GenerateRequirementList(_selectedVersion);
+                    List<Requirement> tempReq = ReportService.GenerateRequirementList(_selectedVersion);
                     foreach (Requirement rq in tempReq)
                         RequirementList.Add(new ReportItemWrapper(rq));
                 }

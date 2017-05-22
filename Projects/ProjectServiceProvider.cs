@@ -24,6 +24,9 @@ namespace Projects
             _container = container;
             _entities = entities;
             _eventAggregator = eventAggregator;
+
+            _eventAggregator.GetEvent<ProjectCreationRequested>().Subscribe(
+                () => CreateNewProject());
         }
 
         public bool AlterProjectInfo(Project target)
@@ -34,7 +37,7 @@ namespace Projects
             return (bool)modificationDialog.ShowDialog();
         }
 
-        public Project CreateNewProject(Person leader = null)
+        private Project CreateNewProject(Person leader = null)
         {
             Views.ProjectCreationDialog creationDialog = new Views.ProjectCreationDialog(_entities);
 

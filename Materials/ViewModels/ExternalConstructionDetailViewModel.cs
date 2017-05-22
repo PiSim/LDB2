@@ -156,7 +156,7 @@ namespace Materials.ViewModels
                 }
                 else
                 {
-                    _externalConstructionInstance = MaterialService.GetExternalConstruction(value.ID);
+                    _externalConstructionInstance = value;
                     _externalConstructionInstance.Load();
 
                     if (_externalConstructionInstance.DefaultSpecVersion != null)

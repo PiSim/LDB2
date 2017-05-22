@@ -1,4 +1,5 @@
 using DBManager;
+using DBManager.Services;
 using Infrastructure;
 using Infrastructure.Events;
 using Infrastructure.Wrappers;
@@ -198,7 +199,7 @@ namespace Reports.ViewModels
                 
                 if (_selectedVersion != null)
                 {
-                    List<Requirement> tempReq = _reportServiceProvider.GenerateRequirementList(_selectedVersion);
+                    List<Requirement> tempReq = ReportService.GenerateRequirementList(_selectedVersion);
                     foreach (Requirement rq in tempReq)
                         RequirementList.Add(new ReportItemWrapper(rq));
                 }

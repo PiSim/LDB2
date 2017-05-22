@@ -1,5 +1,6 @@
 ﻿using Controls.Views;
 using DBManager;
+using DBManager.Services;
 using Infrastructure;
 using Infrastructure.Events;
 using Microsoft.Practices.Unity;
@@ -29,6 +30,8 @@ namespace Materials
             _entities = entities;
             _eventAggregator = eventAggregator;
             _principal = principal;
+
+
         }
 
         public Sample AddSampleLog(string batchNumber, string actionCode)
@@ -46,6 +49,28 @@ namespace Materials
             _entities.SaveChanges();
 
             return output;
+        }
+
+        public static ExternalConstruction CreateNewExternalConstruction()
+        {
+            ExternalConstruction newEntry = new ExternalConstruction();
+            IEnumerable<ExternalConstruction> tempList = MaterialService.GetExternalConstructions();
+
+            int nameCounter = 1;
+            string curName = "Nuova Construction";
+            while (true)
+            {
+                if (!tempList.Any(exc => exc.Name == curName))
+                    break;
+
+                else
+                    curName = "Nuova Construction " + nameCounter++;
+            }
+            newEntry.Name = curName;
+
+            newEntry.Create();
+
+            return newEntry;
         }
 
         private Material GetMaterial()
@@ -161,7 +186,7 @@ namespace Materials
         public void TryQuickBatchVisualize(string batchNumber)
         {
 
-            Batch temp = _entities.Batches.FirstOrDefault(btc => btc.Number == batchNumber);
+            Batch temp = MaterialService.GetBatch(batchNumber);
 
             if (temp != null)
             {

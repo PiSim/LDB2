@@ -154,9 +154,6 @@
     <Compile Include="ExternalReport.cs">
       <DependentUpon>LabDB.tt</DependentUpon>
     </Compile>
-    <Compile Include="ExternalReportBatchMapping.cs">
-      <DependentUpon>LabDB.tt</DependentUpon>
-    </Compile>
     <Compile Include="ExternalReportFile.cs">
       <DependentUpon>LabDB.tt</DependentUpon>
     </Compile>
@@ -257,8 +254,10 @@
       <DependentUpon>LabDB.tt</DependentUpon>
     </Compile>
     <Compile Include="Services\MaterialService.cs" />
+    <Compile Include="Services\ProjectService.cs" />
     <Compile Include="Services\ReportService.cs" />
     <Compile Include="Services\SpecificationService.cs" />
+    <Compile Include="Services\TaskService.cs" />
     <Compile Include="Specification.cs">
       <DependentUpon>LabDB.tt</DependentUpon>
     </Compile>

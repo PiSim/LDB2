@@ -10,6 +10,5 @@ namespace Infrastructure
     public interface IProjectServiceProvider
     {
         bool AlterProjectInfo(Project project);
-        Project CreateNewProject(Person leader = null);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Controls.Views;
 using DBManager;
+using DBManager.Services;
 using Infrastructure;
 using Infrastructure.Events;
 using Microsoft.Practices.Unity;
@@ -18,31 +19,27 @@ namespace Materials.ViewModels
     public class BatchInfoViewModel : BindableBase
     {
         private Batch _instance;
-        private DBEntities _entities;
         private DBPrincipal _principal;
-        private DelegateCommand _newReport, _openExternalReport, _openReport, _removeReport;
+        private DelegateCommand _newReport, _openExternalReport, _openReport;
         private EventAggregator _eventAggregator;
         private ExternalReport _selectedExternalReport;
         private List<SamplesWrapper> _samplesList;
         private Report _selectedReport;
         private IUnityContainer _container;
 
-        public BatchInfoViewModel(DBEntities entities,
-                                DBPrincipal principal,
+        public BatchInfoViewModel(DBPrincipal principal,
                                 EventAggregator aggregator,
                                 IUnityContainer container) : base()
         {
             _container = container;
-            _entities = entities;
             _eventAggregator = aggregator;
             _principal = principal;
 
             _eventAggregator.GetEvent<ReportListUpdateRequested>().Subscribe(
-                () => 
+                () =>
                 {
-                    _entities.Entry(BatchInstance).Reload();
-                    RaisePropertyChanged("ReportList");
                     SelectedReport = null;
+                    RaisePropertyChanged("ReportList");
                 }); 
                
             _newReport = new DelegateCommand(
@@ -70,15 +67,6 @@ namespace Materials.ViewModels
                     _eventAggregator.GetEvent<NavigationRequested>().Publish(token);
                 },
                 () => _selectedReport != null);
-
-            _removeReport = new DelegateCommand(
-                () =>
-                {
-                    _entities.Reports.Remove(_selectedReport);
-                    _entities.SaveChanges();
-                    _eventAggregator.GetEvent<ReportListUpdateRequested>().Publish();
-                },
-                () => CanRemoveReport && SelectedReport != null);
         }
 
         public Batch BatchInstance
@@ -86,11 +74,10 @@ namespace Materials.ViewModels
             get { return _instance; }
             set
             {
-                _instance = (value == null) ? null : _entities.Batches.First(btc => btc.ID == value.ID);
+                _instance = value;
+                _instance.Load();
 
-                _samplesList = new List<SamplesWrapper>();
-                foreach (Sample smp in _instance.Samples)
-                    _samplesList.Add(new SamplesWrapper(smp));
+                _samplesList = new List<SamplesWrapper>(_instance.Samples.Select(smp => new SamplesWrapper(smp)));
 
                 SelectedExternalReport = null;
                 SelectedReport = null;
@@ -103,9 +90,7 @@ namespace Materials.ViewModels
                 RaisePropertyChanged("ReportList");
             }
         }
-
-
-
+        
         public bool CanCreateReport
         {
             get
@@ -113,33 +98,15 @@ namespace Materials.ViewModels
                 return _principal.IsInRole(UserRoleNames.ReportEdit);
             }
         }
-
-        public bool CanRemoveReport
-        {
-            get
-            {
-                if (SelectedReport == null)
-                    return false;
-                
-                else if (_principal.IsInRole(UserRoleNames.ReportAdmin))
-                    return true;
-                    
-                else
-                    return _principal.IsInRole(UserRoleNames.ReportEdit)
-                            && SelectedReport.Author.ID == _principal.CurrentPerson.ID;
-            }
-        }
         
-        public List<ExternalReport> ExternalReportList 
+        public IEnumerable<ExternalReport> ExternalReportList 
         {
             get 
             { 
                 if (_instance == null)
                     return null;
                     
-                return new List<ExternalReport>(_entities.ExternalReports
-                                                        .Where(xtr => xtr.BatchMappings
-                                                        .Any(btm => btm.BatchID == _instance.ID))); 
+                return _instance.ExternalReports; 
             }
         }
 
@@ -200,14 +167,9 @@ namespace Materials.ViewModels
             get { return _samplesList; }
         }
 
-        public DelegateCommand RemoveReportCommand
+        public IEnumerable<Report> ReportList
         {
-            get { return _removeReport; }
-        }
-
-        public ObservableCollection<DBManager.Report> ReportList
-        {
-            get { return new ObservableCollection<Report>(_instance.Reports); }
+            get { return _instance.Reports; }
         }
         
         public Report SelectedReport
@@ -217,7 +179,6 @@ namespace Materials.ViewModels
             {
                 _selectedReport = value; 
                 _openReport.RaiseCanExecuteChanged();
-                _removeReport.RaiseCanExecuteChanged();
             }
         }
 

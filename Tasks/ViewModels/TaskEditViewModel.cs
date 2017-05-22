@@ -1,4 +1,5 @@
 ﻿using DBManager;
+using DBManager.Services;
 using Infrastructure;
 using Infrastructure.Events;
 using Infrastructure.Wrappers;
@@ -15,24 +16,22 @@ namespace Tasks.ViewModels
 {
     public class TaskEditViewModel : BindableBase
     {
-        private DBEntities _entities;
         private DBPrincipal _principal;
         private DelegateCommand _convertToReport;
         private EventAggregator _eventAggregator;
         private DBManager.Task _instance;
 
-        public TaskEditViewModel(DBEntities entities,
-                                DBPrincipal principal,
+        public TaskEditViewModel(DBPrincipal principal,
                                 EventAggregator aggregator) : base()
         {
-            _entities = entities;
             _eventAggregator = aggregator;
             _principal = principal;
 
             _convertToReport = new DelegateCommand(
                 () =>
                 {
-                    _eventAggregator.GetEvent<TaskToReportConversionRequested>().Publish(_instance);
+                    _eventAggregator.GetEvent<TaskToReportConversionRequested>()
+                                    .Publish(_instance);
                 },
                 () => CanCreateReport);
         }
@@ -53,7 +52,8 @@ namespace Tasks.ViewModels
         {
             get
             {
-                return _principal.IsInRole(UserRoleNames.ReportEdit) || _principal.IsInRole(UserRoleNames.ReportAdmin);
+                return _principal.IsInRole(UserRoleNames.ReportEdit) 
+                    || _principal.IsInRole(UserRoleNames.ReportAdmin);
             }
         }
 
@@ -168,10 +168,9 @@ namespace Tasks.ViewModels
             get { return _instance; }
             set
             {
-                if (value == null)
-                    _instance = null;
-                else
-                    _instance = _entities.Tasks.FirstOrDefault(tsk => tsk.ID == value.ID);
+                _instance = value;
+                _instance.Load();
+
                 RaisePropertyChanged("BatchNumber");
                 RaisePropertyChanged("CanEdit");
                 RaisePropertyChanged("Notes");

@@ -1,4 +1,5 @@
 ﻿using DBManager;
+using DBManager.Services;
 using Infrastructure;
 using Prism.Events;
 using Prism.Mvvm;
@@ -13,25 +14,18 @@ namespace Materials.ViewModels
     public class ConstructionDetailViewModel : BindableBase
     {
         private Construction _constructionInstance;
-        private DBEntities _entities;
         private EventAggregator _eventAggregator;
 
-        public ConstructionDetailViewModel(DBEntities entities,
-                                            EventAggregator eventAggregator) : base()
+        public ConstructionDetailViewModel(EventAggregator eventAggregator) : base()
         {
-            _entities = entities;
             _eventAggregator = eventAggregator;
         }
 
-        public List<Batch> BatchList
+        public IEnumerable<Batch> BatchList
         {
             get
             {
-                if (_constructionInstance == null)
-                    return new List<Batch>();
-
-                else
-                    return new List<Batch>(_entities.Batches.Where(btc => btc.Material.Construction.ID == _constructionInstance.ID));
+                return _constructionInstance.GetBatches();
             }
         }
 
@@ -45,9 +39,9 @@ namespace Materials.ViewModels
             get { return _constructionInstance; }
             set
             {
-                _constructionInstance = _entities.Constructions.First(cns => cns.ID == value.ID);
-                RaisePropertyChanged();
+                _constructionInstance = value;
 
+                RaisePropertyChanged();
                 RaisePropertyChanged("BatchList");
             }
         }

@@ -1,4 +1,5 @@
 ﻿using DBManager;
+using DBManager.Services;
 using Infrastructure;
 using Infrastructure.Events;
 using Navigation;
@@ -15,7 +16,6 @@ namespace Materials.ViewModels
 {
     class BatchMainViewModel : BindableBase
     {
-        private DBEntities _entities;
         private DelegateCommand _quickOpen, _openSampleLogView;
         private IEventAggregator _eventAggregator;
         private IMaterialServiceProvider _materialServiceProvider;
@@ -23,11 +23,9 @@ namespace Materials.ViewModels
         private string _batchNumber;
 
         public BatchMainViewModel(IEventAggregator eventAggregator, 
-                                IMaterialServiceProvider serviceProvider,
-                                DBEntities entities) 
+                                IMaterialServiceProvider serviceProvider) 
             : base()
         {
-            _entities = entities;
             _eventAggregator = eventAggregator;
             _materialServiceProvider = serviceProvider;
 
@@ -41,6 +39,13 @@ namespace Materials.ViewModels
                 () =>
                 {
                     _materialServiceProvider.TryQuickBatchVisualize(_batchNumber);
+                });
+
+            _eventAggregator.GetEvent<SampleListUpdateRequested>().Subscribe(
+                () =>
+                {
+                    RaisePropertyChanged("RecentArrivalsList");
+                    SelectedSampleArrival = null;
                 });
         }
 
@@ -64,13 +69,11 @@ namespace Materials.ViewModels
             get { return _quickOpen; }
         }
 
-        public List<Sample> RecentArrivalsList
+        public IEnumerable<Sample> RecentArrivalsList
         {
             get
             {
-                return new List<Sample>(_entities.Samples.Where(sle => sle.Code== "A")
-                                                        .OrderByDescending(sle => sle.Date)
-                                                        .Take(25));
+                return MaterialService.GetRecentlyArrivedSamples();
             }
         }
 

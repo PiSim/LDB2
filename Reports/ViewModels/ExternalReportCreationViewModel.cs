@@ -63,14 +63,8 @@ namespace Reports.ViewModels
                     output.ReportReceived = false;
                     output.ExternalLab = _selectedLab;
                     output.Project = _selectedProject;
-                    
-                    foreach (Batch selectedBatch in _batchList)
-                    {
-                        ExternalReportBatchMapping tempMap = new ExternalReportBatchMapping();
-                        tempMap.Batch = _entities.Batches.First(btc => btc.ID == selectedBatch.ID);
-                        
-                        output.BatchMappings.Add(tempMap);
-                    }
+
+                    output.Batches = _batchList;
 
                     _entities.ExternalReports.Add(output);
                     _entities.SaveChanges();

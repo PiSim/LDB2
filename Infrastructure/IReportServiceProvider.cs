@@ -12,7 +12,6 @@ namespace Infrastructure
     {
         PurchaseOrder AddPOToExternalReport(ExternalReport target);
         void ApplyControlPlan(IEnumerable<ISelectableRequirement> reqList, ControlPlan conPlan);
-        List<Requirement> GenerateRequirementList(SpecificationVersion version);
         List<Test> GenerateTestList(List<ISelectableRequirement> reqList);
         IEnumerable<Test> GenerateTestList(List<TaskItemWrapper> testList);
     }

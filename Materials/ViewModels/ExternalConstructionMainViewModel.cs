@@ -1,4 +1,5 @@
 ﻿using DBManager;
+using DBManager.Services;
 using Infrastructure;
 using Infrastructure.Events;
 using Prism.Commands;
@@ -14,47 +15,34 @@ namespace Materials.ViewModels
 {
     public class ExternalConstructionMainViewModel : BindableBase
     {
-        private DBEntities _entities;
+        private DBPrincipal _principal;
         private DelegateCommand _createExternalConstruction, _removeExternalConstruction;
         private EventAggregator _eventAggregator;
         private ExternalConstruction _selectedExternalConstruction;
 
-        public ExternalConstructionMainViewModel(DBEntities entities,
+        public ExternalConstructionMainViewModel(DBPrincipal principal,
                                                 EventAggregator eventAggregator) : base()
         {
-            _entities = entities;
             _eventAggregator = eventAggregator;
+            _principal = principal;
 
             _createExternalConstruction = new DelegateCommand(
                 () =>
                 {
-                    ExternalConstruction newEntry = new ExternalConstruction();
-                    int nameCounter = 1;
-                    string curName = "Nuova Construction";
-                    while (true)
-                    {
-                        if (!_entities.ExternalConstructions.Any(exc => exc.Name == curName))
-                            break;
-
-                        else
-                            curName = "Nuova Construction " + nameCounter++; 
-                    }
-                    newEntry.Name = curName;
-
-                    _entities.ExternalConstructions.Add(newEntry);
-                    _entities.SaveChanges();
-                    RaisePropertyChanged("ExternalConstructionList");
-                });
+                    if (MaterialServiceProvider.CreateNewExternalConstruction() != null)
+                        RaisePropertyChanged("ExternalConstructionList");
+                },
+                () => _principal.IsInRole(UserRoleNames.MaterialAdmin));
 
             _removeExternalConstruction = new DelegateCommand(
                 () =>
                 {
-                    _entities.ExternalConstructions.Remove(_selectedExternalConstruction);
-                    _entities.SaveChanges();
+                    _selectedExternalConstruction.Delete();
 
                     RaisePropertyChanged("ExternalConstructionList");
                 },
-                () => _selectedExternalConstruction != null);
+                () => _selectedExternalConstruction != null
+                    && _principal.IsInRole(UserRoleNames.MaterialAdmin));
 
 
             _eventAggregator.GetEvent<ExternalConstructionModified>().Subscribe(
@@ -71,9 +59,9 @@ namespace Materials.ViewModels
             get { return RegionNames.ExternalConstructionDetailRegion; }
         }
 
-        public List<ExternalConstruction> ExternalConstructionList
+        public IEnumerable<ExternalConstruction> ExternalConstructionList
         {
-            get { return new List<ExternalConstruction>(_entities.ExternalConstructions.OrderBy(exc => exc.Name)); }
+            get { return MaterialService.GetExternalConstructions(); }
         }
 
         public DelegateCommand RemoveExternalConstructionCommand

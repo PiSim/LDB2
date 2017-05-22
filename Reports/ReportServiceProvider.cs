@@ -27,6 +27,13 @@ namespace Reports
             _entities = entities;
             _eventAggregator = aggregator;
 
+            _eventAggregator.GetEvent<ExternalReportCreationRequested>()
+                            .Subscribe(
+                () =>
+                {
+                    CreateNewExternalReport();
+                });
+
             _eventAggregator.GetEvent<ReportCreationRequested>().Subscribe(
                 token =>
                 {
@@ -94,6 +101,16 @@ namespace Reports
                     else
                         _eventAggregator.GetEvent<StatusNotificationIssued>().Publish("Alcuni requisiti richiesti non sono stati trovati");
                 }
+            }
+        }
+
+        public void CreateNewExternalReport()
+        {
+            Views.ExternalReportCreationDialog creationDialog = _container.Resolve<Views.ExternalReportCreationDialog>();
+            if (creationDialog.ShowDialog() == true)
+            {
+                _eventAggregator.GetEvent<ExternalReportListUpdateRequested>()
+                                .Publish();
             }
         }
 

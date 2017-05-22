@@ -1,10 +1,12 @@
 ﻿using DBManager;
+using DBManager.Services;
 using Infrastructure.Events;
 using Microsoft.Practices.Unity;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
@@ -12,25 +14,19 @@ using System.Threading.Tasks;
 
 namespace Specifications.ViewModels
 {
-    internal class SpecificationMainViewModel : BindableBase
+    public class SpecificationMainViewModel : BindableBase
     {
-        private DBEntities _entities;
         private DelegateCommand _newSpecification, _openSpecification;
         private EventAggregator _eventAggregator;
-        private ObservableCollection<Specification> _specificationList;
         private Specification _selectedSpecification;
         private UnityContainer _container;
 
-        public SpecificationMainViewModel(DBEntities entities, 
-                                            EventAggregator aggregator,
+        public SpecificationMainViewModel(EventAggregator aggregator,
                                             UnityContainer container) 
             : base()
         {
             _container = container;
-            _entities = entities;
             _eventAggregator = aggregator;
-            _specificationList = new ObservableCollection<Specification>(
-                _entities.Specifications);
 
             _newSpecification = new DelegateCommand(
                 () => 
@@ -41,9 +37,9 @@ namespace Specifications.ViewModels
                     if (creationDialog.ShowDialog() == true)
                     {
                         Specification temp = creationDialog.SpecificationInstance;
-                        _specificationList.Add(temp);
                         SelectedSpecification = temp;
                         _openSpecification.Execute();
+                        RaisePropertyChanged("SpecificationList");
                     }
                                             
                 });
@@ -51,7 +47,8 @@ namespace Specifications.ViewModels
             _openSpecification = new DelegateCommand(
                 () => 
                 {
-                    NavigationToken token = new NavigationToken(ViewNames.SpecificationsEditView,SelectedSpecification);
+                    NavigationToken token = new NavigationToken(ViewNames.SpecificationsEditView,
+                                                                SelectedSpecification);
                     _eventAggregator.GetEvent<NavigationRequested>().Publish(token);
                 },
                 () => SelectedSpecification != null);
@@ -67,9 +64,9 @@ namespace Specifications.ViewModels
             get { return _openSpecification; }
         }
 
-        public ObservableCollection<Specification> SpecificationList
+        public IEnumerable<Specification> SpecificationList
         {
-            get { return _specificationList; }
+            get { return SpecificationService.GetSpecifications(); }
         }
 
         public Specification SelectedSpecification
