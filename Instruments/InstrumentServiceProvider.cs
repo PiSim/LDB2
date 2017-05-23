@@ -24,6 +24,13 @@ namespace Instruments
             _entities = entities;
             _eventAggregator = aggregator;
             _container = container;
+
+            _eventAggregator.GetEvent<InstrumentCreationRequested>()
+                            .Subscribe(
+                () =>
+                {
+                    RegisterNewInstrument();
+                });
         }
 
         public InstrumentMaintenanceEvent AddMaintenanceEvent(Instrument target)

@@ -90,18 +90,18 @@ namespace DBManager.Services
             }
         }
 
-        public static IEnumerable<Method> GetMethods(Property filterProperty = null)
+        public static IEnumerable<Method> GetMethods()
         {
-            // Returns all Method entities. A property entity can be provided to filter by
+            // Returns all Method entities.
 
             using (var entities = new DBEntities())
             {
                 entities.Configuration.LazyLoadingEnabled = false;
 
-                return entities.Methods.Include(mtd => mtd.Standard)
+                return entities.Methods.Include(mtd => mtd.Standard.Organization)
                                         .Include(mtd => mtd.Property)
-                                        .Where(mtd => (filterProperty == null) ? true : mtd.Property.ID == filterProperty.ID )
-                                        .OrderBy(spec => spec.Standard.Name)
+                                        .Where(mtd => true)
+                                        .OrderBy(mtd => mtd.Standard.Name)
                                         .ToList();
             }
         }
@@ -184,6 +184,17 @@ namespace DBManager.Services
 
         #region Operations for Requirement entities
 
+        public static void Create(this Requirement entry)
+        {
+            // Insert new Requirement entry in the DB
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Requirements.Add(entry);
+                entities.SaveChanges();
+            }
+        }
+
         public static void Delete(this Requirement entry)
         {
             // Deletes Requirement entry
@@ -216,6 +227,57 @@ namespace DBManager.Services
             }
         }
 
+        public static void Create(this Specification entry)
+        {
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Specifications.Attach(entry);
+                entities.Entry(entry).State = System.Data.Entity.EntityState.Added;
+                entities.SaveChanges();
+            }
+        }
+
+        public static void Delete(this Specification entry)
+        {
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Specifications.Attach(entry);
+                entities.Entry(entry).State = System.Data.Entity.EntityState.Deleted;
+                entities.SaveChanges();
+            }
+        }
+
+        public static IEnumerable<StandardIssue> GetIssues(this Specification entry)
+        {
+            // Returns all Issue entities for a given Specification entry
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entry.Standard.StandardIssues.ToList();
+            }
+        }
+
+        public static IEnumerable<Report> GetReports(this Specification entry)
+        {
+            // Returns all Report entities for a given Specification entry
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.Reports.Include(rep => rep.Author)
+                                        .Include(rep => rep.Batch.Material.Construction.Aspect)
+                                        .Include(rep => rep.Batch.Material.Construction.Project.Oem)
+                                        .Include(rep => rep.Batch.Material.Construction.Type)
+                                        .Include(rep => rep.Batch.Material.Recipe.Colour)
+                                        .Include(rep => rep.SpecificationVersion.Specification.Standard.CurrentIssue)
+                                        .Where(rep => rep.SpecificationVersion.Specification.ID == entry.ID)
+                                        .ToList();
+            }
+        }
+
         public static Specification GetSpecification(int ID)
         {
             using (DBEntities entities = new DBEntities())
@@ -237,28 +299,10 @@ namespace DBManager.Services
             }
         }
 
-        public static void Create(this Specification entry)
-        {
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.Specifications.Attach(entry);
-                entities.Entry(entry).State = System.Data.Entity.EntityState.Added;
-                entities.SaveChanges();
-            }
-        }
-
-        public static void Delete(this Specification entry)
-        {
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.Specifications.Attach(entry);
-                entities.Entry(entry).State = System.Data.Entity.EntityState.Deleted;
-                entities.SaveChanges();
-            }
-        }
-
         public static void Load(this Specification entry)
         {
+            // Loads all relevant Related entities into a given Specification entry
+
             using (DBEntities entities = new DBEntities())
             {
                 entities.Configuration.LazyLoadingEnabled = false;
@@ -268,6 +312,8 @@ namespace DBManager.Services
                 Specification tempEntry = entities.Specifications.Include(spec => spec.SpecificationVersions)
                                                                 .Include(spec => spec.Standard)
                                                                 .Include(spec => spec.Standard.CurrentIssue)
+                                                                .Include(spec => spec.Standard.StandardIssues)
+                                                                .Include(spec => spec.Standard.Organization)
                                                                 .Include(spec => spec.ControlPlans)
                                                                 .First(spec => spec.ID == entry.ID);
 
@@ -302,6 +348,33 @@ namespace DBManager.Services
             }
         }
 
+        public static void Load(this SpecificationVersion entry)
+        {
+            // Loads relevant RelatedEntities for given SpecificationVersion entry
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                entities.SpecificationVersions.Attach(entry);
+
+                SpecificationVersion tempEntry = entities.SpecificationVersions.Include(specv => specv.ExternalConstructions)
+                                                                                .Include(specv => specv.Requirements
+                                                                                .Select(req => req.SubRequirements))
+                                                                                .Include(specv => specv.Requirements
+                                                                                .Select(req => req.Overridden))
+                                                                                .Include(specv => specv.Requirements
+                                                                                .Select(req => req.Method.Property))
+                                                                                .Include(specv => specv.Requirements
+                                                                                .Select(req => req.Method.Standard.Organization))
+                                                                                .Include(req => req.Specification.Standard.Organization)
+                                                                                .Include(req => req.Specification.Standard.CurrentIssue)
+                                                                                .First(specv => specv.ID == entry.ID);
+
+                entities.Entry(entry).CurrentValues.SetValues(tempEntry);
+            }
+        }
+
         #endregion
 
         #region Operations for StandardFiles entities
@@ -332,6 +405,23 @@ namespace DBManager.Services
                 entities.Entry(entry).State = EntityState.Deleted;
                 entities.SaveChanges();
             }
+        }
+
+        public static void Load(this StandardIssue entry)
+        {
+            // Loads relevant RelatedEntities for StandardIssue entry
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                StandardIssue tempEntry = entities.StandardIssues.Include(stdi => stdi.StandardFiles)
+                                                                .First(stdi => stdi.ID == entry.ID);
+
+                entities.Entry(entry).CurrentValues.SetValues(tempEntry);
+                entities.SaveChanges();
+            }
+
         }
 
         #endregion

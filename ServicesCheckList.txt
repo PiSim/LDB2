@@ -5,12 +5,14 @@
 -ExternalConstructionDetail
 -ExternalConstructionMain
 -ExternalReportMain
+-InstrumentMain
 -MaterialInfoMain
 -MethodMain
 -ProjectCreation
 -ProjectMain
 -ProjectInfo
 -SpecificationCreation
+-SpecificationEdit
 -SpecificationMain
 -TaskEdit
 -TaskMain

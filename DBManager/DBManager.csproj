@@ -254,6 +254,7 @@
     <Compile Include="Sample.cs">
       <DependentUpon>LabDB.tt</DependentUpon>
     </Compile>
+    <Compile Include="Services\InstrumentService.cs" />
     <Compile Include="Services\MaterialService.cs" />
     <Compile Include="Services\OrganizationService.cs" />
     <Compile Include="Services\PeopleService.cs" />

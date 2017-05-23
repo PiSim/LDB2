@@ -1,4 +1,5 @@
 ﻿using DBManager;
+using DBManager.Services;
 using Infrastructure;
 using Infrastructure.Events;
 using Prism.Commands;
@@ -15,39 +16,34 @@ namespace Instruments.ViewModels
 {
     public class InstrumentEditViewModel : BindableBase
     {
+        private bool _editMode;
         private CalibrationReport _selectedCalibration;
-        private DBEntities _entities;
         private DBPrincipal _principal;
         private DelegateCommand _addCalibration, _addMaintenanceEvent;
         private EventAggregator _eventAggregator;
-        private IInstrumentServiceProvider _instrumentServiceProvider;
         private Instrument _instance;
 
-        public InstrumentEditViewModel(DBEntities entities, 
-                                    DBPrincipal principal,
-                                    EventAggregator aggregator,
-                                    IInstrumentServiceProvider instrumentServiceProvider) : base()
+        public InstrumentEditViewModel(DBPrincipal principal,
+                                    EventAggregator aggregator) : base()
         {
-            _entities = entities;
+            _editMode = false;
             _eventAggregator = aggregator;
-            _instrumentServiceProvider = instrumentServiceProvider;
             _principal = principal;
 
-            _eventAggregator.GetEvent<CommitRequested>().Subscribe(() => _entities.SaveChanges());
+            _eventAggregator.GetEvent<CommitRequested>().Subscribe(() => _instance.Update());
 
             _addCalibration = new DelegateCommand(
                 () =>
                 {
-                    CalibrationReport tempCalibration = _instrumentServiceProvider.RegisterNewCalibration(_instance);
-
-                    if (tempCalibration != null)
-                        RaisePropertyChanged("CalibrationReportList");
+                    _eventAggregator.GetEvent<NewCalibrationRequested>()
+                                    .Publish(_instance);
                 });
 
             _addMaintenanceEvent = new DelegateCommand(
                 () =>
                 {
-                    _instrumentServiceProvider.AddMaintenanceEvent(_instance);
+                    _eventAggregator.GetEvent<NewMaintenanceEventRequested>()
+                                    .Publish(_instance);
                 });
         }
 
@@ -61,14 +57,14 @@ namespace Instruments.ViewModels
             get { return _addMaintenanceEvent; }
         }
 
-        public List<CalibrationReport> CalibrationReportList
+        public IEnumerable<CalibrationReport> CalibrationReportList
         {
             get 
             { 
                 if (_instance == null)
                     return new List<CalibrationReport>();
                     
-                return new List<CalibrationReport>(_instance.CalibrationReports); 
+                return _instance.CalibrationReports; 
             }
         }
 
@@ -127,11 +123,8 @@ namespace Instruments.ViewModels
             get { return _instance; }
             set
             {
-                if (value == null)
-                    _instance = null;
-
-                else
-                    _instance = _entities.Instruments.First(ins => ins.ID == value.ID);
+                _instance = value;
+                _instance.Load();
 
                 RaisePropertyChanged("CalibrationReportList");
                 RaisePropertyChanged("CalibrationTabVisible");

@@ -1,4 +1,5 @@
 ﻿using DBManager;
+using DBManager.Services;
 using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
@@ -10,15 +11,12 @@ namespace Infrastructure.Wrappers
 {
     public class RequirementWrapper : BindableBase
     {
-        private DBEntities _entities;
         private Requirement _requirementInstance;
         private SpecificationVersion _versionInstance;
 
         public RequirementWrapper(Requirement instance,
-                                    SpecificationVersion version,
-                                    DBEntities entities) : base()
+                                    SpecificationVersion version) : base()
         {
-            _entities = entities;
             _requirementInstance = instance;
             _versionInstance = version;
         }
@@ -56,9 +54,9 @@ namespace Infrastructure.Wrappers
             set
             {
                 if (value)
-                    _requirementInstance = _entities.AddOverride(_versionInstance, _requirementInstance);
+                    AddOverride();
                 else
-                    _requirementInstance = _entities.RemoveOverride(_requirementInstance);
+                    RemoveOverride();
 
                 RaisePropertyChanged("CanModify");
                 RaisePropertyChanged("SubRequirements");
@@ -81,6 +79,41 @@ namespace Infrastructure.Wrappers
         public string Test
         {
             get { return _requirementInstance.Method.Property.Name; }
+        }
+
+        // Method definitions
+
+        public void AddOverride()
+        {
+            Requirement newOverride = new Requirement();
+            newOverride.Description = _requirementInstance.Description;
+            newOverride.IsOverride = true;
+            newOverride.Method = _requirementInstance.Method;
+            newOverride.Overridden = _requirementInstance;
+            newOverride.SpecificationVersions = _versionInstance;
+
+            foreach (SubRequirement subReq in _requirementInstance.SubRequirements)
+            {
+                SubRequirement tempSub = new SubRequirement();
+
+                tempSub.Requirement = newOverride;
+                tempSub.SubMethod = subReq.SubMethod;
+                tempSub.RequiredValue = subReq.RequiredValue;
+
+                newOverride.SubRequirements.Add(tempSub);
+            }
+
+            newOverride.SpecificationVersions = _versionInstance;
+            newOverride.Create();
+
+            _requirementInstance = newOverride;
+        }
+
+        private void RemoveOverride()
+        {
+            Requirement tempReq = _requirementInstance.Overridden;
+            _requirementInstance.Delete();
+            _requirementInstance = tempReq;
         }
     }
 

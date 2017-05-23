@@ -1,4 +1,5 @@
 ﻿using DBManager;
+using DBManager.Services;
 using Infrastructure;
 using Infrastructure.Events;
 using Microsoft.Practices.Unity;
@@ -17,23 +18,18 @@ namespace Instruments.ViewModels
     public class InstrumentMainViewModel : BindableBase
     {
         private DelegateCommand _newInstrument, _openInstrument;
-        private DBEntities _entities;
         private EventAggregator _eventAggregator;
         private Instrument _selectedInstrument;
-        private IInstrumentServiceProvider _instrumentServiceProvider;
 
-        public InstrumentMainViewModel(EventAggregator eventAggregator,
-                                        DBEntities entities,
-                                        IInstrumentServiceProvider instrumentServiceProvider) : base()
+        public InstrumentMainViewModel(EventAggregator eventAggregator) : base()
         {
-            _entities = entities;
             _eventAggregator = eventAggregator;
-            _instrumentServiceProvider = instrumentServiceProvider;
             
             _newInstrument = new DelegateCommand(
                 () =>
                 {
-                    _instrumentServiceProvider.RegisterNewInstrument();
+                    _eventAggregator.GetEvent<InstrumentCreationRequested>()
+                                    .Publish();
                 });
 
             _openInstrument = new DelegateCommand(
@@ -48,8 +44,6 @@ namespace Instruments.ViewModels
             _eventAggregator.GetEvent<CalibrationIssued>().Subscribe(
                 calRep => 
                 {
-                    Instrument tempInstrument = _entities.Instruments.First(ins => ins.ID == calRep.Instrument.ID);
-                    _entities.Entry(tempInstrument).Reload();
                     RaisePropertyChanged("PendingCalibrationsList");
                 });
 
@@ -62,9 +56,9 @@ namespace Instruments.ViewModels
 
         }
 
-        public List<Instrument> InstrumentList
+        public IEnumerable<Instrument> InstrumentList
         {
-            get { return new List<Instrument>(_entities.Instruments); }
+            get { return InstrumentService.GetInstruments(); }
         }
 
         public DelegateCommand NewInstrumentCommand
@@ -77,11 +71,11 @@ namespace Instruments.ViewModels
             get { return _openInstrument; }
         }
 
-        public List<Instrument> PendingCalibrationsList
+        public IEnumerable<Instrument> PendingCalibrationsList
         {
             get
             {
-                return new List<Instrument>(_entities.Instruments.Where(inst => inst.IsUnderControl).OrderBy(inst => inst.CalibrationDueDate));
+                return InstrumentService.GetCalibrationCalendar();
             }
         }
 

@@ -52,14 +52,14 @@ namespace Specifications.ViewModels
                     tempControlPlan.Name = "Completo";
                     tempControlPlan.IsDefault = true;
 
-                    Specification tempSpec = new Specification();
-                    tempSpec.Description = "";
-                    tempSpec.Standard = tempStd;
+                    _specificationInstance = new Specification();
+                    _specificationInstance.Description = "";
+                    _specificationInstance.Standard = tempStd;
 
-                    tempSpec.ControlPlans.Add(tempControlPlan);
-                    tempSpec.SpecificationVersions.Add(tempMain);
+                    _specificationInstance.ControlPlans.Add(tempControlPlan);
+                    _specificationInstance.SpecificationVersions.Add(tempMain);
 
-                    tempSpec.Create();
+                    _specificationInstance.Create();
                     
                     parent.DialogResult = true;
                 },

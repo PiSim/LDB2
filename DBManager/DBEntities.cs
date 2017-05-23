@@ -8,36 +8,6 @@ namespace DBManager
 {
     public class DBEntities : LabDBEntities
     {
-        public Requirement AddOverride(SpecificationVersion version,
-                                        Requirement toBeOverridden)
-        {
-            Requirement output = new Requirement();
-            output.Description = toBeOverridden.Description;
-            output.IsOverride = true;
-            output.Method = toBeOverridden.Method;
-            output.Overridden = toBeOverridden;
-            output.SpecificationVersions = version;
-            
-            foreach (SubRequirement subReq in toBeOverridden.SubRequirements)
-            {
-                SubRequirement tempSub = new SubRequirement();
                 
-                tempSub.Requirement = output;
-                tempSub.SubMethod = subReq.SubMethod;
-                tempSub.RequiredValue = subReq.RequiredValue;
-                
-                output.SubRequirements.Add(tempSub);
-            }
-            
-            version.Requirements.Add(output);
-            return output;
-        }
-        
-        public Requirement RemoveOverride(Requirement toBeRemoved)
-        {
-            Requirement output = toBeRemoved.Overridden;
-            Requirements.Remove(toBeRemoved);
-            return output;
-        }
     }
 }

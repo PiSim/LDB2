@@ -23,16 +23,12 @@ namespace Specifications.ViewModels
         private DelegateCommand _addControlPlan, _addFile, _addIssue,
             _addTest, _addVersion, _newReport, _openFile, _openReport, _removeControlPlan, _removeFile, _removeIssue, _removeTest, _removeVersion, _setCurrent;
         private EventAggregator _eventAggregator;
-        private IEnumerable<Method> _methodList;
-        private IEnumerable<Report> _reportList;
         private List<ControlPlanItemWrapper> _controlPlanItemsList;
         private Method _selectedToAdd;
         private List<RequirementWrapper> _requirementList;
-        private ObservableCollection<SpecificationVersion> _versionList;
-        private ObservableCollection<StandardIssue> _issueList;
         private Property _filterProperty;
-        private Report _selectedReport;
         private Requirement _selectedToRemove;
+        private Report _selectedReport;
         private Specification _instance;
         private SpecificationVersion _selectedVersion;
         private StandardFile _selectedFile;
@@ -44,7 +40,6 @@ namespace Specifications.ViewModels
         {
             _eventAggregator = aggregator;
             _principal = principal;
-            _reportList = new List<Report>();
 
             _addControlPlan = new DelegateCommand(
                 () =>
@@ -88,7 +83,7 @@ namespace Specifications.ViewModels
 
                     _instance.Standard.StandardIssues.Add(temp);
 
-                    _issueList.Add(temp);
+                    RaisePropertyChanged("IssueList");
 
                     SelectedIssue = temp;
                 });
@@ -111,7 +106,8 @@ namespace Specifications.ViewModels
                     temp.Name = "Nuova versione";
 
                     _instance.SpecificationVersions.Add(temp);
-                    _versionList.Add(temp);
+
+                    RaisePropertyChanged("VersionList");
                 });
             
             _newReport = new DelegateCommand(
@@ -165,8 +161,9 @@ namespace Specifications.ViewModels
                 () =>
                 {
                     _selectedIssue.Delete();
-                    _issueList.Remove(_selectedIssue);
+
                     SelectedIssue = null;
+                    RaisePropertyChanged("IssueList");
                 },
                 () => _selectedIssue != null);
 
@@ -220,7 +217,7 @@ namespace Specifications.ViewModels
             List<Requirement> tempReqList = ReportService.GenerateRequirementList(_selectedVersion);
             _requirementList = new List<RequirementWrapper>();
             foreach (Requirement rr in tempReqList)
-                _requirementList.Add(new RequirementWrapper(rr, _selectedVersion, _entities));
+                _requirementList.Add(new RequirementWrapper(rr, _selectedVersion));
         }
 
 
@@ -269,14 +266,14 @@ namespace Specifications.ViewModels
             get { return _controlPlanItemsList; }
         }
 
-        public List<ControlPlan> ControlPlanList
+        public IEnumerable<ControlPlan> ControlPlanList
         {
             get
             {
                 if (_instance == null)
                     return null;
 
-                return new List<ControlPlan>(_instance.ControlPlans);
+                return _instance.ControlPlans;
             }
         }
 
@@ -318,13 +315,13 @@ namespace Specifications.ViewModels
         {
             get
             {
-                return SpecificationService.GetMethods(_filterProperty);
+                return SpecificationService.GetMethods().Where(mtd => _filterProperty == null || mtd.Property.ID == _filterProperty.ID);
             }
         }
         
-        public ObservableCollection<StandardIssue> IssueList
+        public IEnumerable<StandardIssue> IssueList
         {
-            get { return _issueList; }
+            get { return _instance.GetIssues(); }
         }
 
         public SpecificationVersion MainVersion
@@ -338,13 +335,13 @@ namespace Specifications.ViewModels
             }
         }
 
-        public ObservableCollection<Requirement> MainVersionRequirements
+        public IEnumerable<Requirement> MainVersionRequirements
         {
             get
             {
                 if (MainVersion == null)
                     return null;
-                return new ObservableCollection<Requirement>(MainVersion.Requirements);
+                return MainVersion.Requirements;
             }
         }
         
@@ -387,11 +384,11 @@ namespace Specifications.ViewModels
         {
             get
             {
-                return _reportList;
+                return _instance.GetReports();
             }
         }
 
-        public List<RequirementWrapper> RequirementList
+        public IEnumerable<RequirementWrapper> RequirementList
         {
             get { return _requirementList; }
         }
@@ -436,8 +433,11 @@ namespace Specifications.ViewModels
             set 
             {
                 _selectedIssue = value;
+                _selectedIssue.Load();
+
                 _setCurrent.RaiseCanExecuteChanged();
                 _removeIssue.RaiseCanExecuteChanged();
+
                 RaisePropertyChanged("SelectedIssue");
                 RaisePropertyChanged("FileList");
             }
@@ -501,11 +501,10 @@ namespace Specifications.ViewModels
             {
                 _instance = value;
                 _instance.Load();
+                MainVersion.Load();
 
                 SelectedControlPlan = null;
-                _issueList = new ObservableCollection<StandardIssue>(_instance.Standard.StandardIssues);
                 SelectedIssue = null;
-                _versionList = new ObservableCollection<SpecificationVersion>(_instance.SpecificationVersions);
                 SelectedVersion = null;
 
                 RaisePropertyChanged("ControlPlanList");
