@@ -411,6 +411,9 @@ namespace DBManager.Services
         {
             // Loads relevant RelatedEntities for StandardIssue entry
 
+            if (entry == null)
+                return;
+
             using (DBEntities entities = new DBEntities())
             {
                 entities.Configuration.LazyLoadingEnabled = false;
