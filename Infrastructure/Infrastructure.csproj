@@ -144,10 +144,8 @@
     <Compile Include="IUserServiceProvider.cs" />
     <Compile Include="MaterialViewNames.cs" />
     <Compile Include="Events\NavigationToken.cs" />
-    <Compile Include="OrganizationRoleNames.cs" />
     <Compile Include="OrganizationViewNames.cs" />
     <Compile Include="PeopleViewNames.cs" />
-    <Compile Include="PersonRoleNames.cs" />
     <Compile Include="RegionNames.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -204,6 +202,9 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Services\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

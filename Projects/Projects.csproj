@@ -119,7 +119,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="ViewModels\ModifyProjectDetailsDialogViewModel.cs" />
-    <Compile Include="ViewModels\ProjectCreationViewModel.cs" />
+    <Compile Include="ViewModels\ProjectCreationDialogViewModel.cs" />
     <Compile Include="ViewModels\ProjectInfoViewModel.cs" />
     <Compile Include="ViewModels\ProjectMainViewModel.cs" />
     <Compile Include="Views\ModifyProjectDetailsDialog.xaml.cs">

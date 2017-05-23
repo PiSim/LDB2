@@ -7,8 +7,10 @@
 -ExternalReportMain
 -MaterialInfoMain
 -MethodMain
+-ProjectCreation
 -ProjectMain
 -ProjectInfo
+-SpecificationCreation
 -SpecificationMain
 -TaskEdit
 -TaskMain

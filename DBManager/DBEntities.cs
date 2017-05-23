@@ -32,25 +32,6 @@ namespace DBManager
             version.Requirements.Add(output);
             return output;
         }
-
-        public void AddTest(Specification specification, Method method)
-        {
-            Requirement tempReq = new Requirement();
-            tempReq.Method = method;
-            tempReq.IsOverride = false;
-            tempReq.Name = "";
-            tempReq.Description = "";
-            tempReq.Position = 0;
-            
-            foreach (SubMethod measure in method.SubMethods)
-            {
-                SubRequirement tempSub = new SubRequirement();
-                tempSub.SubMethod = measure;
-                tempReq.SubRequirements.Add(tempSub);
-            }
-
-            specification.SpecificationVersions.First(ver => ver.IsMain).Requirements.Add(tempReq);
-        }
         
         public Requirement RemoveOverride(Requirement toBeRemoved)
         {

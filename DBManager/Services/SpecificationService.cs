@@ -90,14 +90,17 @@ namespace DBManager.Services
             }
         }
 
-        public static IEnumerable<Method> GetMethods()
+        public static IEnumerable<Method> GetMethods(Property filterProperty = null)
         {
+            // Returns all Method entities. A property entity can be provided to filter by
+
             using (var entities = new DBEntities())
             {
                 entities.Configuration.LazyLoadingEnabled = false;
 
                 return entities.Methods.Include(mtd => mtd.Standard)
                                         .Include(mtd => mtd.Property)
+                                        .Where(mtd => (filterProperty == null) ? true : mtd.Property.ID == filterProperty.ID )
                                         .OrderBy(spec => spec.Standard.Name)
                                         .ToList();
             }
@@ -163,7 +166,55 @@ namespace DBManager.Services
 
         #endregion
 
+        #region Operations for Property entities
+
+        public static IEnumerable<Property> GetProperties()
+        {
+            // Returns all property entities
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.Properties.ToList();
+            }
+        }
+
+        #endregion
+
+        #region Operations for Requirement entities
+
+        public static void Delete(this Requirement entry)
+        {
+            // Deletes Requirement entry
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Requirements.Attach(entry);
+                entities.Entry(entry).State = EntityState.Deleted;
+                entities.SaveChanges();
+            }
+        }
+
+        #endregion
+
         #region Operations for Specification entities
+
+        public static void AddRequirement(this Specification entry,
+                                        Requirement requirementEntity)
+        {
+            // Creates a new Test entity adding it to the specification entry
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Specifications.Attach(entry);
+                entry.SpecificationVersions.First(specv => specv.IsMain)
+                                            .Requirements
+                                            .Add(requirementEntity);
+
+                entities.SaveChanges();
+            }
+        }
 
         public static Specification GetSpecification(int ID)
         {
@@ -231,6 +282,73 @@ namespace DBManager.Services
                 entities.Specifications.Attach(entry);
                 entities.Entry(entry).State = System.Data.Entity.EntityState.Modified;
                 entities.SaveChanges();
+            }
+        }
+
+        #endregion
+
+        #region Operations for SpecificationVersion entities
+
+        public static void Delete(this SpecificationVersion entry)
+        {
+            // Deletes SpecificationVersion entity
+            {
+                using (DBEntities entities = new DBEntities())
+                {
+                    entities.SpecificationVersions.Attach(entry);
+                    entities.Entry(entry).State = EntityState.Deleted;
+                    entities.SaveChanges();
+                }
+            }
+        }
+
+        #endregion
+
+        #region Operations for StandardFiles entities
+
+        public static void Delete(this StandardFile entry)
+        {
+            // Deletes StandardFile entry
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.StandardFiles.Attach(entry);
+                entities.Entry(entry).State = EntityState.Deleted;
+                entities.SaveChanges();
+            }
+        }
+
+        #endregion
+
+        #region Operations for StandardIssue entities
+
+        public static void Delete(this StandardIssue entry)
+        {
+            // Deletes StandardIssue entry
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.StandardIssues.Attach(entry);
+                entities.Entry(entry).State = EntityState.Deleted;
+                entities.SaveChanges();
+            }
+        }
+
+        #endregion
+
+        #region Operations for Std entities
+
+        public static Std GetStandard(string name)
+        {
+            // returns Standard entity with the provided name or null if none is found
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.Stds.Include(std => std.Organization)
+                                    .Include(std => std.CurrentIssue)
+                                    .FirstOrDefault(std => std.Name == name);
             }
         }
 

@@ -39,7 +39,7 @@ namespace Projects
 
         private Project CreateNewProject(Person leader = null)
         {
-            Views.ProjectCreationDialog creationDialog = new Views.ProjectCreationDialog(_entities);
+            Views.ProjectCreationDialog creationDialog = new Views.ProjectCreationDialog();
 
             if (creationDialog.ShowDialog() == true)
             {

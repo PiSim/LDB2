@@ -19,11 +19,11 @@ namespace Specifications.ViewModels
     public class SpecificationEditViewModel : BindableBase
     {
         private ControlPlan _selectedControlPlan;
-        private DBEntities _entities;
         private DBPrincipal _principal;
         private DelegateCommand _addControlPlan, _addFile, _addIssue,
             _addTest, _addVersion, _newReport, _openFile, _openReport, _removeControlPlan, _removeFile, _removeIssue, _removeTest, _removeVersion, _setCurrent;
         private EventAggregator _eventAggregator;
+        private IEnumerable<Method> _methodList;
         private IEnumerable<Report> _reportList;
         private List<ControlPlanItemWrapper> _controlPlanItemsList;
         private Method _selectedToAdd;
@@ -38,12 +38,10 @@ namespace Specifications.ViewModels
         private StandardFile _selectedFile;
         private StandardIssue _selectedIssue;
 
-        public SpecificationEditViewModel(DBEntities entities,
-                                            DBPrincipal principal,
+        public SpecificationEditViewModel(DBPrincipal principal,
                                             EventAggregator aggregator) 
             : base()
         {
-            _entities = entities;
             _eventAggregator = aggregator;
             _principal = principal;
             _reportList = new List<Report>();
@@ -53,7 +51,9 @@ namespace Specifications.ViewModels
                 {
                     ControlPlan temp = new ControlPlan();
                     temp.Name = "Nuovo Piano di Controllo";
-                    _instance.ControlPlans.Add(temp);
+                    temp.Specification = _instance;
+                    temp.Create();
+
                     SelectedControlPlan = temp;
                     RaisePropertyChanged("ControlPlanList");
                 });
@@ -96,9 +96,9 @@ namespace Specifications.ViewModels
             _addTest = new DelegateCommand(
                 () =>
                 {
-                    _entities.AddTest(_instance, _selectedToAdd);
-                    if (_requirementList != null)
-                        
+                    Requirement newReq =SpecificationServiceProvider.GenerateRequirement(_selectedToAdd);
+                    
+
                     RaisePropertyChanged("MainVersionRequirements");
                 },
                 () => _selectedToAdd != null);
@@ -156,7 +156,7 @@ namespace Specifications.ViewModels
             _removeFile = new DelegateCommand(
                 () =>
                 {
-                    _entities.StandardFiles.Remove(_selectedFile);
+                    _selectedFile.Delete();
                     SelectedFile = null;
                 },
                 () => _selectedFile != null );
@@ -164,7 +164,7 @@ namespace Specifications.ViewModels
             _removeIssue = new DelegateCommand(
                 () =>
                 {
-                    _entities.StandardIssues.Remove(_selectedIssue);
+                    _selectedIssue.Delete();
                     _issueList.Remove(_selectedIssue);
                     SelectedIssue = null;
                 },
@@ -173,7 +173,7 @@ namespace Specifications.ViewModels
             _removeTest = new DelegateCommand(
                 () =>
                 {
-                    _entities.Requirements.Remove(_selectedToRemove);
+                    _selectedToRemove.Delete();
                     RaisePropertyChanged("MainVersionRequirements");
                     RaisePropertyChanged("RequirementList");
                 },
@@ -183,8 +183,8 @@ namespace Specifications.ViewModels
             _removeVersion = new DelegateCommand(
                 () =>
                 {
-                    _entities.SpecificationVersions.Remove(_selectedVersion);
-                    _entities.SaveChanges();
+                    _selectedVersion.Delete();
+                    SelectedVersion = null;
                 },
                 () => _selectedVersion != null);
 
@@ -207,7 +207,7 @@ namespace Specifications.ViewModels
             _eventAggregator.GetEvent<CommitRequested>().Subscribe(
                 () =>
                 {
-                    _entities.SaveChanges();
+                    _instance.Update();
                 });
 
             _eventAggregator.GetEvent<ReportListUpdateRequested>().Subscribe(
@@ -314,15 +314,11 @@ namespace Specifications.ViewModels
             }
         }
 
-        public List<Method> FilteredMethods
+        public IEnumerable<Method> FilteredMethods
         {
             get
             {
-                if (_filterProperty == null)
-                    return new List<Method>(_entities.Methods);
-                else
-                    return new List<Method>(
-                        _entities.Methods.Where(mtd => mtd.Property.ID == FilterProperty.ID));
+                return SpecificationService.GetMethods(_filterProperty);
             }
         }
         
@@ -362,9 +358,9 @@ namespace Specifications.ViewModels
             get { return _openFile; }
         }
 
-        public List<Property> Properties
+        public IEnumerable<Property> Properties
         {
-            get { return new List<Property>(_entities.Properties); }
+            get { return SpecificationService.GetProperties(); }
         }
 
         public DelegateCommand RemoveControlPlanCommand
@@ -503,7 +499,9 @@ namespace Specifications.ViewModels
             get { return _instance; }
             set
             {
-                _instance = _entities.Specifications.FirstOrDefault(spec => spec.ID == value.ID);
+                _instance = value;
+                _instance.Load();
+
                 SelectedControlPlan = null;
                 _issueList = new ObservableCollection<StandardIssue>(_instance.Standard.StandardIssues);
                 SelectedIssue = null;
@@ -537,14 +535,14 @@ namespace Specifications.ViewModels
             }
         }
 
-        public List<SpecificationVersion> VersionList
+        public IEnumerable<SpecificationVersion> VersionList
         {
             get
             {
                 if (_instance == null)
                     return null;
 
-                return new List<SpecificationVersion>(_instance.SpecificationVersions);
+                return _instance.SpecificationVersions;
             }
         }
     }

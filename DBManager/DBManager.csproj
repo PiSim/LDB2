@@ -146,6 +146,7 @@
     <Compile Include="Currency.cs">
       <DependentUpon>LabDB.tt</DependentUpon>
     </Compile>
+    <Compile Include="PersonRoleNames.cs" />
     <Compile Include="Services\DataService.cs" />
     <Compile Include="DBManagerModule.cs" />
     <Compile Include="ExternalConstruction.cs">
@@ -254,6 +255,8 @@
       <DependentUpon>LabDB.tt</DependentUpon>
     </Compile>
     <Compile Include="Services\MaterialService.cs" />
+    <Compile Include="Services\OrganizationService.cs" />
+    <Compile Include="Services\PeopleService.cs" />
     <Compile Include="Services\ProjectService.cs" />
     <Compile Include="Services\ReportService.cs" />
     <Compile Include="Services\SpecificationService.cs" />

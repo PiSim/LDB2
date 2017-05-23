@@ -121,7 +121,7 @@
     <Compile Include="ViewModels\MethodCreationViewModel.cs" />
     <Compile Include="ViewModels\MethodEditViewModel.cs" />
     <Compile Include="ViewModels\MethodMainViewModel.cs" />
-    <Compile Include="ViewModels\SpecificationCreationViewModel.cs" />
+    <Compile Include="ViewModels\SpecificationCreationDialogViewModel.cs" />
     <Compile Include="ViewModels\SpecificationEditViewModel.cs" />
     <Compile Include="ViewModels\SpecificationMainViewModel.cs" />
     <Compile Include="ViewNames.cs" />

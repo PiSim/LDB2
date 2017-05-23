@@ -19,6 +19,7 @@ namespace Projects
 
         public void Initialize()
         {
+            _container.RegisterType<Views.ProjectCreationDialog>();
             _container.RegisterType<Views.ModifyProjectDetailsDialog>();
 
             _container.RegisterType<Object, Views.ProjectMain>
@@ -26,6 +27,7 @@ namespace Projects
             _container.RegisterType<Object, Views.ProjectInfo>
                 (ProjectsViewNames.ProjectInfoView);
 
+            _container.RegisterType<ViewModels.ProjectCreationDialogViewModel>();
             _container.RegisterType<ViewModels.ProjectInfoViewModel>();
             _container.RegisterType<ViewModels.ProjectMainViewModel>();
 

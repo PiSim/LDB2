@@ -32,6 +32,7 @@ namespace Specifications
 
             _container.RegisterType<ViewModels.MethodEditViewModel>();
             _container.RegisterType<ViewModels.MethodMainViewModel>();
+            _container.RegisterType<ViewModels.SpecificationCreationDialogViewModel>();
             _container.RegisterType<ViewModels.SpecificationMainViewModel>();
             _container.RegisterType<ViewModels.SpecificationEditViewModel>();
 

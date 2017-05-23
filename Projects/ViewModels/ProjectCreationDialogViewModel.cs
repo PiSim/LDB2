@@ -1,4 +1,5 @@
 ﻿using DBManager;
+using DBManager.Services;
 using Infrastructure;
 using Prism.Commands;
 using Prism.Mvvm;
@@ -7,54 +8,49 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Projects.ViewModels
 {
-    internal class ProjectCreationViewModel : BindableBase
+    internal class ProjectCreationDialogViewModel : BindableBase
     {
-        private DBEntities _entities;
-        private DelegateCommand _cancel, _confirm;
+        private DelegateCommand<Window> _cancel, _confirm;
         private Organization _selectedOem;
         private Person _selectedLeader;
+        private Project _projectInstance;
         private string _description, _name;
-        private Views.ProjectCreationDialog _parent;
-
-        internal ProjectCreationViewModel(DBEntities entities,
-                                        Views.ProjectCreationDialog parent) : base()
+        
+        internal ProjectCreationDialogViewModel(DBEntities entities) : base()
         {
-            _entities = entities;
-            _parent = parent;
 
-            _cancel = new DelegateCommand(
-                () =>
+            _cancel = new DelegateCommand<Window>(
+                parent =>
                 {
-                    _parent.DialogResult = false;
+                    parent.DialogResult = false;
                 });
 
-            _confirm = new DelegateCommand(
-                () =>
+            _confirm = new DelegateCommand<Window>(
+                parent =>
                 {
-                    Project temp = new Project();
-                    temp.Description = _description;
-                    temp.Leader = _selectedLeader;
-                    temp.Name = _name;
-                    temp.Oem = _selectedOem;
+                    _projectInstance = new Project();
+                    _projectInstance.Description = _description;
+                    _projectInstance.Leader = _selectedLeader;
+                    _projectInstance.Name = _name;
+                    _projectInstance.Oem = _selectedOem;
 
-                    _entities.Projects.Add(temp);
-                    _entities.SaveChanges();
-
-                    _parent.ProjectInstance = temp;
-                    _parent.DialogResult = true;
+                    _projectInstance.Create();
+                    
+                    parent.DialogResult = true;
                 },
-                () => IsValidInput);
+                parent => IsValidInput);
         }
 
-        public DelegateCommand CancelCommand
+        public DelegateCommand<Window> CancelCommand
         {
             get { return _cancel; }
         }
 
-        public DelegateCommand ConfirmCommand
+        public DelegateCommand<Window> ConfirmCommand
         {
             get { return _confirm; }
         }
@@ -70,19 +66,17 @@ namespace Projects.ViewModels
             }
         }
 
-        public List<Person> LeaderList
+        public IEnumerable<Person> LeaderList
         {
             get
             {
-                PersonRole techRole = _entities.PersonRoles.First(prr => prr.Name == PersonRoleNames.ProjectLeader);
-                return new List<Person>(techRole.RoleMappings.Where(prm => prm.IsSelected)
-                                                            .Select(prm => prm.Person));
+                return PeopleService.GetProjectLeaders();
             }
         }
 
-        public List<Organization> OemList
+        public IEnumerable<Organization> OemList
         {
-            get { return new List<Organization>(_entities.Organizations.Where(org => org.Category == "OEM")); }
+            get { return OrganizationService.GetOrganizations(OrganizationRoleNames.OEM); }
         }
 
         public string ProjectDescription
@@ -93,6 +87,11 @@ namespace Projects.ViewModels
                 _description = value;
                 _confirm.RaiseCanExecuteChanged();
             }
+        }
+
+        public Project ProjectInstance
+        {
+            get { return _projectInstance; }
         }
 
         public string ProjectName

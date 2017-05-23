@@ -1,4 +1,5 @@
 ﻿using DBManager;
+using Microsoft.Practices.Prism.Mvvm;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,20 +19,16 @@ namespace Projects.Views
     /// <summary>
     /// Interaction logic for ProjectCreationDialog.xaml
     /// </summary>
-    public partial class ProjectCreationDialog : Window
+    public partial class ProjectCreationDialog : Window, IView
     {
-        private Project _projectInstance;
-
-        public ProjectCreationDialog(DBEntities entities)
+        public ProjectCreationDialog()
         {
-            DataContext = new ViewModels.ProjectCreationViewModel(entities, this);
             InitializeComponent();
         }
 
         public Project ProjectInstance
         {
-            get { return _projectInstance; }
-            set { _projectInstance = value; }
+            get { return (DataContext as ViewModels.ProjectCreationDialogViewModel).ProjectInstance; }
         }
     }
 }

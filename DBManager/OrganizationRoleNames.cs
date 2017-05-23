@@ -11,5 +11,6 @@ namespace DBManager
         public static string CalibrationLab { get { return "CAL_LAB"; } }
         public static string OEM { get { return "OEM"; } }
         public static string Supplier { get { return "SUPPL"; } }
+        public static string StandardPublisher { get { return "STD_PUB"; } }
     }
 }

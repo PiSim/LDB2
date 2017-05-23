@@ -1,4 +1,5 @@
 ﻿using DBManager;
+using Microsoft.Practices.Prism.Mvvm;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,23 +19,17 @@ namespace Specifications.Views
     /// <summary>
     /// Interaction logic for SpecificationCreationDialog.xaml
     /// </summary>
-    public partial class SpecificationCreationDialog : Window
+    public partial class SpecificationCreationDialog : Window, IView
     {
-        private Specification _specificationInstance;
 
-        public SpecificationCreationDialog(DBEntities entities, 
-                                            SpecificationServiceProvider serviceProvider)
+        public SpecificationCreationDialog()
         {
-            DataContext = new ViewModels.SpecificationCreationViewModel(entities
-                                                                        , serviceProvider
-                                                                        ,this);
             InitializeComponent();
         }
 
         public Specification SpecificationInstance
         {
-            get { return _specificationInstance; }
-            set { _specificationInstance = value; }
+            get { return (DataContext as ViewModels.SpecificationCreationDialogViewModel).SpecificationInstance; }
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using DBManager;
+using DBManager.Services;
 using Prism.Commands;
 using Prism.Mvvm;
 using System;
@@ -6,36 +7,30 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Specifications.ViewModels
 {
-    internal class SpecificationCreationViewModel : BindableBase
+    internal class SpecificationCreationDialogViewModel : BindableBase
     {
-        private DBEntities _entities;
-        private DelegateCommand _cancel, _confirm;
+        private DelegateCommand<Window> _cancel, _confirm;
         private Organization _oem;
-        private Views.SpecificationCreationDialog _parentDialog;
-        private SpecificationServiceProvider _serviceProvider;
+        private Specification _specificationInstance;
         private string _name;
 
-        internal SpecificationCreationViewModel(DBEntities entities,
-                                                SpecificationServiceProvider serviceProvider,
-                                                Views.SpecificationCreationDialog parentDialog) : base()
+        internal SpecificationCreationDialogViewModel() : base()
         {
-            _entities = entities;
-            _parentDialog = parentDialog;
-            _serviceProvider = serviceProvider;
 
-            _cancel = new DelegateCommand(
-                () =>
+            _cancel = new DelegateCommand<Window>(
+                parent =>
                 {
-                    _parentDialog.DialogResult = false;
+                    parent.DialogResult = false;
                 });
 
-            _confirm = new DelegateCommand(
-                () =>
+            _confirm = new DelegateCommand<Window>(
+                parent =>
                 {
-                    Std tempStd = _entities.Stds.FirstOrDefault(std => std.Name == _name);
+                    Std tempStd = SpecificationService.GetStandard(_name);
                     if (tempStd == null)
                     {
                         tempStd = new Std();
@@ -46,8 +41,6 @@ namespace Specifications.ViewModels
                         tempIssue.IsCurrent = true;
                         tempIssue.Issue = DateTime.Now.ToShortDateString();
                         tempIssue.Standard = tempStd;
-                        _entities.Stds.Add(tempStd);
-                        _entities.SaveChanges();
                         tempStd.CurrentIssue = tempIssue;
                     }
 
@@ -66,21 +59,19 @@ namespace Specifications.ViewModels
                     tempSpec.ControlPlans.Add(tempControlPlan);
                     tempSpec.SpecificationVersions.Add(tempMain);
 
-                    _entities.Specifications.Add(tempSpec);
-                    _entities.SaveChanges();
-
-                    _parentDialog.SpecificationInstance = tempSpec;
-                    _parentDialog.DialogResult = true;
+                    tempSpec.Create();
+                    
+                    parent.DialogResult = true;
                 },
-                () => (_name != "" && _oem != null));
+                parent => (_name != "" && _oem != null));
         }
 
-        public DelegateCommand CancelCommand
+        public DelegateCommand<Window> CancelCommand
         {
             get { return _cancel; }
         }
 
-        public DelegateCommand ConfirmCommand
+        public DelegateCommand<Window> ConfirmCommand
         {
             get { return _confirm; }
         }
@@ -105,13 +96,19 @@ namespace Specifications.ViewModels
             }
         }
 
-        public List<Organization> OemList
+        public IEnumerable<Organization> OemList
         {
             get
             {
-                return new List<Organization>
-                    (_entities.Organizations.Where(org => org.RoleMapping
-                                            .Any(orm => orm.Role.Name == "STD_PUB" && orm.IsSelected)));
+                return OrganizationService.GetOrganizations(OrganizationRoleNames.StandardPublisher);
+            }
+        }
+
+        public Specification SpecificationInstance
+        {
+            get
+            {
+                return _specificationInstance;
             }
         }
     }
