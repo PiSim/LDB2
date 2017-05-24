@@ -56,24 +56,30 @@ namespace DBManager.Services
 
                 return entities.Projects.Include(prj => prj.Leader)
                                         .Include(prj => prj.Oem)
+                                        .OrderByDescending(prj => prj.Name)
                                         .ToList();
             }
         }
 
         public static void Create(this Project entry)
         {
+            if (entry == null)
+                throw new NullReferenceException();
+
             using (DBEntities entities = new DBEntities())
             {
                 entities.Configuration.LazyLoadingEnabled = false;
 
-                entities.Projects.Attach(entry);
-                entities.Entry(entry).State = System.Data.Entity.EntityState.Added;
+                entities.Projects.Add(entry);
                 entities.SaveChanges();
             }
         }
 
         public static void Delete(this Project entry)
         {
+            if (entry == null)
+                throw new NullReferenceException();
+
             using (DBEntities entities = new DBEntities())
             {
                 entities.Configuration.LazyLoadingEnabled = false;
@@ -87,6 +93,9 @@ namespace DBManager.Services
         public static IEnumerable<Report> GetReports(this Project entry)
         {
             // Returns all Report entities for a given Project
+
+            if (entry == null)
+                throw new NullReferenceException();
 
             using (DBEntities entities = new DBEntities())
             {
@@ -106,6 +115,9 @@ namespace DBManager.Services
         {
             // Returns all Task entities for a given Project
 
+            if (entry == null)
+                throw new NullReferenceException();
+
             using (DBEntities entities = new DBEntities())
             {
                 entities.Configuration.LazyLoadingEnabled = false;
@@ -122,6 +134,9 @@ namespace DBManager.Services
         public static void Load(this Project entry)
         {
             // Explicitly loads a Project and all related entities
+
+            if (entry == null)
+                return;
 
             using (DBEntities entities = new DBEntities())
             {
@@ -146,6 +161,10 @@ namespace DBManager.Services
 
         public static void Update(this Project entry)
         {
+
+            if (entry == null)
+                throw new NullReferenceException();
+
             using (DBEntities entities = new DBEntities())
             {
                 entities.Configuration.LazyLoadingEnabled = false;

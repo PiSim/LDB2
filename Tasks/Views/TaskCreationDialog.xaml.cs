@@ -1,5 +1,6 @@
 ﻿using DBManager;
 using Infrastructure;
+using Microsoft.Practices.Prism.Mvvm;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,25 +19,17 @@ namespace Tasks.Views
     /// <summary>
     /// Interaction logic for TaskCreationDialog.xaml
     /// </summary>
-    public partial class TaskCreationDialog : Window
+    public partial class TaskCreationDialog : Window, IView
     {
-        private Task _taskInstance;
         
-        public TaskCreationDialog(DBEntities entities,
-                                IMaterialServiceProvider serviceProvider,
-                                IReportServiceProvider reportServiceProvider)
+        public TaskCreationDialog()
         {
-            DataContext = new ViewModels.TaskCreationDialogViewModel(entities, 
-                                                                    serviceProvider, 
-                                                                    reportServiceProvider, 
-                                                                    this);
             InitializeComponent();
         }
         
         public Task TaskInstance
         {
-            get { return _taskInstance; }
-            set { _taskInstance = value; }
+            get { return (DataContext as ViewModels.TaskCreationDialogViewModel).TaskInstance; }
         }
     }
 }

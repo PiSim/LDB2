@@ -103,6 +103,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AdminViewNames.cs" />
+    <Compile Include="Events\BatchVisualizationRequested.cs" />
     <Compile Include="Events\ExternalConstructionModified.cs" />
     <Compile Include="Events\ExternalReportCreationRequested.cs" />
     <Compile Include="Events\InstrumentCreationRequested.cs" />
@@ -112,11 +113,16 @@
     <Compile Include="Events\NewMaintenanceEventRequested.cs" />
     <Compile Include="Events\OrganizationCreationRequested.cs" />
     <Compile Include="Events\OrganizationListRefreshRequested.cs" />
+    <Compile Include="Events\OrganizationRoleCreationRequested.cs" />
     <Compile Include="Events\PeopleListUpdateRequested.cs" />
     <Compile Include="Events\PersonCreationRequested.cs" />
+    <Compile Include="Events\PersonRoleCreationRequested.cs" />
     <Compile Include="Events\ProjectCreationRequested.cs" />
+    <Compile Include="Events\SampleCreationRequested.cs" />
     <Compile Include="Events\SampleListUpdateRequested.cs" />
     <Compile Include="Events\TaskStatusCheckRequested.cs" />
+    <Compile Include="Events\UserCreationRequested.cs" />
+    <Compile Include="Events\UserRoleCreationRequested.cs" />
     <Compile Include="Resources\CommonResourceDictionary.xaml.cs" />
     <Compile Include="DBIdentity.cs" />
     <Compile Include="DBPrincipal.cs" />

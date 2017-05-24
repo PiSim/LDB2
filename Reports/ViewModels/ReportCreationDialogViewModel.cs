@@ -6,12 +6,14 @@ using Infrastructure.Wrappers;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
+using Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Forms;
 
 namespace Reports.ViewModels
@@ -19,66 +21,51 @@ namespace Reports.ViewModels
     public class ReportCreationDialogViewModel : BindableBase
     {
         private ControlPlan _selectedControlPlan;
-        private DBEntities _entities;
         private DBPrincipal _principal;
-        private DelegateCommand _cancel, _confirm;
-        private IMaterialServiceProvider _materialServiceProvider;
+        private DelegateCommand<Window> _cancel, _confirm;
+        private ICollection<ISelectableRequirement> _requirementList;
+        private IEnumerable<Person> _techList;
         private Int32 _number;
-        private IReportServiceProvider _reportServiceProvider;
-        private List<ControlPlan> _controlPlanList;
-        private List<ISelectableRequirement> _requirementList;
-        private ObservableCollection<SpecificationVersion> _versionList;
         private Person _author;
+        private Report _reportInstance;
         private Specification _selectedSpecification;
         private SpecificationVersion _selectedVersion;
         private string _batchNumber, _category;
-        private Views.ReportCreationDialog _parentDialog;
         
-        public ReportCreationDialogViewModel(DBEntities entities,
-                                        DBPrincipal principal,
-                                        IMaterialServiceProvider materialServiceProvider,
-                                        IReportServiceProvider reportServiceProvider,
-                                        Views.ReportCreationDialog parentDialog) : base()
+        public ReportCreationDialogViewModel(DBPrincipal principal) : base()
         {
-            _controlPlanList = new List<ControlPlan>();
-            _entities = entities;
-            _materialServiceProvider = materialServiceProvider;
-            _parentDialog = parentDialog;
             _principal = principal;
-            _reportServiceProvider = reportServiceProvider;
-            _author = _entities.People.First(prs => prs.ID == _principal.CurrentPerson.ID);
-            _versionList = new ObservableCollection<SpecificationVersion>();
+
+            _techList = PeopleService.GetPeople(PersonRoleNames.MaterialTestingTech);
+            _author = _techList.First(prs => prs.ID == _principal.CurrentPerson.ID);
             _requirementList = new List<ISelectableRequirement>();
 
-            _confirm = new DelegateCommand(
-                () => {
-                    Report temp = new Report();
-                    temp.Author = _author;
-                    Batch tempBatch = _materialServiceProvider.GetBatch(_batchNumber);
-                    temp.Batch = _entities.Batches.First(btc => btc.ID == tempBatch.ID);
-                    temp.Category = "TR";
+            _confirm = new DelegateCommand<Window>(
+                parent => {
+                    _reportInstance = new Report();
+                    _reportInstance.Author = _author;
+                    _reportInstance.Batch = MaterialService.GetBatch(_batchNumber);
+                    _reportInstance.Category = "TR";
                     if (_selectedControlPlan != null)
-                        temp.Description = _selectedControlPlan.Name;
+                        _reportInstance.Description = _selectedControlPlan.Name;
                     else
-                        temp.Description = _selectedSpecification.Description;
-                    temp.IsComplete = false;
-                    temp.Number = _number;
-                    temp.SpecificationVersion = _selectedVersion;
-                    temp.StartDate = DateTime.Now.ToShortDateString();
+                        _reportInstance.Description = _selectedSpecification.Description;
+                    _reportInstance.IsComplete = false;
+                    _reportInstance.Number = _number;
+                    _reportInstance.SpecificationVersion = _selectedVersion;
+                    _reportInstance.StartDate = DateTime.Now.ToShortDateString();
                     
-                    temp.Tests =  _reportServiceProvider.GenerateTestList(_requirementList);
-                    
-                    _entities.Reports.Add(temp);
-                    _entities.SaveChanges();
+                    _reportInstance.Tests =  new List<Test>(ReportServiceProvider.GenerateTestList(_requirementList));
 
-                    _parentDialog.ReportInstance = temp;
-                    _parentDialog.DialogResult = true;
+                    _reportInstance.Create();
+                    
+                    parent.DialogResult = true;
                 },
-                () => IsValidInput);
+                parent => IsValidInput);
                 
-            _cancel = new DelegateCommand(
-                () => {
-                    _parentDialog.DialogResult = false;    
+            _cancel = new DelegateCommand<Window>(
+                parent => {
+                    parent.DialogResult = false;    
                 });
         }
         
@@ -102,7 +89,7 @@ namespace Reports.ViewModels
             }
         }
         
-        public DelegateCommand CancelCommand
+        public DelegateCommand<Window> CancelCommand
         {
             get { return _cancel; }
         }
@@ -113,16 +100,19 @@ namespace Reports.ViewModels
             set { _category = value; }
         }
         
-        public DelegateCommand ConfirmCommand
+        public DelegateCommand<Window> ConfirmCommand
         {
             get { return _confirm; }
         }
 
-        public List<ControlPlan> ControlPlanList
+        public IEnumerable<ControlPlan> ControlPlanList
         {
             get
             {
-                return _controlPlanList;
+                if (_selectedSpecification == null)
+                    return new List<ControlPlan>();
+                else
+                    return _selectedSpecification.ControlPlans;
             }
         }
         
@@ -136,16 +126,16 @@ namespace Reports.ViewModels
             get { return _number; }
             set { _number = value; }
         }
-        
-        public List<Person> TechList
+
+        public IEnumerable<ISelectableRequirement> RequirementList
         {
-            get
-            {
-                PersonRole techRole = _entities.PersonRoles.First(prr => prr.Name == PersonRoleNames.MaterialTestingTech);
-                return new List<Person>(techRole.RoleMappings.Where(prm => prm.IsSelected)
-                                                            .Select(prm => prm.Person));
-            }
-        }        
+            get { return _requirementList; }
+        }
+
+        public Report ReportInstance
+        {
+            get { return _reportInstance; }
+        }
 
         public ControlPlan SelectedControlPlan
         {
@@ -156,7 +146,7 @@ namespace Reports.ViewModels
                 RaisePropertyChanged("SelectedControlPlan");
                 if (value != null)
                 {
-                    _reportServiceProvider.ApplyControlPlan(_requirementList, _selectedControlPlan);
+                    CommonServices.ApplyControlPlan(_requirementList, _selectedControlPlan);
                 }
             }
         }
@@ -167,25 +157,13 @@ namespace Reports.ViewModels
             set
             {
                 _selectedSpecification = value;
+                _selectedSpecification.Load();
+                
+                RaisePropertyChanged("VersionList");
+                RaisePropertyChanged("ControlPlanList");
 
-                if (_selectedSpecification != null)
-                {
-                    _versionList = new ObservableCollection<SpecificationVersion>(
-                        _entities.SpecificationVersions.Where(sv => sv.SpecificationID == _selectedSpecification.ID));
-                    RaisePropertyChanged("VersionList");
-                    
-                    _controlPlanList = new List<ControlPlan>(_selectedSpecification.ControlPlans);
-                    RaisePropertyChanged("ControlPlanList");
-                }
-
-                else
-                {
-                    _controlPlanList.Clear();
-                    _versionList.Clear();
-                }
-
-                SelectedControlPlan = _controlPlanList.FirstOrDefault(cp => cp.IsDefault);
-                SelectedVersion = _versionList.FirstOrDefault(sv => sv.IsMain);
+                SelectedControlPlan = ControlPlanList.FirstOrDefault(cp => cp.IsDefault);
+                SelectedVersion = VersionList.FirstOrDefault(sv => sv.IsMain);
             }
         }
 
@@ -195,33 +173,42 @@ namespace Reports.ViewModels
             set 
             { 
                 _selectedVersion = value;
-                _requirementList = new List<ISelectableRequirement>();
                 
                 if (_selectedVersion != null)
-                {
-                    List<Requirement> tempReq = ReportService.GenerateRequirementList(_selectedVersion);
-                    foreach (Requirement rq in tempReq)
-                        RequirementList.Add(new ReportItemWrapper(rq));
-                }
+                    _requirementList = new List<ISelectableRequirement>(ReportService.GenerateRequirementList(_selectedVersion)
+                                                                                    .Select(req => new ReportItemWrapper(req)));
+
+                else
+                    _requirementList = new List<ISelectableRequirement>();
 
                 RaisePropertyChanged("RequirementList");
                 RaisePropertyChanged("SelectedVersion");
             }
         }
         
-        public List<Specification> SpecificationList
+        public IEnumerable<Specification> SpecificationList
         {
-            get { return new List<Specification>(_entities.Specifications); }
+            get { return SpecificationService.GetSpecifications(); }
         }
         
-        public ObservableCollection<SpecificationVersion> VersionList
+        public IEnumerable<SpecificationVersion> VersionList
         {
-            get { return _versionList; }
+            get
+            {
+                if (_selectedSpecification == null)
+                    return new List<SpecificationVersion>();
+
+                else
+                    return _selectedSpecification.SpecificationVersions;
+            }
         }
-            
-        public List<ISelectableRequirement> RequirementList
+
+        public IEnumerable<Person> TechList
         {
-            get { return _requirementList; }
+            get
+            {
+                return PeopleService.GetPeople(PersonRoleNames.MaterialTestingTech);
+            }
         }
     }
 }

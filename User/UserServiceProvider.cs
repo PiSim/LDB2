@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace User
 {
-    public class UserServiceProvider : IUserServiceProvider
+    public class UserServiceProvider
     {
         private DBEntities _entities;
         private IUnityContainer _container;

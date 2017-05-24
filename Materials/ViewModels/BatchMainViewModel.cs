@@ -18,16 +18,13 @@ namespace Materials.ViewModels
     {
         private DelegateCommand _quickOpen, _openSampleLogView;
         private IEventAggregator _eventAggregator;
-        private IMaterialServiceProvider _materialServiceProvider;
         private Sample _selectedSampleArrival;
         private string _batchNumber;
 
-        public BatchMainViewModel(IEventAggregator eventAggregator, 
-                                IMaterialServiceProvider serviceProvider) 
+        public BatchMainViewModel(IEventAggregator eventAggregator) 
             : base()
         {
             _eventAggregator = eventAggregator;
-            _materialServiceProvider = serviceProvider;
 
             _openSampleLogView = new DelegateCommand(
                 () =>
@@ -38,7 +35,8 @@ namespace Materials.ViewModels
             _quickOpen = new DelegateCommand(
                 () =>
                 {
-                    _materialServiceProvider.TryQuickBatchVisualize(_batchNumber);
+                    _eventAggregator.GetEvent<BatchVisualizationRequested>()
+                                    .Publish(_batchNumber);
                 });
 
             _eventAggregator.GetEvent<SampleListUpdateRequested>().Subscribe(

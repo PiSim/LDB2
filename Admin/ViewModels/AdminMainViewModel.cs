@@ -1,7 +1,9 @@
 ﻿using DBManager;
-using Infrastructure;
+using DBManager.Services;
+using Infrastructure.Events;
 using Microsoft.Practices.Unity;
 using Prism.Commands;
+using Prism.Events;
 using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
@@ -13,40 +15,39 @@ namespace Admin.ViewModels
 {
     public class AdminMainViewModel : BindableBase
     {
-        private DBEntities _entities;
         private DelegateCommand _newOrganizationRole, _newPersonRole, _newUser, _newUserRole, _runMethod;
-        private IAdminServiceProvider _adminServiceProvider;
-        private IUserServiceProvider _userServiceProvider;
+        private EventAggregator _eventAggregator;
         private string _name;
 
-        public AdminMainViewModel(DBEntities entities,
-                                    IAdminServiceProvider services,
-                                    IUserServiceProvider userServiceProvider) : base()
+        public AdminMainViewModel(EventAggregator eventAggregator) : base()
         {
-            _adminServiceProvider = services;
-            _entities = entities;
-            _userServiceProvider = userServiceProvider;
+            _eventAggregator = eventAggregator;
 
             _newOrganizationRole = new DelegateCommand(
                 () =>
                 {
-                    services.AddOrganizationRole(_name);
+                    _eventAggregator.GetEvent<OrganizationRoleCreationRequested>()
+                                    .Publish();
                 });
 
             _newPersonRole = new DelegateCommand(
                 () =>
                 {
-                    services.AddPersonRole();
-                    RaisePropertyChanged("PersonRoleList");
+                    _eventAggregator.GetEvent<PersonRoleCreationRequested>()
+                                    .Publish();
                 });
 
             _newUser = new DelegateCommand(
-                () => services.NewUserRegistration() );
+                () =>
+                {
+                    _eventAggregator.GetEvent<UserCreationRequested>()
+                                    .Publish();
+                });
 
             _newUserRole = new DelegateCommand(
                 () =>
                 {
-                    services.AddUserRole(_name);
+                    _eventAggregator.GetEvent<UserRoleCreationRequested>();
                 });
 
             _runMethod = new DelegateCommand(
@@ -83,9 +84,9 @@ namespace Admin.ViewModels
             get { return _newUser; }
         }
 
-        public List<PersonRole> PersonRoleList
+        public IEnumerable<PersonRole> PersonRoleList
         {
-            get { return new List<PersonRole>(_entities.PersonRoles); }
+            get { return PeopleService.GetPersonRoles(); }
         }
 
         public DelegateCommand RunMethodCommand

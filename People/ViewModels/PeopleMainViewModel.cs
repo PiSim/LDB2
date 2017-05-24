@@ -20,11 +20,9 @@ namespace People.ViewModels
         private EventAggregator _eventAggregator;
         private Person _selectedPerson;
 
-        public PeopleMainViewModel(DBEntities entities,
-                                    EventAggregator aggregator,
-                                    IAdminServiceProvider adminServiceProvider) : base()
+        public PeopleMainViewModel(EventAggregator eventAggregator) : base()
         {
-            _eventAggregator = aggregator;
+            _eventAggregator = eventAggregator;
 
             _eventAggregator.GetEvent<CommitRequested>()
                             .Subscribe(() => _selectedPerson.Update());

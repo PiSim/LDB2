@@ -18,13 +18,10 @@ namespace Controls.ViewModels
         private DelegateCommand<IModuleNavigationTag> _requestNavigation;
         private DelegateCommand<string> _runSearch;
         private IEventAggregator _eventAggregator;
-        private IMaterialServiceProvider _materialServiceProvider;
 
-        public ToolbarViewModel(IEventAggregator eventAggregator,
-                                IMaterialServiceProvider materialServiceProvider) : base()
+        public ToolbarViewModel(IEventAggregator eventAggregator) : base()
         {
             _eventAggregator = eventAggregator;
-            _materialServiceProvider = materialServiceProvider;
 
             _openCurrentUserMenu = new DelegateCommand(
                 () =>
@@ -55,7 +52,8 @@ namespace Controls.ViewModels
             _runSearch = new DelegateCommand<string>(
                 sString =>
                 {
-                    _materialServiceProvider.TryQuickBatchVisualize(sString);
+                    _eventAggregator.GetEvent<BatchVisualizationRequested>()
+                                    .Publish(sString);
                 });    
 
            _save = new DelegateCommand(

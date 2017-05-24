@@ -21,13 +21,17 @@ namespace Controls
         {
             _container.RegisterType<Views.StringInputDialog>();
 
+            _container.RegisterType<ViewModels.BatchPickerDialogViewModel>();
+            _container.RegisterType<ViewModels.ColorPickerDialogViewModel>();
+            _container.RegisterType<ViewModels.MaterialCreationDialogViewModel>();
+            _container.RegisterType<ViewModels.ProjectPickerDialogViewModel>();
             _container.RegisterType<ViewModels.StatusBarViewModel>();
-
+            _container.RegisterType<ViewModels.ToolbarViewModel>();
 
             _regionManager.RegisterViewWithRegion(RegionNames.NewCalibrationFileListRegion, 
                                                 typeof(Views.FileListControl));
             _regionManager.RegisterViewWithRegion(RegionNames.ToolbarRegion, 
-                                                typeof(Views.ToolbarView));
+                                                typeof(Views.Toolbar));
             _regionManager.RegisterViewWithRegion(RegionNames.StatusbarRegion,
                                                 typeof(Views.StatusBar)); 
         }

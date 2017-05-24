@@ -5,6 +5,7 @@ using Infrastructure.Events;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
+using Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -36,7 +37,7 @@ namespace Reports.ViewModels
             _addBatch = new DelegateCommand(
                 () => 
                 {
-                    Batch tempBatch = MaterialServiceProvider.StartBatchSelection();
+                    Batch tempBatch = CommonServices.StartBatchSelection();
                     if (tempBatch != null)
                     {
                         _instance.Batches.Add(tempBatch);
@@ -125,6 +126,16 @@ namespace Reports.ViewModels
         public IEnumerable<Batch> BatchList
         {
             get { return _instance.Batches; }
+        }
+
+        public string BatchNumber
+        {
+            get { return _batchNumber; }
+            set
+            {
+                _batchNumber = value;
+                RaisePropertyChanged("BatchNumber");
+            }
         }
 
         public string Description

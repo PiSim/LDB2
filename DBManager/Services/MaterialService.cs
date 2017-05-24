@@ -12,6 +12,15 @@ namespace DBManager.Services
 
         #region Operations for Aspect entities
 
+        public static void Create(this Aspect entry)
+        {
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Aspects.Add(entry);
+                entities.SaveChanges();
+            }
+        }
+
         public static Aspect GetAspect(string code)
         {
             // Returns an Aspect entity with the given code
@@ -49,8 +58,7 @@ namespace DBManager.Services
         {
             using (DBEntities entities = new DBEntities())
             {
-                entities.Batches.Attach(entry);
-                entities.Entry(entry).State = System.Data.Entity.EntityState.Added;
+                entities.Batches.Add(entry);
                 entities.SaveChanges();
             }
         }
@@ -96,13 +104,33 @@ namespace DBManager.Services
 
         public static void Update(this Batch entry)
         {
+            // Updates the DB values of a Batch entity
+
             using (DBEntities entities = new DBEntities())
             {
                 entities.Configuration.ProxyCreationEnabled = false;
 
-                entities.Batches.Attach(entry);
-                entities.Entry(entry).State = System.Data.Entity.EntityState.Modified;
+                Batch tempEntry = entities.Batches.First(btc => btc.ID == entry.ID);
+                entities.Entry(tempEntry).CurrentValues.SetValues(entry);
+
                 entities.SaveChanges();
+            }
+        }
+
+        #endregion
+
+        #region Operations for Colour entities
+
+        public static IEnumerable<Colour> GetColours()
+        {
+            // Returns all Colour entities
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.Colours.Where(clr => true)
+                                        .ToList();
             }
         }
 
@@ -176,6 +204,19 @@ namespace DBManager.Services
                                             .Include(cns => cns.ExternalConstruction)
                                             .Include(cns => cns.Type)
                                             .ToList();
+            }
+        }
+
+        public static void Update(this Construction entry)
+        {
+            using (DBEntities entities = new DBEntities())
+            {
+
+                Construction tempEntry = entities.Constructions.First(con => con.ID == entry.ID);
+
+                entities.Entry(tempEntry).CurrentValues.SetValues(entry);
+                
+                entities.SaveChanges();
             }
         }
 
@@ -301,6 +342,20 @@ namespace DBManager.Services
 
         #region Operations for Material entities
 
+        public static void Create(this Material entry)
+        {
+            // Inserts a new Material entity in the DB
+
+            if (entry == null)
+                throw new NullReferenceException();
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Materials.Add(entry);
+                entities.SaveChanges();
+            }
+        }
+
         public static Material GetMaterial(Construction construction,
                                             Recipe recipe)
         {
@@ -313,6 +368,19 @@ namespace DBManager.Services
 
                 return entities.Materials.FirstOrDefault(mat => mat.ConstructionID == construction.ID
                                                             && mat.RecipeID == recipe.ID);
+            }
+        }
+
+        public static void Update(this Material entry)
+        {
+            // Updates the DB values of a Material entity
+
+            using (DBEntities entities = new DBEntities())
+            {
+                Material tempEntry = entities.Materials.First(mat => mat.ID == entry.ID);
+                entities.Entry(tempEntry).CurrentValues.SetValues(entry);
+
+                entities.SaveChanges();
             }
         }
 
@@ -337,6 +405,17 @@ namespace DBManager.Services
 
         #region Operations for Recipe entities
 
+        public static void Create(this Recipe entry)
+        {
+            // Inserts a new Recipe entity in the DB
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Recipes.Add(entry);
+                entities.SaveChanges();
+            }
+        }
+
         public static Recipe GetRecipe(string code)
         {
             // Returns the recipe with the given code
@@ -353,6 +432,21 @@ namespace DBManager.Services
         #endregion
 
         #region Operations for Sample entities
+
+        public static void Create(this Sample entry)
+        {
+            // Inserts a Sample entry in the DB
+
+            if (entry == null)
+                throw new NullReferenceException();
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Samples.Add(entry);
+
+                entities.SaveChanges();
+            }
+        }
 
         public static IEnumerable<Sample> GetRecentlyArrivedSamples(int number = 25)
         {

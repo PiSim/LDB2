@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Practices.Prism.Mvvm;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,43 +13,36 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace Materials.Views
+namespace Controls.Views
 {
     /// <summary>
     /// Interaction logic for MaterialCreationDialog.xaml
     /// </summary>
-    public partial class MaterialCreationDialog : Window
+    public partial class MaterialCreationDialog : Window, IView
     {
-        private string _aspect, _line, _recipe, _type;
-
         public MaterialCreationDialog()
         {
-            DataContext = new ViewModels.MaterialCreationViewModel(this);
             InitializeComponent();
         }
 
         public string MaterialAspect
         {
-            get { return _aspect; }
-            set { _aspect = value; }
+            get { return (DataContext as ViewModels.MaterialCreationDialogViewModel).Aspect; }
         }
 
         public string MaterialLine
         {
-            get { return _line; }
-            set { _line = value; }
+            get { return (DataContext as ViewModels.MaterialCreationDialogViewModel).Line; }
         }
 
         public string MaterialRecipe
         {
-            get { return _recipe; }
-            set { _recipe = value; }
+            get { return (DataContext as ViewModels.MaterialCreationDialogViewModel).Recipe; }
         }
 
         public string MaterialType
         {
-            get { return _type; }
-            set { _type = value; }
+            get { return (DataContext as ViewModels.MaterialCreationDialogViewModel).Type; }
         }
     }
 }

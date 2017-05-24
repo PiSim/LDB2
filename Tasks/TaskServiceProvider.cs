@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Tasks
 {
-    public class TaskServiceProvider : ITaskServiceProvider
+    public class TaskServiceProvider
     {
         private DBEntities _entities;
         private EventAggregator _eventAggregator;

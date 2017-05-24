@@ -41,10 +41,10 @@ namespace Projects
             _regionManager.RegisterViewWithRegion(RegionNames.MainNavigationRegion, 
                                                 typeof(Views.ProjectsNavigationItem));
 
-            _container.RegisterType<IProjectServiceProvider, ProjectServiceProvider>
+            _container.RegisterType<ProjectServiceProvider>
                 (new ContainerControlledLifetimeManager());
 
-            _container.Resolve<IProjectServiceProvider>();
+            _container.Resolve<ProjectServiceProvider>();
         }
     }
 }

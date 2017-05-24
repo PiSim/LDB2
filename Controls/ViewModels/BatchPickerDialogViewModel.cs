@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Materials.ViewModels
+namespace Controls.ViewModels
 {
     public class BatchPickerDialogViewModel : BindableBase
     {

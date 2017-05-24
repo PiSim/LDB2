@@ -1,9 +1,10 @@
 ﻿using Controls.Views;
 using DBManager;
-using Infrastructure;
+using Infrastructure.Events;
 using Materials;
 using Microsoft.Practices.Unity;
 using Prism.Commands;
+using Prism.Events;
 using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
@@ -15,19 +16,16 @@ namespace Materials.ViewModels
 {
     class SampleLogViewModel : BindableBase
     {
-        private Batch _currentBatch;
-        private DBEntities _entities;
-        private DelegateCommand _continue, _saveLogEntry;
-        private IUnityContainer _container;
+        private DelegateCommand _continue;
+        private EventAggregator _eventAggregator;
         private List<Tuple<string, string>> _actions;
-        private IMaterialServiceProvider _batchServiceProvider;
         private string _batchNumber;
         private Tuple<string, string> _selectedAction;
 
-        public SampleLogViewModel(DBEntities entities,
-                                IMaterialServiceProvider batchServiceProvider,
-                                IUnityContainer container) : base()
+        public SampleLogViewModel(EventAggregator eventAggregator) : base()
         {
+            _eventAggregator = eventAggregator;
+
             _actions = new List<Tuple<string, string>>()
             {
                 new Tuple<string, string> ("Arrivato in laboratorio", "A"),
@@ -37,22 +35,13 @@ namespace Materials.ViewModels
                 new Tuple<string, string> ("Spedito", "S")
             };
 
-            _container = container;
-            _entities = entities;
-            _batchServiceProvider = batchServiceProvider;
-
             _continue = new DelegateCommand(
                 () =>
                 {
-                    _batchServiceProvider.AddSampleLog(_batchNumber, SelectedAction.Item2);
+                    _eventAggregator.GetEvent<SampleCreationRequested>()
+                                    .Publish(new Tuple<string, string>(_batchNumber, _selectedAction.Item2));
                     Clear();
                 });
-
-            _saveLogEntry = new DelegateCommand(
-                () => 
-                {
-                    _currentBatch = entities.Batches.First(b => b.Number == _batchNumber);
-                } );
         }
 
         public void Clear()
@@ -78,11 +67,6 @@ namespace Materials.ViewModels
         public DelegateCommand ContinueCommand
         {
             get { return _continue; }
-        }
-
-        public DelegateCommand SaveLogEntryCommand
-        {
-            get { return _saveLogEntry; }
         }
         
         public Tuple<string, string> SelectedAction

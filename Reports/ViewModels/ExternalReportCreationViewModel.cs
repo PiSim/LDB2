@@ -1,4 +1,5 @@
 ﻿using DBManager;
+using DBManager.Services;
 using Infrastructure;
 using Microsoft.Practices.Unity;
 using Prism.Commands;
@@ -9,68 +10,70 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace Reports.ViewModels
 {
     internal class ExternalReportCreationViewModel : BindableBase
     {
         private Batch _selectedBatch;
-        private DBEntities _entities;
-        private DelegateCommand _addBatch, _cancel, _confirm, _removeBatch;
-        private IMaterialServiceProvider _materialServiceProvider;
+        private DelegateCommand _removeBatch;
+        private DelegateCommand<TextBox> _addBatch;
+        private DelegateCommand<Window> _cancel, _confirm;
+        private ExternalReport _externalReportInstance;
         private Int32 _number;
         private ObservableCollection<Batch> _batchList;
         private Organization _selectedLab;
         private Project _selectedProject;
-        private string _sampleDescription, _testDescription;
-        private Views.ExternalReportCreationDialog _parentDialog;
+        private string _batchNumber, _sampleDescription, _testDescription;
         
-        internal ExternalReportCreationViewModel(DBEntities entities,
-                                                IMaterialServiceProvider materialServiceProvider,
-                                                Views.ExternalReportCreationDialog parentDialog) : base()
+        internal ExternalReportCreationViewModel() : base()
         {
             _batchList = new ObservableCollection<Batch>();
-            _materialServiceProvider = materialServiceProvider;
-            _entities = entities;
-            _parentDialog = parentDialog;
             
-            _addBatch = new DelegateCommand(
-                () => 
+            _addBatch = new DelegateCommand<TextBox>(
+                batchBox => 
                 {
-                    Batch temp = _materialServiceProvider.StartBatchSelection();
-                    _batchList.Add(temp);                                      
+                    Batch temp = MaterialService.GetBatch(batchBox.Text);
+                    if (temp == null)
+                    {
+                        temp = new Batch();
+                        temp.Number = batchBox.Text;
+                        temp.Create();
+                    }
+
+                    _batchList.Add(temp);                 
                 });
             
-            _cancel = new DelegateCommand(
-                () => 
+            _cancel = new DelegateCommand<Window>(
+                parent => 
                 {
-                    _parentDialog.DialogResult = false;
+                    parent.DialogResult = false;
                 });
                 
-           _confirm = new DelegateCommand(
-                () => 
+           _confirm = new DelegateCommand<Window>(
+                parent => 
                 {
-                    ExternalReport output = new ExternalReport();
-                    output.Description = _testDescription;
-                    output.InternalNumber = _number;
-                    output.ExternalNumber = "";
-                    output.MaterialSent = false;
-                    output.RequestDone = false;
-                    output.PurchaseOrder = "";
-                    output.Price = 0;
-                    output.Samples = _sampleDescription;
-                    output.Currency = "";
-                    output.ReportReceived = false;
-                    output.ExternalLab = _selectedLab;
-                    output.Project = _selectedProject;
+                    _externalReportInstance = new ExternalReport();
+                    _externalReportInstance.Description = _testDescription;
+                    _externalReportInstance.InternalNumber = _number;
+                    _externalReportInstance.ExternalNumber = "";
+                    _externalReportInstance.MaterialSent = false;
+                    _externalReportInstance.RequestDone = false;
+                    _externalReportInstance.PurchaseOrder = "";
+                    _externalReportInstance.Price = 0;
+                    _externalReportInstance.Samples = _sampleDescription;
+                    _externalReportInstance.Currency = "";
+                    _externalReportInstance.ReportReceived = false;
+                    _externalReportInstance.ExternalLab = _selectedLab;
+                    _externalReportInstance.Project = _selectedProject;
 
-                    output.Batches = _batchList;
+                    _externalReportInstance.Batches = _batchList;
 
-                    _entities.ExternalReports.Add(output);
-                    _entities.SaveChanges();
-
-                    _parentDialog.ExternalReportInstance = output;
-                    _parentDialog.DialogResult = true;
+                    _externalReportInstance.Create();
+                
+                    parent.DialogResult = true;
                 });
                 
             _removeBatch = new DelegateCommand(
@@ -83,9 +86,14 @@ namespace Reports.ViewModels
         }
         
         
-        public DelegateCommand AddBatchCommand
+        public DelegateCommand<TextBox> AddBatchCommand
         {
             get { return _addBatch; }
+        }
+
+        public ExternalReport ExternalReportInstance
+        {
+            get { return _externalReportInstance; }
         }
 
         public ObservableCollection<Batch> BatchList
@@ -93,12 +101,22 @@ namespace Reports.ViewModels
             get { return _batchList; }
         }
 
-        public DelegateCommand CancelCommand
+        public string BatchNumber
+        {
+            get { return _batchNumber; }
+            set
+            {
+                _batchNumber = value;
+                RaisePropertyChanged("BatchNumber");
+            }
+        }
+
+        public DelegateCommand<Window> CancelCommand
         {
             get { return _cancel; }
         }
         
-        public DelegateCommand ConfirmCommand
+        public DelegateCommand<Window> ConfirmCommand
         {
             get { return _confirm; }
         }
@@ -114,9 +132,9 @@ namespace Reports.ViewModels
             set { _number = value; }
         }
         
-        public List<Organization> LaboratoriesList 
+        public IEnumerable<Organization> LaboratoriesList 
         {
-            get { return new List<Organization>(_entities.Organizations.Where(org => org.Category == "Laboratorio")); }
+            get { return OrganizationService.GetOrganizations(OrganizationRoleNames.TestLab); }
         }
         
         public string SampleDescription
@@ -139,9 +157,9 @@ namespace Reports.ViewModels
             }
         }
         
-        public List<Project> ProjectList
+        public IEnumerable<Project> ProjectList
         {
-            get { return new List<Project>(_entities.Projects.OrderBy(prj => prj.Name)); }
+            get { return ProjectService.GetProjects(); }
         }
         
         public Organization SelectedLab

@@ -4,11 +4,13 @@ using Infrastructure;
 using Infrastructure.Wrappers;
 using Prism.Commands;
 using Prism.Mvvm;
+using Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using System.Windows;
 
 namespace Tasks.ViewModels
 {
@@ -16,53 +18,49 @@ namespace Tasks.ViewModels
     {
         private string _batchNumber, _notes;
         private ControlPlan _selectedControlPlan;
-        private DBEntities _entities;
-        private DelegateCommand _cancel, _confirm;
-        private IMaterialServiceProvider _materialServiceProvider;
-        private IReportServiceProvider _reportServiceProvider;
-        private List<ControlPlan> _controlPlanList;
+        private DelegateCommand<Window> _cancel, _confirm;
+        private IEnumerable<Person> _leaderList;
+        private IEnumerable<Specification> _specificationList;
         private ObservableCollection<ReportItemWrapper> _requirementList;
-        private ObservableCollection<SpecificationVersion> _versionList;
         private Person _requester;
         private Specification _selectedSpecification;
         private SpecificationVersion _selectedVersion;
-        private Views.TaskCreationDialog _parentView;
+        private Task _taskInstance;
 
-        public TaskCreationDialogViewModel(DBEntities entities,
-                                    IMaterialServiceProvider serviceProvider,
-                                    IReportServiceProvider reportServiceProvider,
-                                    Views.TaskCreationDialog parentView) : base()
+        public TaskCreationDialogViewModel() : base()
         {
-            _controlPlanList = new List<ControlPlan>();
-            _entities = entities;
-            _materialServiceProvider = serviceProvider;
-            _reportServiceProvider = reportServiceProvider;
-            _parentView = parentView;
+            _leaderList = PeopleService.GetPeople(PersonRoleNames.ProjectLeader);
             _requirementList = new ObservableCollection<ReportItemWrapper>();
-            _versionList = new ObservableCollection<SpecificationVersion>();
+            _specificationList = SpecificationService.GetSpecifications();
 
-            _cancel = new DelegateCommand(
-                () => 
+            _cancel = new DelegateCommand<Window>(
+                parent => 
                 {
-                    _parentView.DialogResult = false;
+                    parent.DialogResult = false;
                 } );
             
-            _confirm = new DelegateCommand(
-                () => 
+            _confirm = new DelegateCommand<Window>(
+                parent => 
                 {
-                    Task output = new Task();
-                    Batch tempBatch = _materialServiceProvider.GetBatch(_batchNumber);
+                    _taskInstance = new Task();
+                    Batch tempBatch = MaterialService.GetBatch(_batchNumber);
 
-                    output.Batch = _entities.Batches.First(btc => btc.ID == tempBatch.ID);
-                    output.IsComplete = false;
-                    output.Notes = _notes;
-                    output.PipelineOrder = 0;
-                    output.PriorityModifier = 0;
-                    output.Progress = 0;
-                    output.PriorityModifier = 0;
-                    output.Requester = _requester;
-                    output.SpecificationVersion = _selectedVersion;
-                    output.StartDate = DateTime.Now.Date;
+                    if (tempBatch == null)
+                    {
+                        tempBatch = new Batch();
+                        tempBatch.Number = _batchNumber;
+                        tempBatch.Create();
+                    }
+                    
+                    _taskInstance.IsComplete = false;
+                    _taskInstance.Notes = _notes;
+                    _taskInstance.PipelineOrder = 0;
+                    _taskInstance.PriorityModifier = 0;
+                    _taskInstance.Progress = 0;
+                    _taskInstance.PriorityModifier = 0;
+                    _taskInstance.Requester = _requester;
+                    _taskInstance.SpecificationVersion = _selectedVersion;
+                    _taskInstance.StartDate = DateTime.Now.Date;
 
                     foreach (ReportItemWrapper req in _requirementList)
                     {
@@ -71,15 +69,14 @@ namespace Tasks.ViewModels
 
                         TaskItem temp = new TaskItem();
                         temp.Requirement = req.RequirementInstance;
-                        output.TaskItems.Add(temp);
+                        _taskInstance.TaskItems.Add(temp);
                     }
+
+                    _taskInstance.Create();
                     
-                    _entities.Tasks.Add(output);
-                    _entities.SaveChanges();
-                    _parentView.TaskInstance = output;
-                    _parentView.DialogResult = true;
+                    parent.DialogResult = true;
                 },
-                () => IsValidInput
+                parent => IsValidInput
             );
             
         }
@@ -91,21 +88,25 @@ namespace Tasks.ViewModels
             set { _batchNumber = value; }
         }
 
-        public DelegateCommand CancelCommand
+        public DelegateCommand<Window> CancelCommand
         {
             get { return _cancel; }
         }
 
-        public DelegateCommand ConfirmCommand
+        public DelegateCommand<Window> ConfirmCommand
         {
             get { return _confirm; }
         }
 
-        public List<ControlPlan> ControlPlanList
+        public IEnumerable<ControlPlan> ControlPlanList
         {
             get
             {
-                return _controlPlanList;
+                if (_selectedSpecification == null)
+                    return new List<ControlPlan>();
+
+                else
+                    return _selectedSpecification.ControlPlans;
             }
         }
 
@@ -114,13 +115,11 @@ namespace Tasks.ViewModels
             get { return true; }
         }
 
-        public List<Person> LeaderList
+        public IEnumerable<Person> LeaderList
         {
             get
             {
-                PersonRole techRole = _entities.PersonRoles.First(prr => prr.Name == PersonRoleNames.ProjectLeader);
-                return new List<Person>(techRole.RoleMappings.Where(prm => prm.IsSelected)
-                                                            .Select(prm => prm.Person));
+                return _leaderList;
             }
         }
 
@@ -152,7 +151,7 @@ namespace Tasks.ViewModels
                 RaisePropertyChanged("SelectedControlPlan");
                 if (value != null)
                 {
-                    _reportServiceProvider.ApplyControlPlan(_requirementList, _selectedControlPlan);
+                    CommonServices.ApplyControlPlan(_requirementList, _selectedControlPlan);
                 }
             }
         }
@@ -165,24 +164,12 @@ namespace Tasks.ViewModels
             {
                 _selectedSpecification = value;
 
-                if (_selectedSpecification != null)
-                {
-                    _versionList = new ObservableCollection<SpecificationVersion>(
-                        _entities.SpecificationVersions.Where(sv => sv.SpecificationID == _selectedSpecification.ID));
-                    RaisePropertyChanged("VersionList");
-                    
-                    _controlPlanList = new List<ControlPlan>(_selectedSpecification.ControlPlans);
-                    RaisePropertyChanged("ControlPlanList");
-                }
+                RaisePropertyChanged("SelectedSpecification");
+                RaisePropertyChanged("VersionList");
+                RaisePropertyChanged("ControlPlanList");
 
-                else
-                {
-                    _controlPlanList.Clear();
-                    _versionList.Clear();
-                }
-
-                SelectedControlPlan = _controlPlanList.FirstOrDefault(cp => cp.IsDefault);
-                SelectedVersion = _versionList.FirstOrDefault(sv => sv.IsMain);
+                SelectedControlPlan = ControlPlanList.FirstOrDefault(cp => cp.IsDefault);
+                SelectedVersion = VersionList.FirstOrDefault(sv => sv.IsMain);
             }
         }
 
@@ -204,14 +191,21 @@ namespace Tasks.ViewModels
             }
         }
 
-        public List<Specification> SpecificationList
+        public IEnumerable<Specification> SpecificationList
         {
-            get { return new List<Specification>(_entities.Specifications); }
+            get { return _specificationList; }
         }
 
-        public ObservableCollection<SpecificationVersion> VersionList
+        public IEnumerable<SpecificationVersion> VersionList
         {
-            get { return _versionList; }
+            get
+            {
+                if (_selectedSpecification == null)
+                    return new List<SpecificationVersion>();
+
+                else
+                    return _selectedSpecification.SpecificationVersions;
+            }
         }
 
         public ObservableCollection<ReportItemWrapper> RequirementList
@@ -222,6 +216,11 @@ namespace Tasks.ViewModels
                 _requirementList = value;
                 RaisePropertyChanged("RequirementList");
             }
+        }
+
+        public Task TaskInstance
+        {
+            get { return _taskInstance; }
         }
     }
 

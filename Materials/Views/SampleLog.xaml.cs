@@ -1,4 +1,5 @@
-﻿using Microsoft.Practices.Unity;
+﻿using Microsoft.Practices.Prism.Mvvm;
+using Microsoft.Practices.Unity;
 using Prism.Events;
 using System;
 using System.Collections.Generic;
@@ -18,13 +19,10 @@ using System.Windows.Shapes;
 namespace Materials.Views
 {
 
-    public partial class SampleLogView : UserControl
+    public partial class SampleLog : UserControl, IView
     {
-        public SampleLogView(DBManager.DBEntities entities, 
-                            MaterialServiceProvider serviceProvider,
-                            IUnityContainer container)
+        public SampleLog()
         {
-            DataContext = new ViewModels.SampleLogViewModel(entities, serviceProvider, container);
             InitializeComponent();
         }
     }

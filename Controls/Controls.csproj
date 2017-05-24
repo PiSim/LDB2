@@ -117,15 +117,31 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="ViewModels\BatchPickerDialogViewModel.cs" />
+    <Compile Include="ViewModels\ColorPickerDialogViewModel.cs" />
+    <Compile Include="ViewModels\MaterialCreationDialogViewModel.cs" />
     <Compile Include="ViewModels\NewPODialogViewModel.cs" />
+    <Compile Include="ViewModels\ProjectPickerViewModel.cs" />
     <Compile Include="ViewModels\StringInputDialogViewModel.cs" />
     <Compile Include="ViewModels\StatusBarViewModel.cs" />
     <Compile Include="ViewModels\ToolbarViewModel.cs" />
+    <Compile Include="Views\BatchPickerDialog.xaml.cs">
+      <DependentUpon>BatchPickerDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ColorPickerDialog.xaml.cs">
+      <DependentUpon>ColorPickerDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\FileListControl.xaml.cs">
       <DependentUpon>FileListControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\MaterialCreationDialog.xaml.cs">
+      <DependentUpon>MaterialCreationDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\NewPODialog.xaml.cs">
       <DependentUpon>NewPODialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ProjectPickerDialog.xaml.cs">
+      <DependentUpon>ProjectPickerDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SpecificationSelector.xaml.cs">
       <DependentUpon>SpecificationSelector.xaml</DependentUpon>
@@ -136,8 +152,8 @@
     <Compile Include="Views\StatusBar.xaml.cs">
       <DependentUpon>StatusBar.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\ToolbarView.xaml.cs">
-      <DependentUpon>ToolbarView.xaml</DependentUpon>
+    <Compile Include="Views\Toolbar.xaml.cs">
+      <DependentUpon>Toolbar.xaml</DependentUpon>
     </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -166,13 +182,29 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Views\BatchPickerDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\ColorPickerDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\FileListControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\MaterialCreationDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\NewPODialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ProjectPickerDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\SpecificationSelector.xaml">
       <SubType>Designer</SubType>
@@ -186,7 +218,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\ToolbarView.xaml">
+    <Page Include="Views\Toolbar.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

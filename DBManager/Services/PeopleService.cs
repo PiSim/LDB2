@@ -82,5 +82,21 @@ namespace DBManager.Services
 
         #endregion
 
+        #region Operations for PersonRole entities
+
+        public static IEnumerable<PersonRole> GetPersonRoles()
+        {
+            // Returns all PersonRole entities
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.PersonRoles.Where(prol => true)
+                                            .ToList();
+            }
+        }
+
+        #endregion
     }
 }

@@ -9,9 +9,9 @@ namespace DBManager.Services
 {
     public static class ReportService
     {
-        
-        // TO BE MOVED IN SEPARATE CLASS
 
+        // TO BE MOVED IN SEPARATE CLASS
+            
         public static List<Requirement> GenerateRequirementList(SpecificationVersion version)
         {
             if (version.IsMain)

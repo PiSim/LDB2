@@ -21,7 +21,6 @@ namespace Controls.ViewModels
         private IEnumerable<Organization> _organizationList;
         private Organization _selectedOrganization;
         private string _number;
-        private Views.NewPODialog _parentDialog;
 
         public NewPODialogViewModel() : base()
         {

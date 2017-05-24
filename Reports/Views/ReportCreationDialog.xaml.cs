@@ -15,18 +15,9 @@ namespace Reports.Views
     /// </summary>
     public partial class ReportCreationDialog : Window, IView
     {
-        private Report _reportInstance;
 
-        public ReportCreationDialog(DBEntities entities, 
-                                    DBPrincipal principal,
-                                    IMaterialServiceProvider materialServiceProvider,
-                                    IReportServiceProvider reportServiceProvider)
+        public ReportCreationDialog()
         {
-            DataContext = new ViewModels.ReportCreationDialogViewModel(entities, 
-                                                                    principal, 
-                                                                    materialServiceProvider,
-                                                                    reportServiceProvider, 
-                                                                    this);
             InitializeComponent();
         }
 
@@ -37,8 +28,7 @@ namespace Reports.Views
 
         public Report ReportInstance
         {
-            get { return _reportInstance; }
-            set { _reportInstance = value; }
+            get { return (DataContext as ViewModels.ReportCreationDialogViewModel).ReportInstance; }
         }
     }
 }

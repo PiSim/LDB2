@@ -23,7 +23,9 @@
 -Creata videata info materiali che unifica Colori, Aspetti e Construction
 -Aggiunta videata Externalconstructions
 -Creato metodo per vrificare lo stato di un Task + l'evento per richiamarlo
--Iniziata la reimplementazione delle modalità di accesso al db tramite servizi statici e metodi di estensione
+-Implementate classi statiche di servizio e metodi di estensione per tutti i tipi di entità
+-Rimosse le interfacce serviceProvider, introdotti eventi per tutte le loro funzioni
+-Aggiunto progetto UnitTest per l'assembly DBManager
 
 v 0.4.4 -- 9/5/2017
 

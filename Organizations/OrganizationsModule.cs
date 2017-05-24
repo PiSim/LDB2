@@ -30,9 +30,9 @@ namespace Organizations
             _container.RegisterType<Object, Views.OrganizationsMain>(OrganizationViewNames.OrganizationMainView);
             
 
-            _container.RegisterType<IOrganizationServiceProvider, OrganizationServiceProvider>(
+            _container.RegisterType<OrganizationServiceProvider>(
                 new ContainerControlledLifetimeManager());
-            _container.Resolve<IOrganizationServiceProvider>();
+            _container.Resolve<OrganizationServiceProvider>();
         }
     }
 }

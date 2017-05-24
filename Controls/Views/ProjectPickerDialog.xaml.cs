@@ -1,4 +1,6 @@
-﻿using System;
+﻿using DBManager;
+using Microsoft.Practices.Prism.Mvvm;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,16 +14,21 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace Materials.Views
+namespace Controls.Views
 {
     /// <summary>
-    /// Interaction logic for SampleLogDialog.xaml
+    /// Interaction logic for ProjectPickerDialog.xaml
     /// </summary>
-    public partial class SampleLogDialog : Window
+    public partial class ProjectPickerDialog : Window, IView
     {
-        public SampleLogDialog()
+        public ProjectPickerDialog()
         {
             InitializeComponent();
+        }
+
+        public Project ProjectInstance
+        {
+            get { return (DataContext as ViewModels.ProjectPickerDialogViewModel).SelectedProject; }
         }
     }
 }

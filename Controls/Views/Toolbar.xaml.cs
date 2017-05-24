@@ -24,18 +24,13 @@ namespace Controls.Views
     /// <summary>
     /// Interaction logic for ToolbarView.xaml
     /// </summary>
-    public partial class ToolbarView : UserControl
+    public partial class Toolbar : UserControl
     {
-        private IEventAggregator _eventAggregator;
-        private IRegionManager _regionManager;
+        private EventAggregator _eventAggregator;
 
-        public ToolbarView(IRegionManager regionManager, 
-                            IEventAggregator eventAggregator,
-                            IMaterialServiceProvider materialServiceProvider)
+        public Toolbar(EventAggregator eventAggregator)
         {
             _eventAggregator = eventAggregator;
-            _regionManager = regionManager;
-            DataContext = new ViewModels.ToolbarViewModel(eventAggregator, materialServiceProvider);
             InitializeComponent();
         }
 

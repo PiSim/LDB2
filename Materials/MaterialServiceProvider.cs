@@ -5,6 +5,7 @@ using Infrastructure;
 using Infrastructure.Events;
 using Microsoft.Practices.Unity;
 using Prism.Events;
+using Services;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -31,22 +32,31 @@ namespace Materials
             _eventAggregator = eventAggregator;
             _principal = principal;
 
+            _eventAggregator.GetEvent<BatchVisualizationRequested>()
+                            .Subscribe(batchNumber =>
+                            {
+                                TryQuickBatchVisualize(batchNumber);
+                            });
 
+            _eventAggregator.GetEvent<SampleCreationRequested>()
+                            .Subscribe(tuple =>
+                            {
+                                AddSampleLog(tuple.Item1, tuple.Item2);
+                            });
         }
 
         public Sample AddSampleLog(string batchNumber, string actionCode)
         {
-            Batch temp = GetBatch(batchNumber);
+            Batch temp = CommonServices.GetBatch(batchNumber);
 
             Sample output = new Sample();
 
             output.Batch = temp;
             output.Date = DateTime.Now;
             output.Code = actionCode;
-            output.LogAuthor = _entities.People.First(ppl => ppl.ID == _principal.CurrentPerson.ID);
+            output.LogAuthor = _principal.CurrentPerson;
 
-            _entities.Samples.Add(output);
-            _entities.SaveChanges();
+            output.Create();
 
             return output;
         }
@@ -73,124 +83,14 @@ namespace Materials
             return newEntry;
         }
 
-        private static Material GetMaterial()
-        {
-            Material output = null;
-            Views.MaterialCreationDialog matDialog = new Views.MaterialCreationDialog();
-            
-            if (matDialog.ShowDialog() == true)
-            {
-                Construction tempConstruction = MaterialService.GetConstruction(matDialog.MaterialType,
-                                                                                matDialog.MaterialLine,
-                                                                                matDialog.MaterialAspect);
-                
-                Recipe tempRecipe = MaterialService.GetRecipe(matDialog.MaterialRecipe);
+        
 
-                if (tempConstruction != null && tempRecipe != null)
-                    output = MaterialService.GetMaterial(tempConstruction, tempRecipe);
-
-                else
-                {
-                    if (tempConstruction == null)
-                    {
-                        tempConstruction = new Construction();
-                        tempConstruction.Type = MaterialService.GetMaterialType(matDialog.MaterialType);
-                        tempConstruction.Line = matDialog.MaterialLine;
-                        tempConstruction.Aspect = MaterialService.GetAspect(matDialog.MaterialAspect);
-
-                        if (tempConstruction.Aspect == null)
-                        {
-                            Aspect tempAspect = new Aspect();
-                            tempAspect.Code = matDialog.MaterialAspect;
-                            tempAspect.Name = "";
-
-                            tempAspect.Create();
-
-                            tempConstruction.Aspect = tempAspect;
-                        }
-
-
-                        tempConstruction.Update();
-                    }
-
-                    if (tempRecipe == null)
-                    {
-                        tempRecipe = new Recipe();
-                        tempRecipe.Code = matDialog.MaterialRecipe;
-
-                        tempRecipe.Create();
-                    };
-
-                    output.Update();
-                }
-                
-                if (output == null)
-                {
-                    output = new Material();
-                    output.Construction = tempConstruction;
-                    output.Recipe = tempRecipe;
-
-                    output.Create();
-                }
-            }
-
-            return output;
-        }
-
-        public static void CheckMaterialData(Material target)
-        {
-            if (target.Construction.Project == null)
-            {
-                Views.ProjectPickerDialog prjDialog = new Views.ProjectPickerDialog();
-                if (prjDialog.ShowDialog() == true)
-                    target.Construction.Project = prjDialog.ProjectInstance;
-            }
-
-            if (target.Recipe.Colour == null)
-            {
-                Views.ColorPickerDialog colourPicker = new Views.ColorPickerDialog();
-                if (colourPicker.ShowDialog() == true)
-                    target.Recipe.Colour = colourPicker.ColourInstance;
-            }
-        }
-
-        public static Batch GetBatch(string batchNumber)
-        {
-            Batch temp = MaterialService.GetBatch(batchNumber);
-
-            if (temp == null)
-            {
-                temp = new Batch();
-                temp.Number = batchNumber;
-                temp.Create();
-            }
-
-            if (temp.Material == null)
-                temp.Material = GetMaterial();
-
-            if (temp.Material != null)
-                CheckMaterialData(temp.Material);
-            
-            return temp;
-        }
+        
 
         private void OnColorCreationRequested()
         {
             Views.ColorCreationDialog colorCreator =  _container.Resolve<Views.ColorCreationDialog>();
             colorCreator.ShowDialog();
-        }
-
-        public static Batch StartBatchSelection()
-        {
-            Views.BatchPickerDialog batchPicker = new Views.BatchPickerDialog();
-            if (batchPicker.ShowDialog() == true)
-            {
-                Batch output = GetBatch(batchPicker.BatchNumber);
-                return output;
-            }
-
-            else
-                return null;
         }
 
         public void TryQuickBatchVisualize(string batchNumber)

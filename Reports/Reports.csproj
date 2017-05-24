@@ -185,6 +185,10 @@
       <Project>{31368a5f-9770-4198-bc3d-4996917b4139}</Project>
       <Name>Navigation</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Services\Services.csproj">
+      <Project>{715cb64a-55d7-4ca2-abe9-1bac70680a02}</Project>
+      <Name>Services</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Page Include="Views\ExternalReportList.xaml">

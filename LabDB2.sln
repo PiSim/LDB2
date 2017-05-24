@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26430.6
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LabDB2", "LabDB2\LabDB2.csproj", "{99C9E82C-C594-446D-AA59-8FFBC43AD226}"
 EndProject
@@ -64,6 +64,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DBManagerTests", "DBManagerTests\DBManagerTests.csproj", "{D9C57D48-413A-46A7-8F82-7DDD32A173BE}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test_assemblies", "Test_assemblies", "{5C29ACB5-924D-42D5-8634-6205091FC610}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services", "Services\Services.csproj", "{715CB64A-55D7-4CA2-ABE9-1BAC70680A02}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -147,6 +149,10 @@ Global
 		{D9C57D48-413A-46A7-8F82-7DDD32A173BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D9C57D48-413A-46A7-8F82-7DDD32A173BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D9C57D48-413A-46A7-8F82-7DDD32A173BE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{715CB64A-55D7-4CA2-ABE9-1BAC70680A02}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{715CB64A-55D7-4CA2-ABE9-1BAC70680A02}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{715CB64A-55D7-4CA2-ABE9-1BAC70680A02}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{715CB64A-55D7-4CA2-ABE9-1BAC70680A02}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -170,5 +176,6 @@ Global
 		{E6E57B0F-0C23-4EDD-BEE7-D24A3D2413C5} = {3560430A-1098-46BE-8732-26BCC70F451A}
 		{2DCA77D8-9C60-4877-AD00-668A21FF9FFE} = {5C29ACB5-924D-42D5-8634-6205091FC610}
 		{D9C57D48-413A-46A7-8F82-7DDD32A173BE} = {5C29ACB5-924D-42D5-8634-6205091FC610}
+		{715CB64A-55D7-4CA2-ABE9-1BAC70680A02} = {3560430A-1098-46BE-8732-26BCC70F451A}
 	EndGlobalSection
 EndGlobal

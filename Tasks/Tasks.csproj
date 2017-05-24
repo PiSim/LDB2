@@ -169,6 +169,10 @@
       <Project>{31368a5f-9770-4198-bc3d-4996917b4139}</Project>
       <Name>Navigation</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Services\Services.csproj">
+      <Project>{715CB64A-55D7-4CA2-ABE9-1BAC70680A02}</Project>
+      <Name>Services</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Page Include="Views\ConversionReviewDialog.xaml">

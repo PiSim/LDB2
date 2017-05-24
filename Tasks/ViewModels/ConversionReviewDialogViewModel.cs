@@ -1,8 +1,10 @@
 ﻿using DBManager;
+using DBManager.Services;
 using Infrastructure;
 using Infrastructure.Wrappers;
 using Prism.Commands;
 using Prism.Mvvm;
+using Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,25 +16,21 @@ namespace Tasks.ViewModels
 {
     public class ConversionReviewDialogViewModel : BindableBase
     {
-        private DBEntities _entities;
         private DBPrincipal _principal;
         private DelegateCommand<Window> _cancel, _confirm;
+        private IEnumerable<Person> _techList;
         private int _reportNumber;
         private List<TaskItemWrapper> _testList;
-        private IReportServiceProvider _reportServiceProvider;
         private Person _selectedAuthor;
         private Report _reportInstance;
         private string _notes;
         private DBManager.Task _taskInstance;
 
-        public ConversionReviewDialogViewModel(DBEntities entities,
-                                                DBPrincipal principal,
-                                                IReportServiceProvider reportServiceProvider) : base()
+        public ConversionReviewDialogViewModel(DBPrincipal principal) : base()
         {
-            _entities = entities;
             _principal = principal;
-            _reportServiceProvider = reportServiceProvider;
-            _selectedAuthor = _entities.People.First(pt => pt.ID == _principal.CurrentPerson.ID);
+            _techList = PeopleService.GetPeople(PersonRoleNames.MaterialTestingTech);
+            _selectedAuthor = _techList.First(pt => pt.ID == _principal.CurrentPerson.ID);
 
             _testList = new List<TaskItemWrapper>();
 
@@ -57,7 +55,7 @@ namespace Tasks.ViewModels
                     _reportInstance.SpecificationVersion = _taskInstance.SpecificationVersion;
                     _reportInstance.StartDate = DateTime.Now.Date.ToShortDateString();
 
-                    foreach (Test tst in _reportServiceProvider.GenerateTestList(_testList))
+                    foreach (Test tst in CommonServices.GenerateTestList(_testList))
                         _reportInstance.Tests.Add(tst);
 
                     foreach (TaskItemWrapper riw in _testList.Where(tiw => tiw.IsSelected))
@@ -66,8 +64,7 @@ namespace Tasks.ViewModels
                     if (!_taskInstance.TaskItems.Any(tski => !tski.IsAssignedToReport))
                         _taskInstance.AllItemsAssigned = true;
 
-                    _entities.Reports.Add(_reportInstance);
-                    _entities.SaveChanges();
+                    _reportInstance.Create();
 
                     parentDialog.DialogResult = true;
                 });
@@ -162,7 +159,8 @@ namespace Tasks.ViewModels
             get { return _taskInstance; }
             set
             {
-                _taskInstance = _entities.Tasks.First(tsk => tsk.ID == value.ID);
+                _taskInstance = value;
+                _taskInstance.Load();
 
                 _testList = new List<TaskItemWrapper>();
                 foreach (TaskItem tsi in _taskInstance.TaskItems.Where(tsi => !tsi.IsAssignedToReport))
@@ -179,13 +177,11 @@ namespace Tasks.ViewModels
             }
         }
 
-        public List<Person> TechList
+        public IEnumerable<Person> TechList
         {
             get
             {
-                PersonRole tempRole = _entities.PersonRoles.First(tpr => tpr.Name == PersonRoleNames.MaterialTestingTech);
-                return new List<Person>(tempRole.RoleMappings.Where(trm => trm.IsSelected)
-                                                            .Select(trm => trm.Person));
+                return _techList;
             }
         }
 

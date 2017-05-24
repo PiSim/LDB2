@@ -1,4 +1,5 @@
 ﻿using DBManager;
+using Microsoft.Practices.Prism.Mvvm;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,25 +14,22 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace Materials.Views
+namespace Controls.Views
 {
     /// <summary>
     /// Interaction logic for ColorPickerDialog.xaml
     /// </summary>
-    public partial class ColorPickerDialog : Window
+    public partial class ColorPickerDialog : Window, IView
     {
-        private Colour _colourInstance;
-        
-        public ColorPickerDialog(DBEntities entities)
+        public ColorPickerDialog()
         {
-            DataContext = new ViewModels.ColorPickerDialogViewModel(entities, this);
             InitializeComponent();
         }
 
         public Colour ColourInstance
         {
-            get { return _colourInstance; }
-            set { _colourInstance = value; }
+            get { return (DataContext as ViewModels.ColorPickerDialogViewModel).SelectedColour; }
+            set { (DataContext as ViewModels.ColorPickerDialogViewModel).SelectedColour = value; }
         } 
     }
 }

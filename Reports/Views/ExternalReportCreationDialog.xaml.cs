@@ -1,5 +1,6 @@
 ﻿using DBManager;
 using Infrastructure;
+using Microsoft.Practices.Prism.Mvvm;
 using Microsoft.Practices.Unity;
 using System;
 using System.Collections.Generic;
@@ -20,20 +21,16 @@ namespace Reports.Views
     /// <summary>
     /// Interaction logic for ExternalReportCreationDialog.xaml
     /// </summary>
-    public partial class ExternalReportCreationDialog : Window
+    public partial class ExternalReportCreationDialog : Window, IView
     {
-        private ExternalReport _externalReportInstance;
-        
-        public ExternalReportCreationDialog(DBEntities entities, IMaterialServiceProvider serviceProvider)
+        public ExternalReportCreationDialog()
         {
-            DataContext = new ViewModels.ExternalReportCreationViewModel(entities, serviceProvider, this);
             InitializeComponent();
         }
         
         public ExternalReport ExternalReportInstance
         {
-            get { return _externalReportInstance; }
-            set { _externalReportInstance = value; }
+            get { return (DataContext as ViewModels.ExternalReportCreationViewModel).ExternalReportInstance; }
         }
     }
 }

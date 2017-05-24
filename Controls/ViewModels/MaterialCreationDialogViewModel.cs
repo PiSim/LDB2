@@ -6,30 +6,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
-namespace Materials.ViewModels
+namespace Controls.ViewModels
 {
-    public class MaterialCreationViewModel : BindableBase
+    public class MaterialCreationDialogViewModel : BindableBase
     {
-        private DelegateCommand _confirmCreation;
+        private DelegateCommand<Window> _confirmCreation;
         private string _aspect, _line, _recipe, _type;
-        private Views.MaterialCreationDialog _parentDialog;
 
-        public MaterialCreationViewModel(Views.MaterialCreationDialog parentDialog) 
+        public MaterialCreationDialogViewModel() 
             : base()
         {
-            _parentDialog = parentDialog;
-
-            _confirmCreation = new DelegateCommand(
-                () => {
-                    _parentDialog.MaterialType = _type;
-                    _parentDialog.MaterialLine = _line;
-                    _parentDialog.MaterialAspect = _aspect;
-                    _parentDialog.MaterialRecipe = _recipe;
-                    
+            _confirmCreation = new DelegateCommand<Window>(
+                _parentDialog => {
                     _parentDialog.DialogResult = true;
                 },
-                () => IsValidInput);
+                _parentDialog => IsValidInput);
         }
 
         public string Aspect
@@ -38,7 +31,7 @@ namespace Materials.ViewModels
             set { _aspect = value; }
         }
 
-        public DelegateCommand ConfirmCreationCommand
+        public DelegateCommand<Window> ConfirmCreationCommand
         {
             get { return _confirmCreation; }
         }

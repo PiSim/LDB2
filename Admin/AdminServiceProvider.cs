@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace Admin
 {
-    public class AdminServiceProvider : IAdminServiceProvider
+    public class AdminServiceProvider
     {
         private DBEntities _entities;
         private DBPrincipal _principal;

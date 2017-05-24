@@ -36,8 +36,10 @@ namespace Instruments
             _regionManager.RegisterViewWithRegion(RegionNames.MainNavigationRegion, 
                                                 typeof(Views.InstrumentsNavigationItem));
 
-            _container.RegisterType<IInstrumentServiceProvider, InstrumentServiceProvider>
+            _container.RegisterType<InstrumentServiceProvider>
                 (new ContainerControlledLifetimeManager());
+            _container.Resolve<InstrumentServiceProvider>();
+
         }
     }
 }

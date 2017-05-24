@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Organizations
 {
-    public class OrganizationServiceProvider : IOrganizationServiceProvider
+    public class OrganizationServiceProvider
     {
         private DBEntities _entities;
         private EventAggregator _aggregator;

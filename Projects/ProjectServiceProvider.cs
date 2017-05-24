@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Projects
 {
-    public class ProjectServiceProvider : IProjectServiceProvider
+    public class ProjectServiceProvider
     {
         private DBEntities _entities;
         private EventAggregator _eventAggregator;

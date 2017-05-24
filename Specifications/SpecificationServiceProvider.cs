@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Specifications
 {
-    public class SpecificationServiceProvider : ISpecificationServiceProvider
+    public class SpecificationServiceProvider
     {
         private DBEntities _entities;
         private EventAggregator _eventAggregator;

@@ -28,16 +28,12 @@ namespace Projects.ViewModels
         private Project _projectInstance;
         private Report _selectedReport;
 
-        private IProjectServiceProvider _prjService;  // DA ELIMINARE
-
         public ProjectInfoViewModel(DBPrincipal principal,
-                                    EventAggregator aggregator,
-                                    IProjectServiceProvider prjService)
+                                    EventAggregator aggregator)
             : base()
         {
             _eventAggregator = aggregator;
             _principal = principal;
-            _prjService = prjService;
 
             #region EventSubscriptions
 
@@ -74,10 +70,6 @@ namespace Projects.ViewModels
             _modifyDetails = new DelegateCommand(
                 () =>
                 {
-                    _prjService.AlterProjectInfo(_projectInstance);
-                    RaisePropertyChanged("LeaderName");
-                    RaisePropertyChanged("Name");
-                    RaisePropertyChanged("OemName");
                 });
 
             _openBatch = new DelegateCommand(

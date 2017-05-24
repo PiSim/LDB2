@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Instruments
 {
-    public class InstrumentServiceProvider : IInstrumentServiceProvider
+    public class InstrumentServiceProvider
     {
         private DBEntities _entities;
         private EventAggregator _eventAggregator;
