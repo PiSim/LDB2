@@ -1,6 +1,7 @@
 ﻿using Controls.Views;
 using DBManager;
 using Infrastructure;
+using Infrastructure.Events;
 using Microsoft.Practices.Unity;
 using Prism.Events;
 using System;
@@ -24,6 +25,12 @@ namespace Organizations
             _entities = entities;
             _aggregator = aggregator;
             _container = container;
+
+            _aggregator.GetEvent<OrganizationCreationRequested>()
+                        .Subscribe(() =>
+                        {
+                            CreateNewOrganization();
+                        });
         }
         
         public Organization CreateNewOrganization()
@@ -47,6 +54,10 @@ namespace Organizations
 
                 _entities.Organizations.Add(output);
                 _entities.SaveChanges();
+
+                _aggregator.GetEvent<OrganizationListRefreshRequested>()
+                            .Publish();
+
                 return output;
             }
             else return null;

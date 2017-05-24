@@ -9,6 +9,21 @@ namespace DBManager
 {
     public static class DataService
     {
+        // Repository for Common DB-Access methods
+
+        public static IEnumerable<Currency> GetCurrencies()
+        {
+            // Returns all currency entities
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.Currencies.Where(cur => true)
+                                            .ToList();
+            }
+        }
+
         public static IEnumerable<Batch> GetBatchesForExternalConstruction(ExternalConstruction target,
                                                                     bool lazyLoadingEnabled = false)
         {

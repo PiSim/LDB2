@@ -1,4 +1,5 @@
 ﻿using DBManager;
+using DBManager.Services;
 using Prism.Commands;
 using Prism.Mvvm;
 using System;
@@ -6,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Controls.ViewModels
 {
@@ -13,53 +15,48 @@ namespace Controls.ViewModels
     {
         private Currency _selectedCurrency;
         private DateTime _date;
-        private DBEntities _entities;
-        private DelegateCommand _cancel, _confirm;
+        private DelegateCommand<Window> _cancel, _confirm;
         private float _total;
+        private IEnumerable<Currency> _currencyList;
+        private IEnumerable<Organization> _organizationList;
         private Organization _selectedOrganization;
         private string _number;
         private Views.NewPODialog _parentDialog;
 
-        public NewPODialogViewModel(DBEntities entities,
-                                    Views.NewPODialog parentDialog) : base()
+        public NewPODialogViewModel() : base()
         {
-            _entities = entities;
-            _parentDialog = parentDialog;
             _date = DateTime.Now;
-            _selectedCurrency = _entities.Currencies.First(cur => cur.Code == "EUR");
+            _currencyList = DataService.GetCurrencies();
+            _selectedCurrency = _currencyList.First(cur => cur.Code == "EUR");
+            _organizationList = OrganizationService.GetOrganizations(OrganizationRoleNames.TestLab);
 
-            _cancel = new DelegateCommand(
-                () =>
+            _cancel = new DelegateCommand<Window>(
+                parent =>
                 {
-                    _parentDialog.DialogResult = false;
+                    parent.DialogResult = false;
                 });
 
-            _confirm = new DelegateCommand(
-                () =>
+            _confirm = new DelegateCommand<Window>(
+                parent =>
                 {
-                    _parentDialog.Currency = _selectedCurrency;
-                    _parentDialog.Date = _date;
-                    _parentDialog.Number = _number;
-                    _parentDialog.Supplier = _selectedOrganization;
-                    _parentDialog.Total = _total;
-                    _parentDialog.DialogResult = true;
+                    parent.DialogResult = true;
                 },
-                () => IsValidInput);
+                parent => IsValidInput);
         }
 
-        public DelegateCommand CancelCommand
+        public DelegateCommand<Window> CancelCommand
         {
             get { return _cancel; }
         }
 
-        public DelegateCommand ConfirmCommand
+        public DelegateCommand<Window> ConfirmCommand
         {
             get { return _confirm; }
         }
 
-        public List<Currency> CurrencyList
+        public IEnumerable<Currency> CurrencyList
         {
-            get { return new List<Currency>(_entities.Currencies); }
+            get { return _currencyList; }
         }
 
         public DateTime Date
@@ -79,16 +76,11 @@ namespace Controls.ViewModels
             set { _number = value; }
         }
 
-        public List<Organization> OrganizationList
+        public IEnumerable<Organization> OrganizationList
         {
             get
             {
-                OrganizationRole supplier = _entities.OrganizationRoles
-                    .First(oro => oro.Name == "TEST_LAB");
-
-                return new List<Organization>((supplier.OrganizationMappings
-                    .Where(orm => orm.IsSelected == true )
-                    .Select(orm => orm.Organization)));
+                return _organizationList;
             }
         }
 
@@ -112,7 +104,7 @@ namespace Controls.ViewModels
 
         public void SetOrganization(Organization target)
         {
-            _selectedOrganization = OrganizationList.Find(org => org.ID == target.ID);
+            _selectedOrganization = _organizationList.First(org => org.ID == target.ID);
             RaisePropertyChanged("SelectedOrganization");
         }
 

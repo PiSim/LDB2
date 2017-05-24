@@ -4,10 +4,15 @@
 -ConstructionMain
 -ExternalConstructionDetail
 -ExternalConstructionMain
+-ExternalReportEdit
 -ExternalReportMain
+-InstrumentEdit
 -InstrumentMain
 -MaterialInfoMain
 -MethodMain
+-NewPODialog
+-OrganizationMain
+-PeopleMain
 -ProjectCreation
 -ProjectMain
 -ProjectInfo

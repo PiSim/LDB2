@@ -1,4 +1,5 @@
 ﻿using DBManager;
+using Microsoft.Practices.Prism.Mvvm;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,20 +19,17 @@ namespace Materials.Views
     /// <summary>
     /// Interaction logic for BatchPickerDialog.xaml
     /// </summary>
-    public partial class BatchPickerDialog : Window
+    public partial class BatchPickerDialog : Window, IView
     {
-        private string _batchNumber;
-        
-        public BatchPickerDialog(DBEntities entities)
+        public BatchPickerDialog()
         {
-            DataContext = new ViewModels.BatchPickerDialogViewModel(this);
             InitializeComponent();
         }
         
         public string BatchNumber
         {
-            get { return _batchNumber; }
-            set { _batchNumber = value; }
+            get { return (DataContext as ViewModels.BatchPickerDialogViewModel).Number; }
+            set { (DataContext as ViewModels.BatchPickerDialogViewModel).Number = value; }
         }
     }
 }

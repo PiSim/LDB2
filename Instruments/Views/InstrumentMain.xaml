@@ -82,12 +82,12 @@
                           Grid.Row="1">
                 <ListView.View>
                     <GridView>
+                        <GridViewColumn Header="Scadenza"
+                                        DisplayMemberBinding="{Binding CalibrationDueDate, StringFormat=d}"/>
                         <GridViewColumn Header="Codice"
                                         DisplayMemberBinding="{Binding Code}"/>
                         <GridViewColumn Header="Tipo"
                                         DisplayMemberBinding="{Binding InstrumentType.Name}"/>
-                        <GridViewColumn Header="Scadenza"
-                                        DisplayMemberBinding="{Binding CalibrationDueDate, StringFormat=d}"/> 
                     </GridView>
                 </ListView.View>   
             </ListView>

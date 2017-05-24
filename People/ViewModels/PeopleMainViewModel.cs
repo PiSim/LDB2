@@ -1,4 +1,5 @@
 ﻿using DBManager;
+using DBManager.Services;
 using Infrastructure;
 using Infrastructure.Events;
 using Prism.Commands;
@@ -15,28 +16,27 @@ namespace People.ViewModels
 {
     public class PeopleMainViewModel : BindableBase
     {
-        private DBEntities _entities;
         private DelegateCommand _newPerson;
         private EventAggregator _eventAggregator;
-        private IAdminServiceProvider _adminServiceProvider;
         private Person _selectedPerson;
 
         public PeopleMainViewModel(DBEntities entities,
                                     EventAggregator aggregator,
                                     IAdminServiceProvider adminServiceProvider) : base()
         {
-            _entities = entities;
             _eventAggregator = aggregator;
-            _adminServiceProvider = adminServiceProvider;
 
             _eventAggregator.GetEvent<CommitRequested>()
-                            .Subscribe(() => _entities.SaveChanges());
+                            .Subscribe(() => _selectedPerson.Update());
+
+            _eventAggregator.GetEvent<PeopleListUpdateRequested>()
+                            .Subscribe(() => RaisePropertyChanged("PeopleList"));
 
             _newPerson = new DelegateCommand(
                 () =>
                 {
-                    _adminServiceProvider.AddPerson();
-                    RaisePropertyChanged("PeopleList");
+                    _eventAggregator.GetEvent<PersonCreationRequested>()
+                                    .Publish();
                 });
         }
 
@@ -51,20 +51,22 @@ namespace People.ViewModels
             set
             {
                 _selectedPerson = value;
+                _selectedPerson.Load();
+
                 RaisePropertyChanged("SelectedPerson");
                 RaisePropertyChanged("PersonRoleMappingList");
             }
         }
 
-        public List<Person> PeopleList
+        public IEnumerable<Person> PeopleList
         {
             get
             {
-                return new List<Person>(_entities.People.OrderBy(per => per.Name));
+                return PeopleService.GetPeople();
             }
         }
 
-        public List<PersonRoleMapping> PersonRoleMappingList
+        public IEnumerable<PersonRoleMapping> PersonRoleMappingList
         {
             get
             {
@@ -72,8 +74,7 @@ namespace People.ViewModels
                     return new List<PersonRoleMapping>();
 
                 else
-                    return new List<PersonRoleMapping>
-                        (_selectedPerson.RoleMappings);
+                    return _selectedPerson.RoleMappings;
             }
         }
         

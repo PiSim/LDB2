@@ -24,7 +24,7 @@ namespace Instruments.ViewModels
         private Instrument _instance;
 
         public InstrumentEditViewModel(DBPrincipal principal,
-                                    EventAggregator aggregator) : base()
+                                        EventAggregator aggregator) : base()
         {
             _editMode = false;
             _eventAggregator = aggregator;
@@ -86,6 +86,11 @@ namespace Instruments.ViewModels
         public bool CanModifyInstrumentInfo
         {
             get { return true; }
+        }
+
+        public bool EditMode
+        {
+            get { return _editMode; }
         }
 
         public string InstrumentCode

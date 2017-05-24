@@ -1,4 +1,5 @@
 ﻿using DBManager;
+using DBManager.Services;
 using Infrastructure;
 using Infrastructure.Events;
 using Prism.Commands;
@@ -15,29 +16,25 @@ namespace Organizations.ViewModels
 {
     public class OrganizationsMainViewModel : BindableBase
     {
-        private DBEntities _entities;
         private DelegateCommand _createNewOrganization;
         private EventAggregator _eventAggregator;
-        private IOrganizationServiceProvider _organizationServiceProvider;
         private Organization _selectedOrganization;
 
-        public OrganizationsMainViewModel(DBEntities entities,
-                                            EventAggregator aggregator,
-                                            IOrganizationServiceProvider organizationServiceProvider) : base()
+        public OrganizationsMainViewModel(EventAggregator aggregator) : base()
         {
-            _entities = entities;
             _eventAggregator = aggregator;
-            _organizationServiceProvider = organizationServiceProvider;
 
             _eventAggregator.GetEvent<CommitRequested>()
-                            .Subscribe(() => _entities.SaveChanges());
+                            .Subscribe(() => _selectedOrganization.Update());
+            _eventAggregator.GetEvent<OrganizationListRefreshRequested>()
+                            .Subscribe(() => RaisePropertyChanged("OrganizationList"));
+
 
             _createNewOrganization = new DelegateCommand(
                 () =>
                 {
-                    Organization tempOrg = _organizationServiceProvider.CreateNewOrganization();
-                    if (tempOrg != null)
-                        RaisePropertyChanged("OrganizationList");
+                    _eventAggregator.GetEvent<OrganizationCreationRequested>()
+                                    .Publish();
                 });
         }
 
@@ -52,17 +49,18 @@ namespace Organizations.ViewModels
             set
             {
                 _selectedOrganization = value;
+                _selectedOrganization.Load();
+
                 RaisePropertyChanged("SelectedOrganization");
                 RaisePropertyChanged("RoleList");
             }
         }
 
-        public List<Organization> OrganizationList
+        public IEnumerable<Organization> OrganizationList
         {
             get
             {
-                return new List<Organization>
-                    (_entities.Organizations.OrderBy(org => org.Name));
+                return OrganizationService.GetOrganizations();
             }
         }
 

@@ -23,7 +23,6 @@ namespace DBManager.Services
                                             .OrderBy(inst => inst.CalibrationDueDate)
                                             .ToList();                                            
             }
-
         }
 
         public static IEnumerable<Instrument> GetInstruments()
@@ -55,6 +54,8 @@ namespace DBManager.Services
                                                             .Select(mtd => mtd.Standard.Organization))
                                                             .Include(inst => inst.AssociatedMethods
                                                             .Select(mtd => mtd.Property))
+                                                            .Include(inst => inst.CalibrationReports
+                                                            .Select(cal => cal.Laboratory))
                                                             .Include(inst => inst.CalibrationResponsible)
                                                             .Include(inst => inst.MaintenanceEvent
                                                             .Select(mte => mte.Organization))

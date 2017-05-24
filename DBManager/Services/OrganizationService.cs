@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,6 +27,40 @@ namespace DBManager.Services
 
                 else
                     return entities.Organizations.ToList();
+            }
+        }
+
+        public static void Load(this Organization entry)
+        {
+            // Loads all relevant Related Entities into a given organization entry
+
+            if (entry == null)
+                return;
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                entities.Organizations.Attach(entry);
+
+                Organization tempEntry = entities.Organizations.Include(org => org.RoleMapping
+                                                                .Select(orm => orm.Role))
+                                                                .First(org => org.ID == entry.ID);
+
+                entities.Entry(entry).CurrentValues.SetValues(tempEntry);
+            }
+        }
+
+        public static void Update(this Organization entry)
+        {
+            // Updates the db values for a given Organization entry
+
+            using (DBEntities entities = new DBEntities())
+            {
+                Organization tempEntry = entities.Organizations.First(org => org.ID == entry.ID);
+
+                entities.Entry(entry).CurrentValues.SetValues(tempEntry);
+                entities.SaveChanges();
             }
         }
 

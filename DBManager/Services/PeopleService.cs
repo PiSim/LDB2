@@ -7,9 +7,25 @@ using System.Threading.Tasks;
 
 namespace DBManager.Services
 {
-    public class PeopleService
+    public static class PeopleService
     {
         #region Operations for People entities
+
+        public static IEnumerable<Person> GetPeople(string roleName = null)
+        {
+            // Returns all People entities, a rolename can be provided to filter by
+
+            using (DBEntities entities = new DBEntities())
+            {
+
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.People.Where(per => roleName == null || per.RoleMappings
+                                        .First(prm => prm.Role.Name == roleName)
+                                        .IsSelected)
+                                        .ToList();
+            }
+        }
 
         public static IEnumerable<Person> GetProjectLeaders()
         {
@@ -23,6 +39,44 @@ namespace DBManager.Services
                                                     .First(role => role.Name == PersonRoleNames.ProjectLeader))
                                                     .Select(prm => prm.Person)
                                                     .ToList();            
+            }
+        }
+
+        public static void Load(this Person entry)
+        {
+            // Loads the relevant Related Entities into a given Person Instance
+
+            if (entry == null)
+                return;
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                entities.People.Attach(entry);
+
+                Person tempEntry = entities.People.Include(per => per.RoleMappings
+                                                    .Select(prm => prm.Role))
+                                                    .First(per => per.ID == entry.ID);
+
+                entities.Entry(entry).CurrentValues.SetValues(entry);
+            }
+        }
+
+        public static void Update(this Person entry)
+        {
+            // Updates the DB values of a given entry
+
+            if (entry == null)
+                return;
+
+            using (DBEntities entities = new DBEntities())
+            {
+                Person tempEntry = entities.People.First(per => per.ID == entry.ID);
+
+                entities.Entry(tempEntry).CurrentValues.SetValues(entry);
+
+                entities.SaveChanges();
             }
         }
 

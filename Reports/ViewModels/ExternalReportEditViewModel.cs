@@ -1,4 +1,5 @@
 ﻿using DBManager;
+using DBManager.Services;
 using Infrastructure;
 using Infrastructure.Events;
 using Prism.Commands;
@@ -17,35 +18,25 @@ namespace Reports.ViewModels
     public class ExternalReportEditViewModel : BindableBase
     {
         private Batch _selectedBatch;
-        private DBEntities _entities;
         private DBPrincipal _principal;
         private DelegateCommand _addBatch, _addFile, _addPO, _openBatch, _openFile, _removeBatch, _removeFile;
         private EventAggregator _eventAggregator;
         private ExternalReport _instance;
         private ExternalReportFile _selectedFile;
-        private IMaterialServiceProvider _materialServiceProvider;
-        private IReportServiceProvider _reportServiceProvider;
-        private ObservableCollection<Batch> _batchList;
-        private ObservableCollection<ExternalReportFile> _reportFiles;
+        private string _batchNumber;
 
-        public ExternalReportEditViewModel(DBEntities entities,
-                                            DBPrincipal principal,
-                                            EventAggregator aggregator,
-                                            IMaterialServiceProvider materialServiceProvider,
-                                            IReportServiceProvider reportServiceProvider) : base()
+        public ExternalReportEditViewModel(DBPrincipal principal,
+                                            EventAggregator aggregator) : base()
         {
             _eventAggregator = aggregator;
-            _materialServiceProvider = materialServiceProvider;
-            _reportServiceProvider = reportServiceProvider;
-            _entities = entities;
             _principal = principal;
 
-            _eventAggregator.GetEvent<CommitRequested>().Subscribe(() => _entities.SaveChanges());
+            _eventAggregator.GetEvent<CommitRequested>().Subscribe(() => _instance.Update());
             
             _addBatch = new DelegateCommand(
                 () => 
                 {
-                    Batch tempBatch = _materialServiceProvider.StartBatchSelection();
+                    Batch tempBatch = MaterialServiceProvider.StartBatchSelection();
                     if (tempBatch != null)
                     {
                         _instance.Batches.Add(tempBatch);
@@ -66,8 +57,8 @@ namespace Reports.ViewModels
                             ExternalReportFile temp = new ExternalReportFile();
                             temp.Path = pth;
                             temp.Description = "";
-                            ReportFiles.Add(temp);   
-                            _instance.ExternalReportFiles.Add(temp);
+
+                            _instance.AddFile(temp);
                         }
                     }
                 });
@@ -75,8 +66,8 @@ namespace Reports.ViewModels
             _addPO = new DelegateCommand(
                 () =>
                 {
-                    _reportServiceProvider.AddPOToExternalReport(_instance);
-                    _entities.Entry<ExternalReport>(_instance).Reload();
+                    ReportServiceProvider.AddPOToExternalReport(_instance);
+
                     RaisePropertyChanged("OrderCurrency");
                     RaisePropertyChanged("OrderDate");
                     RaisePropertyChanged("OrderNumber");
@@ -102,9 +93,7 @@ namespace Reports.ViewModels
             _removeBatch = new DelegateCommand(
                 () =>
                 {
-                    _entities.Batches.Remove(SelectedBatch);
-
-                    _batchList.Remove(_selectedBatch);
+                    _selectedFile.Delete();
                     SelectedBatch = null;
                 },
                 () => _selectedBatch != null);
@@ -112,8 +101,7 @@ namespace Reports.ViewModels
             _removeFile = new DelegateCommand(
                 () =>
                 {
-                    ReportFiles.Remove(_selectedFile);
-                    _entities.ExternalReportFiles.Remove(_selectedFile);
+                    _selectedFile.Delete();
                     SelectedFile = null;
                 },
                 () => _selectedFile != null);
@@ -134,9 +122,9 @@ namespace Reports.ViewModels
             get { return _addPO; }
         }
         
-        public ObservableCollection<Batch> BatchList
+        public IEnumerable<Batch> BatchList
         {
-            get { return _batchList; }
+            get { return _instance.Batches; }
         }
 
         public string Description
@@ -191,16 +179,14 @@ namespace Reports.ViewModels
             set 
             {
                 _instance = value;
+                _instance.Load();
+                
+                SelectedBatch = null;
+                SelectedFile = null;
+                
+                RaisePropertyChanged("BatchList");
                 RaisePropertyChanged("Currency");
                 RaisePropertyChanged("Description");
-
-                SelectedBatch = null;
-
-                _batchList = new ObservableCollection<Batch>(_instance.Batches);
-                RaisePropertyChanged("BatchList");
-
-                _reportFiles = new ObservableCollection<ExternalReportFile>
-                    (_instance.ExternalReportFiles);
                 RaisePropertyChanged("ReportFiles");
                 RaisePropertyChanged("ExternalLab");
                 RaisePropertyChanged("InternalNumber");
@@ -308,9 +294,9 @@ namespace Reports.ViewModels
             get { return _removeFile; }
         }
 
-        public ObservableCollection<ExternalReportFile> ReportFiles
+        public IEnumerable<ExternalReportFile> ReportFiles
         {
-            get { return _reportFiles; }
+            get { return _instance.ExternalReportFiles; }
         }
 
         public bool ReportReceived

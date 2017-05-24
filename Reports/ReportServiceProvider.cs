@@ -48,37 +48,41 @@ namespace Reports
                 });
         }
 
-        public PurchaseOrder AddPOToExternalReport(ExternalReport target)
+        public static PurchaseOrder AddPOToExternalReport(ExternalReport target)
         {
-            ExternalReport targetReport = _entities.ExternalReports.First(xtr => xtr.ID == target.ID);
 
-            NewPODialog poDialog = _container.Resolve<NewPODialog>();
-            poDialog.SetSupplier(targetReport.ExternalLab);
-
-            if (poDialog.ShowDialog() == true)
+            using (DBEntities entities = new DBEntities())
             {
-                PurchaseOrder output = _entities.PurchaseOrders.FirstOrDefault(po => po.Number == poDialog.Number);
+                ExternalReport targetReport = entities.ExternalReports.First(xtr => xtr.ID == target.ID);
 
-                if (output == null)
+                NewPODialog poDialog = new NewPODialog();
+                poDialog.SetSupplier(targetReport.ExternalLab);
+
+                if (poDialog.ShowDialog() == true)
                 {
-                    output = new PurchaseOrder();
-                    output.Currency = _entities.Currencies
-                         .First(crn => crn.ID == poDialog.Currency.ID);
-                    output.Number = poDialog.Number;
-                    output.OrderDate = poDialog.Date;
-                    output.Organization = _entities.Organizations
-                        .First(sup => sup.ID == poDialog.Supplier.ID);
-                    output.Total = poDialog.Total;
+                    PurchaseOrder output = entities.PurchaseOrders.FirstOrDefault(po => po.Number == poDialog.Number);
+
+                    if (output == null)
+                    {
+                        output = new PurchaseOrder();
+                        output.Currency = entities.Currencies
+                             .First(crn => crn.ID == poDialog.Currency.ID);
+                        output.Number = poDialog.Number;
+                        output.OrderDate = poDialog.Date;
+                        output.Organization = entities.Organizations
+                            .First(sup => sup.ID == poDialog.Supplier.ID);
+                        output.Total = poDialog.Total;
+                    }
+
+                    targetReport.PO = output;
+                    entities.SaveChanges();
+
+                    return output;
                 }
 
-                targetReport.PO = output;
-                _entities.SaveChanges();
-
-                return output;
+                else
+                    return null;
             }
-
-            else
-                return null;
         } 
 
         public void ApplyControlPlan(IEnumerable<ISelectableRequirement> reqList, ControlPlan conPlan)

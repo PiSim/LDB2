@@ -9,6 +9,24 @@ namespace DBManager.Services
 {
     public static class MaterialService
     {
+
+        #region Operations for Aspect entities
+
+        public static Aspect GetAspect(string code)
+        {
+            // Returns an Aspect entity with the given code
+            // if none is found null is returned
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.Aspects.FirstOrDefault(asp => asp.Code == code);
+            }
+        }
+
+        #endregion
+
         #region Operations for Batch entities
 
         public static Batch GetBatch(int ID)
@@ -24,20 +42,6 @@ namespace DBManager.Services
             using (DBEntities entities = new DBEntities())
             {
                 return entities.Batches.FirstOrDefault(entry => entry.Number == batchNumber);
-            }
-        }
-
-        public static IEnumerable<Construction> GetConstructionsWithoutProject()
-        {
-            // returns all Construction entities unassigned to a Project
-
-            using (DBEntities entities = new DBEntities())
-            {
-                return entities.Constructions.Where(cns => cns.Project == null)
-                                            .Include(cns => cns.Aspect)
-                                            .Include(cns => cns.ExternalConstruction)
-                                            .Include(cns => cns.Type)
-                                            .ToList();
             }
         }
 
@@ -125,6 +129,26 @@ namespace DBManager.Services
             }
         }
 
+        public static Construction GetConstruction(string typeCode,
+                                                    string line,
+                                                    string aspectCode)
+        {
+            // Returns a construction with the given typeCode, line and aspectCode
+            // if none is found in the DB, null is returned
+
+            if (typeCode == null || line == null || aspectCode == null)
+                throw new NullReferenceException();
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.Constructions.FirstOrDefault(con => con.Aspect.Code == typeCode
+                                                                && con.Line == line
+                                                                && con.Type.Code == typeCode);
+            }
+        }
+
         public static IEnumerable<Construction> GetConstructions()
         {
             // Returns all Construction entities
@@ -137,6 +161,20 @@ namespace DBManager.Services
                                             .Include(con => con.ExternalConstruction)
                                             .Include(con => con.Project)
                                             .Include(con => con.Type)
+                                            .ToList();
+            }
+        }
+
+        public static IEnumerable<Construction> GetConstructionsWithoutProject()
+        {
+            // returns all Construction entities unassigned to a Project
+
+            using (DBEntities entities = new DBEntities())
+            {
+                return entities.Constructions.Where(cns => cns.Project == null)
+                                            .Include(cns => cns.Aspect)
+                                            .Include(cns => cns.ExternalConstruction)
+                                            .Include(cns => cns.Type)
                                             .ToList();
             }
         }
@@ -261,8 +299,61 @@ namespace DBManager.Services
 
         #endregion
 
+        #region Operations for Material entities
+
+        public static Material GetMaterial(Construction construction,
+                                            Recipe recipe)
+        {
+            // Returns a Material entities with the given construction and recipe
+            // if none is found null is returned
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.Materials.FirstOrDefault(mat => mat.ConstructionID == construction.ID
+                                                            && mat.RecipeID == recipe.ID);
+            }
+        }
+
+        #endregion
+
+        #region Operations for MaterialType entities
+
+        public static MaterialType GetMaterialType(string code)
+        {
+            // Returns a MaterialType entity with the given code
+            // if none is found null is returned
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.MaterialTypes.FirstOrDefault(mty => mty.Code == code);
+            }
+        }
+
+        #endregion
+
+        #region Operations for Recipe entities
+
+        public static Recipe GetRecipe(string code)
+        {
+            // Returns the recipe with the given code
+            // if none is found, null is returned
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.Recipes.FirstOrDefault(rec => rec.Code == code);
+            }
+        }
+
+        #endregion
+
         #region Operations for Sample entities
-        
+
         public static IEnumerable<Sample> GetRecentlyArrivedSamples(int number = 25)
         {
             using (DBEntities entities = new DBEntities())

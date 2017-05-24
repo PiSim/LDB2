@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace Materials
 {
-    public class MaterialServiceProvider : IMaterialServiceProvider
+    public class MaterialServiceProvider
     {
         private DBEntities _entities;
         private DBPrincipal _principal;
@@ -73,46 +73,55 @@ namespace Materials
             return newEntry;
         }
 
-        private Material GetMaterial()
+        private static Material GetMaterial()
         {
             Material output = null;
-            Views.MaterialCreationDialog matDialog = _container.Resolve<Views.MaterialCreationDialog>();
+            Views.MaterialCreationDialog matDialog = new Views.MaterialCreationDialog();
             
             if (matDialog.ShowDialog() == true)
             {
-                Construction tempConstruction = _entities.Constructions.FirstOrDefault(con => con.Type.Code == matDialog.MaterialType &&
-                                                                                            con.Line == matDialog.MaterialLine &&
-                                                                                            con.Aspect.Code == matDialog.MaterialAspect);
+                Construction tempConstruction = MaterialService.GetConstruction(matDialog.MaterialType,
+                                                                                matDialog.MaterialLine,
+                                                                                matDialog.MaterialAspect);
                 
-                Recipe tempRecipe = _entities.Recipes.FirstOrDefault(rcp => rcp.Code == matDialog.MaterialRecipe);
+                Recipe tempRecipe = MaterialService.GetRecipe(matDialog.MaterialRecipe);
 
                 if (tempConstruction != null && tempRecipe != null)
-                    output = _entities.Materials.FirstOrDefault(mat => mat.ConstructionID == tempConstruction.ID &&
-                                                                                mat.RecipeID == tempRecipe.ID);
+                    output = MaterialService.GetMaterial(tempConstruction, tempRecipe);
 
-                else 
+                else
                 {
                     if (tempConstruction == null)
                     {
                         tempConstruction = new Construction();
-                        tempConstruction.Type = _entities.MaterialTypes.First(mty => mty.Code == matDialog.MaterialType);
+                        tempConstruction.Type = MaterialService.GetMaterialType(matDialog.MaterialType);
                         tempConstruction.Line = matDialog.MaterialLine;
-                        tempConstruction.Aspect = _entities.Aspects.FirstOrDefault(asp => asp.Code == matDialog.MaterialAspect);
-                        
+                        tempConstruction.Aspect = MaterialService.GetAspect(matDialog.MaterialAspect);
+
                         if (tempConstruction.Aspect == null)
                         {
                             Aspect tempAspect = new Aspect();
                             tempAspect.Code = matDialog.MaterialAspect;
                             tempAspect.Name = "";
+
+                            tempAspect.Create();
+
                             tempConstruction.Aspect = tempAspect;
                         }
+
+
+                        tempConstruction.Update();
                     }
 
                     if (tempRecipe == null)
                     {
                         tempRecipe = new Recipe();
                         tempRecipe.Code = matDialog.MaterialRecipe;
+
+                        tempRecipe.Create();
                     };
+
+                    output.Update();
                 }
                 
                 if (output == null)
@@ -120,38 +129,40 @@ namespace Materials
                     output = new Material();
                     output.Construction = tempConstruction;
                     output.Recipe = tempRecipe;
+
+                    output.Create();
                 }
             }
 
             return output;
         }
 
-        public void CheckMaterialData(Material target)
+        public static void CheckMaterialData(Material target)
         {
             if (target.Construction.Project == null)
             {
-                Views.ProjectPickerDialog prjDialog = _container.Resolve<Views.ProjectPickerDialog>();
+                Views.ProjectPickerDialog prjDialog = new Views.ProjectPickerDialog();
                 if (prjDialog.ShowDialog() == true)
-                    target.Construction.Project = _entities.Projects.First(prj => prj.ID == prjDialog.ProjectInstance.ID);
+                    target.Construction.Project = prjDialog.ProjectInstance;
             }
 
             if (target.Recipe.Colour == null)
             {
-                Views.ColorPickerDialog colourPicker = _container.Resolve<Views.ColorPickerDialog>();
+                Views.ColorPickerDialog colourPicker = new Views.ColorPickerDialog();
                 if (colourPicker.ShowDialog() == true)
-                    target.Recipe.Colour = _entities.Colours.First(clr => clr.ID == colourPicker.ColourInstance.ID);
+                    target.Recipe.Colour = colourPicker.ColourInstance;
             }
         }
 
-        public Batch GetBatch(string batchNumber)
+        public static Batch GetBatch(string batchNumber)
         {
-            Batch temp = _entities.Batches.FirstOrDefault(bb => bb.Number == batchNumber);
+            Batch temp = MaterialService.GetBatch(batchNumber);
 
             if (temp == null)
             {
                 temp = new Batch();
                 temp.Number = batchNumber;
-                _entities.Batches.Add(temp);
+                temp.Create();
             }
 
             if (temp.Material == null)
@@ -160,7 +171,6 @@ namespace Materials
             if (temp.Material != null)
                 CheckMaterialData(temp.Material);
             
-            _entities.SaveChanges();
             return temp;
         }
 
@@ -170,9 +180,9 @@ namespace Materials
             colorCreator.ShowDialog();
         }
 
-        public Batch StartBatchSelection()
+        public static Batch StartBatchSelection()
         {
-            Views.BatchPickerDialog batchPicker = _container.Resolve<Views.BatchPickerDialog>();
+            Views.BatchPickerDialog batchPicker = new Views.BatchPickerDialog();
             if (batchPicker.ShowDialog() == true)
             {
                 Batch output = GetBatch(batchPicker.BatchNumber);

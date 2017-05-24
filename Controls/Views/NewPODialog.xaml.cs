@@ -1,4 +1,5 @@
 ﻿using DBManager;
+using Microsoft.Practices.Prism.Mvvm;
 using System;
 using System.Windows;
 
@@ -7,51 +8,44 @@ namespace Controls.Views
     /// <summary>
     /// Interaction logic for NewPODialog.xaml
     /// </summary>
-    public partial class NewPODialog : Window
+    public partial class NewPODialog : Window, IView
     {
-        private Currency _currency;
-        private DateTime _date;
-        private Organization _supplier;
-        private string _number;
-        private float _total;
-
-        public NewPODialog(DBEntities entities)
+        public NewPODialog()
         {
-            DataContext = new ViewModels.NewPODialogViewModel(entities, this);
             InitializeComponent();
         }
 
         public Currency Currency
         {
-            get { return _currency; }
+            get { return (DataContext as ViewModels.NewPODialogViewModel).SelectedCurrency; }
             set
             {
-                _currency = value;
+                (DataContext as ViewModels.NewPODialogViewModel).SelectedCurrency = value;
             }
         }
 
         public DateTime Date
         {
-            get { return _date; }
-            internal set { _date = value; }
+            get { return (DataContext as ViewModels.NewPODialogViewModel).Date; }
+            internal set { (DataContext as ViewModels.NewPODialogViewModel).Date = value; }
         }
 
         public string Number
         {
-            get { return _number; }
-            internal set { _number = value; }
+            get { return (DataContext as ViewModels.NewPODialogViewModel).Number; }
+            internal set { (DataContext as ViewModels.NewPODialogViewModel).Number = value; }
         }
 
         public Organization Supplier
         {
-            get { return _supplier; }
-            set { _supplier = value; }
+            get { return (DataContext as ViewModels.NewPODialogViewModel).SelectedOrganization; }
+            set { (DataContext as ViewModels.NewPODialogViewModel).SelectedOrganization = value; }
         }
 
         public float Total
         {
-            get { return _total; }
-            internal set { _total = value; }
+            get { return (DataContext as ViewModels.NewPODialogViewModel).Total; }
+            internal set { (DataContext as ViewModels.NewPODialogViewModel).Total = value; }
         }
 
         public void SetSupplier(Organization target)

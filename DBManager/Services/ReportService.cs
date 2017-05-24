@@ -34,6 +34,22 @@ namespace DBManager.Services
 
         #region Operations for ExternalReport entities
 
+        public static void AddFile(this ExternalReport entry,
+                                    ExternalReportFile fileEntry)
+        {
+            // Adds an ExternalReportFile entity to an ExternalReport
+
+            if (entry == null || fileEntry == null)
+                throw new NullReferenceException();
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.ExternalReports.Attach(entry);
+                entry.ExternalReportFiles.Add(fileEntry);
+                entities.SaveChanges();
+            }
+        }
+
         public static IEnumerable<ExternalReport> GetExternalReports()
         {
             // Returns all external report instances
@@ -118,6 +134,25 @@ namespace DBManager.Services
                 ExternalReport tempEntry = entities.ExternalReports.First(exrep => exrep.ID == entry.ID);
                 entities.Entry(tempEntry).CurrentValues.SetValues(entry);
                 entities.Entry(tempEntry).State = EntityState.Modified;
+                entities.SaveChanges();
+            }
+        }
+
+        #endregion
+
+        #region Operations for ExternalReportFile entities 
+
+        public static void Delete(this ExternalReportFile entry)
+        {
+            // Deletes a given ExternalReportFile entry
+
+            if (entry == null)
+                return;
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.ExternalReportFiles.Attach(entry);
+                entities.Entry(entry).State = EntityState.Deleted;
                 entities.SaveChanges();
             }
         }
