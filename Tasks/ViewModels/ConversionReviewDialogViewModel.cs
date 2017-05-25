@@ -55,7 +55,7 @@ namespace Tasks.ViewModels
                     _reportInstance.SpecificationVersion = _taskInstance.SpecificationVersion;
                     _reportInstance.StartDate = DateTime.Now.Date.ToShortDateString();
 
-                    foreach (Test tst in CommonServices.GenerateTestList(_testList))
+                    foreach (Test tst in CommonProcedures.GenerateTestList(_testList))
                         _reportInstance.Tests.Add(tst);
 
                     foreach (TaskItemWrapper riw in _testList.Where(tiw => tiw.IsSelected))

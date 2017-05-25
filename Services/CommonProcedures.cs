@@ -1,6 +1,7 @@
 ﻿using Controls.Views;
 using DBManager;
 using DBManager.Services;
+using DBManager.EntityExtensions;
 using Infrastructure;
 using Infrastructure.Wrappers;
 using System;
@@ -11,9 +12,8 @@ using System.Threading.Tasks;
 
 namespace Services
 {
-    public static class CommonServices
+    public static class CommonProcedures
     {
-
         public static void ApplyControlPlan(IEnumerable<ISelectableRequirement> reqList, ControlPlan conPlan)
         {
             if (conPlan.IsDefault)
@@ -39,6 +39,8 @@ namespace Services
 
         public static void CheckMaterialData(Material target)
         {
+            target.Load();
+
             if (target.Construction.Project == null)
             {
                 ProjectPickerDialog prjDialog = new ProjectPickerDialog();
@@ -87,13 +89,19 @@ namespace Services
 
             if (temp == null)
             {
-                temp = new Batch();
-                temp.Number = batchNumber;
+                temp = new Batch()
+                {
+                    Number = batchNumber
+                };
+
                 temp.Create();
             }
 
             if (temp.Material == null)
-                temp.Material = GetMaterial();
+            {
+                temp.SetMaterial(StartMaterialSelection());
+                temp.Update();
+            }
 
             if (temp.Material != null)
                 CheckMaterialData(temp.Material);
@@ -101,68 +109,81 @@ namespace Services
             return temp;
         }
 
-        private static Material GetMaterial()
+        public static Material GetMaterial(string typeCode,
+                                            string line,
+                                            string aspectCode,
+                                            string recipeCode)
         {
             Material output = null;
-            MaterialCreationDialog matDialog = new MaterialCreationDialog();
 
-            if (matDialog.ShowDialog() == true)
+            Construction tempConstruction = MaterialService.GetConstruction(typeCode,
+                                                                            line,
+                                                                            aspectCode);
+
+            Recipe tempRecipe = MaterialService.GetRecipe(recipeCode);
+
+            if (tempConstruction != null && tempRecipe != null)
+                output = MaterialService.GetMaterial(tempConstruction, tempRecipe);
+
+            else
             {
-                Construction tempConstruction = MaterialService.GetConstruction(matDialog.MaterialType,
-                                                                                matDialog.MaterialLine,
-                                                                                matDialog.MaterialAspect);
-
-                Recipe tempRecipe = MaterialService.GetRecipe(matDialog.MaterialRecipe);
-
-                if (tempConstruction != null && tempRecipe != null)
-                    output = MaterialService.GetMaterial(tempConstruction, tempRecipe);
-
-                else
+                if (tempConstruction == null)
                 {
-                    if (tempConstruction == null)
+                    tempConstruction = new Construction();
+                    tempConstruction.SetType(MaterialService.GetMaterialType(typeCode));
+                    tempConstruction.Line = line;
+                    tempConstruction.SetAspect(MaterialService.GetAspect(aspectCode));
+
+                    if (tempConstruction.Aspect == null)
                     {
-                        tempConstruction = new Construction();
-                        tempConstruction.Type = MaterialService.GetMaterialType(matDialog.MaterialType);
-                        tempConstruction.Line = matDialog.MaterialLine;
-                        tempConstruction.Aspect = MaterialService.GetAspect(matDialog.MaterialAspect);
+                        Aspect tempAspect = new Aspect();
+                        tempAspect.Code = aspectCode;
+                        tempAspect.Name = "";
 
-                        if (tempConstruction.Aspect == null)
-                        {
-                            Aspect tempAspect = new Aspect();
-                            tempAspect.Code = matDialog.MaterialAspect;
-                            tempAspect.Name = "";
+                        tempAspect.Create();
 
-                            tempAspect.Create();
-
-                            tempConstruction.Aspect = tempAspect;
-                        }
-
-
-                        tempConstruction.Update();
+                        tempConstruction.SetAspect(tempAspect);
                     }
 
-                    if (tempRecipe == null)
-                    {
-                        tempRecipe = new Recipe();
-                        tempRecipe.Code = matDialog.MaterialRecipe;
-
-                        tempRecipe.Create();
-                    };
-
-                    output.Update();
+                    tempConstruction.Create();
                 }
 
-                if (output == null)
+                if (tempRecipe == null)
                 {
-                    output = new Material();
-                    output.Construction = tempConstruction;
-                    output.Recipe = tempRecipe;
+                    tempRecipe = new Recipe();
+                    tempRecipe.Code = recipeCode;
 
-                    output.Create();
+                    tempRecipe.Create();
                 }
             }
 
+            if (output == null)
+            {
+                output = new Material();
+
+                output.SetConstruction(tempConstruction);
+                output.SetRecipe(tempRecipe);
+
+                output.Create();
+            }
+
             return output;
+        }
+
+        public static Material StartMaterialSelection()
+        {
+            MaterialCreationDialog materialPicker = new MaterialCreationDialog();
+            if (materialPicker.ShowDialog() == true)
+            {
+                Material output = GetMaterial(materialPicker.MaterialType,
+                                            materialPicker.MaterialLine,
+                                            materialPicker.MaterialAspect,
+                                            materialPicker.MaterialRecipe);
+                return output;
+            }
+
+            else
+                return null;
         }
 
         public static Batch StartBatchSelection()

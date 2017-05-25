@@ -64,8 +64,6 @@ namespace DBManager.Services.Tests
                 Assert.IsNotNull(req.Method.Standard.Organization);
                 Assert.IsNotNull(req.Method.Property);
             }
-
         }
-
     }
 }

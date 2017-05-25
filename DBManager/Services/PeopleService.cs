@@ -21,7 +21,7 @@ namespace DBManager.Services
                 entities.Configuration.LazyLoadingEnabled = false;
 
                 return entities.People.Where(per => roleName == null || per.RoleMappings
-                                        .First(prm => prm.Role.Name == roleName)
+                                        .FirstOrDefault(prm => prm.Role.Name == roleName)
                                         .IsSelected)
                                         .ToList();
             }

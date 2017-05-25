@@ -146,6 +146,12 @@
     <Compile Include="Currency.cs">
       <DependentUpon>LabDB.tt</DependentUpon>
     </Compile>
+    <Compile Include="EntityExtensions\BatchExtension.cs" />
+    <Compile Include="EntityExtensions\ConstructionExtension.cs" />
+    <Compile Include="EntityExtensions\InstrumentExtension.cs" />
+    <Compile Include="EntityExtensions\MaterialExtension.cs" />
+    <Compile Include="EntityExtensions\RecipeExtension.cs" />
+    <Compile Include="EntityExtensions\ReportExtension.cs" />
     <Compile Include="PersonRoleNames.cs" />
     <Compile Include="Services\DataService.cs" />
     <Compile Include="DBManagerModule.cs" />

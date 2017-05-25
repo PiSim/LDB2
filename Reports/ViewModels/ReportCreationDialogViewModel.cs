@@ -1,4 +1,5 @@
 using DBManager;
+using DBManager.EntityExtensions;
 using DBManager.Services;
 using Infrastructure;
 using Infrastructure.Events;
@@ -44,7 +45,7 @@ namespace Reports.ViewModels
                 parent => {
                     _reportInstance = new Report();
                     _reportInstance.Author = _author;
-                    _reportInstance.Batch = MaterialService.GetBatch(_batchNumber);
+                    _reportInstance.SetBatch(MaterialService.GetBatch(_batchNumber));
                     _reportInstance.Category = "TR";
                     if (_selectedControlPlan != null)
                         _reportInstance.Description = _selectedControlPlan.Name;
@@ -52,7 +53,7 @@ namespace Reports.ViewModels
                         _reportInstance.Description = _selectedSpecification.Description;
                     _reportInstance.IsComplete = false;
                     _reportInstance.Number = _number;
-                    _reportInstance.SpecificationVersion = _selectedVersion;
+                    _reportInstance.SetSpecificationVersion(_selectedVersion);
                     _reportInstance.StartDate = DateTime.Now.ToShortDateString();
                     
                     _reportInstance.Tests =  new List<Test>(ReportServiceProvider.GenerateTestList(_requirementList));
@@ -146,7 +147,7 @@ namespace Reports.ViewModels
                 RaisePropertyChanged("SelectedControlPlan");
                 if (value != null)
                 {
-                    CommonServices.ApplyControlPlan(_requirementList, _selectedControlPlan);
+                    CommonProcedures.ApplyControlPlan(_requirementList, _selectedControlPlan);
                 }
             }
         }

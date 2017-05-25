@@ -28,7 +28,7 @@ namespace DBManager
         public string Description { get; set; }
         public Nullable<System.DateTime> EndDate { get; set; }
         public int Number { get; set; }
-        public int SpecificationVersionID { get; private set; }
+        public int SpecificationVersionID { get; set; }
         public string StartDate { get; set; }
         public bool IsComplete { get; set; }
         public Nullable<int> SpecificationIssueID { get; set; }

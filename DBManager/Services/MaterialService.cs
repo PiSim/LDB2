@@ -9,14 +9,31 @@ namespace DBManager.Services
 {
     public static class MaterialService
     {
-
         #region Operations for Aspect entities
 
         public static void Create(this Aspect entry)
         {
+            if (entry == null)
+                throw new NullReferenceException();
+
             using (DBEntities entities = new DBEntities())
             {
                 entities.Aspects.Add(entry);
+                entities.SaveChanges();
+            }
+        }
+
+        public static void Delete(this Aspect entry)
+        {
+            // Deletes an aspect entity
+
+            if (entry == null)
+                throw new NullReferenceException();
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Entry(entities.Aspects.First(asp => asp.ID == entry.ID))
+                        .State = EntityState.Deleted;
                 entities.SaveChanges();
             }
         }
@@ -34,6 +51,38 @@ namespace DBManager.Services
             }
         }
 
+        public static void Load(this Aspect entry)
+        {
+            // Loads the values of an Aspect entry from the DB
+
+            if (entry == null)
+                return;
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Aspects.Attach(entry);
+
+                Aspect tempEntry = entities.Aspects.First(asp => asp.ID == entry.ID);
+                entities.Entry(entry).CurrentValues.SetValues(tempEntry);
+            }
+        }
+
+        public static void Update(this Aspect entry)
+        {
+            // Updates a given Aspect entry
+
+            if (entry == null)
+                throw new NullReferenceException();
+
+            using (DBEntities entities = new DBEntities())
+            {
+                Aspect tempEntry = entities.Aspects.First(asp => asp.ID == entry.ID);
+
+                entities.Entry(tempEntry).CurrentValues.SetValues(entry);
+                entities.SaveChanges();
+            }
+        }
+
         #endregion
 
         #region Operations for Batch entities
@@ -42,7 +91,10 @@ namespace DBManager.Services
         {
             using (DBEntities entities = new DBEntities())
             {
-                return entities.Batches.FirstOrDefault(entry => entry.ID == ID);
+                return entities.Batches.Include(btc => btc.Material.Construction.Aspect)
+                                        .Include(btc => btc.Material.Construction.Type)
+                                        .Include(btc => btc.Material.Recipe.Colour)
+                                        .FirstOrDefault(entry => entry.ID == ID);
             }
         }
 
@@ -50,7 +102,10 @@ namespace DBManager.Services
         {
             using (DBEntities entities = new DBEntities())
             {
-                return entities.Batches.FirstOrDefault(entry => entry.Number == batchNumber);
+                return entities.Batches.Include(btc => btc.Material.Construction.Aspect)
+                                        .Include(btc => btc.Material.Construction.Type)
+                                        .Include(btc => btc.Material.Recipe.Colour)
+                                        .FirstOrDefault(entry => entry.Number == batchNumber);
             }
         }
 
@@ -67,8 +122,10 @@ namespace DBManager.Services
         {
             using (DBEntities entities = new DBEntities())
             {
-                entities.Batches.Attach(entry);
-                entities.Entry(entry).State = System.Data.Entity.EntityState.Deleted;
+                Batch tempEntry = entities.Batches.First(btc => btc.ID == entry.ID);
+
+                entities.Entry(tempEntry).State = EntityState.Deleted;
+
                 entities.SaveChanges();
             }
         }
@@ -108,9 +165,11 @@ namespace DBManager.Services
 
             using (DBEntities entities = new DBEntities())
             {
-                entities.Configuration.ProxyCreationEnabled = false;
-
                 Batch tempEntry = entities.Batches.First(btc => btc.ID == entry.ID);
+
+                if (tempEntry.Material != null && tempEntry.MaterialID == 0)
+                    tempEntry.MaterialID = tempEntry.Material.ID;
+
                 entities.Entry(tempEntry).CurrentValues.SetValues(entry);
 
                 entities.SaveChanges();
@@ -138,6 +197,44 @@ namespace DBManager.Services
 
         #region Operations for Construction entities
 
+        public static void Create(this Construction entry)
+        {
+            if (entry == null)
+                throw new NullReferenceException();
+
+            using (DBEntities entities = new DBEntities())
+            {
+                if (entry.AspectID == 0)
+                    entry.AspectID = entry.Aspect.ID;
+
+                if (entry.TypeID == 0)
+                    entry.TypeID = entry.Type.ID;
+
+                Construction newEntry = new Construction();
+
+                entities.Constructions.Add(newEntry);
+                entities.Entry(newEntry).CurrentValues.SetValues(entry);
+                entities.SaveChanges();
+
+                entry.ID = newEntry.ID;
+            }
+        }
+
+        public static void Delete(this Construction entry)
+        {
+            // Deletes an aspect entity
+
+            if (entry == null)
+                throw new NullReferenceException();
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Constructions.Attach(entry);
+                entities.Entry(entry).State = EntityState.Deleted;
+                entities.SaveChanges();
+            }
+        }
+
         public static IEnumerable<Batch> GetBatches(this Construction entry)
         {
             // Gets all batches for a given Construction entity, 
@@ -157,6 +254,19 @@ namespace DBManager.Services
             }
         }
 
+        public static Construction GetConstruction(int ID)
+        {
+            // Returns a construction with the given ID
+            // if none is found in the DB, null is returned
+            
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.Constructions.FirstOrDefault(con => con.ID == ID);
+            }
+        }
+
         public static Construction GetConstruction(string typeCode,
                                                     string line,
                                                     string aspectCode)
@@ -171,7 +281,7 @@ namespace DBManager.Services
             {
                 entities.Configuration.LazyLoadingEnabled = false;
 
-                return entities.Constructions.FirstOrDefault(con => con.Aspect.Code == typeCode
+                return entities.Constructions.FirstOrDefault(con => con.Aspect.Code == aspectCode
                                                                 && con.Line == line
                                                                 && con.Type.Code == typeCode);
             }
@@ -205,6 +315,13 @@ namespace DBManager.Services
                                             .Include(cns => cns.Type)
                                             .ToList();
             }
+        }
+
+        public static void SetType(this Construction entry, 
+                                    MaterialType typeEntity)
+        {
+            entry.Type = typeEntity;
+            entry.TypeID = (typeEntity == null) ? 0 : typeEntity.ID;
         }
 
         public static void Update(this Construction entry)
@@ -342,17 +459,19 @@ namespace DBManager.Services
 
         #region Operations for Material entities
 
-        public static void Create(this Material entry)
+        public static Material GetMaterial(int ID)
         {
-            // Inserts a new Material entity in the DB
-
-            if (entry == null)
-                throw new NullReferenceException();
+            // Returns a Material entities with the given ID
+            // if none is found null is returned
 
             using (DBEntities entities = new DBEntities())
             {
-                entities.Materials.Add(entry);
-                entities.SaveChanges();
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.Materials.Include(mat => mat.Construction.Aspect)
+                                        .Include(mat => mat.Construction.Type)
+                                        .Include(mat => mat.Recipe)
+                                        .FirstOrDefault(mat => mat.ID == ID);
             }
         }
 
@@ -366,21 +485,11 @@ namespace DBManager.Services
             {
                 entities.Configuration.LazyLoadingEnabled = false;
 
-                return entities.Materials.FirstOrDefault(mat => mat.ConstructionID == construction.ID
+                return entities.Materials.Include(mat => mat.Construction.Aspect)
+                                        .Include(mat => mat.Construction.Type)
+                                        .Include(mat => mat.Recipe)
+                                        .FirstOrDefault(mat => mat.ConstructionID == construction.ID
                                                             && mat.RecipeID == recipe.ID);
-            }
-        }
-
-        public static void Update(this Material entry)
-        {
-            // Updates the DB values of a Material entity
-
-            using (DBEntities entities = new DBEntities())
-            {
-                Material tempEntry = entities.Materials.First(mat => mat.ID == entry.ID);
-                entities.Entry(tempEntry).CurrentValues.SetValues(entry);
-
-                entities.SaveChanges();
             }
         }
 

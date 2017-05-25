@@ -1,4 +1,5 @@
 ﻿using DBManager;
+using Microsoft.Practices.Prism.Mvvm;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,20 +19,16 @@ namespace Instruments.Views
     /// <summary>
     /// Interaction logic for InstrumentCreationDialog.xaml
     /// </summary>
-    public partial class InstrumentCreationDialog : Window
+    public partial class InstrumentCreationDialog : Window, IView
     {
-        private Instrument _instrumentInstance;
-
         public InstrumentCreationDialog(DBEntities entities)
         {
-            DataContext = new ViewModels.InstrumentCreationDialogViewModel(this, entities);
             InitializeComponent();
         }
 
         public Instrument InstrumentInstance
         {
-            get { return _instrumentInstance; }
-            set { _instrumentInstance = value; }
+            get { return (DataContext as ViewModels.InstrumentCreationDialogViewModel).InstrumentInstance; }
         }
     }
 }

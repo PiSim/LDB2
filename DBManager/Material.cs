@@ -20,9 +20,9 @@ namespace DBManager
             this.Batches = new HashSet<Batch>();
         }
     
-        public int ID { get; private set; }
-        public int ConstructionID { get; private set; }
-        public int RecipeID { get; private set; }
+        public int ID { get; set; }
+        public int ConstructionID { get; set; }
+        public int RecipeID { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Batch> Batches { get; set; }

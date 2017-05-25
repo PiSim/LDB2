@@ -15,7 +15,7 @@ namespace DBManager
     public partial class Sample
     {
         public int ID { get; set; }
-        public int BatchID { get; private set; }
+        public int BatchID { get; set; }
         public string Code { get; set; }
         public System.DateTime Date { get; set; }
         public int personID { get; set; }

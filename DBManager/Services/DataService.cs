@@ -50,6 +50,19 @@ namespace DBManager
             }
         }
 
+        public static IEnumerable<InstrumentType> GetinstrumentTypes()
+        {
+            using (var entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.InstrumentTypes
+                                .Where(insty => true)
+                                .OrderBy(insty => insty.Name)
+                                .ToList();
+            }
+        }
+
         public static IEnumerable<Organization> GetOEMs()
         {
             using (var entities = new DBEntities())

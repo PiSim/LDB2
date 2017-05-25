@@ -2017,7 +2017,7 @@
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Number" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="MaterialID" Type="Int32" a:SetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+          <Property Name="MaterialID" Type="Int32" a:SetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <Property Name="Notes" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" DefaultValue="" />
           <NavigationProperty Name="BatchFiles" Relationship="Self.batch1" FromRole="batches" ToRole="batch_files" />
           <NavigationProperty Name="Material" Relationship="Self.batch_by_material" FromRole="batches" ToRole="materials" />
@@ -2042,14 +2042,14 @@
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Line" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="AspectID" Type="Int32" Nullable="false" a:GetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:SetterAccess="Private" />
+          <Property Name="AspectID" Type="Int32" Nullable="false" a:GetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:SetterAccess="Public" />
           <Property Name="ProjectID" Type="Int32" a:GetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:SetterAccess="Public" />
-          <Property Name="ExternalConstructionID" Type="Int32" a:GetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:SetterAccess="Internal" />
+          <Property Name="ExternalConstructionID" Type="Int32" a:GetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:SetterAccess="Public" />
           <NavigationProperty Name="Aspect" Relationship="Self.aspect1" FromRole="constructions" ToRole="aspects" />
           <NavigationProperty Name="Materials" Relationship="Self.construction_to_material" FromRole="constructions" ToRole="materials" />
           <NavigationProperty Name="ExternalConstruction" Relationship="Self.external_construction" FromRole="constructions" ToRole="external_constructions" />
           <NavigationProperty Name="Project" Relationship="Self.project1" FromRole="constructions" ToRole="projects" />
-          <Property Name="TypeID" Type="Int32" a:SetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" Nullable="false" />
+          <Property Name="TypeID" Type="Int32" a:SetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" Nullable="false" />
           <NavigationProperty Name="Type" Relationship="labdbModel.type_to_construction" FromRole="Construction" ToRole="material_types" />
         </EntityType>
         <EntityType Name="ExternalConstruction">
@@ -2115,9 +2115,9 @@
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" a:SetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
-          <Property Name="ConstructionID" Type="Int32" Nullable="false" a:GetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:SetterAccess="Private" />
-          <Property Name="RecipeID" Type="Int32" Nullable="false" a:SetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" a:SetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+          <Property Name="ConstructionID" Type="Int32" Nullable="false" a:GetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:SetterAccess="Public" />
+          <Property Name="RecipeID" Type="Int32" Nullable="false" a:SetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="Batches" Relationship="Self.batch_by_material" FromRole="materials" ToRole="batches" />
           <NavigationProperty Name="Construction" Relationship="Self.construction_to_material" FromRole="materials" ToRole="constructions" />
           <NavigationProperty Name="Recipe" Relationship="Self.recipe_to_material" FromRole="materials" ToRole="recipes" />
@@ -2231,7 +2231,7 @@
           <Property Name="Description" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="EndDate" Type="DateTime" />
           <Property Name="Number" Type="Int32" Nullable="false" />
-          <Property Name="SpecificationVersionID" Type="Int32" Nullable="false" a:GetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:SetterAccess="Private" />
+          <Property Name="SpecificationVersionID" Type="Int32" Nullable="false" a:GetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:SetterAccess="Public" />
           <Property Name="StartDate" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="Batch" Relationship="Self.batch_to_report" FromRole="reports" ToRole="batches" />
           <NavigationProperty Name="Author" Relationship="Self.author_to_report" FromRole="reports" ToRole="people" />
@@ -2269,7 +2269,7 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="BatchID" Type="Int32" Nullable="false" a:SetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+          <Property Name="BatchID" Type="Int32" Nullable="false" a:SetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <Property Name="Code" Type="String" MaxLength="1" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Date" Type="DateTime" Nullable="false" />
           <NavigationProperty Name="Batch" Relationship="Self.batch_to_sample" FromRole="samples" ToRole="batches" />

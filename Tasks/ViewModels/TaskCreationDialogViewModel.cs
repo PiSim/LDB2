@@ -151,7 +151,7 @@ namespace Tasks.ViewModels
                 RaisePropertyChanged("SelectedControlPlan");
                 if (value != null)
                 {
-                    CommonServices.ApplyControlPlan(_requirementList, _selectedControlPlan);
+                    CommonProcedures.ApplyControlPlan(_requirementList, _selectedControlPlan);
                 }
             }
         }

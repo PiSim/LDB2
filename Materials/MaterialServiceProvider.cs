@@ -47,14 +47,14 @@ namespace Materials
 
         public Sample AddSampleLog(string batchNumber, string actionCode)
         {
-            Batch temp = CommonServices.GetBatch(batchNumber);
+            Batch temp = CommonProcedures.GetBatch(batchNumber);
 
             Sample output = new Sample();
 
-            output.Batch = temp;
+            output.BatchID = temp.ID;
             output.Date = DateTime.Now;
             output.Code = actionCode;
-            output.LogAuthor = _principal.CurrentPerson;
+            output.personID = _principal.CurrentPerson.ID;
 
             output.Create();
 
@@ -82,10 +82,6 @@ namespace Materials
 
             return newEntry;
         }
-
-        
-
-        
 
         private void OnColorCreationRequested()
         {

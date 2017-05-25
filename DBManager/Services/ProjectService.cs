@@ -9,7 +9,6 @@ namespace DBManager.Services
 {
     public static class ProjectService
     {
-
         #region Operations for Project entitites
 
         public static IEnumerable<Batch> GetBatches(this Project entry)

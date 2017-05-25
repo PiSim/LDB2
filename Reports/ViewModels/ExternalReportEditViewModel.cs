@@ -37,7 +37,7 @@ namespace Reports.ViewModels
             _addBatch = new DelegateCommand(
                 () => 
                 {
-                    Batch tempBatch = CommonServices.StartBatchSelection();
+                    Batch tempBatch = CommonProcedures.StartBatchSelection();
                     if (tempBatch != null)
                     {
                         _instance.Batches.Add(tempBatch);

@@ -22,10 +22,10 @@ namespace DBManager
     
         public int ID { get; set; }
         public string Line { get; set; }
-        public int AspectID { get; private set; }
+        public int AspectID { get; set; }
         public Nullable<int> ProjectID { get; set; }
-        public Nullable<int> ExternalConstructionID { get; internal set; }
-        public int TypeID { get; private set; }
+        public Nullable<int> ExternalConstructionID { get; set; }
+        public int TypeID { get; set; }
     
         public virtual Aspect Aspect { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

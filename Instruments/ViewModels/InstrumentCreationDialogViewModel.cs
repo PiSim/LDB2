@@ -1,11 +1,12 @@
 ﻿using DBManager;
+using DBManager.EntityExtensions;
+using DBManager.Services;
 using Prism.Commands;
 using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows;
 
 namespace Instruments.ViewModels
 {
@@ -13,53 +14,47 @@ namespace Instruments.ViewModels
     internal class InstrumentCreationDialogViewModel : BindableBase
     {
         private bool _isUnderControl;
-        private DBEntities _entities;
-        private DelegateCommand _cancel, _confirm;
+        private DelegateCommand<Window> _cancel, _confirm;
+        private Instrument _instrumentInstance;
         private InstrumentType _selectedType;
         private int _controlPeriod;
         private Organization _manufacturer;
         private string _code, _model, _serial;
-        private Views.InstrumentCreationDialog _parentDialog;
 
-        internal InstrumentCreationDialogViewModel(Views.InstrumentCreationDialog parentDialog,
-                                                    DBEntities entities) : base()
+        internal InstrumentCreationDialogViewModel() : base()
         {
-            _entities = entities;
-            _parentDialog = parentDialog;
 
-            _cancel = new DelegateCommand(
-                () =>
+            _cancel = new DelegateCommand<Window>(
+                parent =>
                 {
-                    _parentDialog.DialogResult = false;
+                    parent.DialogResult = false;
                 });
 
-            _confirm = new DelegateCommand(
-                () =>
+            _confirm = new DelegateCommand<Window>(
+                parent =>
                 {
-                    Instrument newInstrument = new Instrument();
-                    newInstrument.Code = _code;
-                    newInstrument.Description = "";
-                    newInstrument.ControlPeriod = (sbyte)_controlPeriod;
-                    newInstrument.InstrumentType = _selectedType;
-                    newInstrument.IsUnderControl = IsUnderControl;
+                    _instrumentInstance = new Instrument();
+                    _instrumentInstance.Code = _code;
+                    _instrumentInstance.Description = "";
+                    _instrumentInstance.ControlPeriod = (sbyte)_controlPeriod;
+                    _instrumentInstance.InstrumentType = _selectedType;
+                    _instrumentInstance.IsUnderControl = IsUnderControl;
 
                     if (_isUnderControl)
-                        newInstrument.CalibrationDueDate = DateTime.Now.Date;
+                        _instrumentInstance.CalibrationDueDate = DateTime.Now.Date;
 
-                    newInstrument.Manufacturer = SelectedManufacturer;
-                    newInstrument.Model = Model;
-                    newInstrument.SerialNumber = _serial;
+                    _instrumentInstance.Manufacturer = SelectedManufacturer;
+                    _instrumentInstance.Model = Model;
+                    _instrumentInstance.SerialNumber = _serial;
 
-                    _entities.Instruments.Add(newInstrument);
-                    _entities.SaveChanges();
-
-                    _parentDialog.InstrumentInstance = newInstrument;
-                    _parentDialog.DialogResult = true;
+                    _instrumentInstance.Create();
+                    
+                    parent.DialogResult = true;
                 },
-                () => IsValidInput);
+                parent => IsValidInput);
         }
 
-        public DelegateCommand CancelCommand
+        public DelegateCommand<Window> CancelCommand
         {
             get { return _cancel; }
         }
@@ -70,7 +65,7 @@ namespace Instruments.ViewModels
             set { _code = value; }
         }
 
-        public DelegateCommand ConfirmCommand
+        public DelegateCommand<Window> ConfirmCommand
         {
             get { return _confirm; }
         }
@@ -82,6 +77,11 @@ namespace Instruments.ViewModels
             {
                 _controlPeriod = value;
             }
+        }
+
+        public Instrument InstrumentInstance
+        {
+            get { return _instrumentInstance; }
         }
 
         public bool IsUnderControl
@@ -99,15 +99,11 @@ namespace Instruments.ViewModels
             get { return true; }
         }
 
-        public List<Organization> ManufacturerList
+        public IEnumerable<Organization> ManufacturerList
         {
             get 
-            { 
-
-                OrganizationRole _manufacturerRole = _entities.OrganizationRoles.First(rol => rol.Name == "MANUF");
-                return new List<Organization>(_entities.Organizations.Where(org => org.RoleMapping
-                                                                    .Any(orm => orm.Role.ID == _manufacturerRole.ID && orm.IsSelected == true))
-                                                                    .OrderBy(oor => oor.Name)); 
+            {
+                return OrganizationService.GetOrganizations(OrganizationRoleNames.Manufacturer);                
             }
         }
 
@@ -144,9 +140,9 @@ namespace Instruments.ViewModels
             }
         }
 
-        public List<InstrumentType> TypeList
+        public IEnumerable<InstrumentType> TypeList
         {
-            get { return new List<InstrumentType>(_entities.InstrumentTypes.OrderBy(inty => inty.Name)); }
+            get { return DataService.GetinstrumentTypes(); }
         }
     }
 }
