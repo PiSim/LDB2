@@ -177,9 +177,12 @@ namespace DBManager.Services
             {
                 entities.Configuration.LazyLoadingEnabled = false;
 
-                entities.Reports.Attach(entry);
-                entities.Entry(entry).State = System.Data.Entity.EntityState.Added;
+                Report tempEntry = new Report();
+                entities.Reports.Add(tempEntry);
+                entities.Entry(tempEntry).CurrentValues.SetValues(entry);
                 entities.SaveChanges();
+
+                entry.ID = tempEntry.ID;
             }
         }
 

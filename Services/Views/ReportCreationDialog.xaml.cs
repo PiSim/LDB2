@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace Reports.Views
+namespace Services.Views
 {
     /// <summary>
     /// Interaction logic for ReportCreationDialog.xaml

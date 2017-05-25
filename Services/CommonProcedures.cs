@@ -83,6 +83,34 @@ namespace Services
             return output;
         }
 
+        public static IEnumerable<Test> GenerateTestList(IEnumerable<ISelectableRequirement> reqList)
+        {
+            List<Test> output = new List<Test>();
+
+            foreach (ISelectableRequirement req in reqList.Where(isr => isr.IsSelected))
+            {
+                req.RequirementInstance.Load();
+
+                Test tempTest = new Test();
+                tempTest.IsComplete = false;
+                tempTest.methodID = req.RequirementInstance.Method.ID;
+                tempTest.MethodIssueID = req.RequirementInstance.Method.Standard.CurrentIssue.ID;
+                tempTest.Notes = req.RequirementInstance.Description;
+
+                foreach (SubRequirement subReq in req.RequirementInstance.SubRequirements)
+                {
+                    SubTest tempSubTest = new SubTest();
+                    tempSubTest.Name = subReq.SubMethod.Name;
+                    tempSubTest.Requirement = subReq.RequiredValue;
+                    tempSubTest.UM = subReq.SubMethod.UM;
+                    tempTest.SubTests.Add(tempSubTest);
+                }
+                output.Add(tempTest);
+            }
+
+            return output;
+        }
+
         public static Batch GetBatch(string batchNumber)
         {
             Batch temp = MaterialService.GetBatch(batchNumber);

@@ -405,7 +405,6 @@ namespace DBManager.Services
 
                 int entryID = entry.ID;
 
-                entities.ExternalConstructions.Attach(entry);
 
                 ExternalConstruction tempEntry = entities.ExternalConstructions
                                                         .Include(extc => extc.Constructions.Select(cons => cons.Aspect))
@@ -416,8 +415,12 @@ namespace DBManager.Services
                                                         .Include(extc => extc.Organization)
                                                         .First(extc => extc.ID == entryID);
 
-                entities.Entry(entry).CurrentValues.SetValues(tempEntry);
-
+                entry.Constructions = tempEntry.Constructions;
+                entry.DefaultSpecVersion = tempEntry.DefaultSpecVersion;
+                entry.DefaultSpecVersionID = tempEntry.DefaultSpecVersionID;
+                entry.Name = tempEntry.Name;
+                entry.OemID = tempEntry.OemID;
+                entry.Organization = tempEntry.Organization;
             }
         }
 

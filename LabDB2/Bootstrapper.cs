@@ -72,6 +72,14 @@ namespace LabDB2
                     ModuleType = SecurityModuleType.AssemblyQualifiedName
                 });
 
+            Type ServicesModuleType = typeof(Services.ServicesModule);
+            ModuleCatalog.AddModule(
+                new ModuleInfo()
+                {
+                    ModuleName = ServicesModuleType.Name,
+                    ModuleType = ServicesModuleType.AssemblyQualifiedName
+                });
+
             // Initializing modules to be loaded on demand
 
             Type AdminModuleType = typeof(Admin.AdminModule);

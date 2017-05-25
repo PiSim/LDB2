@@ -7,7 +7,6 @@ using Infrastructure.Wrappers;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
-using Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -15,9 +14,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Forms;
 
-namespace Reports.ViewModels
+namespace Services.ViewModels
 {   
     public class ReportCreationDialogViewModel : BindableBase
     {
@@ -44,8 +42,8 @@ namespace Reports.ViewModels
             _confirm = new DelegateCommand<Window>(
                 parent => {
                     _reportInstance = new Report();
-                    _reportInstance.Author = _author;
-                    _reportInstance.SetBatch(MaterialService.GetBatch(_batchNumber));
+                    _reportInstance.SetAuthor(_author);
+                    _reportInstance.SetBatch(CommonProcedures.GetBatch(_batchNumber));
                     _reportInstance.Category = "TR";
                     if (_selectedControlPlan != null)
                         _reportInstance.Description = _selectedControlPlan.Name;
@@ -55,11 +53,12 @@ namespace Reports.ViewModels
                     _reportInstance.Number = _number;
                     _reportInstance.SetSpecificationVersion(_selectedVersion);
                     _reportInstance.StartDate = DateTime.Now.ToShortDateString();
-                    
-                    _reportInstance.Tests =  new List<Test>(ReportServiceProvider.GenerateTestList(_requirementList));
-
+                    _reportInstance.SpecificationIssueID = _selectedVersion.Specification.Standard.CurrentIssue.ID;
                     _reportInstance.Create();
-                    
+
+                    _reportInstance.AddTests(CommonProcedures
+                                    .GenerateTestList(_requirementList));
+
                     parent.DialogResult = true;
                 },
                 parent => IsValidInput);
@@ -174,7 +173,8 @@ namespace Reports.ViewModels
             set 
             { 
                 _selectedVersion = value;
-                
+                _selectedVersion.Load();
+
                 if (_selectedVersion != null)
                     _requirementList = new List<ISelectableRequirement>(ReportService.GenerateRequirementList(_selectedVersion)
                                                                                     .Select(req => new ReportItemWrapper(req)));

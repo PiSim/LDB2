@@ -32,8 +32,6 @@ namespace Reports
             _container.RegisterType<ViewModels.ExternalReportEditViewModel>();
             _container.RegisterType<ViewModels.ExternalReportMainViewModel>();
 
-            _container.RegisterType<Views.ReportCreationDialog>();
-
             _regionManager.RegisterViewWithRegion(RegionNames.BatchExternalReportListRegion,
                                                 typeof(Views.ExternalReportList));
             _regionManager.RegisterViewWithRegion(RegionNames.MainExternalReportListRegion,

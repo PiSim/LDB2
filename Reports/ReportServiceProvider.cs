@@ -33,19 +33,6 @@ namespace Reports
                 {
                     CreateNewExternalReport();
                 });
-
-            _eventAggregator.GetEvent<ReportCreationRequested>().Subscribe(
-                token =>
-                {
-                    Views.ReportCreationDialog creationDialog =
-                        _container.Resolve<Views.ReportCreationDialog>();
-
-                    if (token.TargetBatch != null)
-                        creationDialog.Batch = token.TargetBatch;
-
-                    if (creationDialog.ShowDialog() == true)
-                        _eventAggregator.GetEvent<ReportListUpdateRequested>().Publish();
-                });
         }
 
         public static PurchaseOrder AddPOToExternalReport(ExternalReport target)
@@ -93,32 +80,6 @@ namespace Reports
                 _eventAggregator.GetEvent<ExternalReportListUpdateRequested>()
                                 .Publish();
             }
-        }
-
-        public static IEnumerable<Test> GenerateTestList(IEnumerable<ISelectableRequirement> reqList)
-        {
-            List<Test> output = new List<Test>();
-
-            foreach (ISelectableRequirement req in reqList.Where(isr => isr.IsSelected))
-            {
-                Test tempTest = new Test();
-                tempTest.IsComplete = false;
-                tempTest.Method = req.RequirementInstance.Method;
-                tempTest.MethodIssue = tempTest.Method.Standard.CurrentIssue;
-                tempTest.Notes = req.RequirementInstance.Description;
-
-                foreach (SubRequirement subReq in req.RequirementInstance.SubRequirements)
-                {
-                    SubTest tempSubTest = new SubTest();
-                    tempSubTest.Name = subReq.SubMethod.Name;
-                    tempSubTest.Requirement = subReq.RequiredValue;
-                    tempSubTest.UM = subReq.SubMethod.UM;
-                    tempTest.SubTests.Add(tempSubTest);
-                }
-                output.Add(tempTest);
-            }
-
-            return output;
         }
 
         

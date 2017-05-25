@@ -19,10 +19,10 @@ namespace Controls.ViewModels
             : base()
         {
             _confirmCreation = new DelegateCommand<Window>(
-                _parentDialog => {
-                    _parentDialog.DialogResult = true;
+                parent => {
+                    parent.DialogResult = true;
                 },
-                _parentDialog => IsValidInput);
+                parent => IsValidInput);
         }
 
         public string Aspect
