@@ -1,4 +1,5 @@
 ﻿using DBManager;
+using DBManager.EntityExtensions;
 using DBManager.Services;
 using Prism.Commands;
 using Prism.Mvvm;
@@ -18,7 +19,7 @@ namespace Specifications.ViewModels
         private Specification _specificationInstance;
         private string _name;
 
-        internal SpecificationCreationDialogViewModel() : base()
+        public SpecificationCreationDialogViewModel() : base()
         {
 
             _cancel = new DelegateCommand<Window>(
@@ -35,13 +36,9 @@ namespace Specifications.ViewModels
                     {
                         tempStd = new Std();
                         tempStd.Name = Name;
-                        tempStd.Organization = _oem;
-
-                        StandardIssue tempIssue = new StandardIssue();
-                        tempIssue.IsCurrent = true;
-                        tempIssue.Issue = DateTime.Now.ToShortDateString();
-                        tempIssue.Standard = tempStd;
-                        tempStd.CurrentIssue = tempIssue;
+                        tempStd.OrganizationID = _oem.ID;
+                        
+                        tempStd.Create();
                     }
 
                     SpecificationVersion tempMain = new SpecificationVersion();

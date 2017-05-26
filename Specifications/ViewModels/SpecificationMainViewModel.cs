@@ -19,20 +19,16 @@ namespace Specifications.ViewModels
         private DelegateCommand _newSpecification, _openSpecification;
         private EventAggregator _eventAggregator;
         private Specification _selectedSpecification;
-        private UnityContainer _container;
 
-        public SpecificationMainViewModel(EventAggregator aggregator,
-                                            UnityContainer container) 
+        public SpecificationMainViewModel(EventAggregator aggregator) 
             : base()
         {
-            _container = container;
             _eventAggregator = aggregator;
 
             _newSpecification = new DelegateCommand(
                 () => 
                 {
-                    Views.SpecificationCreationDialog creationDialog = 
-                        _container.Resolve<Views.SpecificationCreationDialog>();
+                    Views.SpecificationCreationDialog creationDialog = new Views.SpecificationCreationDialog();
                     
                     if (creationDialog.ShowDialog() == true)
                     {
@@ -40,8 +36,7 @@ namespace Specifications.ViewModels
                         SelectedSpecification = temp;
                         _openSpecification.Execute();
                         RaisePropertyChanged("SpecificationList");
-                    }
-                                            
+                    }                        
                 });
 
             _openSpecification = new DelegateCommand(

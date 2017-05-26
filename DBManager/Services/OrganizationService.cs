@@ -19,14 +19,12 @@ namespace DBManager.Services
             {
                 entities.Configuration.LazyLoadingEnabled = false;
 
-                if (roleName != null)
-                    return entities.OrganizationRoleMappings.Where(orm => orm.IsSelected && orm.Role == entities.OrganizationRoles
-                                                            .First(orgr => orgr.Name == roleName))
-                                                            .Select(orm => orm.Organization)
-                                                            .ToList();
-
-                else
-                    return entities.Organizations.ToList();
+                return entities.Organizations.Include(org => org.RoleMapping
+                                                .Select(orm => orm.Role))
+                                                .Where(org => (roleName == null) ? true : org.RoleMapping
+                                                .FirstOrDefault(orm => orm.Role.Name == roleName)
+                                                .IsSelected)
+                                                .ToList();
             }
         }
 

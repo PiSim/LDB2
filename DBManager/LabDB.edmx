@@ -2250,7 +2250,7 @@
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Description" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="MethodID" Type="Int32" Nullable="false" a:SetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+          <Property Name="MethodID" Type="Int32" Nullable="false" a:SetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <Property Name="Name" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" DefaultValue="" />
           <Property Name="Position" Type="Int32" Nullable="false" />
           <Property Name="SpecificationVersionID" Type="Int32" Nullable="false" />
@@ -2317,7 +2317,7 @@
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="OrganizationID" Type="Int32" Nullable="false" a:GetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:SetterAccess="Private" />
+          <Property Name="OrganizationID" Type="Int32" Nullable="false" a:GetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:SetterAccess="Public" />
           <NavigationProperty Name="Methods" Relationship="Self.standard_to_method" FromRole="standards" ToRole="methods" />
           <NavigationProperty Name="Organization" Relationship="Self.organization_to_standard" FromRole="standards" ToRole="organizations" />
           <NavigationProperty Name="Specifications" Relationship="Self.standard_to_specification" FromRole="standards" ToRole="specifications" />

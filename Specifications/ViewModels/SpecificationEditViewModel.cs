@@ -6,6 +6,7 @@ using Infrastructure.Wrappers;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
+using Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -91,8 +92,8 @@ namespace Specifications.ViewModels
             _addTest = new DelegateCommand(
                 () =>
                 {
-                    Requirement newReq =SpecificationServiceProvider.GenerateRequirement(_selectedToAdd);
-                    
+                    Requirement newReq = CommonProcedures.GenerateRequirement(_selectedToAdd);
+                    _instance.AddRequirement(newReq);
 
                     RaisePropertyChanged("MainVersionRequirements");
                 },
@@ -403,11 +404,15 @@ namespace Specifications.ViewModels
                 if (value == null)
                     _controlPlanItemsList = new List<ControlPlanItemWrapper>();
                 
-                else   
+                else
+                {
+
+                    _selectedControlPlan.Load();
                     _controlPlanItemsList = new List<ControlPlanItemWrapper>(_instance.SpecificationVersions
-                                                                                .First(sve => sve.IsMain)
-                                                                                .Requirements
-                                                                                .Select(req => new ControlPlanItemWrapper(_selectedControlPlan, req)));
+                                                                                        .First(sve => sve.IsMain)
+                                                                                        .Requirements
+                                                                                        .Select(req => new ControlPlanItemWrapper(_selectedControlPlan, req)));
+                }
 
                 RaisePropertyChanged("SelectedControlPlan");
                 RaisePropertyChanged("ControlPlanItemsList");

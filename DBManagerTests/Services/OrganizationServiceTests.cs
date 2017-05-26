@@ -25,5 +25,24 @@ namespace DBManager.Services.Tests
 
             Assert.IsTrue(temp.RoleMapping.Count != 0);
         }
+
+        [TestMethod()]
+        public void GetOrganizationsTest()
+        {
+            IEnumerable<Organization> _tempList;
+
+            _tempList = OrganizationService.GetOrganizations();
+
+            Assert.IsNotNull(_tempList);
+            Assert.IsTrue(_tempList.Count() != 0);
+
+            _tempList = OrganizationService.GetOrganizations(OrganizationRoleNames.OEM);
+
+            Assert.IsNotNull(_tempList);
+            Assert.IsTrue(_tempList.Count() != 0);
+            Assert.IsTrue(_tempList.All(org => org.RoleMapping
+                                    .FirstOrDefault(orm => orm.Role.Name == OrganizationRoleNames.OEM)
+                                    .IsSelected));
+        }
     }
 }

@@ -153,6 +153,9 @@
     <Compile Include="EntityExtensions\RecipeExtension.cs" />
     <Compile Include="EntityExtensions\ReportExtension.cs" />
     <Compile Include="EntityExtensions\RequirementExtension.cs" />
+    <Compile Include="EntityExtensions\SpecificationExtension.cs" />
+    <Compile Include="EntityExtensions\SpecificationVersionExtension.cs" />
+    <Compile Include="EntityExtensions\StandardExtension.cs" />
     <Compile Include="EntityExtensions\TestExtension.cs" />
     <Compile Include="PersonRoleNames.cs" />
     <Compile Include="Services\DataService.cs" />

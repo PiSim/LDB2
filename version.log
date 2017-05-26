@@ -19,13 +19,16 @@
 -Aggiornamento strumenti Post calibrazione
 -Aggiunto Modulo Reporting per la generazione procedurale di documenti 
 -Implementato ReportingEngine con funzionalità base per la creazione di fogli di raccolta dati per report
--*Corretto aggiornamento proprietà SpecificationEdit
 -Creata videata info materiali che unifica Colori, Aspetti e Construction
 -Aggiunta videata Externalconstructions
 -Creato metodo per vrificare lo stato di un Task + l'evento per richiamarlo
--Implementate classi statiche di servizio e metodi di estensione per tutti i tipi di entità
+-Implementate classi statiche di servizio per l'accesso al DB
 -Rimosse le interfacce serviceProvider, introdotti eventi per tutte le loro funzioni
--Aggiunto progetto UnitTest per l'assembly DBManager
+-Rimosse le istanze DBEntities da tutti i ViewModel
+-Aggiunta Assembly services per servizi e procedure condivise
+-Creata classe eventListener per raccogliere le sottoscrizioni agli eventi di richiesta servizi
+-Create raccolte di metodi di estensione per diversi tipi di entità 
+-Aggiunti progetti UnitTest per assembly DBManager e Services
 
 v 0.4.4 -- 9/5/2017
 

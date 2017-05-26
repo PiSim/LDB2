@@ -56,6 +56,25 @@ namespace Services
             }
         }
 
+        public static Requirement GenerateRequirement(Method method)
+        {
+            Requirement tempReq = new Requirement();
+            tempReq.MethodID = method.ID;
+            tempReq.IsOverride = false;
+            tempReq.Name = "";
+            tempReq.Description = "";
+            tempReq.Position = 0;
+
+            foreach (SubMethod measure in method.SubMethods)
+            {
+                SubRequirement tempSub = new SubRequirement();
+                tempSub.SubMethodID = measure.ID;
+                tempReq.SubRequirements.Add(tempSub);
+            }
+
+            return tempReq;
+        }
+
         public static IEnumerable<Test> GenerateTestList(IEnumerable<TaskItemWrapper> reqList)
         {
             List<Test> output = new List<Test>();

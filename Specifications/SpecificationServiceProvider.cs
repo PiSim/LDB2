@@ -30,25 +30,6 @@ namespace Specifications
                 () => CreateNewMethod());
         }
 
-        public static Requirement GenerateRequirement(Method method)
-        {
-            Requirement tempReq = new Requirement();
-            tempReq.Method = method;
-            tempReq.IsOverride = false;
-            tempReq.Name = "";
-            tempReq.Description = "";
-            tempReq.Position = 0;
-
-            foreach (SubMethod measure in method.SubMethods)
-            {
-                SubRequirement tempSub = new SubRequirement();
-                tempSub.SubMethod = measure;
-                tempReq.SubRequirements.Add(tempSub);
-            }
-
-            return tempReq;
-        }
-
         private void CreateNewMethod()
         {
             Views.MethodCreationDialog creationDialog =
