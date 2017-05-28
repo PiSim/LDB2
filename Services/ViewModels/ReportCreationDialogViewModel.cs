@@ -22,7 +22,7 @@ namespace Services.ViewModels
         private ControlPlan _selectedControlPlan;
         private DBPrincipal _principal;
         private DelegateCommand<Window> _cancel, _confirm;
-        private ICollection<ISelectableRequirement> _requirementList;
+        private IEnumerable<ISelectableRequirement> _requirementList;
         private IEnumerable<Person> _techList;
         private Int32 _number;
         private Person _author;
@@ -176,7 +176,7 @@ namespace Services.ViewModels
                 _selectedVersion.Load();
 
                 if (_selectedVersion != null)
-                    _requirementList = new List<ISelectableRequirement>(ReportService.GenerateRequirementList(_selectedVersion)
+                    _requirementList = new List<ISelectableRequirement>(_selectedVersion.GenerateRequirementList()
                                                                                     .Select(req => new ReportItemWrapper(req)));
 
                 else

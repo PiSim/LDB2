@@ -51,7 +51,7 @@ namespace Specifications.ViewModels
 
                     _specificationInstance = new Specification();
                     _specificationInstance.Description = "";
-                    _specificationInstance.Standard = tempStd;
+                    _specificationInstance.StandardID = tempStd.ID;
 
                     _specificationInstance.ControlPlans.Add(tempControlPlan);
                     _specificationInstance.SpecificationVersions.Add(tempMain);

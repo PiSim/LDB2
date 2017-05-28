@@ -1,4 +1,5 @@
 ﻿using DBManager;
+using DBManager.EntityExtensions;
 using DBManager.Services;
 using Infrastructure;
 using Infrastructure.Wrappers;
@@ -21,7 +22,7 @@ namespace Tasks.ViewModels
         private DelegateCommand<Window> _cancel, _confirm;
         private IEnumerable<Person> _leaderList;
         private IEnumerable<Specification> _specificationList;
-        private ObservableCollection<ReportItemWrapper> _requirementList;
+        private IEnumerable<ReportItemWrapper> _requirementList;
         private Person _requester;
         private Specification _selectedSpecification;
         private SpecificationVersion _selectedVersion;
@@ -30,7 +31,6 @@ namespace Tasks.ViewModels
         public TaskCreationDialogViewModel() : base()
         {
             _leaderList = PeopleService.GetPeople(PersonRoleNames.ProjectLeader);
-            _requirementList = new ObservableCollection<ReportItemWrapper>();
             _specificationList = SpecificationService.GetSpecifications();
 
             _cancel = new DelegateCommand<Window>(
@@ -43,14 +43,7 @@ namespace Tasks.ViewModels
                 parent => 
                 {
                     _taskInstance = new Task();
-                    Batch tempBatch = MaterialService.GetBatch(_batchNumber);
-
-                    if (tempBatch == null)
-                    {
-                        tempBatch = new Batch();
-                        tempBatch.Number = _batchNumber;
-                        tempBatch.Create();
-                    }
+                    Batch tempBatch = CommonProcedures.GetBatch(_batchNumber);
                     
                     _taskInstance.IsComplete = false;
                     _taskInstance.Notes = _notes;
@@ -58,8 +51,8 @@ namespace Tasks.ViewModels
                     _taskInstance.PriorityModifier = 0;
                     _taskInstance.Progress = 0;
                     _taskInstance.PriorityModifier = 0;
-                    _taskInstance.Requester = _requester;
-                    _taskInstance.SpecificationVersion = _selectedVersion;
+                    _taskInstance.RequesterID = _requester.ID;
+                    _taskInstance.SpecificationVersionID = _selectedVersion.ID;
                     _taskInstance.StartDate = DateTime.Now.Date;
 
                     foreach (ReportItemWrapper req in _requirementList)
@@ -68,7 +61,7 @@ namespace Tasks.ViewModels
                             continue;
 
                         TaskItem temp = new TaskItem();
-                        temp.Requirement = req.RequirementInstance;
+                        temp.RequirementID = req.RequirementInstance.ID;
                         _taskInstance.TaskItems.Add(temp);
                     }
 
@@ -179,14 +172,13 @@ namespace Tasks.ViewModels
             set
             {
                 _selectedVersion = value;
-                RequirementList.Clear();
-
                 if (_selectedVersion != null)
-                {
-                    List<Requirement> tempReq = ReportService.GenerateRequirementList(_selectedVersion);
-                    foreach (Requirement rq in tempReq)
-                        RequirementList.Add(new ReportItemWrapper(rq));
-                }
+                    _requirementList = _selectedVersion.GenerateRequirementList()
+                                                        .Select(req => new ReportItemWrapper(req));
+
+                else
+                    _requirementList = new List<ReportItemWrapper>();
+
                 RaisePropertyChanged("SelectedVersion");
             }
         }
@@ -208,14 +200,9 @@ namespace Tasks.ViewModels
             }
         }
 
-        public ObservableCollection<ReportItemWrapper> RequirementList
+        public IEnumerable<ReportItemWrapper> RequirementList
         {
             get { return _requirementList; }
-            set
-            {
-                _requirementList = value;
-                RaisePropertyChanged("RequirementList");
-            }
         }
 
         public Task TaskInstance

@@ -58,6 +58,8 @@ namespace Services
 
         public static Requirement GenerateRequirement(Method method)
         {
+            method.LoadSubMethods();
+
             Requirement tempReq = new Requirement();
             tempReq.MethodID = method.ID;
             tempReq.IsOverride = false;

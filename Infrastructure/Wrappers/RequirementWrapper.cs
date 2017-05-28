@@ -1,4 +1,5 @@
 ﻿using DBManager;
+using DBManager.EntityExtensions;
 using DBManager.Services;
 using Prism.Mvvm;
 using System;
@@ -78,7 +79,9 @@ namespace Infrastructure.Wrappers
 
         public string Test
         {
-            get { return _requirementInstance.Method.Property.Name; }
+            get {
+
+                return _requirementInstance.Method.Property.Name; }
         }
 
         // Method definitions

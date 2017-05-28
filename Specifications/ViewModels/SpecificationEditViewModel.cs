@@ -1,4 +1,5 @@
 ﻿using DBManager;
+using DBManager.EntityExtensions;
 using DBManager.Services;
 using Infrastructure;
 using Infrastructure.Events;
@@ -93,9 +94,11 @@ namespace Specifications.ViewModels
                 () =>
                 {
                     Requirement newReq = CommonProcedures.GenerateRequirement(_selectedToAdd);
-                    _instance.AddRequirement(newReq);
-
+                    _instance.AddMethod(newReq);
                     RaisePropertyChanged("MainVersionRequirements");
+
+                    GenerateRequirementList();
+                    RaisePropertyChanged("RequirementList");
                 },
                 () => _selectedToAdd != null);
 
@@ -173,6 +176,7 @@ namespace Specifications.ViewModels
                 {
                     _selectedToRemove.Delete();
                     RaisePropertyChanged("MainVersionRequirements");
+                    GenerateRequirementList();
                     RaisePropertyChanged("RequirementList");
                 },
 
@@ -212,15 +216,12 @@ namespace Specifications.ViewModels
                 () => RaisePropertyChanged("ReportList"));
 
         }
-        
+
         private void GenerateRequirementList()
         {
-            List<Requirement> tempReqList = ReportService.GenerateRequirementList(_selectedVersion);
-            _requirementList = new List<RequirementWrapper>();
-            foreach (Requirement rr in tempReqList)
-                _requirementList.Add(new RequirementWrapper(rr, _selectedVersion));
+            _requirementList = new List<RequirementWrapper>(_selectedVersion.GenerateRequirementList()
+                                                                           .Select(req => new RequirementWrapper(req, _selectedVersion)));
         }
-
 
         public DelegateCommand AddControlPlanCommand
         {
@@ -340,9 +341,9 @@ namespace Specifications.ViewModels
         {
             get
             {
-                if (MainVersion == null)
+                if (_instance == null)
                     return null;
-                return MainVersion.Requirements;
+                return _instance.GetMainVersionRequirements();
             }
         }
         

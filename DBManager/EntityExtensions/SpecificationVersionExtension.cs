@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,5 +23,77 @@ namespace DBManager.EntityExtensions
                 entities.SaveChanges();
             }
         }
+
+        public static IEnumerable<Requirement> GenerateRequirementList(this SpecificationVersion version)
+        {
+            if (version == null)
+                return new List<Requirement>();
+
+            if (version.IsMain)
+                return version.GetRequirements();
+
+            else
+            {
+                List<Requirement> output = new List<Requirement>(
+                    version.Specification.GetMainVersionRequirements());
+
+                foreach (Requirement requirement in version.GetRequirements())
+                {
+                    int ii = output.FindIndex(rr => rr.Method.ID == requirement.Method.ID);
+                    output[ii] = requirement;
+                }
+
+                return output;
+            }
+        }
+
+        public static IEnumerable<Requirement> GetRequirements(this SpecificationVersion entry)
+        {
+            // returns loaded requirement list for version
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.Requirements.Include(req => req.Method.Property)
+                                            .Include(req => req.Method.Standard.Organization)
+                                            .Include(req => req.SubRequirements
+                                            .Select(sreq => sreq.SubMethod))
+                                            .Where(req => req.SpecificationVersionID == entry.ID)
+                                            .ToList();
+            }
+        }
+
+
+        public static void Load(this SpecificationVersion entry)
+        {
+            // Loads relevant RelatedEntities for given SpecificationVersion entry
+
+            if (entry == null)
+                return;
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                entities.SpecificationVersions.Attach(entry);
+
+                SpecificationVersion tempEntry = entities.SpecificationVersions.Include(specv => specv.ExternalConstructions)
+                                                                                .Include(specv => specv.Requirements
+                                                                                .Select(req => req.SubRequirements))
+                                                                                .Include(specv => specv.Requirements
+                                                                                .Select(req => req.Overridden))
+                                                                                .Include(specv => specv.Requirements
+                                                                                .Select(req => req.Method.Property))
+                                                                                .Include(specv => specv.Requirements
+                                                                                .Select(req => req.Method.Standard.Organization))
+                                                                                .Include(req => req.Specification.Standard.Organization)
+                                                                                .Include(req => req.Specification.Standard.CurrentIssue)
+                                                                                .First(specv => specv.ID == entry.ID);
+
+                entities.Entry(entry).CurrentValues.SetValues(tempEntry);
+            }
+        }
+
     }
 }

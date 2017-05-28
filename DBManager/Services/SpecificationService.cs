@@ -106,64 +106,6 @@ namespace DBManager.Services
             }
         }
 
-        public static void Create(this Method entry)
-        {
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.Methods.Attach(entry);
-                entities.Entry(entry).State = System.Data.Entity.EntityState.Added;
-                entities.SaveChanges();
-            }
-        }
-
-        public static void Delete(this Method entry)
-        {
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.Methods.Attach(entry);
-                entities.Entry(entry).State = System.Data.Entity.EntityState.Deleted;
-                entities.SaveChanges();
-            }
-        }
-
-        public static void Load(this Method entry)
-        {
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.Configuration.LazyLoadingEnabled = false;
-
-                entities.Methods.Attach(entry);
-
-                Method tempEntry = entities.Methods.Include(mtd => mtd.AssociatedInstruments
-                                                    .Select(inst => inst.InstrumentType))
-                                                    .Include(mtd => mtd.ExternalReports
-                                                    .Select(extr => extr.ExternalLab))
-                                                    .Include(mtd => mtd.Property)
-                                                    .Include(mtd => mtd.Standard)
-                                                    .Include(mtd => mtd.SubMethods)
-                                                    .Include(mtd => mtd.Tests
-                                                    .Select(tst => tst.SubTests))
-                                                    .Include(mtd => mtd.Tests
-                                                    .Select(tst => tst.Report))
-                                                    .First(spec => spec.ID == entry.ID);
-
-                entities.Entry(entry).CurrentValues.SetValues(tempEntry);
-            }
-        }
-
-        public static void Update(this Method entry)
-        {
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.Configuration.AutoDetectChangesEnabled = false;
-
-                Method tempEntry = entities.Methods.First(mtd => mtd.ID == entry.ID);
-                entities.Entry(tempEntry).CurrentValues.SetValues(entry);
-                entities.Entry(tempEntry).State = EntityState.Modified;
-                entities.SaveChanges();
-            }
-        }
-
         #endregion
 
         #region Operations for Property entities
@@ -181,103 +123,12 @@ namespace DBManager.Services
         }
 
         #endregion
-
-        #region Operations for Requirement entities
-
-        public static void Create(this Requirement entry)
-        {
-            // Insert new Requirement entry in the DB
-
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.Requirements.Add(entry);
-                entities.SaveChanges();
-            }
-        }
-
-        public static void Delete(this Requirement entry)
-        {
-            // Deletes Requirement entry
-
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.Requirements.Attach(entry);
-                entities.Entry(entry).State = EntityState.Deleted;
-                entities.SaveChanges();
-            }
-        }
-
-        #endregion
-
+        
         #region Operations for Specification entities
 
-        public static void AddRequirement(this Specification entry,
-                                        Requirement requirementEntity)
-        {
-            // Creates a new Test entity adding it to the specification entry
+        
 
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.Specifications.Attach(entry);
-                entry.SpecificationVersions.First(specv => specv.IsMain)
-                                            .Requirements
-                                            .Add(requirementEntity);
-
-                entities.SaveChanges();
-            }
-        }
-
-        public static void Create(this Specification entry)
-        {
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.Specifications.Attach(entry);
-                entities.Entry(entry).State = System.Data.Entity.EntityState.Added;
-                entities.SaveChanges();
-            }
-        }
-
-        public static void Delete(this Specification entry)
-        {
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.Specifications.Attach(entry);
-                entities.Entry(entry).State = System.Data.Entity.EntityState.Deleted;
-                entities.SaveChanges();
-            }
-        }
-
-        public static IEnumerable<StandardIssue> GetIssues(this Specification entry)
-        {
-            // Returns all Issue entities for a given Specification entry
-
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.Configuration.LazyLoadingEnabled = false;
-
-                return entry.Standard.StandardIssues.ToList();
-            }
-        }
-
-        public static IEnumerable<Report> GetReports(this Specification entry)
-        {
-            // Returns all Report entities for a given Specification entry
-
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.Configuration.LazyLoadingEnabled = false;
-
-                return entities.Reports.Include(rep => rep.Author)
-                                        .Include(rep => rep.Batch.Material.Construction.Aspect)
-                                        .Include(rep => rep.Batch.Material.Construction.Project.Oem)
-                                        .Include(rep => rep.Batch.Material.Construction.Type)
-                                        .Include(rep => rep.Batch.Material.Recipe.Colour)
-                                        .Include(rep => rep.SpecificationVersion.Specification.Standard.CurrentIssue)
-                                        .Where(rep => rep.SpecificationVersion.Specification.ID == entry.ID)
-                                        .ToList();
-            }
-        }
-
+        
         public static Specification GetSpecification(int ID)
         {
             using (DBEntities entities = new DBEntities())
@@ -348,35 +199,6 @@ namespace DBManager.Services
             }
         }
 
-        public static void Load(this SpecificationVersion entry)
-        {
-            // Loads relevant RelatedEntities for given SpecificationVersion entry
-
-            if (entry == null)
-                return;
-
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.Configuration.LazyLoadingEnabled = false;
-
-                entities.SpecificationVersions.Attach(entry);
-
-                SpecificationVersion tempEntry = entities.SpecificationVersions.Include(specv => specv.ExternalConstructions)
-                                                                                .Include(specv => specv.Requirements
-                                                                                .Select(req => req.SubRequirements))
-                                                                                .Include(specv => specv.Requirements
-                                                                                .Select(req => req.Overridden))
-                                                                                .Include(specv => specv.Requirements
-                                                                                .Select(req => req.Method.Property))
-                                                                                .Include(specv => specv.Requirements
-                                                                                .Select(req => req.Method.Standard.Organization))
-                                                                                .Include(req => req.Specification.Standard.Organization)
-                                                                                .Include(req => req.Specification.Standard.CurrentIssue)
-                                                                                .First(specv => specv.ID == entry.ID);
-
-                entities.Entry(entry).CurrentValues.SetValues(tempEntry);
-            }
-        }
 
         #endregion
 

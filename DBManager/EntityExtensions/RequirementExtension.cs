@@ -9,9 +9,34 @@ namespace DBManager.EntityExtensions
 {
     public static class RequirementExtension
     {
+        public static void Create(this Requirement entry)
+        {
+            // Insert new Requirement entry in the DB
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Requirements.Add(entry);
+                entities.SaveChanges();
+            }
+        }
+
+        public static void Delete(this Requirement entry)
+        {
+            // Deletes Requirement entry
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Requirements.Attach(entry);
+                entities.Entry(entry).State = EntityState.Deleted;
+                entities.SaveChanges();
+            }
+        }
+
         public static void Load(this Requirement entry)
         {
             // Loads DB values a given Requirement entry
+
+
 
             using (DBEntities entities = new DBEntities())
             {
