@@ -11,33 +11,6 @@ namespace DBManager.Services
     {
         #region Operations for Aspect entities
 
-        public static void Create(this Aspect entry)
-        {
-            if (entry == null)
-                throw new NullReferenceException();
-
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.Aspects.Add(entry);
-                entities.SaveChanges();
-            }
-        }
-
-        public static void Delete(this Aspect entry)
-        {
-            // Deletes an aspect entity
-
-            if (entry == null)
-                throw new NullReferenceException();
-
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.Entry(entities.Aspects.First(asp => asp.ID == entry.ID))
-                        .State = EntityState.Deleted;
-                entities.SaveChanges();
-            }
-        }
-
         public static Aspect GetAspect(string code)
         {
             // Returns an Aspect entity with the given code
@@ -51,35 +24,16 @@ namespace DBManager.Services
             }
         }
 
-        public static void Load(this Aspect entry)
+        public static IEnumerable<Aspect> GetAspects()
         {
-            // Loads the values of an Aspect entry from the DB
-
-            if (entry == null)
-                return;
+            // Returns all Aspect entities
 
             using (DBEntities entities = new DBEntities())
             {
-                entities.Aspects.Attach(entry);
+                entities.Configuration.LazyLoadingEnabled = false;
 
-                Aspect tempEntry = entities.Aspects.First(asp => asp.ID == entry.ID);
-                entities.Entry(entry).CurrentValues.SetValues(tempEntry);
-            }
-        }
-
-        public static void Update(this Aspect entry)
-        {
-            // Updates a given Aspect entry
-
-            if (entry == null)
-                throw new NullReferenceException();
-
-            using (DBEntities entities = new DBEntities())
-            {
-                Aspect tempEntry = entities.Aspects.First(asp => asp.ID == entry.ID);
-
-                entities.Entry(tempEntry).CurrentValues.SetValues(entry);
-                entities.SaveChanges();
+                return entities.Aspects.Where(asp => true)
+                                        .ToList();
             }
         }
 

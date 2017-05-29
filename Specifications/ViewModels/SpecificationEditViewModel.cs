@@ -10,10 +10,7 @@ using Prism.Mvvm;
 using Services;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading;
 using System.Windows.Forms;
 
 namespace Specifications.ViewModels
@@ -22,9 +19,11 @@ namespace Specifications.ViewModels
     {
         private ControlPlan _selectedControlPlan;
         private DBPrincipal _principal;
-        private DelegateCommand _addControlPlan, _addFile, _addIssue,
-            _addTest, _addVersion, _newReport, _openFile, _openReport, _removeControlPlan, _removeFile, _removeIssue, _removeTest, _removeVersion, _setCurrent;
+        private DelegateCommand _addControlPlan, _addFile, _addIssue, _addTest, _addVersion, 
+                            _newReport, _openFile, _openReport, _removeControlPlan, _removeFile, 
+                            _removeIssue, _removeTest, _removeVersion, _setCurrent;
         private EventAggregator _eventAggregator;
+        private IEnumerable<StandardIssue> _issueList;
         private List<ControlPlanItemWrapper> _controlPlanItemsList;
         private Method _selectedToAdd;
         private List<RequirementWrapper> _requirementList;
@@ -42,6 +41,8 @@ namespace Specifications.ViewModels
         {
             _eventAggregator = aggregator;
             _principal = principal;
+
+            _issueList = _instance.GetIssues();
 
             _addControlPlan = new DelegateCommand(
                 () =>
@@ -79,15 +80,17 @@ namespace Specifications.ViewModels
                 () =>
                 {
                     StandardIssue temp = new StandardIssue();
+
                     temp.IsCurrent = false;
                     temp.Issue = DateTime.Now.ToShortDateString();
-                    temp.Standard = _instance.Standard;
+                    temp.StandardID = _instance.StandardID;
 
-                    _instance.Standard.StandardIssues.Add(temp);
+                    temp.Create();
 
+                    _issueList = _instance.GetIssues();
                     RaisePropertyChanged("IssueList");
 
-                    SelectedIssue = temp;
+                    SelectedIssue = _issueList.First(stdi => stdi.ID == temp.ID);
                 });
 
             _addTest = new DelegateCommand(
@@ -193,14 +196,7 @@ namespace Specifications.ViewModels
             _setCurrent = new DelegateCommand(
                 () =>
                 {
-                    _instance.Standard.CurrentIssue = _selectedIssue;
-                    foreach (StandardIssue stdi in _instance.Standard.StandardIssues)
-                    {
-                        if (stdi == _selectedIssue)
-                            stdi.IsCurrent = true;
-                        else
-                            stdi.IsCurrent = false;
-                    }
+                    _instance.SetCurrentIssue(_selectedIssue);
                 },
                 () => _selectedIssue != null);
 
@@ -323,7 +319,7 @@ namespace Specifications.ViewModels
         
         public IEnumerable<StandardIssue> IssueList
         {
-            get { return _instance.GetIssues(); }
+            get { return _issueList; }
         }
 
         public SpecificationVersion MainVersion
@@ -439,7 +435,9 @@ namespace Specifications.ViewModels
             set 
             {
                 _selectedIssue = value;
-                _selectedIssue.Load();
+
+                if (value != null)
+                    _selectedIssue.Load();
 
                 _setCurrent.RaiseCanExecuteChanged();
                 _removeIssue.RaiseCanExecuteChanged();
@@ -506,8 +504,13 @@ namespace Specifications.ViewModels
             set
             {
                 _instance = value;
-                _instance.Load();
-                MainVersion.Load();
+                if (_instance != null)
+                {
+                    _instance.Load();
+                    MainVersion.Load();
+                }
+                
+                _issueList = _instance.GetIssues();
 
                 SelectedControlPlan = null;
                 SelectedIssue = null;

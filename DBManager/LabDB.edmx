@@ -2283,7 +2283,7 @@
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" a:SetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <Property Name="IsMain" Type="Boolean" Nullable="false" />
           <Property Name="Name" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="SpecificationID" Type="Int32" Nullable="false" a:GetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:SetterAccess="Private" />
+          <Property Name="SpecificationID" Type="Int32" Nullable="false" a:GetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:SetterAccess="Public" />
           <NavigationProperty Name="Reports" Relationship="Self.specversion_to_report" FromRole="specification_versions" ToRole="reports" />
           <NavigationProperty Name="Requirements" Relationship="Self.specversion_to_requirement" FromRole="specification_versions" ToRole="requirements" />
           <NavigationProperty Name="Specification" Relationship="Self.specification_to_specversion" FromRole="specification_versions" ToRole="specifications" />
@@ -3430,7 +3430,7 @@
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="IsDefault" Type="Boolean" Nullable="false"/>
           <Property Name="Name" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
-          <Property Name="SpecificationID" Type="Int32" Nullable="false" a:SetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+          <Property Name="SpecificationID" Type="Int32" Nullable="false" a:SetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="ControlPlanItems" Relationship="labdbModel.control_plan_to_item" FromRole="control_plans" ToRole="control_plan_items" />
           <NavigationProperty Name="Specification" Relationship="labdbModel.specification_to_control_plan" FromRole="control_plans" ToRole="Specification" />
         </EntityType>

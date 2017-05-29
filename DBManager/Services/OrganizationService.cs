@@ -24,6 +24,7 @@ namespace DBManager.Services
                                                 .Where(org => (roleName == null) ? true : org.RoleMapping
                                                 .FirstOrDefault(orm => orm.Role.Name == roleName)
                                                 .IsSelected)
+                                                .OrderBy(org => org.Name)
                                                 .ToList();
             }
         }
@@ -39,13 +40,12 @@ namespace DBManager.Services
             {
                 entities.Configuration.LazyLoadingEnabled = false;
 
-                entities.Organizations.Attach(entry);
-
                 Organization tempEntry = entities.Organizations.Include(org => org.RoleMapping
                                                                 .Select(orm => orm.Role))
                                                                 .First(org => org.ID == entry.ID);
 
-                entities.Entry(entry).CurrentValues.SetValues(tempEntry);
+                entry.Name = tempEntry.Name;
+                entry.RoleMapping = tempEntry.RoleMapping;
             }
         }
 
@@ -57,7 +57,8 @@ namespace DBManager.Services
             {
                 Organization tempEntry = entities.Organizations.First(org => org.ID == entry.ID);
 
-                entities.Entry(entry).CurrentValues.SetValues(tempEntry);
+                tempEntry.Name = entry.Name;
+                tempEntry.RoleMapping = entry.RoleMapping;
                 entities.SaveChanges();
             }
         }

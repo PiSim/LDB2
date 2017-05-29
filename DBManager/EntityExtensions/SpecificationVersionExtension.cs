@@ -24,6 +24,19 @@ namespace DBManager.EntityExtensions
             }
         }
 
+        public static void Delete(this SpecificationVersion entry)
+        {
+            // Deletes SpecificationVersion entity
+            {
+                using (DBEntities entities = new DBEntities())
+                {
+                    entities.SpecificationVersions.Attach(entry);
+                    entities.Entry(entry).State = EntityState.Deleted;
+                    entities.SaveChanges();
+                }
+            }
+        }
+
         public static IEnumerable<Requirement> GenerateRequirementList(this SpecificationVersion version)
         {
             if (version == null)
@@ -75,8 +88,7 @@ namespace DBManager.EntityExtensions
             using (DBEntities entities = new DBEntities())
             {
                 entities.Configuration.LazyLoadingEnabled = false;
-
-                entities.SpecificationVersions.Attach(entry);
+                
 
                 SpecificationVersion tempEntry = entities.SpecificationVersions.Include(specv => specv.ExternalConstructions)
                                                                                 .Include(specv => specv.Requirements
@@ -91,7 +103,14 @@ namespace DBManager.EntityExtensions
                                                                                 .Include(req => req.Specification.Standard.CurrentIssue)
                                                                                 .First(specv => specv.ID == entry.ID);
 
-                entities.Entry(entry).CurrentValues.SetValues(tempEntry);
+                entry.ExternalConstructions = tempEntry.ExternalConstructions;
+                entry.IsMain = tempEntry.IsMain;
+                entry.Name = tempEntry.Name;
+                entry.Reports = tempEntry.Reports;
+                entry.Requirements = tempEntry.Requirements;
+                entry.Specification = tempEntry.Specification;
+                entry.SpecificationID = tempEntry.SpecificationID;
+                entry.Tasks = tempEntry.Tasks;
             }
         }
 

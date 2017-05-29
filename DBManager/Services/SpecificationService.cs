@@ -56,15 +56,17 @@ namespace DBManager.Services
             {
                 entities.Configuration.LazyLoadingEnabled = false;
 
-                entities.ControlPlans.Attach(entry);
-
                 ControlPlan tempEntry = entities.ControlPlans.Include(cpl => cpl.Specification)
                                                             .Include(cpl => cpl.ControlPlanItems)
                                                             .Include(cpl => cpl.ControlPlanItems
                                                             .Select(cpi => cpi.Requirement))
                                                             .First(spec => spec.ID == entry.ID);
 
-                entities.Entry(entry).CurrentValues.SetValues(tempEntry);
+                entry.ControlPlanItems = tempEntry.ControlPlanItems;
+                entry.IsDefault = tempEntry.IsDefault;
+                entry.Name = tempEntry.Name;
+                entry.Specification = tempEntry.Specification;
+                entry.SpecificationID = tempEntry.SpecificationID;
             }
         }
 
@@ -150,57 +152,8 @@ namespace DBManager.Services
             }
         }
 
-        public static void Load(this Specification entry)
-        {
-            // Loads all relevant Related entities into a given Specification entry
-
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.Configuration.LazyLoadingEnabled = false;
-
-                entities.Specifications.Attach(entry);
-
-                Specification tempEntry = entities.Specifications.Include(spec => spec.SpecificationVersions)
-                                                                .Include(spec => spec.Standard)
-                                                                .Include(spec => spec.Standard.CurrentIssue)
-                                                                .Include(spec => spec.Standard.StandardIssues)
-                                                                .Include(spec => spec.Standard.Organization)
-                                                                .Include(spec => spec.ControlPlans)
-                                                                .First(spec => spec.ID == entry.ID);
-
-                entities.Entry(entry).CurrentValues.SetValues(tempEntry);
-            }
-        }
-
-        public static void Update(this Specification entry)
-        {
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.Specifications.Attach(entry);
-                entities.Entry(entry).State = System.Data.Entity.EntityState.Modified;
-                entities.SaveChanges();
-            }
-        }
-
         #endregion
-
-        #region Operations for SpecificationVersion entities
-
-        public static void Delete(this SpecificationVersion entry)
-        {
-            // Deletes SpecificationVersion entity
-            {
-                using (DBEntities entities = new DBEntities())
-                {
-                    entities.SpecificationVersions.Attach(entry);
-                    entities.Entry(entry).State = EntityState.Deleted;
-                    entities.SaveChanges();
-                }
-            }
-        }
-
-
-        #endregion
+        
 
         #region Operations for StandardFiles entities
 
@@ -217,42 +170,7 @@ namespace DBManager.Services
         }
 
         #endregion
-
-        #region Operations for StandardIssue entities
-
-        public static void Delete(this StandardIssue entry)
-        {
-            // Deletes StandardIssue entry
-
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.StandardIssues.Attach(entry);
-                entities.Entry(entry).State = EntityState.Deleted;
-                entities.SaveChanges();
-            }
-        }
-
-        public static void Load(this StandardIssue entry)
-        {
-            // Loads relevant RelatedEntities for StandardIssue entry
-
-            if (entry == null)
-                return;
-
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.Configuration.LazyLoadingEnabled = false;
-
-                StandardIssue tempEntry = entities.StandardIssues.Include(stdi => stdi.StandardFiles)
-                                                                .First(stdi => stdi.ID == entry.ID);
-
-                entities.Entry(entry).CurrentValues.SetValues(tempEntry);
-                entities.SaveChanges();
-            }
-
-        }
-
-        #endregion
+        
 
         #region Operations for Std entities
 

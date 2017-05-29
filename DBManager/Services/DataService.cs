@@ -62,19 +62,5 @@ namespace DBManager
                                 .ToList();
             }
         }
-
-        public static IEnumerable<Organization> GetOEMs()
-        {
-            using (var entities = new DBEntities())
-            {
-                entities.Configuration.LazyLoadingEnabled = false;
-
-                return entities.OrganizationRoleMappings
-                            .Where(orm => orm.Role.Name == OrganizationRoleNames.OEM && orm.IsSelected)
-                            .Select(orm => orm.Organization)
-                            .OrderBy(org => org.Name)
-                            .ToList();
-            }
-        }
     }
 }

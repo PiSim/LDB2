@@ -21,7 +21,7 @@ namespace Instruments.ViewModels
         private Organization _manufacturer;
         private string _code, _model, _serial;
 
-        internal InstrumentCreationDialogViewModel() : base()
+        public InstrumentCreationDialogViewModel() : base()
         {
 
             _cancel = new DelegateCommand<Window>(
@@ -37,13 +37,13 @@ namespace Instruments.ViewModels
                     _instrumentInstance.Code = _code;
                     _instrumentInstance.Description = "";
                     _instrumentInstance.ControlPeriod = (sbyte)_controlPeriod;
-                    _instrumentInstance.InstrumentType = _selectedType;
+                    _instrumentInstance.InstrumentTypeID = _selectedType.ID;
                     _instrumentInstance.IsUnderControl = IsUnderControl;
 
                     if (_isUnderControl)
                         _instrumentInstance.CalibrationDueDate = DateTime.Now.Date;
 
-                    _instrumentInstance.Manufacturer = SelectedManufacturer;
+                    _instrumentInstance.manufacturerID = SelectedManufacturer.ID;
                     _instrumentInstance.Model = Model;
                     _instrumentInstance.SerialNumber = _serial;
 

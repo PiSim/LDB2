@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DBManager.EntityExtensions;
 
 namespace Materials.ViewModels
 {
@@ -33,7 +34,7 @@ namespace Materials.ViewModels
             _principal = principal;
             _isEditMode = false;
 
-            _oemList = new List<Organization>(DataService.GetOEMs());
+            _oemList = new List<Organization>(OrganizationService.GetOrganizations(OrganizationRoleNames.OEM));
             _specificationList = new List<Specification>(SpecificationService.GetSpecifications());
 
             _assignConstructionToExternal = new DelegateCommand(

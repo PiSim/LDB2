@@ -1,4 +1,6 @@
 ﻿using DBManager;
+using DBManager.EntityExtensions;
+using DBManager.Services;
 using Infrastructure;
 using Infrastructure.Events;
 using Prism.Commands;
@@ -15,14 +17,11 @@ namespace Materials.ViewModels
     public class AspectMainViewModel : BindableBase
     {
         private Aspect _selectedAspect;
-        private DBEntities _entities;
         private DelegateCommand _createAspect, _removeAspect;
         private EventAggregator _eventAggregator;
 
-        public AspectMainViewModel(DBEntities entities,
-                                    EventAggregator eventAggregator) : base()
+        public AspectMainViewModel(EventAggregator eventAggregator) : base()
         {
-            _entities = entities;
             _eventAggregator = eventAggregator;
 
             _createAspect = new DelegateCommand(
@@ -35,7 +34,9 @@ namespace Materials.ViewModels
             _removeAspect = new DelegateCommand(
                 () =>
                 {
-
+                    _selectedAspect.Delete();
+                    SelectedAspect = null;
+                    RaisePropertyChanged("AspectList");
                 },
                 () => _selectedAspect != null && CanModify);
         }
@@ -45,14 +46,19 @@ namespace Materials.ViewModels
             get { return RegionNames.AspectDetailRegion; }
         }
 
-        public List<Aspect> AspectList
+        public IEnumerable<Aspect> AspectList
         {
-            get { return new List<Aspect>(_entities.Aspects); }
+            get { return MaterialService.GetAspects(); }
         }
 
         public bool CanModify
         {
             get { return true; }
+        }
+
+        public DelegateCommand RemoveAspectCommand
+        {
+            get { return _removeAspect; }
         }
 
         public Aspect SelectedAspect

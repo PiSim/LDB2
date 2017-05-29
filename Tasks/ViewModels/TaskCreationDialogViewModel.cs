@@ -17,8 +17,8 @@ namespace Tasks.ViewModels
 {
     public class TaskCreationDialogViewModel : BindableBase
     {
-        private string _batchNumber, _notes;
         private ControlPlan _selectedControlPlan;
+        private DBPrincipal _principal;
         private DelegateCommand<Window> _cancel, _confirm;
         private IEnumerable<Person> _leaderList;
         private IEnumerable<Specification> _specificationList;
@@ -26,13 +26,16 @@ namespace Tasks.ViewModels
         private Person _requester;
         private Specification _selectedSpecification;
         private SpecificationVersion _selectedVersion;
+        private string _batchNumber, _notes;
         private Task _taskInstance;
 
-        public TaskCreationDialogViewModel() : base()
+        public TaskCreationDialogViewModel(DBPrincipal principal) : base()
         {
+            _principal = principal;
+
             _leaderList = PeopleService.GetPeople(PersonRoleNames.ProjectLeader);
             _specificationList = SpecificationService.GetSpecifications();
-
+            
             _cancel = new DelegateCommand<Window>(
                 parent => 
                 {
@@ -74,7 +77,6 @@ namespace Tasks.ViewModels
             
         }
 
-
         public string BatchNumber
         {
             get { return _batchNumber; }
@@ -100,6 +102,14 @@ namespace Tasks.ViewModels
 
                 else
                     return _selectedSpecification.ControlPlans;
+            }
+        }
+
+        public bool IsSpecificationSelected
+        {
+            get
+            {
+                return _selectedSpecification != null;
             }
         }
 
@@ -135,12 +145,19 @@ namespace Tasks.ViewModels
             }
         }
 
+        public IEnumerable<ReportItemWrapper> RequirementList
+        {
+            get { return _requirementList; }
+        }
+
         public ControlPlan SelectedControlPlan
         {
             get { return _selectedControlPlan; }
             set
             {
                 _selectedControlPlan = value;
+                _selectedControlPlan.Load();
+
                 RaisePropertyChanged("SelectedControlPlan");
                 if (value != null)
                 {
@@ -149,20 +166,21 @@ namespace Tasks.ViewModels
             }
         }
 
-
         public Specification SelectedSpecification
         {
             get { return _selectedSpecification; }
             set
             {
                 _selectedSpecification = value;
+                _selectedSpecification.Load();
 
+                RaisePropertyChanged("ControlPlanList");
+                RaisePropertyChanged("IsSpecificationSelected");
                 RaisePropertyChanged("SelectedSpecification");
                 RaisePropertyChanged("VersionList");
-                RaisePropertyChanged("ControlPlanList");
 
+                SelectedVersion = VersionList.First(sv => sv.IsMain);
                 SelectedControlPlan = ControlPlanList.FirstOrDefault(cp => cp.IsDefault);
-                SelectedVersion = VersionList.FirstOrDefault(sv => sv.IsMain);
             }
         }
 
@@ -172,6 +190,8 @@ namespace Tasks.ViewModels
             set
             {
                 _selectedVersion = value;
+                _selectedVersion.Load();
+
                 if (_selectedVersion != null)
                     _requirementList = _selectedVersion.GenerateRequirementList()
                                                         .Select(req => new ReportItemWrapper(req));
@@ -179,6 +199,7 @@ namespace Tasks.ViewModels
                 else
                     _requirementList = new List<ReportItemWrapper>();
 
+                RaisePropertyChanged("RequirementList");
                 RaisePropertyChanged("SelectedVersion");
             }
         }
@@ -200,15 +221,9 @@ namespace Tasks.ViewModels
             }
         }
 
-        public IEnumerable<ReportItemWrapper> RequirementList
-        {
-            get { return _requirementList; }
-        }
-
         public Task TaskInstance
         {
             get { return _taskInstance; }
         }
     }
-
 }
