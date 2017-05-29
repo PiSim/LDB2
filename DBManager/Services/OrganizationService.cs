@@ -57,8 +57,7 @@ namespace DBManager.Services
             {
                 Organization tempEntry = entities.Organizations.First(org => org.ID == entry.ID);
 
-                tempEntry.Name = entry.Name;
-                tempEntry.RoleMapping = entry.RoleMapping;
+                entities.Entry(tempEntry).CurrentValues.SetValues(entry);
                 entities.SaveChanges();
             }
         }

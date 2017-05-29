@@ -64,7 +64,7 @@ namespace Organizations.ViewModels
             }
         }
 
-        public List<OrganizationRoleMapping> RoleList
+        public IEnumerable<OrganizationRoleMapping> RoleList
         {
             get
             {
@@ -72,8 +72,7 @@ namespace Organizations.ViewModels
                     return new List<OrganizationRoleMapping>();
 
                 else
-                    return new List<OrganizationRoleMapping>
-                        (_selectedOrganization.RoleMapping);
+                    return _selectedOrganization.RoleMapping;
             }
         }
         

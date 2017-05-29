@@ -1,4 +1,5 @@
 ﻿using DBManager;
+using DBManager.Services;
 using Infrastructure;
 using Infrastructure.Events;
 using Prism.Commands;
@@ -16,7 +17,6 @@ namespace Reports.ViewModels
 {
     public class ReportEditViewModel : BindableBase
     {
-        private DBEntities _entities;
         private DBPrincipal _principal;
         private DelegateCommand _addFile, _generateRawDataSheet, _openFile, _removeFile;
         private EventAggregator _eventAggregator;
@@ -24,24 +24,24 @@ namespace Reports.ViewModels
         private List<TestWrapper> _testList;
         private ReportFile _selectedFile;
         
-        public ReportEditViewModel(DBEntities entities,
-                                    DBPrincipal principal,
+        public ReportEditViewModel(DBPrincipal principal,
                                     EventAggregator aggregator) : base()
         {
-            _entities = entities;
             _eventAggregator = aggregator;
             _principal = principal;
 
             _eventAggregator.GetEvent<CommitRequested>()
                 .Subscribe(() =>
                 {
+                    _instance.UpdateTests();
+
                     if (!_instance.IsComplete && !_testList.Any(tst => !tst.IsComplete))
                     {
                         _instance.IsComplete = true;
                         _instance.EndDate = DateTime.Now.Date;
-                        _eventAggregator.GetEvent<ReportCompleted>().Publish(_instance);                           
+                        _instance.Update();
+                        _eventAggregator.GetEvent<ReportCompleted>().Publish(_instance);
                     }
-                    _entities.SaveChanges();
                 }, true);
 
             _addFile = new DelegateCommand(
@@ -172,11 +172,10 @@ namespace Reports.ViewModels
             get { return _instance; }
             set
             {
-                _instance = _entities.Reports.FirstOrDefault(rep => rep.ID == value.ID);
+                _instance = value;
+                _instance.Load();
 
-                _testList = new List<TestWrapper>();
-                foreach (Test tst in _instance.Tests)
-                    _testList.Add(new TestWrapper(tst));
+                _testList = new List<TestWrapper>(_instance.Tests.Select(tst => new TestWrapper(tst)));
 
                 RaisePropertyChanged("BatchNumber");
                 RaisePropertyChanged("CanModify");

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -178,26 +179,75 @@ namespace DBManager.Services
             }
         }
 
+        public static IEnumerable<Report> GetReports()
+        {
+            // Returns all Report entities
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.Reports.AsNoTracking()
+                                        .Include(rep => rep.Author)
+                                        .Include(rep => rep.Batch.Material.Construction.Aspect)
+                                        .Include(rep => rep.Batch.Material.Construction.Project.Oem)
+                                        .Include(rep => rep.Batch.Material.Construction.Type)
+                                        .Include(rep => rep.Batch.Material.Recipe.Colour)
+                                        .Include(rep => rep.SpecificationVersion.Specification.Standard.CurrentIssue)
+                                        .Include(rep => rep.SpecificationVersion.Specification.Standard.Organization)
+                                        .Where(rep => true)
+                                        .OrderByDescending(rep => rep.Number)
+                                        .ToList();
+            }
+        }
+
         public static void Load(this Report entry)
         {
             using (DBEntities entities = new DBEntities())
             {
                 entities.Configuration.LazyLoadingEnabled = false;
-
-                int entryID = entry.ID;
-
-                entities.Reports.Attach(entry);
-
+                
                 Report tempEntry = entities.Reports
-                                            .Include(rep => rep.Batch)
+                                            .AsNoTracking()
+                                            .Include(rep => rep.Author)
+                                            .Include(rep => rep.Batch.Material.Construction.Aspect)
+                                            .Include(rep => rep.Batch.Material.Construction.ExternalConstruction)
+                                            .Include(rep => rep.Batch.Material.Construction.Project.Oem)
+                                            .Include(rep => rep.Batch.Material.Construction.Project.Leader)
+                                            .Include(rep => rep.Batch.Material.Construction.Type)
+                                            .Include(rep => rep.Batch.Material.Recipe.Colour)
                                             .Include(rep => rep.ParentTask)
+                                            .Include(rep => rep.ReportFiles)
                                             .Include(rep => rep.SpecificationIssues)
-                                            .Include(rep => rep.Tests)
-                                            .Include(rep => rep.SpecificationVersion)
-                                            .First(rep => rep.ID == entryID);
+                                            .Include(rep => rep.Tests
+                                            .Select(tst => tst.instrument.InstrumentType))
+                                            .Include(rep => rep.Tests
+                                            .Select(tst => tst.Method.Property))
+                                            .Include(rep => rep.Tests
+                                            .Select(tst => tst.Method.Standard.Organization))
+                                            .Include(rep => rep.Tests
+                                            .Select(tst => tst.SubTests))
+                                            .Include(rep => rep.SpecificationVersion.Specification.Standard.Organization)
+                                            .First(rep => rep.ID == entry.ID);
 
-                entities.Entry(entry).CurrentValues.SetValues(tempEntry);
-
+                entry.Author = tempEntry.Author;
+                entry.AuthorID = tempEntry.AuthorID;
+                entry.Batch = tempEntry.Batch;
+                entry.BatchID = tempEntry.BatchID;
+                entry.Category = tempEntry.Category;
+                entry.Description = tempEntry.Description;
+                entry.EndDate = tempEntry.EndDate;
+                entry.IsComplete = tempEntry.IsComplete;
+                entry.Number = tempEntry.Number;
+                entry.ParentTask = tempEntry.ParentTask;
+                entry.ParentTaskID = tempEntry.ParentTaskID;
+                entry.ReportFiles = tempEntry.ReportFiles;
+                entry.SpecificationIssueID = tempEntry.SpecificationIssueID;
+                entry.SpecificationIssues = tempEntry.SpecificationIssues;
+                entry.SpecificationVersion = tempEntry.SpecificationVersion;
+                entry.SpecificationVersionID = tempEntry.SpecificationVersionID;
+                entry.StartDate = tempEntry.StartDate;
+                entry.Tests = tempEntry.Tests;
             }
         }
 
@@ -205,16 +255,26 @@ namespace DBManager.Services
         {
             using (DBEntities entities = new DBEntities())
             {
-                entities.Configuration.LazyLoadingEnabled = false;
-                entities.Configuration.AutoDetectChangesEnabled = false;
-
-                Report tempEntry = entities.Reports.First(rep => rep.ID == entry.ID);
-                entities.Entry(tempEntry).CurrentValues.SetValues(entry);
-                entities.Entry(tempEntry).State = EntityState.Modified;
+                entities.Reports.AddOrUpdate(entry);
                 entities.SaveChanges();
             }
         }
 
+        public static void UpdateTests(this Report entry)
+        {
+            // Updates all related Test and Subtest instances in a report
+
+            using (DBEntities entities = new DBEntities())
+            {
+                foreach (Test tst in entry.Tests)
+                {
+                    entities.Tests.AddOrUpdate(tst);
+                    foreach (SubTest sts in tst.SubTests)
+                        entities.SubTests.AddOrUpdate(sts);
+                }
+                entities.SaveChanges();
+            }
+        }
         #endregion
 
     }

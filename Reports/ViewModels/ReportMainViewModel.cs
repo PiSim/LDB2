@@ -11,22 +11,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DBManager.Services;
 
 namespace Reports.ViewModels
 {
     class ReportMainViewModel : BindableBase
     {
-        private DBEntities _entities;
         private DBPrincipal _principal;
         private DelegateCommand _newReport, _openReport, _removeReport;
         private EventAggregator _eventAggregator;
         private Report _selectedReport;
 
-        public ReportMainViewModel(DBEntities entities, 
-                            DBPrincipal principal,
-                            EventAggregator eventAggregator) : base()
+        public ReportMainViewModel(DBPrincipal principal,
+                                    EventAggregator eventAggregator) : base()
         {
-            _entities = entities;
             _eventAggregator = eventAggregator;
             _principal = principal;
 
@@ -48,8 +46,7 @@ namespace Reports.ViewModels
             _removeReport = new DelegateCommand(
                 () =>
                 {
-                    _entities.Reports.Remove(_selectedReport);
-                    _entities.SaveChanges();
+                    _selectedReport.Delete();
                     _eventAggregator.GetEvent<ReportListUpdateRequested>().Publish();
 
                     if (_selectedReport.ParentTask != null)
@@ -104,9 +101,9 @@ namespace Reports.ViewModels
             get { return _removeReport; }
         }
 
-        public List<Report> ReportList
+        public IEnumerable<Report> ReportList
         {
-            get { return new List<Report>(_entities.Reports); }
+            get { return ReportService.GetReports(); }
         }
 
         public Report SelectedReport
