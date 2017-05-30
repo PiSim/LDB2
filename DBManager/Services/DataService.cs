@@ -50,7 +50,7 @@ namespace DBManager
             }
         }
 
-        public static IEnumerable<InstrumentType> GetinstrumentTypes()
+        public static IEnumerable<InstrumentType> GetInstrumentTypes()
         {
             using (var entities = new DBEntities())
             {
@@ -60,6 +60,19 @@ namespace DBManager
                                 .Where(insty => true)
                                 .OrderBy(insty => insty.Name)
                                 .ToList();
+            }
+        }
+
+        public static IEnumerable<Property> GetProperties()
+        {
+            // Returns all Property entities
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.Properties.Where(prp => true)
+                                            .ToList();
             }
         }
     }

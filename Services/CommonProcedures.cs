@@ -85,8 +85,8 @@ namespace Services
             {
                 Test tempTest = new Test();
                 tempTest.IsComplete = false;
-                tempTest.Method = req.RequirementInstance.Method;
-                tempTest.MethodIssue = tempTest.Method.Standard.CurrentIssue;
+                tempTest.MethodID = req.RequirementInstance.Method.ID;
+                tempTest.MethodIssueID = tempTest.Method.Standard.CurrentIssue.ID;
                 tempTest.Notes = req.RequirementInstance.Description;
                 tempTest.TaskItems.Add(req.TaskItemInstance);
 
@@ -114,7 +114,7 @@ namespace Services
 
                 Test tempTest = new Test();
                 tempTest.IsComplete = false;
-                tempTest.methodID = req.RequirementInstance.Method.ID;
+                tempTest.MethodID = req.RequirementInstance.Method.ID;
                 tempTest.MethodIssueID = req.RequirementInstance.Method.Standard.CurrentIssue.ID;
                 tempTest.Notes = req.RequirementInstance.Description;
 

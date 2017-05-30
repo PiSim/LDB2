@@ -1,4 +1,5 @@
 ﻿using DBManager;
+using Microsoft.Practices.Prism.Mvvm;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,20 +19,16 @@ namespace Specifications.Views
     /// <summary>
     /// Interaction logic for MethodCreationDialog.xaml
     /// </summary>
-    public partial class MethodCreationDialog : Window
+    public partial class MethodCreationDialog : Window, IView
     {
-        private Method _methodInstance;
-
-        public MethodCreationDialog(DBEntities entities)
+        public MethodCreationDialog()
         {
-            DataContext = new ViewModels.MethodCreationViewModel(entities, this);
             InitializeComponent();
         }
 
         public Method MethodInstance
         {
-            get { return _methodInstance; }
-            set { _methodInstance = value; }
+            get { return (DataContext as ViewModels.MethodCreationDialogViewModel).MethodInstance; }
         }
     }
 }

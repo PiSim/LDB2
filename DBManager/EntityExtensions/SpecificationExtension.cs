@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -141,8 +142,7 @@ namespace DBManager.EntityExtensions
         {
             using (DBEntities entities = new DBEntities())
             {
-                entities.Specifications.Attach(entry);
-                entities.Entry(entry).State = System.Data.Entity.EntityState.Modified;
+                entities.Specifications.AddOrUpdate(entry);
                 entities.SaveChanges();
             }
         }

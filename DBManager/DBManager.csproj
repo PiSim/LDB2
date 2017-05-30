@@ -159,6 +159,8 @@
     <Compile Include="EntityExtensions\SpecificationVersionExtension.cs" />
     <Compile Include="EntityExtensions\StandardExtension.cs" />
     <Compile Include="EntityExtensions\StandardIssueExtension.cs" />
+    <Compile Include="EntityExtensions\SubMethodExtension.cs" />
+    <Compile Include="EntityExtensions\TaskExtension.cs" />
     <Compile Include="EntityExtensions\TestExtension.cs" />
     <Compile Include="PersonRoleNames.cs" />
     <Compile Include="Services\DataService.cs" />

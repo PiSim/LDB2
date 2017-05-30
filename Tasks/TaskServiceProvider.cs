@@ -1,4 +1,5 @@
 ﻿using DBManager;
+using DBManager.EntityExtensions;
 using Infrastructure;
 using Infrastructure.Events;
 using Microsoft.Practices.Unity;
@@ -13,15 +14,12 @@ namespace Tasks
 {
     public class TaskServiceProvider
     {
-        private DBEntities _entities;
         private EventAggregator _eventAggregator;
         private IUnityContainer _container;
 
-        public TaskServiceProvider(DBEntities entities,
-                                    EventAggregator aggregator,
+        public TaskServiceProvider(EventAggregator aggregator,
                                     IUnityContainer container)
         {
-            _entities = entities;
             _eventAggregator = aggregator;
             _container = container;
 
@@ -40,32 +38,29 @@ namespace Tasks
 
         public void UpdateTaskStatus(DBManager.Task target)
         {
-
-            DBManager.Task tempTask = _entities.Tasks.FirstOrDefault(tsk => tsk.ID == target.ID);
-
-            if (tempTask == null)
+            if (target == null)
                 return;
-
-            else if (!tempTask.AllItemsAssigned && tempTask.TaskItems.All(tski => tski.IsAssignedToReport))
+            
+            else if (!target.AllItemsAssigned && target.TaskItems.All(tski => tski.IsAssignedToReport))
             {
-                tempTask.AllItemsAssigned = true;
-                _entities.SaveChanges();
+                target.AllItemsAssigned = true;
+                target.Update();
             }
 
             else
             {
-                if (tempTask.Reports.Any(rep => !rep.IsComplete))
+                if (target.Reports.Any(rep => !rep.IsComplete))
                 {
-                    tempTask.AllItemsAssigned = false;
-                    _entities.SaveChanges();
+                    target.AllItemsAssigned = false;
+                    target.Update();
                 }
 
                 else
                 {
-                    tempTask.IsComplete = true;
-                    tempTask.EndDate = DateTime.Now.Date;
-                    _entities.SaveChanges();
-                    _eventAggregator.GetEvent<TaskCompleted>().Publish(tempTask);
+                    target.IsComplete = true;
+                    target.EndDate = DateTime.Now.Date;
+                    target.Update();
+                    _eventAggregator.GetEvent<TaskCompleted>().Publish(target);
                 }
             }
         }

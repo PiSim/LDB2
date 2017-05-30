@@ -1,4 +1,5 @@
 ﻿using DBManager;
+using DBManager.EntityExtensions;
 using Infrastructure.Events;
 using Prism.Commands;
 using Prism.Events;
@@ -10,27 +11,31 @@ using System.Windows.Forms;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
- 
+using DBManager.Services;
+
 namespace Specifications.ViewModels
 {
     public class MethodEditViewModel : BindableBase
     {
-        private DBEntities _entities;
         private DelegateCommand _addFile, _addIssue, _addMeasurement, _openFile, _removeFile, _removeIssue, _removeMeasurement, _setCurrent;
         private EventAggregator _eventAggregator;
+        private IEnumerable<SubMethod> _subMethodList;
         private Method _methodInstance;
         private SubMethod _selectedMeasurement;
-        private ObservableCollection<SubMethod>_measurementList;
-        private ObservableCollection<StandardIssue> _issueList;
         private StandardIssue _selectedIssue;
         private StandardFile _selectedFile;
 
-        public MethodEditViewModel(DBEntities entities, EventAggregator aggregator) : base()
+        public MethodEditViewModel(EventAggregator aggregator) : base()
         {
-            _entities = entities;
             _eventAggregator = aggregator;
+            _subMethodList = new List<SubMethod>();
 
-            _eventAggregator.GetEvent<CommitRequested>().Subscribe(() => _entities.SaveChanges());
+            _eventAggregator.GetEvent<CommitRequested>()
+                            .Subscribe(() =>
+                            {
+                                _methodInstance.Update();
+                                SpecificationService.UpdateSubMethods(_subMethodList);
+                            });
 
             _addFile = new DelegateCommand(
                 () =>
@@ -59,13 +64,11 @@ namespace Specifications.ViewModels
                     StandardIssue temp = new StandardIssue();
                     temp.IsCurrent = false;
                     temp.Issue = DateTime.Now.ToShortDateString();
-                    temp.Standard = _methodInstance.Standard;
+                    temp.StandardID = _methodInstance.Standard.ID;
 
-                    _methodInstance.Standard.StandardIssues.Add(temp);
+                    temp.Create();
 
-                    _issueList.Add(temp);
-
-                    SelectedIssue = temp;
+                    RaisePropertyChanged("IssueList");
                 });
 
             _addMeasurement = new DelegateCommand(
@@ -75,16 +78,10 @@ namespace Specifications.ViewModels
                     tempMea.Name = "Nuova Prova";
                     tempMea.UM = "";
 
-                    foreach (Requirement req in MethodInstance.Requirements)
-                    {
-                        SubRequirement tempSR = new SubRequirement();
-                        tempSR.RequiredValue = "";
-                        tempMea.SubRequirements.Add(tempSR);
-                        req.SubRequirements.Add(tempSR);
-                    }
-                    
-                    Measurements.Add(tempMea);                   
-                    _methodInstance.SubMethods.Add(tempMea);
+                    _methodInstance.AddSubMethod(tempMea);
+
+                    _subMethodList = _methodInstance.GetSubMethods();
+                    RaisePropertyChanged("Measurements");
                 });
 
             _openFile = new DelegateCommand(
@@ -106,7 +103,7 @@ namespace Specifications.ViewModels
                 () =>
                 {
                     _methodInstance.Standard.StandardIssues.Remove(_selectedIssue);
-                    _issueList.Remove(_selectedIssue);
+                    RaisePropertyChanged("IssueList");
                     SelectedIssue = null;
                 },
                 () => _selectedIssue != null);
@@ -114,8 +111,11 @@ namespace Specifications.ViewModels
             _removeMeasurement = new DelegateCommand(
                 () => 
                 {
-                    _entities.SubMethods.Remove(_selectedMeasurement);
+                    _selectedMeasurement.Delete();
                     SelectedMeasurement = null;
+
+                    _subMethodList = _methodInstance.GetSubMethods();
+                    RaisePropertyChanged("Measurements");
                 },
                 () => SelectedMeasurement != null );
 
@@ -156,17 +156,11 @@ namespace Specifications.ViewModels
             }
         }
 
-        public ObservableCollection<StandardIssue> IssueList
+        public IEnumerable<StandardIssue> IssueList
         {
             get
             {
-                return _issueList;
-            }
-
-            private set
-            {
-                _issueList = value;
-                RaisePropertyChanged("IssueList");
+                return _methodInstance.GetIssues();
             }
         }
 
@@ -175,9 +169,12 @@ namespace Specifications.ViewModels
             get { return _methodInstance; }
             set
             {
-                _methodInstance = _entities.Methods.First(mtd => mtd.ID == value.ID);
-                Measurements = new ObservableCollection<SubMethod>(_methodInstance.SubMethods);
-                IssueList = new ObservableCollection<StandardIssue>(_methodInstance.Standard.StandardIssues);
+                _methodInstance = value;
+                _methodInstance.Load();
+
+                _subMethodList = _methodInstance.GetSubMethods();
+
+                RaisePropertyChanged("Measurements");
                 RaisePropertyChanged("Name");
                 RaisePropertyChanged("Oem");
                 RaisePropertyChanged("Property");
@@ -186,17 +183,11 @@ namespace Specifications.ViewModels
             }
         }
 
-        public ObservableCollection<SubMethod> Measurements
+        public IEnumerable<SubMethod> Measurements
         {
             get 
-            { 
-                return _measurementList;
-            }
-            
-            private set 
             {
-                _measurementList = value;
-                RaisePropertyChanged("Measurements");
+                return _subMethodList;
             }
         }
 
@@ -239,14 +230,14 @@ namespace Specifications.ViewModels
             get { return _removeMeasurement; }
         }
 
-        public List<Test> ResultList
+        public IEnumerable<Test> ResultList
         {
             get
             {
                 if (_methodInstance == null)
                     return null;
                 else
-                    return new List<Test>(_methodInstance.Tests); }
+                    return _methodInstance.Tests; }
         }
 
         public StandardFile SelectedFile

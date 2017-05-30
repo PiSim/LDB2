@@ -25,8 +25,8 @@ namespace DBManager
         }
     
         public int ID { get; private set; }
-        public int StandardID { get; private set; }
-        private int PropertyID { get; set; }
+        public int StandardID { get; set; }
+        public int PropertyID { get; set; }
         public string Description { get; set; }
         public string UM { get; set; }
         public int CostUnits { get; set; }

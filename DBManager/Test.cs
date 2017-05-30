@@ -22,7 +22,7 @@ namespace DBManager
         }
     
         public int ID { get; set; }
-        public int methodID { get; set; }
+        public int MethodID { get; set; }
         public int reportID { get; set; }
         public string Notes { get; set; }
         public Nullable<int> operatorID { get; set; }

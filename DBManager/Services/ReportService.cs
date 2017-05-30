@@ -10,9 +10,6 @@ namespace DBManager.Services
 {
     public static class ReportService
     {
-
-        // TO BE MOVED IN SEPARATE CLASS
-
         #region Operations for ExternalReport entities
 
         public static void AddFile(this ExternalReport entry,
@@ -149,33 +146,6 @@ namespace DBManager.Services
                 entities.Configuration.LazyLoadingEnabled = false;
 
                 return entities.Reports.First(entry => entry.ID == ID);
-            }
-        }
-
-        public static void Create(this Report entry)
-        {
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.Configuration.LazyLoadingEnabled = false;
-
-                Report tempEntry = new Report();
-                entities.Reports.Add(tempEntry);
-                entities.Entry(tempEntry).CurrentValues.SetValues(entry);
-                entities.SaveChanges();
-
-                entry.ID = tempEntry.ID;
-            }
-        }
-
-        public static void Delete(this Report entry)
-        {
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.Configuration.LazyLoadingEnabled = false;
-
-                entities.Reports.Attach(entry);
-                entities.Entry(entry).State = System.Data.Entity.EntityState.Deleted;
-                entities.SaveChanges();
             }
         }
 

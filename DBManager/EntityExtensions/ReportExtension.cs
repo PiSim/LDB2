@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,6 +19,32 @@ namespace DBManager.EntityExtensions
                     entry.Tests.Add(tst);
 
                 entities.SaveChanges();
+            }
+        }
+
+        public static void Create(this Report entry)
+        {
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                Report tempEntry = new Report();
+                entities.Reports.Add(tempEntry);
+                entities.Entry(tempEntry).CurrentValues.SetValues(entry);
+                entities.SaveChanges();
+
+                entry.ID = tempEntry.ID;
+            }
+        }
+
+        public static void Delete(this Report entry)
+        {
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Entry(entities.Reports.First(rep => rep.ID == entry.ID)).State = EntityState.Deleted;
+                entities.SaveChanges();
+
+                entry.ID = 0;
             }
         }
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -153,7 +154,6 @@ namespace DBManager.Services
         }
 
         #endregion
-        
 
         #region Operations for StandardFiles entities
 
@@ -170,7 +170,6 @@ namespace DBManager.Services
         }
 
         #endregion
-        
 
         #region Operations for Std entities
 
@@ -189,5 +188,35 @@ namespace DBManager.Services
         }
 
         #endregion
+        
+        public static void UpdateRequirements(IEnumerable<Requirement> requirementEntries)
+        {
+            // Updates all the Requirement entries passed as parameter
+
+            using (DBEntities entities = new DBEntities())
+            {
+                foreach (Requirement req in requirementEntries)
+                {
+                    entities.Requirements.AddOrUpdate(req);
+                    foreach (SubRequirement sreq in req.SubRequirements)
+                        entities.SubRequirements.AddOrUpdate(sreq);
+                }
+
+                entities.SaveChanges();
+            }
+        }
+
+        public static void UpdateSubMethods(IEnumerable<SubMethod> methodEntries)
+        {
+            // Updates all the SubMethod entries
+
+            using (DBEntities entities = new DBEntities())
+            {
+                foreach (SubMethod smtd in methodEntries)
+                    entities.SubMethods.AddOrUpdate(smtd);
+
+                entities.SaveChanges();
+            }
+        }
     }
 }

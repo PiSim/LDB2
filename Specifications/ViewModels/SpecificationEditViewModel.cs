@@ -206,6 +206,13 @@ namespace Specifications.ViewModels
                 () =>
                 {
                     _instance.Update();
+
+                    if (_selectedVersion.IsMain)
+                        SpecificationService.UpdateRequirements(_requirementList.Select(req => req.RequirementInstance));
+
+                    else
+                        SpecificationService.UpdateRequirements(_requirementList.Where(req => req.IsOverride)
+                                                                                .Select(req => req.RequirementInstance));
                 });
 
             _eventAggregator.GetEvent<ReportListUpdateRequested>().Subscribe(

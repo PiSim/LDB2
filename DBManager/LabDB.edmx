@@ -2127,8 +2127,8 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" a:SetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
-          <Property Name="StandardID" Type="Int32" Nullable="false" a:GetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:SetterAccess="Private" />
-          <Property Name="PropertyID" Type="Int32" Nullable="false" a:GetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:SetterAccess="Private" />
+          <Property Name="StandardID" Type="Int32" Nullable="false" a:GetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:SetterAccess="Public" />
+          <Property Name="PropertyID" Type="Int32" Nullable="false" a:GetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:SetterAccess="Public" />
           <Property Name="Description" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="UM" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="CostUnits" Type="Int32" Nullable="false" />
@@ -2375,7 +2375,7 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="methodID" Type="Int32" Nullable="false" />
+          <Property Name="MethodID" Type="Int32" Nullable="false" />
           <Property Name="reportID" Type="Int32" Nullable="false" />
           <Property Name="Notes" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
           <Property Name="operatorID" Type="Int32" Nullable="true" />
@@ -3222,7 +3222,7 @@
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="Test">
-              <PropertyRef Name="methodID" />
+              <PropertyRef Name="MethodID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -4299,7 +4299,7 @@
                 <ScalarProperty Name="instrumentID" ColumnName="instrumentID" />
                 <ScalarProperty Name="IsComplete" ColumnName="is_complete" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="methodID" ColumnName="methodID" />
+                <ScalarProperty Name="MethodID" ColumnName="methodID" />
                 <ScalarProperty Name="reportID" ColumnName="reportID" />
                 <ScalarProperty Name="Notes" ColumnName="notes" />
                 <ScalarProperty Name="operatorID" ColumnName="operatorID" />

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -55,9 +56,11 @@ namespace DBManager.Services
 
             using (DBEntities entities = new DBEntities())
             {
-                Organization tempEntry = entities.Organizations.First(org => org.ID == entry.ID);
+                entities.Organizations.AddOrUpdate(entry);
+                
+                foreach (OrganizationRoleMapping orm in entry.RoleMapping)
+                    entities.OrganizationRoleMappings.AddOrUpdate(orm);
 
-                entities.Entry(tempEntry).CurrentValues.SetValues(entry);
                 entities.SaveChanges();
             }
         }

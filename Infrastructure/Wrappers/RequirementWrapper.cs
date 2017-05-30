@@ -63,6 +63,11 @@ namespace Infrastructure.Wrappers
                 RaisePropertyChanged("SubRequirements");
             }
         }
+        
+        public Requirement RequirementInstance
+        {
+            get { return _requirementInstance; }
+        }
 
         public List<SubRequirement> SubRequirements
         {
