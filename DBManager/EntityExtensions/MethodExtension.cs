@@ -82,7 +82,7 @@ namespace DBManager.EntityExtensions
                 entities.Configuration.LazyLoadingEnabled = false;
 
                 return entities.Tests.Include(tst => tst.SubTests)
-                                    .Where(tst => tst.methodID == entry.ID)
+                                    .Where(tst => tst.MethodID == entry.ID)
                                     .ToList();
             }
         }

@@ -56,8 +56,11 @@ namespace Services.ViewModels
                     _reportInstance.SpecificationIssueID = _selectedVersion.Specification.Standard.CurrentIssue.ID;
                     _reportInstance.Create();
 
-                    _reportInstance.AddTests(CommonProcedures
-                                    .GenerateTestList(_requirementList));
+                    IEnumerable<Test> testList = CommonProcedures.GenerateTestList(_requirementList);
+                    foreach (Test tst in testList)
+                        tst.reportID = _reportInstance.ID;
+
+                    testList.CreateTests();
 
                     parent.DialogResult = true;
                 },

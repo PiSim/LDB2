@@ -9,18 +9,6 @@ namespace DBManager.EntityExtensions
 {
     public static class ReportExtension
     {
-        public static void AddTests(this Report entry,
-                                    IEnumerable<Test> testList)
-        {
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.Reports.Attach(entry);
-                foreach (Test tst in testList)
-                    entry.Tests.Add(tst);
-
-                entities.SaveChanges();
-            }
-        }
 
         public static void Create(this Report entry)
         {
