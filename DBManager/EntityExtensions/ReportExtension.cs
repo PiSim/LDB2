@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,12 +17,8 @@ namespace DBManager.EntityExtensions
             {
                 entities.Configuration.LazyLoadingEnabled = false;
 
-                Report tempEntry = new Report();
-                entities.Reports.Add(tempEntry);
-                entities.Entry(tempEntry).CurrentValues.SetValues(entry);
+                entities.Reports.Add(entry);
                 entities.SaveChanges();
-
-                entry.ID = tempEntry.ID;
             }
         }
 

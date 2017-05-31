@@ -53,6 +53,9 @@ namespace DBManager.Services
 
         public static void Load(this ControlPlan entry)
         {
+            if (entry == null)
+                return;
+
             using (DBEntities entities = new DBEntities())
             {
                 entities.Configuration.LazyLoadingEnabled = false;

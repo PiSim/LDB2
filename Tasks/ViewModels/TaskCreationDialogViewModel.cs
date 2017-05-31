@@ -47,7 +47,8 @@ namespace Tasks.ViewModels
                 {
                     _taskInstance = new Task();
                     Batch tempBatch = CommonProcedures.GetBatch(_batchNumber);
-                    
+
+                    _taskInstance.batchID = tempBatch.ID;
                     _taskInstance.IsComplete = false;
                     _taskInstance.Notes = _notes;
                     _taskInstance.PipelineOrder = 0;

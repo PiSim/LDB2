@@ -91,6 +91,9 @@ namespace DBManager.EntityExtensions
         {
             // Returns All SubMethod entities for a Method
 
+            if (entry == null)
+                return null;
+
             using (DBEntities entities = new DBEntities())
             {
                 entities.Configuration.LazyLoadingEnabled = false;
@@ -102,6 +105,9 @@ namespace DBManager.EntityExtensions
 
         public static void Load(this Method entry)
         {
+            if (entry == null)
+                return;
+
             using (DBEntities entities = new DBEntities())
             {
                 entities.Configuration.LazyLoadingEnabled = false;
@@ -111,7 +117,8 @@ namespace DBManager.EntityExtensions
                                                     .Include(mtd => mtd.ExternalReports
                                                     .Select(extr => extr.ExternalLab))
                                                     .Include(mtd => mtd.Property)
-                                                    .Include(mtd => mtd.Standard)
+                                                    .Include(mtd => mtd.Standard.CurrentIssue)
+                                                    .Include(mtd => mtd.Standard.Organization)
                                                     .Include(mtd => mtd.Tests
                                                     .Select(tst => tst.SubTests))
                                                     .Include(mtd => mtd.Tests

@@ -143,6 +143,7 @@ namespace DBManager.Services
                 entities.Configuration.LazyLoadingEnabled = false;
 
                 return entities.Colours.Where(clr => true)
+                                        .OrderBy(clr => clr.Name)
                                         .ToList();
             }
         }

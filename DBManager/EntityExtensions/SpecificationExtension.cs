@@ -62,7 +62,8 @@ namespace DBManager.EntityExtensions
             {
                 entities.Configuration.LazyLoadingEnabled = false;
 
-                return entities.Requirements.Include(req => req.Method.Standard.Organization)
+                return entities.Requirements.Include(req => req.Method.Property)
+                                            .Include(req => req.Method.Standard.Organization)
                                             .Include(req => req.SubRequirements
                                             .Select(sreq => sreq.SubMethod))
                                             .Where(req => req.SpecificationVersionID == entities.SpecificationVersions
@@ -87,30 +88,6 @@ namespace DBManager.EntityExtensions
                                         .Include(rep => rep.SpecificationVersion.Specification.Standard.CurrentIssue)
                                         .Where(rep => rep.SpecificationVersion.Specification.ID == entry.ID)
                                         .ToList();
-            }
-        }
-
-        public static void SetCurrentIssue(this Specification entry,
-                                            StandardIssue issueEntity)
-        {
-            // Sets the current issue of a specification's standard
-
-            using (DBEntities entities = new DBEntities())
-            {
-                Specification tempSpec = entities.Specifications.Include(spec => spec.Standard.StandardIssues)
-                                                                .First(spec => spec.ID == entry.ID);
-
-                tempSpec.Standard.CurrentIssueID = issueEntity.ID;
-                                foreach (StandardIssue stdi in tempSpec.Standard.StandardIssues)
-                {
-                    if (stdi.ID == issueEntity.ID)
-                        stdi.IsCurrent = true;
-
-                    else
-                        stdi.IsCurrent = false;
-                }
-
-                entities.SaveChanges();
             }
         }
 

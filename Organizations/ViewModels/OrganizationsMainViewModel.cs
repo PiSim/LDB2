@@ -25,7 +25,12 @@ namespace Organizations.ViewModels
             _eventAggregator = aggregator;
 
             _eventAggregator.GetEvent<CommitRequested>()
-                            .Subscribe(() => _selectedOrganization.Update());
+                            .Subscribe(() =>
+                            {
+                                if (_selectedOrganization != null)
+                                    _selectedOrganization.Update();
+                            });
+
             _eventAggregator.GetEvent<OrganizationListRefreshRequested>()
                             .Subscribe(() => RaisePropertyChanged("OrganizationList"));
 

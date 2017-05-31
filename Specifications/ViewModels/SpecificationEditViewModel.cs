@@ -89,8 +89,6 @@ namespace Specifications.ViewModels
 
                     _issueList = _instance.GetIssues();
                     RaisePropertyChanged("IssueList");
-
-                    SelectedIssue = _issueList.First(stdi => stdi.ID == temp.ID);
                 });
 
             _addTest = new DelegateCommand(
@@ -196,7 +194,7 @@ namespace Specifications.ViewModels
             _setCurrent = new DelegateCommand(
                 () =>
                 {
-                    _instance.SetCurrentIssue(_selectedIssue);
+                    _instance.Standard.SetCurrentIssue(_selectedIssue);
                 },
                 () => _selectedIssue != null);
 
@@ -206,6 +204,9 @@ namespace Specifications.ViewModels
                 () =>
                 {
                     _instance.Update();
+
+                    if (_selectedVersion == null)
+                        return;
 
                     if (_selectedVersion.IsMain)
                         SpecificationService.UpdateRequirements(_requirementList.Select(req => req.RequirementInstance));

@@ -122,9 +122,7 @@ namespace Specifications.ViewModels
             _setCurrent = new DelegateCommand(
                 () =>
                 {
-                    _methodInstance.Standard.CurrentIssue.IsCurrent = false;
-                    _selectedIssue.IsCurrent = true;
-                    _methodInstance.Standard.CurrentIssue = _selectedIssue;
+                    _methodInstance.Standard.SetCurrentIssue(_selectedIssue);
                 },
                 () => _selectedIssue != null
                 );
@@ -174,6 +172,7 @@ namespace Specifications.ViewModels
 
                 _subMethodList = _methodInstance.GetSubMethods();
 
+                RaisePropertyChanged("IssueList");
                 RaisePropertyChanged("Measurements");
                 RaisePropertyChanged("Name");
                 RaisePropertyChanged("Oem");

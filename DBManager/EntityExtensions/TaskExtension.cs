@@ -42,6 +42,9 @@ namespace DBManager.EntityExtensions
         {
             // Loads all relevant Related Entities for given task instance
 
+            if (entry == null)
+                return;
+
             using (DBEntities entities = new DBEntities())
             {
                 entities.Configuration.LazyLoadingEnabled = false;
@@ -57,7 +60,8 @@ namespace DBManager.EntityExtensions
                                                 .Include(tsk => tsk.SpecificationVersion.Specification.Standard.CurrentIssue)
                                                 .Include(tsk => tsk.SpecificationVersion.Specification.Standard.Organization)
                                                 .Include(tsk => tsk.TaskItems
-                                                .Select(tski => tski.Test.Report))
+                                                .Select(tski => tski.Tests
+                                                .Select(tst => tst.Report)))
                                                 .Include(tsk => tsk.TaskItems
                                                 .Select(tski => tski.Requirement.Method.Standard))
                                                 .Include(tsk => tsk.TaskItems
@@ -65,6 +69,32 @@ namespace DBManager.EntityExtensions
                                                 .First(tsk => tsk.ID == entry.ID);
 
                 entities.Entry(entry).CurrentValues.SetValues(tempEntry);
+            }
+        }
+
+        public static void SetAssigned(this Task entry,
+                                        bool isAssigned)
+        {
+            // Sets the Assignment flag of a Task entry
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entry.AllItemsAssigned = isAssigned;
+                entities.Tasks.AddOrUpdate(entry);
+                entities.SaveChanges();
+            }
+        }
+        
+        public static void SetComplete(this Task entry,
+                                        bool isComplete)
+        {
+            // Sets the Assignment flag of a Task entry
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entry.IsComplete = isComplete;
+                entities.Tasks.AddOrUpdate(entry);
+                entities.SaveChanges();
             }
         }
 

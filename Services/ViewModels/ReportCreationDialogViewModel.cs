@@ -54,14 +54,11 @@ namespace Services.ViewModels
                     _reportInstance.SetSpecificationVersion(_selectedVersion);
                     _reportInstance.StartDate = DateTime.Now.ToShortDateString();
                     _reportInstance.SpecificationIssueID = _selectedVersion.Specification.Standard.CurrentIssue.ID;
+
+                    foreach (Test tst in CommonProcedures.GenerateTestList(_requirementList))
+                        _reportInstance.Tests.Add(tst);
+
                     _reportInstance.Create();
-
-                    IEnumerable<Test> testList = CommonProcedures.GenerateTestList(_requirementList);
-                    foreach (Test tst in testList)
-                        tst.reportID = _reportInstance.ID;
-
-                    testList.CreateTests();
-
                     parent.DialogResult = true;
                 },
                 parent => IsValidInput);

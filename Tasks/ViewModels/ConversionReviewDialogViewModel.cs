@@ -45,27 +45,25 @@ namespace Tasks.ViewModels
                 parentDialog =>
                 {
                     _reportInstance = new Report();
-                    _reportInstance.Author = _selectedAuthor;
-                    _reportInstance.Batch = _taskInstance.Batch;
+                    _reportInstance.AuthorID = _selectedAuthor.ID;
+                    _reportInstance.BatchID = _taskInstance.Batch.ID;
                     _reportInstance.Category = "TR";
                     _reportInstance.Description = _notes;
                     _reportInstance.IsComplete = false;
                     _reportInstance.Number = _reportNumber;
-                    _reportInstance.ParentTask = _taskInstance;
-                    _reportInstance.SpecificationIssues = _taskInstance.SpecificationVersion.Specification.Standard.CurrentIssue;
-                    _reportInstance.SpecificationVersion = _taskInstance.SpecificationVersion;
+                    _reportInstance.ParentTaskID = _taskInstance.ID;
+                    _reportInstance.SpecificationIssueID = _taskInstance.SpecificationVersion.Specification.Standard.CurrentIssueID;
+                    _reportInstance.SpecificationVersionID = _taskInstance.SpecificationVersion.ID;
                     _reportInstance.StartDate = DateTime.Now.Date.ToShortDateString();
 
                     foreach (Test tst in CommonProcedures.GenerateTestList(_testList))
                         _reportInstance.Tests.Add(tst);
 
-                    foreach (TaskItemWrapper riw in _testList.Where(tiw => tiw.IsSelected))
-                        riw.TaskItemInstance.IsAssignedToReport = true;
+                    _reportInstance.Create();
+
 
                     if (!_taskInstance.TaskItems.Any(tski => !tski.IsAssignedToReport))
-                        _taskInstance.AllItemsAssigned = true;
-
-                    _reportInstance.Create();
+                        _taskInstance.SetAssigned(true);
 
                     parentDialog.DialogResult = true;
                 });

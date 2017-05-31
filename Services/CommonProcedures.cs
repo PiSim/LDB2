@@ -83,12 +83,18 @@ namespace Services
 
             foreach (TaskItemWrapper req in reqList.Where(isr => isr.IsSelected))
             {
+                req.RequirementInstance.Load();
+
                 Test tempTest = new Test();
                 tempTest.IsComplete = false;
                 tempTest.MethodID = req.RequirementInstance.Method.ID;
-                tempTest.MethodIssueID = tempTest.Method.Standard.CurrentIssue.ID;
+
+                if (req.RequirementInstance.Method.Standard.CurrentIssue != null)
+                    tempTest.MethodIssueID = req.RequirementInstance.Method.Standard.CurrentIssue.ID;
+
                 tempTest.Notes = req.RequirementInstance.Description;
-                tempTest.TaskItems.Add(req.TaskItemInstance);
+                tempTest.ParentTaskItemID = req.TaskItemInstance.ID;
+                req.TaskItemInstance.IsAssignedToReport = true;
 
                 foreach (SubRequirement subReq in req.RequirementInstance.SubRequirements)
                 {
@@ -115,7 +121,10 @@ namespace Services
                 Test tempTest = new Test();
                 tempTest.IsComplete = false;
                 tempTest.MethodID = req.RequirementInstance.Method.ID;
-                tempTest.MethodIssueID = req.RequirementInstance.Method.Standard.CurrentIssue.ID;
+
+                if (req.RequirementInstance.Method.Standard.CurrentIssue != null)
+                    tempTest.MethodIssueID = req.RequirementInstance.Method.Standard.CurrentIssue.ID;
+
                 tempTest.Notes = req.RequirementInstance.Description;
 
                 foreach (SubRequirement subReq in req.RequirementInstance.SubRequirements)
