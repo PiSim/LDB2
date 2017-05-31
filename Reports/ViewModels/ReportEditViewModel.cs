@@ -1,4 +1,5 @@
 ﻿using DBManager;
+using DBManager.EntityExtensions;
 using DBManager.Services;
 using Infrastructure;
 using Infrastructure.Events;
@@ -57,7 +58,7 @@ namespace Reports.ViewModels
                             ReportFile temp = new ReportFile();
                             temp.Path = pth;
                             temp.Description = "";
-                            _instance.ReportFiles.Add(temp);
+                            temp.Create();
                         }
 
                         RaisePropertyChanged("FileList");
@@ -87,11 +88,12 @@ namespace Reports.ViewModels
             _removeFile = new DelegateCommand(
                 () =>
                 {
-                    _instance.ReportFiles.Remove(_selectedFile);
+                    _selectedFile.Delete();
+                    SelectedFile = null;
+
                     RaisePropertyChanged("FileList");
                 },
                 () => _selectedFile != null);
-
         }
 
         public DelegateCommand AddFileCommand
@@ -151,14 +153,11 @@ namespace Reports.ViewModels
             set { _instance.Description = value; }
         }
 
-        public List<ReportFile> FileList
+        public IEnumerable<ReportFile> FileList
         {
             get 
-            { 
-                if (_instance == null)
-                    return null;
-                else
-                     return new List<ReportFile>(_instance.ReportFiles); 
+            {
+                return _instance.GetReportFiles();
             }
         }
 

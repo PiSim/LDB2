@@ -32,6 +32,22 @@ namespace DBManager.EntityExtensions
             }
         }
 
+        public static IEnumerable<StandardFile> GetIssueFiles(this StandardIssue entry)
+        {
+            // Returns all StandardFiles for an Issue
+
+            if (entry == null)
+                return null;
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.StandardFiles.Where(stdf => stdf.IssueID == entry.ID)
+                                            .ToList();
+                
+            }
+        }
 
         public static void Load(this StandardIssue entry)
         {

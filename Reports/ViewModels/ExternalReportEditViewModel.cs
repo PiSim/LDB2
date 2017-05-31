@@ -1,4 +1,5 @@
 ﻿using DBManager;
+using DBManager.EntityExtensions;
 using DBManager.Services;
 using Infrastructure;
 using Infrastructure.Events;
@@ -58,9 +59,12 @@ namespace Reports.ViewModels
                             ExternalReportFile temp = new ExternalReportFile();
                             temp.Path = pth;
                             temp.Description = "";
+                            temp.ExternalReportID = _instance.ID;
 
-                            _instance.AddFile(temp);
+                            temp.Create();
                         }
+
+                        RaisePropertyChanged("ReportFiles");
                     }
                 });
 
@@ -307,7 +311,7 @@ namespace Reports.ViewModels
 
         public IEnumerable<ExternalReportFile> ReportFiles
         {
-            get { return _instance.ExternalReportFiles; }
+            get { return _instance.GetExternalReportFiles(); }
         }
 
         public bool ReportReceived

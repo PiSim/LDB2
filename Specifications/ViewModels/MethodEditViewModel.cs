@@ -50,7 +50,9 @@ namespace Specifications.ViewModels
                             StandardFile temp = new StandardFile();
                             temp.Path = pth;
                             temp.Description = "";
-                            _selectedIssue.StandardFiles.Add(temp);
+                            temp.IssueID = _selectedIssue.ID;
+
+                            temp.Create();
                         }
 
                         RaisePropertyChanged("FileList");
@@ -94,7 +96,7 @@ namespace Specifications.ViewModels
             _removeFile = new DelegateCommand(
                 () =>
                 {
-                    _selectedIssue.StandardFiles.Remove(_selectedFile);
+                    _selectedFile.Delete();
                     SelectedFile = null;
                 },
                 () => _selectedFile != null);
@@ -143,14 +145,11 @@ namespace Specifications.ViewModels
             get { return _addMeasurement; }
         }
 
-        public List<StandardFile> FileList
+        public IEnumerable<StandardFile> FileList
         {
             get
             {
-                if (_selectedIssue == null)
-                    return null;
-
-                return new List<StandardFile>(_selectedIssue.StandardFiles);
+                return _selectedIssue.GetIssueFiles();
             }
         }
 

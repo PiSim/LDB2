@@ -157,22 +157,7 @@ namespace DBManager.Services
         }
 
         #endregion
-
-        #region Operations for StandardFiles entities
-
-        public static void Delete(this StandardFile entry)
-        {
-            // Deletes StandardFile entry
-
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.StandardFiles.Attach(entry);
-                entities.Entry(entry).State = EntityState.Deleted;
-                entities.SaveChanges();
-            }
-        }
-
-        #endregion
+        
 
         #region Operations for Std entities
 
