@@ -4,8 +4,8 @@
 -Supporto primari multipli per taratura
 -Corretto crash alla creazione di un report di calibrazione
 -Inserita associazione n-m per strumenti-metodi 
--*Associazione Norma/strumento
--*Modifica dati e parametri strumento
+-Implementata l'interfaccia per creazione/rimozione associazione metodi nella vista Instrumentedit
+-Aggiunta funzione modifica parametri strumento
 -*Funzionalità storico strumento
 -Aggiunto riferimento all'autore nelle entità SampleLogEntry
 -Aggiunto SortingBehavior alla lista strumenti
@@ -13,7 +13,7 @@
 -Corretta mancata attribuzione della lista prove alla creazione di un report
 -*Funzione elimina/aggiungi prove a/da report
 -Implementato evento per aggiornamento Task al completamento di un report 
--*Trasporto note PDC/Task/Report
+-Implementata la copia delle note da Piano di controllo a richiesta a report
 -Filtro Pipeline per completi
 -Impostati check di autorizzazione per numerose funzioni
 -Aggiornamento strumenti Post calibrazione
@@ -28,6 +28,7 @@
 -Aggiunta Assembly services per servizi e procedure condivise
 -Creata classe eventListener per raccogliere le sottoscrizioni agli eventi di richiesta servizi
 -Create raccolte di metodi di estensione per diversi tipi di entità 
+-Modificati tutti i ViewModel per il funzionamento in modalità disconnessa
 -Aggiunti progetti UnitTest per assembly DBManager e Services
 
 v 0.4.4 -- 9/5/2017

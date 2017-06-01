@@ -9,6 +9,22 @@ namespace DBManager.EntityExtensions
 {
     public static class InstrumentExtension
     {
+        public static void AddMethodAssociation(this Instrument entry,
+                                                Method methodEntity)
+        {
+            // Creates a new Instrument/method association
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Instruments.First(inst => inst.ID == entry.ID)
+                                    .AssociatedMethods
+                                    .Add(entities.Methods
+                                    .First(mtd => mtd.ID == methodEntity.ID));
+
+                entities.SaveChanges();
+            }
+        }
+
         public static void Create(this Instrument entry)
         {
             // Inserts a new Instrument entry
@@ -18,6 +34,44 @@ namespace DBManager.EntityExtensions
                 entities.Instruments.Add(entry);
 
                 entities.SaveChanges();
+            }
+        }
+
+        public static IEnumerable<Method> GetAssociatedMethods(this Instrument entry)
+        {
+            // Returns all the methods not assigned to the instrument entry
+
+            if (entry == null)
+                return null;
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.Methods.Include(mtd => mtd.Property)
+                                        .Include(mtd => mtd.Standard.Organization)
+                                        .Where(mtd => mtd.AssociatedInstruments
+                                        .Any(instr => instr.ID == entry.ID))
+                                        .ToList();
+            }
+        }
+
+        public static IEnumerable<Method> GetUnassociatedMethods(this Instrument entry)
+        {
+            // Returns all the methods not assigned to the instrument entry
+
+            if (entry == null)
+                return null;
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.Methods.Include(mtd => mtd.Property)
+                                        .Include(mtd => mtd.Standard.Organization)
+                                        .Where(mtd => !mtd.AssociatedInstruments
+                                        .Any(instr => instr.ID == entry.ID))
+                                        .ToList();
             }
         }
 
@@ -36,6 +90,7 @@ namespace DBManager.EntityExtensions
                                                             .Include(inst => inst.CalibrationReports
                                                             .Select(cal => cal.Laboratory))
                                                             .Include(inst => inst.CalibrationResponsible)
+                                                            .Include(inst => inst.InstrumentType)
                                                             .Include(inst => inst.MaintenanceEvent
                                                             .Select(mte => mte.Organization))
                                                             .Include(inst => inst.Manufacturer)
@@ -69,6 +124,22 @@ namespace DBManager.EntityExtensions
             }
         }
 
+        public static void RemoveMethodAssociation(this Instrument entry,
+                                                    Method methodEntity)
+        {
+            // Creates a new Instrument/method association
+
+            using (DBEntities entities = new DBEntities())
+            {
+                Instrument tempInstrument = entities.Instruments.First(inst => inst.ID == entry.ID);
+                Method tempMethod = tempInstrument.AssociatedMethods.First(mtd => mtd.ID == methodEntity.ID);
+
+                tempInstrument.AssociatedMethods.Remove(tempMethod);
+
+                entities.SaveChanges();
+            }
+        }
+
         public static void Update(this Instrument entry)
         {
             // Updates a given Instrument entry
@@ -77,7 +148,7 @@ namespace DBManager.EntityExtensions
             {
                 Instrument tempEntry = entities.Instruments.First(inst => inst.ID == entry.ID);
 
-                entities.Entry(tempEntry).CurrentValues.SetValues(entities);
+                entities.Entry(tempEntry).CurrentValues.SetValues(entry);
 
                 entities.SaveChanges();
             }

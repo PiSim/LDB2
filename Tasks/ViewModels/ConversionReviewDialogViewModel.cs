@@ -137,8 +137,9 @@ namespace Tasks.ViewModels
                 if (_taskInstance == null)
                     return null;
                 else
-                   return _taskInstance.SpecificationVersion.Specification.Standard.Name + " : "
-                        + _taskInstance.SpecificationVersion.Specification.Standard.CurrentIssue.Issue;
+                   return _taskInstance.SpecificationVersion.Specification.Standard.Name + (
+                        (_taskInstance.SpecificationVersion.Specification.Standard.CurrentIssue != null) ? (" : "
+                            + _taskInstance.SpecificationVersion.Specification.Standard.CurrentIssue.Issue) : "");
             }
         }
 

@@ -25,40 +25,46 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
                     <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition Height="2*"/>
                 </Grid.RowDefinitions>
-                
-                <Label Content="Codice:"
-                   Grid.Column="0"
-                   Grid.Row="0"
-                   Margin="5"/>
 
-                <Label Content="{Binding InstrumentCode}"
-                   Grid.Column="1"
-                   Grid.Row="0"
-                   Margin="5"/>
+                <Label Content="Codice:"
+                       Grid.Column="0"
+                       Grid.Row="0"
+                       Margin="5"/>
+
+                <TextBox Text="{Binding InstrumentCode}"
+                         IsEnabled="{Binding EditMode}"
+                         HorizontalContentAlignment="Center"
+                         VerticalContentAlignment="Center"
+                         Grid.Column="1"
+                         Grid.Row="0"
+                         Margin="5"/>
 
                 <Label Content="Tipo:"
-                   Grid.Column="0"
-                   Grid.Row="1"
-                   Margin="5"/>
-
-                <Label Content="{Binding InstrumentType}"
-                   Grid.Column="1"
-                   Grid.Row="1"
-                   Margin="5"/>
+                       Grid.Column="0"
+                       Grid.Row="1"
+                       Margin="5"/>
+                
+                <ComboBox ItemsSource="{Binding InstrumentTypeList}"
+                          SelectedItem="{Binding InstrumentType, Mode=TwoWay}"
+                          DisplayMemberPath="Name"
+                          IsEnabled="{Binding EditMode}"
+                          Grid.Column="1"
+                          Grid.Row="1"
+                          Margin="5"/>
 
                 <Label Content="Descrizione:"
                        Grid.Column="0"
                        Grid.Row="2"
                        Margin="5"/>
 
-                <TextBox Text="{Binding InstrumentDescription, Mode=TwoWay}"
+                <TextBox Text="{Binding InstrumentDescription}"
                          AcceptsReturn="True"
                          TextWrapping="Wrap"
-                         IsEnabled="{Binding CanModifyInstrumentInfo}"
+                         IsEnabled="{Binding EditMode}"
                          Grid.Column="1"
                          Grid.Row="2"
                          Margin="5"/>
@@ -70,8 +76,9 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
                 <Label Content="Costruttore:"
@@ -79,37 +86,48 @@
                    Grid.Row="0"
                    Margin="5"/>
 
-                <Label Content="{Binding InstrumentManufacturer}"
-                   Grid.Column="1"
-                   Grid.Row="0"
-                   Margin="5"/>
+                <ComboBox ItemsSource="{Binding ManufacturerList}"
+                          SelectedItem="{Binding InstrumentManufacturer, Mode=TwoWay}"
+                          DisplayMemberPath="Name"
+                          IsEnabled="{Binding EditMode}"
+                          Grid.Column="1"
+                          Grid.Row="0"
+                          Margin="5"/>
 
                 <Label Content="Modello:"
-                   Grid.Column="0"
-                   Grid.Row="1"
-                   Margin="5"/>
+                       Grid.Column="0"
+                       Grid.Row="1"
+                       Margin="5"/>
 
-                <Label Content="{Binding InstrumentModel}"
-                   Grid.Column="1"
-                   Grid.Row="1"
-                   Margin="5"/>
+                <TextBox Text="{Binding InstrumentModel}"
+                         IsEnabled="{Binding EditMode}"
+                         HorizontalContentAlignment="Center"
+                         VerticalContentAlignment="Center"
+                         Grid.Column="1"
+                         Grid.Row="1"
+                         Margin="5"/>
 
                 <Label Content="Matricola:"
                    Grid.Column="0"
                    Grid.Row="2"
                    Margin="5"/>
 
-                <Label Content="{Binding InstrumentSerialNumber}"
-                       Grid.Column="1"
-                       Grid.Row="2"
-                       Margin="5"/>
-            </Grid>
-            
-            
+                <TextBox Text="{Binding InstrumentSerialNumber}"
+                         IsEnabled="{Binding EditMode}"
+                         HorizontalContentAlignment="Center"
+                         VerticalContentAlignment="Center"
+                         Grid.Column="1"
+                         Grid.Row="2"
+                         Margin="5"/>
 
-            
-
-            
+                <Button Content="Modifica"
+                        Command="{Binding SetModifyCommand}"
+                        Grid.Column="1"
+                        Grid.Row="3"
+                        HorizontalAlignment="Right"
+                        Margin="5"
+                        Padding="5"/>
+            </Grid>            
         </Grid>
 
         <TabControl Grid.Row="1">
@@ -202,6 +220,7 @@
                     </StackPanel>
                 </Grid>
             </TabItem>
+            
             <TabItem Header="Metodi">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -224,14 +243,14 @@
                                    Grid.Column="0"
                                    Grid.Row="0"
                                    Height="Auto"/>
-                            <ComboBox ItemsSource="{Binding Path=Properties}" 
+                            <ComboBox ItemsSource="{Binding Path=PropertyList}" 
                                       SelectedItem="{Binding Path=FilterProperty, Mode=TwoWay}"
                                       DisplayMemberPath="Name"
                                       Grid.Column="1"
                                       Grid.Row="0"/>
 
-                            <ListView ItemsSource="{Binding Path=FilteredMethods}"
-                                      SelectedItem="{Binding Path=SelectedToAdd, Mode=TwoWay}"
+                            <ListView ItemsSource="{Binding Path=UnassociatedMethods}"
+                                      SelectedItem="{Binding Path=SelectedUnassociatedMethod, Mode=TwoWay}"
                                       Grid.Column="0"
                                       Grid.ColumnSpan="2"
                                       Grid.Row="1">
@@ -260,14 +279,14 @@
                             <RowDefinition/>
                         </Grid.RowDefinitions>
                         <Button Content="►"
-                                Command="{Binding Path=AddMethodCommand}"
+                                Command="{Binding Path=AddMethodAssociationCommand}"
                                 Grid.Row="1"
                                 Height="30"
                                 Width="30" 
                                 FontSize="20" 
                                 Margin="5,0,5,0"/>
                         <Button Content="◄"
-                                Command="{Binding Path=RemoveMethodCommand}"
+                                Command="{Binding Path=RemoveMethodAssociationCommand}"
                                 Grid.Row="3"
                                 Height="30"
                                 Width="30" 
@@ -277,16 +296,16 @@
 
                     <GroupBox Header="Metodi Associati"
                               Grid.Column="2">
-                        <ListView ItemsSource="{Binding AssociatedMethodList}" 
-                                  SelectedItem="{Binding SelectedToRemove, Mode=TwoWay}">
+                        <ListView ItemsSource="{Binding AssociatedMethods}" 
+                                  SelectedItem="{Binding SelectedAssociatedMethod, Mode=TwoWay}">
                             <ListView.View>
                                 <GridView>
                                     <GridViewColumn Header="Proprietà"
-                                                    DisplayMemberBinding="{Binding Method.Property.Name}"/>
+                                                    DisplayMemberBinding="{Binding Property.Name}"/>
                                     <GridViewColumn Header="OEM"
-                                                    DisplayMemberBinding="{Binding Method.Standard.Organization.Name}"/>
+                                                    DisplayMemberBinding="{Binding Standard.Organization.Name}"/>
                                     <GridViewColumn Header="Standard"
-                                                    DisplayMemberBinding="{Binding Method.Standard.Name}"/>
+                                                    DisplayMemberBinding="{Binding Standard.Name}"/>
                                 </GridView>
                             </ListView.View>
                         </ListView>
