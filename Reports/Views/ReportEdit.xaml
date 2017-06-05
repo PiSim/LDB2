@@ -5,14 +5,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Reports.Views"
              xmlns:prism="http://prismlibrary.com/"
-             xmlns:res="clr-namespace:Infrastructure.Resources;assembly=Infrastructure"
              prism:ViewModelLocator.AutoWireViewModel="True"
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="600">
-    <UserControl.Resources>
-        <BitmapImage x:Key="DatasheetIcon"
-                     UriSource="..\Resources\Datasheet_icon.png"/>
-    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -233,6 +228,16 @@
                         </GridViewColumn>
                         <GridViewColumn Header="Data Completamento" 
                                         DisplayMemberBinding="{Binding CompletionDate}"/>
+                        <GridViewColumn>
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Content="Elimina"
+                                            Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}, 
+                                                            Path=DataContext.RemoveTestCommand}"
+                                            CommandParameter="{Binding }"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
                     </GridView>
                 </ListView.View>
             </ListView>

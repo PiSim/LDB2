@@ -143,6 +143,8 @@ namespace Services.ViewModels
             set
             {
                 _selectedControlPlan = value;
+                _selectedControlPlan.Load();
+
                 RaisePropertyChanged("SelectedControlPlan");
                 if (value != null)
                 {
@@ -162,8 +164,8 @@ namespace Services.ViewModels
                 RaisePropertyChanged("VersionList");
                 RaisePropertyChanged("ControlPlanList");
 
-                SelectedControlPlan = ControlPlanList.FirstOrDefault(cp => cp.IsDefault);
                 SelectedVersion = VersionList.FirstOrDefault(sv => sv.IsMain);
+                SelectedControlPlan = ControlPlanList.FirstOrDefault(cp => cp.IsDefault);
             }
         }
 

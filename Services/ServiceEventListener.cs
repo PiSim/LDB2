@@ -1,4 +1,5 @@
 ﻿using DBManager.Services;
+using DBManager.EntityExtensions;
 using Infrastructure.Events;
 using Prism.Events;
 using System;
@@ -27,6 +28,27 @@ namespace Services
 
                     if (creationDialog.ShowDialog() == true)
                         _eventAggregator.GetEvent<ReportListUpdateRequested>().Publish();
+                });
+
+            _eventAggregator.GetEvent<ReportStatusCheckRequested>()
+                            .Subscribe(
+                report =>
+                {
+                    // areTestsComplete is true if all tests are marked as complete
+
+                    bool areTestsComplete = report.Tests.Any(tst => !tst.IsComplete);
+
+                    if ((report.IsComplete && !areTestsComplete)
+                        || (!report.IsComplete && areTestsComplete))
+                    {
+                        report.IsComplete = !report.IsComplete;
+                        report.Update();
+
+                        if (report.ParentTask != null)
+                            _eventAggregator.GetEvent<TaskStatusCheckRequested>()
+                                            .Publish(report.ParentTask);
+                    }
+
                 });
         }
     }

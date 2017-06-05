@@ -16,7 +16,7 @@ namespace Infrastructure.Wrappers
         public ReportItemWrapper(Requirement instance)
         {
             _instance = instance;
-            _isSelected = true;
+            _isSelected = false;
         }
 
         public string Method

@@ -68,5 +68,10 @@ namespace Reports
             get { return _testInstance.SubTests; }
         }
 
+        public Test TestInstance
+        {
+            get { return _testInstance; }
+        }
+
     }
 }

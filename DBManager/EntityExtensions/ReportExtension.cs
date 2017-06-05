@@ -45,7 +45,7 @@ namespace DBManager.EntityExtensions
 
                 return entities.Requirements.Include(req => req.Method.Property)
                                             .Include(req => req.Method.Standard.Organization)
-                                            .Where(req => true)
+                                            .Where(req => req.SpecificationVersionID == entry.SpecificationVersionID)
                                             .ToList();
             }
         } 

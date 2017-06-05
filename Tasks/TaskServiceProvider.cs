@@ -38,10 +38,9 @@ namespace Tasks
 
         public void UpdateTaskStatus(DBManager.Task target)
         {
-            if (target == null)
-                return;
+            target.Load();
             
-            else if (!target.AllItemsAssigned && target.TaskItems.All(tski => tski.IsAssignedToReport))
+            if (!target.AllItemsAssigned && target.TaskItems.All(tski => tski.IsAssignedToReport))
             {
                 target.AllItemsAssigned = true;
                 target.Update();

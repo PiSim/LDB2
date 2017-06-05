@@ -3,9 +3,13 @@
                     x:Class="Infrastructure.Resources.CommonResourceDictionary"
                     xmlns:local="clr-namespace:Infrastructure.Resources">
 
-    <Image x:Key="VulcaLogo"
-           Source="vulca_logo.jpg"/>
+    <BitmapImage x:Key="VulcaLogo"
+                UriSource="vulca_logo.jpg"/>
 
-    <Image x:Key="PlusIcon"
-           Source="Plus_icon.ico"/>
+    <BitmapImage x:Key="PlusIcon"
+                UriSource="Plus_icon.ico"/>
+
+    <BitmapImage x:Key="DatasheetIcon"
+                UriSource="Datasheet_icon.png"/>
+    
 </ResourceDictionary>

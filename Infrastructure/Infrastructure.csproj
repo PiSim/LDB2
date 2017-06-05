@@ -118,6 +118,7 @@
     <Compile Include="Events\PersonCreationRequested.cs" />
     <Compile Include="Events\PersonRoleCreationRequested.cs" />
     <Compile Include="Events\ProjectCreationRequested.cs" />
+    <Compile Include="Events\ReportStatusCheckRequested.cs" />
     <Compile Include="Events\SampleCreationRequested.cs" />
     <Compile Include="Events\SampleListUpdateRequested.cs" />
     <Compile Include="Events\TaskStatusCheckRequested.cs" />
@@ -212,6 +213,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Plus_icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Datasheet_icon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

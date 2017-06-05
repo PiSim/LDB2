@@ -20,7 +20,8 @@ namespace Reports.ViewModels
     public class ReportEditViewModel : BindableBase
     {
         private DBPrincipal _principal;
-        private DelegateCommand _addFile, _addTest, _generateRawDataSheet, _openFile, _removeFile;
+        private DelegateCommand _addFile, _addTests, _generateRawDataSheet, _openFile, _removeFile;
+        private DelegateCommand<TestWrapper> _removeTest;
         private EventAggregator _eventAggregator;
         private Report _instance;
         private List<TestWrapper> _testList;
@@ -44,7 +45,7 @@ namespace Reports.ViewModels
                         _instance.Update();
                         _eventAggregator.GetEvent<ReportCompleted>().Publish(_instance);
                     }
-                }, true);
+                });
 
             _addFile = new DelegateCommand(
                 () =>
@@ -59,6 +60,7 @@ namespace Reports.ViewModels
                             ReportFile temp = new ReportFile();
                             temp.Path = pth;
                             temp.Description = "";
+                            temp.reportID = _instance.ID;
                             temp.Create();
                         }
 
@@ -66,7 +68,7 @@ namespace Reports.ViewModels
                     }
                 });
 
-            _addTest = new DelegateCommand(
+            _addTests = new DelegateCommand(
                 () =>
                 {
                     if (CommonProcedures.AddTestsToReport(_instance))
@@ -102,6 +104,22 @@ namespace Reports.ViewModels
                     RaisePropertyChanged("FileList");
                 },
                 () => _selectedFile != null);
+
+            _removeTest = new DelegateCommand<TestWrapper>(
+                testItem =>
+                {
+                    testItem.TestInstance.Load();
+                    TaskItem tempTaskItem = testItem.TestInstance.ParentTaskItem;
+
+                    testItem.TestInstance.Delete();
+
+                    tempTaskItem.IsAssignedToReport = false;
+                    tempTaskItem.Update();
+
+                    _eventAggregator.GetEvent<TaskStatusCheckRequested>()
+                                    .Publish(tempTaskItem.Task);
+                },
+                testItem => !testItem.IsComplete);
         }
 
         public DelegateCommand AddFileCommand
@@ -109,9 +127,9 @@ namespace Reports.ViewModels
             get { return _addFile; }
         }
 
-        public DelegateCommand AddTestCommand
+        public DelegateCommand AddTestsCommand
         {
-            get { return _addTest; }
+            get { return _addTests; }
         }
 
         public string BatchNumber
@@ -248,6 +266,11 @@ namespace Reports.ViewModels
         public DelegateCommand RemoveFileCommand
         {
             get { return _removeFile; }
+        }
+
+        public DelegateCommand<TestWrapper> RemoveTestCommand
+        {
+            get { return _removeTest; }
         }
 
         public string Specification
