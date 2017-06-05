@@ -14,6 +14,31 @@ namespace Services
 {
     public static class CommonProcedures
     {
+        public static bool AddTestsToReport(Report entry)
+        {
+            if (entry == null)
+                throw new NullReferenceException();
+
+            Views.AddTestDialog testDialog = new Views.AddTestDialog();
+            testDialog.ReportInstance = entry;
+
+            if (testDialog.ShowDialog() == true)
+            {
+                if (testDialog.TestList.Count() == 0)
+                    return false;
+
+                IEnumerable<Test> testList = GenerateTestList(testDialog.TestList);
+                foreach (Test tst in testList)
+                    tst.reportID = entry.ID;
+                testList.CreateTests();
+
+                return true;
+            }
+
+            else
+                return false;
+        }
+
         public static void ApplyControlPlan(IEnumerable<ISelectableRequirement> reqList, ControlPlan conPlan)
         {
             if (conPlan.IsDefault)

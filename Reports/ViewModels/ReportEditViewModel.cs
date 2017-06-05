@@ -6,6 +6,7 @@ using Infrastructure.Events;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
+using Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -19,7 +20,7 @@ namespace Reports.ViewModels
     public class ReportEditViewModel : BindableBase
     {
         private DBPrincipal _principal;
-        private DelegateCommand _addFile, _generateRawDataSheet, _openFile, _removeFile;
+        private DelegateCommand _addFile, _addTest, _generateRawDataSheet, _openFile, _removeFile;
         private EventAggregator _eventAggregator;
         private Report _instance;
         private List<TestWrapper> _testList;
@@ -65,6 +66,13 @@ namespace Reports.ViewModels
                     }
                 });
 
+            _addTest = new DelegateCommand(
+                () =>
+                {
+                    if (CommonProcedures.AddTestsToReport(_instance))
+                        RaisePropertyChanged("TestList");
+                });
+
             _generateRawDataSheet = new DelegateCommand(
                 () =>
                 {
@@ -99,6 +107,11 @@ namespace Reports.ViewModels
         public DelegateCommand AddFileCommand
         {
             get { return _addFile; }
+        }
+
+        public DelegateCommand AddTestCommand
+        {
+            get { return _addTest; }
         }
 
         public string BatchNumber

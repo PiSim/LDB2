@@ -22,6 +22,7 @@ namespace Services
             _container.RegisterType<ServiceEventListener>(new ContainerControlledLifetimeManager());
             _container.Resolve<ServiceEventListener>();
 
+            _container.RegisterType<ViewModels.AddTestDialogViewModel>();
             _container.RegisterType<ViewModels.ReportCreationDialogViewModel>();
         }
     }

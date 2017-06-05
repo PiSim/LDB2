@@ -9,5 +9,6 @@ namespace Infrastructure.Resources
     public class CommonResourceKeys
     {
         public static string VulcaLogo { get { return "VulcaLogo"; } }
+        public static string PlusIcon { get { return "PlusIcon"; } }
     }
 }

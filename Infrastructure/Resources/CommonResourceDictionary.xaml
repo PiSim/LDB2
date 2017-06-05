@@ -5,4 +5,7 @@
 
     <Image x:Key="VulcaLogo"
            Source="vulca_logo.jpg"/>
+
+    <Image x:Key="PlusIcon"
+           Source="Plus_icon.ico"/>
 </ResourceDictionary>

@@ -109,7 +109,11 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="ViewModels\AddTestDialogViewModel.cs" />
     <Compile Include="ViewModels\ReportCreationDialogViewModel.cs" />
+    <Compile Include="Views\AddTestDialog.xaml.cs">
+      <DependentUpon>AddTestDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ReportCreationDialog.xaml.cs">
       <DependentUpon>ReportCreationDialog.xaml</DependentUpon>
     </Compile>
@@ -126,6 +130,10 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Views\AddTestDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\ReportCreationDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

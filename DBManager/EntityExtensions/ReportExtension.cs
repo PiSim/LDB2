@@ -32,6 +32,24 @@ namespace DBManager.EntityExtensions
             }
         }
 
+        public static IEnumerable<Requirement> GetAddableTests(this Report entry)
+        {
+            // Returns all the tests that can be added to a Report Entry
+
+            if (entry == null)
+                return null;
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.Requirements.Include(req => req.Method.Property)
+                                            .Include(req => req.Method.Standard.Organization)
+                                            .Where(req => true)
+                                            .ToList();
+            }
+        } 
+
         public static IEnumerable<ReportFile> GetReportFiles(this Report entry)
         {
             // Returns all ReportFiles for a report Entry

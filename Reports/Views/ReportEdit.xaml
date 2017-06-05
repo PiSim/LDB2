@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Reports.Views"
              xmlns:prism="http://prismlibrary.com/"
+             xmlns:res="clr-namespace:Infrastructure.Resources;assembly=Infrastructure"
              prism:ViewModelLocator.AutoWireViewModel="True"
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="600">
@@ -175,6 +176,13 @@
                     Margin="5">
                 <Image Source="{StaticResource DatasheetIcon}"
                        ToolTip="Genera un foglio raccolta dati vuoto per questo report"
+                       Height="30"
+                       Width="25"/>
+            </Button>
+            <Button Command="{Binding AddTestsCommand}"
+                    Margin="5">
+                <Image Source="{StaticResource ResourceKey=PlusIcon}"
+                       ToolTip="Aggiungi test al report"
                        Height="30"
                        Width="25"/>
             </Button>
