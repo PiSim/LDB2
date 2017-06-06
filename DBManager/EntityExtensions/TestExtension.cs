@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,7 +10,6 @@ namespace DBManager.EntityExtensions
 {
     public static class TestExtension
     {
-
         public static void CreateTests(this IEnumerable<Test> testList)
         {
             using (DBEntities entities = new DBEntities())
@@ -37,7 +37,6 @@ namespace DBManager.EntityExtensions
 
         public static void Load(this Test entry)
         {
-
             if (entry == null)
                 return;
 
@@ -80,6 +79,22 @@ namespace DBManager.EntityExtensions
         {
             entry.Method = methodEntity;
             entry.MethodID = (methodEntity == null) ? 0 : methodEntity.ID;
+        }
+
+        public static void Update(this IEnumerable<Test> entryList)
+        {
+            // Updates all related Test and Subtest instances in a report
+
+            using (DBEntities entities = new DBEntities())
+            {
+                foreach (Test tst in entryList)
+                {
+                    entities.Tests.AddOrUpdate(tst);
+                    foreach (SubTest sts in tst.SubTests)
+                        entities.SubTests.AddOrUpdate(sts);
+                }
+                entities.SaveChanges();
+            }
         }
     }
 }

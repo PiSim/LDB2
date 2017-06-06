@@ -18,6 +18,16 @@ namespace Services
         {
             _eventAggregator = eventAggregator;
 
+            _eventAggregator.GetEvent<MaintenanceEventCreationRequested>()
+                            .Subscribe(instrumentEntry =>
+                            {
+                                Views.MaintenanceEventCreationDialog newEventDialog = new Views.MaintenanceEventCreationDialog();
+                                if (newEventDialog.ShowDialog() == true)
+                                {
+
+                                }
+                            });
+
             _eventAggregator.GetEvent<ReportCreationRequested>().Subscribe(
                 token =>
                 {
@@ -36,13 +46,16 @@ namespace Services
                 {
                     // areTestsComplete is true if all tests are marked as complete
 
-                    bool areTestsComplete = report.Tests.Any(tst => !tst.IsComplete);
+                    bool areTestsComplete = report.AreTestsComplete();
 
                     if ((report.IsComplete && !areTestsComplete)
                         || (!report.IsComplete && areTestsComplete))
                     {
                         report.IsComplete = !report.IsComplete;
                         report.Update();
+
+                        _eventAggregator.GetEvent<ReportListUpdateRequested>()
+                                        .Publish();
 
                         if (report.ParentTask != null)
                             _eventAggregator.GetEvent<TaskStatusCheckRequested>()

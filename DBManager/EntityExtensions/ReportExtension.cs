@@ -10,6 +10,17 @@ namespace DBManager.EntityExtensions
 {
     public static class ReportExtension
     {
+        public static bool AreTestsComplete(this Report entry)
+        {
+            // Returns true if all the tests are completed
+
+            using (DBEntities entities = new DBEntities())
+            {
+                return entities.Tests.Where(tst => tst.reportID == entry.ID)
+                                    .All(tst => tst.IsComplete == true);
+            }
+        }
+
         public static void Create(this Report entry)
         {
             using (DBEntities entities = new DBEntities())
@@ -32,24 +43,6 @@ namespace DBManager.EntityExtensions
             }
         }
 
-        public static IEnumerable<Requirement> GetAddableTests(this Report entry)
-        {
-            // Returns all the tests that can be added to a Report Entry
-
-            if (entry == null)
-                return null;
-
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.Configuration.LazyLoadingEnabled = false;
-
-                return entities.Requirements.Include(req => req.Method.Property)
-                                            .Include(req => req.Method.Standard.Organization)
-                                            .Where(req => req.SpecificationVersionID == entry.SpecificationVersionID)
-                                            .ToList();
-            }
-        } 
-
         public static IEnumerable<ReportFile> GetReportFiles(this Report entry)
         {
             // Returns all ReportFiles for a report Entry
@@ -63,6 +56,28 @@ namespace DBManager.EntityExtensions
 
                 return entities.ReportFiles.Where(repf => repf.reportID == entry.ID)
                                             .ToList();
+            }
+        }
+
+        public static IEnumerable<Test> GetTests(this Report entry)
+        {
+            // Returns all tests for a Report Entry
+
+            if (entry == null)
+                return new List<Test>();
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.Tests.Include(tst => tst.instrument.InstrumentType)
+                                    .Include(tst => tst.Method.Property)
+                                    .Include(tst => tst.Method.Standard.Organization)
+                                    .Include(tst => tst.MethodIssue)
+                                    .Include(tst => tst.Person)
+                                    .Include(tst => tst.SubTests)
+                                    .Where(tst => tst.reportID == entry.ID)
+                                    .ToList();
             }
         }
 
@@ -83,14 +98,7 @@ namespace DBManager.EntityExtensions
                                             .Include(rep => rep.Batch.Material.Recipe.Colour)
                                             .Include(rep => rep.ParentTask)
                                             .Include(rep => rep.SpecificationIssues)
-                                            .Include(rep => rep.Tests
-                                            .Select(tst => tst.instrument.InstrumentType))
-                                            .Include(rep => rep.Tests
-                                            .Select(tst => tst.Method.Property))
-                                            .Include(rep => rep.Tests
-                                            .Select(tst => tst.Method.Standard.Organization))
-                                            .Include(rep => rep.Tests
-                                            .Select(tst => tst.SubTests))
+                                            .Include(rep => rep.Tests)
                                             .Include(rep => rep.SpecificationVersion.Specification.Standard.Organization)
                                             .First(rep => rep.ID == entry.ID);
 
@@ -112,27 +120,6 @@ namespace DBManager.EntityExtensions
                 entry.StartDate = tempEntry.StartDate;
                 entry.Tests = tempEntry.Tests;
             }
-        }
-
-        public static void SetAuthor(this Report entry,
-                                    Person personEntity)
-        {
-            entry.Author = personEntity;
-            entry.AuthorID = (personEntity == null) ? 0 : personEntity.ID;
-        }
-
-        public static void SetBatch(this Report entry,
-                                    Batch batchEntity)
-        {
-            entry.Batch = batchEntity;
-            entry.BatchID = (batchEntity == null) ? 0 : batchEntity.ID;
-        }
-
-        public static void SetSpecificationVersion(this Report entry,
-                                                    SpecificationVersion specificationVersionEntity)
-        {
-            entry.SpecificationVersion = specificationVersionEntity;
-            entry.SpecificationVersionID = (specificationVersionEntity == null) ? 0 : specificationVersionEntity.ID;
         }
 
         public static void Update(this Report entry)

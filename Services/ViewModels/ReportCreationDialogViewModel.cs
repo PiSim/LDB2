@@ -42,8 +42,8 @@ namespace Services.ViewModels
             _confirm = new DelegateCommand<Window>(
                 parent => {
                     _reportInstance = new Report();
-                    _reportInstance.SetAuthor(_author);
-                    _reportInstance.SetBatch(CommonProcedures.GetBatch(_batchNumber));
+                    _reportInstance.AuthorID = _author.ID;
+                    _reportInstance.BatchID = CommonProcedures.GetBatch(_batchNumber).ID;
                     _reportInstance.Category = "TR";
                     if (_selectedControlPlan != null)
                         _reportInstance.Description = _selectedControlPlan.Name;
@@ -51,9 +51,9 @@ namespace Services.ViewModels
                         _reportInstance.Description = _selectedSpecification.Description;
                     _reportInstance.IsComplete = false;
                     _reportInstance.Number = _number;
-                    _reportInstance.SetSpecificationVersion(_selectedVersion);
+                    _reportInstance.SpecificationVersionID = _selectedVersion.ID;
                     _reportInstance.StartDate = DateTime.Now.ToShortDateString();
-                    _reportInstance.SpecificationIssueID = _selectedVersion.Specification.Standard.CurrentIssue.ID;
+                    _reportInstance.SpecificationIssueID = _selectedVersion.Specification.Standard.CurrentIssueID;
 
                     foreach (Test tst in CommonProcedures.GenerateTestList(_requirementList))
                         _reportInstance.Tests.Add(tst);

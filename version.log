@@ -11,7 +11,7 @@
 -Aggiunto SortingBehavior alla lista strumenti
 -Impostato AutoWireViewModel per NewCalibrationDialog, NewUserDialog
 -Corretta mancata attribuzione della lista prove alla creazione di un report
--*Funzione elimina/aggiungi prove a/da report
+-Funzione aggiungi/elimina prove a/da report
 -Implementato evento per aggiornamento Task al completamento di un report 
 -Implementata la copia delle note da Piano di controllo a richiesta a report
 -Filtro Pipeline per completi

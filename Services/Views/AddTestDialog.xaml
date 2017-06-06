@@ -7,7 +7,7 @@
         xmlns:prism="http://prismlibrary.com/"
         prism:ViewModelLocator.AutoWireViewModel="True"
         mc:Ignorable="d"
-        Title="Aggiungi test" Height="300" Width="300"
+        Title="Aggiungi test" Height="350" Width="300"
         ResizeMode="NoResize">
     <Grid>
         <Grid.ColumnDefinitions>
@@ -43,8 +43,7 @@
                    HorizontalContentAlignment="Center"
                    VerticalContentAlignment="Center"
                    Grid.Column="1"
-                   Grid.Row="0"
-                   Margin="5"/>
+                   Grid.Row="0"/>
 
             <Label Content="Batch:"
                    Grid.Column="0"
@@ -55,8 +54,7 @@
                    HorizontalContentAlignment="Center"
                    VerticalContentAlignment="Center"
                    Grid.Column="1"
-                   Grid.Row="1"
-                   Margin="5"/>
+                   Grid.Row="1"/>
 
             <Label Content="Specifica:"
                    Grid.Column="0"
@@ -67,8 +65,7 @@
                    HorizontalContentAlignment="Center"
                    VerticalContentAlignment="Center"
                    Grid.Column="1"
-                   Grid.Row="2"
-                   Margin="5"/>
+                   Grid.Row="2"/>
         </Grid>
 
         <ListView ItemsSource="{Binding TestList}"
@@ -81,10 +78,14 @@
                     <GridViewColumn>
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <CheckBox IsChecked="{Binding IsSelected}"/>
+                                <CheckBox IsChecked="{Binding IsSelected, Mode=TwoWay}"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
+                    <GridViewColumn Header="Proprietà"
+                                    DisplayMemberBinding="{Binding Property}"/>
+                    <GridViewColumn Header="Metodo"
+                                    DisplayMemberBinding="{Binding Method}"/>
                 </GridView>
             </ListView.View>
         </ListView>

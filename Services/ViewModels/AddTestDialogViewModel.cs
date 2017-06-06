@@ -60,9 +60,11 @@ namespace Services.ViewModels
             set
             {
                 _reportInstance = value;
+                _reportInstance.SpecificationVersion.Load();
 
-                _testList = _reportInstance.GetAddableTests()
-                                            .Select(req => new ReportItemWrapper(req));
+                _testList = _reportInstance.SpecificationVersion.GenerateRequirementList()
+                                                                .Select(req => new ReportItemWrapper(req))
+                                                                .ToList();
 
                 RaisePropertyChanged("BatchNumber");
                 RaisePropertyChanged("ReportNumber");
@@ -91,7 +93,7 @@ namespace Services.ViewModels
 
                 return _reportInstance.SpecificationVersion.Specification.Standard.Name
                     + " - " + _reportInstance.SpecificationVersion.Name
-                        + " : " + ((_reportInstance.SpecificationIssues == null) ? null : _reportInstance.SpecificationIssues.Issue);
+                        + ((_reportInstance.SpecificationIssues == null) ? null : " : " + _reportInstance.SpecificationIssues.Issue);
             }
         }
 

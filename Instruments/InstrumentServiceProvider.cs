@@ -33,19 +33,6 @@ namespace Instruments
                 });
         }
 
-        public InstrumentMaintenanceEvent AddMaintenanceEvent(Instrument target)
-        {
-            Views.NewMaintenanceEventDialog newEventDialog = _container.Resolve<Views.NewMaintenanceEventDialog>();
-            if (newEventDialog.ShowDialog() == true)
-            {
-                _eventAggregator.GetEvent<InstrumentListUpdateRequested>().Publish();
-                return newEventDialog.EventInstance;
-            }
-
-            else
-                return null;
-        }
-
         public CalibrationReport RegisterNewCalibration(Instrument target)
         {
             Views.NewCalibrationDialog calibrationDialog = _container.Resolve<Views.NewCalibrationDialog>();

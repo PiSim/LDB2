@@ -24,7 +24,7 @@ namespace Reports.ViewModels
         private DelegateCommand<TestWrapper> _removeTest;
         private EventAggregator _eventAggregator;
         private Report _instance;
-        private List<TestWrapper> _testList;
+        private IEnumerable<TestWrapper> _testList;
         private ReportFile _selectedFile;
         
         public ReportEditViewModel(DBPrincipal principal,
@@ -36,15 +36,9 @@ namespace Reports.ViewModels
             _eventAggregator.GetEvent<CommitRequested>()
                 .Subscribe(() =>
                 {
-                    _instance.UpdateTests();
-
-                    if (!_instance.IsComplete && !_testList.Any(tst => !tst.IsComplete))
-                    {
-                        _instance.IsComplete = true;
-                        _instance.EndDate = DateTime.Now.Date;
-                        _instance.Update();
-                        _eventAggregator.GetEvent<ReportCompleted>().Publish(_instance);
-                    }
+                    _testList.Select(tiw => tiw.TestInstance)
+                            .Update();
+                    _eventAggregator.GetEvent<ReportStatusCheckRequested>().Publish(_instance);
                 });
 
             _addFile = new DelegateCommand(
@@ -72,7 +66,12 @@ namespace Reports.ViewModels
                 () =>
                 {
                     if (CommonProcedures.AddTestsToReport(_instance))
-                        RaisePropertyChanged("TestList");
+                    {
+                        TestList = new List<TestWrapper>(_instance.GetTests().Select(tst => new TestWrapper(tst)));
+                        _eventAggregator.GetEvent<ReportStatusCheckRequested>()
+                                        .Publish(_instance);
+                    }
+                    
                 });
 
             _generateRawDataSheet = new DelegateCommand(
@@ -113,11 +112,19 @@ namespace Reports.ViewModels
 
                     testItem.TestInstance.Delete();
 
-                    tempTaskItem.IsAssignedToReport = false;
-                    tempTaskItem.Update();
+                    if (tempTaskItem != null)
+                    {
+                        tempTaskItem.IsAssignedToReport = false;
+                        tempTaskItem.Update();
+                        _eventAggregator.GetEvent<TaskStatusCheckRequested>()
+                                        .Publish(tempTaskItem.Task);
+                    }
 
-                    _eventAggregator.GetEvent<TaskStatusCheckRequested>()
-                                    .Publish(tempTaskItem.Task);
+                    _eventAggregator.GetEvent<ReportStatusCheckRequested>()
+                                    .Publish(_instance);
+
+                    TestList = new List<TestWrapper>(_instance.GetTests().Select(tst => new TestWrapper(tst)));
+
                 },
                 testItem => !testItem.IsComplete);
         }
@@ -205,7 +212,7 @@ namespace Reports.ViewModels
                 _instance = value;
                 _instance.Load();
 
-                _testList = new List<TestWrapper>(_instance.Tests.Select(tst => new TestWrapper(tst)));
+                _testList = new List<TestWrapper>(_instance.GetTests().Select(tst => new TestWrapper(tst)));
 
                 RaisePropertyChanged("BatchNumber");
                 RaisePropertyChanged("CanModify");
@@ -309,9 +316,14 @@ namespace Reports.ViewModels
             }
         } 
 
-        public List<TestWrapper> TestList
+        public IEnumerable<TestWrapper> TestList
         {
             get { return _testList; }
+            private set
+            {
+                _testList = value;
+                RaisePropertyChanged("TestList");
+            }
         }
     }
 }

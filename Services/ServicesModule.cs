@@ -23,6 +23,7 @@ namespace Services
             _container.Resolve<ServiceEventListener>();
 
             _container.RegisterType<ViewModels.AddTestDialogViewModel>();
+            _container.RegisterType<ViewModels.MaintenanceEventCreationDialogViewModel>();
             _container.RegisterType<ViewModels.ReportCreationDialogViewModel>();
         }
     }

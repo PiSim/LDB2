@@ -23,9 +23,6 @@ namespace Tasks
             _eventAggregator = aggregator;
             _container = container;
 
-            _eventAggregator.GetEvent<ReportCompleted>().Subscribe(
-                report => UpdateTaskStatus(report.ParentTask));
-
             _eventAggregator.GetEvent<TaskCreationRequested>().Subscribe(
                 token => OnTaskCreationRequested(token));
 

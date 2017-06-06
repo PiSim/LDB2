@@ -58,7 +58,7 @@ namespace Instruments.ViewModels
             _addMaintenanceEvent = new DelegateCommand(
                 () =>
                 {
-                    _eventAggregator.GetEvent<NewMaintenanceEventRequested>()
+                    _eventAggregator.GetEvent<MaintenanceEventCreationRequested>()
                                     .Publish(_instance);
                 });
 
