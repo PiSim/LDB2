@@ -117,6 +117,8 @@ namespace Services
 
                 tempTest.Notes = req.RequirementInstance.Description;
                 tempTest.ParentTaskItemID = req.TaskItemInstance.ID;
+                tempTest.RequirementID = req.RequirementInstance.ID;
+
                 req.TaskItemInstance.IsAssignedToReport = true;
 
                 foreach (SubRequirement subReq in req.RequirementInstance.SubRequirements)
@@ -124,6 +126,7 @@ namespace Services
                     SubTest tempSubTest = new SubTest();
                     tempSubTest.Name = subReq.SubMethod.Name;
                     tempSubTest.Requirement = subReq.RequiredValue;
+                    tempSubTest.SubRequiremntID = subReq.ID;
                     tempSubTest.UM = subReq.SubMethod.UM;
                     tempTest.SubTests.Add(tempSubTest);
                 }
@@ -144,6 +147,7 @@ namespace Services
                 Test tempTest = new Test();
                 tempTest.IsComplete = false;
                 tempTest.MethodID = req.RequirementInstance.Method.ID;
+                tempTest.RequirementID = req.RequirementInstance.ID;
 
                 if (req.RequirementInstance.Method.Standard.CurrentIssue != null)
                     tempTest.MethodIssueID = req.RequirementInstance.Method.Standard.CurrentIssue.ID;
@@ -155,6 +159,7 @@ namespace Services
                     SubTest tempSubTest = new SubTest();
                     tempSubTest.Name = subReq.SubMethod.Name;
                     tempSubTest.Requirement = subReq.RequiredValue;
+                    tempSubTest.SubRequiremntID = subReq.ID;
                     tempSubTest.UM = subReq.SubMethod.UM;
                     tempTest.SubTests.Add(tempSubTest);
                 }
