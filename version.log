@@ -1,4 +1,9 @@
-﻿v 0.5.0 -- 07/06/2017
+﻿v 0.51 -- 
+
+-*Aggiornato dialogo creazione report esterni per modalità disconnessa
+-*GridView in vista report
+
+v 0.5.0 -- 07/06/2017
 
 -Implementata funzionalità per la registrazione di nuovi profili utente
 -Supporto primari multipli per taratura
