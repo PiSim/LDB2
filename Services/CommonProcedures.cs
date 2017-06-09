@@ -185,7 +185,7 @@ namespace Services
 
             if (temp.Material == null)
             {
-                temp.SetMaterial(StartMaterialSelection());
+                temp.MaterialID = StartMaterialSelection().ID;
                 temp.Update();
             }
 

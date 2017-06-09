@@ -30,7 +30,7 @@ namespace Reports.Views
         
         public ExternalReport ExternalReportInstance
         {
-            get { return (DataContext as ViewModels.ExternalReportCreationViewModel).ExternalReportInstance; }
+            get { return (DataContext as ViewModels.ExternalReportCreationDialogViewModel).ExternalReportInstance; }
         }
     }
 }

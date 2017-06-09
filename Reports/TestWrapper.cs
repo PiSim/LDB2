@@ -19,6 +19,11 @@ namespace Reports
             _testInstance = instance;
         }
 
+        public bool CanDelete
+        {
+            get { return !IsComplete; }
+        }
+
         public bool CanModify
         {
             get { return _canModify; }
@@ -47,6 +52,11 @@ namespace Reports
             }
         }
 
+        public bool IsLocked
+        {
+            get { return !_canModify; }
+        }
+
         public string Method
         {
             get { return _testInstance.Method.Standard.Name; }
@@ -63,9 +73,9 @@ namespace Reports
             get { return _testInstance.Method.Property.Name; }
         }
 
-        public ICollection<SubTest> SubTests
+        public List<SubTest> SubTests
         {
-            get { return _testInstance.SubTests; }
+            get { return _testInstance.SubTests.ToList(); }
         }
 
         public Test TestInstance

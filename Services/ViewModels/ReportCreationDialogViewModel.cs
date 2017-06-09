@@ -164,8 +164,8 @@ namespace Services.ViewModels
                 RaisePropertyChanged("VersionList");
                 RaisePropertyChanged("ControlPlanList");
 
-                SelectedVersion = VersionList.FirstOrDefault(sv => sv.IsMain);
                 SelectedControlPlan = ControlPlanList.FirstOrDefault(cp => cp.IsDefault);
+                SelectedVersion = VersionList.FirstOrDefault(sv => sv.IsMain);
             }
         }
 
@@ -178,8 +178,12 @@ namespace Services.ViewModels
                 _selectedVersion.Load();
 
                 if (_selectedVersion != null)
-                    _requirementList = new List<ISelectableRequirement>(_selectedVersion.GenerateRequirementList()
-                                                                                    .Select(req => new ReportItemWrapper(req)));
+                {
+                    _requirementList = _selectedVersion.GenerateRequirementList()
+                                                        .Select(req => new ReportItemWrapper(req))
+                                                        .ToList();
+                    CommonProcedures.ApplyControlPlan(_requirementList, _selectedControlPlan);
+                }
 
                 else
                     _requirementList = new List<ISelectableRequirement>();

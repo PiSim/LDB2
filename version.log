@@ -1,7 +1,7 @@
 ﻿v 0.51 -- 
 
--*Aggiornato dialogo creazione report esterni per modalità disconnessa
--*GridView in vista report
+-Corretta funzione AutoWireViewModel di ExternalReportCreationDialog
+-ReportEditView: Sostituita ListView prove con DataGrid
 
 v 0.5.0 -- 07/06/2017
 

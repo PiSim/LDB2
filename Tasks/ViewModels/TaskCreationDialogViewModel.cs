@@ -160,7 +160,7 @@ namespace Tasks.ViewModels
                 _selectedControlPlan.Load();
 
                 RaisePropertyChanged("SelectedControlPlan");
-                if (value != null)
+                if (value != null && _requirementList != null)
                 {
                     CommonProcedures.ApplyControlPlan(_requirementList, _selectedControlPlan);
                 }
@@ -180,8 +180,8 @@ namespace Tasks.ViewModels
                 RaisePropertyChanged("SelectedSpecification");
                 RaisePropertyChanged("VersionList");
 
-                SelectedVersion = VersionList.First(sv => sv.IsMain);
                 SelectedControlPlan = ControlPlanList.FirstOrDefault(cp => cp.IsDefault);
+                SelectedVersion = VersionList.First(sv => sv.IsMain);             
             }
         }
 
@@ -194,8 +194,13 @@ namespace Tasks.ViewModels
                 _selectedVersion.Load();
 
                 if (_selectedVersion != null)
+                {
+
                     _requirementList = _selectedVersion.GenerateRequirementList()
-                                                        .Select(req => new ReportItemWrapper(req));
+                                                        .Select(req => new ReportItemWrapper(req))
+                                                        .ToList();
+                    CommonProcedures.ApplyControlPlan(_requirementList, _selectedControlPlan);
+                }
 
                 else
                     _requirementList = new List<ReportItemWrapper>();

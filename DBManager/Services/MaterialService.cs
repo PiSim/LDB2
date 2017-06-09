@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -45,6 +46,8 @@ namespace DBManager.Services
         {
             using (DBEntities entities = new DBEntities())
             {
+                entities.Configuration.LazyLoadingEnabled = false;
+
                 return entities.Batches.Include(btc => btc.Material.Construction.Aspect)
                                         .Include(btc => btc.Material.Construction.Type)
                                         .Include(btc => btc.Material.Recipe.Colour)
@@ -56,6 +59,8 @@ namespace DBManager.Services
         {
             using (DBEntities entities = new DBEntities())
             {
+                entities.Configuration.LazyLoadingEnabled = false;
+
                 return entities.Batches.Include(btc => btc.Material.Construction.Aspect)
                                         .Include(btc => btc.Material.Construction.Type)
                                         .Include(btc => btc.Material.Recipe.Colour)
@@ -79,6 +84,7 @@ namespace DBManager.Services
                 Batch tempEntry = entities.Batches.First(btc => btc.ID == entry.ID);
 
                 entities.Entry(tempEntry).State = EntityState.Deleted;
+                entry.ID = 0;
 
                 entities.SaveChanges();
             }
@@ -88,7 +94,6 @@ namespace DBManager.Services
         {
             using (DBEntities entities = new DBEntities())
             {
-                entities.Batches.Attach(entry);
                 entities.Configuration.LazyLoadingEnabled = false;
 
                 Batch tempEntry = entities.Batches.Include(btc => btc.BatchFiles)
@@ -107,9 +112,18 @@ namespace DBManager.Services
                                                     .Include(btc => btc.Samples)
                                                     .Include(btc => btc.Tasks
                                                     .Select(tsk => tsk.SpecificationVersion.Specification.Standard))
-                                                    .First(btc => btc.ID == entry.ID);
+                                                    .FirstOrDefault(btc => btc.ID == entry.ID);
 
-                entities.Entry(entry).CurrentValues.SetValues(tempEntry);
+                entry.BatchFiles = tempEntry.BatchFiles;
+                entry.ExternalReports = tempEntry.ExternalReports;
+                entry.Masters = tempEntry.Masters;
+                entry.Material = tempEntry.Material;
+                entry.MaterialID = tempEntry.MaterialID;
+                entry.Notes = tempEntry.Notes;
+                entry.Number = tempEntry.Number;
+                entry.Reports = tempEntry.Reports;
+                entry.Samples = tempEntry.Samples;
+                entry.Tasks = tempEntry.Tasks;
             }
         }
 
@@ -119,13 +133,7 @@ namespace DBManager.Services
 
             using (DBEntities entities = new DBEntities())
             {
-                Batch tempEntry = entities.Batches.First(btc => btc.ID == entry.ID);
-
-                if (tempEntry.Material != null && tempEntry.MaterialID == 0)
-                    tempEntry.MaterialID = tempEntry.Material.ID;
-
-                entities.Entry(tempEntry).CurrentValues.SetValues(entry);
-
+                entities.Batches.AddOrUpdate(entry);
                 entities.SaveChanges();
             }
         }

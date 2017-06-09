@@ -9,6 +9,22 @@ namespace DBManager.EntityExtensions
 {
     public static class ExternalReportExtension
     {
+        public static void AddBatch(this ExternalReport entry,
+                                    Batch batchEntity)
+        {
+            // Adds a Batch to an ExternalReport entry
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.ExternalReports.First(ext => ext.ID == entry.ID)
+                                        .Batches
+                                        .Add(entities.Batches
+                                        .First(btc => btc.ID == batchEntity.ID));
+
+                entities.SaveChanges();
+            }
+        }
+
         public static IEnumerable<ExternalReportFile> GetExternalReportFiles(this ExternalReport entry)
         {
             // Returns all the files for an external report entry

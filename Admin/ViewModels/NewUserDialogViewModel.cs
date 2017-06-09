@@ -1,4 +1,5 @@
 ﻿using DBManager;
+using DBManager.Services;
 using Prism.Commands;
 using Prism.Mvvm;
 using Security;
@@ -14,18 +15,15 @@ namespace Admin.ViewModels
 {
     public class NewUserDialogViewModel : BindableBase
     {
-        AuthenticationService _authenticator;
-        private DBEntities _entities;
+        AuthenticationService _authenticator; 
         private DelegateCommand<Window> _cancel, _confirm;
         private Person _selectedPerson;
         private string _userName;
         private User _userInstance;
 
-        public NewUserDialogViewModel(AuthenticationService authenticator,
-                                        DBEntities entities) : base()
+        public NewUserDialogViewModel(AuthenticationService authenticator) : base()
         {
             _authenticator = authenticator;
-            _entities = entities;
 
             _cancel = new DelegateCommand<Window>(
                 parentDialog =>
@@ -74,9 +72,9 @@ namespace Admin.ViewModels
             }
         }
 
-        public List<Person> PeopleList
+        public IEnumerable<Person> PeopleList
         {
-            get { return new List<Person>(_entities.People); }
+            get { return PeopleService.GetPeople(); }
         }
 
         public Person SelectedPerson

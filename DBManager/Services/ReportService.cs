@@ -30,10 +30,7 @@ namespace DBManager.Services
         {
             using (DBEntities entities = new DBEntities())
             {
-                entities.Configuration.LazyLoadingEnabled = false;
-
-                entities.ExternalReports.Attach(entry);
-                entities.Entry(entry).State = System.Data.Entity.EntityState.Added;
+                entities.ExternalReports.Add(entry);
                 entities.SaveChanges();
             }
         }

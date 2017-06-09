@@ -26,7 +26,7 @@ namespace DBManager
         public string Description { get; set; }
         public string ExternalNumber { get; set; }
         public int InternalNumber { get; set; }
-        public int ExternalLabID { get; private set; }
+        public int ExternalLabID { get; set; }
         public bool MaterialSent { get; set; }
         public bool RequestDone { get; set; }
         public string PurchaseOrder { get; set; }

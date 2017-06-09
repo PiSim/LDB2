@@ -248,7 +248,7 @@ namespace Materials.ViewModels
                 if (_externalConstructionInstance == null)
                     return null;
                 else
-                    return _oemList.FirstOrDefault(org => org.ID == _externalConstructionInstance.Organization.ID);
+                    return _oemList.FirstOrDefault(org => org.ID == _externalConstructionInstance.OemID);
             }
             set
             {

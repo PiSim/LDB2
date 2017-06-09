@@ -17,8 +17,6 @@ namespace DBManager.EntityExtensions
 
             using (DBEntities entities = new DBEntities())
             {
-                entities.Configuration.LazyLoadingEnabled = false;
-
                 entities.Tasks.Add(entry);
                 entities.SaveChanges();
             }
@@ -30,10 +28,10 @@ namespace DBManager.EntityExtensions
 
             using (DBEntities entities = new DBEntities())
             {
-                entities.Configuration.LazyLoadingEnabled = false;
+                entities.Entry(entities.Tasks
+                        .First(tsk => tsk.ID == entry.ID))
+                        .State = EntityState.Deleted;
 
-                entities.Tasks.Attach(entry);
-                entities.Entry(entry).State = System.Data.Entity.EntityState.Deleted;
                 entities.SaveChanges();
             }
         }
@@ -48,9 +46,7 @@ namespace DBManager.EntityExtensions
             using (DBEntities entities = new DBEntities())
             {
                 entities.Configuration.LazyLoadingEnabled = false;
-
-                entities.Tasks.Attach(entry);
-
+                
                 Task tempEntry = entities.Tasks.Include(tsk => tsk.Batch.Material.Construction.Aspect)
                                                 .Include(tsk => tsk.Batch.Material.Construction.Project.Oem)
                                                 .Include(tsk => tsk.Batch.Material.Construction.Type)
@@ -68,7 +64,22 @@ namespace DBManager.EntityExtensions
                                                 .Select(tski => tski.Requirement.Method.Property))
                                                 .First(tsk => tsk.ID == entry.ID);
 
-                entities.Entry(entry).CurrentValues.SetValues(tempEntry);
+                entry.AllItemsAssigned = tempEntry.AllItemsAssigned;
+                entry.Batch = tempEntry.Batch;
+                entry.batchID = tempEntry.batchID;
+                entry.EndDate = tempEntry.EndDate;
+                entry.IsComplete = tempEntry.IsComplete;
+                entry.Notes = tempEntry.Notes;
+                entry.PipelineOrder = tempEntry.PipelineOrder;
+                entry.PriorityModifier = tempEntry.PriorityModifier;
+                entry.Progress = tempEntry.Progress;
+                entry.Reports = tempEntry.Reports;
+                entry.Requester = tempEntry.Requester;
+                entry.RequesterID = tempEntry.RequesterID;
+                entry.SpecificationVersion = tempEntry.SpecificationVersion;
+                entry.SpecificationVersionID = tempEntry.SpecificationVersionID;
+                entry.StartDate = tempEntry.StartDate;
+                entry.TaskItems = tempEntry.TaskItems;
             }
         }
 

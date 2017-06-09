@@ -125,7 +125,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="TestWrapper.cs" />
-    <Compile Include="ViewModels\ExternalReportCreationViewModel.cs" />
+    <Compile Include="ViewModels\ExternalReportCreationDialogViewModel.cs" />
     <Compile Include="ViewModels\ExternalReportEditViewModel.cs" />
     <Compile Include="ViewModels\ExternalReportMainViewModel.cs" />
     <Compile Include="ViewModels\ReportEditViewModel.cs" />

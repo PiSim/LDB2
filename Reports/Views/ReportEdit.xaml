@@ -183,65 +183,142 @@
             </Button>
         </StackPanel>
 
-        <GroupBox Header="Risultati"
+        <DataGrid ItemsSource="{Binding TestList}"
                   Grid.Column="0"
                   Grid.ColumnSpan="3"
-                  Grid.Row="1">
-            <ListView ItemsSource="{Binding TestList}">
-                <ListView.View>
-                    <GridView>
-                        <GridViewColumn Header="Prova" 
-                                        DisplayMemberBinding="{Binding Property}"/>
+                  Grid.Row="1"
+                  AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Prova"
+                                    Binding="{Binding Property}"
+                                    IsReadOnly="True"/>
+                
+                <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <DataGrid ItemsSource="{Binding SubTests}"
+                                      AutoGenerateColumns="False"
+                                      HeadersVisibility="None"
+                                      CanUserAddRows="False"
+                                      CanUserDeleteRows="False"
+                                      GridLinesVisibility="Horizontal"
+                                      ClipToBounds="True"
+                                      HorizontalScrollBarVisibility="Hidden"
+                                      Height="Auto"
+                                      Width="Auto">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Binding="{Binding Name}"
+                                                        IsReadOnly="True"
+                                                        Width="*"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                
+                <DataGridTemplateColumn Header="Risultato">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <DataGrid ItemsSource="{Binding SubTests}"
+                                    AutoGenerateColumns="False"
+                                    IsEnabled="{Binding DataContext.CanModify, RelativeSource={RelativeSource AncestorType=DataGridCell}}"
+                                    HeadersVisibility="None"
+                                    CanUserAddRows="False"
+                                    CanUserDeleteRows="False"
+                                    GridLinesVisibility="Horizontal"
+                                    ClipToBounds="True"
+                                    HorizontalScrollBarVisibility="Hidden">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Binding="{Binding Result}"
+                                                    Width="*"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
 
-                        <GridViewColumn Header="Risultati">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <ListView ItemsSource="{Binding SubTests}">
-                                        <ListView.ItemTemplate>
-                                            <DataTemplate>
-                                                <StackPanel Orientation="Horizontal">
-                                                    <Label Content="{Binding Path=Name}"/>
-                                                    <TextBox Text="{Binding Path=Result, Mode=TwoWay}"
-                                                             IsEnabled="{Binding DataContext.CanModify, RelativeSource={RelativeSource AncestorType=ListViewItem, AncestorLevel=2}}"/>
-                                                    <Label Content="{Binding Path=Requirement}"/>
-                                                    <Label Content="{Binding UM}"/>
-                                                </StackPanel>
-                                            </DataTemplate>
-                                        </ListView.ItemTemplate>
-                                    </ListView>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        
-                        <GridViewColumn Header="Nome"
-                                        DisplayMemberBinding="{Binding Notes}"/>
+                <DataGridTemplateColumn Header="Requisito">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <DataGrid ItemsSource="{Binding SubTests}"
+                                      AutoGenerateColumns="False"
+                                      HeadersVisibility="None"
+                                      CanUserAddRows="False"
+                                      CanUserDeleteRows="False"
+                                      GridLinesVisibility="Horizontal"
+                                      ClipToBounds="True"
+                                      HorizontalScrollBarVisibility="Hidden">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Binding="{Binding Requirement}"
+                                                        IsReadOnly="True"
+                                                        Width="*"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
 
-                        <GridViewColumn Header="Metodo"
-                                        DisplayMemberBinding="{Binding Method}"/>
-                        <GridViewColumn Header="Completo">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <CheckBox IsChecked="{Binding IsComplete, Mode=TwoWay}"
-                                              IsEnabled="{Binding CanModify}"/>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn Header="Data Completamento" 
-                                        DisplayMemberBinding="{Binding CompletionDate}"/>
-                        <GridViewColumn>
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Button Content="Elimina"
-                                            Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}, 
-                                                            Path=DataContext.RemoveTestCommand}"
-                                            CommandParameter="{Binding }"/>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                    </GridView>
-                </ListView.View>
-            </ListView>
-        </GroupBox>
+                <DataGridTemplateColumn Header="UM">
+                    <DataGridTemplateColumn.CellTemplate> 
+                        <DataTemplate>
+                            <DataGrid ItemsSource="{Binding SubTests}"
+                                      AutoGenerateColumns="False"
+                                      HeadersVisibility="None"
+                                      CanUserAddRows="False"
+                                      CanUserDeleteRows="False"
+                                      GridLinesVisibility="Horizontal"
+                                      ClipToBounds="True"
+                                      HorizontalScrollBarVisibility="Hidden">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Binding="{Binding UM}"
+                                                        IsReadOnly="True"
+                                                        Width="*"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTextColumn Header="Note"
+                                    Binding="{Binding Notes}"
+                                    IsReadOnly="True"/>
+
+                <DataGridTextColumn Header="Metodo"
+                                    Binding="{Binding Method}"
+                                    IsReadOnly="True"/>
+
+                <DataGridCheckBoxColumn Header="Completo"
+                                        Binding="{Binding IsComplete, Mode=TwoWay}">
+                    <DataGridCheckBoxColumn.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Setter Property="IsEnabled" Value="{Binding CanModify}"/>
+                        </Style>
+                    </DataGridCheckBoxColumn.CellStyle>
+                </DataGridCheckBoxColumn>
+                
+                <DataGridTextColumn Header="Data Completamento" 
+                                    Binding="{Binding CompletionDate}"
+                                    IsReadOnly="True"/>
+
+                <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Content="Elimina"
+                                    Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}, 
+                                                        Path=DataContext.RemoveTestCommand}"
+                                    CommandParameter="{Binding RelativeSource={RelativeSource Mode=Self},
+                                                                Path=DataContext.TestInstance}"
+                                    IsEnabled="{Binding CanDelete}"
+                                    Height="Auto"
+                                    Width="Auto"
+                                    Margin="5"
+                                    Padding="2"/>
+                            
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
 
         <GroupBox Header="File"
                   Grid.Column="0"

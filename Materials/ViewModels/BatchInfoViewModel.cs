@@ -77,7 +77,8 @@ namespace Materials.ViewModels
                 _instance = value;
                 _instance.Load();
 
-                _samplesList = new List<SamplesWrapper>(_instance.Samples.Select(smp => new SamplesWrapper(smp)));
+
+                _samplesList = _instance.Samples.Select(smp => new SamplesWrapper(smp)).ToList();
 
                 SelectedExternalReport = null;
                 SelectedReport = null;

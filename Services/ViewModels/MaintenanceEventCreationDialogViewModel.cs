@@ -97,6 +97,12 @@ namespace Services.ViewModels
             }
         }
 
+        public Organization SelectedOrganization
+        {
+            get { return _selectedOrganization; }
+            set { _selectedOrganization = value; }
+        }
+
         public Person SelectedTech
         {
             get { return _selectedTech; }

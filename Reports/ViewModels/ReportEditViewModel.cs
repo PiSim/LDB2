@@ -21,7 +21,7 @@ namespace Reports.ViewModels
     {
         private DBPrincipal _principal;
         private DelegateCommand _addFile, _addTests, _generateRawDataSheet, _openFile, _removeFile;
-        private DelegateCommand<TestWrapper> _removeTest;
+        private DelegateCommand<Test> _removeTest;
         private EventAggregator _eventAggregator;
         private Report _instance;
         private IEnumerable<TestWrapper> _testList;
@@ -104,13 +104,13 @@ namespace Reports.ViewModels
                 },
                 () => _selectedFile != null);
 
-            _removeTest = new DelegateCommand<TestWrapper>(
+            _removeTest = new DelegateCommand<Test>(
                 testItem =>
                 {
-                    testItem.TestInstance.Load();
-                    TaskItem tempTaskItem = testItem.TestInstance.ParentTaskItem;
+                    testItem.Load();
+                    TaskItem tempTaskItem = testItem.ParentTaskItem;
 
-                    testItem.TestInstance.Delete();
+                    testItem.Delete();
 
                     if (tempTaskItem != null)
                     {
@@ -125,8 +125,8 @@ namespace Reports.ViewModels
 
                     TestList = new List<TestWrapper>(_instance.GetTests().Select(tst => new TestWrapper(tst)));
 
-                },
-                testItem => !testItem.IsComplete);
+                });
+
         }
 
         public DelegateCommand AddFileCommand
@@ -275,7 +275,7 @@ namespace Reports.ViewModels
             get { return _removeFile; }
         }
 
-        public DelegateCommand<TestWrapper> RemoveTestCommand
+        public DelegateCommand<Test> RemoveTestCommand
         {
             get { return _removeTest; }
         }

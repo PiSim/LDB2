@@ -29,6 +29,7 @@ namespace Reports
             
             _container.RegisterType<ViewModels.ReportEditViewModel>();
             _container.RegisterType<ViewModels.ReportMainViewModel>();
+            _container.RegisterType<ViewModels.ExternalReportCreationDialogViewModel>();
             _container.RegisterType<ViewModels.ExternalReportEditViewModel>();
             _container.RegisterType<ViewModels.ExternalReportMainViewModel>();
 

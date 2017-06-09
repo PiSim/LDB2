@@ -1,7 +1,9 @@
 using Controls.Views;
 using DBManager;
 using Infrastructure;
+using Infrastructure.Events;
 using Microsoft.Practices.Unity;
+using Prism.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,15 +14,24 @@ namespace Admin
     {
         private DBEntities _entities;
         private DBPrincipal _principal;
+        private EventAggregator _eventAggregator;
         private IUnityContainer _container;
 
         public AdminServiceProvider(DBEntities entities,
                                     DBPrincipal principal,
+                                    EventAggregator aggregator,
                                     IUnityContainer container)
         {
             _entities = entities;
+            _eventAggregator = aggregator;
             _container = container;
             _principal = principal;
+
+            _eventAggregator.GetEvent<UserCreationRequested>()
+                            .Subscribe(() =>
+                            {
+                                NewUserRegistration();
+                            });
         }
 
         public void AddOrganizationRole(string name)

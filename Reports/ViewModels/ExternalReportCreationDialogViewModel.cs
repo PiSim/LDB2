@@ -1,4 +1,5 @@
 ﻿using DBManager;
+using DBManager.EntityExtensions;
 using DBManager.Services;
 using Infrastructure;
 using Microsoft.Practices.Unity;
@@ -15,7 +16,7 @@ using System.Windows.Controls;
 
 namespace Reports.ViewModels
 {
-    internal class ExternalReportCreationViewModel : BindableBase
+    internal class ExternalReportCreationDialogViewModel : BindableBase
     {
         private Batch _selectedBatch;
         private DelegateCommand _removeBatch;
@@ -28,7 +29,7 @@ namespace Reports.ViewModels
         private Project _selectedProject;
         private string _batchNumber, _sampleDescription, _testDescription;
         
-        internal ExternalReportCreationViewModel() : base()
+        public ExternalReportCreationDialogViewModel() : base()
         {
             _batchList = new ObservableCollection<Batch>();
             
@@ -66,13 +67,13 @@ namespace Reports.ViewModels
                     _externalReportInstance.Samples = _sampleDescription;
                     _externalReportInstance.Currency = "";
                     _externalReportInstance.ReportReceived = false;
-                    _externalReportInstance.ExternalLab = _selectedLab;
-                    _externalReportInstance.Project = _selectedProject;
-
-                    _externalReportInstance.Batches = _batchList;
-
+                    _externalReportInstance.ExternalLabID = _selectedLab.ID;
+                    _externalReportInstance.ProjectID = _selectedProject.ID;
                     _externalReportInstance.Create();
-                
+
+                    foreach (Batch btc in _batchList)
+                        _externalReportInstance.AddBatch(btc);
+
                     parent.DialogResult = true;
                 });
                 
