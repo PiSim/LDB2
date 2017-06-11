@@ -169,6 +169,7 @@
           <Property Name="description" Type="varchar" MaxLength="45" Nullable="false" />
           <Property Name="organizationID" Type="int" Nullable="false" />
           <Property Name="instrumentID" Type="int" Nullable="false" />
+          <Property Name="techID" Type="int" />
         </EntityType>
         <EntityType Name="instrument_method_mappings">
           <Key>
@@ -456,6 +457,7 @@
           <Property Name="name" Type="varchar" MaxLength="45" Nullable="false" />
           <Property Name="requirement" Type="varchar" MaxLength="45" Nullable="false" />
           <Property Name="um" Type="varchar" MaxLength="45" Nullable="false" />
+          <Property Name="sub_requirementID" Type="int" />
         </EntityType>
         <EntityType Name="task_items">
           <Key>
@@ -497,6 +499,7 @@
           <Property Name="instrumentID" Type="int" />
           <Property Name="method_issueID" Type="int" />
           <Property Name="parent_task_itemID" Type="int" />
+          <Property Name="requirementID" Type="int" />
         </EntityType>
         <EntityType Name="user_role_mappings">
           <Key>
@@ -1337,6 +1340,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="requirement_to_test">
+          <End Role="requirements" Type="Self.requirements" Multiplicity="0..1" />
+          <End Role="tests" Type="Self.tests" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="requirements">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="tests">
+              <PropertyRef Name="requirementID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="role_to_organization_mapping">
           <End Role="organization_roles" Type="Self.organization_roles" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -1490,6 +1505,18 @@
             </Principal>
             <Dependent Role="specifications">
               <PropertyRef Name="standardID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="sub_requirement_to_sub_test">
+          <End Role="sub_requirements" Type="Self.sub_requirements" Multiplicity="0..1" />
+          <End Role="sub_tests" Type="Self.sub_tests" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="sub_requirements">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="sub_tests">
+              <PropertyRef Name="sub_requirementID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1907,6 +1934,10 @@
             <End Role="requirements" EntitySet="requirements" />
             <End Role="task_items" EntitySet="task_items" />
           </AssociationSet>
+          <AssociationSet Name="requirement_to_test" Association="Self.requirement_to_test">
+            <End Role="requirements" EntitySet="requirements" />
+            <End Role="tests" EntitySet="tests" />
+          </AssociationSet>
           <AssociationSet Name="role_to_organization_mapping" Association="Self.role_to_organization_mapping">
             <End Role="organization_roles" EntitySet="organization_roles" />
             <End Role="organization_role_mappings" EntitySet="organization_role_mappings" />
@@ -1954,6 +1985,10 @@
           <AssociationSet Name="standard_to_specification" Association="Self.standard_to_specification">
             <End Role="standards" EntitySet="standards" />
             <End Role="specifications" EntitySet="specifications" />
+          </AssociationSet>
+          <AssociationSet Name="sub_requirement_to_sub_test" Association="Self.sub_requirement_to_sub_test">
+            <End Role="sub_requirements" EntitySet="sub_requirements" />
+            <End Role="sub_tests" EntitySet="sub_tests" />
           </AssociationSet>
           <AssociationSet Name="submethod_to_subreq" Association="Self.submethod_to_subreq">
             <End Role="sub_methods" EntitySet="sub_methods" />
@@ -2263,6 +2298,7 @@
           <NavigationProperty Name="Overridden" Relationship="labdbModel.overridden_to_requirement" FromRole="Requirement1" ToRole="Requirement" />
           <NavigationProperty Name="TaskItems" Relationship="labdbModel.requirement_to_task_item" FromRole="Requirement" ToRole="task_items" />
           <NavigationProperty Name="ControlPlanItems" Relationship="labdbModel.requirement_to_control_plan" FromRole="Requirement" ToRole="ControlPlanItem" />
+          <NavigationProperty Name="tests" Relationship="labdbModel.requirement_to_test1" FromRole="Requirement" ToRole="Test" />
         </EntityType>
         <EntityType Name="Sample">
           <Key>
@@ -2335,6 +2371,7 @@
           <NavigationProperty Name="Requirement" Relationship="Self.requirement_to_subreq" FromRole="sub_requirements" ToRole="requirements" />
           <Property Name="SubMethodID" Type="Int32" Nullable="false" />
           <NavigationProperty Name="SubMethod" Relationship="labdbModel.submethod_to_subreq1" FromRole="SubRequirement" ToRole="sub_methods" />
+          <NavigationProperty Name="sub_tests" Relationship="labdbModel.sub_requirement_to_sub_test" FromRole="SubRequirement" ToRole="SubTest" />
         </EntityType>
         <EntityType Name="SubTest">
           <Key>
@@ -2347,6 +2384,8 @@
           <Property Name="Name" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
           <Property Name="Requirement" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
           <Property Name="UM" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="SubRequiremntID" Type="Int32" />
+          <NavigationProperty Name="SubRequirement" Relationship="labdbModel.sub_requirement_to_sub_test" FromRole="SubTest" ToRole="SubRequirement" />
         </EntityType>
         <EntityType Name="Task">
           <Key>
@@ -2391,6 +2430,8 @@
           <NavigationProperty Name="MethodIssue" Relationship="labdbModel.method_issue_to_test" FromRole="Test" ToRole="StandardIssue" />
           <Property Name="ParentTaskItemID" Type="Int32" />
           <NavigationProperty Name="ParentTaskItem" Relationship="labdbModel.parent_task_item_to_test" FromRole="Test" ToRole="TaskItem" />
+          <Property Name="RequirementID" Type="Int32" />
+          <NavigationProperty Name="Requirement" Relationship="labdbModel.requirement_to_test1" FromRole="Test" ToRole="Requirement" />
         </EntityType>
         <EntityType Name="User">
           <Key>
@@ -3200,6 +3241,14 @@
             <End Role="TaskItem" EntitySet="TaskItems" />
             <End Role="Test" EntitySet="Tests" />
           </AssociationSet>
+          <AssociationSet Name="requirement_to_test1" Association="labdbModel.requirement_to_test1">
+            <End Role="Requirement" EntitySet="Requirements" />
+            <End Role="Test" EntitySet="Tests" />
+          </AssociationSet>
+          <AssociationSet Name="sub_requirement_to_sub_test" Association="labdbModel.sub_requirement_to_sub_test">
+            <End Role="SubRequirement" EntitySet="SubRequirements" />
+            <End Role="SubTest" EntitySet="SubTests" />
+          </AssociationSet>
         </EntityContainer>
         <Association Name="overridden_to_requirement">
           <End Type="labdbModel.Requirement" Role="Requirement" Multiplicity="0..1">
@@ -3743,6 +3792,7 @@
           <Property Name="InstrumentID" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Instrument" Relationship="labdbModel.instrument_to_maintenance_event" FromRole="instrument_maintenance_events" ToRole="Instrument" />
           <NavigationProperty Name="Organization" Relationship="labdbModel.organization_to_maintenance_event" FromRole="instrument_maintenance_events" ToRole="Organization" />
+          <Property Name="techID" Type="Int32" />
         </EntityType>
         <Association Name="instrument_to_maintenance_event">
           <End Type="labdbModel.Instrument" Role="Instrument" Multiplicity="1">
@@ -3990,6 +4040,30 @@
             </Principal>
             <Dependent Role="Test">
               <PropertyRef Name="ParentTaskItemID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="requirement_to_test1">
+          <End Type="labdbModel.Requirement" Role="Requirement" Multiplicity="0..1" />
+          <End Type="labdbModel.Test" Role="Test" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Requirement">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Test">
+              <PropertyRef Name="RequirementID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="sub_requirement_to_sub_test">
+          <End Type="labdbModel.SubRequirement" Role="SubRequirement" Multiplicity="0..1" />
+          <End Type="labdbModel.SubTest" Role="SubTest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SubRequirement">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="SubTest">
+              <PropertyRef Name="SubRequiremntID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -4265,6 +4339,7 @@
           <EntitySetMapping Name="SubTests">
             <EntityTypeMapping TypeName="labdbModel.SubTest">
               <MappingFragment StoreEntitySet="sub_tests">
+                <ScalarProperty Name="SubRequiremntID" ColumnName="sub_requirementID" />
                 <ScalarProperty Name="UM" ColumnName="um" />
                 <ScalarProperty Name="Requirement" ColumnName="requirement" />
                 <ScalarProperty Name="Name" ColumnName="name" />
@@ -4295,6 +4370,7 @@
           <EntitySetMapping Name="Tests">
             <EntityTypeMapping TypeName="labdbModel.Test">
               <MappingFragment StoreEntitySet="tests">
+                <ScalarProperty Name="RequirementID" ColumnName="requirementID" />
                 <ScalarProperty Name="ParentTaskItemID" ColumnName="parent_task_itemID" />
                 <ScalarProperty Name="MethodIssueID" ColumnName="method_issueID" />
                 <ScalarProperty Name="instrumentID" ColumnName="instrumentID" />
@@ -4479,6 +4555,7 @@
           <EntitySetMapping Name="InstrumentMaintenanceEvents">
             <EntityTypeMapping TypeName="labdbModel.InstrumentMaintenanceEvent">
               <MappingFragment StoreEntitySet="instrument_maintenance_events">
+                <ScalarProperty Name="techID" ColumnName="techID" />
                 <ScalarProperty Name="InstrumentID" ColumnName="instrumentID" />
                 <ScalarProperty Name="OrganizationID" ColumnName="organizationID" />
                 <ScalarProperty Name="Description" ColumnName="description" />

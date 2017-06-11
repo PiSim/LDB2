@@ -1,4 +1,4 @@
-﻿v 0.5.0 -- In corso
+﻿v 0.5.0 -- 07/06/2017
 
 -Implementata funzionalità per la registrazione di nuovi profili utente
 -Supporto primari multipli per taratura
@@ -6,7 +6,6 @@
 -Inserita associazione n-m per strumenti-metodi 
 -Implementata l'interfaccia per creazione/rimozione associazione metodi nella vista Instrumentedit
 -Aggiunta funzione modifica parametri strumento
--*Funzionalità storico strumento
 -Aggiunto riferimento all'autore nelle entità SampleLogEntry
 -Aggiunto SortingBehavior alla lista strumenti
 -Impostato AutoWireViewModel per NewCalibrationDialog, NewUserDialog
@@ -30,6 +29,7 @@
 -Create raccolte di metodi di estensione per diversi tipi di entità 
 -Modificati tutti i ViewModel per il funzionamento in modalità disconnessa
 -Aggiunti progetti UnitTest per assembly DBManager e Services
+-Reintrodotta associazione Requirement-Test, non retroattiva
 
 v 0.4.4 -- 9/5/2017
 

@@ -11,8 +11,6 @@ namespace LabDB2.ViewModels
             get { return _title; }
             set { SetProperty(ref _title, value); }
         }
-        
-
 
         public ShellViewModel()
         {
