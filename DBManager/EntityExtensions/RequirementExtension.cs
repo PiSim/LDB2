@@ -26,9 +26,14 @@ namespace DBManager.EntityExtensions
 
             using (DBEntities entities = new DBEntities())
             {
-                entities.Requirements.Attach(entry);
-                entities.Entry(entry).State = EntityState.Deleted;
+                entities.Entry(entities
+                        .Requirements
+                        .First(req => req.ID == entry.ID))
+                        .State = EntityState.Deleted;
+
                 entities.SaveChanges();
+
+                entry.ID = 0;
             }
         }
 

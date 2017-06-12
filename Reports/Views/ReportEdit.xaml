@@ -191,9 +191,10 @@
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Prova"
                                     Binding="{Binding Property}"
-                                    IsReadOnly="True"/>
+                                    IsReadOnly="True"
+                                    Width="150"/>
                 
-                <DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="150">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <DataGrid ItemsSource="{Binding SubTests}"
@@ -204,8 +205,7 @@
                                       GridLinesVisibility="Horizontal"
                                       ClipToBounds="True"
                                       HorizontalScrollBarVisibility="Hidden"
-                                      Height="Auto"
-                                      Width="Auto">
+                                      RowHeight="30">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Binding="{Binding Name}"
                                                         IsReadOnly="True"
@@ -215,8 +215,9 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                
-                <DataGridTemplateColumn Header="Risultato">
+
+                <DataGridTemplateColumn Header="Risultato"
+                                        Width="100">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <DataGrid ItemsSource="{Binding SubTests}"
@@ -227,7 +228,8 @@
                                     CanUserDeleteRows="False"
                                     GridLinesVisibility="Horizontal"
                                     ClipToBounds="True"
-                                    HorizontalScrollBarVisibility="Hidden">
+                                    HorizontalScrollBarVisibility="Hidden"
+                                    RowHeight="30">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Binding="{Binding Result}"
                                                     Width="*"/>
@@ -237,7 +239,8 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
 
-                <DataGridTemplateColumn Header="Requisito">
+                <DataGridTemplateColumn Header="Requisito"
+                                        Width="100">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <DataGrid ItemsSource="{Binding SubTests}"
@@ -247,7 +250,8 @@
                                       CanUserDeleteRows="False"
                                       GridLinesVisibility="Horizontal"
                                       ClipToBounds="True"
-                                      HorizontalScrollBarVisibility="Hidden">
+                                      HorizontalScrollBarVisibility="Hidden"
+                                      RowHeight="30">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Binding="{Binding Requirement}"
                                                         IsReadOnly="True"
@@ -258,7 +262,8 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
 
-                <DataGridTemplateColumn Header="UM">
+                <DataGridTemplateColumn Header="UM"
+                                        Width="50">
                     <DataGridTemplateColumn.CellTemplate> 
                         <DataTemplate>
                             <DataGrid ItemsSource="{Binding SubTests}"
@@ -268,7 +273,8 @@
                                       CanUserDeleteRows="False"
                                       GridLinesVisibility="Horizontal"
                                       ClipToBounds="True"
-                                      HorizontalScrollBarVisibility="Hidden">
+                                      HorizontalScrollBarVisibility="Hidden"
+                                      RowHeight="30">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Binding="{Binding UM}"
                                                         IsReadOnly="True"
@@ -281,39 +287,64 @@
 
                 <DataGridTextColumn Header="Note"
                                     Binding="{Binding Notes}"
-                                    IsReadOnly="True"/>
+                                    IsReadOnly="True"
+                                    Width="100"/>
 
                 <DataGridTextColumn Header="Metodo"
                                     Binding="{Binding Method}"
-                                    IsReadOnly="True"/>
+                                    IsReadOnly="True"
+                                    Width="Auto">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="VerticalAlignment"
+                                    Value="Center"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
 
                 <DataGridCheckBoxColumn Header="Completo"
-                                        Binding="{Binding IsComplete, Mode=TwoWay}">
+                                        Binding="{Binding IsComplete, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                        Width="70">
                     <DataGridCheckBoxColumn.CellStyle>
                         <Style TargetType="DataGridCell">
                             <Setter Property="IsEnabled" Value="{Binding CanModify}"/>
+                            <Setter Property="VerticalContentAlignment"
+                                    Value="Center"/>
                         </Style>
                     </DataGridCheckBoxColumn.CellStyle>
+                    <DataGridCheckBoxColumn.ElementStyle>
+                        <Style TargetType="{x:Type CheckBox}">
+                            <Setter Property="HorizontalAlignment"
+                                    Value="Center"/>
+                            <Setter Property="VerticalAlignment"
+                                    Value="Center"/>
+                        </Style>
+                    </DataGridCheckBoxColumn.ElementStyle>
                 </DataGridCheckBoxColumn>
-                
+
                 <DataGridTextColumn Header="Data Completamento" 
                                     Binding="{Binding CompletionDate}"
-                                    IsReadOnly="True"/>
-
-                <DataGridTemplateColumn>
+                                    IsReadOnly="True">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="VerticalAlignment"
+                                    Value="Center"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                
+                <DataGridTemplateColumn Width="50"
+                                        CanUserResize="False">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Button Content="Elimina"
                                     Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}, 
-                                                        Path=DataContext.RemoveTestCommand}"
+                                                      Path=DataContext.RemoveTestCommand}"
                                     CommandParameter="{Binding RelativeSource={RelativeSource Mode=Self},
-                                                                Path=DataContext.TestInstance}"
+                                                               Path=DataContext.TestInstance}"
                                     IsEnabled="{Binding CanDelete}"
-                                    Height="Auto"
-                                    Width="Auto"
-                                    Margin="5"
-                                    Padding="2"/>
-                            
+                                    VerticalAlignment="Center"
+                                    Height="Auto"/>                            
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

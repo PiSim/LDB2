@@ -18,6 +18,7 @@ namespace DBManager
         public Test()
         {
             this.SubTests = new HashSet<SubTest>();
+            this.task_items1 = new HashSet<TaskItem>();
         }
     
         public int ID { get; set; }
@@ -41,5 +42,7 @@ namespace DBManager
         public virtual StandardIssue MethodIssue { get; set; }
         public virtual TaskItem ParentTaskItem { get; set; }
         public virtual Requirement Requirement { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<TaskItem> task_items1 { get; set; }
     }
 }

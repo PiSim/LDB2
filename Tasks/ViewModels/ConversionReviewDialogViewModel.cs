@@ -61,6 +61,8 @@ namespace Tasks.ViewModels
 
                     _reportInstance.Create();
 
+                    CommonProcedures.SetTaskItemsAssignment(_reportInstance.Tests,
+                                                            _taskInstance);
 
                     if (!_taskInstance.TaskItems.Any(tski => !tski.IsAssignedToReport))
                         _taskInstance.SetAssigned(true);

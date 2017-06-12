@@ -24,10 +24,12 @@ namespace DBManager
         public int TaskID { get; private set; }
         public int RequirementID { get; set; }
         public bool IsAssignedToReport { get; set; }
+        public Nullable<int> TestID { get; set; }
     
         public virtual Requirement Requirement { get; set; }
         public virtual Task Task { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Test> Tests { get; set; }
+        public virtual Test Test { get; set; }
     }
 }

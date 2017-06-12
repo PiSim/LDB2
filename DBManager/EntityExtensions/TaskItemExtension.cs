@@ -20,5 +20,18 @@ namespace DBManager.EntityExtensions
                 entities.SaveChanges();
             }
         }
+
+        public static void Update(this IEnumerable<TaskItem> entryList)
+        {
+            // Updates a list of TaskItem entries
+
+            using (DBEntities entities = new DBEntities())
+            {
+                foreach (TaskItem entry in entryList)
+                    entities.TaskItems.AddOrUpdate(entry);
+
+                entities.SaveChanges();
+            }
+        }
     }
 }

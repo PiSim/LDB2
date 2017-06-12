@@ -256,6 +256,19 @@ namespace Services
             return output;
         }
 
+
+        public static void SetTaskItemsAssignment(IEnumerable<Test> testList, DBManager.Task taskEntry)
+        {
+            foreach (Test tst in testList)
+            {
+                TaskItem tempItem = taskEntry.TaskItems.First(tsk => tsk.RequirementID == tst.RequirementID);
+                tempItem.IsAssignedToReport = true;
+                tempItem.TestID = tst.ID;
+            }
+
+            taskEntry.TaskItems.Update();
+        }
+
         public static Material StartMaterialSelection()
         {
             MaterialCreationDialog materialPicker = new MaterialCreationDialog();
