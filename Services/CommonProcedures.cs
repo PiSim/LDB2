@@ -16,8 +16,11 @@ namespace Services
     {
         public static bool AddTestsToReport(Report entry)
         {
+            if (entry == null)
+                 throw new NullReferenceException();
+
             Views.AddTestDialog testDialog = new Views.AddTestDialog();
-            testDialog.ReportInstance = entry ?? throw new NullReferenceException();
+            testDialog.ReportInstance = entry;
 
             if (testDialog.ShowDialog() == true)
             {
@@ -98,6 +101,41 @@ namespace Services
             }
 
             return tempReq;
+        }
+
+        public static IEnumerable<TaskItem> GenerateTaskItemList(IEnumerable<Requirement> reqList)
+        {
+            List<TaskItem> output = new List<TaskItem>();
+
+            foreach(Requirement req in reqList)
+            {
+                TaskItem tempItem = new TaskItem();
+
+                tempItem.Description = req.Description;
+                tempItem.IsAssignedToReport = false;
+                tempItem.MethodID = req.MethodID;
+                tempItem.Name = req.Name;
+                tempItem.Position = 0;
+                tempItem.RequirementID = req.ID;
+                tempItem.SpecificationVersionID = req.SpecificationVersionID;
+                    
+                foreach (SubRequirement sreq in req.SubRequirements)
+                {
+                    SubTaskItem tempSubItem = new SubTaskItem();
+
+                    tempSubItem.Name = sreq.SubMethod.Name;
+                    tempSubItem.RequiredValue = sreq.RequiredValue;
+                    tempSubItem.SubMethodID = sreq.SubMethodID;
+                    tempSubItem.SubRequirementID = sreq.ID;
+                    tempSubItem.UM = sreq.SubMethod.UM;
+
+                    tempItem.SubTaskItems.Add(tempSubItem);
+                }
+
+                output.Add(tempItem);
+            }
+
+            return output;
         }
 
         public static IEnumerable<Test> GenerateTestList(IEnumerable<TaskItemWrapper> reqList)

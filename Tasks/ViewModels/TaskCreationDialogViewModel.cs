@@ -59,15 +59,10 @@ namespace Tasks.ViewModels
                     _taskInstance.SpecificationVersionID = _selectedVersion.ID;
                     _taskInstance.StartDate = DateTime.Now.Date;
 
-                    foreach (ReportItemWrapper req in _requirementList)
-                    {
-                        if (!req.IsSelected)
-                            continue;
-
-                        TaskItem temp = new TaskItem();
-                        temp.RequirementID = req.RequirementInstance.ID;
-                        _taskInstance.TaskItems.Add(temp);
-                    }
+                    foreach (TaskItem tItem in CommonProcedures.GenerateTaskItemList(_requirementList
+                                                                .Where(req => req.IsSelected)
+                                                                .Select(req => req.RequirementInstance)))
+                        _taskInstance.TaskItems.Add(tItem);
 
                     _taskInstance.Create();
                     

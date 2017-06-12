@@ -304,6 +304,9 @@
     <Compile Include="SubRequirement.cs">
       <DependentUpon>LabDB.tt</DependentUpon>
     </Compile>
+    <Compile Include="SubTaskItem.cs">
+      <DependentUpon>LabDB.tt</DependentUpon>
+    </Compile>
     <Compile Include="SubTest.cs">
       <DependentUpon>LabDB.tt</DependentUpon>
     </Compile>

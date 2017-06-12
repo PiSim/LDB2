@@ -447,6 +447,18 @@
           <Property Name="requirementID" Type="int" Nullable="false" />
           <Property Name="sub_methodID" Type="int" Nullable="false" />
         </EntityType>
+        <EntityType Name="sub_task_items">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="task_itemID" Type="int" Nullable="false" />
+          <Property Name="required_value" Type="text" Nullable="false" />
+          <Property Name="sub_methodID" Type="int" />
+          <Property Name="name" Type="text" Nullable="false" />
+          <Property Name="um" Type="text" Nullable="false" />
+          <Property Name="sub_requirementID" Type="int" />
+        </EntityType>
         <EntityType Name="sub_tests">
           <Key>
             <PropertyRef Name="ID" />
@@ -468,6 +480,11 @@
           <Property Name="requirementID" Type="int" Nullable="false" />
           <Property Name="is_assigned_to_report" Type="bit" Nullable="false" />
           <Property Name="testID" Type="int" />
+          <Property Name="specification_versionID" Type="int" Nullable="false" />
+          <Property Name="methodID" Type="int" />
+          <Property Name="name" Type="text" />
+          <Property Name="position" Type="int" Nullable="false" />
+          <Property Name="description" Type="text" />
         </EntityType>
         <EntityType Name="tasks">
           <Key>
@@ -1407,6 +1424,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="specification_version_to_task_item">
+          <End Role="specification_versions" Type="Self.specification_versions" Multiplicity="1" />
+          <End Role="task_items" Type="Self.task_items" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="specification_versions">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="task_items">
+              <PropertyRef Name="specification_versionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="specissue_to_report">
           <End Role="standard_issues" Type="Self.standard_issues" Multiplicity="0..1" />
           <End Role="reports" Type="Self.reports" Multiplicity="*" />
@@ -1509,6 +1538,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="sub_method_to_sub_task_item">
+          <End Role="sub_methods" Type="Self.sub_methods" Multiplicity="0..1" />
+          <End Role="sub_task_items" Type="Self.sub_task_items" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="sub_methods">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="sub_task_items">
+              <PropertyRef Name="sub_methodID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="sub_requirement_to_sub_task_item">
+          <End Role="sub_requirements" Type="Self.sub_requirements" Multiplicity="0..1" />
+          <End Role="sub_task_items" Type="Self.sub_task_items" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="sub_requirements">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="sub_task_items">
+              <PropertyRef Name="sub_requirementID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="sub_requirement_to_sub_test">
           <End Role="sub_requirements" Type="Self.sub_requirements" Multiplicity="0..1" />
           <End Role="sub_tests" Type="Self.sub_tests" Multiplicity="*" />
@@ -1544,6 +1597,20 @@
             </Principal>
             <Dependent Role="instruments">
               <PropertyRef Name="supplierID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="task_item_to_sub">
+          <End Role="task_items" Type="Self.task_items" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="sub_task_items" Type="Self.sub_task_items" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="task_items">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="sub_task_items">
+              <PropertyRef Name="task_itemID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1684,6 +1751,7 @@
           <EntitySet Name="standards" EntityType="Self.standards" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="sub_methods" EntityType="Self.sub_methods" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="sub_requirements" EntityType="Self.sub_requirements" Schema="labdb" store:Type="Tables" />
+          <EntitySet Name="sub_task_items" EntityType="Self.sub_task_items" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="sub_tests" EntityType="Self.sub_tests" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="task_items" EntityType="Self.task_items" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="tasks" EntityType="Self.tasks" Schema="labdb" store:Type="Tables" />
@@ -1967,6 +2035,10 @@
             <End Role="specifications" EntitySet="specifications" />
             <End Role="specification_versions" EntitySet="specification_versions" />
           </AssociationSet>
+          <AssociationSet Name="specification_version_to_task_item" Association="Self.specification_version_to_task_item">
+            <End Role="specification_versions" EntitySet="specification_versions" />
+            <End Role="task_items" EntitySet="task_items" />
+          </AssociationSet>
           <AssociationSet Name="specissue_to_report" Association="Self.specissue_to_report">
             <End Role="standard_issues" EntitySet="standard_issues" />
             <End Role="reports" EntitySet="reports" />
@@ -1999,6 +2071,14 @@
             <End Role="standards" EntitySet="standards" />
             <End Role="specifications" EntitySet="specifications" />
           </AssociationSet>
+          <AssociationSet Name="sub_method_to_sub_task_item" Association="Self.sub_method_to_sub_task_item">
+            <End Role="sub_methods" EntitySet="sub_methods" />
+            <End Role="sub_task_items" EntitySet="sub_task_items" />
+          </AssociationSet>
+          <AssociationSet Name="sub_requirement_to_sub_task_item" Association="Self.sub_requirement_to_sub_task_item">
+            <End Role="sub_requirements" EntitySet="sub_requirements" />
+            <End Role="sub_task_items" EntitySet="sub_task_items" />
+          </AssociationSet>
           <AssociationSet Name="sub_requirement_to_sub_test" Association="Self.sub_requirement_to_sub_test">
             <End Role="sub_requirements" EntitySet="sub_requirements" />
             <End Role="sub_tests" EntitySet="sub_tests" />
@@ -2010,6 +2090,10 @@
           <AssociationSet Name="supplier_to_instrument" Association="Self.supplier_to_instrument">
             <End Role="organizations" EntitySet="organizations" />
             <End Role="instruments" EntitySet="instruments" />
+          </AssociationSet>
+          <AssociationSet Name="task_item_to_sub" Association="Self.task_item_to_sub">
+            <End Role="task_items" EntitySet="task_items" />
+            <End Role="sub_task_items" EntitySet="sub_task_items" />
           </AssociationSet>
           <AssociationSet Name="task_to_item" Association="Self.task_to_item">
             <End Role="tasks" EntitySet="tasks" />
@@ -2342,6 +2426,7 @@
           <NavigationProperty Name="Specification" Relationship="Self.specification_to_specversion" FromRole="specification_versions" ToRole="specifications" />
           <NavigationProperty Name="Tasks" Relationship="Self.specversion_to_task" FromRole="specification_versions" ToRole="tasks" />
           <NavigationProperty Name="ExternalConstructions" Relationship="labdbModel.default_spec_version_to_ex_construction" FromRole="SpecificationVersion" ToRole="ExternalConstruction" />
+          <NavigationProperty Name="task_items" Relationship="labdbModel.specification_version_to_task_item" FromRole="SpecificationVersion" ToRole="TaskItem" />
         </EntityType>
         <EntityType Name="Specification">
           <Key>
@@ -2389,6 +2474,7 @@
           <Property Name="SubMethodID" Type="Int32" Nullable="false" />
           <NavigationProperty Name="SubMethod" Relationship="labdbModel.submethod_to_subreq1" FromRole="SubRequirement" ToRole="sub_methods" />
           <NavigationProperty Name="sub_tests" Relationship="labdbModel.sub_requirement_to_sub_test" FromRole="SubRequirement" ToRole="SubTest" />
+          <NavigationProperty Name="sub_task_items" Relationship="labdbModel.sub_requirement_to_sub_task_item" FromRole="SubRequirement" ToRole="sub_task_items" />
         </EntityType>
         <EntityType Name="SubTest">
           <Key>
@@ -3271,6 +3357,23 @@
             <End Role="Test" EntitySet="Tests" />
             <End Role="TaskItem" EntitySet="TaskItems" />
           </AssociationSet>
+          <EntitySet Name="SubTaskItems" EntityType="labdbModel.SubTaskItem" />
+          <AssociationSet Name="sub_method_to_sub_task_item" Association="labdbModel.sub_method_to_sub_task_item">
+            <End Role="SubMethod" EntitySet="SubMethods" />
+            <End Role="sub_task_items" EntitySet="SubTaskItems" />
+          </AssociationSet>
+          <AssociationSet Name="sub_requirement_to_sub_task_item" Association="labdbModel.sub_requirement_to_sub_task_item">
+            <End Role="SubRequirement" EntitySet="SubRequirements" />
+            <End Role="sub_task_items" EntitySet="SubTaskItems" />
+          </AssociationSet>
+          <AssociationSet Name="task_item_to_sub" Association="labdbModel.task_item_to_sub">
+            <End Role="TaskItem" EntitySet="TaskItems" />
+            <End Role="sub_task_items" EntitySet="SubTaskItems" />
+          </AssociationSet>
+          <AssociationSet Name="specification_version_to_task_item" Association="labdbModel.specification_version_to_task_item">
+            <End Role="SpecificationVersion" EntitySet="SpecificationVersions" />
+            <End Role="TaskItem" EntitySet="TaskItems" />
+          </AssociationSet>
         </EntityContainer>
         <Association Name="overridden_to_requirement">
           <End Type="labdbModel.Requirement" Role="Requirement" Multiplicity="0..1">
@@ -3399,6 +3502,13 @@
           <NavigationProperty Name="Tests" Relationship="labdbModel.parent_task_item_to_test" FromRole="TaskItem" ToRole="Test" />
           <Property Name="TestID" Type="Int32" />
           <NavigationProperty Name="Test" Relationship="labdbModel.test_to_task_item" FromRole="TaskItem" ToRole="Test" />
+          <NavigationProperty Name="SubTaskItems" Relationship="labdbModel.task_item_to_sub" FromRole="TaskItem" ToRole="sub_task_items" />
+          <Property Name="SpecificationVersionID" Type="Int32" Nullable="false" />
+          <Property Name="MethodID" Type="Int32" />
+          <Property Name="Name" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="Position" Type="Int32" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="SpecificationVersion" Relationship="labdbModel.specification_version_to_task_item" FromRole="TaskItem" ToRole="SpecificationVersion" />
         </EntityType>
         <Association Name="requirement_to_task_item">
           <End Type="labdbModel.Requirement" Role="Requirement" Multiplicity="1" />
@@ -3854,6 +3964,7 @@
           <Property Name="UM" Type="String" Nullable="false" MaxLength="25" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Method" Relationship="labdbModel.method_to_measurement1" FromRole="sub_methods" ToRole="Method" />
           <NavigationProperty Name="SubRequirements" Relationship="labdbModel.submethod_to_subreq1" FromRole="sub_methods" ToRole="SubRequirement" />
+          <NavigationProperty Name="sub_task_items" Relationship="labdbModel.sub_method_to_sub_task_item" FromRole="SubMethod" ToRole="sub_task_items" />
         </EntityType>
         <Association Name="method_to_measurement1">
           <End Type="labdbModel.Method" Role="Method" Multiplicity="1">
@@ -4100,6 +4211,71 @@
             </Principal>
             <Dependent Role="TaskItem">
               <PropertyRef Name="TestID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="SubTaskItem">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TaskItemID" Type="Int32" Nullable="false" />
+          <Property Name="RequiredValue" Type="String" Nullable="false" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="SubMethodID" Type="Int32" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="UM" Type="String" Nullable="false" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="SubRequirementID" Type="Int32" />
+          <NavigationProperty Name="SubMethod" Relationship="labdbModel.sub_method_to_sub_task_item" FromRole="sub_task_items" ToRole="SubMethod" />
+          <NavigationProperty Name="SubRequirement" Relationship="labdbModel.sub_requirement_to_sub_task_item" FromRole="sub_task_items" ToRole="SubRequirement" />
+          <NavigationProperty Name="ParentTaskItem" Relationship="labdbModel.task_item_to_sub" FromRole="sub_task_items" ToRole="TaskItem" />
+        </EntityType>
+        <Association Name="sub_method_to_sub_task_item">
+          <End Type="labdbModel.SubMethod" Role="SubMethod" Multiplicity="0..1" />
+          <End Type="labdbModel.SubTaskItem" Role="sub_task_items" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SubMethod">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="sub_task_items">
+              <PropertyRef Name="SubMethodID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="sub_requirement_to_sub_task_item">
+          <End Type="labdbModel.SubRequirement" Role="SubRequirement" Multiplicity="0..1" />
+          <End Type="labdbModel.SubTaskItem" Role="sub_task_items" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SubRequirement">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="sub_task_items">
+              <PropertyRef Name="SubRequirementID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="task_item_to_sub">
+          <End Type="labdbModel.TaskItem" Role="TaskItem" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="labdbModel.SubTaskItem" Role="sub_task_items" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TaskItem">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="sub_task_items">
+              <PropertyRef Name="TaskItemID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="specification_version_to_task_item">
+          <End Type="labdbModel.SpecificationVersion" Role="SpecificationVersion" Multiplicity="1" />
+          <End Type="labdbModel.TaskItem" Role="TaskItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SpecificationVersion">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="TaskItem">
+              <PropertyRef Name="SpecificationVersionID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -4453,6 +4629,11 @@
           <EntitySetMapping Name="TaskItems">
             <EntityTypeMapping TypeName="labdbModel.TaskItem">
               <MappingFragment StoreEntitySet="task_items">
+                <ScalarProperty Name="Description" ColumnName="description" />
+                <ScalarProperty Name="Position" ColumnName="position" />
+                <ScalarProperty Name="Name" ColumnName="name" />
+                <ScalarProperty Name="MethodID" ColumnName="methodID" />
+                <ScalarProperty Name="SpecificationVersionID" ColumnName="specification_versionID" />
                 <ScalarProperty Name="TestID" ColumnName="testID" />
                 <ScalarProperty Name="IsAssignedToReport" ColumnName="is_assigned_to_report" />
                 <ScalarProperty Name="RequirementID" ColumnName="requirementID" />
@@ -4681,6 +4862,19 @@
               <ScalarProperty Name="ID" ColumnName="batchID" />
             </EndProperty>
           </AssociationSetMapping>
+          <EntitySetMapping Name="SubTaskItems">
+            <EntityTypeMapping TypeName="labdbModel.SubTaskItem">
+              <MappingFragment StoreEntitySet="sub_task_items">
+                <ScalarProperty Name="SubRequirementID" ColumnName="sub_requirementID" />
+                <ScalarProperty Name="UM" ColumnName="um" />
+                <ScalarProperty Name="Name" ColumnName="name" />
+                <ScalarProperty Name="SubMethodID" ColumnName="sub_methodID" />
+                <ScalarProperty Name="RequiredValue" ColumnName="required_value" />
+                <ScalarProperty Name="TaskItemID" ColumnName="task_itemID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
