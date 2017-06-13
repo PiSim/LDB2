@@ -291,10 +291,7 @@ namespace DBManager.Services
         {
             using (DBEntities entities = new DBEntities())
             {
-
-                Construction tempEntry = entities.Constructions.First(con => con.ID == entry.ID);
-
-                entities.Entry(tempEntry).CurrentValues.SetValues(entry);
+                entities.Constructions.AddOrUpdate(entry);
                 
                 entities.SaveChanges();
             }

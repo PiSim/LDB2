@@ -154,6 +154,7 @@
     <Compile Include="EntityExtensions\InstrumentExtension.cs" />
     <Compile Include="EntityExtensions\MaterialExtension.cs" />
     <Compile Include="EntityExtensions\MethodExtension.cs" />
+    <Compile Include="EntityExtensions\ProjectExtension.cs" />
     <Compile Include="EntityExtensions\RecipeExtension.cs" />
     <Compile Include="EntityExtensions\ReportExtension.cs" />
     <Compile Include="EntityExtensions\ReportFileExtension.cs" />

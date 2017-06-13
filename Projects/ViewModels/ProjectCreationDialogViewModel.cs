@@ -12,7 +12,7 @@ using System.Windows;
 
 namespace Projects.ViewModels
 {
-    internal class ProjectCreationDialogViewModel : BindableBase
+    public class ProjectCreationDialogViewModel : BindableBase
     {
         private DelegateCommand<Window> _cancel, _confirm;
         private Organization _selectedOem;
@@ -20,7 +20,7 @@ namespace Projects.ViewModels
         private Project _projectInstance;
         private string _description, _name;
         
-        internal ProjectCreationDialogViewModel(DBEntities entities) : base()
+        public ProjectCreationDialogViewModel(DBEntities entities) : base()
         {
 
             _cancel = new DelegateCommand<Window>(
@@ -34,9 +34,9 @@ namespace Projects.ViewModels
                 {
                     _projectInstance = new Project();
                     _projectInstance.Description = _description;
-                    _projectInstance.Leader = _selectedLeader;
+                    _projectInstance.ProjectLeaderID = _selectedLeader.ID;
                     _projectInstance.Name = _name;
-                    _projectInstance.Oem = _selectedOem;
+                    _projectInstance.OemID = _selectedOem.ID;
 
                     _projectInstance.Create();
                     
@@ -70,7 +70,7 @@ namespace Projects.ViewModels
         {
             get
             {
-                return PeopleService.GetProjectLeaders();
+                return PeopleService.GetPeople(PersonRoleNames.ProjectLeader);
             }
         }
 

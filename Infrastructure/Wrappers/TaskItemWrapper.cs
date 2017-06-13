@@ -26,17 +26,12 @@ namespace Infrastructure.Wrappers
 
         public string Method
         {
-            get { return _taskItemInstance.Requirement.Method.Standard.Name; }
+            get { return _taskItemInstance.Method.Standard.Name; }
         }
 
         public string Property
         {
-            get { return _taskItemInstance.Requirement.Method.Property.Name; }
-        }
-
-        public Requirement RequirementInstance
-        {
-            get { return _taskItemInstance.Requirement; }
+            get { return _taskItemInstance.Method.Property.Name; }
         }
 
         public TaskItem TaskItemInstance

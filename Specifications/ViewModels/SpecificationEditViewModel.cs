@@ -17,11 +17,25 @@ namespace Specifications.ViewModels
 {
     public class SpecificationEditViewModel : BindableBase
     {
+        private bool _editMode;
         private ControlPlan _selectedControlPlan;
         private DBPrincipal _principal;
-        private DelegateCommand _addControlPlan, _addFile, _addIssue, _addTest, _addVersion, 
-                            _newReport, _openFile, _openReport, _removeControlPlan, _removeFile, 
-                            _removeIssue, _removeTest, _removeVersion, _setCurrent;
+        private DelegateCommand _addControlPlan, 
+                                _addFile, 
+                                _addIssue, 
+                                _addTest, 
+                                _addVersion, 
+                                _newReport, 
+                                _openFile, 
+                                _openReport, 
+                                _removeControlPlan, 
+                                _removeFile, 
+                                _removeIssue, 
+                                _removeTest, 
+                                _removeVersion, 
+                                _setCurrent, 
+                                _startEdit;
+
         private EventAggregator _eventAggregator;
         private IEnumerable<StandardIssue> _issueList;
         private List<ControlPlanItemWrapper> _controlPlanItemsList;
@@ -111,8 +125,9 @@ namespace Specifications.ViewModels
                     SpecificationVersion temp = new SpecificationVersion();
                     temp.IsMain = false;
                     temp.Name = "Nuova versione";
+                    temp.SpecificationID = _instance.ID;
 
-                    _instance.SpecificationVersions.Add(temp);
+                    temp.Create();
 
                     RaisePropertyChanged("VersionList");
                 });
@@ -192,6 +207,8 @@ namespace Specifications.ViewModels
                 {
                     _selectedVersion.Delete();
                     SelectedVersion = null;
+
+                    RaisePropertyChanged("VersionList");
                 },
                 () => _selectedVersion != null);
 
@@ -201,6 +218,13 @@ namespace Specifications.ViewModels
                     _instance.Standard.SetCurrentIssue(_selectedIssue);
                 },
                 () => _selectedIssue != null);
+
+            _startEdit = new DelegateCommand(
+                () =>
+                {
+                    EditMode = true;
+                },
+                () => CanEdit);
 
             // Event Subscriptions
 
@@ -227,8 +251,12 @@ namespace Specifications.ViewModels
 
         private void GenerateRequirementList()
         {
-            _requirementList = new List<RequirementWrapper>(_selectedVersion.GenerateRequirementList()
-                                                                           .Select(req => new RequirementWrapper(req, _selectedVersion)));
+            if (_selectedVersion == null)
+                _requirementList = new List<RequirementWrapper>();
+
+            else
+                _requirementList = new List<RequirementWrapper>(_selectedVersion.GenerateRequirementList()
+                                                                                .Select(req => new RequirementWrapper(req, _selectedVersion)));
         }
 
         public DelegateCommand AddControlPlanCommand
@@ -254,6 +282,11 @@ namespace Specifications.ViewModels
         public DelegateCommand AddVersionCommand
         {
             get { return _addVersion; }
+        }
+
+        private bool CanEdit
+        {
+            get { return _principal.IsInRole(UserRoleNames.SpecificationAdmin); }
         }
 
         public bool CanModifyControlPlan
@@ -297,6 +330,16 @@ namespace Specifications.ViewModels
                 return _instance.Description;
             }
             set { _instance.Description = value; }
+        }
+        
+        public bool EditMode
+        {
+            get { return _editMode; }
+            private set
+            {
+                _editMode = value;
+                RaisePropertyChanged("EditMode");
+            }
         }
         
         public IEnumerable<StandardFile> FileList
@@ -472,11 +515,10 @@ namespace Specifications.ViewModels
             {
                 _selectedVersion = value;
                 RaisePropertyChanged("SelectedVersionIsNotMain");
-                if (_selectedVersion != null)
-                {
-                    GenerateRequirementList();
-                    RaisePropertyChanged("RequirementList");
-                }
+
+                GenerateRequirementList();
+                RaisePropertyChanged("RequirementList");
+
             }
         }
 

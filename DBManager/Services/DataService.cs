@@ -50,6 +50,19 @@ namespace DBManager
             }
         }
 
+        public static IEnumerable<Construction> GetConstructionsWithoutProject()
+        {
+            using (var entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+                return entities.Constructions.Where(cns => cns.Project == null)
+                                            .Include(cns => cns.Aspect)
+                                            .Include(cns => cns.ExternalConstruction)
+                                            .Include(cns => cns.Type)
+                                            .ToList();
+            }
+        }
+
         public static IEnumerable<InstrumentType> GetInstrumentTypes()
         {
             using (var entities = new DBEntities())

@@ -43,17 +43,17 @@ namespace Services
         public static void ApplyControlPlan(IEnumerable<ISelectableRequirement> reqList, ControlPlan conPlan)
         {
             if (conPlan.IsDefault)
-                foreach (ReportItemWrapper riw in reqList)
+                foreach (ISelectableRequirement riw in reqList)
                     riw.IsSelected = true;
             else
             {
-                foreach (ReportItemWrapper riw in reqList)
+                foreach (ISelectableRequirement riw in reqList)
                     riw.IsSelected = false;
 
                 foreach (ControlPlanItem cpi in conPlan.ControlPlanItems)
                 {
-                    ISelectableRequirement tempRIW = reqList.FirstOrDefault(riw => riw.RequirementInstance.ID == cpi.Requirement.ID ||
-                                                    (riw.RequirementInstance.IsOverride && riw.RequirementInstance.Overridden.ID == cpi.Requirement.ID));
+                    ISelectableRequirement tempRIW = reqList.FirstOrDefault(riw => riw.RequirementInstance.ID == cpi.RequirementID ||
+                                                    (riw.RequirementInstance.IsOverride && riw.RequirementInstance.OverriddenID == cpi.RequirementID));
                     if (tempRIW != null)
                         tempRIW.IsSelected = true;
 
@@ -144,28 +144,25 @@ namespace Services
 
             foreach (TaskItemWrapper req in reqList.Where(isr => isr.IsSelected))
             {
-                req.RequirementInstance.Load();
+                req.TaskItemInstance.Load();
 
                 Test tempTest = new Test();
                 tempTest.IsComplete = false;
-                tempTest.MethodID = req.RequirementInstance.Method.ID;
+                tempTest.MethodID = req.TaskItemInstance.MethodID;
+                
+                tempTest.MethodIssueID = req.TaskItemInstance.Method.Standard.CurrentIssueID;
 
-                if (req.RequirementInstance.Method.Standard.CurrentIssue != null)
-                    tempTest.MethodIssueID = req.RequirementInstance.Method.Standard.CurrentIssue.ID;
-
-                tempTest.Notes = req.RequirementInstance.Description;
+                tempTest.Notes = req.TaskItemInstance.Description;
                 tempTest.ParentTaskItemID = req.TaskItemInstance.ID;
-                tempTest.RequirementID = req.RequirementInstance.ID;
+                tempTest.RequirementID = req.TaskItemInstance.RequirementID;
 
-                req.TaskItemInstance.IsAssignedToReport = true;
-
-                foreach (SubRequirement subReq in req.RequirementInstance.SubRequirements)
+                foreach (SubTaskItem subItem in req.TaskItemInstance.SubTaskItems)
                 {
                     SubTest tempSubTest = new SubTest();
-                    tempSubTest.Name = subReq.SubMethod.Name;
-                    tempSubTest.Requirement = subReq.RequiredValue;
-                    tempSubTest.SubRequiremntID = subReq.ID;
-                    tempSubTest.UM = subReq.SubMethod.UM;
+                    tempSubTest.Name = subItem.Name;
+                    tempSubTest.Requirement = subItem.RequiredValue;
+                    tempSubTest.SubRequiremntID = subItem.SubRequirementID;
+                    tempSubTest.UM = subItem.UM;
                     tempTest.SubTests.Add(tempSubTest);
                 }
                 output.Add(tempTest);

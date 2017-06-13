@@ -1,4 +1,5 @@
 using DBManager;
+using DBManager.EntityExtensions;
 using DBManager.Services;
 using Infrastructure;
 using Infrastructure.Events;
@@ -24,7 +25,6 @@ namespace Projects.ViewModels
             _openExternalReport, _openReport, _unassignConstruction;
         private EventAggregator _eventAggregator;
         private ExternalReport _selectedExternal;
-        private ObservableCollection<Construction> _assignedConstructions, _unassignedConstructions;
         private Project _projectInstance;
         private Report _selectedReport;
 
@@ -59,10 +59,12 @@ namespace Projects.ViewModels
             _assignConstruction = new DelegateCommand(
                 () => 
                 {
-                    AssignedConstructions.Add(_selectedUnassigned);
-                    _projectInstance.Constructions.Add(_selectedUnassigned);
-                    UnassignedConstructions.Remove(_selectedUnassigned);
+                    _selectedUnassigned.ProjectID = _projectInstance.ID;
+                    _selectedUnassigned.Update();
+
                     SelectedUnassigned = null;
+                    RaisePropertyChanged("AssignedConstructions");
+                    RaisePropertyChanged("UnassignedConstructions");
                 },
                 () => _selectedUnassigned != null
             );
@@ -101,9 +103,11 @@ namespace Projects.ViewModels
             _unassignConstruction = new DelegateCommand(
                 () => 
                 {
-                    UnassignedConstructions.Add(_selectedAssigned);
-                    _projectInstance.Constructions.Remove(_selectedAssigned);
-                    AssignedConstructions.Remove(_selectedAssigned);
+                    _selectedAssigned.ProjectID = null;
+                    _selectedAssigned.Update();
+                    
+                    RaisePropertyChanged("AssignedConstructions");
+                    RaisePropertyChanged("UnassignedConstructions");
                     SelectedAssigned = null;
                 },
                 () => _selectedAssigned != null
@@ -117,12 +121,11 @@ namespace Projects.ViewModels
             get { return _assignConstruction; }
         }
         
-        public ObservableCollection<Construction> AssignedConstructions
+        public IEnumerable<Construction> AssignedConstructions
         {
-            get { return _assignedConstructions; }
+            get { return _projectInstance.GetConstructions(); }
             private set
             {
-                _assignedConstructions = value;
                 RaisePropertyChanged("AssignedConstructions");
             }
         }
@@ -185,7 +188,7 @@ namespace Projects.ViewModels
         {
             get
             {
-                if (_projectInstance == null)
+                if (_projectInstance == null || _projectInstance.Leader == null)
                     return null;
 
                 return _projectInstance.Leader.Name;
@@ -336,12 +339,11 @@ namespace Projects.ViewModels
             get { return _unassignConstruction; }
         }
         
-        public ObservableCollection<Construction> UnassignedConstructions
+        public IEnumerable<Construction> UnassignedConstructions
         {
-            get { return _unassignedConstructions; }
+            get { return DataService.GetConstructionsWithoutProject(); }
             private set
             {
-                _unassignedConstructions = value;
                 RaisePropertyChanged("UnassignedConstructions");
             }
         }

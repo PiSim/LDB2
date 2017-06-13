@@ -24,6 +24,18 @@ namespace DBManager.EntityExtensions
             }
         }
 
+        public static void Create(this SpecificationVersion entry)
+        {
+            // Inserts a new SpecificationVersion entry in the DB
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.SpecificationVersions.Add(entry);
+
+                entities.SaveChanges();
+            }
+        }
+
         public static void Delete(this SpecificationVersion entry)
         {
             // Deletes SpecificationVersion entity
@@ -89,7 +101,6 @@ namespace DBManager.EntityExtensions
             {
                 entities.Configuration.LazyLoadingEnabled = false;
                 
-
                 SpecificationVersion tempEntry = entities.SpecificationVersions.Include(specv => specv.ExternalConstructions)
                                                                                 .Include(specv => specv.Requirements
                                                                                 .Select(req => req.SubRequirements))

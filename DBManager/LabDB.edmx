@@ -477,11 +477,11 @@
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="taskID" Type="int" Nullable="false" />
-          <Property Name="requirementID" Type="int" Nullable="false" />
+          <Property Name="requirementID" Type="int" />
           <Property Name="is_assigned_to_report" Type="bit" Nullable="false" />
           <Property Name="testID" Type="int" />
           <Property Name="specification_versionID" Type="int" Nullable="false" />
-          <Property Name="methodID" Type="int" />
+          <Property Name="methodID" Type="int" Nullable="false" />
           <Property Name="name" Type="text" />
           <Property Name="position" Type="int" Nullable="false" />
           <Property Name="description" Type="text" />
@@ -1002,6 +1002,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="method_to_task_item">
+          <End Role="methods" Type="Self.methods" Multiplicity="1" />
+          <End Role="task_items" Type="Self.task_items" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="methods">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="task_items">
+              <PropertyRef Name="methodID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="method_to_test">
           <End Role="methods" Type="Self.methods" Multiplicity="1" />
           <End Role="tests" Type="Self.tests" Multiplicity="*" />
@@ -1347,7 +1359,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="requirement_to_task_item">
-          <End Role="requirements" Type="Self.requirements" Multiplicity="1" />
+          <End Role="requirements" Type="Self.requirements" Multiplicity="0..1" />
           <End Role="task_items" Type="Self.task_items" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="requirements">
@@ -1903,6 +1915,10 @@
             <End Role="methods" EntitySet="methods" />
             <End Role="requirements" EntitySet="requirements" />
           </AssociationSet>
+          <AssociationSet Name="method_to_task_item" Association="Self.method_to_task_item">
+            <End Role="methods" EntitySet="methods" />
+            <End Role="task_items" EntitySet="task_items" />
+          </AssociationSet>
           <AssociationSet Name="method_to_test" Association="Self.method_to_test">
             <End Role="methods" EntitySet="methods" />
             <End Role="tests" EntitySet="tests" />
@@ -2275,6 +2291,7 @@
           <NavigationProperty Name="SubMethods" Relationship="labdbModel.method_to_measurement1" FromRole="Method" ToRole="sub_methods" />
           <NavigationProperty Name="AssociatedInstruments" Relationship="labdbModel.instrument_method_mappings" FromRole="Method" ToRole="Instrument" />
           <NavigationProperty Name="ExternalReports" Relationship="labdbModel.external_report_method_mappings" FromRole="Method" ToRole="ExternalReport" />
+          <NavigationProperty Name="task_items" Relationship="labdbModel.method_to_task_item" FromRole="Method" ToRole="TaskItem" />
         </EntityType>
         <EntityType Name="Organization">
           <Key>
@@ -2317,8 +2334,8 @@
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" a:GetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:SetterAccess="Public" />
           <Property Name="Description" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" a:GetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:SetterAccess="Public" />
-          <Property Name="ProjectLeaderD" Type="Int32" a:GetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:SetterAccess="Private" />
-          <Property Name="OemID" Type="Int32" a:SetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:GetterAccess="Public" />
+          <Property Name="ProjectLeaderID" Type="Int32" a:GetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:SetterAccess="Public" />
+          <Property Name="OemID" Type="Int32" a:SetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:GetterAccess="Public" />
           <Property Name="TotalInternalCost" Type="Int32" Nullable="false" />
           <Property Name="TotalExternalCost" Type="Double" Nullable="false" />
           <NavigationProperty Name="Constructions" Relationship="Self.project1" FromRole="projects" ToRole="constructions" />
@@ -2829,7 +2846,7 @@
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="projects">
-              <PropertyRef Name="ProjectLeaderD" />
+              <PropertyRef Name="ProjectLeaderID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -3374,6 +3391,10 @@
             <End Role="SpecificationVersion" EntitySet="SpecificationVersions" />
             <End Role="TaskItem" EntitySet="TaskItems" />
           </AssociationSet>
+          <AssociationSet Name="method_to_task_item" Association="labdbModel.method_to_task_item">
+            <End Role="Method" EntitySet="Methods" />
+            <End Role="TaskItem" EntitySet="TaskItems" />
+          </AssociationSet>
         </EntityContainer>
         <Association Name="overridden_to_requirement">
           <End Type="labdbModel.Requirement" Role="Requirement" Multiplicity="0..1">
@@ -3494,8 +3515,8 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="TaskID" Type="Int32" Nullable="false" a:SetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
-          <Property Name="RequirementID" Type="Int32" Nullable="false" />
+          <Property Name="TaskID" Type="Int32" Nullable="false" a:SetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+          <Property Name="RequirementID" Type="Int32" Nullable="true" />
           <NavigationProperty Name="Requirement" Relationship="labdbModel.requirement_to_task_item" FromRole="task_items" ToRole="Requirement" />
           <NavigationProperty Name="Task" Relationship="labdbModel.task_to_item" FromRole="task_items" ToRole="Task" />
           <Property Name="IsAssignedToReport" Type="Boolean" Nullable="false" />
@@ -3504,14 +3525,15 @@
           <NavigationProperty Name="Test" Relationship="labdbModel.test_to_task_item" FromRole="TaskItem" ToRole="Test" />
           <NavigationProperty Name="SubTaskItems" Relationship="labdbModel.task_item_to_sub" FromRole="TaskItem" ToRole="sub_task_items" />
           <Property Name="SpecificationVersionID" Type="Int32" Nullable="false" />
-          <Property Name="MethodID" Type="Int32" />
+          <Property Name="MethodID" Type="Int32" Nullable="false" />
           <Property Name="Name" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
           <Property Name="Position" Type="Int32" Nullable="false" />
           <Property Name="Description" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="SpecificationVersion" Relationship="labdbModel.specification_version_to_task_item" FromRole="TaskItem" ToRole="SpecificationVersion" />
+          <NavigationProperty Name="Method" Relationship="labdbModel.method_to_task_item" FromRole="TaskItem" ToRole="Method" a:SetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         </EntityType>
         <Association Name="requirement_to_task_item">
-          <End Type="labdbModel.Requirement" Role="Requirement" Multiplicity="1" />
+          <End Type="labdbModel.Requirement" Role="Requirement" Multiplicity="0..1" />
           <End Type="labdbModel.TaskItem" Role="task_items" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Requirement">
@@ -4279,6 +4301,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="method_to_task_item">
+          <End Type="labdbModel.Method" Role="Method" Multiplicity="1" />
+          <End Type="labdbModel.TaskItem" Role="TaskItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Method">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="TaskItem">
+              <PropertyRef Name="MethodID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -4421,7 +4455,7 @@
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Name" ColumnName="name" />
                 <ScalarProperty Name="Description" ColumnName="description" />
-                <ScalarProperty Name="ProjectLeaderD" ColumnName="project_leaderID" />
+                <ScalarProperty Name="ProjectLeaderID" ColumnName="project_leaderID" />
                 <ScalarProperty Name="OemID" ColumnName="oemID" />
                 <ScalarProperty Name="TotalInternalCost" ColumnName="total_internal_cost" />
                 <ScalarProperty Name="TotalExternalCost" ColumnName="total_external_cost" />

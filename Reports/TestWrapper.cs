@@ -46,7 +46,7 @@ namespace Reports
                 if (value)
                     _testInstance.Date = DateTime.Now.Date;
                 else
-                    _testInstance.Date = null;
+                     _testInstance.Date = null;
                     
                 RaisePropertyChanged("CompletionDate");
             }

@@ -27,21 +27,6 @@ namespace DBManager.Services
             }
         }
 
-        public static IEnumerable<Person> GetProjectLeaders()
-        {
-            // Returns all People entities with ProjectLeader Role selected
-
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.Configuration.LazyLoadingEnabled = false;
-
-                return entities.PersonRoleMappings.Where(prm => prm.IsSelected && prm.Role == entities.PersonRoles
-                                                    .First(role => role.Name == PersonRoleNames.ProjectLeader))
-                                                    .Select(prm => prm.Person)
-                                                    .ToList();            
-            }
-        }
-
         public static void Load(this Person entry)
         {
             // Loads the relevant Related Entities into a given Person Instance

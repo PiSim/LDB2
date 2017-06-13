@@ -141,8 +141,6 @@ namespace DBManager.Services
             {
                 entities.Configuration.LazyLoadingEnabled = false;
                 
-                entities.Projects.Attach(entry);
-
                 Project tempEntry = entities.Projects.Include(prj => prj.Constructions
                                                     .Select(cns => cns.Aspect))
                                                     .Include(prj => prj.Constructions
@@ -153,8 +151,16 @@ namespace DBManager.Services
                                                     .Include(prj => prj.Oem)
                                                     .First(prj => prj.ID == entry.ID);
 
-                entities.Entry(entry).CurrentValues.SetValues(tempEntry);
-
+                entry.Constructions = tempEntry.Constructions;
+                entry.Description = tempEntry.Description;
+                entry.ExternalReports = tempEntry.ExternalReports;
+                entry.Leader = tempEntry.Leader;
+                entry.Name = tempEntry.Name;
+                entry.Oem = tempEntry.Oem;
+                entry.OemID = tempEntry.OemID;
+                entry.ProjectLeaderID = tempEntry.ProjectLeaderID;
+                entry.TotalExternalCost = tempEntry.TotalExternalCost;
+                entry.TotalInternalCost = tempEntry.TotalInternalCost;
             }
         }
 
