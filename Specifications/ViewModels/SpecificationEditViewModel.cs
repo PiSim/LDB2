@@ -33,6 +33,7 @@ namespace Specifications.ViewModels
                                 _removeIssue, 
                                 _removeTest, 
                                 _removeVersion, 
+                                _save,
                                 _setCurrent, 
                                 _startEdit;
 
@@ -212,6 +213,22 @@ namespace Specifications.ViewModels
                 },
                 () => _selectedVersion != null);
 
+            _save = new DelegateCommand(
+                () =>
+                {
+                    _instance.Update();
+
+                    if (_selectedVersion == null)
+                        return;
+
+                    if (_selectedVersion.IsMain)
+                        SpecificationService.UpdateRequirements(_requirementList.Select(req => req.RequirementInstance));
+
+                    else
+                        SpecificationService.UpdateRequirements(_requirementList.Where(req => req.IsOverride)
+                                                                                .Select(req => req.RequirementInstance));
+                });
+
             _setCurrent = new DelegateCommand(
                 () =>
                 {
@@ -227,22 +244,7 @@ namespace Specifications.ViewModels
                 () => CanEdit);
 
             // Event Subscriptions
-
-            _eventAggregator.GetEvent<CommitRequested>().Subscribe(
-                () =>
-                {
-                    _instance.Update();
-
-                    if (_selectedVersion == null)
-                        return;
-
-                    if (_selectedVersion.IsMain)
-                        SpecificationService.UpdateRequirements(_requirementList.Select(req => req.RequirementInstance));
-
-                    else
-                        SpecificationService.UpdateRequirements(_requirementList.Where(req => req.IsOverride)
-                                                                                .Select(req => req.RequirementInstance));
-                });
+            
 
             _eventAggregator.GetEvent<ReportListUpdateRequested>().Subscribe(
                 () => RaisePropertyChanged("ReportList"));
@@ -442,6 +444,11 @@ namespace Specifications.ViewModels
             get { return _requirementList; }
         }
 
+        public DelegateCommand SaveCommand
+        {
+            get { return _save; }
+        }
+
         public ControlPlan SelectedControlPlan
         {
             get { return _selectedControlPlan; }
@@ -588,9 +595,18 @@ namespace Specifications.ViewModels
                 if (_instance == null)
                     return null;
 
-                return _instance.Standard.Organization.Name + " " +
-                  _instance.Standard.Name;
+                return _instance.Standard.Name;
             }
+
+            set
+            {
+                _instance.Standard.Name = value;
+            }
+        }
+
+        public DelegateCommand StartEditCommand
+        {
+            get { return _startEdit; }
         }
 
         public IEnumerable<SpecificationVersion> VersionList

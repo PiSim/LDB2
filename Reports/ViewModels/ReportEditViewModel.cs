@@ -19,8 +19,15 @@ namespace Reports.ViewModels
 {
     public class ReportEditViewModel : BindableBase
     {
+        private bool _editMode;
         private DBPrincipal _principal;
-        private DelegateCommand _addFile, _addTests, _generateRawDataSheet, _openFile, _removeFile;
+        private DelegateCommand _addFile, 
+                                _addTests, 
+                                _generateRawDataSheet, 
+                                _openFile, 
+                                _removeFile,
+                                _save,
+                                _startEdit;
         private DelegateCommand<Test> _removeTest;
         private EventAggregator _eventAggregator;
         private Report _instance;
@@ -30,16 +37,9 @@ namespace Reports.ViewModels
         public ReportEditViewModel(DBPrincipal principal,
                                     EventAggregator aggregator) : base()
         {
+            _editMode = false;
             _eventAggregator = aggregator;
             _principal = principal;
-
-            _eventAggregator.GetEvent<CommitRequested>()
-                .Subscribe(() =>
-                {
-                    _testList.Select(tiw => tiw.TestInstance)
-                            .Update();
-                    _eventAggregator.GetEvent<ReportStatusCheckRequested>().Publish(_instance);
-                });
 
             _addFile = new DelegateCommand(
                 () =>
@@ -71,7 +71,6 @@ namespace Reports.ViewModels
                         _eventAggregator.GetEvent<ReportStatusCheckRequested>()
                                         .Publish(_instance);
                     }
-                    
                 });
 
             _generateRawDataSheet = new DelegateCommand(
@@ -127,6 +126,19 @@ namespace Reports.ViewModels
 
                 });
 
+            _save = new DelegateCommand(
+                () =>
+                {
+                    _testList.Select(tiw => tiw.TestInstance)
+                            .Update();
+                    _eventAggregator.GetEvent<ReportStatusCheckRequested>().Publish(_instance);
+                });
+
+            _startEdit = new DelegateCommand(
+                () =>
+                {
+                    EditMode = true;
+                });
         }
 
         public DelegateCommand AddFileCommand
@@ -189,6 +201,16 @@ namespace Reports.ViewModels
                     return _instance.Description; 
             }
             set { _instance.Description = value; }
+        }
+
+        public bool EditMode
+        {
+            get { return _editMode; }
+            set
+            {
+                _editMode = value;
+                RaisePropertyChanged("EditMode");
+            }
         }
 
         public IEnumerable<ReportFile> FileList
@@ -280,6 +302,11 @@ namespace Reports.ViewModels
             get { return _removeTest; }
         }
 
+        public DelegateCommand SaveCommand
+        {
+            get { return _save; }
+        }
+
         public string Specification
         {
             get 
@@ -315,6 +342,11 @@ namespace Reports.ViewModels
                 RaisePropertyChanged("SelectedFile");
             }
         } 
+
+        public DelegateCommand StartEditCommand
+        {
+            get { return _startEdit; }
+        }
 
         public IEnumerable<TestWrapper> TestList
         {

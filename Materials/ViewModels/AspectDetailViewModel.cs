@@ -17,7 +17,8 @@ namespace Materials.ViewModels
         private Aspect _aspectInstance;
         private bool _editMode;
         private DBEntities _entities;
-        private DelegateCommand _setModify;
+        private DelegateCommand _save,
+                                _startEdit;
         private EventAggregator _eventAggregator;
 
         public AspectDetailViewModel(DBEntities entities,
@@ -27,24 +28,20 @@ namespace Materials.ViewModels
             _eventAggregator = eventAggregator;
             _editMode = false;
 
-            _setModify = new DelegateCommand(
+            _save = new DelegateCommand(
+                () =>
+                {
+                    EditMode = false;
+                    _entities.SaveChanges();
+                },
+                () => _editMode);
+
+            _startEdit = new DelegateCommand(
                 () =>
                 {
                     EditMode = true;
                 },
                 () => CanSetModify);
-
-            _eventAggregator.GetEvent<CommitRequested>().Subscribe(
-                () =>
-                {
-                    if (_editMode)
-                    {
-                        EditMode = false;
-                        _entities.SaveChanges();
-                    }
-                    else
-                        return;
-                });
         }
 
         public string AspectCode
@@ -123,14 +120,18 @@ namespace Materials.ViewModels
             set
             {
                 _editMode = value;
-
                 RaisePropertyChanged("EditMode");
             }
         }
 
-        public DelegateCommand SetModifyCommand
+        public DelegateCommand SaveCommand
         {
-            get { return _setModify; }
+            get { return _save; }
+        }
+
+        public DelegateCommand StartEditCommand
+        {
+            get { return _startEdit; }
         }
     }
 }

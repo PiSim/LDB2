@@ -10,10 +10,22 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="35"/>
             <RowDefinition Height="150"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <Grid Grid.Row="0">
+
+        <StackPanel Orientation="Horizontal"
+                    Grid.Row="0">
+            <Button Content="Modifica"
+                    Command="{Binding StartEditCommand}"
+                    Margin="5"/>
+            <Button Content="Salva"
+                    Command="{Binding SaveCommand}"
+                    Margin="5"/>
+        </StackPanel>
+        
+        <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
@@ -47,7 +59,7 @@
                        Grid.Column="0"
                        Grid.Row="1"
                        Margin="5"/>
-                
+
                 <ComboBox ItemsSource="{Binding InstrumentTypeList}"
                           SelectedItem="{Binding InstrumentType, Mode=TwoWay}"
                           DisplayMemberPath="Name"
@@ -107,7 +119,7 @@
                          Grid.Row="1"
                          Margin="5"/>
 
-                <Label Content="Matricola:"
+                <Label Content="N° di serie:"
                    Grid.Column="0"
                    Grid.Row="2"
                    Margin="5"/>
@@ -119,18 +131,10 @@
                          Grid.Column="1"
                          Grid.Row="2"
                          Margin="5"/>
-
-                <Button Content="Modifica"
-                        Command="{Binding SetModifyCommand}"
-                        Grid.Column="1"
-                        Grid.Row="3"
-                        HorizontalAlignment="Right"
-                        Margin="5"
-                        Padding="5"/>
-            </Grid>            
+            </Grid>
         </Grid>
 
-        <TabControl Grid.Row="1">
+        <TabControl Grid.Row="2">
             <TabItem Header="Tarature"
                      Visibility="{Binding CalibrationTabVisible}">
                 <Grid>
@@ -138,7 +142,7 @@
                         <ColumnDefinition/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
-                    
+
                     <ListView ItemsSource="{Binding CalibrationReportList}"
                               SelectedItem="{Binding SelectedCalibration, Mode=TwoWay}">
                         <ListView.View>
@@ -220,7 +224,7 @@
                     </StackPanel>
                 </Grid>
             </TabItem>
-            
+
             <TabItem Header="Metodi">
                 <Grid>
                     <Grid.ColumnDefinitions>

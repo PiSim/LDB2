@@ -14,22 +14,22 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="40"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
 
         <StackPanel Orientation="Horizontal">
             <Button Content="Apri"
                     Command="{Binding OpenSpecificationCommand}"
-                    Margin="5"
-                    Width="50"/>
+                    Height="25"
+                    Margin="5"/>
 
             <Button Content="Crea Nuova"
                     Command="{Binding NewSpecificationCommand}"
-                    Margin="5"
-                    Width="75"/>
+                    Height="25"
+                    Margin="5"/>
         </StackPanel>
-        
+
         <ListView ItemsSource="{Binding SpecificationList}"
                   SelectedItem="{Binding SelectedSpecification, Mode=TwoWay}"
                   Grid.Column="0"

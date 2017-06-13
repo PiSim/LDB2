@@ -9,22 +9,29 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition Width="Auto"/>
-        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="35"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
         
-        <ContentControl prism:RegionManager.RegionName="MainExternalReportListRegion"/>
+        
+        
+        <ContentControl prism:RegionManager.RegionName="MainExternalReportListRegion"
+                        Grid.Row="1"/>
 
-        <StackPanel Grid.Column="1">
-            <Button Content="Nuovo"
+        <StackPanel Orientation="Horizontal"
+                    Grid.Row="0">
+            <Button Content="Crea Nuovo"
                     Command="{Binding NewExternalReportCommand}"
-                    IsEnabled="{Binding CanCreateExternalReport}"
                     Margin="5"/>
 
             <Button Content="Apri"
                     Command="{Binding OpenExternalReportCommand}"
-                    Margin="5"/>        
+                    Margin="5"/>
+
+            <Button Content="Elimina"
+                    Command="{Binding DeleteExternalReportCommand}"
+                    Margin="5"/>
         </StackPanel>
     </Grid>
 </UserControl>

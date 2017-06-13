@@ -12,11 +12,22 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="35"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <Grid Grid.Row="0">
+        <StackPanel Orientation="Horizontal"
+                    Grid.Row="0">
+            <Button Content="Modifica"
+                    Command="{Binding StartEditCommand}"
+                    Margin="5"/>
+            <Button Content="Salva"
+                    Command="{Binding SaveCommand}"
+                    Margin="5"/>
+        </StackPanel>
+        
+        <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition/>
@@ -40,13 +51,7 @@
                      Grid.Row="0"
                      Margin="5"/>
 
-            <Button Content="Modifica"
-                    Command="{Binding SetModifyCommand}"
-                    Grid.Column="3"
-                    Grid.Row="0"
-                    Margin="5"/>
-
-            <Label Content="OEM:"
+            <Label Content="Nome:"
                    Grid.Column="0"
                    Grid.Row="1"
                    VerticalAlignment="Center"/>
@@ -58,8 +63,8 @@
                      Grid.Row="1"
                      Margin="5"/>
         </Grid>
-        
-        <TabControl Grid.Row="1">
+
+        <TabControl Grid.Row="2">
             <TabItem Header="Commesse">
                 <Grid>
                     <Grid.ColumnDefinitions>

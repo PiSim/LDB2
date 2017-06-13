@@ -16,45 +16,44 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
 
-        <GroupBox Header="Metodi"
-                  Grid.Column="0">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-                <Grid Grid.Row="0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="35"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
 
-                    <Button Content="Nuovo"
-                            Command="{Binding NewMethodCommand}"
-                            Grid.Column="0"
-                            Margin="5"/>
-                </Grid>
+        <StackPanel Orientation="Horizontal"
+                    Grid.Column="0"
+                    Grid.Row="0">
 
-                <ListView ItemsSource="{Binding MethodList}"
-                          SelectedItem="{Binding SelectedMethod, Mode=TwoWay}"
-                          Grid.Row="1">
-                    <i:Interaction.Behaviors>
-                        <sort:SortingBehavior/>
-                    </i:Interaction.Behaviors>
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn Header="Nome"
-                                            DisplayMemberBinding="{Binding Standard.Name}"/>
-                            <GridViewColumn Header="Proprietà"
-                                            DisplayMemberBinding="{Binding Property.Name}"/>
-                        </GridView>
-                    </ListView.View>
-                </ListView>
-            </Grid>
-        </GroupBox>
+            <Button Content="Nuovo"
+                    Command="{Binding NewMethodCommand}"
+                    Margin="5"/>
+
+            <Button Content="Elimina"
+                    Command="{Binding DeleteMethodCommand}"
+                    Margin="5"/>
+        </StackPanel>
+        
+
+        <ListView ItemsSource="{Binding MethodList}"
+                    SelectedItem="{Binding SelectedMethod, Mode=TwoWay}"
+                    Grid.Row="1">
+            <i:Interaction.Behaviors>
+                <sort:SortingBehavior/>
+            </i:Interaction.Behaviors>
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Nome"
+                                    DisplayMemberBinding="{Binding Standard.Name}"/>
+                    <GridViewColumn Header="Proprietà"
+                                    DisplayMemberBinding="{Binding Property.Name}"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
 
         <ContentControl prism:RegionManager.RegionName="MethodEditRegion"
-                        Grid.Column="1"/>
+                        Grid.Column="1"
+                        Grid.Row="1"/>
 
     </Grid>
 </UserControl>

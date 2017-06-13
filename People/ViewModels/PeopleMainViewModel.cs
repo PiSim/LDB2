@@ -16,16 +16,15 @@ namespace People.ViewModels
 {
     public class PeopleMainViewModel : BindableBase
     {
-        private DelegateCommand _newPerson;
+        private bool _editMode;
+        private DelegateCommand _newPerson,
+                                _save;
         private EventAggregator _eventAggregator;
         private Person _selectedPerson;
 
         public PeopleMainViewModel(EventAggregator eventAggregator) : base()
         {
             _eventAggregator = eventAggregator;
-
-            _eventAggregator.GetEvent<CommitRequested>()
-                            .Subscribe(() => _selectedPerson.Update());
 
             _eventAggregator.GetEvent<PeopleListUpdateRequested>()
                             .Subscribe(() => RaisePropertyChanged("PeopleList"));
@@ -35,6 +34,12 @@ namespace People.ViewModels
                 {
                     _eventAggregator.GetEvent<PersonCreationRequested>()
                                     .Publish();
+                });
+
+            _save = new DelegateCommand(
+                () =>
+                {
+                    _selectedPerson.Update();
                 });
         }
 

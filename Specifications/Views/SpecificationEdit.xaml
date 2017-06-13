@@ -9,23 +9,49 @@
              mc:Ignorable="d" 
              d:DesignHeight="500" d:DesignWidth="600">
     <Grid>
-        <Label Content="Standard:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,0,0"/>
-        <Label Content="{Binding Standard}"
-               HorizontalAlignment="Left" VerticalAlignment="Top" Margin="100,0,0,0"/>
-        <Label Content="Descrizione:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,19,0,0"/>
-        <TextBox Text="{Binding Description, Mode=TwoWay}"
-                 TextWrapping="Wrap"
-                 Height="50"
-                 Width="200"
-               HorizontalAlignment="Left" VerticalAlignment="Top" Margin="100,25,0,0"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal"
+                    Grid.Row="0">
+            <Button Content="Modifica"
+                    Command="{Binding StartEditCommand}"
+                    Height="25"
+                    Margin="5"/>
+            <Button Content="Salva"
+                    Command="{Binding SaveCommand}"
+                    Height="25"
+                    Margin="5"/>
+        </StackPanel>
 
-        <TabControl Margin="0,100,0,0">
+        <StackPanel Orientation="Horizontal"
+                    Grid.Row="1"
+                    Height="35">
+
+            <Label Content="Specifica:"
+                   Margin="5"/>
+            <TextBox Text="{Binding Standard}"
+                     IsEnabled="{Binding EditMode}"
+                     Width="150"
+                     Margin="5"/>
+        </StackPanel>
+
+        <TabControl Grid.Row="2">
             <TabItem Header="Dettagli">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
+
+                    <Label Content="Descrizione:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,19,0,0"/>
+                    <TextBox Text="{Binding Description, Mode=TwoWay}"
+                             TextWrapping="Wrap"
+                             Height="50"
+                             Width="200"
+                             HorizontalAlignment="Left" VerticalAlignment="Top" Margin="100,25,0,0"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Metodi">

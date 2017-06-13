@@ -11,14 +11,27 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition Width="Auto"/>
-        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="35"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal"
+                    Grid.Row="0">
+
+
+            <Button Content="Apri"
+                    Command="{Binding OpenProjectCommand}"
+                    Margin="5"/>
+
+            <Button Content="Nuovo"
+                    Command="{Binding NewProjectCommand}"
+                    Margin="5"/>
+        </StackPanel>
         
         <ListView ItemsSource="{Binding ProjectList}"
                   SelectedItem="{Binding SelectedProject, Mode=TwoWay}"
-                  Grid.Column="0">
+                  Grid.Row="1">
             <i:Interaction.Behaviors>
                 <sort:SortingBehavior/>
             </i:Interaction.Behaviors>
@@ -35,30 +48,5 @@
                 </GridView>
             </ListView.View>
         </ListView>
-
-        <Grid Grid.Column="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
-            
-            <Button Content="Apri"
-                    Command="{Binding OpenProjectCommand}"
-                    Grid.Column="0"
-                    Grid.Row="0"
-                    Margin="5"/>
-
-            <Button Content="Nuovo"
-                    Command="{Binding NewProjectCommand}"
-                    Grid.Column="0"
-                    Grid.Row="1"
-                    Margin="5"/>
-
-        </Grid>
     </Grid>
 </UserControl>

@@ -17,10 +17,13 @@ namespace Materials.ViewModels
 {
     public class ExternalConstructionDetailViewModel : BindableBase 
     {
-        private bool _isEditMode;
+        private bool _editMode;
         private Construction _selectedAssignedConstruction, _selectedUnassignedConstruction;
         private DBPrincipal _principal;
-        private DelegateCommand _assignConstructionToExternal, _setModify, _unassignConstructionToExternal;
+        private DelegateCommand _assignConstructionToExternal, 
+                                _save,
+                                _startEdit, 
+                                _unassignConstructionToExternal;
         private EventAggregator _eventAggregator;
         private ExternalConstruction _externalConstructionInstance;
         private IEnumerable<Organization> _oemList;
@@ -32,7 +35,7 @@ namespace Materials.ViewModels
         {
             _eventAggregator = eventAggregator;
             _principal = principal;
-            _isEditMode = false;
+            _editMode = false;
 
             _oemList = new List<Organization>(OrganizationService.GetOrganizations(OrganizationRoleNames.OEM));
             _specificationList = new List<Specification>(SpecificationService.GetSpecifications());
@@ -51,12 +54,20 @@ namespace Materials.ViewModels
                     && !EditMode
                     && CanModify);
 
-            _setModify = new DelegateCommand(
+            _save = new DelegateCommand(
+                () =>
+                {
+                    _externalConstructionInstance.Update();
+                    EditMode = false;
+                },
+                () => _editMode);
+
+            _startEdit = new DelegateCommand(
                 () =>
                 {
                     EditMode = true;
                 },
-                () => CanModify);
+                () => CanModify && !_editMode);
 
             _unassignConstructionToExternal = new DelegateCommand(
                 () =>
@@ -70,18 +81,6 @@ namespace Materials.ViewModels
                 () => _selectedAssignedConstruction != null
                     && CanModify
                     && !EditMode);
-
-            _eventAggregator.GetEvent<CommitRequested>().Subscribe(
-                () =>
-                {
-                    if (!_isEditMode)
-                        return;
-                    else
-                    {
-                        _externalConstructionInstance.Update();
-                        EditMode = false;
-                    }
-                });
         }
 
         public DelegateCommand AssignConstructionToExternalCommand
@@ -123,13 +122,15 @@ namespace Materials.ViewModels
 
         public bool EditMode
         {
-            get { return _isEditMode; }
+            get { return _editMode; }
             set
             {
-                _isEditMode = value;
+                _editMode = value;
 
                 _assignConstructionToExternal.RaiseCanExecuteChanged();
                 _unassignConstructionToExternal.RaiseCanExecuteChanged();
+                _save.RaiseCanExecuteChanged();
+                _startEdit.RaiseCanExecuteChanged();
                 RaisePropertyChanged("EditMode");
                 RaisePropertyChanged("EnableVersionSelection");
             }
@@ -230,6 +231,11 @@ namespace Materials.ViewModels
             _eventAggregator.GetEvent<ExternalConstructionModified>().Publish();
         }
 
+        public DelegateCommand SaveCommand
+        {
+            get { return _save; }
+        }
+
         public Construction SelectedAssignedConstruction
         {
             get { return _selectedAssignedConstruction; }
@@ -293,9 +299,9 @@ namespace Materials.ViewModels
             }
         }
 
-        public DelegateCommand SetModifyCommand
+        public DelegateCommand StartEditCommand
         {
-            get { return _setModify; }
+            get { return _startEdit; }
         }
 
         public IEnumerable<Specification> SpecificationList

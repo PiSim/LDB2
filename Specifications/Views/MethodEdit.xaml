@@ -10,10 +10,22 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="35"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <Grid Grid.Row="0">
+
+        <StackPanel Orientation="Horizontal"
+                    Grid.Row="0">
+            <Button Content="Modifica"
+                    Command="{Binding StartEditCommand}"
+                    Margin="5"/>
+            <Button Content="Salva"
+                    Command="{Binding SaveCommand}"
+                    Margin="5"/>
+        </StackPanel>
+        
+        <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
@@ -55,7 +67,7 @@
                    Grid.Row="2"
                    Margin="5"/>
         </Grid>
-        <TabControl Grid.Row="1"
+        <TabControl Grid.Row="2"
                     Margin="5">
             <TabItem Header="Prove">
                 <Grid>
@@ -128,7 +140,7 @@
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
-                            
+
                             <GridViewColumn Header="Note"
                                             DisplayMemberBinding="{Binding Notes}"/>
 
@@ -150,6 +162,7 @@
                     </ListView.View>
                 </ListView>
             </TabItem>
+            
             <TabItem Header="Specifiche">
                 <ListView ItemsSource="{Binding SpecificationList}"
                           SelectedItem="{Binding SelectedSpecification, Mode=TwoWay}"
@@ -162,6 +175,7 @@
                     </ListView.View>
                 </ListView>
             </TabItem>
+            
             <TabItem Header="Edizioni/File">
                 <ContentControl prism:RegionManager.RegionName="MethodIssueRegion"/>
             </TabItem>

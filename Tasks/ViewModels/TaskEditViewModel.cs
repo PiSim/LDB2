@@ -17,14 +17,19 @@ namespace Tasks.ViewModels
 {
     public class TaskEditViewModel : BindableBase
     {
+        private bool _editMode;
         private DBPrincipal _principal;
-        private DelegateCommand _convertToReport;
+        private DelegateCommand _addTest,
+                                _convertToReport,
+                                _save,
+                                _startEdit;
         private EventAggregator _eventAggregator;
         private DBManager.Task _instance;
 
         public TaskEditViewModel(DBPrincipal principal,
                                 EventAggregator aggregator) : base()
         {
+            _editMode = false;
             _eventAggregator = aggregator;
             _principal = principal;
 
@@ -35,6 +40,12 @@ namespace Tasks.ViewModels
                                     .Publish(_instance);
                 },
                 () => CanCreateReport);
+
+            _startEdit = new DelegateCommand(
+                () =>
+                {
+                    EditMode = true;
+                });
         }
 
         public string BatchNumber
@@ -77,6 +88,16 @@ namespace Tasks.ViewModels
         public DelegateCommand ConvertToReportCommand
         {
             get { return _convertToReport; }
+        }
+
+        public bool EditMode
+        {
+            get { return _editMode; }
+            set
+            {
+                _editMode = value;
+                RaisePropertyChanged("EditMode");
+            }
         }
 
         public string Notes
@@ -128,6 +149,11 @@ namespace Tasks.ViewModels
             }
         }
 
+        public DelegateCommand SaveCommand
+        {
+            get { return _save; }
+        }
+
         public string Specification
         {
             get
@@ -163,6 +189,11 @@ namespace Tasks.ViewModels
                 else
                     return _instance.StartDate;
             }
+        }
+
+        public DelegateCommand StartEditCommand
+        {
+            get { return _startEdit; }
         }
 
         public DBManager.Task TaskInstance

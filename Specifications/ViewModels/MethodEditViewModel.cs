@@ -17,7 +17,17 @@ namespace Specifications.ViewModels
 {
     public class MethodEditViewModel : BindableBase
     {
-        private DelegateCommand _addFile, _addIssue, _addMeasurement, _openFile, _removeFile, _removeIssue, _removeMeasurement, _setCurrent;
+        private bool _editMode;
+        private DelegateCommand _addFile, 
+                                _addIssue, 
+                                _addMeasurement, 
+                                _openFile, 
+                                _removeFile, 
+                                _removeIssue, 
+                                _removeMeasurement, 
+                                _save,
+                                _setCurrent,
+                                _startEdit;
         private EventAggregator _eventAggregator;
         private IEnumerable<SubMethod> _subMethodList;
         private Method _methodInstance;
@@ -27,15 +37,9 @@ namespace Specifications.ViewModels
 
         public MethodEditViewModel(EventAggregator aggregator) : base()
         {
+            _editMode = false;
             _eventAggregator = aggregator;
             _subMethodList = new List<SubMethod>();
-
-            _eventAggregator.GetEvent<CommitRequested>()
-                            .Subscribe(() =>
-                            {
-                                _methodInstance.Update();
-                                SpecificationService.UpdateSubMethods(_subMethodList);
-                            });
 
             _addFile = new DelegateCommand(
                 () =>
@@ -121,6 +125,15 @@ namespace Specifications.ViewModels
                 },
                 () => SelectedMeasurement != null );
 
+            _save = new DelegateCommand(
+                () =>
+                {
+                    _methodInstance.Update();
+                    SpecificationService.UpdateSubMethods(_subMethodList);
+                    EditMode = false;
+                },
+                () => _editMode);
+
             _setCurrent = new DelegateCommand(
                 () =>
                 {
@@ -128,6 +141,13 @@ namespace Specifications.ViewModels
                 },
                 () => _selectedIssue != null
                 );
+
+            _startEdit = new DelegateCommand(
+                () =>
+                {
+                    EditMode = true;
+                },
+                () => !_editMode);
         }
 
         public DelegateCommand AddFileCommand
@@ -143,6 +163,18 @@ namespace Specifications.ViewModels
         public DelegateCommand AddMeasurementCommand
         {
             get { return _addMeasurement; }
+        }
+
+        public bool EditMode
+        {
+            get { return _editMode; }
+            set
+            {
+                _editMode = value;
+                RaisePropertyChanged("EditMode");
+                _save.RaiseCanExecuteChanged();
+                _startEdit.RaiseCanExecuteChanged();
+            }
         }
 
         public IEnumerable<StandardFile> FileList
@@ -166,6 +198,8 @@ namespace Specifications.ViewModels
             get { return _methodInstance; }
             set
             {
+                EditMode = false;
+
                 _methodInstance = value;
                 _methodInstance.Load();
 
@@ -238,6 +272,11 @@ namespace Specifications.ViewModels
                     return _methodInstance.Tests; }
         }
 
+        public DelegateCommand SaveCommand
+        {
+            get { return _save; }
+        }
+
         public StandardFile SelectedFile
         {
             get { return _selectedFile; }
@@ -294,5 +333,9 @@ namespace Specifications.ViewModels
             }
         }
         
+        public DelegateCommand StartEditCommand
+        {
+            get { return _startEdit; }
+        }
     }
 }

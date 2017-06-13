@@ -19,9 +19,18 @@ namespace Reports.ViewModels
 {
     public class ExternalReportEditViewModel : BindableBase
     {
+        private bool _editMode;
         private Batch _selectedBatch;
         private DBPrincipal _principal;
-        private DelegateCommand _addBatch, _addFile, _addPO, _openBatch, _openFile, _removeBatch, _removeFile;
+        private DelegateCommand _addBatch, 
+                                _addFile, 
+                                _addPO, 
+                                _openBatch, 
+                                _openFile, 
+                                _removeBatch, 
+                                _removeFile,
+                                _save,
+                                _startEdit;
         private EventAggregator _eventAggregator;
         private ExternalReport _instance;
         private ExternalReportFile _selectedFile;
@@ -30,10 +39,9 @@ namespace Reports.ViewModels
         public ExternalReportEditViewModel(DBPrincipal principal,
                                             EventAggregator aggregator) : base()
         {
+            _editMode = false;
             _eventAggregator = aggregator;
             _principal = principal;
-
-            _eventAggregator.GetEvent<CommitRequested>().Subscribe(() => _instance.Update());
             
             _addBatch = new DelegateCommand(
                 () => 
@@ -110,6 +118,20 @@ namespace Reports.ViewModels
                     SelectedFile = null;
                 },
                 () => _selectedFile != null);
+
+            _save = new DelegateCommand(
+                () =>
+                {
+                    _instance.Update();
+                    EditMode = false;
+                },
+                () => _editMode);
+
+            _startEdit = new DelegateCommand(
+                () =>
+                {
+                    EditMode = true;
+                });
         }
 
         public DelegateCommand AddBatchCommand
@@ -178,6 +200,17 @@ namespace Reports.ViewModels
             set { _instance.Currency = value; }
         }
         
+        public bool EditMode
+        {
+            get { return _editMode; }
+            set
+            {
+                _editMode = value;
+                RaisePropertyChanged("EditMode");
+                _save.RaiseCanExecuteChanged();
+            }
+        }
+
         public string ExternalLab
         {
             get
@@ -193,6 +226,8 @@ namespace Reports.ViewModels
             get { return _instance; }
             set 
             {
+                EditMode = false;
+
                 _instance = value;
                 _instance.Load();
                 
@@ -424,6 +459,11 @@ namespace Reports.ViewModels
             set { _instance.Samples = value; }
         }
 
+        public DelegateCommand SaveCommand
+        {
+            get { return _save; }
+        }
+
         public ExternalReportFile SelectedFile
         {
             get { return _selectedFile; }
@@ -433,6 +473,11 @@ namespace Reports.ViewModels
                 _openFile.RaiseCanExecuteChanged();
                 _removeFile.RaiseCanExecuteChanged();
             }
+        }
+
+        public DelegateCommand StartEdit
+        {
+            get { return _startEdit; }
         }
     }
 }

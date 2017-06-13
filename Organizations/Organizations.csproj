@@ -118,6 +118,9 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="ViewModels\OrganizationsMainViewModel.cs" />
+    <Compile Include="Views\OrganizationEdit.xaml.cs">
+      <DependentUpon>OrganizationEdit.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\OrganizationsMain.xaml.cs">
       <DependentUpon>OrganizationsMain.xaml</DependentUpon>
     </Compile>
@@ -160,6 +163,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Views\OrganizationEdit.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\OrganizationsMain.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

@@ -18,11 +18,17 @@ namespace Projects.ViewModels
 {
     public class ProjectInfoViewModel : BindableBase
     {
+        private bool _editMode;
         private Construction _selectedAssigned, _selectedUnassigned;
         private Batch _selectedBatch;
         private DBPrincipal _principal;
-        private DelegateCommand _assignConstruction, _openBatch, _modifyDetails, 
-            _openExternalReport, _openReport, _unassignConstruction;
+        private DelegateCommand _assignConstruction, 
+                                _openBatch, 
+                                _openExternalReport, 
+                                _openReport, 
+                                _save,
+                                _startEdit,
+                                _unassignConstruction;
         private EventAggregator _eventAggregator;
         private ExternalReport _selectedExternal;
         private Project _projectInstance;
@@ -32,16 +38,11 @@ namespace Projects.ViewModels
                                     EventAggregator aggregator)
             : base()
         {
+            _editMode = false;
             _eventAggregator = aggregator;
             _principal = principal;
 
             #region EventSubscriptions
-
-            _eventAggregator.GetEvent<CommitRequested>().Subscribe
-                (() =>
-                {
-                    _projectInstance.Update();
-                });
             
             _eventAggregator.GetEvent<ReportListUpdateRequested>().Subscribe(
                 () =>
@@ -68,12 +69,7 @@ namespace Projects.ViewModels
                 },
                 () => _selectedUnassigned != null
             );
-
-            _modifyDetails = new DelegateCommand(
-                () =>
-                {
-                });
-
+            
             _openBatch = new DelegateCommand(
                 () => 
                 {
@@ -99,7 +95,22 @@ namespace Projects.ViewModels
                                                                 _selectedReport);
                     _eventAggregator.GetEvent<NavigationRequested>().Publish(token);
                 });
-                
+
+            _save = new DelegateCommand(
+                () =>
+                {
+                    _projectInstance.Update();
+                    EditMode = false;
+                },
+                () => _editMode);
+
+            _startEdit = new DelegateCommand(
+                () =>
+                {
+                    EditMode = true;
+                },
+                () => !_editMode);
+
             _unassignConstruction = new DelegateCommand(
                 () => 
                 {
@@ -138,30 +149,6 @@ namespace Projects.ViewModels
             }
         }
 
-        public bool CanCreateReport
-        {
-            get
-            {
-                return _principal.IsInRole(UserRoleNames.ReportEdit);
-            }
-        }
-
-        public bool CanRemoveReport
-        {
-            get
-            {
-                if (SelectedReport == null)
-                    return false;
-                
-                else if (_principal.IsInRole(UserRoleNames.ReportAdmin))
-                    return true;
-                    
-                else
-                    return (_principal.IsInRole(UserRoleNames.ReportEdit)
-                            && (SelectedReport.Author.ID == _principal.CurrentPerson.ID));
-            }
-        }
-
         public string Description
         {
             get
@@ -170,6 +157,24 @@ namespace Projects.ViewModels
                     return null;
 
                 return _projectInstance.Description;
+            }
+
+            set
+            {
+                _projectInstance.Description = value;
+            }
+        }
+
+        public bool EditMode
+        {
+            get { return _editMode; }
+            set
+            {
+                _editMode = value;
+                RaisePropertyChanged("EditMode");
+
+                _save.RaiseCanExecuteChanged();
+                _startEdit.RaiseCanExecuteChanged();
             }
         }
 
@@ -195,11 +200,6 @@ namespace Projects.ViewModels
             }
         }
 
-        public DelegateCommand ModifyDetailsCommand
-        {
-            get { return _modifyDetails; }
-        }
-        
         public string Name
         {
             get
@@ -208,6 +208,10 @@ namespace Projects.ViewModels
                     return null;
 
                 return _projectInstance.Name;
+            }
+            set
+            {
+                _projectInstance.Name = value;
             }
         }
 
@@ -270,6 +274,11 @@ namespace Projects.ViewModels
             }
         }
 
+        public DelegateCommand SaveCommand
+        {
+            get { return _save; }
+        }
+
         public Construction SelectedAssigned
         {
             get { return _selectedAssigned; }
@@ -321,6 +330,11 @@ namespace Projects.ViewModels
                 RaisePropertyChanged("SelectedUnassigned");
                 _assignConstruction.RaiseCanExecuteChanged();
             }
+        }
+
+        public DelegateCommand StartEditCommand
+        {
+            get { return _startEdit; }
         }
 
         public IEnumerable<DBManager.Task> TaskList

@@ -20,8 +20,12 @@ namespace Instruments.ViewModels
         private bool _editMode;
         private CalibrationReport _selectedCalibration;
         private DBPrincipal _principal;
-        private DelegateCommand _addCalibration, _addMaintenanceEvent, _addMethodAssociation,
-                                _removeMethodAssociation, _setModify;
+        private DelegateCommand _addCalibration, 
+                                _addMaintenanceEvent, 
+                                _addMethodAssociation,
+                                _removeMethodAssociation, 
+                                _save,
+                                _startEdit;
         private EventAggregator _eventAggregator;
         private IEnumerable<InstrumentType> _instrumentTypeList;
         private IEnumerable<Organization> _manufacturerList;
@@ -37,17 +41,7 @@ namespace Instruments.ViewModels
             _principal = principal;
             _instrumentTypeList = DataService.GetInstrumentTypes();
             _manufacturerList = OrganizationService.GetOrganizations(OrganizationRoleNames.Manufacturer);
-
-            _eventAggregator.GetEvent<CommitRequested>()
-                            .Subscribe(() =>
-                            {
-                                if (_editMode)
-                                {
-                                    _instance.Update();
-                                    EditMode = false;
-                                }
-                            });
-
+            
             _addCalibration = new DelegateCommand(
                 () =>
                 {
@@ -82,11 +76,20 @@ namespace Instruments.ViewModels
                 },
                 () => _selectedAssociated != null);
 
-            _setModify = new DelegateCommand(
+            _save = new DelegateCommand(
+                () =>
+                {
+                    _instance.Update();
+                    EditMode = false;
+                },
+                () => _editMode);
+
+            _startEdit = new DelegateCommand(
                 () =>
                 {
                     EditMode = true;
-                });
+                },
+                () => !_editMode);
         }
 
         public DelegateCommand AddCalibrationCommand
@@ -147,6 +150,9 @@ namespace Instruments.ViewModels
             {
                 _editMode = value;
                 RaisePropertyChanged("EditMode");
+
+                _save.RaiseCanExecuteChanged();
+                _startEdit.RaiseCanExecuteChanged();
             }
         }
 
@@ -326,6 +332,11 @@ namespace Instruments.ViewModels
             get { return _removeMethodAssociation; }
         }
 
+        public DelegateCommand SaveCommand
+        {
+            get { return _save; }
+        }
+
         public Method SelectedAssociatedMethod
         {
             get { return _selectedAssociated; }
@@ -358,9 +369,9 @@ namespace Instruments.ViewModels
             }
         }
 
-        public DelegateCommand SetModifyCommand
+        public DelegateCommand StartEditCommand
         {
-            get { return _setModify; }
+            get { return _startEdit; }
         }
 
         public IEnumerable<Method> UnassociatedMethods

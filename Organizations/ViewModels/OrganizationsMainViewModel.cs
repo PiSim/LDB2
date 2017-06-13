@@ -16,21 +16,15 @@ namespace Organizations.ViewModels
 {
     public class OrganizationsMainViewModel : BindableBase
     {
-        private DelegateCommand _createNewOrganization;
+        private DelegateCommand _createNewOrganization, 
+                                _deleteOrganization;
         private EventAggregator _eventAggregator;
         private Organization _selectedOrganization;
 
         public OrganizationsMainViewModel(EventAggregator aggregator) : base()
         {
             _eventAggregator = aggregator;
-
-            _eventAggregator.GetEvent<CommitRequested>()
-                            .Subscribe(() =>
-                            {
-                                if (_selectedOrganization != null)
-                                    _selectedOrganization.Update();
-                            });
-
+            
             _eventAggregator.GetEvent<OrganizationListRefreshRequested>()
                             .Subscribe(() => RaisePropertyChanged("OrganizationList"));
 
