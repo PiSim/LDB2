@@ -33,6 +33,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Practices.Prism.Mvvm, Version=1.1.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Prism.Mvvm.1.1.1\lib\net45\Microsoft.Practices.Prism.Mvvm.dll</HintPath>
       <Private>True</Private>
@@ -74,7 +80,9 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Prism.Wpf.6.3.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
       <Private>True</Private>
@@ -94,7 +102,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommonProcedures.cs" />
-    <Compile Include="ServiceEventListener.cs" />
+    <Compile Include="EventManager.cs" />
+    <Compile Include="ServiceProvider.cs" />
     <Compile Include="ServicesModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -111,12 +120,16 @@
     </Compile>
     <Compile Include="ViewModels\AddTestDialogViewModel.cs" />
     <Compile Include="ViewModels\MaintenanceEventCreationDialogViewModel.cs" />
+    <Compile Include="ViewModels\NewCalibrationDialogViewModel.cs" />
     <Compile Include="ViewModels\ReportCreationDialogViewModel.cs" />
     <Compile Include="Views\AddTestDialog.xaml.cs">
       <DependentUpon>AddTestDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MaintenanceEventCreationDialog.xaml.cs">
       <DependentUpon>MaintenanceEventCreationDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\NewCalibrationDialog.xaml.cs">
+      <DependentUpon>NewCalibrationDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ReportCreationDialog.xaml.cs">
       <DependentUpon>ReportCreationDialog.xaml</DependentUpon>
@@ -141,6 +154,10 @@
     <Page Include="Views\MaintenanceEventCreationDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\NewCalibrationDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\ReportCreationDialog.xaml">
       <Generator>MSBuild:Compile</Generator>

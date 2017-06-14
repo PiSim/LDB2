@@ -124,6 +124,7 @@
     <Compile Include="ViewModels\SpecificationCreationDialogViewModel.cs" />
     <Compile Include="ViewModels\SpecificationEditViewModel.cs" />
     <Compile Include="ViewModels\SpecificationMainViewModel.cs" />
+    <Compile Include="ViewModels\SpecificationVersionEditViewModel.cs" />
     <Compile Include="ViewNames.cs" />
     <Compile Include="Views\MethodCreationDialog.xaml.cs">
       <DependentUpon>MethodCreationDialog.xaml</DependentUpon>
@@ -148,6 +149,9 @@
     </Compile>
     <Compile Include="Views\SpecificationNavigationItem.xaml.cs">
       <DependentUpon>SpecificationNavigationItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SpecificationVersionEdit.xaml.cs">
+      <DependentUpon>SpecificationVersionEdit.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\StandardIssueControl.xaml.cs">
       <DependentUpon>StandardIssueControl.xaml</DependentUpon>
@@ -221,6 +225,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\SpecificationNavigationItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SpecificationVersionEdit.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -7,14 +7,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DBManager;
 
 namespace Services
 {
-    internal class ServiceEventListener
+    internal class EventManager
     {
         private EventAggregator _eventAggregator;
 
-        public ServiceEventListener(EventAggregator eventAggregator)
+        public EventManager(EventAggregator eventAggregator)
         {
             _eventAggregator = eventAggregator;
 
@@ -27,6 +28,19 @@ namespace Services
 
                                 }
                             });
+
+
+            _eventAggregator.GetEvent<NewCalibrationRequested>()
+                            .Subscribe(
+                            instrument =>
+                            {
+                                CalibrationReport tempReport = ServiceProvider.RegisterNewCalibration(instrument);
+
+                                if (tempReport != null)
+                                    _eventAggregator.GetEvent<CalibrationIssued>()
+                                                    .Publish(tempReport);
+                            });
+
 
             _eventAggregator.GetEvent<ReportCreationRequested>().Subscribe(
                 token =>

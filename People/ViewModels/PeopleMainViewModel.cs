@@ -16,7 +16,6 @@ namespace People.ViewModels
 {
     public class PeopleMainViewModel : BindableBase
     {
-        private bool _editMode;
         private DelegateCommand _newPerson,
                                 _save;
         private EventAggregator _eventAggregator;

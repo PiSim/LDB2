@@ -19,8 +19,8 @@ namespace Services
 
         public void Initialize()
         {
-            _container.RegisterType<ServiceEventListener>(new ContainerControlledLifetimeManager());
-            _container.Resolve<ServiceEventListener>();
+            _container.RegisterType<EventManager>(new ContainerControlledLifetimeManager());
+            _container.Resolve<EventManager>();
 
             _container.RegisterType<ViewModels.AddTestDialogViewModel>();
             _container.RegisterType<ViewModels.MaintenanceEventCreationDialogViewModel>();

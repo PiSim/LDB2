@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
 
-namespace Instruments.ViewModels
+namespace Services.ViewModels
 {
     public class NewCalibrationDialogViewModel : BindableBase
     {

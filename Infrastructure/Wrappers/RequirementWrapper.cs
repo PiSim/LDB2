@@ -39,7 +39,7 @@ namespace Infrastructure.Wrappers
             get { return !_versionInstance.IsMain;  }
         }
         
-        public string Description
+        public string Notes
         {
             get { return _requirementInstance.Description; }
             set
@@ -74,7 +74,7 @@ namespace Infrastructure.Wrappers
             get { return new List<SubRequirement>(_requirementInstance.SubRequirements); }
         }
 
-        public string Standard
+        public string Method
         {
             get
             {
@@ -82,7 +82,7 @@ namespace Infrastructure.Wrappers
             }
         }
 
-        public string Test
+        public string Property
         {
             get {
 

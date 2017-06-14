@@ -41,11 +41,20 @@ namespace Tasks.ViewModels
                 },
                 () => CanCreateReport);
 
+            _save = new DelegateCommand(
+                () =>
+                {
+                    _instance.Update();
+                    EditMode = false;
+                },
+                () => _editMode);
+
             _startEdit = new DelegateCommand(
                 () =>
                 {
                     EditMode = true;
-                });
+                },
+                () => CanEdit && !_editMode);
         }
 
         public string BatchNumber
@@ -57,6 +66,11 @@ namespace Tasks.ViewModels
 
                 else
                     return _instance.Batch.Number;
+            }
+
+            set
+            {
+                _instance.Batch.Number = value;
             }
         }
 
@@ -97,6 +111,9 @@ namespace Tasks.ViewModels
             {
                 _editMode = value;
                 RaisePropertyChanged("EditMode");
+
+                _save.RaiseCanExecuteChanged();
+                _startEdit.RaiseCanExecuteChanged();
             }
         }
 

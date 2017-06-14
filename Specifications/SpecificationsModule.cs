@@ -26,6 +26,7 @@ namespace Specifications
             _container.RegisterType<Object, Views.MethodMain>(ViewNames.MethodMainView);
             _container.RegisterType<Object, Views.SpecificationEdit>(ViewNames.SpecificationsEditView);
             _container.RegisterType<Object, Views.SpecificationMain>(ViewNames.SpecificationsMainView);
+            _container.RegisterType<Object, Views.SpecificationVersionEdit>(SpecificationViewNames.SpecificationVersionEdit);
 
             _container.RegisterType<Views.MethodCreationDialog>();
             _container.RegisterType<Views.SpecificationCreationDialog>();
@@ -36,6 +37,7 @@ namespace Specifications
             _container.RegisterType<ViewModels.SpecificationCreationDialogViewModel>();
             _container.RegisterType<ViewModels.SpecificationMainViewModel>();
             _container.RegisterType<ViewModels.SpecificationEditViewModel>();
+            _container.RegisterType<ViewModels.SpecificationVersionEditViewModel>();
 
             _regionManager.RegisterViewWithRegion(RegionNames.MainNavigationRegion, 
                                                 typeof(Views.MethodNavigationItem));

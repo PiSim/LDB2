@@ -57,8 +57,8 @@
                    Grid.Row="0"
                    Margin="5"/>
 
-            <TextBox Text="{Binding BatchNumber}"
-                     IsEnabled="{Binding EditMode}"
+            <TextBox Text="{Binding BatchNumber, Mode=OneWay}"
+                     IsEnabled="false"
                      HorizontalContentAlignment="Center"
                      Grid.Column="1"
                      Grid.Row="0"

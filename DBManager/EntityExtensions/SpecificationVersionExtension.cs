@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -122,6 +123,18 @@ namespace DBManager.EntityExtensions
                 entry.Specification = tempEntry.Specification;
                 entry.SpecificationID = tempEntry.SpecificationID;
                 entry.Tasks = tempEntry.Tasks;
+            }
+        }
+
+        public static void Update(this SpecificationVersion entry)
+        {
+            // Updates a SpcificationVersion Entry
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.SpecificationVersions.AddOrUpdate(entry);
+
+                entities.SaveChanges();
             }
         }
 

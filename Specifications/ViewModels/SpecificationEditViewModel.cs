@@ -41,7 +41,6 @@ namespace Specifications.ViewModels
         private IEnumerable<StandardIssue> _issueList;
         private List<ControlPlanItemWrapper> _controlPlanItemsList;
         private Method _selectedToAdd;
-        private List<RequirementWrapper> _requirementList;
         private Property _filterProperty;
         private Requirement _selectedToRemove;
         private Report _selectedReport;
@@ -115,8 +114,8 @@ namespace Specifications.ViewModels
                     _instance.AddMethod(newReq);
                     RaisePropertyChanged("MainVersionRequirements");
 
-                    GenerateRequirementList();
-                    RaisePropertyChanged("RequirementList");
+                    _eventAggregator.GetEvent<SpecificationMethodListChanged>()
+                                    .Publish(_instance);
                 },
                 () => _selectedToAdd != null);
 
@@ -197,8 +196,9 @@ namespace Specifications.ViewModels
                 {
                     _selectedToRemove.Delete();
                     RaisePropertyChanged("MainVersionRequirements");
-                    GenerateRequirementList();
-                    RaisePropertyChanged("RequirementList");
+
+                    _eventAggregator.GetEvent<SpecificationMethodListChanged>()
+                                    .Publish(_instance);
                 },
 
                 () => _selectedToRemove != null);
@@ -217,16 +217,6 @@ namespace Specifications.ViewModels
                 () =>
                 {
                     _instance.Update();
-
-                    if (_selectedVersion == null)
-                        return;
-
-                    if (_selectedVersion.IsMain)
-                        SpecificationService.UpdateRequirements(_requirementList.Select(req => req.RequirementInstance));
-
-                    else
-                        SpecificationService.UpdateRequirements(_requirementList.Where(req => req.IsOverride)
-                                                                                .Select(req => req.RequirementInstance));
                 });
 
             _setCurrent = new DelegateCommand(
@@ -249,16 +239,6 @@ namespace Specifications.ViewModels
             _eventAggregator.GetEvent<ReportListUpdateRequested>().Subscribe(
                 () => RaisePropertyChanged("ReportList"));
 
-        }
-
-        private void GenerateRequirementList()
-        {
-            if (_selectedVersion == null)
-                _requirementList = new List<RequirementWrapper>();
-
-            else
-                _requirementList = new List<RequirementWrapper>(_selectedVersion.GenerateRequirementList()
-                                                                                .Select(req => new RequirementWrapper(req, _selectedVersion)));
         }
 
         public DelegateCommand AddControlPlanCommand
@@ -439,11 +419,6 @@ namespace Specifications.ViewModels
             }
         }
 
-        public IEnumerable<RequirementWrapper> RequirementList
-        {
-            get { return _requirementList; }
-        }
-
         public DelegateCommand SaveCommand
         {
             get { return _save; }
@@ -521,17 +496,13 @@ namespace Specifications.ViewModels
             set
             {
                 _selectedVersion = value;
-                RaisePropertyChanged("SelectedVersionIsNotMain");
+                NavigationToken token = new NavigationToken(SpecificationViewNames.SpecificationVersionEdit,
+                                                            _selectedVersion,
+                                                            RegionNames.SpecificationVersionEditRegion);
 
-                GenerateRequirementList();
-                RaisePropertyChanged("RequirementList");
-
+                _eventAggregator.GetEvent<NavigationRequested>()
+                                .Publish(token);
             }
-        }
-
-        public bool SelectedVersionIsNotMain
-        {
-            get { return !_selectedVersion.IsMain; }
         }
 
         public Method SelectedToAdd
@@ -586,6 +557,11 @@ namespace Specifications.ViewModels
         public DelegateCommand SetCurrentCommand
         {
             get { return _setCurrent; }
+        }
+
+        public string SpecificationVersionEditRegionName
+        {
+            get { return RegionNames.SpecificationVersionEditRegion; }
         }
 
         public string Standard

@@ -23,7 +23,6 @@ namespace Instruments
         {     
 
             _container.RegisterType<Views.InstrumentCreationDialog>();
-            _container.RegisterType<Views.NewCalibrationDialog>();
 
             _container.RegisterType<ViewModels.InstrumentCreationDialogViewModel>();
             _container.RegisterType<ViewModels.InstrumentEditViewModel>();

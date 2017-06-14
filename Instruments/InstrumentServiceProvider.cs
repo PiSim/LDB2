@@ -27,32 +27,13 @@ namespace Instruments
 
             _eventAggregator.GetEvent<InstrumentCreationRequested>()
                             .Subscribe(
-                () =>
-                {
-                    RegisterNewInstrument();
-                });
+                            () =>
+                            {
+                                RegisterNewInstrument();
+                            });
+
         }
 
-        public CalibrationReport RegisterNewCalibration(Instrument target)
-        {
-            Views.NewCalibrationDialog calibrationDialog = _container.Resolve<Views.NewCalibrationDialog>();
-            calibrationDialog.InstrumentInstance = target;
-            if (calibrationDialog.ShowDialog() == true)
-            {
-                CalibrationReport output = calibrationDialog.ReportInstance;
-                Instrument tempTarget = _entities.Instruments.First(ins => ins.ID == target.ID);
-
-                DateTime tempNewDate = output.Date.AddMonths(target.ControlPeriod);
-                if (tempNewDate > tempTarget.CalibrationDueDate)
-                {
-                    tempTarget.CalibrationDueDate = tempNewDate;
-                    _entities.SaveChanges();
-                }
-                _eventAggregator.GetEvent<CalibrationIssued>().Publish(output);
-                return output;
-            }
-            else return null;
-        }
 
         public Instrument RegisterNewInstrument()
         {
