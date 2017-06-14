@@ -1,6 +1,7 @@
 ﻿using DBManager;
 using DBManager.EntityExtensions;
 using DBManager.Services;
+using Infrastructure;
 using Infrastructure.Wrappers;
 using Prism.Commands;
 using Prism.Mvvm;
@@ -16,14 +17,16 @@ namespace Specifications.ViewModels
     public class SpecificationVersionEditViewModel : BindableBase
     {
         private bool _editMode;
+        private DBPrincipal _principal;
         private DelegateCommand _save,
                                 _startEdit;
         private List<RequirementWrapper> _requirementList;
         private SpecificationVersion _specificationVersionInstance;
         
-        public SpecificationVersionEditViewModel()
+        public SpecificationVersionEditViewModel(DBPrincipal principal)
         {
             _editMode = false;
+            _principal = principal;
 
             _save = new DelegateCommand(
                 () =>
@@ -40,6 +43,7 @@ namespace Specifications.ViewModels
                         SpecificationService.UpdateRequirements(_requirementList.Where(req => req.IsOverride)
                                                                                 .Select(req => req.RequirementInstance));
 
+                    EditMode = false;
                 },
                 () => _editMode);
 
@@ -48,9 +52,13 @@ namespace Specifications.ViewModels
                 {
                     EditMode = true;
                 },
-                () => !_editMode);
+                () => CanEdit && !_editMode);
         }
         
+        private bool CanEdit
+        {
+            get { return _principal.IsInRole(UserRoleNames.SpecificationAdmin); }
+        }
 
         private void GenerateRequirementList()
         {
@@ -81,7 +89,12 @@ namespace Specifications.ViewModels
         {
             get
             {
-                return _editMode ? Visibility.Visible : Visibility.Collapsed;
+                if (_specificationVersionInstance == null)
+                    return Visibility.Collapsed;
+
+                else
+                    return (_editMode && !_specificationVersionInstance.IsMain) 
+                        ? Visibility.Visible : Visibility.Collapsed;
             }
         }
 

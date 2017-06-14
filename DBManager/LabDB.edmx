@@ -481,7 +481,7 @@
           <Property Name="is_assigned_to_report" Type="bit" Nullable="false" />
           <Property Name="testID" Type="int" />
           <Property Name="specification_versionID" Type="int" Nullable="false" />
-          <Property Name="methodID" Type="int" Nullable="false" />
+          <Property Name="methodID" Type="int" />
           <Property Name="name" Type="text" />
           <Property Name="position" Type="int" Nullable="false" />
           <Property Name="description" Type="text" />
@@ -998,18 +998,6 @@
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="requirements">
-              <PropertyRef Name="methodID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="method_to_task_item">
-          <End Role="methods" Type="Self.methods" Multiplicity="1" />
-          <End Role="task_items" Type="Self.task_items" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="methods">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="task_items">
               <PropertyRef Name="methodID" />
             </Dependent>
           </ReferentialConstraint>
@@ -1914,10 +1902,6 @@
           <AssociationSet Name="method_to_requirement" Association="Self.method_to_requirement">
             <End Role="methods" EntitySet="methods" />
             <End Role="requirements" EntitySet="requirements" />
-          </AssociationSet>
-          <AssociationSet Name="method_to_task_item" Association="Self.method_to_task_item">
-            <End Role="methods" EntitySet="methods" />
-            <End Role="task_items" EntitySet="task_items" />
           </AssociationSet>
           <AssociationSet Name="method_to_test" Association="Self.method_to_test">
             <End Role="methods" EntitySet="methods" />

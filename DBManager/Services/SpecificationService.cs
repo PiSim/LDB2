@@ -10,6 +10,16 @@ namespace DBManager.Services
 {
     public static class SpecificationService
     {
+        public static Requirement GetRequirement(int ID)
+        {
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.Requirements.First(req => req.ID == ID);
+            }
+        }
+
         #region Operations for ControlPlans entities
 
         public static ControlPlan GetControlPlan(int ID)

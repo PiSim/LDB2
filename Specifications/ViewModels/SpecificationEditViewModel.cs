@@ -217,7 +217,8 @@ namespace Specifications.ViewModels
                 () =>
                 {
                     _instance.Update();
-                });
+                },
+                () => _editMode);
 
             _setCurrent = new DelegateCommand(
                 () =>
@@ -231,7 +232,7 @@ namespace Specifications.ViewModels
                 {
                     EditMode = true;
                 },
-                () => CanEdit);
+                () => CanEdit && !_editMode);
 
             // Event Subscriptions
             
@@ -321,6 +322,9 @@ namespace Specifications.ViewModels
             {
                 _editMode = value;
                 RaisePropertyChanged("EditMode");
+
+                _save.RaiseCanExecuteChanged();
+                _startEdit.RaiseCanExecuteChanged();
             }
         }
         

@@ -96,32 +96,31 @@ namespace Infrastructure.Wrappers
             Requirement newOverride = new Requirement();
             newOverride.Description = _requirementInstance.Description;
             newOverride.IsOverride = true;
-            newOverride.Method = _requirementInstance.Method;
-            newOverride.Overridden = _requirementInstance;
-            newOverride.SpecificationVersions = _versionInstance;
+            newOverride.MethodID = _requirementInstance.MethodID;
+            newOverride.OverriddenID = _requirementInstance.ID;
+            newOverride.SpecificationVersionID = _versionInstance.ID;
 
             foreach (SubRequirement subReq in _requirementInstance.SubRequirements)
             {
                 SubRequirement tempSub = new SubRequirement();
-
-                tempSub.Requirement = newOverride;
-                tempSub.SubMethod = subReq.SubMethod;
+                
+                tempSub.SubMethodID = subReq.SubMethodID;
                 tempSub.RequiredValue = subReq.RequiredValue;
 
                 newOverride.SubRequirements.Add(tempSub);
             }
-
-            newOverride.SpecificationVersions = _versionInstance;
+            
             newOverride.Create();
-
+            newOverride.Method = _requirementInstance.Method;
             _requirementInstance = newOverride;
         }
 
         private void RemoveOverride()
         {
-            Requirement tempReq = _requirementInstance.Overridden;
+            int overrID = (int)_requirementInstance.OverriddenID;
             _requirementInstance.Delete();
-            _requirementInstance = tempReq;
+            _requirementInstance = SpecificationService.GetRequirement(overrID);
+            _requirementInstance.Load();
         }
     }
 

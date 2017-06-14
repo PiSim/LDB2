@@ -61,14 +61,9 @@
                           AutoGenerateColumns="False">
                     <DataGrid.Columns>
 
-                        <DataGridTemplateColumn Header="Override"
-                                                Visibility="{Binding DataContext.IsOverrideVisibility, Source={x:Reference dummyElement}}">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <CheckBox IsChecked="{Binding IsOverride}"/>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
+                        <DataGridCheckBoxColumn Header="Override"
+                                                Binding="{Binding IsOverride, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                Visibility="{Binding DataContext.IsOverrideVisibility, Source={x:Reference dummyElement}}"/>
 
                         <DataGridTextColumn Header="Prova"
                                             Binding="{Binding Property}"
@@ -98,11 +93,12 @@
                         </DataGridTemplateColumn>
                     
                         <DataGridTemplateColumn Header="Requisito"
-                                            Width="100">
+                                                Width="100">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <DataGrid ItemsSource="{Binding SubRequirements}"
                                               IsEnabled="{Binding DataContext.EditMode, ElementName=RequirementGrid}"
+                                              Name="RequiredValuesGrid"
                                               AutoGenerateColumns="False"
                                               HeadersVisibility="None"
                                               CanUserAddRows="False"
@@ -113,7 +109,15 @@
                                               RowHeight="30">
                                         <DataGrid.Columns>
                                             <DataGridTextColumn Binding="{Binding RequiredValue}"
-                                                                Width="*"/>
+                                                                Width="*">
+                                                <DataGridTextColumn.CellStyle>
+                                                    <Style TargetType="{x:Type DataGridCell}">
+                                                        <Setter Property="IsEnabled"
+                                                                Value="{Binding DataContext.CanModify, 
+                                                                                ElementName=RequiredValuesGrid}"/>
+                                                    </Style>
+                                                </DataGridTextColumn.CellStyle>
+                                            </DataGridTextColumn>
                                         </DataGrid.Columns>
                                     </DataGrid>
                                 </DataTemplate>
