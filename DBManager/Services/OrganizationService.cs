@@ -30,41 +30,6 @@ namespace DBManager.Services
             }
         }
 
-        public static void Load(this Organization entry)
-        {
-            // Loads all relevant Related Entities into a given organization entry
-
-            if (entry == null)
-                return;
-
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.Configuration.LazyLoadingEnabled = false;
-
-                Organization tempEntry = entities.Organizations.Include(org => org.RoleMapping
-                                                                .Select(orm => orm.Role))
-                                                                .First(org => org.ID == entry.ID);
-
-                entry.Name = tempEntry.Name;
-                entry.RoleMapping = tempEntry.RoleMapping;
-            }
-        }
-
-        public static void Update(this Organization entry)
-        {
-            // Updates the db values for a given Organization entry
-
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.Organizations.AddOrUpdate(entry);
-                
-                foreach (OrganizationRoleMapping orm in entry.RoleMapping)
-                    entities.OrganizationRoleMappings.AddOrUpdate(orm);
-
-                entities.SaveChanges();
-            }
-        }
-
         #endregion
     }
 }

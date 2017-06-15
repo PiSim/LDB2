@@ -25,13 +25,16 @@
         </StackPanel>
 
         <ListView ItemsSource="{Binding RoleList}"
+                  Name="OrganizationRoleList"
                   Grid.Row="1">
             <ListView.View>
                 <GridView>
                     <GridViewColumn>
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <CheckBox IsChecked="{Binding IsSelected, Mode=TwoWay}"/>
+                                <CheckBox IsChecked="{Binding IsSelected, Mode=TwoWay}"
+                                          IsEnabled="{Binding ElementName=OrganizationRoleList,
+                                                              Path=DataContext.EditMode}"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>

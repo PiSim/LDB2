@@ -24,9 +24,11 @@ namespace Organizations
             if (principal.IsInRole(UserRoleNames.Admin))
                 _regionManager.RegisterViewWithRegion(RegionNames.MainNavigationRegion,
                                                 typeof(Views.OrganizationsNavigationItem));
-            
+
+            _container.RegisterType<ViewModels.OrganizationEditViewModel>();
             _container.RegisterType<ViewModels.OrganizationsMainViewModel>();
 
+            _container.RegisterType<Object, Views.OrganizationEdit>(OrganizationViewNames.OrganizationEditView);
             _container.RegisterType<Object, Views.OrganizationsMain>(OrganizationViewNames.OrganizationMainView);
             
 

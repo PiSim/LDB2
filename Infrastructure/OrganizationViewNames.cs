@@ -8,6 +8,7 @@ namespace Infrastructure
 {
     public class OrganizationViewNames
     {
+        public static string OrganizationEditView { get { return "OrganizationEditView"; } }
         public static string OrganizationMainView { get { return "OrganizationMainView"; } }
     }
 }

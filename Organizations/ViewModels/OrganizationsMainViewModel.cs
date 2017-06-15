@@ -48,11 +48,19 @@ namespace Organizations.ViewModels
             set
             {
                 _selectedOrganization = value;
-                _selectedOrganization.Load();
-
                 RaisePropertyChanged("SelectedOrganization");
-                RaisePropertyChanged("RoleList");
+
+                NavigationToken token = new NavigationToken(OrganizationViewNames.OrganizationEditView,
+                                                            _selectedOrganization,
+                                                            RegionNames.OrganizationEditRegion);
+                _eventAggregator.GetEvent<NavigationRequested>()
+                                .Publish(token);
             }
+        }
+
+        public string OrganizationEditRegionName
+        {
+            get { return RegionNames.OrganizationEditRegion; }
         }
 
         public IEnumerable<Organization> OrganizationList
