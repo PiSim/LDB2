@@ -125,6 +125,8 @@ namespace Specifications.ViewModels
             get { return _specificationVersionInstance; }
             set
             {
+                EditMode = false;
+
                 _specificationVersionInstance = value;
                 _specificationVersionInstance.Load();
                 

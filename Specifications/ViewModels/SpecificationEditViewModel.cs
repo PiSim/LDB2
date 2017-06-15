@@ -21,20 +21,16 @@ namespace Specifications.ViewModels
         private ControlPlan _selectedControlPlan;
         private DBPrincipal _principal;
         private DelegateCommand _addControlPlan, 
-                                _addFile, 
                                 _addIssue, 
                                 _addTest, 
                                 _addVersion, 
                                 _newReport, 
-                                _openFile, 
                                 _openReport, 
                                 _removeControlPlan, 
-                                _removeFile, 
                                 _removeIssue, 
                                 _removeTest, 
                                 _removeVersion, 
                                 _save,
-                                _setCurrent, 
                                 _startEdit;
 
         private EventAggregator _eventAggregator;
@@ -46,7 +42,6 @@ namespace Specifications.ViewModels
         private Report _selectedReport;
         private Specification _instance;
         private SpecificationVersion _selectedVersion;
-        private StandardFile _selectedFile;
         private StandardIssue _selectedIssue;
 
         public SpecificationEditViewModel(DBPrincipal principal,
@@ -68,28 +63,6 @@ namespace Specifications.ViewModels
 
                     SelectedControlPlan = temp;
                     RaisePropertyChanged("ControlPlanList");
-                });
-
-            _addFile = new DelegateCommand(
-                () =>
-                {
-                    OpenFileDialog fileDialog = new OpenFileDialog();
-                    fileDialog.Multiselect = true;
-
-                    if (fileDialog.ShowDialog() == DialogResult.OK)
-                    {
-                        foreach (string pth in fileDialog.FileNames)
-                        {
-                            StandardFile temp = new StandardFile();
-                            temp.Path = pth;
-                            temp.Description = "";
-                            temp.IssueID = _selectedIssue.ID;
-
-                            temp.Create();
-                        }
-
-                        RaisePropertyChanged("FileList");
-                    }
                 });
 
             _addIssue = new DelegateCommand(
@@ -138,21 +111,6 @@ namespace Specifications.ViewModels
                     NewReportToken token = new NewReportToken();
                     _eventAggregator.GetEvent<ReportCreationRequested>().Publish(token);
                 });
-                
-            _openFile = new DelegateCommand(
-                () =>
-                {
-                    try
-                    {
-                        System.Diagnostics.Process.Start(_selectedFile.Path);
-                    }
-
-                    catch (Exception)
-                    {
-                        _eventAggregator.GetEvent<StatusNotificationIssued>().Publish("File non trovato");
-                    }
-                },
-                () => _selectedFile != null);
 
             _openReport = new DelegateCommand(
                 () =>
@@ -170,16 +128,6 @@ namespace Specifications.ViewModels
                     SelectedControlPlan = null;
                 }, 
                 () => _selectedControlPlan != null);
-
-            _removeFile = new DelegateCommand(
-                () =>
-                {
-                    _selectedFile.Delete();
-                    SelectedFile = null;
-
-                    RaisePropertyChanged("FileList");
-                },
-                () => _selectedFile != null );
 
             _removeIssue = new DelegateCommand(
                 () =>
@@ -220,13 +168,6 @@ namespace Specifications.ViewModels
                 },
                 () => _editMode);
 
-            _setCurrent = new DelegateCommand(
-                () =>
-                {
-                    _instance.Standard.SetCurrentIssue(_selectedIssue);
-                },
-                () => _selectedIssue != null);
-
             _startEdit = new DelegateCommand(
                 () =>
                 {
@@ -245,11 +186,6 @@ namespace Specifications.ViewModels
         public DelegateCommand AddControlPlanCommand
         {
             get { return _addControlPlan; }
-        }
-
-        public DelegateCommand AddFileCommand
-        {
-            get { return _addFile; }
         }
 
         public DelegateCommand AddIssueCommand
@@ -327,14 +263,6 @@ namespace Specifications.ViewModels
                 _startEdit.RaiseCanExecuteChanged();
             }
         }
-        
-        public IEnumerable<StandardFile> FileList
-        {
-            get
-            {
-                return _selectedIssue.GetIssueFiles();
-            }
-        }
 
         public Property FilterProperty
         {
@@ -385,11 +313,6 @@ namespace Specifications.ViewModels
             get { return _newReport; }
         }
 
-        public DelegateCommand OpenFileCommand
-        {
-            get { return _openFile; }
-        }
-
         public IEnumerable<Property> Properties
         {
             get { return SpecificationService.GetProperties(); }
@@ -398,11 +321,6 @@ namespace Specifications.ViewModels
         public DelegateCommand RemoveControlPlanCommand
         {
             get { return _removeControlPlan; }
-        }
-
-        public DelegateCommand RemoveFileCommand
-        {
-            get { return _removeFile; }
         }
 
         public DelegateCommand RemoveIssueCommand
@@ -454,33 +372,21 @@ namespace Specifications.ViewModels
             }
         }
         
-        public StandardFile SelectedFile
-        {
-            get { return _selectedFile; }
-            set 
-            { 
-                _selectedFile = value;
-                RaisePropertyChanged("SelectedFile");
-                OpenFileCommand.RaiseCanExecuteChanged();
-                RemoveFileCommand.RaiseCanExecuteChanged();
-            }
-        }
-        
         public StandardIssue SelectedIssue
         {
             get { return _selectedIssue; }
             set 
             {
                 _selectedIssue = value;
-
-                if (value != null)
-                    _selectedIssue.Load();
-
-                _setCurrent.RaiseCanExecuteChanged();
                 _removeIssue.RaiseCanExecuteChanged();
 
-                RaisePropertyChanged("SelectedIssue");
-                RaisePropertyChanged("FileList");
+                NavigationToken token = new NavigationToken(SpecificationViewNames.StandardIssueEdit,
+                                                            _selectedIssue,
+                                                            RegionNames.SpecificationIssueEditRegion);
+
+                _eventAggregator.GetEvent<NavigationRequested>()
+                                .Publish(token);
+
             }
         }
 
@@ -558,14 +464,14 @@ namespace Specifications.ViewModels
             }
         }
 
-        public DelegateCommand SetCurrentCommand
-        {
-            get { return _setCurrent; }
-        }
-
         public string SpecificationVersionEditRegionName
         {
             get { return RegionNames.SpecificationVersionEditRegion; }
+        }
+
+        public string SpecificationIssueEditRegionName
+        {
+            get { return RegionNames.SpecificationIssueEditRegion; }
         }
 
         public string Standard

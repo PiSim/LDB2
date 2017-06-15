@@ -177,7 +177,17 @@
             </TabItem>
             
             <TabItem Header="Edizioni/File">
-                <ContentControl prism:RegionManager.RegionName="MethodIssueRegion"/>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <ContentControl prism:RegionManager.RegionName="MethodIssueRegion"
+                                    Grid.Column="0"/>
+                    <ContentControl prism:RegionManager.RegionName="{Binding MethodIssueEditRegionName}"
+                                    Grid.Column="0"/>
+                </Grid>
             </TabItem>
         </TabControl>
     </Grid>

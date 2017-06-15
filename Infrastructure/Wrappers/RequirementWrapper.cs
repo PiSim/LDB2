@@ -59,6 +59,7 @@ namespace Infrastructure.Wrappers
                 else
                     RemoveOverride();
 
+                _requirementInstance.Load();
                 RaisePropertyChanged("CanModify");
                 RaisePropertyChanged("SubRequirements");
             }
@@ -69,9 +70,10 @@ namespace Infrastructure.Wrappers
             get { return _requirementInstance; }
         }
 
-        public List<SubRequirement> SubRequirements
+        public IEnumerable<SubRequirement> SubRequirements
         {
-            get { return new List<SubRequirement>(_requirementInstance.SubRequirements); }
+            get { return _requirementInstance.SubRequirements
+                                            .ToList(); }
         }
 
         public string Method
@@ -87,6 +89,11 @@ namespace Infrastructure.Wrappers
             get {
 
                 return _requirementInstance.Method.Property.Name; }
+        }
+
+        public bool ReadOnly
+        {
+            get { return !CanModify; }
         }
 
         // Method definitions
@@ -111,7 +118,6 @@ namespace Infrastructure.Wrappers
             }
             
             newOverride.Create();
-            newOverride.Method = _requirementInstance.Method;
             _requirementInstance = newOverride;
         }
 
@@ -120,7 +126,6 @@ namespace Infrastructure.Wrappers
             int overrID = (int)_requirementInstance.OverriddenID;
             _requirementInstance.Delete();
             _requirementInstance = SpecificationService.GetRequirement(overrID);
-            _requirementInstance.Load();
         }
     }
 

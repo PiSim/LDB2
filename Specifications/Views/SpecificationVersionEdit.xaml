@@ -94,10 +94,16 @@
                     
                         <DataGridTemplateColumn Header="Requisito"
                                                 Width="100">
+                            <DataGridTemplateColumn.CellStyle>
+                                <Style TargetType="{x:Type DataGridCell}">
+                                    <Setter Property="IsEnabled"
+                                            Value="{Binding DataContext.EditMode, Source={x:Reference dummyElement}}"/>
+                                </Style>
+                            </DataGridTemplateColumn.CellStyle>
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <DataGrid ItemsSource="{Binding SubRequirements}"
-                                              IsEnabled="{Binding DataContext.EditMode, ElementName=RequirementGrid}"
+                                              IsEnabled="{Binding CanModify}"
                                               Name="RequiredValuesGrid"
                                               AutoGenerateColumns="False"
                                               HeadersVisibility="None"
@@ -109,15 +115,7 @@
                                               RowHeight="30">
                                         <DataGrid.Columns>
                                             <DataGridTextColumn Binding="{Binding RequiredValue}"
-                                                                Width="*">
-                                                <DataGridTextColumn.CellStyle>
-                                                    <Style TargetType="{x:Type DataGridCell}">
-                                                        <Setter Property="IsEnabled"
-                                                                Value="{Binding DataContext.CanModify, 
-                                                                                ElementName=RequiredValuesGrid}"/>
-                                                    </Style>
-                                                </DataGridTextColumn.CellStyle>
-                                            </DataGridTextColumn>
+                                                                Width="*"/>
                                         </DataGrid.Columns>
                                     </DataGrid>
                                 </DataTemplate>
@@ -149,8 +147,16 @@
 
                         <DataGridTextColumn Header="Note"
                                             Binding="{Binding Notes}"
-                                            IsReadOnly="True"
-                                            Width="100"/>
+                                            IsReadOnly="{Binding ReadOnly}"
+                                            Width="100">
+                            <DataGridTextColumn.CellStyle>
+                                <Style TargetType="{x:Type DataGridCell}">
+                                    <Setter Property="IsEnabled"
+                                            Value="{Binding DataContext.EditMode, 
+                                            Source={x:Reference dummyElement}}"/>
+                                </Style>
+                            </DataGridTextColumn.CellStyle>
+                        </DataGridTextColumn>
 
                         <DataGridTextColumn Header="Metodo"
                                             Binding="{Binding Method}"

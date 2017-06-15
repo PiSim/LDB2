@@ -28,12 +28,14 @@ namespace Infrastructure
         public static string MaterialInfoExternalCostructionRegion { get { return "MaterialInfoExternalCostructionRegion"; } }
         public static string MethodEditRegion { get { return "MethodEditRegion"; } }
         public static string MethodIssueRegion { get { return "MethodIssueRegion"; } }
+        public static string MethodIssueEditRegion { get { return "MethodIssueEditRegion"; } }
         public static string MethodReportListRegion { get { return "MethodReportListRegion"; } }
         public static string NewCalibrationFileListRegion { get { return "NewCalibrationFileListRegion"; } }
         public static string OrganizationEditRegion { get { return "OrganizationEditRegion"; } } 
         public static string ProjectBatchListRegion { get { return "ProjectBatchListRegion"; } }
         public static string ProjectReportListRegion { get { return "ProjectReportListRegion"; } }
         public static string SpecificationIssueRegion { get { return "SpecificationIssueRegion"; } }
+        public static string SpecificationIssueEditRegion { get { return "SpecificationIssueEditRegion"; } }
         public static string SpecificationReportListRegion { get { return "SpecificationReportListRegion"; } }
         public static string SpecificationVersionEditRegion { get { return "SpecificationVersionEditRegion"; } }
         public static string StatusbarRegion { get { return "StatusBarRegion"; } }

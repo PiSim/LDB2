@@ -117,6 +117,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="ViewModels\OrganizationEditViewModel.cs" />
     <Compile Include="ViewModels\OrganizationsMainViewModel.cs" />
     <Compile Include="Views\OrganizationEdit.xaml.cs">
       <DependentUpon>OrganizationEdit.xaml</DependentUpon>

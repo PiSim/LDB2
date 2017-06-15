@@ -8,6 +8,7 @@ namespace Infrastructure
 {
     public static class SpecificationViewNames
     {
+        public static string StandardIssueEdit { get { return "StandardIssueEdit"; } }
         public static string SpecificationVersionEdit { get { return "SpecificationVersionEdit"; } }
     }
 }

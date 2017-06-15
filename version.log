@@ -5,6 +5,8 @@
 -Standardizzata posizione pulsanti di servizio nelle viste
 -Eliminato pulsante "Salva" comune
 -Introdotta funzionalità Modifica/Salva in diverse viste
+-Create viste SpecificationVersionEdit e StandardIssueEdit, introdotte regioni relative
+-Corretta logica di aggiunta/Rimozione Override nelle versioni di specifica
 
 v 0.5.0 -- 07/06/2017
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -71,6 +72,18 @@ namespace DBManager.EntityExtensions
                 entities.SaveChanges();
             }
 
+        }
+
+        public static void Update(this StandardIssue entry)
+        {
+            //Updates a StandardIssue entry
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.StandardIssues.AddOrUpdate(entry);
+
+                entities.SaveChanges();
+            }
         }
     }
 }

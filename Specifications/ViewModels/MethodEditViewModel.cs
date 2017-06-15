@@ -12,19 +12,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DBManager.Services;
+using Infrastructure;
 
 namespace Specifications.ViewModels
 {
     public class MethodEditViewModel : BindableBase
     {
         private bool _editMode;
-        private DelegateCommand _addFile, 
-                                _addIssue, 
-                                _addMeasurement, 
-                                _openFile, 
-                                _removeFile, 
-                                _removeIssue, 
-                                _removeMeasurement, 
+        private DelegateCommand _addFile,
+                                _addIssue,
+                                _addMeasurement,
+                                _openFile,
+                                _removeFile,
+                                _removeIssue,
+                                _removeMeasurement,
                                 _save,
                                 _setCurrent,
                                 _startEdit;
@@ -78,7 +79,7 @@ namespace Specifications.ViewModels
                 });
 
             _addMeasurement = new DelegateCommand(
-                () => 
+                () =>
                 {
                     SubMethod tempMea = new SubMethod();
                     tempMea.Name = "Nuova Prova";
@@ -115,7 +116,7 @@ namespace Specifications.ViewModels
                 () => _selectedIssue != null);
 
             _removeMeasurement = new DelegateCommand(
-                () => 
+                () =>
                 {
                     _selectedMeasurement.Delete();
                     SelectedMeasurement = null;
@@ -123,7 +124,7 @@ namespace Specifications.ViewModels
                     _subMethodList = _methodInstance.GetSubMethods();
                     RaisePropertyChanged("Measurements");
                 },
-                () => SelectedMeasurement != null );
+                () => SelectedMeasurement != null);
 
             _save = new DelegateCommand(
                 () =>
@@ -154,12 +155,12 @@ namespace Specifications.ViewModels
         {
             get { return _addFile; }
         }
-        
+
         public DelegateCommand AddIssueCommand
         {
             get { return _addIssue; }
         }
-        
+
         public DelegateCommand AddMeasurementCommand
         {
             get { return _addMeasurement; }
@@ -213,6 +214,11 @@ namespace Specifications.ViewModels
                 RaisePropertyChanged("SpecificationList");
                 RaisePropertyChanged("ResultList");
             }
+        }
+
+        public string MethodIssueEditRegionName
+        {
+            get { return RegionNames.MethodIssueEditRegion; }
         }
 
         public IEnumerable<SubMethod> Measurements
