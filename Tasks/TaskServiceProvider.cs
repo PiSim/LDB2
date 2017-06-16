@@ -36,29 +36,12 @@ namespace Tasks
         public void UpdateTaskStatus(DBManager.Task target)
         {
             target.Load();
-            
-            if (!target.AllItemsAssigned && target.TaskItems.All(tski => tski.IsAssignedToReport))
-            {
-                target.AllItemsAssigned = true;
-                target.Update();
-            }
 
-            else
-            {
-                if (target.Reports.Any(rep => !rep.IsComplete))
-                {
-                    target.AllItemsAssigned = false;
-                    target.Update();
-                }
+            target.AllItemsAssigned = target.TaskItems.All(tski => tski.Test != null);
 
-                else
-                {
-                    target.IsComplete = true;
-                    target.EndDate = DateTime.Now.Date;
-                    target.Update();
-                    _eventAggregator.GetEvent<TaskCompleted>().Publish(target);
-                }
-            }
+            target.IsComplete = target.TaskItems.All(tski => tski.Test.IsComplete);
+
+            target.Update();
         }
 
         private void OnTaskCreationRequested(NewTaskToken token)

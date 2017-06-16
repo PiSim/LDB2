@@ -16,7 +16,7 @@ namespace DBManager.EntityExtensions
 
             using (DBEntities entities = new DBEntities())
             {
-                return entities.Tests.Where(tst => tst.reportID == entry.ID)
+                return entities.Tests.Where(tst => tst.ReportID == entry.ID)
                                     .All(tst => tst.IsComplete == true);
             }
         }
@@ -70,13 +70,13 @@ namespace DBManager.EntityExtensions
             {
                 entities.Configuration.LazyLoadingEnabled = false;
 
-                return entities.Tests.Include(tst => tst.instrument.InstrumentType)
+                return entities.Tests.Include(tst => tst.Instrument.InstrumentType)
                                     .Include(tst => tst.Method.Property)
                                     .Include(tst => tst.Method.Standard.Organization)
                                     .Include(tst => tst.MethodIssue)
                                     .Include(tst => tst.Person)
                                     .Include(tst => tst.SubTests)
-                                    .Where(tst => tst.reportID == entry.ID)
+                                    .Where(tst => tst.ReportID == entry.ID)
                                     .ToList();
             }
         }

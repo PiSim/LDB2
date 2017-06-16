@@ -21,7 +21,7 @@ namespace DBManager
             this.Reports = new HashSet<Report>();
             this.Tests = new HashSet<Test>();
         }
-
+    
         public int ID { get; set; }
         public string Issue { get; set; }
         public int StandardID { get; set; }

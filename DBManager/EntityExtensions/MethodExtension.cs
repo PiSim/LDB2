@@ -18,11 +18,16 @@ namespace DBManager.EntityExtensions
 
             using (DBEntities entities = new DBEntities())
             {
+                entities.Configuration.LazyLoadingEnabled = false;
+
                 entities.SubMethods.Add(subMethodEntity);
 
                 subMethodEntity.MethodID = entry.ID;
 
-                foreach (Requirement req in entities.Requirements.Where(req => req.MethodID == entry.ID))
+                IEnumerable<Requirement> tempReqList = entities.Requirements.Where(req => req.MethodID == entry.ID)
+                                                                            .ToList();
+
+                foreach (Requirement req in tempReqList)
                 {
                     SubRequirement tempSR = new SubRequirement();
                     tempSR.RequiredValue = "";

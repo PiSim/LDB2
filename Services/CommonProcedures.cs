@@ -30,7 +30,7 @@ namespace Services
                 IEnumerable<Test> testList = GenerateTestList(testDialog.TestList);
 
                 foreach (Test tst in testList)
-                    tst.reportID = entry.ID;
+                    tst.ReportID = entry.ID;
                 testList.CreateTests();
 
                 return true;
@@ -294,11 +294,14 @@ namespace Services
 
         public static void SetTaskItemsAssignment(IEnumerable<Test> testList, DBManager.Task taskEntry)
         {
-            foreach (Test tst in testList)
+            foreach (TaskItem tski in taskEntry.TaskItems)
             {
-                TaskItem tempItem = taskEntry.TaskItems.First(tsk => tsk.RequirementID == tst.RequirementID);
-                tempItem.IsAssignedToReport = true;
-                tempItem.TestID = tst.ID;
+                Test tempTest = testList.First(tst => tst.RequirementID == tski.RequirementID
+                                                && !tst.TaskItems.Any());
+
+                tski.IsAssignedToReport = true;
+                tski.TestID = tempTest.ID;
+
             }
 
             taskEntry.TaskItems.Update();

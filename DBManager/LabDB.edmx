@@ -2519,7 +2519,7 @@
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="MethodID" Type="Int32" Nullable="false" />
-          <Property Name="reportID" Type="Int32" Nullable="false" />
+          <Property Name="ReportID" Type="Int32" Nullable="false" />
           <Property Name="Notes" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
           <Property Name="operatorID" Type="Int32" Nullable="true" />
           <Property Name="Date" Type="DateTime" />
@@ -2529,14 +2529,14 @@
           <NavigationProperty Name="Method" Relationship="labdbModel.method_to_test" FromRole="Test" ToRole="Method" />
           <Property Name="IsComplete" Type="Boolean" Nullable="false" />
           <Property Name="instrumentID" Type="Int32" />
-          <NavigationProperty Name="instrument" Relationship="labdbModel.instrument_to_test" FromRole="Test" ToRole="instrument" />
+          <NavigationProperty Name="Instrument" Relationship="labdbModel.instrument_to_test" FromRole="Test" ToRole="instrument" />
           <Property Name="MethodIssueID" Type="Int32" />
           <NavigationProperty Name="MethodIssue" Relationship="labdbModel.method_issue_to_test" FromRole="Test" ToRole="StandardIssue" />
           <Property Name="ParentTaskItemID" Type="Int32" />
           <NavigationProperty Name="ParentTaskItem" Relationship="labdbModel.parent_task_item_to_test" FromRole="Test" ToRole="TaskItem" />
           <Property Name="RequirementID" Type="Int32" />
           <NavigationProperty Name="Requirement" Relationship="labdbModel.requirement_to_test1" FromRole="Test" ToRole="Requirement" />
-          <NavigationProperty Name="task_items1" Relationship="labdbModel.test_to_task_item" FromRole="Test" ToRole="TaskItem" />
+          <NavigationProperty Name="TaskItems" Relationship="labdbModel.test_to_task_item" FromRole="Test" ToRole="TaskItem" />
         </EntityType>
         <EntityType Name="User">
           <Key>
@@ -2882,7 +2882,7 @@
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="tests">
-              <PropertyRef Name="reportID" />
+              <PropertyRef Name="ReportID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -4607,7 +4607,7 @@
                 <ScalarProperty Name="IsComplete" ColumnName="is_complete" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="MethodID" ColumnName="methodID" />
-                <ScalarProperty Name="reportID" ColumnName="reportID" />
+                <ScalarProperty Name="ReportID" ColumnName="reportID" />
                 <ScalarProperty Name="Notes" ColumnName="notes" />
                 <ScalarProperty Name="operatorID" ColumnName="operatorID" />
                 <ScalarProperty Name="Date" ColumnName="date" />

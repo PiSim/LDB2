@@ -44,7 +44,7 @@ namespace DBManager.EntityExtensions
             {
                 entities.Configuration.LazyLoadingEnabled = false;
 
-                Test tempEntry = entities.Tests.Include(tst => tst.instrument)
+                Test tempEntry = entities.Tests.Include(tst => tst.Instrument)
                                                 .Include(tst => tst.Method.Property)
                                                 .Include(tst => tst.Method.Standard.Organization)
                                                 .Include(tst => tst.MethodIssue)
@@ -56,7 +56,7 @@ namespace DBManager.EntityExtensions
                                                 .First(tst => tst.ID == entry.ID);
 
                 entry.Date = tempEntry.Date;
-                entry.instrument = tempEntry.instrument;
+                entry.Instrument = tempEntry.Instrument;
                 entry.instrumentID = tempEntry.instrumentID;
                 entry.IsComplete = tempEntry.IsComplete;
                 entry.Method = tempEntry.Method;
@@ -69,7 +69,7 @@ namespace DBManager.EntityExtensions
                 entry.ParentTaskItemID = tempEntry.ParentTaskItemID;
                 entry.Person = tempEntry.Person;
                 entry.Report = tempEntry.Report;
-                entry.reportID = tempEntry.reportID;
+                entry.ReportID = tempEntry.ReportID;
                 entry.SubTests = tempEntry.SubTests;
             }
         }

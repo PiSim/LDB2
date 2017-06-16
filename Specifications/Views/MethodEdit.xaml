@@ -78,13 +78,16 @@
 
                     <ListView ItemsSource="{Binding Measurements}"
                               SelectedItem="{Binding SelectedMeasurement, Mode=TwoWay}"
+                              Name="TestGrid"
                               Grid.Column="0">
                         <ListView.View>
                             <GridView>
                                 <GridViewColumn Header="Nome">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
-                                            <TextBox Text="{Binding Name, Mode=TwoWay}"/>
+                                            <TextBox Text="{Binding Name, Mode=TwoWay}"
+                                                     IsEnabled="{Binding ElementName=TextGrid,
+                                                                         Path=DataContext.EditMode}"/>
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
@@ -92,7 +95,9 @@
                                 <GridViewColumn Header="UM">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
-                                            <TextBox Text="{Binding UM, Mode=TwoWay}"/>
+                                            <TextBox Text="{Binding UM, Mode=TwoWay}"
+                                                     IsEnabled="{Binding ElementName=TextGrid,
+                                                                         Path=DataContext.EditMode}"/>
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>

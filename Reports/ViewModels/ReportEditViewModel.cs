@@ -131,14 +131,19 @@ namespace Reports.ViewModels
                 {
                     _testList.Select(tiw => tiw.TestInstance)
                             .Update();
+
+                    EditMode = false;
+
                     _eventAggregator.GetEvent<ReportStatusCheckRequested>().Publish(_instance);
-                });
+                },
+                () => _editMode);
 
             _startEdit = new DelegateCommand(
                 () =>
                 {
                     EditMode = true;
-                });
+                },
+                () => !_editMode && CanModify);
         }
 
         public DelegateCommand AddFileCommand

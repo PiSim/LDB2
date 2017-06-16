@@ -7,6 +7,8 @@
 -Introdotta funzionalità Modifica/Salva in diverse viste
 -Create viste SpecificationVersionEdit e StandardIssueEdit, introdotte regioni relative
 -Corretta logica di aggiunta/Rimozione Override nelle versioni di specifica
+-Creata vista OrganizationEdit
+-Rivisto controllo stato Task
 
 v 0.5.0 -- 07/06/2017
 

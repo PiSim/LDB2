@@ -41,7 +41,7 @@ namespace Materials.ViewModels
                 {
                     EditMode = true;
                 },
-                () => CanSetModify);
+                () => CanSetModify && !_editMode);
         }
 
         public string AspectCode
@@ -121,6 +121,9 @@ namespace Materials.ViewModels
             {
                 _editMode = value;
                 RaisePropertyChanged("EditMode");
+
+                _save.RaiseCanExecuteChanged();
+                _startEdit.RaiseCanExecuteChanged();
             }
         }
 
