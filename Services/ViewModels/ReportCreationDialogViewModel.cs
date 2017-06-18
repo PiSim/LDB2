@@ -19,6 +19,7 @@ namespace Services.ViewModels
 {   
     public class ReportCreationDialogViewModel : BindableBase
     {
+        private Batch _selectedBatch;
         private ControlPlan _selectedControlPlan;
         private DBPrincipal _principal;
         private DelegateCommand<Window> _cancel, _confirm;
@@ -135,6 +136,15 @@ namespace Services.ViewModels
         public Report ReportInstance
         {
             get { return _reportInstance; }
+        }
+
+        public Batch SelectedBatch
+        {
+            get { return _selectedBatch; }
+            set
+            {
+                _selectedBatch = value;
+            }
         }
 
         public ControlPlan SelectedControlPlan
