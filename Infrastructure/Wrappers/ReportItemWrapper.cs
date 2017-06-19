@@ -18,17 +18,6 @@ namespace Infrastructure.Wrappers
             _instance = instance;
             _isSelected = false;
         }
-
-        public string Method
-        {
-            get { return _instance.Method.Standard.Name; }
-        }
-
-        public Requirement RequirementInstance
-        {
-            get { return _instance; }
-        }
-
         public bool IsSelected
         {
             get { return _isSelected; }
@@ -39,9 +28,38 @@ namespace Infrastructure.Wrappers
             }
         }
 
+        public string Method
+        {
+            get { return _instance.Method.Standard.Name; }
+        }
+
+
+        public string Notes
+        {
+            get { return _instance.Description; }
+            set
+            {
+                _instance.Description = value;
+            }
+        }
+
         public string Property
         {
             get { return _instance.Method.Property.Name; }
+        }
+
+
+        public Requirement RequirementInstance
+        {
+            get { return _instance; }
+        }
+
+        public IEnumerable<SubRequirement> SubRequirements
+        {
+            get
+            {
+                return _instance.SubRequirements.ToList();
+            }
         }
     }
 }

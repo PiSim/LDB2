@@ -25,7 +25,9 @@ namespace Services.ViewModels
         private DelegateCommand<Window> _cancel, _confirm;
         private IEnumerable<ISelectableRequirement> _requirementList;
         private IEnumerable<Person> _techList;
+        private IEnumerable<Specification> _specificationList;
         private Int32 _number;
+        private Material _material;
         private Person _author;
         private Report _reportInstance;
         private Specification _selectedSpecification;
@@ -39,6 +41,7 @@ namespace Services.ViewModels
             _techList = PeopleService.GetPeople(PersonRoleNames.MaterialTestingTech);
             _author = _techList.First(prs => prs.ID == _principal.CurrentPerson.ID);
             _requirementList = new List<ISelectableRequirement>();
+            _specificationList = SpecificationService.GetSpecifications();
 
             _confirm = new DelegateCommand<Window>(
                 parent => {
@@ -86,6 +89,8 @@ namespace Services.ViewModels
             set
             {
                 _batchNumber = value;
+
+                SelectedBatch = MaterialService.GetBatch(_batchNumber);
                 RaisePropertyChanged("BatchNumber");
             }
         }
@@ -117,11 +122,30 @@ namespace Services.ViewModels
             }
         }
         
+        public string ExternalConstruction
+        {
+            get
+            {
+                if (_material == null || _material.Construction.ExternalConstruction == null)
+                    return null;
+
+                return _material.Construction.ExternalConstruction.Name;
+            }
+        }
+
         public bool IsValidInput
         {
             get { return true; }
         }
         
+        public Material Material
+        {
+            get
+            {
+                return _material;
+            }
+        }
+
         public Int32 Number
         {
             get { return _number; }
@@ -144,6 +168,17 @@ namespace Services.ViewModels
             set
             {
                 _selectedBatch = value;
+                _material = _selectedBatch.GetMaterial();
+
+                if (_material != null && _material.Construction.ExternalConstruction != null)
+                {
+                    SpecificationVersion tempVersion = SpecificationService.GetSpecificationVersion((int)_material.Construction.ExternalConstruction.DefaultSpecVersionID);
+                    SelectedSpecification = SpecificationList.FirstOrDefault(spec => spec.ID == tempVersion.SpecificationID);
+                    SelectedVersion = VersionList.First(vers => vers.ID == tempVersion.ID);
+                }
+
+                RaisePropertyChanged("ExternalConstruction");
+                RaisePropertyChanged("Material");
             }
         }
 
@@ -170,7 +205,8 @@ namespace Services.ViewModels
             {
                 _selectedSpecification = value;
                 _selectedSpecification.Load();
-                
+
+                RaisePropertyChanged("SelectedSpecification");
                 RaisePropertyChanged("VersionList");
                 RaisePropertyChanged("ControlPlanList");
 
@@ -205,7 +241,7 @@ namespace Services.ViewModels
         
         public IEnumerable<Specification> SpecificationList
         {
-            get { return SpecificationService.GetSpecifications(); }
+            get { return _specificationList; }
         }
         
         public IEnumerable<SpecificationVersion> VersionList
@@ -224,7 +260,7 @@ namespace Services.ViewModels
         {
             get
             {
-                return PeopleService.GetPeople(PersonRoleNames.MaterialTestingTech);
+                return _techList;
             }
         }
     }

@@ -17,12 +17,14 @@ namespace Tasks.ViewModels
 {
     public class TaskCreationDialogViewModel : BindableBase
     {
+        private Batch _selectedBatch;
         private ControlPlan _selectedControlPlan;
         private DBPrincipal _principal;
         private DelegateCommand<Window> _cancel, _confirm;
         private IEnumerable<Person> _leaderList;
         private IEnumerable<Specification> _specificationList;
         private IEnumerable<ReportItemWrapper> _requirementList;
+        private Material _material;
         private Person _requester;
         private Specification _selectedSpecification;
         private SpecificationVersion _selectedVersion;
@@ -35,7 +37,9 @@ namespace Tasks.ViewModels
 
             _leaderList = PeopleService.GetPeople(PersonRoleNames.ProjectLeader);
             _specificationList = SpecificationService.GetSpecifications();
-            
+
+            _requester = _leaderList.FirstOrDefault(prs => prs.ID == _principal.CurrentPerson.ID);
+
             _cancel = new DelegateCommand<Window>(
                 parent => 
                 {
@@ -76,7 +80,11 @@ namespace Tasks.ViewModels
         public string BatchNumber
         {
             get { return _batchNumber; }
-            set { _batchNumber = value; }
+            set
+            {
+                _batchNumber = value;
+                SelectedBatch = MaterialService.GetBatch(_batchNumber);
+            }
         }
 
         public DelegateCommand<Window> CancelCommand
@@ -101,6 +109,18 @@ namespace Tasks.ViewModels
             }
         }
 
+        public string ExternalConstruction
+        {
+            get
+            {
+                if (_material == null || _material.Construction.ExternalConstruction == null)
+                    return null;
+
+                return _material.Construction.ExternalConstruction.Name;
+            }
+        }
+
+
         public bool IsSpecificationSelected
         {
             get
@@ -119,6 +139,14 @@ namespace Tasks.ViewModels
             get
             {
                 return _leaderList;
+            }
+        }
+
+        public Material Material
+        {
+            get
+            {
+                return _material;
             }
         }
 
@@ -144,6 +172,26 @@ namespace Tasks.ViewModels
         public IEnumerable<ReportItemWrapper> RequirementList
         {
             get { return _requirementList; }
+        }
+
+        public Batch SelectedBatch
+        {
+            get { return _selectedBatch; }
+            set
+            {
+                _selectedBatch = value;
+                _material = _selectedBatch.GetMaterial();
+
+                if (_material != null && _material.Construction.ExternalConstruction != null)
+                {
+                    SpecificationVersion tempVersion = SpecificationService.GetSpecificationVersion((int)_material.Construction.ExternalConstruction.DefaultSpecVersionID);
+                    SelectedSpecification = SpecificationList.FirstOrDefault(spec => spec.ID == tempVersion.SpecificationID);
+                    SelectedVersion = VersionList.First(vers => vers.ID == tempVersion.ID);
+                }
+
+                RaisePropertyChanged("ExternalConstruction");
+                RaisePropertyChanged("Material");
+            }
         }
 
         public ControlPlan SelectedControlPlan

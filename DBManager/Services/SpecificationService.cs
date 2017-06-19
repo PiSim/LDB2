@@ -20,6 +20,20 @@ namespace DBManager.Services
             }
         }
 
+        public static Std GetStandard(string name)
+        {
+            // returns Standard entity with the provided name or null if none is found
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.Stds.Include(std => std.Organization)
+                                    .Include(std => std.CurrentIssue)
+                                    .FirstOrDefault(std => std.Name == name);
+            }
+        }
+
         #region Operations for ControlPlans entities
 
         public static ControlPlan GetControlPlan(int ID)
@@ -161,6 +175,7 @@ namespace DBManager.Services
                 return entities.Specifications.Include(spec => spec.Standard)
                                                 .Include(spec => spec.Standard.CurrentIssue)
                                                 .Include(spec => spec.Standard.Organization)
+                                                .Where(spec => true)
                                                 .OrderBy(spec => spec.Standard.Name)
                                                 .ToList();
             }
@@ -168,24 +183,6 @@ namespace DBManager.Services
 
         #endregion
         
-
-        #region Operations for Std entities
-
-        public static Std GetStandard(string name)
-        {
-            // returns Standard entity with the provided name or null if none is found
-
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.Configuration.LazyLoadingEnabled = false;
-
-                return entities.Stds.Include(std => std.Organization)
-                                    .Include(std => std.CurrentIssue)
-                                    .FirstOrDefault(std => std.Name == name);
-            }
-        }
-
-        #endregion
         
         public static void UpdateRequirements(IEnumerable<Requirement> requirementEntries)
         {
@@ -215,6 +212,18 @@ namespace DBManager.Services
 
                 entities.SaveChanges();
             }
+        }
+
+        public static SpecificationVersion GetSpecificationVersion(int ID)
+        {
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.SpecificationVersions.FirstOrDefault(specv => specv.ID == ID);
+            }
+
         }
     }
 }

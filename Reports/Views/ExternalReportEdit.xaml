@@ -118,6 +118,7 @@
                                    Grid.Row="0"
                                    Margin="5"/>
                             <CheckBox IsChecked="{Binding RequestDone, Mode=TwoWay}"
+                                      IsEnabled="{Binding EditMode}"
                                       Grid.Column="1"
                                       Grid.Row="0"
                                       Margin="5"/>
@@ -128,6 +129,7 @@
                                    Margin="5"/>
 
                             <CheckBox IsChecked="{Binding SamplesSent, Mode=TwoWay}"
+                                      IsEnabled="{Binding EditMode}"
                                       Grid.Column="1"
                                       Grid.Row="1"
                                       Margin="5"/>
@@ -138,6 +140,7 @@
                                    Margin="5"/>
 
                             <CheckBox IsChecked="{Binding ReportReceived, Mode=TwoWay}"
+                                      IsEnabled="{Binding EditMode}"
                                       Grid.Column="1"
                                       Grid.Row="2"
                                       Margin="5"/>

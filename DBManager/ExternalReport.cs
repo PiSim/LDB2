@@ -22,7 +22,7 @@ namespace DBManager
             this.Batches = new HashSet<Batch>();
         }
     
-        public int ID { get; private set; }
+        public int ID { get; set; }
         public string Description { get; set; }
         public string ExternalNumber { get; set; }
         public int InternalNumber { get; set; }

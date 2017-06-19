@@ -6,39 +6,36 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Controls.ViewModels
 {
     public class BatchPickerDialogViewModel : BindableBase
     {
-        private DelegateCommand _cancel, _confirm;
+        private DelegateCommand<Window> _cancel, _confirm;
         private string _number;
-        private Views.BatchPickerDialog _parentDialog;
         
-        public BatchPickerDialogViewModel(Views.BatchPickerDialog parentDialog) : base()
-        {
-            _parentDialog = parentDialog;
-            
-            _cancel = new DelegateCommand(
-                () => 
+        public BatchPickerDialogViewModel() : base()
+        {            
+            _cancel = new DelegateCommand<Window>(
+                parentDialog => 
                 {                    
-                    _parentDialog.DialogResult = false;
+                    parentDialog.DialogResult = false;
                 });
                 
-            _confirm = new DelegateCommand(
-                () => 
+            _confirm = new DelegateCommand<Window>(
+                parentDialog => 
                 {
-                    _parentDialog.BatchNumber = Number;
-                    _parentDialog.DialogResult = true;
+                    parentDialog.DialogResult = true;
                 });
         }
         
-        public DelegateCommand CancelCommand
+        public DelegateCommand<Window> CancelCommand
         {
             get { return _cancel; }
         }
         
-        public DelegateCommand ConfirmCommand
+        public DelegateCommand<Window> ConfirmCommand
         {
             get { return _confirm; }
         }

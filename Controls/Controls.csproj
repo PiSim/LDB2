@@ -137,6 +137,9 @@
     <Compile Include="Views\FileListControl.xaml.cs">
       <DependentUpon>FileListControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\MaterialCodeBox.xaml.cs">
+      <DependentUpon>MaterialCodeBox.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MaterialCreationDialog.xaml.cs">
       <DependentUpon>MaterialCreationDialog.xaml</DependentUpon>
     </Compile>
@@ -145,6 +148,9 @@
     </Compile>
     <Compile Include="Views\ProjectPickerDialog.xaml.cs">
       <DependentUpon>ProjectPickerDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\RequirementGrid.xaml.cs">
+      <DependentUpon>RequirementGrid.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SpecificationSelector.xaml.cs">
       <DependentUpon>SpecificationSelector.xaml</DependentUpon>
@@ -201,6 +207,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\MaterialCodeBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\MaterialCreationDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -212,6 +222,10 @@
     <Page Include="Views\ProjectPickerDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\RequirementGrid.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\SpecificationSelector.xaml">
       <SubType>Designer</SubType>

@@ -49,7 +49,8 @@ namespace Reports.ViewModels
                     Batch tempBatch = CommonProcedures.StartBatchSelection();
                     if (tempBatch != null)
                     {
-                        _instance.Batches.Add(tempBatch);
+                        _instance.AddBatch(tempBatch);
+                        RaisePropertyChanged("BatchList");
                     }
                 },
                 () => _instance != null);
@@ -106,7 +107,7 @@ namespace Reports.ViewModels
             _removeBatch = new DelegateCommand(
                 () =>
                 {
-                    _selectedFile.Delete();
+                    _selectedBatch.Delete();
                     SelectedBatch = null;
                 },
                 () => _selectedBatch != null);
@@ -131,7 +132,8 @@ namespace Reports.ViewModels
                 () =>
                 {
                     EditMode = true;
-                });
+                },
+                () => !_editMode && CanModify);
         }
 
         public DelegateCommand AddBatchCommand
@@ -151,7 +153,7 @@ namespace Reports.ViewModels
         
         public IEnumerable<Batch> BatchList
         {
-            get { return _instance.Batches; }
+            get { return _instance.GetBatches(); }
         }
 
         public string BatchNumber
@@ -208,6 +210,7 @@ namespace Reports.ViewModels
                 _editMode = value;
                 RaisePropertyChanged("EditMode");
                 _save.RaiseCanExecuteChanged();
+                _startEdit.RaiseCanExecuteChanged();
             }
         }
 
@@ -233,7 +236,10 @@ namespace Reports.ViewModels
                 
                 SelectedBatch = null;
                 SelectedFile = null;
-                
+
+                _addBatch.RaiseCanExecuteChanged();
+                _removeBatch.RaiseCanExecuteChanged();
+
                 RaisePropertyChanged("BatchList");
                 RaisePropertyChanged("Currency");
                 RaisePropertyChanged("Description");
@@ -475,7 +481,7 @@ namespace Reports.ViewModels
             }
         }
 
-        public DelegateCommand StartEdit
+        public DelegateCommand StartEditCommand
         {
             get { return _startEdit; }
         }
