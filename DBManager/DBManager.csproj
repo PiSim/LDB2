@@ -169,6 +169,7 @@
     <Compile Include="EntityExtensions\TaskExtension.cs" />
     <Compile Include="EntityExtensions\TaskItemExtension.cs" />
     <Compile Include="EntityExtensions\TestExtension.cs" />
+    <Compile Include="EntityExtensions\UserExtension.cs" />
     <Compile Include="PersonRoleNames.cs" />
     <Compile Include="Services\DataService.cs" />
     <Compile Include="DBManagerModule.cs" />

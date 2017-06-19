@@ -2,6 +2,8 @@ namespace Infrastructure
 {
     public class RegionNames
     {
+        public static string AdminUserEditRegion { get { return "AdminUserEditRegion"; } }
+        public static string AdminUserMainRegion { get { return "AdminUserMainRegion"; } }
         public static string AspectDetailBatchListRegion { get { return "AspectDetailBatchListRegion"; } }
         public static string AspectDetailRegion { get { return "AspectDetailRegion"; } }
         public static string BatchProjectDetailsRegion { get { return "BatchProjectDetailsRegion"; } }

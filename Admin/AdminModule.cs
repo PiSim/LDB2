@@ -22,16 +22,20 @@ namespace Admin
             _container.RegisterType<AdminServiceProvider>(new ContainerControlledLifetimeManager());
             _container.Resolve<AdminServiceProvider>();
 
-            _container.RegisterType<Object, Views.AdminMain>
-                (AdminViewNames.AdminMainView);
+            _container.RegisterType<Object, Views.AdminMain>(AdminViewNames.AdminMainView);
+            _container.RegisterType<Object, Views.UserEdit>(AdminViewNames.UserEditView);
 
             _container.RegisterType<ViewModels.AdminMainViewModel>();
             _container.RegisterType<ViewModels.NewUserDialogViewModel>();
+            _container.RegisterType<ViewModels.UserEditViewModel>();
+            _container.RegisterType<ViewModels.UserMainViewModel>();
 
             _container.RegisterType<Views.NewUserDialog>();
 
             _regionManager.RegisterViewWithRegion(RegionNames.MainNavigationRegion, 
                                                     typeof(Views.AdminNavigationItem));
+            _regionManager.RegisterViewWithRegion(RegionNames.AdminUserMainRegion,
+                                                    typeof(Views.UserMain));
         }
     }
 }

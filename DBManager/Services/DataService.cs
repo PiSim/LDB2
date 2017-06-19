@@ -88,5 +88,17 @@ namespace DBManager
                                             .ToList();
             }
         }
+
+        public static IEnumerable<User> GetUsers()
+        {
+            // Returns all User entities
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.Users.ToList();
+            }
+        }
     }
 }

@@ -119,9 +119,10 @@
     </Compile>
     <Compile Include="ViewModels\AdminMainViewModel.cs" />
     <Compile Include="ViewModels\NewUserDialogViewModel.cs" />
+    <Compile Include="ViewModels\UserEditViewModel.cs" />
     <Compile Include="ViewModels\UserMainViewModel.cs" />
-    <Compile Include="Views\AdminMainView.xaml.cs">
-      <DependentUpon>AdminMainView.xaml</DependentUpon>
+    <Compile Include="Views\AdminMain.xaml.cs">
+      <DependentUpon>AdminMain.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\AdminNavigationItem.xaml.cs">
       <DependentUpon>AdminNavigationItem.xaml</DependentUpon>
@@ -129,8 +130,11 @@
     <Compile Include="Views\NewUserDialog.xaml.cs">
       <DependentUpon>NewUserDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\UserMainView.xaml.cs">
-      <DependentUpon>UserMainView.xaml</DependentUpon>
+    <Compile Include="Views\UserEdit.xaml.cs">
+      <DependentUpon>UserEdit.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserMain.xaml.cs">
+      <DependentUpon>UserMain.xaml</DependentUpon>
     </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -168,7 +172,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Views\AdminMainView.xaml">
+    <Page Include="Views\AdminMain.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -180,7 +184,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\UserMainView.xaml">
+    <Page Include="Views\UserEdit.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UserMain.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

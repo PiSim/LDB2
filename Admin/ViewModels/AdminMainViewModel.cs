@@ -1,5 +1,6 @@
 ﻿using DBManager;
 using DBManager.Services;
+using Infrastructure;
 using Infrastructure.Events;
 using Microsoft.Practices.Unity;
 using Prism.Commands;
@@ -53,6 +54,11 @@ namespace Admin.ViewModels
             _runMethod = new DelegateCommand(
                 () =>
                 {} );
+        }
+
+        public string AdminUserMainRegionName
+        {
+            get { return RegionNames.AdminUserMainRegion; }
         }
 
         public string Name

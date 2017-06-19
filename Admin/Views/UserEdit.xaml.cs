@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Practices.Prism.Mvvm;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,11 +17,11 @@ using System.Windows.Shapes;
 namespace Admin.Views
 {
     /// <summary>
-    /// Interaction logic for UserMainView.xaml
+    /// Interaction logic for UserEdit.xaml
     /// </summary>
-    public partial class UserMainView : UserControl
+    public partial class UserEdit : UserControl, IView
     {
-        public UserMainView()
+        public UserEdit()
         {
             InitializeComponent();
         }
