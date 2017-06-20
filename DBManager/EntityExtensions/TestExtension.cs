@@ -35,6 +35,18 @@ namespace DBManager.EntityExtensions
             }
         }
 
+        public static TaskItem GetTaskItem(this Test entry)
+        {
+            // Returns the task item that originated a Test entry, or null if one doesn't exist
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.TaskItems.FirstOrDefault(tski => tski.TestID == entry.ID);
+            }
+        }
+
         public static void Load(this Test entry)
         {
             if (entry == null)
@@ -48,8 +60,6 @@ namespace DBManager.EntityExtensions
                                                 .Include(tst => tst.Method.Property)
                                                 .Include(tst => tst.Method.Standard.Organization)
                                                 .Include(tst => tst.MethodIssue)
-                                                .Include(tst => tst.ParentTaskItem.Requirement)
-                                                .Include(tst => tst.ParentTaskItem.Task)
                                                 .Include(tst => tst.Person)
                                                 .Include(tst => tst.Report)
                                                 .Include(tst => tst.SubTests)
@@ -65,8 +75,6 @@ namespace DBManager.EntityExtensions
                 entry.MethodIssueID = tempEntry.MethodIssueID;
                 entry.Notes = tempEntry.Notes;
                 entry.operatorID = tempEntry.operatorID;
-                entry.ParentTaskItem = tempEntry.ParentTaskItem;
-                entry.ParentTaskItemID = tempEntry.ParentTaskItemID;
                 entry.Person = tempEntry.Person;
                 entry.Report = tempEntry.Report;
                 entry.ReportID = tempEntry.ReportID;

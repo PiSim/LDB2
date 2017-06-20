@@ -153,7 +153,6 @@ namespace Services
                 tempTest.MethodIssueID = req.TaskItemInstance.Method.Standard.CurrentIssueID;
 
                 tempTest.Notes = req.TaskItemInstance.Description;
-                tempTest.ParentTaskItemID = req.TaskItemInstance.ID;
                 tempTest.RequirementID = req.TaskItemInstance.RequirementID;
 
                 foreach (SubTaskItem subItem in req.TaskItemInstance.SubTaskItems)

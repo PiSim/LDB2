@@ -38,7 +38,7 @@
                     <GridViewColumn Header="Progetto" DisplayMemberBinding="{Binding Batch.Material.Construction.Project.Name}"/>
                     <GridViewColumn Header="Materiale"
                                     DisplayMemberBinding="{Binding Batch.Material.Construction.Type.Code}"/>
-                    <GridViewColumn Header="Linea"
+                    <GridViewColumn Header="Riga"
                                     DisplayMemberBinding="{Binding Batch.Material.Construction.Line}"/>
                     <GridViewColumn Header="Aspetto"
                                     DisplayMemberBinding="{Binding Batch.Material.Construction.Aspect.Code}"/>

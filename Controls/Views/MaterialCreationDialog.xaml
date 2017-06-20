@@ -29,7 +29,7 @@
                  Grid.Column="0"
                  Grid.Row="1"
                  Margin="5"/>
-        <Label Content="Linea"
+        <Label Content="Riga"
                Grid.Column="1"
                Grid.Row="0"
                Margin="5"/>

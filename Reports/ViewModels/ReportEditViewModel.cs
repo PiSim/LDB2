@@ -60,7 +60,8 @@ namespace Reports.ViewModels
 
                         RaisePropertyChanged("FileList");
                     }
-                });
+                },
+                () => CanModify);
 
             _addTests = new DelegateCommand(
                 () =>
@@ -71,7 +72,8 @@ namespace Reports.ViewModels
                         _eventAggregator.GetEvent<ReportStatusCheckRequested>()
                                         .Publish(_instance);
                     }
-                });
+                },
+                () => CanModify);
 
             _generateRawDataSheet = new DelegateCommand(
                 () =>
@@ -101,22 +103,21 @@ namespace Reports.ViewModels
 
                     RaisePropertyChanged("FileList");
                 },
-                () => _selectedFile != null);
+                () => CanModify && _selectedFile != null);
 
             _removeTest = new DelegateCommand<Test>(
                 testItem =>
                 {
-                    testItem.Load();
-                    TaskItem tempTaskItem = testItem.ParentTaskItem;
-
+                    TaskItem tempTaskItem = testItem.GetTaskItem();
                     testItem.Delete();
 
                     if (tempTaskItem != null)
                     {
+                        tempTaskItem = TaskService.GetTaskItem(tempTaskItem.ID);
                         tempTaskItem.IsAssignedToReport = false;
                         tempTaskItem.Update();
                         _eventAggregator.GetEvent<TaskStatusCheckRequested>()
-                                        .Publish(tempTaskItem.Task);
+                                        .Publish(TaskService.GetTask(tempTaskItem.TaskID));
                     }
 
                     _eventAggregator.GetEvent<ReportStatusCheckRequested>()
@@ -124,7 +125,8 @@ namespace Reports.ViewModels
 
                     TestList = new List<TestWrapper>(_instance.GetTests().Select(tst => new TestWrapper(tst)));
 
-                });
+                },
+                testItem => CanModify);
 
             _save = new DelegateCommand(
                 () =>
@@ -215,6 +217,10 @@ namespace Reports.ViewModels
             {
                 _editMode = value;
                 RaisePropertyChanged("EditMode");
+                RaisePropertyChanged("ReadOnlyMode");
+
+                _save.RaiseCanExecuteChanged();
+                _startEdit.RaiseCanExecuteChanged();
             }
         }
 
@@ -240,6 +246,12 @@ namespace Reports.ViewModels
                 _instance.Load();
 
                 _testList = new List<TestWrapper>(_instance.GetTests().Select(tst => new TestWrapper(tst)));
+
+                _addFile.RaiseCanExecuteChanged();
+                _addTests.RaiseCanExecuteChanged();
+                _removeFile.RaiseCanExecuteChanged();
+                _removeTest.RaiseCanExecuteChanged();
+                _startEdit.RaiseCanExecuteChanged();
 
                 RaisePropertyChanged("BatchNumber");
                 RaisePropertyChanged("CanModify");
@@ -295,6 +307,11 @@ namespace Reports.ViewModels
                     return null;
                 }
             }
+        }
+
+        public bool ReadOnlyMode
+        {
+            get { return !EditMode; }
         }
 
         public DelegateCommand RemoveFileCommand

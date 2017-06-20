@@ -56,8 +56,9 @@ namespace DBManager.EntityExtensions
                                                 .Include(tsk => tsk.SpecificationVersion.Specification.Standard.CurrentIssue)
                                                 .Include(tsk => tsk.SpecificationVersion.Specification.Standard.Organization)
                                                 .Include(tsk => tsk.TaskItems
-                                                .Select(tski => tski.Tests
-                                                .Select(tst => tst.Report)))
+                                                .Select(tski => tski.SubTaskItems))
+                                                .Include(tsk => tsk.TaskItems
+                                                .Select(tski => tski.Test.Report))
                                                 .Include(tsk => tsk.TaskItems
                                                 .Select(tski => tski.Requirement.Method.Standard))
                                                 .Include(tsk => tsk.TaskItems

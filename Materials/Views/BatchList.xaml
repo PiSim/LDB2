@@ -15,7 +15,7 @@
                                     DisplayMemberBinding="{Binding Path=Number}"/>
                     <GridViewColumn Header="Tipo"
                                     DisplayMemberBinding="{Binding Path=Material.Construction.Type.Code}"/>
-                    <GridViewColumn Header="Linea"
+                    <GridViewColumn Header="Riga"
                                     DisplayMemberBinding="{Binding Path=Material.Construction.Line}"/>
                     <GridViewColumn Header="Aspetto"
                                     DisplayMemberBinding="{Binding Path=Material.Construction.Aspect.Code}"/>

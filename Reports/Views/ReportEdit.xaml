@@ -21,6 +21,9 @@
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
 
+        <!-- Invisible FrameworkElement only used as reference to access DataContext-->
+        <FrameworkElement x:Name="dummyElement" Visibility="Collapsed"/>
+
         <StackPanel Orientation="Horizontal"
                     Grid.Column="0"
                     Grid.ColumnSpan="3">
@@ -118,7 +121,7 @@
                    Grid.Row="5"
                    Margin="5,0,5,0"/>
             <TextBox Text="{Binding Description, Mode=TwoWay}"
-                     IsEnabled="{Binding CanModify}"
+                     IsEnabled="{Binding EditMode}"
                      Grid.Column="1"
                      Grid.Row="5"
                      Margin="5"/>
@@ -133,7 +136,7 @@
                   Margin="5,0,5,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="90"/>
-                    <ColumnDefinition Width="45"/>
+                    <ColumnDefinition Width="50"/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
@@ -157,7 +160,7 @@
                        Grid.Row="0"
                        Margin="5"/>
 
-                <Label Content="Linea:"
+                <Label Content="Riga:"
                        Grid.Column="0"
                        Grid.Row="1"
                        Margin="5,0,5,0"/>
@@ -242,6 +245,7 @@
                             <DataGrid ItemsSource="{Binding SubTests}"
                                     AutoGenerateColumns="False"
                                     IsEnabled="{Binding DataContext.CanModify, RelativeSource={RelativeSource AncestorType=DataGridCell}}"
+                                    IsReadOnly="{Binding DataContext.ReadOnlyMode, Source={x:Reference dummyElement}}"
                                     HeadersVisibility="None"
                                     CanUserAddRows="False"
                                     CanUserDeleteRows="False"
@@ -251,7 +255,7 @@
                                     RowHeight="30">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Binding="{Binding Result}"
-                                                    Width="*"/>
+                                                        Width="*"/>
                                 </DataGrid.Columns>
                             </DataGrid>
                         </DataTemplate>
@@ -323,6 +327,7 @@
 
                 <DataGridCheckBoxColumn Header="Completo"
                                         Binding="{Binding IsComplete, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                        IsReadOnly="{Binding DataContext.ReadOnlyMode, Source={x:Reference dummyElement}}"
                                         Width="70">
                     <DataGridCheckBoxColumn.CellStyle>
                         <Style TargetType="DataGridCell">
@@ -335,6 +340,9 @@
                         <Style TargetType="{x:Type CheckBox}">
                             <Setter Property="HorizontalAlignment"
                                     Value="Center"/>
+                            <Setter Property="IsEnabled"
+                                    Value="{Binding DataContext.EditMode,
+                                                    Source={x:Reference dummyElement}}"/>
                             <Setter Property="VerticalAlignment"
                                     Value="Center"/>
                         </Style>
@@ -354,6 +362,13 @@
 
                 <DataGridTemplateColumn Width="50"
                                         CanUserResize="False">
+                    <DataGridTemplateColumn.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Setter Property="IsEnabled"
+                                    Value="{Binding Source={x:Reference dummyElement},
+                                                    Path=DataContext.CanModify}"/>
+                        </Style>
+                    </DataGridTemplateColumn.CellStyle>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Button Content="Elimina"

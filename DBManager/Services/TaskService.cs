@@ -11,6 +11,30 @@ namespace DBManager.Services
     {
         #region Operations for Task entities
 
+        public static TaskItem GetTaskItem(int ID)
+        {
+            // Returns the Task Item with the given ID
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.TaskItems.FirstOrDefault(tski => tski.ID == ID);
+            }
+        }
+
+
+        public static Task GetTask(int ID)
+        {
+            // Returns the Task Entry with the given ID, or null if none is found
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.Tasks.FirstOrDefault(tsk => tsk.ID == ID);
+            }
+        }
 
         public static IEnumerable<Task> GetTasks(bool includeComplete = true,
                                                 bool includeAssigned = true)

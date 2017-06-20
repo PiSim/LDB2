@@ -183,7 +183,7 @@ v 0.3.6 -- 03/01/2017
 v 0.3.5 -- 17/12/2016
 
 -Definite classi DBConstruction e DBExternalConstruction e relative tabelle
--Migrati dati relativi a tipo, linea, aspetto e progetto dal materiale alla construction
+-Migrati dati relativi a tipo, Riga, aspetto e progetto dal materiale alla construction
 -Rimossa completamente la selezione progetto in entrata rotoli e creazione Report
 -Trasferito il metodo StartReportEdit alla superclasse ViewModelBase
 -Migliorate le viste di visualizzazione di Batch e Report e di modifica Report

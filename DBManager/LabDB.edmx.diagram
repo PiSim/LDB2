@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="9fa1cdb38a7949d89850433ccf2fcd72" Name="Diagram1" ZoomLevel="33" ShowGrid="false">
+      <Diagram DiagramId="9fa1cdb38a7949d89850433ccf2fcd72" Name="Diagram1" ZoomLevel="24" ShowGrid="false">
         <EntityTypeShape EntityType="labdbModel.Aspect" Width="1.5" PointX="20.125" PointY="29.375" IsExpanded="true" />
         <EntityTypeShape EntityType="labdbModel.BatchFile" Width="1.5" PointX="30.875" PointY="16.875" IsExpanded="true" />
         <EntityTypeShape EntityType="labdbModel.Batch" Width="1.5" PointX="30.875" PointY="13.25" IsExpanded="true" />
@@ -136,8 +136,17 @@
         <AssociationConnector Association="labdbModel.default_spec_version_to_ex_construction" />
         <AssociationConnector Association="labdbModel.external_report_method_mappings" />
         <AssociationConnector Association="labdbModel.external_report_batch_mapping" />
-        <AssociationConnector Association="labdbModel.parent_task_item_to_test" />
-        <AssociationConnector Association="labdbModel.requirement_to_test1" />
+        <AssociationConnector Association="labdbModel.requirement_to_test1" ManuallyRouted="true" >
+          <ConnectorPoint PointX="14.640959038461539" PointY="10.970602213541666" />
+          <ConnectorPoint PointX="14.640959038461539" PointY="13.64463141613458" />
+          <ConnectorPoint PointX="14.161460833333335" PointY="13.64463141613458" />
+          <ConnectorPoint PointX="13.994794166666667" PointY="13.64463141613458" />
+          <ConnectorPoint PointX="13.677083333333334" PointY="13.64463141613458" />
+          <ConnectorPoint PointX="13.510416666666666" PointY="13.64463141613458" />
+          <ConnectorPoint PointX="12.369016482692308" PointY="13.64463141613458" />
+          <ConnectorPoint PointX="12.369016482692308" PointY="13.484375" />
+          <ConnectorPoint PointX="11.25" PointY="13.484375" />
+        </AssociationConnector>
         <AssociationConnector Association="labdbModel.sub_requirement_to_sub_test" />
         <AssociationConnector Association="labdbModel.test_to_task_item" />
         <EntityTypeShape EntityType="labdbModel.SubTaskItem" Width="1.5" PointX="18.75" PointY="2" />

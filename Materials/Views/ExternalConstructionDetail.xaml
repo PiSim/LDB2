@@ -141,7 +141,7 @@
                                 <GridView>
                                     <GridViewColumn Header="Tipo" 
                                                     DisplayMemberBinding="{Binding Path=Type.Code}"/>
-                                    <GridViewColumn Header="Linea" 
+                                    <GridViewColumn Header="Riga" 
                                                     DisplayMemberBinding="{Binding Path=Line}"/>
                                     <GridViewColumn Header="Aspetto" 
                                                     DisplayMemberBinding="{Binding Path=Aspect.Code}"/>
@@ -163,7 +163,7 @@
                                 <GridView>
                                     <GridViewColumn Header="Tipo" 
                                                     DisplayMemberBinding="{Binding Path=Type.Code}"/>
-                                    <GridViewColumn Header="Linea" 
+                                    <GridViewColumn Header="Riga" 
                                                     DisplayMemberBinding="{Binding Path=Line}"/>
                                     <GridViewColumn Header="Aspetto" 
                                                     DisplayMemberBinding="{Binding Path=Aspect.Code}"/>

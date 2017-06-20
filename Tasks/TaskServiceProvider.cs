@@ -39,7 +39,11 @@ namespace Tasks
 
             target.AllItemsAssigned = target.TaskItems.All(tski => tski.Test != null);
 
-            target.IsComplete = target.TaskItems.All(tski => tski.Test.IsComplete);
+            if (target.AllItemsAssigned)
+                target.IsComplete = target.TaskItems.All(tski => tski.Test.IsComplete);
+
+            else
+                target.IsComplete = false;
 
             target.Update();
         }

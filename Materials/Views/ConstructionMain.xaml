@@ -27,7 +27,7 @@
                 <GridView>
                     <GridViewColumn Header="Tipo"
                                     DisplayMemberBinding="{Binding Type.Code}"/>
-                    <GridViewColumn Header="Linea"
+                    <GridViewColumn Header="Riga"
                                     DisplayMemberBinding="{Binding Line}"/>
                     <GridViewColumn Header="Aspetto"
                                     DisplayMemberBinding="{Binding Aspect.Code}"/>
