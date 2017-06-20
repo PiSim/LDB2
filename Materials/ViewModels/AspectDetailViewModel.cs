@@ -15,9 +15,11 @@ namespace Materials.ViewModels
     public class AspectDetailViewModel : BindableBase
     {
         private Aspect _aspectInstance;
+        private Batch _selectedBatch;
         private bool _editMode;
         private DBEntities _entities;
-        private DelegateCommand _save,
+        private DelegateCommand _openBatch,
+                                _save,
                                 _startEdit;
         private EventAggregator _eventAggregator;
 
@@ -27,6 +29,17 @@ namespace Materials.ViewModels
             _entities = entities;
             _eventAggregator = eventAggregator;
             _editMode = false;
+
+            _openBatch = new DelegateCommand(
+                () =>
+                {
+                    NavigationToken token = new NavigationToken(MaterialViewNames.BatchInfoView,
+                                                                _selectedBatch);
+
+                    _eventAggregator.GetEvent<NavigationRequested>()
+                                    .Publish(token);
+                },
+                () => _selectedBatch != null);
 
             _save = new DelegateCommand(
                 () =>
@@ -125,6 +138,21 @@ namespace Materials.ViewModels
                 _save.RaiseCanExecuteChanged();
                 _startEdit.RaiseCanExecuteChanged();
             }
+        }
+
+        public Batch SelectedBatch
+        {
+            get { return _selectedBatch; }
+            set
+            {
+                _selectedBatch = value;
+                _openBatch.RaiseCanExecuteChanged();
+            }
+        }
+
+        public DelegateCommand OpenBatchCommand
+        {
+            get { return _openBatch; }
         }
 
         public DelegateCommand SaveCommand

@@ -15,6 +15,7 @@ namespace Projects.ViewModels
 {
     public class ProjectMainViewModel : BindableBase
     {
+        private DBPrincipal _principal;
         private DelegateCommand _newProject, _openProject;
         private EventAggregator _eventAggregator;
         private Project _selectedProject;
@@ -24,6 +25,7 @@ namespace Projects.ViewModels
             : base()
         {
             _eventAggregator = aggregator;
+            _principal = principal;
 
             _eventAggregator.GetEvent<ProjectListUpdateRequested>().Subscribe(
                 () => RaisePropertyChanged("ProjectList"));
@@ -32,7 +34,8 @@ namespace Projects.ViewModels
                 () =>
                 {
                     _eventAggregator.GetEvent<ProjectCreationRequested>().Publish();
-                });
+                },
+                () => IsProjectEdit);
 
             _openProject = new DelegateCommand(
                 () => 
@@ -43,6 +46,11 @@ namespace Projects.ViewModels
                 },
                 () => _selectedProject != null
             );
+        }
+
+        public bool IsProjectEdit
+        {
+            get { return _principal.IsInRole(UserRoleNames.ProjectEdit); }
         }
 
         public DelegateCommand NewProjectCommand

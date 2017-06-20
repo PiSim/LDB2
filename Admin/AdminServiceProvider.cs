@@ -54,26 +54,6 @@ namespace Admin
             _entities.SaveChanges();
         }
 
-        public void AddUserRole(string name)
-        {
-            UserRole newRole = new UserRole();
-            newRole.Name = name;
-            newRole.Description = "";
-
-            _entities.UserRoles.Add(newRole);
-
-            foreach (User usr in _entities.Users)
-            {
-                UserRoleMapping newMapping = new UserRoleMapping();
-                newMapping.UserRole = newRole;
-                newMapping.User = usr;
-                newMapping.IsSelected = false;
-                _entities.UserRoleMappings.Add(newMapping);
-            }
-
-            _entities.SaveChanges();
-        }
-
         public Person AddPerson()
         {
             StringInputDialog addPersonDialog = _container.Resolve<StringInputDialog>();

@@ -1,4 +1,5 @@
 ﻿using DBManager;
+using DBManager.EntityExtensions;
 using DBManager.Services;
 using Infrastructure;
 using Infrastructure.Events;
@@ -17,20 +18,32 @@ namespace Instruments.ViewModels
 {
     public class InstrumentMainViewModel : BindableBase
     {
-        private DelegateCommand _newInstrument, _openInstrument;
+        private DBPrincipal _principal;
+        private DelegateCommand _deleteInstrument, _newInstrument, _openInstrument;
         private EventAggregator _eventAggregator;
         private Instrument _selectedInstrument;
 
-        public InstrumentMainViewModel(EventAggregator eventAggregator) : base()
+        public InstrumentMainViewModel(DBPrincipal principal,
+                                        EventAggregator eventAggregator) : base()
         {
+            _principal = principal;
             _eventAggregator = eventAggregator;
-            
+
+            _deleteInstrument = new DelegateCommand(
+                () =>
+                {
+                    _selectedInstrument.Delete();
+                    SelectedInstrument = null;
+                },
+                () => IsInstrumentAdmin && _selectedInstrument != null);
+
             _newInstrument = new DelegateCommand(
                 () =>
                 {
                     _eventAggregator.GetEvent<InstrumentCreationRequested>()
                                     .Publish();
-                });
+                },
+                () => IsInstrumentAdmin);
 
             _openInstrument = new DelegateCommand(
                 () =>
@@ -56,9 +69,19 @@ namespace Instruments.ViewModels
 
         }
 
+        public DelegateCommand DeleteInstrumentCommand
+        {
+            get { return _deleteInstrument; }
+        }
+
         public IEnumerable<Instrument> InstrumentList
         {
             get { return InstrumentService.GetInstruments(); }
+        }
+
+        private bool IsInstrumentAdmin
+        {
+            get { return _principal.IsInRole(UserRoleNames.InstrumentAdmin); }
         }
 
         public DelegateCommand NewInstrumentCommand
@@ -85,7 +108,10 @@ namespace Instruments.ViewModels
             set
             {
                 _selectedInstrument = value;
+
                 _openInstrument.RaiseCanExecuteChanged();
+                _deleteInstrument.RaiseCanExecuteChanged();
+
                 RaisePropertyChanged("SelectedInstrument");
             }
         }

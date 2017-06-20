@@ -25,21 +25,23 @@
         </StackPanel>
         
         <GroupBox Header="Privilegi"
-                      Grid.Row="2">
-            <ListView ItemsSource="{Binding RoleList}">
+                  Grid.Row="2">
+            <ListView Name="RoleList"
+                      ItemsSource="{Binding RoleList}">
                 <ListView.View>
                     <GridView>
-                        <GridViewColumn Header="">
+                        <GridViewColumn>
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <CheckBox IsChecked="{Binding IsSelected, Mode=TwoWay}"/>
+                                    <CheckBox IsChecked="{Binding IsSelected, Mode=TwoWay}"
+                                              IsEnabled="{Binding DataContext.EditMode, ElementName=RoleList}"/>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
                         <GridViewColumn Header="Nome"
-                                            DisplayMemberBinding="{Binding Name}"/>
+                                        DisplayMemberBinding="{Binding UserRole.Name}"/>
                         <GridViewColumn Header="Descrizione"
-                                            DisplayMemberBinding="{Binding Description}"/>
+                                        DisplayMemberBinding="{Binding UserRole.Description}"/>
                     </GridView>
                 </ListView.View>
             </ListView>

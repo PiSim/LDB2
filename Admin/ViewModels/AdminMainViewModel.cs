@@ -16,7 +16,7 @@ namespace Admin.ViewModels
 {
     public class AdminMainViewModel : BindableBase
     {
-        private DelegateCommand _newOrganizationRole, _newPersonRole, _newUser, _newUserRole, _runMethod;
+        private DelegateCommand _newOrganizationRole, _newPersonRole, _newUserRole, _runMethod;
         private EventAggregator _eventAggregator;
         private string _name;
 
@@ -38,17 +38,11 @@ namespace Admin.ViewModels
                                     .Publish();
                 });
 
-            _newUser = new DelegateCommand(
-                () =>
-                {
-                    _eventAggregator.GetEvent<UserCreationRequested>()
-                                    .Publish();
-                });
-
             _newUserRole = new DelegateCommand(
                 () =>
                 {
-                    _eventAggregator.GetEvent<UserRoleCreationRequested>();
+                    _eventAggregator.GetEvent<UserRoleCreationRequested>()
+                                    .Publish();
                 });
 
             _runMethod = new DelegateCommand(
@@ -83,11 +77,6 @@ namespace Admin.ViewModels
         public DelegateCommand NewUserRoleCommand
         {
             get { return _newUserRole; }
-        }
-
-        public DelegateCommand NewUserCommand
-        {
-            get { return _newUser; }
         }
 
         public IEnumerable<PersonRole> PersonRoleList

@@ -86,7 +86,7 @@
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBox Text="{Binding Name, Mode=TwoWay}"
-                                                     IsEnabled="{Binding ElementName=TextGrid,
+                                                     IsEnabled="{Binding ElementName=TestGrid,
                                                                          Path=DataContext.EditMode}"/>
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
@@ -96,7 +96,7 @@
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBox Text="{Binding UM, Mode=TwoWay}"
-                                                     IsEnabled="{Binding ElementName=TextGrid,
+                                                     IsEnabled="{Binding ElementName=TestGrid,
                                                                          Path=DataContext.EditMode}"/>
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>

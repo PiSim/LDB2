@@ -8,17 +8,26 @@ namespace Projects
 {
     public class ProjectsModule : IModule
     {
+        DBPrincipal _principal;
         IRegionManager _regionManager;
         IUnityContainer _container;
 
-        public ProjectsModule(IRegionManager regionManager, IUnityContainer container)
+        public ProjectsModule(DBPrincipal principal,
+                            IRegionManager regionManager, 
+                            IUnityContainer container)
         {
             _container = container;
             _regionManager = regionManager;
+            _principal = principal;
         }
 
         public void Initialize()
         {
+            _container.RegisterType<ProjectServiceProvider>
+                (new ContainerControlledLifetimeManager());
+
+            _container.Resolve<ProjectServiceProvider>();
+
             _container.RegisterType<Views.ProjectCreationDialog>();
             _container.RegisterType<Views.ModifyProjectDetailsDialog>();
 
@@ -38,13 +47,9 @@ namespace Projects
             _regionManager.RegisterViewWithRegion(RegionNames.TaskEditProjectDetailsRegion,
                                                 typeof(Views.ProjectDetailsControl));
 
-            _regionManager.RegisterViewWithRegion(RegionNames.MainNavigationRegion, 
-                                                typeof(Views.ProjectsNavigationItem));
-
-            _container.RegisterType<ProjectServiceProvider>
-                (new ContainerControlledLifetimeManager());
-
-            _container.Resolve<ProjectServiceProvider>();
+            if (_principal.IsInRole(UserRoleNames.ProjectView))
+                _regionManager.RegisterViewWithRegion(RegionNames.MainNavigationRegion, 
+                                                    typeof(Views.ProjectsNavigationItem));
         }
     }
 }

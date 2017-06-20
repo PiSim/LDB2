@@ -127,7 +127,7 @@
                     <DataGridTemplateColumn Width="150">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <DataGrid ItemsSource="{Binding SubRequirements}"
+                                <DataGrid ItemsSource="{Binding SubTaskItems}"
                                               AutoGenerateColumns="False"
                                               HeadersVisibility="None"
                                               CanUserAddRows="False"
@@ -150,7 +150,7 @@
                                                 Width="100">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <DataGrid ItemsSource="{Binding SubRequirements}"
+                                <DataGrid ItemsSource="{Binding SubTaskItems}"
                                               Name="RequiredValuesGrid"
                                               AutoGenerateColumns="False"
                                               HeadersVisibility="None"
@@ -174,7 +174,7 @@
                                             Width="50">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <DataGrid ItemsSource="{Binding SubRequirements}"
+                                <DataGrid ItemsSource="{Binding SubTaskItems}"
                                               AutoGenerateColumns="False"
                                               HeadersVisibility="None"
                                               CanUserAddRows="False"

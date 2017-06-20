@@ -1,4 +1,5 @@
 ﻿using DBManager;
+using DBManager.EntityExtensions;
 using Infrastructure;
 using Infrastructure.Events;
 using Prism.Commands;
@@ -24,11 +25,39 @@ namespace Admin.ViewModels
             _eventAggregator = eventAggregator;
 
             _userList = DataService.GetUsers();
+
+            _createNewUser = new DelegateCommand(
+                () =>
+                {
+                    _eventAggregator.GetEvent<UserCreationRequested>()
+                                    .Publish();
+
+                    UserList = DataService.GetUsers();
+                });
+
+            _deleteUser = new DelegateCommand(
+                () =>
+                {
+                    _selectedUser.Delete();
+
+                    UserList = DataService.GetUsers();
+                },
+                () => _selectedUser != null);
         }
 
         public string AdminUserEditRegionName
         {
             get { return RegionNames.AdminUserEditRegion; }
+        }
+
+        public DelegateCommand CreateNewUserCommand
+        {
+            get { return _createNewUser; }
+        }
+
+        public DelegateCommand DeleteUserCommand
+        {
+            get { return _deleteUser; }
         }
 
         public User SelectedUser
@@ -51,6 +80,12 @@ namespace Admin.ViewModels
         public IEnumerable<User> UserList
         {
             get { return _userList; }
+
+            private set
+            {
+                _userList = value;
+                RaisePropertyChanged("UserList");
+            }
         }
     }
 }

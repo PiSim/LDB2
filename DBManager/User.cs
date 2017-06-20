@@ -20,7 +20,7 @@ namespace DBManager
             this.RoleMappings = new HashSet<UserRoleMapping>();
         }
     
-        public int ID { get; private set; }
+        public int ID { get; set; }
         public string FullName { get; set; }
         public string HashedPassword { get; set; }
         public string UserName { get; set; }

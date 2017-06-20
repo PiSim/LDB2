@@ -10,18 +10,24 @@ namespace Reports
     [Module(ModuleName = "ReportsModule")]
     public class ReportsModule : IModule
     {
+        DBPrincipal _principal;
         IRegionManager _regionManager;
         IUnityContainer _container;
 
-        public ReportsModule(IRegionManager regionManager,
-                             IUnityContainer container)
+        public ReportsModule(DBPrincipal principal,
+                            IRegionManager regionManager,
+                            IUnityContainer container)
         {
             _container = container;
+            _principal = principal;
             _regionManager = regionManager;
         }
 
         public void Initialize()
         {
+            _container.RegisterType<ReportServiceProvider>(new ContainerControlledLifetimeManager());
+            _container.Resolve<ReportServiceProvider>();
+
             _container.RegisterType<Object, Views.ReportMain>(ViewNames.ReportMain);
             _container.RegisterType<Object, Views.ReportEdit>(ViewNames.ReportEditView);
             _container.RegisterType<Object, Views.ExternalReportMain>(ViewNames.ExternalReportMainView);
@@ -51,13 +57,12 @@ namespace Reports
             _regionManager.RegisterViewWithRegion(RegionNames.SpecificationReportListRegion,
                                                 typeof(Views.ReportList));
 
-            _regionManager.RegisterViewWithRegion(RegionNames.MainNavigationRegion
-                                                , typeof(Views.ExternalReportsNavigationItem));
-            _regionManager.RegisterViewWithRegion(RegionNames.MainNavigationRegion
-                                                , typeof(Views.ReportsNavigationItem));
-
-            _container.RegisterType<ReportServiceProvider>(new ContainerControlledLifetimeManager());
-            _container.Resolve<ReportServiceProvider>();
+            if (_principal.IsInRole(UserRoleNames.ExternalReportView))
+                _regionManager.RegisterViewWithRegion(RegionNames.MainNavigationRegion
+                                                    , typeof(Views.ExternalReportsNavigationItem));
+            if (_principal.IsInRole(UserRoleNames.ReportView))
+                _regionManager.RegisterViewWithRegion(RegionNames.MainNavigationRegion
+                                                    , typeof(Views.ReportsNavigationItem));
         }
     }
 }

@@ -47,14 +47,16 @@ namespace Instruments.ViewModels
                 {
                     _eventAggregator.GetEvent<NewCalibrationRequested>()
                                     .Publish(_instance);
-                });
+                },
+                () => IsInstrumentAdmin);
 
             _addMaintenanceEvent = new DelegateCommand(
                 () =>
                 {
                     _eventAggregator.GetEvent<MaintenanceEventCreationRequested>()
                                     .Publish(_instance);
-                });
+                },
+                () => IsInstrumentAdmin);
 
             _addMethodAssociation = new DelegateCommand(
                 () =>
@@ -64,7 +66,7 @@ namespace Instruments.ViewModels
                     RaisePropertyChanged("AssociatedMethods");
                     RaisePropertyChanged("UnassociatedMethods");
                 },
-                () => _selectedUnassociated != null);
+                () => IsInstrumentAdmin && _selectedUnassociated != null);
 
             _removeMethodAssociation = new DelegateCommand(
                 () =>
@@ -74,7 +76,7 @@ namespace Instruments.ViewModels
                     RaisePropertyChanged("AssociatedMethods");
                     RaisePropertyChanged("UnassociatedMethods");
                 },
-                () => _selectedAssociated != null);
+                () => IsInstrumentAdmin && _selectedAssociated != null);
 
             _save = new DelegateCommand(
                 () =>
@@ -89,7 +91,7 @@ namespace Instruments.ViewModels
                 {
                     EditMode = true;
                 },
-                () => !_editMode);
+                () => IsInstrumentAdmin && !_editMode);
         }
 
         public DelegateCommand AddCalibrationCommand
@@ -119,7 +121,7 @@ namespace Instruments.ViewModels
                 if (_instance == null)
                     return new List<CalibrationReport>();
                     
-                return _instance.CalibrationReports; 
+                return _instance.GetCalibrationReports(); 
             }
         }
 
@@ -315,6 +317,11 @@ namespace Instruments.ViewModels
         public IEnumerable<InstrumentType> InstrumentTypeList
         {
             get { return _instrumentTypeList; }
+        }
+
+        private bool IsInstrumentAdmin
+        {
+            get { return _principal.IsInRole(UserRoleNames.InstrumentAdmin); }
         }
 
         public IEnumerable<Organization> ManufacturerList

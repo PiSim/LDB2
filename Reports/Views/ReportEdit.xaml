@@ -47,10 +47,6 @@
             <Button Content="Salva"
                     Command="{Binding SaveCommand}"
                     Margin="5"/>
-
-            <Button Content="Elimina"
-                    Command="{Binding DeleteCommand}"
-                    Margin="5"/>
         </StackPanel>
         
         <Grid Grid.Column="0"

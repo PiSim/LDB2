@@ -1,4 +1,6 @@
-﻿using Microsoft.Practices.Prism.Mvvm;
+﻿using DBManager;
+using Microsoft.Practices.Prism.Mvvm;
+using Prism.Regions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,11 +21,27 @@ namespace Admin.Views
     /// <summary>
     /// Interaction logic for UserEdit.xaml
     /// </summary>
-    public partial class UserEdit : UserControl, IView
+    public partial class UserEdit : UserControl, IView, INavigationAware
     {
         public UserEdit()
         {
             InitializeComponent();
+        }
+
+        public bool IsNavigationTarget(NavigationContext ncontext)
+        {
+            return true;
+        }
+
+        public void OnNavigatedFrom(NavigationContext ncontext)
+        {
+
+        }
+
+        public void OnNavigatedTo(NavigationContext ncontext)
+        {
+            (DataContext as ViewModels.UserEditViewModel).UserInstance
+                = ncontext.Parameters["ObjectInstance"] as User;
         }
     }
 }

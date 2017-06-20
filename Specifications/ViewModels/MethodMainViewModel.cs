@@ -1,4 +1,5 @@
 ﻿using DBManager;
+using DBManager.EntityExtensions;
 using DBManager.Services;
 using Infrastructure;
 using Infrastructure.Events;
@@ -16,25 +17,43 @@ namespace Specifications.ViewModels
 {
     public class MethodMainViewModel : BindableBase
     {
-        private DelegateCommand _newMethod;
+        private DBPrincipal _principal;
+        private DelegateCommand _deleteMethod, _newMethod;
         private EventAggregator _eventAggregator;
         private Method _selectedMethod;
-        private UnityContainer _container;
 
-        public MethodMainViewModel(EventAggregator aggregator,
-                                    UnityContainer container) : base()
+        public MethodMainViewModel(DBPrincipal principal,
+                                    EventAggregator aggregator) : base()
         {
-            _container = container;
             _eventAggregator = aggregator;
+            _principal = principal;
+
+            _deleteMethod = new DelegateCommand(
+                () =>
+                {
+                    _selectedMethod.Delete();
+                },
+                () => IsSpecAdmin && _selectedMethod != null);
 
             _newMethod = new DelegateCommand(
                 () =>
                 {
                     _eventAggregator.GetEvent<MethodCreationRequested>().Publish();
-                });
+                },
+                () => IsSpecAdmin);
 
             _eventAggregator.GetEvent<MethodListUpdateRequested>().Subscribe(
                 () => RaisePropertyChanged("MethodList"));
+        }
+
+        private DelegateCommand DeleteMethodCommand
+        {
+            get { return _deleteMethod; }
+        }
+
+        private bool IsSpecAdmin
+        {
+            get { return _principal.IsInRole(UserRoleNames.SpecificationAdmin); }
         }
 
         public IEnumerable<Method> MethodList
@@ -61,7 +80,9 @@ namespace Specifications.ViewModels
             set
             {
                 _selectedMethod = value;
+                _deleteMethod.RaiseCanExecuteChanged();
                 RaisePropertyChanged("SelectedMethod");
+
                 NavigationToken token = new NavigationToken(ViewNames.MethodEditView,
                                                             _selectedMethod,
                                                             RegionNames.MethodEditRegion);

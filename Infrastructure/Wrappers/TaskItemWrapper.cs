@@ -29,9 +29,23 @@ namespace Infrastructure.Wrappers
             get { return _taskItemInstance.Method.Standard.Name; }
         }
 
+        public string Notes
+        {
+            get { return _taskItemInstance.Description; }
+        }
+
         public string Property
         {
             get { return _taskItemInstance.Method.Property.Name; }
+        }
+
+        public IEnumerable<SubTaskItem> SubTaskItems
+        {
+            get
+            {
+                return _taskItemInstance.SubTaskItems
+                                        .ToList();
+            }
         }
 
         public TaskItem TaskItemInstance

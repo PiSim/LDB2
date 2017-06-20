@@ -1,5 +1,6 @@
 ﻿using DBManager;
 using DBManager.Services;
+using Infrastructure;
 using Infrastructure.Events;
 using Microsoft.Practices.Unity;
 using Prism.Commands;
@@ -16,14 +17,17 @@ namespace Specifications.ViewModels
 {
     public class SpecificationMainViewModel : BindableBase
     {
+        private DBPrincipal _principal;
         private DelegateCommand _newSpecification, _openSpecification;
         private EventAggregator _eventAggregator;
         private Specification _selectedSpecification;
 
-        public SpecificationMainViewModel(EventAggregator aggregator) 
+        public SpecificationMainViewModel(DBPrincipal principal,
+                                            EventAggregator aggregator) 
             : base()
         {
             _eventAggregator = aggregator;
+            _principal = principal;
 
             _newSpecification = new DelegateCommand(
                 () => 
@@ -37,7 +41,8 @@ namespace Specifications.ViewModels
                         _openSpecification.Execute();
                         RaisePropertyChanged("SpecificationList");
                     }                        
-                });
+                },
+                () => IsSpecAdmin);
 
             _openSpecification = new DelegateCommand(
                 () => 
@@ -47,6 +52,11 @@ namespace Specifications.ViewModels
                     _eventAggregator.GetEvent<NavigationRequested>().Publish(token);
                 },
                 () => SelectedSpecification != null);
+        }
+        
+        private bool IsSpecAdmin
+        {
+            get { return _principal.IsInRole(UserRoleNames.SpecificationAdmin); }
         }
 
         public DelegateCommand NewSpecificationCommand

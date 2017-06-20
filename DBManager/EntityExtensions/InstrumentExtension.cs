@@ -37,6 +37,22 @@ namespace DBManager.EntityExtensions
             }
         }
 
+        public static void Delete(this Instrument entry)
+        {
+            // Deletes an Instrument entry
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Entry(entities.Instruments
+                        .First(ins => ins.ID == entry.ID))
+                        .State = EntityState.Deleted;
+
+                entities.SaveChanges();
+
+                entry.ID = 0;
+            }
+        }
+
         public static IEnumerable<Method> GetAssociatedMethods(this Instrument entry)
         {
             // Returns all the methods not assigned to the instrument entry
@@ -53,6 +69,24 @@ namespace DBManager.EntityExtensions
                                         .Where(mtd => mtd.AssociatedInstruments
                                         .Any(instr => instr.ID == entry.ID))
                                         .ToList();
+            }
+        }
+
+        public static IEnumerable<CalibrationReport> GetCalibrationReports(this Instrument entry)
+        {
+            // Returns all Calibration reports for an Instrument entry
+
+            if (entry == null)
+                return null;
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.CalibrationReports.Include(cal => cal.Laboratory)
+                                                    .Include(cal => cal.Tech)
+                                                    .Where(cal => cal.instrumentID == entry.ID)
+                                                    .ToList();
             }
         }
 

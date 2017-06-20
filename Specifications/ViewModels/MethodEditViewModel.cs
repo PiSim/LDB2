@@ -19,6 +19,7 @@ namespace Specifications.ViewModels
     public class MethodEditViewModel : BindableBase
     {
         private bool _editMode;
+        private DBPrincipal _principal;
         private DelegateCommand _addFile,
                                 _addIssue,
                                 _addMeasurement,
@@ -36,10 +37,13 @@ namespace Specifications.ViewModels
         private StandardIssue _selectedIssue;
         private StandardFile _selectedFile;
 
-        public MethodEditViewModel(EventAggregator aggregator) : base()
+        public MethodEditViewModel(DBPrincipal principal,
+                                    EventAggregator aggregator) : base()
         {
             _editMode = false;
             _eventAggregator = aggregator;
+            _principal = principal;
+
             _subMethodList = new List<SubMethod>();
 
             _addFile = new DelegateCommand(
@@ -63,7 +67,7 @@ namespace Specifications.ViewModels
                         RaisePropertyChanged("FileList");
                     }
                 },
-                () => SelectedIssue != null);
+                () => IsSpecAdmin && SelectedIssue != null);
 
             _addIssue = new DelegateCommand(
                 () =>
@@ -76,7 +80,8 @@ namespace Specifications.ViewModels
                     temp.Create();
 
                     RaisePropertyChanged("IssueList");
-                });
+                },
+                () => IsSpecAdmin);
 
             _addMeasurement = new DelegateCommand(
                 () =>
@@ -89,7 +94,8 @@ namespace Specifications.ViewModels
 
                     _subMethodList = _methodInstance.GetSubMethods();
                     RaisePropertyChanged("Measurements");
-                });
+                },
+                () => IsSpecAdmin);
 
             _openFile = new DelegateCommand(
                 () =>
@@ -104,7 +110,7 @@ namespace Specifications.ViewModels
                     _selectedFile.Delete();
                     SelectedFile = null;
                 },
-                () => _selectedFile != null);
+                () => IsSpecAdmin && _selectedFile != null);
 
             _removeIssue = new DelegateCommand(
                 () =>
@@ -113,7 +119,7 @@ namespace Specifications.ViewModels
                     RaisePropertyChanged("IssueList");
                     SelectedIssue = null;
                 },
-                () => _selectedIssue != null);
+                () => IsSpecAdmin && _selectedIssue != null);
 
             _removeMeasurement = new DelegateCommand(
                 () =>
@@ -124,7 +130,7 @@ namespace Specifications.ViewModels
                     _subMethodList = _methodInstance.GetSubMethods();
                     RaisePropertyChanged("Measurements");
                 },
-                () => SelectedMeasurement != null);
+                () => IsSpecAdmin && SelectedMeasurement != null);
 
             _save = new DelegateCommand(
                 () =>
@@ -140,15 +146,14 @@ namespace Specifications.ViewModels
                 {
                     _methodInstance.Standard.SetCurrentIssue(_selectedIssue);
                 },
-                () => _selectedIssue != null
-                );
+                () => IsSpecAdmin && _selectedIssue != null);
 
             _startEdit = new DelegateCommand(
                 () =>
                 {
                     EditMode = true;
                 },
-                () => !_editMode);
+                () => IsSpecAdmin && !_editMode);
         }
 
         public DelegateCommand AddFileCommand
@@ -184,6 +189,11 @@ namespace Specifications.ViewModels
             {
                 return _selectedIssue.GetIssueFiles();
             }
+        }
+
+        private bool IsSpecAdmin
+        {
+            get { return _principal.IsInRole(UserRoleNames.SpecificationAdmin); }
         }
 
         public IEnumerable<StandardIssue> IssueList

@@ -17,9 +17,18 @@
                   Grid.Column="0">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="35"/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
+                <StackPanel Orientation="Horizontal"
+                            Grid.Row="0">
+                    <Button Content="Crea nuovo"
+                            Command="{Binding CreateNewUserCommand}"
+                            Margin="5"/>
+                    <Button Content="Elimina"
+                            Command="{Binding DeleteUserCommand}"
+                            Margin="5"/>
+                </StackPanel>
                 <ListView ItemsSource="{Binding UserList}"
                           SelectedItem="{Binding SelectedUser, Mode=TwoWay}"
                           Grid.Row="1"

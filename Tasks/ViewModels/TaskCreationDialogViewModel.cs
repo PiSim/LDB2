@@ -202,6 +202,8 @@ namespace Tasks.ViewModels
                 _selectedControlPlan = value;
                 _selectedControlPlan.Load();
 
+                _notes = _selectedControlPlan.Name;
+
                 RaisePropertyChanged("SelectedControlPlan");
                 if (value != null && _requirementList != null)
                 {

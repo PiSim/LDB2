@@ -41,6 +41,14 @@ namespace Services
                                                     .Publish(tempReport);
                             });
 
+            _eventAggregator.GetEvent<UserRoleCreationRequested>()
+                            .Subscribe(
+                            () =>
+                            {
+                                Controls.Views.StringInputDialog stringDialog = new Controls.Views.StringInputDialog();
+                                if (stringDialog.ShowDialog() == true)
+                                    ServiceProvider.AddUserRole(stringDialog.InputString);
+                            });
 
             _eventAggregator.GetEvent<ReportCreationRequested>().Subscribe(
                 token =>
