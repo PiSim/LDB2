@@ -132,7 +132,21 @@
 
                     <GroupBox Header="Report Interni" 
                               Grid.Row="0">
-                        <ContentControl prism:RegionManager.RegionName="BatchReportListRegion"/>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <StackPanel Orientation="Horizontal"
+                                        Grid.Row="0">
+                                <Button Content="Apri"
+                                        Command="{Binding OpenReportCommand}"
+                                        Grid.Row="0"
+                                        Margin="5"/>
+                            </StackPanel>
+                            <ContentControl prism:RegionManager.RegionName="BatchReportListRegion"
+                                            Grid.Row="1"/>
+                        </Grid>
                     </GroupBox>
 
                     <GroupBox Header="Report Esterni"

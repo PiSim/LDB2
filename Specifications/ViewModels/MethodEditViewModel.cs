@@ -282,10 +282,7 @@ namespace Specifications.ViewModels
         {
             get
             {
-                if (_methodInstance == null)
-                    return null;
-                else
-                    return _methodInstance.Tests; }
+                return _methodInstance.GetTests(); }
         }
 
         public DelegateCommand SaveCommand

@@ -284,14 +284,10 @@ namespace Reports.ViewModels
         {
             get
             {
-                try
-                {
-                    return _instance.PO.Currency.Code;
-                }
-                catch
-                {
+                if (_instance == null || _instance.PO == null)
                     return null;
-                }
+
+                return _instance.PO.Currency.Code;
             }
         }
 
@@ -299,29 +295,22 @@ namespace Reports.ViewModels
         {
             get
             {
-                try
-                {
-                    return _instance.PO.OrderDate.ToShortDateString();
-                }
-                catch
-                {
+                if (_instance == null || _instance.PO == null)
                     return null;
-                }
+
+                return _instance.PO.OrderDate.ToShortDateString();
             }
         }
 
         public string OrderNumber
         {
+
             get
             {
-                try
-                {
-                    return _instance.PO.Number;
-                }
-                catch
-                {
+                if (_instance == null || _instance.PO == null)
                     return null;
-                }
+
+                return _instance.PO.Number;
             }
         }
 

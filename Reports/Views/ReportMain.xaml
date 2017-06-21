@@ -9,6 +9,25 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        <ContentControl prism:RegionManager.RegionName="MainReportListRegion"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="35"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal"
+                    Grid.Row="0">
+            <Button Content="Apri"
+                    Command="{Binding OpenReportCommand}"
+                    Margin="5"/>
+            <Button Content="Crea Nuovo"
+                    Command="{Binding NewReportCommand}"
+                    Margin="5"/>
+            <Button Content="Elimina"
+                    Command="{Binding RemoveReportCommand}"
+                    Margin="5"/>
+        </StackPanel>
+
+        <ContentControl prism:RegionManager.RegionName="MainReportListRegion"
+                        Grid.Row="1"/>
     </Grid>
 </UserControl>

@@ -17,12 +17,13 @@ namespace DBManager.Services
 
             using (DBEntities entities = new DBEntities())
             {
-                                
+                entities.Configuration.LazyLoadingEnabled = false;                                
 
                 return entities.Materials.Include(mat => mat.Aspect)
                                         .Include(mat => mat.MaterialLine)
                                         .Include(mat => mat.MaterialType)
                                         .Include(mat => mat.Recipe.Colour)
+                                        .Include(mat => mat.Project)
                                         .Where(mat => true)
                                         .OrderBy(mat => mat.MaterialType.Code)
                                         .ThenBy(mat => mat.MaterialLine.Code)

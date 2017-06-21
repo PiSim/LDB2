@@ -223,7 +223,7 @@
                                     Grid.Column="1"/>
                 </Grid>
             </TabItem>
-            
+
             <TabItem Header="Piani di controllo">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -304,13 +304,25 @@
                     </GroupBox>
                 </Grid>
             </TabItem>
-            
-            <TabItem Header="Progetti">
-
-            </TabItem>
 
             <TabItem Header="Report">
-                <ContentControl prism:RegionManager.RegionName="SpecificationReportListRegion"/>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="35"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Orientation="Horizontal"
+                                Grid.Row="0">
+                        <Button Content="Apri"
+                            Command="{Binding OpenReportCommand}"
+                            Grid.Row="0"
+                            Margin="5"/>
+                    </StackPanel>
+                    
+                    <ContentControl prism:RegionManager.RegionName="SpecificationReportListRegion"
+                                    Grid.Row="1"/>
+                </Grid>
             </TabItem>
         </TabControl>
     </Grid>

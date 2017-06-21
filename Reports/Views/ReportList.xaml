@@ -9,11 +9,6 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition Width="100"/>
-        </Grid.ColumnDefinitions>
-
         <ListView ItemsSource="{Binding Path=ReportList}"
                   SelectedItem="{Binding Path=SelectedReport, Mode=TwoWay}"
                   Grid.Column="0">
@@ -51,20 +46,5 @@
                 </GridView>
             </ListView.View>
         </ListView>
-
-        <StackPanel Orientation="Vertical"
-                    Grid.Column="1">
-            <Button Content="Apri"
-                    Command="{Binding Path=OpenReportCommand}"
-                    Margin="5"/>
-            <Button Content="Crea Nuovo"
-                    Command="{Binding NewReportCommand}"
-                    Margin="5"/>
-            <Button Content="Elimina"
-                    Command="{Binding RemoveReportCommand}"
-                    Margin="5"/>
-        </StackPanel>
-        
-        
     </Grid>
 </UserControl>

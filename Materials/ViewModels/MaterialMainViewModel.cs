@@ -1,4 +1,5 @@
 ﻿using DBManager;
+using DBManager.EntityExtensions;
 using DBManager.Services;
 using Infrastructure;
 using Infrastructure.Events;
@@ -38,6 +39,8 @@ namespace Materials.ViewModels
             set
             {
                 _selectedMaterial = value;
+                _selectedMaterial.Load();
+
                 RaisePropertyChanged();
 
                 NavigationToken token = new NavigationToken(MaterialViewNames.MaterialDetail,

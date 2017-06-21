@@ -150,7 +150,7 @@
                                             DisplayMemberBinding="{Binding Notes}"/>
 
                             <GridViewColumn Header="Metodo"
-                                            DisplayMemberBinding="{Binding Method}"/>
+                                            DisplayMemberBinding="{Binding Method.Standard.Name}"/>
 
                             <GridViewColumn Header="Completo">
                                 <GridViewColumn.CellTemplate>

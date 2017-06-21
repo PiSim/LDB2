@@ -120,6 +120,7 @@
     </Compile>
     <Compile Include="ViewModels\AddTestDialogViewModel.cs" />
     <Compile Include="ViewModels\MaintenanceEventCreationDialogViewModel.cs" />
+    <Compile Include="ViewModels\BatchCreationDialogViewModel.cs" />
     <Compile Include="ViewModels\NewCalibrationDialogViewModel.cs" />
     <Compile Include="ViewModels\ReportCreationDialogViewModel.cs" />
     <Compile Include="Views\AddTestDialog.xaml.cs">

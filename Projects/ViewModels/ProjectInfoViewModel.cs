@@ -135,10 +135,6 @@ namespace Projects.ViewModels
         public IEnumerable<Material> AssignedMaterials
         {
             get { return _projectInstance.GetMaterials(); }
-            private set
-            {
-                RaisePropertyChanged("AssignedMaterials");
-            }
         }
 
         public IEnumerable<Batch> BatchList
@@ -248,13 +244,12 @@ namespace Projects.ViewModels
             {
                 _projectInstance = value;
                 _projectInstance.Load();
-
-                AssignedMaterials = new ObservableCollection<Material>(_projectInstance.Materials);
-
-                UnassignedMaterials = new ObservableCollection<Material>(MaterialService.GetMaterialsWithoutProject());
                 
                 SelectedBatch = null;
+                SelectedAssigned = null;
+                SelectedUnassigned = null;
 
+                RaisePropertyChanged("AssignedMaterials");
                 RaisePropertyChanged("BatchList");
                 RaisePropertyChanged("Description");
                 RaisePropertyChanged("ExternalReportList");
@@ -263,6 +258,7 @@ namespace Projects.ViewModels
                 RaisePropertyChanged("OemName");
                 RaisePropertyChanged("ReportList");
                 RaisePropertyChanged("TaskList");
+                RaisePropertyChanged("UnassignedMaterials");
             }
         }
 
@@ -355,11 +351,7 @@ namespace Projects.ViewModels
         
         public IEnumerable<Material> UnassignedMaterials
         {
-            get { return DataService.GetMaterialsWithoutProject(); }
-            private set
-            {
-                RaisePropertyChanged("UnassignedMaterials");
-            }
+            get { return MaterialService.GetMaterialsWithoutProject(); }
         }
     }        
 }

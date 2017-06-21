@@ -24,6 +24,7 @@ namespace DBManager.EntityExtensions
                                         .Include(mat => mat.ExternalConstruction)
                                         .Include(mat => mat.MaterialLine)
                                         .Include(mat => mat.MaterialType)
+                                        .Include(mat => mat.Recipe.Colour)
                                         .Where(con => con.ProjectID == entry.ID)
                                         .ToList();
             }

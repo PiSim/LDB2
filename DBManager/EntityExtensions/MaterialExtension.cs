@@ -36,8 +36,9 @@ namespace DBManager.EntityExtensions
                                         .Include(btc => btc.Material.MaterialLine)
                                         .Include(btc => btc.Material.MaterialType)
                                         .Include(btc => btc.Material.Recipe.Colour)
-                                        .Where(btc => btc.MaterialID == entry.ID);
-
+                                        .Where(btc => btc.MaterialID == entry.ID)
+                                        .OrderBy(btc => btc.Number)
+                                        .ToList();
             }
         }
 

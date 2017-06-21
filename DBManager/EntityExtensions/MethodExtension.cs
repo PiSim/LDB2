@@ -108,6 +108,26 @@ namespace DBManager.EntityExtensions
             }
         }
 
+        public static IEnumerable<Test> GetTests(this Method entry)
+        {
+            // Returns all Test entities for a Method
+
+            if (entry == null)
+                return null;
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.Tests.Include(tst => tst.Method.Property)
+                                    .Include(tst => tst.Method.Standard)
+                                    .Include(tst => tst.Report.Batch)
+                                    .Include(tst => tst.SubTests)
+                                    .Where(tst => tst.MethodID == entry.ID)
+                                    .ToList();
+            }
+        }
+
         public static void Load(this Method entry)
         {
             if (entry == null)
@@ -124,10 +144,6 @@ namespace DBManager.EntityExtensions
                                                     .Include(mtd => mtd.Property)
                                                     .Include(mtd => mtd.Standard.CurrentIssue)
                                                     .Include(mtd => mtd.Standard.Organization)
-                                                    .Include(mtd => mtd.Tests
-                                                    .Select(tst => tst.SubTests))
-                                                    .Include(mtd => mtd.Tests
-                                                    .Select(tst => tst.Report))
                                                     .First(spec => spec.ID == entry.ID);
 
                 entry.AssociatedInstruments = tempEntry.AssociatedInstruments;
@@ -140,7 +156,6 @@ namespace DBManager.EntityExtensions
                 entry.Standard = tempEntry.Standard;
                 entry.StandardID = tempEntry.StandardID;
                 entry.SubMethods = tempEntry.SubMethods;
-                entry.Tests = tempEntry.Tests;
                 entry.UM = tempEntry.UM;
             }
         }
