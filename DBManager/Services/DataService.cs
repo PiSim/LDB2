@@ -30,35 +30,40 @@ namespace DBManager
             using (var entities = new DBEntities())
             {
                 entities.Configuration.LazyLoadingEnabled = lazyLoadingEnabled;
-                return entities.Batches.Where(btc => btc.Material.Construction.ExternalConstruction.ID == target.ID)
-                                        .Include(btc => btc.Material.Construction.Type)
-                                        .Include(btc => btc.Material.Construction.Aspect)
+                return entities.Batches.Where(btc => btc.Material.ExternalConstruction.ID == target.ID)
+                                        .Include(btc => btc.Material.Aspect)
+                                        .Include(btc => btc.Material.MaterialLine)
+                                        .Include(btc => btc.Material.MaterialType)
                                         .Include(btc => btc.Material.Recipe.Colour)
                                         .ToList();
             }
         }
 
-        public static IEnumerable<Construction> GetConstructionsWithoutExternal()
+        public static IEnumerable<Material> GetMaterialsWithoutConstruction()
         {
             using (var entities = new DBEntities())
             {
                 entities.Configuration.LazyLoadingEnabled = false;
-                return entities.Constructions.Where(cns => cns.ExternalConstruction == null)
-                                            .Include(cns => cns.Aspect)
-                                            .Include(cns => cns.Type)
+                return entities.Materials.Where(mat => mat.ExternalConstruction == null)
+                                            .Include(mat => mat.Aspect)
+                                            .Include(mat => mat.MaterialLine)
+                                            .Include(mat => mat.MaterialType)
+                                            .Include(mat => mat.Recipe)
                                             .ToList();
             }
         }
 
-        public static IEnumerable<Construction> GetConstructionsWithoutProject()
+        public static IEnumerable<Material> GetMaterialsWithoutProject()
         {
             using (var entities = new DBEntities())
             {
                 entities.Configuration.LazyLoadingEnabled = false;
-                return entities.Constructions.Where(cns => cns.Project == null)
-                                            .Include(cns => cns.Aspect)
-                                            .Include(cns => cns.ExternalConstruction)
-                                            .Include(cns => cns.Type)
+                return entities.Materials.Where(mat => mat.Project == null)
+                                            .Include(mat => mat.Aspect)
+                                            .Include(mat => mat.ExternalConstruction)
+                                            .Include(mat => mat.MaterialLine)
+                                            .Include(mat => mat.MaterialType)
+                                            .Include(mat => mat.Recipe)
                                             .ToList();
             }
         }

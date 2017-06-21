@@ -62,8 +62,9 @@ namespace DBManager.EntityExtensions
             {
                 entities.Configuration.LazyLoadingEnabled = false;
 
-                return entities.Batches.Include(btc => btc.Material.Construction.Aspect)
-                                        .Include(btc => btc.Material.Construction.Type)
+                return entities.Batches.Include(btc => btc.Material.Aspect)
+                                        .Include(btc => btc.Material.MaterialLine)
+                                        .Include(btc => btc.Material.MaterialType)
                                         .Include(btc => btc.Material.Recipe.Colour)
                                         .Where(btc => btc.ExternalReports
                                         .Any(ext => ext.ID == entry.ID))
@@ -95,11 +96,13 @@ namespace DBManager.EntityExtensions
                 
                 ExternalReport tempEntry = entities.ExternalReports
                                                     .Include(exrep => exrep.Batches
-                                                    .Select(btc => btc.Material.Construction.Aspect))
+                                                    .Select(btc => btc.Material.Aspect))
                                                     .Include(exrep => exrep.Batches
-                                                    .Select(btc => btc.Material.Construction.Project))
+                                                    .Select(btc => btc.Material.Project))
                                                     .Include(exrep => exrep.Batches
-                                                    .Select(btc => btc.Material.Construction.Type))
+                                                    .Select(btc => btc.Material.MaterialLine))
+                                                    .Include(exrep => exrep.Batches
+                                                    .Select(btc => btc.Material.MaterialType))
                                                     .Include(exrep => exrep.Batches
                                                     .Select(btc => btc.Material.Recipe.Colour))
                                                     .Include(exrep => exrep.ExternalLab)

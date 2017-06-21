@@ -139,7 +139,7 @@ namespace Tasks.ViewModels
                 if (_instance == null)
                     return null;
                 else
-                    return _instance.Batch.Material.Construction.Project;
+                    return _instance.Batch.Material.Project;
             }
         }
 

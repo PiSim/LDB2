@@ -10,6 +10,43 @@ namespace DBManager.Services
 {
     public static class MaterialService
     {
+
+        public static IEnumerable<Material> GetMaterials()
+        {
+            // Returns all material entities 
+
+            using (DBEntities entities = new DBEntities())
+            {
+                                
+
+                return entities.Materials.Include(mat => mat.Aspect)
+                                        .Include(mat => mat.MaterialLine)
+                                        .Include(mat => mat.MaterialType)
+                                        .Include(mat => mat.Recipe.Colour)
+                                        .Where(mat => true)
+                                        .OrderBy(mat => mat.MaterialType.Code)
+                                        .ThenBy(mat => mat.MaterialLine.Code)
+                                        .ToList();
+            }
+        }
+
+        public static IEnumerable<Material> GetMaterialsWithoutProject()
+        {
+            // Returns all Material entities without a project
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.Materials.Include(mat => mat.Aspect)
+                                        .Include(mat => mat.MaterialLine)
+                                        .Include(mat => mat.MaterialType)
+                                        .Include(mat => mat.Recipe.Colour)
+                                        .Where(mat => mat.Project == null)
+                                        .ToList();
+            }
+        }
+
         #region Operations for Aspect entities
 
         public static Aspect GetAspect(string code)
@@ -48,8 +85,9 @@ namespace DBManager.Services
             {
                 entities.Configuration.LazyLoadingEnabled = false;
 
-                return entities.Batches.Include(btc => btc.Material.Construction.Aspect)
-                                        .Include(btc => btc.Material.Construction.Type)
+                return entities.Batches.Include(btc => btc.Material.Aspect)
+                                        .Include(btc => btc.Material.MaterialType)
+                                        .Include(btc => btc.Material.MaterialLine)
                                         .Include(btc => btc.Material.Recipe.Colour)
                                         .FirstOrDefault(entry => entry.ID == ID);
             }
@@ -61,8 +99,9 @@ namespace DBManager.Services
             {
                 entities.Configuration.LazyLoadingEnabled = false;
 
-                return entities.Batches.Include(btc => btc.Material.Construction.Aspect)
-                                        .Include(btc => btc.Material.Construction.Type)
+                return entities.Batches.Include(btc => btc.Material.Aspect)
+                                        .Include(btc => btc.Material.MaterialType)
+                                        .Include(btc => btc.Material.MaterialLine)
                                         .Include(btc => btc.Material.Recipe.Colour)
                                         .FirstOrDefault(entry => entry.Number == batchNumber);
             }
@@ -100,10 +139,11 @@ namespace DBManager.Services
                                                     .Include(btc => btc.ExternalReports
                                                     .Select(extr => extr.ExternalLab))
                                                     .Include(btc => btc.Masters)
-                                                    .Include(btc => btc.Material.Construction.Aspect)
-                                                    .Include(btc => btc.Material.Construction.Project.Leader)
-                                                    .Include(btc => btc.Material.Construction.Project.Oem)
-                                                    .Include(btc => btc.Material.Construction.Type)
+                                                    .Include(btc => btc.Material.Aspect)
+                                                    .Include(btc => btc.Material.MaterialType)
+                                                    .Include(btc => btc.Material.MaterialLine)
+                                                    .Include(btc => btc.Material.Project.Leader)
+                                                    .Include(btc => btc.Material.Project.Oem)
                                                     .Include(btc => btc.Material.Recipe.Colour)
                                                     .Include(btc => btc.Reports
                                                     .Select(rep => rep.Author))
@@ -157,163 +197,20 @@ namespace DBManager.Services
         }
 
         #endregion
-
-        #region Operations for Construction entities
-
-        public static void Create(this Construction entry)
-        {
-            if (entry == null)
-                throw new NullReferenceException();
-
-            using (DBEntities entities = new DBEntities())
-            {
-                if (entry.AspectID == 0)
-                    entry.AspectID = entry.Aspect.ID;
-
-                if (entry.TypeID == 0)
-                    entry.TypeID = entry.Type.ID;
-
-                Construction newEntry = new Construction();
-
-                entities.Constructions.Add(newEntry);
-                entities.Entry(newEntry).CurrentValues.SetValues(entry);
-                entities.SaveChanges();
-
-                entry.ID = newEntry.ID;
-            }
-        }
-
-        public static void Delete(this Construction entry)
-        {
-            // Deletes an aspect entity
-
-            if (entry == null)
-                throw new NullReferenceException();
-
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.Constructions.Attach(entry);
-                entities.Entry(entry).State = EntityState.Deleted;
-                entities.SaveChanges();
-            }
-        }
-
-        public static IEnumerable<Batch> GetBatches(this Construction entry)
-        {
-            // Gets all batches for a given Construction entity, 
-            // returns empty list if instance is null
-
-            using (DBEntities entities = new DBEntities())
-            {
-                if (entry == null)
-                    return new List<Batch>();
-
-                entities.Configuration.LazyLoadingEnabled = false;
-
-                return entities.Batches.Where(btc => btc.Material.Construction.ID == entry.ID)
-                                        .Include(btc => btc.Material.Construction)
-                                        .Include(btc => btc.Material.Recipe.Colour)
-                                        .ToList();
-            }
-        }
-
-        public static Construction GetConstruction(int ID)
-        {
-            // Returns a construction with the given ID
-            // if none is found in the DB, null is returned
-            
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.Configuration.LazyLoadingEnabled = false;
-
-                return entities.Constructions.FirstOrDefault(con => con.ID == ID);
-            }
-        }
-
-        public static Construction GetConstruction(string typeCode,
-                                                    string line,
-                                                    string aspectCode)
-        {
-            // Returns a construction with the given typeCode, line and aspectCode
-            // if none is found in the DB, null is returned
-
-            if (typeCode == null || line == null || aspectCode == null)
-                throw new NullReferenceException();
-
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.Configuration.LazyLoadingEnabled = false;
-
-                return entities.Constructions.FirstOrDefault(con => con.Aspect.Code == aspectCode
-                                                                && con.Line == line
-                                                                && con.Type.Code == typeCode);
-            }
-        }
-
-        public static IEnumerable<Construction> GetConstructions()
-        {
-            // Returns all Construction entities
-
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.Configuration.LazyLoadingEnabled = false;
-
-                return entities.Constructions.Include(con => con.Aspect)
-                                            .Include(con => con.ExternalConstruction)
-                                            .Include(con => con.Project)
-                                            .Include(con => con.Type)
-                                            .ToList();
-            }
-        }
-
-        public static IEnumerable<Construction> GetConstructionsWithoutProject()
-        {
-            // returns all Construction entities unassigned to a Project
-
-            using (DBEntities entities = new DBEntities())
-            {
-                return entities.Constructions.Where(cns => cns.Project == null)
-                                            .Include(cns => cns.Aspect)
-                                            .Include(cns => cns.ExternalConstruction)
-                                            .Include(cns => cns.Type)
-                                            .ToList();
-            }
-        }
-
-        public static void SetType(this Construction entry, 
-                                    MaterialType typeEntity)
-        {
-            entry.Type = typeEntity;
-            entry.TypeID = (typeEntity == null) ? 0 : typeEntity.ID;
-        }
-
-        public static void Update(this Construction entry)
-        {
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.Constructions.AddOrUpdate(entry);
-                
-                entities.SaveChanges();
-            }
-        }
-
-        #endregion 
+        
 
         #region Operations for ExternalConstruction entities
 
-        public static void AddConstruction(this ExternalConstruction entry,
-                                            Construction toBeAdded)
+        public static void AddMaterial(this ExternalConstruction entry,
+                                            Material toBeAdded)
         {
             using (DBEntities entities = new DBEntities())
             {
                 entities.Configuration.AutoDetectChangesEnabled = false;
 
-                entities.Constructions.Attach(toBeAdded);
-                toBeAdded.ExternalConstruction = entry;
-                toBeAdded.ExternalConstructionID = entry.ID;
-                entry.Constructions.Add(toBeAdded);
+                entities.Materials.First(mat => mat.ID == toBeAdded.ID)
+                                    .ExternalConstructionID = entry.ID;
 
-                entities.Entry(toBeAdded).State = EntityState.Modified;
                 entities.SaveChanges();
             }
         }
@@ -367,15 +264,11 @@ namespace DBManager.Services
 
 
                 ExternalConstruction tempEntry = entities.ExternalConstructions
-                                                        .Include(extc => extc.Constructions.Select(cons => cons.Aspect))
-                                                        .Include(extc => extc.Constructions.Select(cons => cons.Type))
-                                                        .Include(extc => extc.Constructions)
                                                         .Include(extc => extc.DefaultSpecVersion.Specification)
                                                         .Include(extc => extc.DefaultSpecVersion.Specification.Standard)
                                                         .Include(extc => extc.Organization)
                                                         .First(extc => extc.ID == entryID);
-
-                entry.Constructions = tempEntry.Constructions;
+                
                 entry.DefaultSpecVersion = tempEntry.DefaultSpecVersion;
                 entry.DefaultSpecVersionID = tempEntry.DefaultSpecVersionID;
                 entry.Name = tempEntry.Name;
@@ -384,23 +277,16 @@ namespace DBManager.Services
             }
         }
 
-        public static void RemoveConstruction(this ExternalConstruction entry,
-                                            Construction toBeRemoved)
+        public static void RemoveMaterial(this ExternalConstruction entry,
+                                            Material toBeRemoved)
         {
-            if (!entry.Constructions.Any(cns => cns.ID == toBeRemoved.ID))
-                return;
-
             using (DBEntities entities = new DBEntities())
             {
                 entities.Configuration.AutoDetectChangesEnabled = false;
 
-                entities.Constructions.Attach(toBeRemoved);
-                toBeRemoved.ExternalConstruction = null;
-                toBeRemoved.ExternalConstructionID = null;
-                entry.Constructions.Remove(entry.Constructions
-                                    .First(cns => cns.ID == toBeRemoved.ID));
+                entities.Materials.First(mat => mat.ID == toBeRemoved.ID)
+                        .ExternalConstructionID = null;
 
-                entities.Entry(toBeRemoved).State = EntityState.Modified;
                 entities.SaveChanges();
             }
         }
@@ -431,14 +317,40 @@ namespace DBManager.Services
             {
                 entities.Configuration.LazyLoadingEnabled = false;
 
-                return entities.Materials.Include(mat => mat.Construction.Aspect)
-                                        .Include(mat => mat.Construction.Type)
+                return entities.Materials.Include(mat => mat.Aspect)
+                                        .Include(mat => mat.MaterialLine)
+                                        .Include(mat => mat.MaterialType)
                                         .Include(mat => mat.Recipe)
                                         .FirstOrDefault(mat => mat.ID == ID);
             }
         }
 
-        public static Material GetMaterial(Construction construction,
+        public static Material GetMaterial(string type,
+                                            string line,
+                                            string aspect,
+                                            string recipe)
+        {
+            // Returns a Material entities with the type, line, aspect and recipe
+            // if none is found null is returned
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.Materials.Include(mat => mat.Aspect)
+                                        .Include(mat => mat.MaterialLine)
+                                        .Include(mat => mat.MaterialType)
+                                        .Include(mat => mat.Recipe)
+                                        .FirstOrDefault(mat => mat.Aspect.Code == aspect
+                                                            && mat.MaterialLine.Code == line
+                                                            && mat.Recipe.Code == recipe
+                                                            && mat.MaterialType.Code == type);
+            }
+        }
+
+        public static Material GetMaterial(MaterialType type,
+                                            MaterialLine line,
+                                            Aspect aspect,
                                             Recipe recipe)
         {
             // Returns a Material entities with the given construction and recipe
@@ -448,11 +360,14 @@ namespace DBManager.Services
             {
                 entities.Configuration.LazyLoadingEnabled = false;
 
-                return entities.Materials.Include(mat => mat.Construction.Aspect)
-                                        .Include(mat => mat.Construction.Type)
+                return entities.Materials.Include(mat => mat.Aspect)
+                                        .Include(mat => mat.MaterialLine)
+                                        .Include(mat => mat.MaterialType)
                                         .Include(mat => mat.Recipe)
-                                        .FirstOrDefault(mat => mat.ConstructionID == construction.ID
-                                                            && mat.RecipeID == recipe.ID);
+                                        .FirstOrDefault(mat => mat.AspectID == aspect.ID
+                                                            && mat.LineID == line.ID
+                                                            && mat.RecipeID == recipe.ID
+                                                            && mat.TypeID == type.ID);
             }
         }
 
@@ -525,9 +440,10 @@ namespace DBManager.Services
             using (DBEntities entities = new DBEntities())
             {
                 return entities.Samples.Where(sle => sle.Code == "A")
-                                        .Include(samp => samp.Batch.Material.Construction.Aspect)
-                                        .Include(samp => samp.Batch.Material.Construction.Project)
-                                        .Include(samp => samp.Batch.Material.Construction.Type)
+                                        .Include(samp => samp.Batch.Material.Aspect)
+                                        .Include(samp => samp.Batch.Material.MaterialLine)
+                                        .Include(samp => samp.Batch.Material.MaterialType)
+                                        .Include(samp => samp.Batch.Material.Project)
                                         .Include(samp => samp.Batch.Material.Recipe.Colour)
                                         .OrderByDescending(sle => sle.Date)
                                         .Take(number)

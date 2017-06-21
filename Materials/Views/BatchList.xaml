@@ -12,15 +12,15 @@
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Odp" 
-                                    DisplayMemberBinding="{Binding Path=Number}"/>
+                                    DisplayMemberBinding="{Binding Number}"/>
                     <GridViewColumn Header="Tipo"
-                                    DisplayMemberBinding="{Binding Path=Material.Construction.Type.Code}"/>
+                                    DisplayMemberBinding="{Binding Material.MaterialType.Code}"/>
                     <GridViewColumn Header="Riga"
-                                    DisplayMemberBinding="{Binding Path=Material.Construction.Line}"/>
+                                    DisplayMemberBinding="{Binding Material.MaterialLine.Code}"/>
                     <GridViewColumn Header="Aspetto"
-                                    DisplayMemberBinding="{Binding Path=Material.Construction.Aspect.Code}"/>
+                                    DisplayMemberBinding="{Binding Material.Aspect.Code}"/>
                     <GridViewColumn Header="Mescola"
-                                    DisplayMemberBinding="{Binding Path=Material.Recipe.Code}"/>
+                                    DisplayMemberBinding="{Binding Material.Recipe.Code}"/>
                     <GridViewColumn Header="Colore"
                                     DisplayMemberBinding="{Binding Material.Recipe.Colour.Name}"/>
                 </GridView>

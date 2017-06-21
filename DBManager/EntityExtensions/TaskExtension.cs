@@ -47,9 +47,10 @@ namespace DBManager.EntityExtensions
             {
                 entities.Configuration.LazyLoadingEnabled = false;
                 
-                Task tempEntry = entities.Tasks.Include(tsk => tsk.Batch.Material.Construction.Aspect)
-                                                .Include(tsk => tsk.Batch.Material.Construction.Project.Oem)
-                                                .Include(tsk => tsk.Batch.Material.Construction.Type)
+                Task tempEntry = entities.Tasks.Include(tsk => tsk.Batch.Material.Aspect)
+                                                .Include(tsk => tsk.Batch.Material.MaterialLine)
+                                                .Include(tsk => tsk.Batch.Material.MaterialType)
+                                                .Include(tsk => tsk.Batch.Material.Project.Oem)
                                                 .Include(tsk => tsk.Batch.Material.Recipe.Colour)
                                                 .Include(tsk => tsk.Batch.Material.Recipe.Master)
                                                 .Include(tsk => tsk.Requester)

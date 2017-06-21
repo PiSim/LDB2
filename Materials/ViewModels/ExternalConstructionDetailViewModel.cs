@@ -1,4 +1,5 @@
 ﻿using DBManager;
+using DBManager.EntityExtensions;
 using DBManager.Services;
 using Microsoft.Practices.Unity;
 using Infrastructure;
@@ -18,12 +19,12 @@ namespace Materials.ViewModels
     public class ExternalConstructionDetailViewModel : BindableBase 
     {
         private bool _editMode;
-        private Construction _selectedAssignedConstruction, _selectedUnassignedConstruction;
+        private Material _selectedAssignedMaterial, _selectedUnassignedMaterial;
         private DBPrincipal _principal;
-        private DelegateCommand _assignConstructionToExternal, 
+        private DelegateCommand _assignMaterialToExternal, 
                                 _save,
-                                _startEdit, 
-                                _unassignConstructionToExternal;
+                                _startEdit,
+                                _unassignMaterialToExternal;
         private EventAggregator _eventAggregator;
         private ExternalConstruction _externalConstructionInstance;
         private IEnumerable<Organization> _oemList;
@@ -40,16 +41,16 @@ namespace Materials.ViewModels
             _oemList = new List<Organization>(OrganizationService.GetOrganizations(OrganizationRoleNames.OEM));
             _specificationList = new List<Specification>(SpecificationService.GetSpecifications());
 
-            _assignConstructionToExternal = new DelegateCommand(
+            _assignMaterialToExternal = new DelegateCommand(
                 () =>
                 {
-                    _externalConstructionInstance.AddConstruction(_selectedUnassignedConstruction);
-                    SelectedUnassignedConstruction = null;
-                    RaisePropertyChanged("AssignedConstructions");
+                    _externalConstructionInstance.AddMaterial(_selectedUnassignedMaterial);
+                    SelectedUnassignedMaterial = null;
+                    RaisePropertyChanged("AssignedMaterials");
                     RaisePropertyChanged("BatchList");
-                    RaisePropertyChanged("UnassignedConstructions");
+                    RaisePropertyChanged("UnassignedMaterials");
                 },
-                () => _selectedUnassignedConstruction != null 
+                () => _selectedUnassignedMaterial != null 
                     && _externalConstructionInstance != null
                     && !EditMode
                     && CanModify);
@@ -69,34 +70,34 @@ namespace Materials.ViewModels
                 },
                 () => CanModify && !_editMode);
 
-            _unassignConstructionToExternal = new DelegateCommand(
+            _unassignMaterialToExternal = new DelegateCommand(
                 () =>
                 {
-                    _externalConstructionInstance.RemoveConstruction(_selectedAssignedConstruction);
-                    SelectedAssignedConstruction = null;
-                    RaisePropertyChanged("AssignedConstructions");
+                    _externalConstructionInstance.RemoveMaterial(_selectedAssignedMaterial);
+                    SelectedAssignedMaterial = null;
+                    RaisePropertyChanged("AssignedMaterials");
                     RaisePropertyChanged("BatchList");
-                    RaisePropertyChanged("UnassignedConstructions");
+                    RaisePropertyChanged("UnassignedMaterials");
                 },
-                () => _selectedAssignedConstruction != null
+                () => _selectedAssignedMaterial != null
                     && CanModify
                     && !EditMode);
         }
 
-        public DelegateCommand AssignConstructionToExternalCommand
+        public DelegateCommand AssignMaterialToExternalCommand
         {
-            get { return _assignConstructionToExternal; }
+            get { return _assignMaterialToExternal; }
         }
 
-        public IEnumerable<Construction> AssignedConstructions
+        public IEnumerable<Material> AssignedMaterials
         {
             get
             {
                 if (_externalConstructionInstance == null)
-                    return new List<Construction>();
+                    return new List<Material>();
 
                 else
-                    return new List<Construction>(_externalConstructionInstance.Constructions);
+                    return new List<Material>(_externalConstructionInstance.GetMaterials());
             }
         }
 
@@ -127,8 +128,8 @@ namespace Materials.ViewModels
             {
                 _editMode = value;
 
-                _assignConstructionToExternal.RaiseCanExecuteChanged();
-                _unassignConstructionToExternal.RaiseCanExecuteChanged();
+                _assignMaterialToExternal.RaiseCanExecuteChanged();
+                _unassignMaterialToExternal.RaiseCanExecuteChanged();
                 _save.RaiseCanExecuteChanged();
                 _startEdit.RaiseCanExecuteChanged();
                 RaisePropertyChanged("EditMode");
@@ -166,14 +167,14 @@ namespace Materials.ViewModels
                         _selectedSpecification = _specificationList.First(spec => spec.ID == _externalConstructionInstance.DefaultSpecVersion.Specification.ID);
                         _selectedSpecification.Load();
                     }
-                }       
+                }
 
-                SelectedAssignedConstruction = null;
-                SelectedUnassignedConstruction = null;
+                SelectedAssignedMaterial = null;
+                SelectedUnassignedMaterial = null;
 
                 EditMode = false;
 
-                RaisePropertyChanged("AssignedConstructions");
+                RaisePropertyChanged("AssignedMaterials");
                 RaisePropertyChanged("BatchList");
                 RaisePropertyChanged("ExternalConstructionInstance");
                 RaisePropertyChanged("ExternalConstructionName");
@@ -236,14 +237,14 @@ namespace Materials.ViewModels
             get { return _save; }
         }
 
-        public Construction SelectedAssignedConstruction
+        public Material SelectedAssignedMaterial
         {
-            get { return _selectedAssignedConstruction; }
+            get { return _selectedAssignedMaterial; }
             set
             {
-                _selectedAssignedConstruction = value;
-                _unassignConstructionToExternal.RaiseCanExecuteChanged();
-                RaisePropertyChanged("SelectedAssignedConstruction");
+                _selectedAssignedMaterial = value;
+                _unassignMaterialToExternal.RaiseCanExecuteChanged();
+                RaisePropertyChanged("SelectedAssignedMaterial");
             }
         }
 
@@ -288,14 +289,14 @@ namespace Materials.ViewModels
             }
         }
 
-        public Construction SelectedUnassignedConstruction
+        public Material SelectedUnassignedMaterial
         {
-            get { return _selectedUnassignedConstruction; }
+            get { return _selectedUnassignedMaterial; }
             set
             {
-                _selectedUnassignedConstruction = value;
-                _assignConstructionToExternal.RaiseCanExecuteChanged();
-                RaisePropertyChanged("SelectedUnassignedConstruction");
+                _selectedUnassignedMaterial = value;
+                _assignMaterialToExternal.RaiseCanExecuteChanged();
+                RaisePropertyChanged("SelectedUnassignedMaterial");
             }
         }
 
@@ -321,16 +322,16 @@ namespace Materials.ViewModels
             }
         }
 
-        public DelegateCommand UnassignConstructionToExternalCommand
+        public DelegateCommand UnassignMaterialToExternalCommand
         {
-            get { return _unassignConstructionToExternal; }
+            get { return _unassignMaterialToExternal; }
         }
 
-        public List<Construction> UnassignedConstructions
+        public List<Material> UnassignedMaterials
         {
             get
             {
-                return new List<Construction>(DataService.GetConstructionsWithoutExternal());
+                return new List<Material>(DataService.GetMaterialsWithoutConstruction());
             }
         }
     }

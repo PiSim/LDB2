@@ -67,11 +67,11 @@ namespace Services
         {
             target.Load();
 
-            if (target.Construction.Project == null)
+            if (target.Project == null)
             {
                 ProjectPickerDialog prjDialog = new ProjectPickerDialog();
                 if (prjDialog.ShowDialog() == true)
-                    target.Construction.Project = prjDialog.ProjectInstance;
+                    target.Project = prjDialog.ProjectInstance;
             }
 
             if (target.Recipe.Colour == null)
@@ -229,68 +229,6 @@ namespace Services
             return temp;
         }
 
-        public static Material GetMaterial(string typeCode,
-                                            string line,
-                                            string aspectCode,
-                                            string recipeCode)
-        {
-            Material output = null;
-
-            Construction tempConstruction = MaterialService.GetConstruction(typeCode,
-                                                                            line,
-                                                                            aspectCode);
-
-            Recipe tempRecipe = MaterialService.GetRecipe(recipeCode);
-
-            if (tempConstruction != null && tempRecipe != null)
-                output = MaterialService.GetMaterial(tempConstruction, tempRecipe);
-
-            else
-            {
-                if (tempConstruction == null)
-                {
-                    tempConstruction = new Construction();
-                    tempConstruction.SetType(MaterialService.GetMaterialType(typeCode));
-                    tempConstruction.Line = line;
-                    tempConstruction.SetAspect(MaterialService.GetAspect(aspectCode));
-
-                    if (tempConstruction.Aspect == null)
-                    {
-                        Aspect tempAspect = new Aspect();
-                        tempAspect.Code = aspectCode;
-                        tempAspect.Name = "";
-
-                        tempAspect.Create();
-
-                        tempConstruction.SetAspect(tempAspect);
-                    }
-
-                    tempConstruction.Create();
-                }
-
-                if (tempRecipe == null)
-                {
-                    tempRecipe = new Recipe();
-                    tempRecipe.Code = recipeCode;
-
-                    tempRecipe.Create();
-                }
-            }
-
-            if (output == null)
-            {
-                output = new Material();
-
-                output.SetConstruction(tempConstruction);
-                output.SetRecipe(tempRecipe);
-
-                output.Create();
-            }
-
-            return output;
-        }
-
-
         public static void SetTaskItemsAssignment(IEnumerable<Test> testList, DBManager.Task taskEntry)
         {
             foreach (TaskItem tski in taskEntry.TaskItems)
@@ -311,10 +249,10 @@ namespace Services
             MaterialCreationDialog materialPicker = new MaterialCreationDialog();
             if (materialPicker.ShowDialog() == true)
             {
-                Material output = GetMaterial(materialPicker.MaterialType,
-                                            materialPicker.MaterialLine,
-                                            materialPicker.MaterialAspect,
-                                            materialPicker.MaterialRecipe);
+                Material output = MaterialService.GetMaterial(materialPicker.MaterialType,
+                                                            materialPicker.MaterialLine,
+                                                            materialPicker.MaterialAspect,
+                                                            materialPicker.MaterialRecipe);
                 return output;
             }
 

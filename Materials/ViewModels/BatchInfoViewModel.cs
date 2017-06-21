@@ -154,7 +154,7 @@ namespace Materials.ViewModels
             {
                 try
                 {
-                    return _instance.Material.Construction.Project;
+                    return _instance.Material.Project;
                 }
                 catch
                 {

@@ -21,9 +21,9 @@ namespace Materials.Views
     /// <summary>
     /// Logica di interazione per ConstructionDetail.xaml
     /// </summary>
-    public partial class ConstructionDetail : UserControl, IView, INavigationAware
+    public partial class MaterialDetail : UserControl, IView, INavigationAware
     {
-        public ConstructionDetail()
+        public MaterialDetail()
         {
             InitializeComponent();
         }
@@ -40,8 +40,8 @@ namespace Materials.Views
 
         public void OnNavigatedTo(NavigationContext ncontext)
         {
-            (DataContext as ViewModels.ConstructionDetailViewModel).ConstructionInstance =
-               ncontext.Parameters["ObjectInstance"] as Construction;
+            (DataContext as ViewModels.MaterialDetailViewModel).MaterialInstance =
+               ncontext.Parameters["ObjectInstance"] as Material;
         }
     }
 }

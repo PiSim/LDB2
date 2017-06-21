@@ -45,9 +45,10 @@ namespace DBManager.Services
             {
                 entities.Configuration.LazyLoadingEnabled = false;
 
-                return entities.Tasks.Include(tsk => tsk.Batch.Material.Construction.Aspect)
-                                    .Include(tsk => tsk.Batch.Material.Construction.Project)
-                                    .Include(tsk => tsk.Batch.Material.Construction.Type)
+                return entities.Tasks.Include(tsk => tsk.Batch.Material.Aspect)
+                                    .Include(tsk => tsk.Batch.Material.Project)
+                                    .Include(tsk => tsk.Batch.Material.MaterialLine)
+                                    .Include(tsk => tsk.Batch.Material.MaterialType)
                                     .Include(tsk => tsk.Batch.Material.Recipe.Colour)
                                     .Include(tsk => tsk.Requester)
                                     .Include(tsk => tsk.SpecificationVersion.Specification.Standard)

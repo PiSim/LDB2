@@ -18,9 +18,9 @@ namespace Materials.Views
     /// <summary>
     /// Logica di interazione per ConstructionMain.xaml
     /// </summary>
-    public partial class ConstructionMain : UserControl
+    public partial class MaterialMain : UserControl
     {
-        public ConstructionMain()
+        public MaterialMain()
         {
             InitializeComponent();
         }

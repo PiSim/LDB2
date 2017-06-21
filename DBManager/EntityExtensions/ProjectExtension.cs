@@ -9,9 +9,9 @@ namespace DBManager.EntityExtensions
 {
     public static class ProjectExtension
     {
-        public static IEnumerable<Construction> GetConstructions(this Project entry)
+        public static IEnumerable<Material> GetMaterials(this Project entry)
         {
-            // Returns all Construction entities for a Project
+            // Returns all Material entities for a Project
 
             if (entry == null)
                 return null;
@@ -20,11 +20,12 @@ namespace DBManager.EntityExtensions
             {
                 entities.Configuration.LazyLoadingEnabled = false;
 
-                return entities.Constructions.Include(con => con.Aspect)
-                                            .Include(con => con.ExternalConstruction)
-                                            .Include(con => con.Type)
-                                            .Where(con => con.ProjectID == entry.ID)
-                                            .ToList();
+                return entities.Materials.Include(mat => mat.Aspect)
+                                        .Include(mat => mat.ExternalConstruction)
+                                        .Include(mat => mat.MaterialLine)
+                                        .Include(mat => mat.MaterialType)
+                                        .Where(con => con.ProjectID == entry.ID)
+                                        .ToList();
             }
         }
     }

@@ -19,16 +19,16 @@ namespace Projects.ViewModels
     public class ProjectInfoViewModel : BindableBase
     {
         private bool _editMode;
-        private Construction _selectedAssigned, _selectedUnassigned;
+        private Material _selectedAssigned, _selectedUnassigned;
         private Batch _selectedBatch;
         private DBPrincipal _principal;
-        private DelegateCommand _assignConstruction, 
+        private DelegateCommand _assignMaterial, 
                                 _openBatch, 
                                 _openExternalReport, 
                                 _openReport, 
                                 _save,
                                 _startEdit,
-                                _unassignConstruction;
+                                _unassignMaterial;
         private EventAggregator _eventAggregator;
         private ExternalReport _selectedExternal;
         private Project _projectInstance;
@@ -57,15 +57,15 @@ namespace Projects.ViewModels
 
             #region CommandDefinitions
 
-            _assignConstruction = new DelegateCommand(
+            _assignMaterial = new DelegateCommand(
                 () => 
                 {
                     _selectedUnassigned.ProjectID = _projectInstance.ID;
                     _selectedUnassigned.Update();
 
                     SelectedUnassigned = null;
-                    RaisePropertyChanged("AssignedConstructions");
-                    RaisePropertyChanged("UnassignedConstructions");
+                    RaisePropertyChanged("AssignedMaterials");
+                    RaisePropertyChanged("UnassignedMaterials");
                 },
                 () => _selectedUnassigned != null
             );
@@ -111,14 +111,14 @@ namespace Projects.ViewModels
                 },
                 () => !_editMode);
 
-            _unassignConstruction = new DelegateCommand(
+            _unassignMaterial = new DelegateCommand(
                 () => 
                 {
                     _selectedAssigned.ProjectID = null;
                     _selectedAssigned.Update();
                     
-                    RaisePropertyChanged("AssignedConstructions");
-                    RaisePropertyChanged("UnassignedConstructions");
+                    RaisePropertyChanged("AssignedMaterials");
+                    RaisePropertyChanged("UnassignedMaterials");
                     SelectedAssigned = null;
                 },
                 () => _selectedAssigned != null
@@ -127,17 +127,17 @@ namespace Projects.ViewModels
             #endregion
         }
 
-        public DelegateCommand AssignConstructionCommand
+        public DelegateCommand AssignMaterialCommand
         {
-            get { return _assignConstruction; }
+            get { return _assignMaterial; }
         }
         
-        public IEnumerable<Construction> AssignedConstructions
+        public IEnumerable<Material> AssignedMaterials
         {
-            get { return _projectInstance.GetConstructions(); }
+            get { return _projectInstance.GetMaterials(); }
             private set
             {
-                RaisePropertyChanged("AssignedConstructions");
+                RaisePropertyChanged("AssignedMaterials");
             }
         }
 
@@ -249,9 +249,9 @@ namespace Projects.ViewModels
                 _projectInstance = value;
                 _projectInstance.Load();
 
-                AssignedConstructions = new ObservableCollection<Construction>(_projectInstance.Constructions);
+                AssignedMaterials = new ObservableCollection<Material>(_projectInstance.Materials);
 
-                UnassignedConstructions = new ObservableCollection<Construction>(MaterialService.GetConstructionsWithoutProject());
+                UnassignedMaterials = new ObservableCollection<Material>(MaterialService.GetMaterialsWithoutProject());
                 
                 SelectedBatch = null;
 
@@ -279,14 +279,14 @@ namespace Projects.ViewModels
             get { return _save; }
         }
 
-        public Construction SelectedAssigned
+        public Material SelectedAssigned
         {
             get { return _selectedAssigned; }
             set 
             { 
                 _selectedAssigned = value; 
                 RaisePropertyChanged("SelectedAssigned");
-                _unassignConstruction.RaiseCanExecuteChanged();
+                _unassignMaterial.RaiseCanExecuteChanged();
             }
         }
 
@@ -321,14 +321,14 @@ namespace Projects.ViewModels
             }
         }
         
-        public Construction SelectedUnassigned
+        public Material SelectedUnassigned
         {
             get { return _selectedUnassigned; }
             set 
             { 
                 _selectedUnassigned = value; 
                 RaisePropertyChanged("SelectedUnassigned");
-                _assignConstruction.RaiseCanExecuteChanged();
+                _assignMaterial.RaiseCanExecuteChanged();
             }
         }
 
@@ -348,17 +348,17 @@ namespace Projects.ViewModels
             }
         }
         
-        public DelegateCommand UnassignConstructionCommand
+        public DelegateCommand UnassignMaterialCommand
         {
-            get { return _unassignConstruction; }
+            get { return _unassignMaterial; }
         }
         
-        public IEnumerable<Construction> UnassignedConstructions
+        public IEnumerable<Material> UnassignedMaterials
         {
-            get { return DataService.GetConstructionsWithoutProject(); }
+            get { return DataService.GetMaterialsWithoutProject(); }
             private set
             {
-                RaisePropertyChanged("UnassignedConstructions");
+                RaisePropertyChanged("UnassignedMaterials");
             }
         }
     }        

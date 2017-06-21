@@ -60,35 +60,6 @@ namespace DBManager.Services.Tests
             Assert.IsNull(loadedEntry);
         }
 
-        [TestMethod()]
-        public void ConstructionCRUDTest()
-        {
-            Construction testEntry = new Construction();
-            testEntry.Aspect = MaterialService.GetAspect("PSY");
-            testEntry.Line = "XXX";
-            testEntry.Type = MaterialService.GetMaterialType("31SA");
-
-            testEntry.Create();
-
-            testEntry.Line = "999";
-            testEntry.Update();
-
-            Construction loadedEntry = MaterialService.GetConstruction("31SA",
-                                                                        "999",
-                                                                        "PSY");
-
-            Assert.IsNotNull(loadedEntry);
-            Assert.IsTrue(loadedEntry.Line == "999");
-
-            testEntry.Delete();
-
-            loadedEntry = MaterialService.GetConstruction("31SA",
-                                                          "999",
-                                                          "PSY");
-
-            Assert.IsNull(loadedEntry);
-        }
-
         
 
         [TestMethod()]

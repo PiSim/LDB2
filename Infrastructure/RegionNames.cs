@@ -11,8 +11,6 @@ namespace Infrastructure
         public static string BatchReportListRegion { get { return "BatchReportListRegion"; } }
         public static string ColourEditBatchListRegion { get { return "ColourEditBatchListRegion"; } }
         public static string ColourEditRegion { get { return "ColourEditRegion"; } }
-        public static string ConstructionDetailBatchListRegion { get { return "ConstructionDetailBatchListRegionName"; } }
-        public static string ConstructionDetailRegion { get { return "ConstructionDetailRegion"; } }
         public static string CurrentUserMainReportListRegion { get { return "CurrentUserMainReportListRegion"; } }
         public static string ExternalConstructionDetailRegion { get { return "ExternalConstructionDetailRegion"; } }
         public static string ExternalConstructionBatchListRegion { get { return "ExternalConstructionBatchListRegion"; } }
@@ -24,9 +22,11 @@ namespace Infrastructure
         public static string MainReportListRegion { get { return "MainReportListRegion"; } }
         public static string MainTaskListRegion { get { return "MainTaskListRegion"; } }
         public static string MainUserReportListRegion { get { return "MainUserReportListRegion"; } }
+        public static string MaterialDetailBatchListRegion { get { return "MaterialDetailBatchListRegionName"; } }
+        public static string MaterialDetailRegion { get { return "MaterialDetailRegion"; } }
         public static string MaterialInfoAspectRegion { get { return "MaterialInfoAspectRegion"; } }
         public static string MaterialInfoColourRegion { get { return "MaterialInfoColourRegion"; } }
-        public static string MaterialInfoCostructionRegion { get { return "MaterialInfoConstructionRegion"; } }
+        public static string MaterialInfoMaterialRegion { get { return "MaterialInfoMaterialRegion"; } }
         public static string MaterialInfoExternalCostructionRegion { get { return "MaterialInfoExternalCostructionRegion"; } }
         public static string MethodEditRegion { get { return "MethodEditRegion"; } }
         public static string MethodIssueRegion { get { return "MethodIssueRegion"; } }

@@ -126,8 +126,8 @@
     <Compile Include="ViewModels\ColorCreationDialogViewModel.cs" />
     <Compile Include="ViewModels\ColourEditViewModel.cs" />
     <Compile Include="ViewModels\ColourMainViewModel.cs" />
-    <Compile Include="ViewModels\ConstructionDetailViewModel.cs" />
-    <Compile Include="ViewModels\ConstructionMainViewModel.cs" />
+    <Compile Include="ViewModels\MaterialDetailViewModel.cs" />
+    <Compile Include="ViewModels\MaterialMainViewModel.cs" />
     <Compile Include="ViewModels\ExternalConstructionDetailViewModel.cs" />
     <Compile Include="ViewModels\ExternalConstructionMainViewModel.cs" />
     <Compile Include="ViewModels\MaterialInfoMainViewModel.cs" />
@@ -159,11 +159,11 @@
     <Compile Include="Views\ColourMain.xaml.cs">
       <DependentUpon>ColourMain.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\ConstructionDetail.xaml.cs">
-      <DependentUpon>ConstructionDetail.xaml</DependentUpon>
+    <Compile Include="Views\MaterialDetail.xaml.cs">
+      <DependentUpon>MaterialDetail.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\ConstructionMain.xaml.cs">
-      <DependentUpon>ConstructionMain.xaml</DependentUpon>
+    <Compile Include="Views\MaterialMain.xaml.cs">
+      <DependentUpon>MaterialMain.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ExternalConstructionDetail.xaml.cs">
       <DependentUpon>ExternalConstructionDetail.xaml</DependentUpon>
@@ -256,11 +256,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\ConstructionDetail.xaml">
+    <Page Include="Views\MaterialDetail.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\ConstructionMain.xaml">
+    <Page Include="Views\MaterialMain.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

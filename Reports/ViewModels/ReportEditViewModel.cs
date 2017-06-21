@@ -300,7 +300,7 @@ namespace Reports.ViewModels
             {
                 try
                 {
-                    return _instance.Batch.Material.Construction.Project.Name;
+                    return _instance.Batch.Material.Project.Name;
                 }
                 catch (NullReferenceException)
                 {

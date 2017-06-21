@@ -114,9 +114,9 @@ namespace Reporting
             
             if (target.Batch.Material != null)
             {
-                materialCode = target.Batch.Material.Construction.Type.Code 
-                                + target.Batch.Material.Construction.Line
-                                + target.Batch.Material.Construction.Aspect.Code;
+                materialCode = target.Batch.Material.MaterialType.Code 
+                                + target.Batch.Material.MaterialLine.Code
+                                + target.Batch.Material.Aspect.Code;
                 
                 recipeCode = target.Batch.Material.Recipe.Code;
                 
@@ -126,8 +126,8 @@ namespace Reporting
                 else
                     colourName = "";
 
-                if (target.Batch.Material.Construction.Project != null)
-                    prjName = target.Batch.Material.Construction.Project.Name;
+                if (target.Batch.Material.Project != null)
+                    prjName = target.Batch.Material.Project.Name;
                 
                 else
                     prjName = "";

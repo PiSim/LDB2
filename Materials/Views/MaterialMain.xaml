@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="Materials.Views.ConstructionMain"
+﻿<UserControl x:Class="Materials.Views.MaterialMain"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -16,8 +16,8 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
 
-        <ListView ItemsSource="{Binding ConstructionList}"
-                  SelectedItem="{Binding SelectedConstruction, Mode=TwoWay}"
+        <ListView ItemsSource="{Binding MaterialList}"
+                  SelectedItem="{Binding SelectedMaterial, Mode=TwoWay}"
                   Grid.Column="0"
                   Margin="5">
             <i:Interaction.Behaviors>
@@ -26,9 +26,9 @@
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Tipo"
-                                    DisplayMemberBinding="{Binding Type.Code}"/>
+                                    DisplayMemberBinding="{Binding MaterialType.Code}"/>
                     <GridViewColumn Header="Riga"
-                                    DisplayMemberBinding="{Binding Line}"/>
+                                    DisplayMemberBinding="{Binding MaterialLine.Code}"/>
                     <GridViewColumn Header="Aspetto"
                                     DisplayMemberBinding="{Binding Aspect.Code}"/>
                     <GridViewColumn Header="Progetto"
@@ -37,7 +37,7 @@
             </ListView.View>
         </ListView>
 
-        <ContentControl prism:RegionManager.RegionName="{Binding ConstructionDetailRegionName}"
+        <ContentControl prism:RegionManager.RegionName="{Binding MateriaDetailRegionName}"
                         Grid.Column="1"/>
 
     </Grid>

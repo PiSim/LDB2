@@ -25,9 +25,9 @@ namespace Materials.ViewModels
             get { return RegionNames.MaterialInfoColourRegion; }
         }
 
-        public string MaterialInfoConstructionRegionName
+        public string MaterialInfoMaterialRegionName
         {
-            get { return RegionNames.MaterialInfoCostructionRegion; }
+            get { return RegionNames.MaterialInfoMaterialRegion; }
         }
 
         public string MaterialInfoExternalConstructionRegionName

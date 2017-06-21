@@ -118,7 +118,7 @@ namespace Materials.ViewModels
                     return new List<Batch>();
 
                 else
-                    return new List<Batch>(_entities.Batches.Where(btc => btc.Material.Construction.Aspect.ID == _aspectInstance.ID));
+                    return new List<Batch>(_entities.Batches.Where(btc => btc.Material.AspectID == _aspectInstance.ID));
             }
         }
 

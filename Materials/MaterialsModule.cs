@@ -26,7 +26,7 @@ namespace Materials
             _container.RegisterType<Object, Views.BatchMain>(MaterialViewNames.BatchesView);
             _container.RegisterType<Object, Views.ColourEdit>(MaterialViewNames.ColourEdit);
             _container.RegisterType<Object, Views.ColourMain>(MaterialViewNames.ColourMain);
-            _container.RegisterType<Object, Views.ConstructionDetail>(MaterialViewNames.ConstructionDetail);
+            _container.RegisterType<Object, Views.MaterialDetail>(MaterialViewNames.MaterialDetail);
             _container.RegisterType<Object, Views.ExternalConstructionDetail>(MaterialViewNames.ExternalConstructionDetail);
             _container.RegisterType<Object, Views.MaterialInfoMain>(MaterialViewNames.MaterialView);
             _container.RegisterType<Object, Views.SampleLog>(MaterialViewNames.SampleLogView);
@@ -40,8 +40,8 @@ namespace Materials
             _container.RegisterType<ViewModels.ColorCreationDialogViewModel>();
             _container.RegisterType<ViewModels.ColourEditViewModel>();
             _container.RegisterType<ViewModels.ColourMainViewModel>();
-            _container.RegisterType<ViewModels.ConstructionDetailViewModel>();
-            _container.RegisterType<ViewModels.ConstructionMainViewModel>();
+            _container.RegisterType<ViewModels.MaterialDetailViewModel>();
+            _container.RegisterType<ViewModels.MaterialMainViewModel>();
             _container.RegisterType<ViewModels.ExternalConstructionDetailViewModel>();
             _container.RegisterType<ViewModels.ExternalConstructionMainViewModel>();
             _container.RegisterType<ViewModels.MaterialInfoMainViewModel>();
@@ -54,7 +54,7 @@ namespace Materials
                                                 typeof(Views.BatchList));
             _regionManager.RegisterViewWithRegion(RegionNames.ColourEditBatchListRegion,
                                                 typeof(Views.BatchList));
-            _regionManager.RegisterViewWithRegion(RegionNames.ConstructionDetailBatchListRegion,
+            _regionManager.RegisterViewWithRegion(RegionNames.MaterialDetailBatchListRegion,
                                                 typeof(Views.BatchList));
             _regionManager.RegisterViewWithRegion(RegionNames.ExternalConstructionBatchListRegion,
                                                 typeof(Views.BatchList));
@@ -64,8 +64,8 @@ namespace Materials
                                                 typeof(Views.AspectMain));
             _regionManager.RegisterViewWithRegion(RegionNames.MaterialInfoColourRegion,
                                                 typeof(Views.ColourMain));
-            _regionManager.RegisterViewWithRegion(RegionNames.MaterialInfoCostructionRegion,
-                                                typeof(Views.ConstructionMain));
+            _regionManager.RegisterViewWithRegion(RegionNames.MaterialInfoMaterialRegion,
+                                                typeof(Views.MaterialMain));
             _regionManager.RegisterViewWithRegion(RegionNames.MaterialInfoExternalCostructionRegion,
                                                 typeof(Views.ExternalConstructionMain));
             _regionManager.RegisterViewWithRegion(RegionNames.ProjectBatchListRegion,

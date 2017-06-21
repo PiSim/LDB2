@@ -113,10 +113,10 @@ namespace Tasks.ViewModels
         {
             get
             {
-                if (_material == null || _material.Construction.ExternalConstruction == null)
+                if (_material == null || _material.ExternalConstruction == null)
                     return null;
 
-                return _material.Construction.ExternalConstruction.Name;
+                return _material.ExternalConstruction.Name;
             }
         }
 
@@ -182,9 +182,9 @@ namespace Tasks.ViewModels
                 _selectedBatch = value;
                 _material = _selectedBatch.GetMaterial();
 
-                if (_material != null && _material.Construction.ExternalConstruction != null)
+                if (_material != null && _material.ExternalConstruction != null)
                 {
-                    SpecificationVersion tempVersion = SpecificationService.GetSpecificationVersion((int)_material.Construction.ExternalConstruction.DefaultSpecVersionID);
+                    SpecificationVersion tempVersion = SpecificationService.GetSpecificationVersion((int)_material.ExternalConstruction.DefaultSpecVersionID);
                     SelectedSpecification = SpecificationList.FirstOrDefault(spec => spec.ID == tempVersion.SpecificationID);
                     SelectedVersion = VersionList.First(vers => vers.ID == tempVersion.ID);
                 }

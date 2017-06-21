@@ -30,6 +30,7 @@
           <Property Name="number" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="materialID" Type="int" />
           <Property Name="notes" Type="varchar" MaxLength="45" Nullable="false" />
+          <Property Name="trial_areaID" Type="int" />
         </EntityType>
         <EntityType Name="calibration_files">
           <Key>
@@ -68,17 +69,6 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="name" Type="varchar" MaxLength="45" Nullable="false" />
           <Property Name="code" Type="varchar" MaxLength="45" Nullable="false" />
-        </EntityType>
-        <EntityType Name="constructions">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="typeID" Type="int" Nullable="false" />
-          <Property Name="line" Type="char" MaxLength="3" Nullable="false" />
-          <Property Name="aspectID" Type="int" Nullable="false" />
-          <Property Name="projectID" Type="int" />
-          <Property Name="external_constructionID" Type="int" />
         </EntityType>
         <EntityType Name="control_plan_items">
           <Key>
@@ -212,6 +202,13 @@
           <Property Name="date" Type="varchar" MaxLength="45" />
           <Property Name="batchID" Type="int" />
         </EntityType>
+        <EntityType Name="material_lines">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="code" Type="varchar" MaxLength="45" Nullable="false" />
+        </EntityType>
         <EntityType Name="material_types">
           <Key>
             <PropertyRef Name="ID" />
@@ -225,8 +222,12 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="constructionID" Type="int" Nullable="false" />
           <Property Name="recipeID" Type="int" Nullable="false" />
+          <Property Name="lineID" Type="int" Nullable="false" />
+          <Property Name="typeID" Type="int" Nullable="false" />
+          <Property Name="aspectID" Type="int" Nullable="false" />
+          <Property Name="projectID" Type="int" />
+          <Property Name="external_constructionID" Type="int" />
         </EntityType>
         <EntityType Name="methods">
           <Key>
@@ -518,6 +519,13 @@
           <Property Name="method_issueID" Type="int" />
           <Property Name="requirementID" Type="int" />
         </EntityType>
+        <EntityType Name="trial_areas">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="45" Nullable="false" />
+        </EntityType>
         <EntityType Name="user_role_mappings">
           <Key>
             <PropertyRef Name="ID" />
@@ -545,14 +553,14 @@
           <Property Name="user_name" Type="text" Nullable="false" />
           <Property Name="personID" Type="int" />
         </EntityType>
-        <Association Name="aspect">
+        <Association Name="aspect_to_material">
           <End Role="aspects" Type="Self.aspects" Multiplicity="1" />
-          <End Role="constructions" Type="Self.constructions" Multiplicity="*" />
+          <End Role="materials" Type="Self.materials" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="aspects">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="constructions">
+            <Dependent Role="materials">
               <PropertyRef Name="aspectID" />
             </Dependent>
           </ReferentialConstraint>
@@ -709,18 +717,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="construction_to_material">
-          <End Role="constructions" Type="Self.constructions" Multiplicity="1" />
-          <End Role="materials" Type="Self.materials" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="constructions">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="materials">
-              <PropertyRef Name="constructionID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="control_plan_to_item">
           <End Role="control_plans" Type="Self.control_plans" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -771,14 +767,14 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="external_construction">
+        <Association Name="external_construction_to_material">
           <End Role="external_constructions" Type="Self.external_constructions" Multiplicity="0..1" />
-          <End Role="constructions" Type="Self.constructions" Multiplicity="*" />
+          <End Role="materials" Type="Self.materials" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="external_constructions">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="constructions">
+            <Dependent Role="materials">
               <PropertyRef Name="external_constructionID" />
             </Dependent>
           </ReferentialConstraint>
@@ -910,6 +906,18 @@
             </Principal>
             <Dependent Role="projects">
               <PropertyRef Name="project_leaderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="line_to_material">
+          <End Role="material_lines" Type="Self.material_lines" Multiplicity="1" />
+          <End Role="materials" Type="Self.materials" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="material_lines">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="materials">
+              <PropertyRef Name="lineID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1203,14 +1211,14 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="project">
+        <Association Name="project_to_material">
           <End Role="projects" Type="Self.projects" Multiplicity="0..1" />
-          <End Role="constructions" Type="Self.constructions" Multiplicity="*" />
+          <End Role="materials" Type="Self.materials" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="projects">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="constructions">
+            <Dependent Role="materials">
               <PropertyRef Name="projectID" />
             </Dependent>
           </ReferentialConstraint>
@@ -1665,18 +1673,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="type_to_construction">
-          <End Role="material_types" Type="Self.material_types" Multiplicity="1" />
-          <End Role="constructions" Type="Self.constructions" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="material_types">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="constructions">
-              <PropertyRef Name="typeID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="type_to_instrument">
           <End Role="instrument_types" Type="Self.instrument_types" Multiplicity="1" />
           <End Role="instruments" Type="Self.instruments" Multiplicity="*" />
@@ -1686,6 +1682,18 @@
             </Principal>
             <Dependent Role="instruments">
               <PropertyRef Name="instrument_typeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="type_to_material">
+          <End Role="material_types" Type="Self.material_types" Multiplicity="1" />
+          <End Role="materials" Type="Self.materials" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="material_types">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="materials">
+              <PropertyRef Name="typeID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1711,7 +1719,6 @@
           <EntitySet Name="calibration_reference_mappings" EntityType="Self.calibration_reference_mappings" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="calibration_reports" EntityType="Self.calibration_reports" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="colours" EntityType="Self.colours" Schema="labdb" store:Type="Tables" />
-          <EntitySet Name="constructions" EntityType="Self.constructions" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="control_plan_items" EntityType="Self.control_plan_items" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="control_plans" EntityType="Self.control_plans" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="currencies" EntityType="Self.currencies" Schema="labdb" store:Type="Tables" />
@@ -1725,6 +1732,7 @@
           <EntitySet Name="instrument_types" EntityType="Self.instrument_types" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="instruments" EntityType="Self.instruments" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="masters" EntityType="Self.masters" Schema="labdb" store:Type="Tables" />
+          <EntitySet Name="material_lines" EntityType="Self.material_lines" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="material_types" EntityType="Self.material_types" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="materials" EntityType="Self.materials" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="methods" EntityType="Self.methods" Schema="labdb" store:Type="Tables" />
@@ -1755,12 +1763,13 @@
           <EntitySet Name="task_items" EntityType="Self.task_items" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="tasks" EntityType="Self.tasks" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="tests" EntityType="Self.tests" Schema="labdb" store:Type="Tables" />
+          <EntitySet Name="trial_areas" EntityType="Self.trial_areas" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="user_role_mappings" EntityType="Self.user_role_mappings" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="user_roles" EntityType="Self.user_roles" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="users" EntityType="Self.users" Schema="labdb" store:Type="Tables" />
-          <AssociationSet Name="aspect" Association="Self.aspect">
+          <AssociationSet Name="aspect_to_material" Association="Self.aspect_to_material">
             <End Role="aspects" EntitySet="aspects" />
-            <End Role="constructions" EntitySet="constructions" />
+            <End Role="materials" EntitySet="materials" />
           </AssociationSet>
           <AssociationSet Name="author_to_report" Association="Self.author_to_report">
             <End Role="people" EntitySet="people" />
@@ -1810,10 +1819,6 @@
             <End Role="colours" EntitySet="colours" />
             <End Role="recipes" EntitySet="recipes" />
           </AssociationSet>
-          <AssociationSet Name="construction_to_material" Association="Self.construction_to_material">
-            <End Role="constructions" EntitySet="constructions" />
-            <End Role="materials" EntitySet="materials" />
-          </AssociationSet>
           <AssociationSet Name="control_plan_to_item" Association="Self.control_plan_to_item">
             <End Role="control_plans" EntitySet="control_plans" />
             <End Role="control_plan_items" EntitySet="control_plan_items" />
@@ -1830,9 +1835,9 @@
             <End Role="specification_versions" EntitySet="specification_versions" />
             <End Role="external_constructions" EntitySet="external_constructions" />
           </AssociationSet>
-          <AssociationSet Name="external_construction" Association="Self.external_construction">
+          <AssociationSet Name="external_construction_to_material" Association="Self.external_construction_to_material">
             <End Role="external_constructions" EntitySet="external_constructions" />
-            <End Role="constructions" EntitySet="constructions" />
+            <End Role="materials" EntitySet="materials" />
           </AssociationSet>
           <AssociationSet Name="external_lab" Association="Self.external_lab">
             <End Role="organizations" EntitySet="organizations" />
@@ -1873,6 +1878,10 @@
           <AssociationSet Name="leader" Association="Self.leader">
             <End Role="people" EntitySet="people" />
             <End Role="projects" EntitySet="projects" />
+          </AssociationSet>
+          <AssociationSet Name="line_to_material" Association="Self.line_to_material">
+            <End Role="material_lines" EntitySet="material_lines" />
+            <End Role="materials" EntitySet="materials" />
           </AssociationSet>
           <AssociationSet Name="manufacturer_to_instrument" Association="Self.manufacturer_to_instrument">
             <End Role="organizations" EntitySet="organizations" />
@@ -1966,9 +1975,9 @@
             <End Role="purchase_orders" EntitySet="purchase_orders" />
             <End Role="external_reports" EntitySet="external_reports" />
           </AssociationSet>
-          <AssociationSet Name="project" Association="Self.project">
+          <AssociationSet Name="project_to_material" Association="Self.project_to_material">
             <End Role="projects" EntitySet="projects" />
-            <End Role="constructions" EntitySet="constructions" />
+            <End Role="materials" EntitySet="materials" />
           </AssociationSet>
           <AssociationSet Name="project_to_report" Association="Self.project_to_report">
             <End Role="projects" EntitySet="projects" />
@@ -2110,13 +2119,13 @@
             <End Role="tests" EntitySet="tests" />
             <End Role="task_items" EntitySet="task_items" />
           </AssociationSet>
-          <AssociationSet Name="type_to_construction" Association="Self.type_to_construction">
-            <End Role="material_types" EntitySet="material_types" />
-            <End Role="constructions" EntitySet="constructions" />
-          </AssociationSet>
           <AssociationSet Name="type_to_instrument" Association="Self.type_to_instrument">
             <End Role="instrument_types" EntitySet="instrument_types" />
             <End Role="instruments" EntitySet="instruments" />
+          </AssociationSet>
+          <AssociationSet Name="type_to_material" Association="Self.type_to_material">
+            <End Role="material_types" EntitySet="material_types" />
+            <End Role="materials" EntitySet="materials" />
           </AssociationSet>
           <AssociationSet Name="user_to_role_mapping" Association="Self.user_to_role_mapping">
             <End Role="users" EntitySet="users" />
@@ -2134,7 +2143,7 @@
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Code" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Name" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" DefaultValue="" />
-          <NavigationProperty Name="Constructions" Relationship="Self.aspect1" FromRole="aspects" ToRole="constructions" />
+          <NavigationProperty Name="materials" Relationship="labdbModel.aspect_to_material" FromRole="Aspect" ToRole="Material" />
         </EntityType>
         <EntityType Name="BatchFile">
           <Key>
@@ -2161,6 +2170,7 @@
           <NavigationProperty Name="Samples" Relationship="Self.batch_to_sample" FromRole="batches" ToRole="samples" />
           <NavigationProperty Name="Tasks" Relationship="labdbModel.batch_to_task" FromRole="Batch" ToRole="Task" />
           <NavigationProperty Name="ExternalReports" Relationship="labdbModel.external_report_batch_mapping" FromRole="Batch" ToRole="ExternalReport" />
+          <Property Name="trial_areaID" Type="Int32" />
         </EntityType>
         <EntityType Name="Colour">
           <Key>
@@ -2171,22 +2181,6 @@
           <Property Name="Code" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="Recipes" Relationship="Self.color_to_recipe" FromRole="colours" ToRole="recipes" />
         </EntityType>
-        <EntityType Name="Construction">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Line" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="AspectID" Type="Int32" Nullable="false" a:GetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:SetterAccess="Public" />
-          <Property Name="ProjectID" Type="Int32" a:GetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:SetterAccess="Public" />
-          <Property Name="ExternalConstructionID" Type="Int32" a:GetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:SetterAccess="Public" />
-          <NavigationProperty Name="Aspect" Relationship="Self.aspect1" FromRole="constructions" ToRole="aspects" />
-          <NavigationProperty Name="Materials" Relationship="Self.construction_to_material" FromRole="constructions" ToRole="materials" />
-          <NavigationProperty Name="ExternalConstruction" Relationship="Self.external_construction" FromRole="constructions" ToRole="external_constructions" />
-          <NavigationProperty Name="Project" Relationship="Self.project1" FromRole="constructions" ToRole="projects" />
-          <Property Name="TypeID" Type="Int32" a:SetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" Nullable="false" />
-          <NavigationProperty Name="Type" Relationship="labdbModel.type_to_construction" FromRole="Construction" ToRole="material_types" />
-        </EntityType>
         <EntityType Name="ExternalConstruction">
           <Key>
             <PropertyRef Name="ID" />
@@ -2194,10 +2188,10 @@
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="OemID" Type="Int32" Nullable="true" a:SetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
-          <NavigationProperty Name="Constructions" Relationship="Self.external_construction" FromRole="external_constructions" ToRole="constructions" />
           <NavigationProperty Name="Organization" Relationship="Self.oemID" FromRole="external_constructions" ToRole="organizations" />
           <Property Name="DefaultSpecVersionID" Type="Int32" Nullable="true" />
           <NavigationProperty Name="DefaultSpecVersion" Relationship="labdbModel.default_spec_version_to_ex_construction" FromRole="ExternalConstruction" ToRole="SpecificationVersion" />
+          <NavigationProperty Name="Materials" Relationship="labdbModel.external_construction_to_material" FromRole="ExternalConstruction" ToRole="Material" />
         </EntityType>
         <EntityType Name="ExternalReportFile">
           <Key>
@@ -2251,11 +2245,19 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" a:SetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
-          <Property Name="ConstructionID" Type="Int32" Nullable="false" a:GetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:SetterAccess="Public" />
           <Property Name="RecipeID" Type="Int32" Nullable="false" a:SetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="Batches" Relationship="Self.batch_by_material" FromRole="materials" ToRole="batches" />
-          <NavigationProperty Name="Construction" Relationship="Self.construction_to_material" FromRole="materials" ToRole="constructions" />
           <NavigationProperty Name="Recipe" Relationship="Self.recipe_to_material" FromRole="materials" ToRole="recipes" />
+          <Property Name="LineID" Type="Int32" Nullable="false" />
+          <Property Name="TypeID" Type="Int32" Nullable="false" />
+          <Property Name="AspectID" Type="Int32" Nullable="false" />
+          <Property Name="ProjectID" Type="Int32" />
+          <Property Name="ExternalConstructionID" Type="Int32" />
+          <NavigationProperty Name="Aspect" Relationship="labdbModel.aspect_to_material" FromRole="Material" ToRole="Aspect" />
+          <NavigationProperty Name="ExternalConstruction" Relationship="labdbModel.external_construction_to_material" FromRole="Material" ToRole="ExternalConstruction" />
+          <NavigationProperty Name="MaterialLine" Relationship="labdbModel.line_to_material" FromRole="Material" ToRole="material_lines" />
+          <NavigationProperty Name="MaterialType" Relationship="labdbModel.type_to_material" FromRole="Material" ToRole="MaterialType" />
+          <NavigationProperty Name="Project" Relationship="labdbModel.project_to_material" FromRole="Material" ToRole="Project" />
         </EntityType>
         <EntityType Name="Method">
           <Key>
@@ -2321,10 +2323,10 @@
           <Property Name="OemID" Type="Int32" a:SetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:GetterAccess="Public" />
           <Property Name="TotalInternalCost" Type="Int32" Nullable="false" />
           <Property Name="TotalExternalCost" Type="Double" Nullable="false" />
-          <NavigationProperty Name="Constructions" Relationship="Self.project1" FromRole="projects" ToRole="constructions" />
           <NavigationProperty Name="ExternalReports" Relationship="Self.project_to_report" FromRole="projects" ToRole="external_reports" />
           <NavigationProperty Name="Oem" Relationship="Self.oem1" FromRole="projects" ToRole="organizations" />
           <NavigationProperty Name="Leader" Relationship="Self.leader" FromRole="projects" ToRole="people" />
+          <NavigationProperty Name="Materials" Relationship="labdbModel.project_to_material" FromRole="Project" ToRole="Material" />
         </EntityType>
         <EntityType Name="Property">
           <Key>
@@ -2547,18 +2549,6 @@
           <NavigationProperty Name="Person" Relationship="labdbModel.person_to_user" FromRole="User" ToRole="Person" />
           <NavigationProperty Name="RoleMappings" Relationship="labdbModel.user_to_role_mapping" FromRole="User" ToRole="user_role_mappings" />
         </EntityType>
-        <Association Name="aspect1">
-          <End Role="aspects" Type="labdbModel.Aspect" Multiplicity="1" />
-          <End Role="constructions" Type="labdbModel.Construction" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="aspects">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="constructions">
-              <PropertyRef Name="AspectID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="batch1">
           <End Role="batches" Type="labdbModel.Batch" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -2632,42 +2622,6 @@
             </Principal>
             <Dependent Role="recipes">
               <PropertyRef Name="ColourID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="construction_to_material">
-          <End Role="constructions" Type="labdbModel.Construction" Multiplicity="1" />
-          <End Role="materials" Type="labdbModel.Material" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="constructions">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="materials">
-              <PropertyRef Name="ConstructionID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="external_construction">
-          <End Role="external_constructions" Type="labdbModel.ExternalConstruction" Multiplicity="0..1" />
-          <End Role="constructions" Type="labdbModel.Construction" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="external_constructions">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="constructions">
-              <PropertyRef Name="ExternalConstructionID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="project1">
-          <End Role="projects" Type="labdbModel.Project" Multiplicity="0..1" />
-          <End Role="constructions" Type="labdbModel.Construction" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="projects">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="constructions">
-              <PropertyRef Name="ProjectID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2978,7 +2932,6 @@
           <EntitySet Name="BatchFiles" EntityType="labdbModel.BatchFile" />
           <EntitySet Name="Batches" EntityType="labdbModel.Batch" />
           <EntitySet Name="Colours" EntityType="labdbModel.Colour" />
-          <EntitySet Name="Constructions" EntityType="labdbModel.Construction" />
           <EntitySet Name="ExternalConstructions" EntityType="labdbModel.ExternalConstruction" />
           <EntitySet Name="ExternalReportFiles" EntityType="labdbModel.ExternalReportFile" />
           <EntitySet Name="ExternalReports" EntityType="labdbModel.ExternalReport" />
@@ -3003,10 +2956,6 @@
           <EntitySet Name="Tasks" EntityType="labdbModel.Task" />
           <EntitySet Name="Tests" EntityType="labdbModel.Test" />
           <EntitySet Name="Users" EntityType="labdbModel.User" />
-          <AssociationSet Name="aspect" Association="Self.aspect1">
-            <End Role="aspects" EntitySet="Aspects" />
-            <End Role="constructions" EntitySet="Constructions" />
-          </AssociationSet>
           <AssociationSet Name="batch" Association="Self.batch1">
             <End Role="batches" EntitySet="Batches" />
             <End Role="batch_files" EntitySet="BatchFiles" />
@@ -3030,18 +2979,6 @@
           <AssociationSet Name="color_to_recipe" Association="Self.color_to_recipe">
             <End Role="colours" EntitySet="Colours" />
             <End Role="recipes" EntitySet="Recipes" />
-          </AssociationSet>
-          <AssociationSet Name="construction_to_material" Association="Self.construction_to_material">
-            <End Role="constructions" EntitySet="Constructions" />
-            <End Role="materials" EntitySet="Materials" />
-          </AssociationSet>
-          <AssociationSet Name="external_construction" Association="Self.external_construction">
-            <End Role="external_constructions" EntitySet="ExternalConstructions" />
-            <End Role="constructions" EntitySet="Constructions" />
-          </AssociationSet>
-          <AssociationSet Name="project" Association="Self.project1">
-            <End Role="projects" EntitySet="Projects" />
-            <End Role="constructions" EntitySet="Constructions" />
           </AssociationSet>
           <AssociationSet Name="oemID" Association="Self.oemID">
             <End Role="organizations" EntitySet="Organizations" />
@@ -3148,10 +3085,6 @@
             <End Role="Test" EntitySet="Tests" />
           </AssociationSet>
           <EntitySet Name="MaterialTypes" EntityType="labdbModel.MaterialType" />
-          <AssociationSet Name="type_to_construction" Association="labdbModel.type_to_construction">
-            <End Role="material_types" EntitySet="MaterialTypes" />
-            <End Role="Construction" EntitySet="Constructions" />
-          </AssociationSet>
           <AssociationSet Name="person_to_user" Association="labdbModel.person_to_user">
             <End Role="Person" EntitySet="People" />
             <End Role="User" EntitySet="Users" />
@@ -3372,6 +3305,28 @@
             <End Role="Method" EntitySet="Methods" />
             <End Role="TaskItem" EntitySet="TaskItems" />
           </AssociationSet>
+          <EntitySet Name="MaterialLines" EntityType="labdbModel.MaterialLine" />
+          <EntitySet Name="TrialAreas" EntityType="labdbModel.TrialArea" />
+          <AssociationSet Name="aspect_to_material" Association="labdbModel.aspect_to_material">
+            <End Role="Aspect" EntitySet="Aspects" />
+            <End Role="Material" EntitySet="Materials" />
+          </AssociationSet>
+          <AssociationSet Name="external_construction_to_material" Association="labdbModel.external_construction_to_material">
+            <End Role="ExternalConstruction" EntitySet="ExternalConstructions" />
+            <End Role="Material" EntitySet="Materials" />
+          </AssociationSet>
+          <AssociationSet Name="line_to_material" Association="labdbModel.line_to_material">
+            <End Role="material_lines" EntitySet="MaterialLines" />
+            <End Role="Material" EntitySet="Materials" />
+          </AssociationSet>
+          <AssociationSet Name="type_to_material" Association="labdbModel.type_to_material">
+            <End Role="MaterialType" EntitySet="MaterialTypes" />
+            <End Role="Material" EntitySet="Materials" />
+          </AssociationSet>
+          <AssociationSet Name="project_to_material" Association="labdbModel.project_to_material">
+            <End Role="Project" EntitySet="Projects" />
+            <End Role="Material" EntitySet="Materials" />
+          </AssociationSet>
         </EntityContainer>
         <Association Name="overridden_to_requirement">
           <End Type="labdbModel.Requirement" Role="Requirement" Multiplicity="0..1">
@@ -3406,22 +3361,8 @@
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" a:SetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <Property Name="Code" Type="String" Nullable="false" MaxLength="4" FixedLength="false" Unicode="false" />
           <Property Name="Description" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Constructions" Relationship="labdbModel.type_to_construction" FromRole="material_types" ToRole="Construction" />
+          <NavigationProperty Name="materials" Relationship="labdbModel.type_to_material" FromRole="MaterialType" ToRole="Material" />
         </EntityType>
-        <Association Name="type_to_construction">
-          <End Type="labdbModel.MaterialType" Role="material_types" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Type="labdbModel.Construction" Role="Construction" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="material_types">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="Construction">
-              <PropertyRef Name="TypeID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="person_to_user">
           <End Type="labdbModel.Person" Role="Person" Multiplicity="0..1" />
           <End Type="labdbModel.User" Role="User" Multiplicity="*" />
@@ -4277,6 +4218,81 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="MaterialLine">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Code" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Materials" Relationship="labdbModel.line_to_material" FromRole="material_lines" ToRole="Material" />
+        </EntityType>
+        <EntityType Name="TrialArea">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <Association Name="aspect_to_material">
+          <End Type="labdbModel.Aspect" Role="Aspect" Multiplicity="1" />
+          <End Type="labdbModel.Material" Role="Material" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Aspect">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Material">
+              <PropertyRef Name="AspectID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="external_construction_to_material">
+          <End Type="labdbModel.ExternalConstruction" Role="ExternalConstruction" Multiplicity="0..1" />
+          <End Type="labdbModel.Material" Role="Material" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ExternalConstruction">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Material">
+              <PropertyRef Name="ExternalConstructionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="line_to_material">
+          <End Type="labdbModel.MaterialLine" Role="material_lines" Multiplicity="1" />
+          <End Type="labdbModel.Material" Role="Material" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="material_lines">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Material">
+              <PropertyRef Name="LineID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="type_to_material">
+          <End Type="labdbModel.MaterialType" Role="MaterialType" Multiplicity="1" />
+          <End Type="labdbModel.Material" Role="Material" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MaterialType">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Material">
+              <PropertyRef Name="TypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="project_to_material">
+          <End Type="labdbModel.Project" Role="Project" Multiplicity="0..1" />
+          <End Type="labdbModel.Material" Role="Material" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Project">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Material">
+              <PropertyRef Name="ProjectID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -4305,6 +4321,7 @@
           <EntitySetMapping Name="Batches">
             <EntityTypeMapping TypeName="labdbModel.Batch">
               <MappingFragment StoreEntitySet="batches">
+                <ScalarProperty Name="trial_areaID" ColumnName="trial_areaID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Number" ColumnName="number" />
                 <ScalarProperty Name="MaterialID" ColumnName="materialID" />
@@ -4318,18 +4335,6 @@
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Name" ColumnName="name" />
                 <ScalarProperty Name="Code" ColumnName="code" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Constructions">
-            <EntityTypeMapping TypeName="labdbModel.Construction">
-              <MappingFragment StoreEntitySet="constructions">
-                <ScalarProperty Name="TypeID" ColumnName="typeID" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="Line" ColumnName="line" />
-                <ScalarProperty Name="AspectID" ColumnName="aspectID" />
-                <ScalarProperty Name="ProjectID" ColumnName="projectID" />
-                <ScalarProperty Name="ExternalConstructionID" ColumnName="external_constructionID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -4845,8 +4850,12 @@
           <EntitySetMapping Name="Materials">
             <EntityTypeMapping TypeName="IsTypeOf(labdbModel.Material)">
               <MappingFragment StoreEntitySet="materials">
+                <ScalarProperty Name="ExternalConstructionID" ColumnName="external_constructionID" />
+                <ScalarProperty Name="ProjectID" ColumnName="projectID" />
+                <ScalarProperty Name="AspectID" ColumnName="aspectID" />
+                <ScalarProperty Name="TypeID" ColumnName="typeID" />
+                <ScalarProperty Name="LineID" ColumnName="lineID" />
                 <ScalarProperty Name="RecipeID" ColumnName="recipeID" />
-                <ScalarProperty Name="ConstructionID" ColumnName="constructionID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -4868,6 +4877,22 @@
                 <ScalarProperty Name="SubMethodID" ColumnName="sub_methodID" />
                 <ScalarProperty Name="RequiredValue" ColumnName="required_value" />
                 <ScalarProperty Name="TaskItemID" ColumnName="task_itemID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MaterialLines">
+            <EntityTypeMapping TypeName="labdbModel.MaterialLine">
+              <MappingFragment StoreEntitySet="material_lines">
+                <ScalarProperty Name="Code" ColumnName="code" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TrialAreas">
+            <EntityTypeMapping TypeName="labdbModel.TrialArea">
+              <MappingFragment StoreEntitySet="trial_areas">
+                <ScalarProperty Name="name" ColumnName="name" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

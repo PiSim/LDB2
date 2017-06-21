@@ -17,7 +17,7 @@
                 <ContentControl prism:RegionManager.RegionName="{Binding MaterialInfoAspectRegionName}"/>
             </TabItem>
             <TabItem Header="Construction">
-                <ContentControl prism:RegionManager.RegionName="{Binding MaterialInfoConstructionRegionName}"/>
+                <ContentControl prism:RegionManager.RegionName="{Binding MaterialInfoMaterialRegionName}"/>
             </TabItem>
             <TabItem Header="Construction Esterna">
                 <ContentControl prism:RegionManager.RegionName="{Binding MaterialInfoExternalConstructionRegionName}"/>

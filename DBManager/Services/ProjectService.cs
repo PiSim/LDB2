@@ -23,11 +23,11 @@ namespace DBManager.Services
 
                 entities.Configuration.LazyLoadingEnabled = false;
 
-                return entities.Batches.Where(btc => btc.Material.Construction.Project.ID == entry.ID)
-                                        .Include(btc => btc.Material.Construction)
-                                        .Include(btc => btc.Material.Construction.Aspect)
-                                        .Include(btc => btc.Material.Construction.ExternalConstruction)
-                                        .Include(btc => btc.Material.Construction.Type)
+                return entities.Batches.Where(btc => btc.Material.ProjectID == entry.ID)
+                                        .Include(btc => btc.Material.Aspect)
+                                        .Include(btc => btc.Material.ExternalConstruction)
+                                        .Include(btc => btc.Material.MaterialLine)
+                                        .Include(btc => btc.Material.MaterialType)
                                         .Include(btc => btc.Material.Recipe.Colour)
                                         .ToList();
             }
@@ -100,10 +100,11 @@ namespace DBManager.Services
             {
                 entities.Configuration.LazyLoadingEnabled = false;
 
-                return entities.Reports.Where(rep => rep.Batch.Material.Construction.Project.ID == entry.ID)
+                return entities.Reports.Where(rep => rep.Batch.Material.ProjectID == entry.ID)
                                         .Include(rep => rep.Author)
-                                        .Include(rep => rep.Batch.Material.Construction.Aspect)
-                                        .Include(rep => rep.Batch.Material.Construction.Type)
+                                        .Include(rep => rep.Batch.Material.Aspect)
+                                        .Include(rep => rep.Batch.Material.MaterialLine)
+                                        .Include(rep => rep.Batch.Material.MaterialType)
                                         .Include(rep => rep.Batch.Material.Recipe.Colour)
                                         .Include(rep => rep.SpecificationVersion.Specification.Standard)
                                         .ToList();
@@ -121,9 +122,10 @@ namespace DBManager.Services
             {
                 entities.Configuration.LazyLoadingEnabled = false;
 
-                return entities.Tasks.Where(tsk => tsk.Batch.Material.Construction.Project.ID == entry.ID)
-                                    .Include(tsk => tsk.Batch.Material.Construction.Aspect)
-                                    .Include(tsk => tsk.Batch.Material.Construction.Type)
+                return entities.Tasks.Where(tsk => tsk.Batch.Material.ProjectID == entry.ID)
+                                    .Include(tsk => tsk.Batch.Material.Aspect)
+                                    .Include(tsk => tsk.Batch.Material.MaterialLine)
+                                    .Include(tsk => tsk.Batch.Material.MaterialType)
                                     .Include(tsk => tsk.Batch.Material.Recipe.Colour)
                                     .Include(tsk => tsk.Requester)
                                     .ToList();
@@ -141,17 +143,12 @@ namespace DBManager.Services
             {
                 entities.Configuration.LazyLoadingEnabled = false;
                 
-                Project tempEntry = entities.Projects.Include(prj => prj.Constructions
-                                                    .Select(cns => cns.Aspect))
-                                                    .Include(prj => prj.Constructions
-                                                    .Select(cns => cns.Type))
-                                                    .Include(prj => prj.ExternalReports
+                Project tempEntry = entities.Projects.Include(prj => prj.ExternalReports
                                                     .Select(extr => extr.ExternalLab))
                                                     .Include(prj => prj.Leader)
                                                     .Include(prj => prj.Oem)
                                                     .First(prj => prj.ID == entry.ID);
-
-                entry.Constructions = tempEntry.Constructions;
+                
                 entry.Description = tempEntry.Description;
                 entry.ExternalReports = tempEntry.ExternalReports;
                 entry.Leader = tempEntry.Leader;

@@ -44,9 +44,10 @@ namespace DBManager.Services
 
                 return entities.Reports.AsNoTracking()
                                         .Include(rep => rep.Author)
-                                        .Include(rep => rep.Batch.Material.Construction.Aspect)
-                                        .Include(rep => rep.Batch.Material.Construction.Project.Oem)
-                                        .Include(rep => rep.Batch.Material.Construction.Type)
+                                        .Include(rep => rep.Batch.Material.Aspect)
+                                        .Include(rep => rep.Batch.Material.MaterialLine)
+                                        .Include(rep => rep.Batch.Material.MaterialType)
+                                        .Include(rep => rep.Batch.Material.Project.Oem)
                                         .Include(rep => rep.Batch.Material.Recipe.Colour)
                                         .Include(rep => rep.SpecificationVersion.Specification.Standard.CurrentIssue)
                                         .Include(rep => rep.SpecificationVersion.Specification.Standard.Organization)

@@ -16,19 +16,28 @@ namespace DBManager.EntityExtensions
             
             using (DBEntities entities = new DBEntities())
             {
-                if (entry.RecipeID == 0)
-                    entry.RecipeID = entry.Recipe.ID;
-
-                if (entry.ConstructionID == 0)
-                    entry.ConstructionID = entry.Construction.ID;
-
-                Material newEntry = new Material();
-
-                entities.Materials.Add(newEntry);
-                entities.Entry(newEntry).CurrentValues.SetValues(entry);
+                entities.Materials.Add(entry);
                 entities.SaveChanges();
+            }
+        }
 
-                entry.ID = newEntry.ID;
+        public static IEnumerable<Batch> GetBatches(this Material entry)
+        {
+            // Returns all the batches for a given material
+
+            if (entry == null)
+                return null;
+
+            using (DBEntities entitites = new DBEntities())
+            {
+                entitites.Configuration.LazyLoadingEnabled = false;
+
+                return entitites.Batches.Include(btc => btc.Material.Aspect)
+                                        .Include(btc => btc.Material.MaterialLine)
+                                        .Include(btc => btc.Material.MaterialType)
+                                        .Include(btc => btc.Material.Recipe.Colour)
+                                        .Where(btc => btc.MaterialID == entry.ID);
+
             }
         }
 
@@ -58,26 +67,15 @@ namespace DBManager.EntityExtensions
                 entities.Materials.Attach(entry);
 
                 Material tempEntry = entities.Materials.Include(mat => mat.Batches)
-                                                        .Include(mat => mat.Construction.Aspect)
-                                                        .Include(mat => mat.Construction.Project)
-                                                        .Include(mat => mat.Construction.Type)
+                                                        .Include(mat => mat.Aspect)
+                                                        .Include(mat => mat.MaterialLine)
+                                                        .Include(mat => mat.MaterialType)
+                                                        .Include(mat => mat.Project)
                                                         .Include(mat => mat.Recipe.Colour)
                                                         .First(mat => mat.ID == entry.ID);
 
                 entities.Entry(entry).CurrentValues.SetValues(tempEntry);
             }
-        }
-
-        public static void SetConstruction(this Material entry,
-                                            Construction constructionEntity)
-        {
-            // Sets the construction and ConstructionID properties of a given Material
-
-            if (entry == null)
-                throw new NotImplementedException();
-
-            entry.Construction = constructionEntity;
-            entry.ConstructionID = (constructionEntity == null) ? 0 : constructionEntity.ID;
         }
 
         public static void SetRecipe(this Material entry,

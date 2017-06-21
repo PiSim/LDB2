@@ -35,13 +35,13 @@
                     <GridViewColumn Header="Tipo" DisplayMemberBinding="{Binding Category}"/>
                     <GridViewColumn Header="Numero" DisplayMemberBinding="{Binding Number}"/>
                     <GridViewColumn Header="Commessa" DisplayMemberBinding="{Binding Batch.Number}"/>
-                    <GridViewColumn Header="Progetto" DisplayMemberBinding="{Binding Batch.Material.Construction.Project.Name}"/>
+                    <GridViewColumn Header="Progetto" DisplayMemberBinding="{Binding Batch.Material.Project.Name}"/>
                     <GridViewColumn Header="Materiale"
-                                    DisplayMemberBinding="{Binding Batch.Material.Construction.Type.Code}"/>
+                                    DisplayMemberBinding="{Binding Batch.Material.MaterialType.Code}"/>
                     <GridViewColumn Header="Riga"
-                                    DisplayMemberBinding="{Binding Batch.Material.Construction.Line}"/>
+                                    DisplayMemberBinding="{Binding Batch.Material.MaterialLine.Code}"/>
                     <GridViewColumn Header="Aspetto"
-                                    DisplayMemberBinding="{Binding Batch.Material.Construction.Aspect.Code}"/>
+                                    DisplayMemberBinding="{Binding Batch.Material.Aspect.Code}"/>
                     <GridViewColumn Header="Ricetta"
                                     DisplayMemberBinding="{Binding Batch.Material.Recipe.Code}"/>
                     <GridViewColumn Header="Specifica" DisplayMemberBinding="{Binding SpecificationVersion.Specification.Standard.Name}"/>
