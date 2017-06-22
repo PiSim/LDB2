@@ -126,6 +126,9 @@
     <Compile Include="Views\AddTestDialog.xaml.cs">
       <DependentUpon>AddTestDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\BatchCreationDialog.xaml.cs">
+      <DependentUpon>BatchCreationDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MaintenanceEventCreationDialog.xaml.cs">
       <DependentUpon>MaintenanceEventCreationDialog.xaml</DependentUpon>
     </Compile>
@@ -149,6 +152,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Views\AddTestDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\BatchCreationDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
