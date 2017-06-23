@@ -13,7 +13,21 @@
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <Grid Grid.Column="0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="35"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal"
+                    Grid.Column="0"
+                    Grid.Row="0">
+            <Button Content="Inserimento Nuovo Batch"
+                    Command="{Binding CreateBatchCommand}"
+                    Margin="5"/>
+        </StackPanel>
+        
+        <Grid Grid.Column="0"
+              Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
@@ -26,6 +40,7 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
+            
             <TextBox x:Name="QuickQueryTextBox"
                  Text="{Binding BatchNumber, Mode=TwoWay}"
                  Grid.Column="0"
@@ -45,7 +60,8 @@
                 Margin="5"/>
         </Grid>
         <GroupBox Header="Ultimi arrivi"
-                  Grid.Column="1">
+                  Grid.Column="1"
+                  Grid.Row="1">
             <Grid>
 
                 <ListView ItemsSource="{Binding RecentArrivalsList}"

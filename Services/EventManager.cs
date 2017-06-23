@@ -19,6 +19,13 @@ namespace Services
         {
             _eventAggregator = eventAggregator;
 
+            _eventAggregator.GetEvent<BatchCreationRequested>()
+                            .Subscribe(
+                            () =>
+                            {
+                                ServiceProvider.CreateBatch();
+                            });
+
             _eventAggregator.GetEvent<MaintenanceEventCreationRequested>()
                             .Subscribe(instrumentEntry =>
                             {
@@ -28,8 +35,7 @@ namespace Services
 
                                 }
                             });
-
-
+            
             _eventAggregator.GetEvent<NewCalibrationRequested>()
                             .Subscribe(
                             instrument =>

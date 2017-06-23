@@ -7,7 +7,7 @@
         xmlns:prism="http://prismlibrary.com/"
         prism:ViewModelLocator.AutoWireViewModel="True"
         mc:Ignorable="d"
-        Title="BatchCreationDialog" Height="400" Width="400">
+        Title="Inserimento nuovo Batch" Height="400" Width="400">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
@@ -22,118 +22,137 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition Height="2*"/>
+                <RowDefinition Height="37*"/>
+                <RowDefinition Height="37*"/>
+                <RowDefinition Height="37*"/>
+                <RowDefinition Height="37*"/>
+                <RowDefinition Height="37*"/>
+                <RowDefinition Height="38*"/>
+                <RowDefinition Height="37*"/>
+                <RowDefinition Height="74*"/>
             </Grid.RowDefinitions>
 
             <TextBlock Text="Tipo:"
                        Grid.Column="0"
                        Grid.Row="0"
-                       Margin="5"/>
+                       Margin="5"
+                       VerticalAlignment="Center"/>
 
             <TextBox Text="{Binding TypeCode, 
                                     UpdateSourceTrigger=PropertyChanged}"
                      Grid.Column="1"
                      Grid.Row="0"
                      HorizontalContentAlignment="Center"
-                     Margin="5"/>
+                     Margin="5"
+                     VerticalAlignment="Center"/>
+
+            <Label Content="{Binding TypeInstance.Description}"
+                   Grid.Column="2"
+                   Grid.ColumnSpan="2"
+                   Grid.Row="0"
+                   Margin="5"
+                   VerticalAlignment="Center"/>
 
             <TextBlock Text="Riga:"
                        Grid.Column="0"
                        Grid.Row="1"
-                       Margin="5"/>
+                       Margin="5"
+                       VerticalAlignment="Center"/>
 
             <TextBox Text="{Binding LineCode,
                                     UpdateSourceTrigger=PropertyChanged}"
                      Grid.Column="1"
                      Grid.Row="1"
                      HorizontalContentAlignment="Center"
-                     Margin="5"/>
+                     Margin="5"
+                     VerticalAlignment="Center"/>
 
             <TextBlock Text="Aspetto:"
                        Grid.Column="0"
                        Grid.Row="2"
-                       Margin="5"/>
+                       Margin="5"
+                       VerticalAlignment="Center"/>
 
             <TextBox Text="{Binding AspectCode,
                                     UpdateSourceTrigger=PropertyChanged}"
                      Grid.Column="1"
                      Grid.Row="2"
                      HorizontalContentAlignment="Center"
-                     Margin="5"/>
+                     Margin="5"
+                     VerticalAlignment="Center"/>
 
-            <TextBlock Text="Ricetta:"
+            <Label Content="{Binding SelectedAspectName}"
+                   Grid.Column="2"
+                   Grid.ColumnSpan="2"
+                   Grid.Row="2"
+                   Margin="5"
+                   VerticalAlignment="Center"/>
+
+            <TextBlock Text="Colore:"
                        Grid.Column="0"
                        Grid.Row="3"
-                       Margin="5"/>
+                       Margin="5"
+                       VerticalAlignment="Center"/>
 
             <TextBox Text="{Binding RecipeCode,
                                     UpdateSourceTrigger=PropertyChanged}"
                      Grid.Column="1"
                      Grid.Row="3"
                      HorizontalContentAlignment="Center"
-                     Margin="5"/>
-
-            <TextBlock Text="Colore:"
-                       Grid.Column="0"
-                       Grid.Row="4"
-                       Margin="5"/>
+                     Margin="5"
+                     VerticalAlignment="Center"/>
 
             <ComboBox ItemsSource="{Binding ColourList}"
                       SelectedItem="{Binding SelectedColour, Mode=TwoWay}"
                       IsEnabled="{Binding ColourPickEnabled}"
                       DisplayMemberPath="Name"
-                      Grid.Column="1"
-                      Grid.ColumnSpan="3"
-                      Grid.Row="4"
+                      Grid.Column="2"
+                      Grid.ColumnSpan="2"
+                      Grid.Row="3"
                       Margin="5"/>
 
             <TextBlock Text="Construction:"
                       Grid.Column="0"
-                      Grid.Row="5"
-                      Margin="5"/>
+                      Grid.Row="4"
+                      Margin="5"
+                      VerticalAlignment="Center"/>
 
             <ComboBox ItemsSource="{Binding ConstructionList}"
                       SelectedItem="{Binding SelectedConstruction, Mode=TwoWay}"
                       Grid.Column="1"
                       Grid.ColumnSpan="3"
-                      Grid.Row="5"
+                      Grid.Row="4"
                       Margin="5"/>
 
             <TextBlock Text="Progetto:"
                        Grid.Column="0"
-                       Grid.Row="6"
-                       Margin="5"/>
+                       Grid.Row="5"
+                       Margin="5"
+                       VerticalAlignment="Center"/>
 
             <ComboBox ItemsSource="{Binding ProjectList}"
                       SelectedItem="{Binding SelectedProject}"
                       DisplayMemberPath="Name"
                       Grid.Column="1"
                       Grid.ColumnSpan="3"
-                      Grid.Row="6"
+                      Grid.Row="5"
                       Margin="5"/>
 
             <TextBlock Text="Area Prova:"
                        Grid.Column="0"
-                       Grid.Row="7"
-                       Margin="5"/>
+                       Grid.Row="6"
+                       Margin="5"
+                       VerticalAlignment="Center"/>
 
             <ComboBox ItemsSource="{Binding TrialAreaList}"
                       SelectedItem="{Binding SelectedTrialArea, Mode=TwoWay}"
                       Grid.Column="1"
                       Grid.ColumnSpan="3"
-                      Grid.Row="7"
+                      Grid.Row="6"
                       Margin="5"/>
 
             <TextBlock Grid.Column="0"
-                       Grid.Row="8"
+                       Grid.Row="7"
                        Margin="5">
                 <Run Text="Motivazione"/>
                 <LineBreak/>
@@ -145,7 +164,7 @@
                      TextWrapping="Wrap"
                      Grid.Column="1"
                      Grid.ColumnSpan="3"
-                     Grid.Row="8"
+                     Grid.Row="7"
                      Margin="5"/>
         </Grid>
 

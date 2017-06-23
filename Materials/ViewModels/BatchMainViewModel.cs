@@ -16,7 +16,7 @@ namespace Materials.ViewModels
 {
     class BatchMainViewModel : BindableBase
     {
-        private DelegateCommand _quickOpen, _openSampleLogView;
+        private DelegateCommand _createBatch, _quickOpen, _openSampleLogView;
         private IEventAggregator _eventAggregator;
         private Sample _selectedSampleArrival;
         private string _batchNumber;
@@ -25,6 +25,13 @@ namespace Materials.ViewModels
             : base()
         {
             _eventAggregator = eventAggregator;
+
+            _createBatch = new DelegateCommand(
+                () =>
+                {
+                    _eventAggregator.GetEvent<BatchCreationRequested>()
+                                    .Publish();
+                });
 
             _openSampleLogView = new DelegateCommand(
                 () =>
@@ -55,6 +62,11 @@ namespace Materials.ViewModels
                 _batchNumber = value;
                 RaisePropertyChanged("BatchNumber");
             }
+        }
+
+        public DelegateCommand CreateBatchCommand
+        {
+            get { return _createBatch; }
         }
 
         public DelegateCommand OpenSampleLogViewCommand

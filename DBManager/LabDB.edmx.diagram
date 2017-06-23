@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="9fa1cdb38a7949d89850433ccf2fcd72" Name="Diagram1" ZoomLevel="52" ShowGrid="false">
+      <Diagram DiagramId="9fa1cdb38a7949d89850433ccf2fcd72" Name="Diagram1" ZoomLevel="101" ShowGrid="false">
         <EntityTypeShape EntityType="labdbModel.Aspect" Width="1.5" PointX="35" PointY="19.75" IsExpanded="true" />
         <EntityTypeShape EntityType="labdbModel.BatchFile" Width="1.5" PointX="30.875" PointY="16.875" IsExpanded="true" />
         <EntityTypeShape EntityType="labdbModel.Batch" Width="1.5" PointX="30.875" PointY="13.25" IsExpanded="true" />
@@ -131,13 +131,13 @@
         <AssociationConnector Association="labdbModel.external_report_method_mappings" />
         <AssociationConnector Association="labdbModel.external_report_batch_mapping" />
         <AssociationConnector Association="labdbModel.requirement_to_test1" ManuallyRouted="true" >
-          <ConnectorPoint PointX="14.640959038461539" PointY="10.970602213541666" />
-          <ConnectorPoint PointX="14.640959038461539" PointY="13.473657854033645" />
-          <ConnectorPoint PointX="14.427083333333334" PointY="13.473657854033645" />
-          <ConnectorPoint PointX="14.260416666666666" PointY="13.473657854033645" />
-          <ConnectorPoint PointX="14.161460833333335" PointY="13.473657854033645" />
-          <ConnectorPoint PointX="13.994794166666667" PointY="13.473657854033645" />
-          <ConnectorPoint PointX="11.25" PointY="13.473657854033645" />
+          <ConnectorPoint PointX="14.25" PointY="7.21875" />
+          <ConnectorPoint PointX="11.520830833333333" PointY="7.2187499999999991" />
+          <ConnectorPoint PointX="11.354164166666665" PointY="7.21875" />
+          <ConnectorPoint PointX="10.567710833333335" PointY="7.2187499999999991" />
+          <ConnectorPoint PointX="10.401044166666667" PointY="7.21875" />
+          <ConnectorPoint PointX="10.21875" PointY="7.21875" />
+          <ConnectorPoint PointX="10.21875" PointY="12.875" />
         </AssociationConnector>
         <AssociationConnector Association="labdbModel.sub_requirement_to_sub_test" />
         <AssociationConnector Association="labdbModel.test_to_task_item" />
@@ -148,12 +148,13 @@
         <AssociationConnector Association="labdbModel.specification_version_to_task_item" />
         <AssociationConnector Association="labdbModel.method_to_task_item" />
         <EntityTypeShape EntityType="labdbModel.MaterialLine" Width="1.5" PointX="34.875" PointY="17.75" />
-        <EntityTypeShape EntityType="labdbModel.TrialArea" Width="1.5" PointX="0.75" PointY="3.75" />
+        <EntityTypeShape EntityType="labdbModel.TrialArea" Width="1.5" PointX="35" PointY="10.25" />
         <AssociationConnector Association="labdbModel.aspect_to_material" />
         <AssociationConnector Association="labdbModel.external_construction_to_material" />
         <AssociationConnector Association="labdbModel.line_to_material" />
         <AssociationConnector Association="labdbModel.type_to_material" />
         <AssociationConnector Association="labdbModel.project_to_material" />
+        <AssociationConnector Association="labdbModel.trial_area_to_batch" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

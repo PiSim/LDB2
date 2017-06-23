@@ -17,6 +17,7 @@ namespace Services.ViewModels
         private Batch _batchInstance;
         private Colour _selectedColour;
         private DelegateCommand<Window> _cancel, _confirm;
+        private IEnumerable<Colour> _colourList;
         private MaterialLine _lineInstance;
         private MaterialType _typeInstance;
         private Project _selectedProject;
@@ -30,6 +31,8 @@ namespace Services.ViewModels
 
         public BatchCreationDialogViewModel() : base()
         {
+            _colourList = MaterialService.GetColours();
+
             _cancel = new DelegateCommand<Window>(
                 parentDialog =>
                 {
@@ -69,7 +72,7 @@ namespace Services.ViewModels
 
         public IEnumerable<Colour> ColourList
         {
-            get { return MaterialService.GetColours(); }
+            get { return _colourList; }
         }
 
         public DelegateCommand<Window> ConfirmCommand
@@ -92,6 +95,7 @@ namespace Services.ViewModels
             set
             {
                 _lineInstance = value;
+                RaisePropertyChanged("LineInstance");
             }
         }
 
@@ -100,12 +104,25 @@ namespace Services.ViewModels
             get { return ProjectService.GetProjects(); }
         }
         
+        public Recipe RecipeInstance
+        {
+            get { return _recipeInstance; }
+            set
+            {
+                _recipeInstance = value;
+
+                if (_recipeInstance != null)
+                    SelectedColour = _colourList.FirstOrDefault(col => col.ID == _recipeInstance.ColourID);
+            }
+        }
+
         public Colour SelectedColour
         {
             get { return _selectedColour; }
             set
             {
                 _selectedColour = value;
+                RaisePropertyChanged("SelectedColour");
             }
         }
 
@@ -116,6 +133,20 @@ namespace Services.ViewModels
             {
                 _selectedProject = value;
             }
+        }
+
+        public TrialArea SelectedTrialArea
+        {
+            get { return _selectedTrialArea; }
+            set
+            {
+                _selectedTrialArea = value;
+            }
+        }
+
+        public IEnumerable<TrialArea> TrialAreaList
+        {
+            get { return MaterialService.GetTrialAreas(); }
         }
 
         public string TrialScope
@@ -143,6 +174,7 @@ namespace Services.ViewModels
             set
             {
                 _typeInstance = value;
+                RaisePropertyChanged("TypeInstance");
             }
         }
 

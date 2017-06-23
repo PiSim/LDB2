@@ -217,15 +217,6 @@ namespace Services
                 temp.Create();
             }
 
-            if (temp.Material == null)
-            {
-                temp.MaterialID = StartMaterialSelection().ID;
-                temp.Update();
-            }
-
-            if (temp.Material != null)
-                CheckMaterialData(temp.Material);
-
             return temp;
         }
 

@@ -48,6 +48,19 @@ namespace DBManager.Services
             }
         }
 
+        public static IEnumerable<TrialArea> GetTrialAreas()
+        {
+            // Returns all TrialArea entries
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.TrialAreas.Where(tra => true)
+                                            .ToList();
+            }
+        }
+
         #region Operations for Aspect entities
 
         public static Aspect GetAspect(string code)

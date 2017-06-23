@@ -45,5 +45,6 @@ namespace DBManager
         public virtual ICollection<Task> Tasks { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ExternalReport> ExternalReports { get; set; }
+        public virtual TrialArea trial_areas { get; set; }
     }
 }
