@@ -123,6 +123,7 @@
     <Compile Include="ViewModels\BatchesNavigationItemViewModel.cs" />
     <Compile Include="ViewModels\BatchInfoViewModel.cs" />
     <Compile Include="ViewModels\BatchMainViewModel.cs" />
+    <Compile Include="ViewModels\BatchStatusListViewModel.cs" />
     <Compile Include="ViewModels\ColorCreationDialogViewModel.cs" />
     <Compile Include="ViewModels\ColourEditViewModel.cs" />
     <Compile Include="ViewModels\ColourMainViewModel.cs" />
@@ -149,6 +150,9 @@
     </Compile>
     <Compile Include="Views\BatchMain.xaml.cs">
       <DependentUpon>BatchMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\BatchStatusList.xaml.cs">
+      <DependentUpon>BatchStatusList.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ColorCreationDialog.xaml.cs">
       <DependentUpon>ColorCreationDialog.xaml</DependentUpon>
@@ -243,6 +247,10 @@
     <Page Include="Views\BatchMain.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\BatchStatusList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ColorCreationDialog.xaml">
       <SubType>Designer</SubType>

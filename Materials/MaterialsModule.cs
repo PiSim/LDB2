@@ -37,6 +37,7 @@ namespace Materials
             _container.RegisterType<ViewModels.AspectMainViewModel>();
             _container.RegisterType<ViewModels.BatchInfoViewModel>();
             _container.RegisterType<ViewModels.BatchMainViewModel>();
+            _container.RegisterType<ViewModels.BatchStatusListViewModel>();
             _container.RegisterType<ViewModels.ColorCreationDialogViewModel>();
             _container.RegisterType<ViewModels.ColourEditViewModel>();
             _container.RegisterType<ViewModels.ColourMainViewModel>();
@@ -52,6 +53,8 @@ namespace Materials
 
             _regionManager.RegisterViewWithRegion(RegionNames.AspectDetailBatchListRegion,
                                                 typeof(Views.BatchList));
+            _regionManager.RegisterViewWithRegion(RegionNames.BatchStatusListRegion,
+                                                typeof(Views.BatchStatusList));
             _regionManager.RegisterViewWithRegion(RegionNames.ColourEditBatchListRegion,
                                                 typeof(Views.BatchList));
             _regionManager.RegisterViewWithRegion(RegionNames.MaterialDetailBatchListRegion,

@@ -64,6 +64,11 @@ namespace Materials.ViewModels
             }
         }
 
+        public string BatchStatusListRegionName
+        {
+            get { return RegionNames.BatchStatusListRegion; }
+        }
+
         public DelegateCommand CreateBatchCommand
         {
             get { return _createBatch; }

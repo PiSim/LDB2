@@ -11,6 +11,27 @@ namespace DBManager.Services
     public static class MaterialService
     {
 
+        public static IEnumerable<Batch> GetBatches()
+        {
+            // Returns all Batches
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.Batches.Include(btc => btc.BasicReport)
+                                        .Include(btc => btc.FirstSample)
+                                        .Include(btc => btc.Material.Aspect)
+                                        .Include(btc => btc.Material.ExternalConstruction)
+                                        .Include(btc => btc.Material.MaterialLine)
+                                        .Include(btc => btc.Material.MaterialType)
+                                        .Include(btc => btc.Material.Recipe.Colour)
+                                        .Where(btc => true)
+                                        .OrderByDescending(btc => btc.Number)
+                                        .ToList();
+            }
+        }
+
         public static IEnumerable<Material> GetMaterials()
         {
             // Returns all material entities 

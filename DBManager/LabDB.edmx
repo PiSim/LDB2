@@ -31,6 +31,10 @@
           <Property Name="materialID" Type="int" />
           <Property Name="notes" Type="varchar" MaxLength="45" Nullable="false" />
           <Property Name="trial_areaID" Type="int" />
+          <Property Name="first_sample_arrived" Type="bit" />
+          <Property Name="first_sampleID" Type="int" />
+          <Property Name="basic_report_done" Type="bit" />
+          <Property Name="basic_reportID" Type="int" />
         </EntityType>
         <EntityType Name="calibration_files">
           <Key>
@@ -577,6 +581,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="basic_report_to_batch">
+          <End Role="reports" Type="Self.reports" Multiplicity="0..1" />
+          <End Role="batches" Type="Self.batches" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="reports">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="batches">
+              <PropertyRef Name="basic_reportID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="batch">
           <End Role="batches" Type="Self.batches" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -830,6 +846,18 @@
             </Principal>
             <Dependent Role="external_report_method_mappings">
               <PropertyRef Name="external_reportID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="first_sample_to_batch">
+          <End Role="samples" Type="Self.samples" Multiplicity="0..1" />
+          <End Role="batches" Type="Self.batches" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="samples">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="batches">
+              <PropertyRef Name="first_sampleID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1787,6 +1815,10 @@
             <End Role="people" EntitySet="people" />
             <End Role="reports" EntitySet="reports" />
           </AssociationSet>
+          <AssociationSet Name="basic_report_to_batch" Association="Self.basic_report_to_batch">
+            <End Role="reports" EntitySet="reports" />
+            <End Role="batches" EntitySet="batches" />
+          </AssociationSet>
           <AssociationSet Name="batch" Association="Self.batch">
             <End Role="batches" EntitySet="batches" />
             <End Role="batch_files" EntitySet="batch_files" />
@@ -1866,6 +1898,10 @@
           <AssociationSet Name="external_report_to_method_mapping" Association="Self.external_report_to_method_mapping">
             <End Role="external_reports" EntitySet="external_reports" />
             <End Role="external_report_method_mappings" EntitySet="external_report_method_mappings" />
+          </AssociationSet>
+          <AssociationSet Name="first_sample_to_batch" Association="Self.first_sample_to_batch">
+            <End Role="samples" EntitySet="samples" />
+            <End Role="batches" EntitySet="batches" />
           </AssociationSet>
           <AssociationSet Name="instrument_to_calibration_report" Association="Self.instrument_to_calibration_report">
             <End Role="instruments" EntitySet="instruments" />
@@ -2186,8 +2222,14 @@
           <NavigationProperty Name="Samples" Relationship="Self.batch_to_sample" FromRole="batches" ToRole="samples" />
           <NavigationProperty Name="Tasks" Relationship="labdbModel.batch_to_task" FromRole="Batch" ToRole="Task" />
           <NavigationProperty Name="ExternalReports" Relationship="labdbModel.external_report_batch_mapping" FromRole="Batch" ToRole="ExternalReport" />
-          <Property Name="trial_areaID" Type="Int32" />
-          <NavigationProperty Name="trial_areas" Relationship="labdbModel.trial_area_to_batch" FromRole="Batch" ToRole="TrialArea" />
+          <Property Name="TrialAreaID" Type="Int32" />
+          <NavigationProperty Name="TrialArea" Relationship="labdbModel.trial_area_to_batch" FromRole="Batch" ToRole="TrialArea" />
+          <Property Name="FirstSampleArrived" Type="Boolean" />
+          <Property Name="FirstSampleID" Type="Int32" />
+          <Property Name="BasicReportDone" Type="Boolean" />
+          <Property Name="BasicReportID" Type="Int32" />
+          <NavigationProperty Name="BasicReport" Relationship="labdbModel.basic_report_to_batch" FromRole="Batch" ToRole="Report" />
+          <NavigationProperty Name="FirstSample" Relationship="labdbModel.first_sample_to_batch" FromRole="Batch" ToRole="Sample" />
         </EntityType>
         <EntityType Name="Colour">
           <Key>
@@ -3348,6 +3390,14 @@
             <End Role="TrialArea" EntitySet="TrialAreas" />
             <End Role="Batch" EntitySet="Batches" />
           </AssociationSet>
+          <AssociationSet Name="basic_report_to_batch" Association="labdbModel.basic_report_to_batch">
+            <End Role="Report" EntitySet="Reports" />
+            <End Role="Batch" EntitySet="Batches" />
+          </AssociationSet>
+          <AssociationSet Name="first_sample_to_batch" Association="labdbModel.first_sample_to_batch">
+            <End Role="Sample" EntitySet="Samples" />
+            <End Role="Batch" EntitySet="Batches" />
+          </AssociationSet>
         </EntityContainer>
         <Association Name="overridden_to_requirement">
           <End Type="labdbModel.Requirement" Role="Requirement" Multiplicity="0..1">
@@ -4323,7 +4373,31 @@
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="Batch">
-              <PropertyRef Name="trial_areaID" />
+              <PropertyRef Name="TrialAreaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="basic_report_to_batch">
+          <End Type="labdbModel.Report" Role="Report" Multiplicity="0..1" />
+          <End Type="labdbModel.Batch" Role="Batch" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Report">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Batch">
+              <PropertyRef Name="BasicReportID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="first_sample_to_batch">
+          <End Type="labdbModel.Sample" Role="Sample" Multiplicity="0..1" />
+          <End Type="labdbModel.Batch" Role="Batch" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Sample">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Batch">
+              <PropertyRef Name="FirstSampleID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -4355,7 +4429,11 @@
           <EntitySetMapping Name="Batches">
             <EntityTypeMapping TypeName="labdbModel.Batch">
               <MappingFragment StoreEntitySet="batches">
-                <ScalarProperty Name="trial_areaID" ColumnName="trial_areaID" />
+                <ScalarProperty Name="BasicReportID" ColumnName="basic_reportID" />
+                <ScalarProperty Name="BasicReportDone" ColumnName="basic_report_done" />
+                <ScalarProperty Name="FirstSampleID" ColumnName="first_sampleID" />
+                <ScalarProperty Name="FirstSampleArrived" ColumnName="first_sample_arrived" />
+                <ScalarProperty Name="TrialAreaID" ColumnName="trial_areaID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Number" ColumnName="number" />
                 <ScalarProperty Name="MaterialID" ColumnName="materialID" />
