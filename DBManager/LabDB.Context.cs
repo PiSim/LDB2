@@ -76,5 +76,6 @@ namespace DBManager
         public virtual DbSet<SubTaskItem> SubTaskItems { get; set; }
         public virtual DbSet<MaterialLine> MaterialLines { get; set; }
         public virtual DbSet<TrialArea> TrialAreas { get; set; }
+        public virtual DbSet<TrialScope> TrialScopes { get; set; }
     }
 }

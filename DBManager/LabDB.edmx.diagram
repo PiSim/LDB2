@@ -4,10 +4,10 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="9fa1cdb38a7949d89850433ccf2fcd72" Name="Diagram1" ZoomLevel="91" ShowGrid="false">
+      <Diagram DiagramId="9fa1cdb38a7949d89850433ccf2fcd72" Name="Diagram1" ZoomLevel="81" ShowGrid="false">
         <EntityTypeShape EntityType="labdbModel.Aspect" Width="1.5" PointX="35" PointY="19.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="labdbModel.BatchFile" Width="1.5" PointX="30.875" PointY="17.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="labdbModel.Batch" Width="1.5" PointX="30.875" PointY="12.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="labdbModel.BatchFile" Width="1.5" PointX="30.875" PointY="17.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="labdbModel.Batch" Width="1.5" PointX="30.875" PointY="11.375" IsExpanded="true" />
         <EntityTypeShape EntityType="labdbModel.Colour" Width="1.5" PointX="37.125" PointY="15.375" IsExpanded="true" />
         <EntityTypeShape EntityType="labdbModel.ExternalConstruction" Width="1.5" PointX="20.125" PointY="20.25" IsExpanded="true" />
         <EntityTypeShape EntityType="labdbModel.ExternalReportFile" Width="1.5" PointX="26.5" PointY="18.75" IsExpanded="true" />
@@ -30,7 +30,7 @@
         <EntityTypeShape EntityType="labdbModel.Std" Width="1.5" PointX="2.625" PointY="12.375" IsExpanded="true" />
         <EntityTypeShape EntityType="labdbModel.SubRequirement" Width="1.5" PointX="12.125" PointY="3.125" IsExpanded="true" />
         <EntityTypeShape EntityType="labdbModel.SubTest" Width="1.5" PointX="10.75" PointY="7.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="labdbModel.Task" Width="1.5" PointX="30.875" PointY="8" IsExpanded="true" />
+        <EntityTypeShape EntityType="labdbModel.Task" Width="1.5" PointX="30.875" PointY="6.875" IsExpanded="true" />
         <EntityTypeShape EntityType="labdbModel.Test" Width="1.5" PointX="9.75" PointY="12.875" IsExpanded="true" />
         <EntityTypeShape EntityType="labdbModel.User" Width="1.5" PointX="11.875" PointY="19.875" IsExpanded="true" />
         <AssociationConnector Association="labdbModel.batch1" ManuallyRouted="false" />
@@ -132,12 +132,12 @@
         <AssociationConnector Association="labdbModel.external_report_batch_mapping" />
         <AssociationConnector Association="labdbModel.requirement_to_test1" ManuallyRouted="true" >
           <ConnectorPoint PointX="14.640959038461539" PointY="10.970602213541666" />
-          <ConnectorPoint PointX="14.640959038461539" PointY="13.484375" />
-          <ConnectorPoint PointX="14.118491458333333" PointY="13.484375" />
-          <ConnectorPoint PointX="13.951824791666665" PointY="13.484375" />
-          <ConnectorPoint PointX="13.569659895833334" PointY="13.484375" />
-          <ConnectorPoint PointX="13.402993229166667" PointY="13.484375" />
-          <ConnectorPoint PointX="11.25" PointY="13.484375" />
+          <ConnectorPoint PointX="14.640959038461539" PointY="13.43359375" />
+          <ConnectorPoint PointX="14.161460833333335" PointY="13.43359375" />
+          <ConnectorPoint PointX="13.994794166666667" PointY="13.43359375" />
+          <ConnectorPoint PointX="13.591144583333334" PointY="13.43359375" />
+          <ConnectorPoint PointX="13.424477916666666" PointY="13.43359375" />
+          <ConnectorPoint PointX="11.25" PointY="13.43359375" />
         </AssociationConnector>
         <AssociationConnector Association="labdbModel.sub_requirement_to_sub_test" />
         <AssociationConnector Association="labdbModel.test_to_task_item" />
@@ -157,6 +157,8 @@
         <AssociationConnector Association="labdbModel.trial_area_to_batch" />
         <AssociationConnector Association="labdbModel.basic_report_to_batch" />
         <AssociationConnector Association="labdbModel.first_sample_to_batch" />
+        <EntityTypeShape EntityType="labdbModel.TrialScope" Width="1.5" PointX="28" PointY="15.875" />
+        <AssociationConnector Association="labdbModel.trial_scope_to_batch" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

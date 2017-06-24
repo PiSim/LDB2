@@ -150,6 +150,7 @@
     <Compile Include="EntityExtensions\ExternalReportFileExtension.cs" />
     <Compile Include="EntityExtensions\InstrumentExtension.cs" />
     <Compile Include="EntityExtensions\MaterialExtension.cs" />
+    <Compile Include="EntityExtensions\MaterialLineExtension.cs" />
     <Compile Include="EntityExtensions\MaterialTypeExtension.cs" />
     <Compile Include="EntityExtensions\MethodExtension.cs" />
     <Compile Include="EntityExtensions\OrganizationExtension.cs" />
@@ -326,6 +327,9 @@
       <DependentUpon>LabDB.tt</DependentUpon>
     </Compile>
     <Compile Include="TrialArea.cs">
+      <DependentUpon>LabDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TrialScope.cs">
       <DependentUpon>LabDB.tt</DependentUpon>
     </Compile>
     <Compile Include="User.cs">

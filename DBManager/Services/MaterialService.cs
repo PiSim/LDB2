@@ -52,6 +52,18 @@ namespace DBManager.Services
             }
         }
 
+        public static MaterialLine GetLine(string lineCode)
+        {
+            // Returns a MaterialLine entry with the given code, or null if none exists
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.MaterialLines.FirstOrDefault(matl => matl.Code == lineCode);
+            }
+        }
+
         public static IEnumerable<Material> GetMaterialsWithoutProject()
         {
             // Returns all Material entities without a project

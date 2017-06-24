@@ -27,7 +27,7 @@
                 <DataGridTextColumn Header="Colore"
                                     Binding="{Binding Material.Recipe.Colour.Name}"/>
                 <DataGridCheckBoxColumn Header="Ricevuto"
-                                        Binding="{Binding FirstSampleReceived}"/>
+                                        Binding="{Binding FirstSampleArrived}"/>
                 <DataGridTextColumn Header="Data arrivo"
                                     Binding="{Binding FirstSample.Date}"/>
                 <DataGridTextColumn Header="Report Basic"
