@@ -1,6 +1,7 @@
 ﻿using DBManager;
 using DBManager.Services;
 using Infrastructure;
+using Infrastructure.Events;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
@@ -17,9 +18,11 @@ namespace Materials.ViewModels
     {
         private DelegateCommand _openBatch;
         private DelegateCommand<Window> _cancel, _confirm;
+        private EventAggregator _eventAggregator;
 
-        public BatchStatusListViewModel() : base()
+        public BatchStatusListViewModel(EventAggregator eventAggregator) : base()
         {
+            _eventAggregator = eventAggregator;
 
             _cancel = new DelegateCommand<Window>(
                 parentDialog =>
@@ -31,6 +34,12 @@ namespace Materials.ViewModels
                 parentDialog =>
                 {
                     parentDialog.DialogResult = true;
+                });
+
+            _eventAggregator.GetEvent<BatchCreated>().Subscribe(
+                batch =>
+                {
+                    RaisePropertyChanged("BatchList");
                 });
         }
 

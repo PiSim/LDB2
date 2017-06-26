@@ -9,10 +9,6 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="35"/>
             <RowDefinition/>
@@ -38,34 +34,5 @@
                             Margin="5"/>
 
         </Grid>
-        <GroupBox Header="Ultimi arrivi"
-                  Grid.Column="1"
-                  Grid.Row="1">
-            <Grid>
-
-                <ListView ItemsSource="{Binding RecentArrivalsList}"
-                          SelectedItem="{Binding SelectedSampleArrival, Mode=TwoWay}">
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn Header="Data"
-                                            DisplayMemberBinding="{Binding Date, StringFormat=d}"/>
-                            <GridViewColumn Header="Batch"
-                                            DisplayMemberBinding="{Binding Batch.Number}"/>
-                            <GridViewColumn Header="Tipo"
-                                            DisplayMemberBinding="{Binding Batch.Material.MaterialType.Code}"/>
-                            <GridViewColumn Header="Riga"
-                                            DisplayMemberBinding="{Binding Batch.Material.MaterialLine.Code}"/>
-                            <GridViewColumn Header="Aspetto"
-                                            DisplayMemberBinding="{Binding Batch.Material.Aspect.Code}"/>
-                            <GridViewColumn Header="Mescola"
-                                            DisplayMemberBinding="{Binding Batch.Material.Recipe.Code}"/>
-                            <GridViewColumn Header="Colore"
-                                            DisplayMemberBinding="{Binding Batch.Material.Recipe.Colour.Name}"/>
-                        </GridView>
-                    </ListView.View>
-                </ListView>
-
-            </Grid>
-        </GroupBox>
     </Grid>
 </UserControl>

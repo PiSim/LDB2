@@ -45,13 +45,6 @@ namespace Materials.ViewModels
                     _eventAggregator.GetEvent<BatchVisualizationRequested>()
                                     .Publish(_batchNumber);
                 });
-
-            _eventAggregator.GetEvent<SampleListUpdateRequested>().Subscribe(
-                () =>
-                {
-                    RaisePropertyChanged("RecentArrivalsList");
-                    SelectedSampleArrival = null;
-                });
         }
 
         public string BatchNumber

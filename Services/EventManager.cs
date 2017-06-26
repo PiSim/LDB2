@@ -23,7 +23,10 @@ namespace Services
                             .Subscribe(
                             () =>
                             {
-                                ServiceProvider.CreateBatch();
+                                Batch tmp = ServiceProvider.CreateBatch();
+                                if (tmp != null)
+                                    _eventAggregator.GetEvent<BatchCreated>()
+                                                    .Publish(tmp);
                             });
 
             _eventAggregator.GetEvent<MaintenanceEventCreationRequested>()

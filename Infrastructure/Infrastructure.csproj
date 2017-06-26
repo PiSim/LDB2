@@ -103,6 +103,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AdminViewNames.cs" />
+    <Compile Include="Events\BatchCreated.cs" />
     <Compile Include="Events\BatchCreationRequested.cs" />
     <Compile Include="Events\BatchVisualizationRequested.cs" />
     <Compile Include="Events\ExternalConstructionModified.cs" />

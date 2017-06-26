@@ -253,8 +253,6 @@ namespace DBManager.Services
         {
             using (DBEntities entities = new DBEntities())
             {
-                entities.Configuration.AutoDetectChangesEnabled = false;
-
                 entities.Materials.First(mat => mat.ID == toBeAdded.ID)
                                     .ExternalConstructionID = entry.ID;
 
@@ -342,11 +340,7 @@ namespace DBManager.Services
         {
             using (DBEntities entities = new DBEntities())
             {
-                entities.Configuration.AutoDetectChangesEnabled = false;
-
-                ExternalConstruction tempEntry = entities.ExternalConstructions.First(extc => extc.ID == entry.ID);
-                entities.Entry(tempEntry).CurrentValues.SetValues(entry);
-                entities.Entry(tempEntry).State = EntityState.Modified; 
+                entities.ExternalConstructions.AddOrUpdate(entry);
                 entities.SaveChanges();
             }
         }

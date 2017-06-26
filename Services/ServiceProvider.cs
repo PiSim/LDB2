@@ -29,14 +29,17 @@ namespace Services
             }
         }
 
-        internal static void CreateBatch()
+        internal static Batch CreateBatch()
         {
             Views.BatchCreationDialog batchCreator = new Views.BatchCreationDialog();
 
             if (batchCreator.ShowDialog() == true)
             {
-
+                return batchCreator.BatchInstance;
             }
+
+            else
+                return null;
         }
 
         public static CalibrationReport RegisterNewCalibration(Instrument target)
