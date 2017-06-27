@@ -14,6 +14,7 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
 
+        
         <StackPanel Orientation="Horizontal"
                     Grid.Column="0"
                     Grid.Row="0">
@@ -24,6 +25,14 @@
 
             <Button Content="Movimenti rotoli"
                     Command="{Binding OpenSampleLogViewCommand}"
+                    Margin="5"/>
+
+            <Button Content="Aggiorna lista"
+                    Command="{Binding RefreshCommand}"
+                    Margin="5"/>
+
+            <Button Content="Stampa"
+                    Command="{Binding PrintStatusListCommand}"
                     Margin="5"/>
         </StackPanel>
 

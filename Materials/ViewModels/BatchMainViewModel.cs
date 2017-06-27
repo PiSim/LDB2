@@ -6,6 +6,7 @@ using Navigation;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
+using Reporting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,22 +17,30 @@ namespace Materials.ViewModels
 {
     class BatchMainViewModel : BindableBase
     {
-        private DelegateCommand _createBatch, _quickOpen, _openSampleLogView;
+        private DBPrincipal _principal;
+        private DelegateCommand _createBatch, 
+                                _quickOpen, 
+                                _openSampleLogView,
+                                _printStatusList,
+                                _refresh;
         private IEventAggregator _eventAggregator;
         private Sample _selectedSampleArrival;
         private string _batchNumber;
 
-        public BatchMainViewModel(IEventAggregator eventAggregator) 
+        public BatchMainViewModel(DBPrincipal principal,
+                                IEventAggregator eventAggregator) 
             : base()
         {
             _eventAggregator = eventAggregator;
+            _principal = principal;
 
             _createBatch = new DelegateCommand(
                 () =>
                 {
                     _eventAggregator.GetEvent<BatchCreationRequested>()
                                     .Publish();
-                });
+                },
+                () => CanCreateBatch);
 
             _openSampleLogView = new DelegateCommand(
                 () =>
@@ -44,6 +53,20 @@ namespace Materials.ViewModels
                 {
                     _eventAggregator.GetEvent<BatchVisualizationRequested>()
                                     .Publish(_batchNumber);
+                });
+
+            _printStatusList = new DelegateCommand(
+                () =>
+                {
+                    ReportingEngine.PrintBatchStatusList();
+                },
+                () => _principal.IsInRole(UserRoleNames.Admin));
+
+            _refresh = new DelegateCommand(
+                () =>
+                {
+                    _eventAggregator.GetEvent<BatchStatusListRefreshRequested>()
+                                    .Publish();
                 });
         }
 
@@ -62,6 +85,11 @@ namespace Materials.ViewModels
             get { return RegionNames.BatchStatusListRegion; }
         }
 
+        private bool CanCreateBatch
+        {
+            get { return _principal.IsInRole(UserRoleNames.MaterialAdmin); }
+        }
+
         public DelegateCommand CreateBatchCommand
         {
             get { return _createBatch; }
@@ -77,11 +105,24 @@ namespace Materials.ViewModels
             get { return _quickOpen; }
         }
 
+        public DelegateCommand PrintStatusListCommand
+        {
+            get { return _printStatusList; }
+        }
+
         public IEnumerable<Sample> RecentArrivalsList
         {
             get
             {
                 return MaterialService.GetRecentlyArrivedSamples();
+            }
+        }
+
+        public DelegateCommand RefreshCommand
+        {
+            get
+            {
+                return _refresh;
             }
         }
 

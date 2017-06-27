@@ -59,6 +59,18 @@ namespace Services
                                     ServiceProvider.AddUserRole(stringDialog.InputString);
                             });
 
+            _eventAggregator.GetEvent<ReportCreated>().Subscribe(
+                report =>
+                {
+                    Batch targetBatch = MaterialService.GetBatch(report.BatchID);
+
+                    if (targetBatch.BasicReportID == null)
+                    {
+                        targetBatch.BasicReportID = report.ID;
+                        targetBatch.Update();
+                    }
+                });
+
             _eventAggregator.GetEvent<ReportCreationRequested>().Subscribe(
                 token =>
                 {
@@ -68,7 +80,10 @@ namespace Services
                         creationDialog.Batch = token.TargetBatch;
 
                     if (creationDialog.ShowDialog() == true)
-                        _eventAggregator.GetEvent<ReportListUpdateRequested>().Publish();
+                    {
+                        _eventAggregator.GetEvent<ReportCreated>()
+                                        .Publish(creationDialog.ReportInstance);
+                    }
                 });
 
             _eventAggregator.GetEvent<ReportStatusCheckRequested>()
@@ -85,8 +100,8 @@ namespace Services
                         report.IsComplete = !report.IsComplete;
                         report.Update();
 
-                        _eventAggregator.GetEvent<ReportListUpdateRequested>()
-                                        .Publish();
+                        _eventAggregator.GetEvent<ReportCompleted>()
+                                        .Publish(report);
 
                         if (report.ParentTask != null)
                             _eventAggregator.GetEvent<TaskStatusCheckRequested>()

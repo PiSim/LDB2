@@ -44,8 +44,8 @@ namespace Projects.ViewModels
 
             #region EventSubscriptions
             
-            _eventAggregator.GetEvent<ReportListUpdateRequested>().Subscribe(
-                () =>
+            _eventAggregator.GetEvent<ReportCreated>().Subscribe(
+                report =>
                 {
                     SelectedReport = null;
                     RaisePropertyChanged("ReportList");

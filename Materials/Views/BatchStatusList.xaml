@@ -29,7 +29,9 @@
                 <DataGridCheckBoxColumn Header="Ricevuto"
                                         Binding="{Binding FirstSampleArrived}"/>
                 <DataGridTextColumn Header="Data arrivo"
-                                    Binding="{Binding FirstSample.Date}"/>
+                                    Binding="{Binding FirstSample.Date, 
+                                                        StringFormat=d,
+                                                        ConverterCulture=it-IT}"/>
                 <DataGridTextColumn Header="Report Basic"
                                     Binding="{Binding BasicReport.Number}"/>
             </DataGrid.Columns>

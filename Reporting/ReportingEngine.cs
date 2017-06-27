@@ -14,6 +14,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace Reporting
 {
@@ -225,5 +226,9 @@ namespace Reporting
             return fullPath;
         }
 
+        public static void PrintBatchStatusList()
+        {
+            
+        }
     }
 }

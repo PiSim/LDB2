@@ -35,8 +35,8 @@ namespace Materials.ViewModels
             _eventAggregator = aggregator;
             _principal = principal;
 
-            _eventAggregator.GetEvent<ReportListUpdateRequested>().Subscribe(
-                () =>
+            _eventAggregator.GetEvent<ReportCreated>().Subscribe(
+                report =>
                 {
                     SelectedReport = null;
                     RaisePropertyChanged("ReportList");

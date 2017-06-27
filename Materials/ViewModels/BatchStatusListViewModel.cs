@@ -41,6 +41,13 @@ namespace Materials.ViewModels
                 {
                     RaisePropertyChanged("BatchList");
                 });
+
+            _eventAggregator.GetEvent<BatchStatusListRefreshRequested>()
+                            .Subscribe(
+                            () =>
+                            {
+                                RaisePropertyChanged("BatchList");
+                            });
         }
 
         public IEnumerable<Batch> BatchList
