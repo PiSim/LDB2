@@ -1,7 +1,15 @@
-﻿<FlowDocument xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+﻿<FlowDocument x:Class="Reporting.Formats.BatchStatusListReport"
+              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
               xmlns:local="clr-namespace:Reporting.Formats"
               ColumnWidth="400" FontSize="14" FontFamily="Georgia">
     <Paragraph>
-
+        <TextBlock Text="Data:"
+                   Margin="5"/>
+        <TextBlock Name="DateBox"
+                   Margin="5"/>
     </Paragraph>
+    <Table Name="BatchTable"
+           TextAlignment="Center">
+    </Table>
 </FlowDocument>

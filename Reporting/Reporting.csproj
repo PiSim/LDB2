@@ -115,7 +115,12 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Formats\ReportRawDataSheet.cs" />
+    <Compile Include="Formats\BatchStatusListReport.xaml.cs">
+      <DependentUpon>BatchStatusListReport.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Formats\ReportRawDataSheet.xaml.cs">
+      <DependentUpon>ReportRawDataSheet.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ReportingEngine.cs" />
     <Compile Include="ReportingModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -166,6 +171,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Formats\FormatDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Formats\ReportRawDataSheet.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -32,6 +32,27 @@ namespace DBManager.Services
             }
         }
 
+        public static IEnumerable<Batch> GetBatches(int entryN)
+        {
+            // Returns all Batches
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.Batches.Include(btc => btc.BasicReport)
+                                        .Include(btc => btc.FirstSample)
+                                        .Include(btc => btc.Material.Aspect)
+                                        .Include(btc => btc.Material.ExternalConstruction)
+                                        .Include(btc => btc.Material.MaterialLine)
+                                        .Include(btc => btc.Material.MaterialType)
+                                        .Include(btc => btc.Material.Recipe.Colour)
+                                        .OrderByDescending(btc => btc.Number)
+                                        .Take(entryN)
+                                        .ToList();
+            }
+        }
+
         public static IEnumerable<Material> GetMaterials()
         {
             // Returns all material entities 

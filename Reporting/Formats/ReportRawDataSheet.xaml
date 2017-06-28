@@ -1,0 +1,129 @@
+﻿<FlowDocument x:Class="Reporting.Formats.ReportRawDataSheet"
+              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+              ColumnWidth="400" FontSize="10" FontFamily="Arial">
+    <Table Name="HeaderTable"
+           BorderThickness="3"
+           BorderBrush="Black"
+           CellSpacing="0">
+        <Table.Columns>
+            <TableColumn />
+            <TableColumn/>
+            <TableColumn/>
+        </Table.Columns>
+        <TableRowGroup>
+            <TableRow>
+                <TableCell RowSpan="2">
+                    <Paragraph>
+                        <Image Source="{StaticResource ResourceKey=VulcaLogo}"
+                               Margin="5"/>
+                    </Paragraph>
+                </TableCell>
+                <TableCell RowSpan="2">
+                    <Paragraph TextAlignment="Center">
+                        <TextBlock FontSize="12"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center">
+                            <Bold>
+                                LABORATORIO VALIDAZIONE MATERIALI
+                            </Bold>
+                        </TextBlock>
+                    </Paragraph>
+                </TableCell>
+                <TableCell >
+                    <Paragraph>
+                        <TextBlock Text="TEST REPORT N°:"
+                                   Margin="5"/>
+                        <TextBlock Text="{Binding Number}"
+                                   Margin="5"/>
+                    </Paragraph>
+                </TableCell>
+            </TableRow>
+
+            <TableRow>
+                <TableCell>
+                    <Paragraph>
+                        <TextBlock>
+                            OEM:
+                        </TextBlock>
+                        <TextBlock Text="{Binding Batch.Material.Project.Organization.Name}"/>
+                    </Paragraph>
+                </TableCell>               
+            </TableRow>
+
+            <TableRow>
+                <TableCell BorderThickness="1"
+                           BorderBrush="Black">
+                    <Paragraph>
+                        <TextBlock HorizontalAlignment="Left"
+                                   VerticalAlignment="Top">
+                            BATCH:
+                        </TextBlock>
+                    </Paragraph>
+                    <Paragraph>
+                        <TextBlock Text="{Binding Batch.Number}"
+                                   HorizontalAlignment="Right"
+                                   VerticalAlignment="Center"/>
+                    </Paragraph>
+                </TableCell>
+                <TableCell BorderThickness="1"
+                           BorderBrush="Black"
+                           RowSpan="2">
+
+                    <Paragraph>
+                        <TextBlock HorizontalAlignment="Left"
+                                   VerticalAlignment="Top">
+                            PROGETTO:
+                        </TextBlock>
+                        <TextBlock Text="{Binding Batch.Material.Project.Name}"
+                                   HorizontalAlignment="Right"
+                                   VerticalAlignment="Center"/>
+                    </Paragraph>
+                </TableCell>
+                <TableCell BorderThickness="1"
+                           BorderBrush="Black"
+                           RowSpan="2">
+                    <Paragraph>
+                        <TextBlock HorizontalAlignment="Left"
+                                   VerticalAlignment="Top">
+                            NOTE:
+                        </TextBlock>
+                    </Paragraph>
+                </TableCell>
+            </TableRow>
+            <TableRow>
+                <TableCell BorderThickness="1"
+                           BorderBrush="Black">
+                    <Paragraph>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0"
+                                       HorizontalAlignment="Left"
+                                       VerticalAlignment="Top"
+                                       Margin="5">
+                                CODICE:
+                            </TextBlock>
+                            <StackPanel Orientation="Horizontal"
+                                        Grid.Column="1"
+                                        HorizontalAlignment="Right"
+                                        VerticalAlignment="Center"
+                                        Margin="5">
+                                <TextBlock Text="{Binding Batch.Material.MaterialType.Code}"/>
+                                <TextBlock Text="{Binding Batch.Material.MaterialLine.Code}"/>
+                                <TextBlock Text="{Binding Batch.Material.Aspect.Code}"/>
+                                <TextBlock Text="{Binding Batch.Material.Recipe.Code}"/>
+                            </StackPanel>
+                        </Grid>
+                    </Paragraph>
+                </TableCell>
+                
+            </TableRow>
+        </TableRowGroup>
+    </Table>
+    <Paragraph>
+        
+    </Paragraph>
+</FlowDocument>
