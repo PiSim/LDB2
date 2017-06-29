@@ -34,10 +34,8 @@ namespace Services.ViewModels
                         _batchNumber,
                         _lineCode,
                         _recipeCode,
-                        _trialScopeText,
                         _typeCode;
         private TrialArea _selectedTrialArea;
-        private TrialScope _selectedTrialScope;
 
         public BatchCreationDialogViewModel() : base()
         {
@@ -141,6 +139,9 @@ namespace Services.ViewModels
                         MaterialID = tempMaterial.ID,
                         Number = _batchNumber
                     };
+
+                    if (_selectedTrialArea != null)
+                        _batchInstance.TrialAreaID = _selectedTrialArea.ID;
 
                     _batchInstance.Create();
 
@@ -358,23 +359,9 @@ namespace Services.ViewModels
             }
         }
 
-        public TrialScope SelectedTrialScope
-        {
-            get { return _selectedTrialScope; }
-        }
-
         public IEnumerable<TrialArea> TrialAreaList
         {
             get { return MaterialService.GetTrialAreas(); }
-        }
-
-        public string TrialScopeText
-        {
-            get { return _trialScopeText; }
-            set
-            {
-                _trialScopeText = value;
-            }
         }
 
         public string TypeCode

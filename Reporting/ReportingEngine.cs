@@ -59,7 +59,7 @@ namespace Reporting
 
             Table batchTable = batchReport.BatchTable;
 
-            for (int ii = 0; ii < 9; ii++)
+            for (int ii = 0; ii < 11; ii++)
                 batchTable.Columns.Add(new TableColumn());
 
             TableRow currentRow;
@@ -91,6 +91,14 @@ namespace Reporting
             currentRow.Cells.Add(new TableCell
                                 (new Paragraph
                                 (new Run("Colore"))));
+
+            currentRow.Cells.Add(new TableCell
+                                (new Paragraph
+                                (new Run("Construction"))));
+
+            currentRow.Cells.Add(new TableCell
+                                (new Paragraph
+                                (new Run("Tipo batch"))));
 
             currentRow.Cells.Add(new TableCell
                                 (new Paragraph
@@ -140,6 +148,14 @@ namespace Reporting
 
                 currentRow.Cells.Add(new TableCell
                                     (new Paragraph
+                                    (new Run((btc.Material != null && btc.Material.ExternalConstruction != null) ? btc.Material.ExternalConstruction.Name : ""))));
+
+                currentRow.Cells.Add(new TableCell
+                                    (new Paragraph
+                                    (new Run((btc.TrialArea != null) ? btc.TrialArea.Name : ""))));
+
+                currentRow.Cells.Add(new TableCell
+                                    (new Paragraph
                                     (new Run((btc.FirstSampleArrived) ? "X" : " "))));
 
                 currentRow.Cells.Add(new TableCell
@@ -163,7 +179,7 @@ namespace Reporting
             PrintDialog printer = new PrintDialog();
 
             DocumentPaginator paginator = ((IDocumentPaginatorSource)batchReport).DocumentPaginator;
-            
+
             if (printer.ShowDialog() == true)
                 printer.PrintDocument(paginator, "Report");
         }

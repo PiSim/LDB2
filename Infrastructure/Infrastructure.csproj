@@ -179,6 +179,7 @@
     <Compile Include="SpecificationViewNames.cs" />
     <Compile Include="UserRoleNames.cs" />
     <Compile Include="TaskViewNames.cs" />
+    <Compile Include="ValidationRules\ExistingReportRule.cs" />
     <Compile Include="Wrappers\ControlPlanItemWrapper.cs" />
     <Compile Include="Wrappers\ISelectableRequirement.cs" />
     <Compile Include="Wrappers\ReportItemWrapper.cs" />

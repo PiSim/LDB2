@@ -59,8 +59,7 @@ namespace Materials.ViewModels
                 () =>
                 {
                     ReportingEngine.PrintBatchStatusList();
-                },
-                () => _principal.IsInRole(UserRoleNames.Admin));
+                });
 
             _refresh = new DelegateCommand(
                 () =>

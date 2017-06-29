@@ -26,6 +26,7 @@ namespace DBManager.Services
                                         .Include(btc => btc.Material.MaterialLine)
                                         .Include(btc => btc.Material.MaterialType)
                                         .Include(btc => btc.Material.Recipe.Colour)
+                                        .Include(btc => btc.TrialArea)
                                         .Where(btc => true)
                                         .OrderByDescending(btc => btc.Number)
                                         .ToList();
@@ -47,6 +48,7 @@ namespace DBManager.Services
                                         .Include(btc => btc.Material.MaterialLine)
                                         .Include(btc => btc.Material.MaterialType)
                                         .Include(btc => btc.Material.Recipe.Colour)
+                                        .Include(btc => btc.TrialArea)
                                         .OrderByDescending(btc => btc.Number)
                                         .Take(entryN)
                                         .ToList();
