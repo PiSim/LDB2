@@ -1,4 +1,5 @@
-﻿using Microsoft.Practices.Prism.Mvvm;
+﻿using DBManager;
+using Microsoft.Practices.Prism.Mvvm;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +24,11 @@ namespace Services.Views
         public BatchCreationDialog()
         {
             InitializeComponent();
+        }
+
+        public Batch BatchInstance
+        {
+            get { return (DataContext as ViewModels.BatchCreationDialogViewModel).BatchInstance; }
         }
     }
 }

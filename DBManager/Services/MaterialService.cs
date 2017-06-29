@@ -26,8 +26,31 @@ namespace DBManager.Services
                                         .Include(btc => btc.Material.MaterialLine)
                                         .Include(btc => btc.Material.MaterialType)
                                         .Include(btc => btc.Material.Recipe.Colour)
+                                        .Include(btc => btc.TrialArea)
                                         .Where(btc => true)
                                         .OrderByDescending(btc => btc.Number)
+                                        .ToList();
+            }
+        }
+
+        public static IEnumerable<Batch> GetBatches(int entryN)
+        {
+            // Returns all Batches
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.Batches.Include(btc => btc.BasicReport)
+                                        .Include(btc => btc.FirstSample)
+                                        .Include(btc => btc.Material.Aspect)
+                                        .Include(btc => btc.Material.ExternalConstruction)
+                                        .Include(btc => btc.Material.MaterialLine)
+                                        .Include(btc => btc.Material.MaterialType)
+                                        .Include(btc => btc.Material.Recipe.Colour)
+                                        .Include(btc => btc.TrialArea)
+                                        .OrderByDescending(btc => btc.Number)
+                                        .Take(entryN)
                                         .ToList();
             }
         }
@@ -253,8 +276,6 @@ namespace DBManager.Services
         {
             using (DBEntities entities = new DBEntities())
             {
-                entities.Configuration.AutoDetectChangesEnabled = false;
-
                 entities.Materials.First(mat => mat.ID == toBeAdded.ID)
                                     .ExternalConstructionID = entry.ID;
 
@@ -342,11 +363,7 @@ namespace DBManager.Services
         {
             using (DBEntities entities = new DBEntities())
             {
-                entities.Configuration.AutoDetectChangesEnabled = false;
-
-                ExternalConstruction tempEntry = entities.ExternalConstructions.First(extc => extc.ID == entry.ID);
-                entities.Entry(tempEntry).CurrentValues.SetValues(entry);
-                entities.Entry(tempEntry).State = EntityState.Modified; 
+                entities.ExternalConstructions.AddOrUpdate(entry);
                 entities.SaveChanges();
             }
         }

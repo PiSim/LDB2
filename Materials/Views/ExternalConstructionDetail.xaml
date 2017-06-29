@@ -132,17 +132,17 @@
 
                     <GroupBox Header="Assegnati al progetto"
                               Grid.Column="0">
-                        <ListView ItemsSource="{Binding Path=AssignedConstructions}"
-                                  SelectedItem="{Binding Path=SelectedAssignedConstruction, Mode=TwoWay}">
+                        <ListView ItemsSource="{Binding Path=AssignedMaterials}"
+                                  SelectedItem="{Binding Path=SelectedAssignedMaterial, Mode=TwoWay}">
                             <i:Interaction.Behaviors>
                                 <sort:SortingBehavior/>
                             </i:Interaction.Behaviors>
                             <ListView.View>
                                 <GridView>
                                     <GridViewColumn Header="Tipo" 
-                                                    DisplayMemberBinding="{Binding Path=Type.Code}"/>
+                                                    DisplayMemberBinding="{Binding Path=MaterialType.Code}"/>
                                     <GridViewColumn Header="Riga" 
-                                                    DisplayMemberBinding="{Binding Path=Line}"/>
+                                                    DisplayMemberBinding="{Binding Path=MaterialLine.Code}"/>
                                     <GridViewColumn Header="Aspetto" 
                                                     DisplayMemberBinding="{Binding Path=Aspect.Code}"/>
                                     <GridViewColumn Header="" 
@@ -154,17 +154,17 @@
 
                     <GroupBox Header="Construction interne non assegnate"
                               Grid.Column="2">
-                        <ListView ItemsSource="{Binding Path=UnassignedConstructions}"
-                                  SelectedItem="{Binding Path=SelectedUnassignedConstruction, Mode=TwoWay}">
+                        <ListView ItemsSource="{Binding Path=UnassignedMaterials}"
+                                  SelectedItem="{Binding Path=SelectedUnassignedMaterial, Mode=TwoWay}">
                             <i:Interaction.Behaviors>
                                 <sort:SortingBehavior/>
                             </i:Interaction.Behaviors>
                             <ListView.View>
                                 <GridView>
                                     <GridViewColumn Header="Tipo" 
-                                                    DisplayMemberBinding="{Binding Path=Type.Code}"/>
+                                                    DisplayMemberBinding="{Binding Path=MaterialType.Code}"/>
                                     <GridViewColumn Header="Riga" 
-                                                    DisplayMemberBinding="{Binding Path=Line}"/>
+                                                    DisplayMemberBinding="{Binding Path=MaterialLine.Code}"/>
                                     <GridViewColumn Header="Aspetto" 
                                                     DisplayMemberBinding="{Binding Path=Aspect.Code}"/>
                                     <GridViewColumn Header="" 
@@ -184,7 +184,7 @@
                         </Grid.RowDefinitions>
 
                         <Button Content="◄"
-                                Command="{Binding Path=AssignConstructionToExternalCommand}"
+                                Command="{Binding Path=AssignMaterialToExternalCommand}"
                                 Grid.Row="1"
                                 Height="30"
                                 Width="30" 
@@ -192,7 +192,7 @@
                                 Margin="5,0,5,0"/>
 
                         <Button Content="►"
-                                Command="{Binding Path=UnassignConstructionToExternalCommand}"
+                                Command="{Binding Path=UnassignMaterialToExternalCommand}"
                                 Grid.Row="3"
                                 Height="30"
                                 Width="30" 

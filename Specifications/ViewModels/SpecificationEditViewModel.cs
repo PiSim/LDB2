@@ -178,8 +178,8 @@ namespace Specifications.ViewModels
             // Event Subscriptions
             
 
-            _eventAggregator.GetEvent<ReportListUpdateRequested>().Subscribe(
-                () => RaisePropertyChanged("ReportList"));
+            _eventAggregator.GetEvent<ReportCreated>().Subscribe(
+                report => RaisePropertyChanged("ReportList"));
 
         }
 

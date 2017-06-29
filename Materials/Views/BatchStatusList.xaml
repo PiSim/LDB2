@@ -26,10 +26,16 @@
                                     Binding="{Binding Material.Recipe.Code}"/>
                 <DataGridTextColumn Header="Colore"
                                     Binding="{Binding Material.Recipe.Colour.Name}"/>
+                <DataGridTextColumn Header="Construction"
+                                    Binding="{Binding Material.ExternalConstruction.Name}"/>
+                <DataGridTextColumn Header=""
+                                    Binding="{Binding TrialArea.Name}"/>
                 <DataGridCheckBoxColumn Header="Ricevuto"
                                         Binding="{Binding FirstSampleArrived}"/>
                 <DataGridTextColumn Header="Data arrivo"
-                                    Binding="{Binding FirstSample.Date}"/>
+                                    Binding="{Binding FirstSample.Date, 
+                                                        StringFormat=d,
+                                                        ConverterCulture=it-IT}"/>
                 <DataGridTextColumn Header="Report Basic"
                                     Binding="{Binding BasicReport.Number}"/>
             </DataGrid.Columns>

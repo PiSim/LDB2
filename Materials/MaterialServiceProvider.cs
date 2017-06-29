@@ -58,6 +58,13 @@ namespace Materials
 
             output.Create();
 
+            if (actionCode == "A" && !temp.FirstSampleArrived)
+            {
+                temp.FirstSampleArrived = true;
+                temp.FirstSampleID = output.ID;
+                temp.Update();
+            }
+
             return output;
         }
 
@@ -103,8 +110,5 @@ namespace Materials
             else
                 _eventAggregator.GetEvent<StatusNotificationIssued>().Publish("Batch non trovato");
         }
-
-        
-
     }
 }

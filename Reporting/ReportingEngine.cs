@@ -1,12 +1,7 @@
 ﻿using DBManager;
+using DBManager.Services;
 using Infrastructure;
 using Infrastructure.Events;
-using iText;
-using iText.Kernel.Pdf;
-using iText.Layout;
-using iText.Layout.Borders;
-using iText.Layout.Element;
-using iText.Layout.Properties;
 using Prism.Events;
 using System;
 using System.Collections.Generic;
@@ -14,6 +9,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Documents;
+using System.Windows.Media;
 
 namespace Reporting
 {
@@ -28,202 +26,162 @@ namespace Reporting
             _entities = entities;
             _eventAggregator = eventAggregator;
 
-            _eventAggregator.GetEvent<GenerateReportDataSheetRequested>().Subscribe(
-                targetReport =>
-                {
-                    string sheetPath = GenerateReportDataSheet(targetReport);
-
-                    System.Diagnostics.Process.Start(sheetPath);
-                });
+            _eventAggregator.GetEvent<GenerateReportDataSheetRequested>()
+                            .Subscribe(
+                            report =>
+                            {
+                                GenerateReportRawDataSheet(report);
+                            });
         }
 
-        private void AddTestToDataSheet(Table table, Test test)
+        public void GenerateReportRawDataSheet(Report target)
         {
-            int rowHeight = test.SubTests.Count;
+            Formats.ReportRawDataSheet dataSheet = new Formats.ReportRawDataSheet(target);
 
-            int jj = 0;
 
-            foreach (SubTest sTest in test.SubTests)
-            {
-                Cell testCell = new Cell();
-                if (jj == 0)
-                    testCell.Add(new Paragraph(test.Method.Property.Name));
 
-                string testLabel;
 
-                if (rowHeight == 1)
-                    testLabel = "";
-                else
-                    testLabel = sTest.Name;
+            PrintDialog printer = new PrintDialog();
 
-                testCell.Add(new Paragraph(testLabel).SetTextAlignment(iText.Layout.Properties.TextAlignment.RIGHT)
-                                                    .SetVerticalAlignment(iText.Layout.Properties.VerticalAlignment.TOP));
+            DocumentPaginator paginator = ((IDocumentPaginatorSource)dataSheet).DocumentPaginator;
 
-                if (sTest.Requirement != "")
-                    testCell.Add(new Paragraph("[" + sTest.Requirement + "]").SetTextAlignment(iText.Layout.Properties.TextAlignment.RIGHT)
-                                                                            .SetVerticalAlignment(iText.Layout.Properties.VerticalAlignment.BOTTOM));
-
-                table.AddCell(testCell);
-                table.AddCell(new Cell().Add(new Paragraph(sTest.UM))
-                                        .SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER)
-                                        .SetVerticalAlignment(iText.Layout.Properties.VerticalAlignment.MIDDLE));               
-
-                for (int ii = 0; ii < 4; ii++)
-                {
-                    table.AddCell(new Cell());
-                }
-
-                if (jj == 0)
-                    table.AddCell(new Cell(rowHeight, 1).Add(new Paragraph(test.Method.Standard.Name))
-                                                        .SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER)
-                                                        .SetVerticalAlignment(iText.Layout.Properties.VerticalAlignment.MIDDLE));
-
-                jj++;
-            }
-
+            if (printer.ShowDialog() == true)
+                printer.PrintDocument(paginator, "Report");
         }
 
-        public string GenerateReportDataSheet(Report target)
+        public static void PrintBatchStatusList()
         {
-            string filename = target.Category + "_"
-                            + target.Number + "_FRD_" 
-                            + target.Batch.Number + ".pdf";
-            string fullPath = System.IO.Path.GetTempPath() + filename;
-            PdfWriter writer = new PdfWriter(fullPath);
-            PdfDocument pdfDoc = new PdfDocument(writer);
-            Document dataSheet = new Document(pdfDoc);
-            
-            // Adds company logo and title at the top of the page
+            Formats.BatchStatusListReport batchReport = new Formats.BatchStatusListReport();
 
-            Table titletable = new Table(UnitValue.CreatePercentArray(new float[] { 1, 2}));
-            
-            
-            titletable.AddCell(new Cell().Add(new Paragraph("LOGO_VUL"))
-                                        .SetBorder(iText.Layout.Borders.Border.NO_BORDER));
-            titletable.AddCell(new Cell().Add(new Paragraph("CONTROLLO PRODOTTO FINITO"))
-                                        .SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER)
-                                        .Add(new Paragraph("Modulo raccolta dati")
-                                        .SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER))
-                                        .SetBorder(iText.Layout.Borders.Border.NO_BORDER));
+            batchReport.DateBox.Text = DateTime.Now.ToShortDateString();
 
-            dataSheet.Add(titletable);
+            IEnumerable<Batch> statusList = MaterialService.GetBatches(100);
 
-            // Attempts to retrieve relevant material info
+            Table batchTable = batchReport.BatchTable;
 
-            string colourName, materialCode, prjName, recipeCode;
-            
-            if (target.Batch.Material != null)
+            for (int ii = 0; ii < 11; ii++)
+                batchTable.Columns.Add(new TableColumn());
+
+            TableRow currentRow;
+
+            batchTable.RowGroups.Add(new TableRowGroup());
+
+            currentRow = new TableRow();
+
+            currentRow.Cells.Add(new TableCell
+                                (new Paragraph
+                                (new Run("Odp"))));
+
+            currentRow.Cells.Add(new TableCell
+                                (new Paragraph
+                                (new Run("Tipo"))));
+
+            currentRow.Cells.Add(new TableCell
+                                (new Paragraph
+                                (new Run("Riga"))));
+
+            currentRow.Cells.Add(new TableCell
+                                (new Paragraph
+                                (new Run("Aspetto"))));
+
+            currentRow.Cells.Add(new TableCell
+                                (new Paragraph
+                                (new Run("Ricetta"))));
+
+            currentRow.Cells.Add(new TableCell
+                                (new Paragraph
+                                (new Run("Colore"))));
+
+            currentRow.Cells.Add(new TableCell
+                                (new Paragraph
+                                (new Run("Construction"))));
+
+            currentRow.Cells.Add(new TableCell
+                                (new Paragraph
+                                (new Run("Tipo batch"))));
+
+            currentRow.Cells.Add(new TableCell
+                                (new Paragraph
+                                (new Run("Ricevuto"))));
+
+            currentRow.Cells.Add(new TableCell
+                                (new Paragraph
+                                (new Run("Data arrivo"))));
+
+            currentRow.Cells.Add(new TableCell
+                                (new Paragraph
+                                (new Run("Report Basic"))));
+
+            currentRow.Background = Brushes.LightBlue;
+
+            batchTable.RowGroups[0].Rows.Add(currentRow);
+
+            bool isBlueRow = false;
+
+            foreach (Batch btc in statusList)
             {
-                materialCode = target.Batch.Material.MaterialType.Code 
-                                + target.Batch.Material.MaterialLine.Code
-                                + target.Batch.Material.Aspect.Code;
-                
-                recipeCode = target.Batch.Material.Recipe.Code;
-                
-                if (target.Batch.Material.Recipe.Colour != null)
-                    colourName = target.Batch.Material.Recipe.Colour.Name;
-                
-                else
-                    colourName = "";
+                currentRow = new TableRow();
 
-                if (target.Batch.Material.Project != null)
-                    prjName = target.Batch.Material.Project.Name;
-                
-                else
-                    prjName = "";
-            }
-            else 
-            {
-                colourName = "";
-                materialCode = "";
-                prjName = "";
-                recipeCode = "";
-            }
+                currentRow.Cells.Add(new TableCell
+                                    (new Paragraph
+                                    (new Run(btc.Number))));
 
+                currentRow.Cells.Add(new TableCell
+                                    (new Paragraph
+                                    (new Run((btc.Material != null) ? btc.Material.MaterialType.Code : ""))));
 
-            // Composes the header table with the report and material info            
+                currentRow.Cells.Add(new TableCell
+                                    (new Paragraph
+                                    (new Run((btc.Material != null) ? btc.Material.MaterialLine.Code : ""))));
 
-            Table headerTable = new Table(new float[] {1, 2, 1, 2 });
-            headerTable.SetWidthPercent(100);
-            headerTable.AddCell(new Cell().Add(new Paragraph("Report N. :")));
-            headerTable.AddCell(new Cell().Add(new Paragraph(target.Category + target.Number)));
-            headerTable.AddCell(new Cell().Add(new Paragraph("Progetto:")));
-            headerTable.AddCell(new Cell().Add(new Paragraph(prjName)));
-            headerTable.AddCell(new Cell().Add(new Paragraph("Batch:")));
-            headerTable.AddCell(new Cell().Add(new Paragraph(target.Batch.Number)));
-            headerTable.AddCell(new Cell().Add(new Paragraph("Specifica:")));
-            headerTable.AddCell(new Cell().Add(new Paragraph(target.SpecificationVersion.Specification.Standard.Name
-                                                            + " : " + target.SpecificationIssues.Issue
-                                                            + " - " + target.SpecificationVersion.Name)));
-            headerTable.AddCell(new Cell().Add(new Paragraph("Materiale:")));
-            headerTable.AddCell(new Cell().Add(new Paragraph(materialCode)));
-            headerTable.AddCell(new Cell().Add(new Paragraph("Colore:")));
-            headerTable.AddCell(new Cell().Add(new Paragraph( recipeCode + " "
-                                                            + colourName)));
+                currentRow.Cells.Add(new TableCell
+                                    (new Paragraph
+                                    (new Run((btc.Material != null) ? btc.Material.Aspect.Code : ""))));
 
-            dataSheet.Add(headerTable);
+                currentRow.Cells.Add(new TableCell
+                                    (new Paragraph
+                                    (new Run((btc.Material != null) ? btc.Material.Recipe.Code : ""))));
 
-            Table testTable = new Table(UnitValue.CreatePercentArray(new float[] { 5, 1, 1, 1, 1, 1, 1 }));
-            testTable.SetWidthPercent(100);
+                currentRow.Cells.Add(new TableCell
+                                    (new Paragraph
+                                    (new Run((btc.Material != null && btc.Material.Recipe.Colour != null) ? btc.Material.Recipe.Colour.Name : ""))));
 
-            testTable.AddCell(new Cell().Add(new Paragraph("Prova"))
-                                        .SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER));
-            testTable.AddCell(new Cell().Add(new Paragraph("UM"))
-                                        .SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER));
-            testTable.AddCell(new Cell(1, 3).Add(new Paragraph("Valori misurati"))
-                                        .SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER));
-            testTable.AddCell(new Cell().Add(new Paragraph("Media"))
-                                        .SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER));
-            testTable.AddCell(new Cell().Add(new Paragraph("Metodo"))
-                                        .SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER));
+                currentRow.Cells.Add(new TableCell
+                                    (new Paragraph
+                                    (new Run((btc.Material != null && btc.Material.ExternalConstruction != null) ? btc.Material.ExternalConstruction.Name : ""))));
 
-            foreach (Test tst in target.Tests)
-            {
-                AddTestToDataSheet(testTable, tst);
+                currentRow.Cells.Add(new TableCell
+                                    (new Paragraph
+                                    (new Run((btc.TrialArea != null) ? btc.TrialArea.Name : ""))));
+
+                currentRow.Cells.Add(new TableCell
+                                    (new Paragraph
+                                    (new Run((btc.FirstSampleArrived) ? "X" : " "))));
+
+                currentRow.Cells.Add(new TableCell
+                                    (new Paragraph
+                                    (new Run((btc.FirstSample != null) ? btc.FirstSample.Date.ToShortDateString() : ""))));
+
+                currentRow.Cells.Add(new TableCell
+                                    (new Paragraph
+                                    (new Run((btc.BasicReport != null) ? btc.BasicReport.Number.ToString() : ""))));
+
+                if (isBlueRow)
+                    currentRow.Background = Brushes.Azure;
+
+                isBlueRow = !isBlueRow;
+
+                batchTable.RowGroups[0]
+                            .Rows
+                            .Add(currentRow);
             }
 
-            dataSheet.Add(testTable);
+            PrintDialog printer = new PrintDialog();
 
-            Table footerTable = new Table(UnitValue.CreatePercentArray(new float[] { 1, 2, 1, 2}));
-            footerTable.SetWidthPercent(100);
+            DocumentPaginator paginator = ((IDocumentPaginatorSource)batchReport).DocumentPaginator;
 
-            footerTable.AddCell(new Cell(2, 1).Add(new Paragraph("Note:"))
-                                            .SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER)
-                                            .SetVerticalAlignment(iText.Layout.Properties.VerticalAlignment.MIDDLE));
-            footerTable.AddCell(new Cell(2, 3));
-            footerTable.AddCell(new Cell().Add(new Paragraph("TL:")));
-            footerTable.AddCell(new Cell().Add(new Paragraph(target.Author.Name)));
-            footerTable.AddCell(new Cell().Add(new Paragraph("Firma TL:")));
-            footerTable.AddCell(new Cell()); 
-            footerTable.AddCell(new Cell().Add(new Paragraph("RL:")));
-
-            string rlName;
-
-            try
-            {
-                rlName = _entities.PersonRoles.First(pr => pr.Name == PersonRoleNames.LabManager)
-                                            .RoleMappings.FirstOrDefault(prm => prm.IsSelected)
-                                            .Person
-                                            .Name;
-            }
-            catch (NullReferenceException)
-            {
-                rlName = "";
-            }
-
-            footerTable.AddCell(new Cell().Add(new Paragraph(rlName)));
-            footerTable.AddCell(new Cell().Add(new Paragraph("Firma RL:")));
-            footerTable.AddCell(new Cell());
-            footerTable.AddCell(new Cell().Add(new Paragraph("Approvato:")));
-            footerTable.AddCell(new Cell().Add(new Paragraph("\u25A1  SI  \u25A1  NO")));
-            footerTable.AddCell(new Cell().Add(new Paragraph("Data:")));
-            footerTable.AddCell(new Cell().Add(new Paragraph(DateTime.Now.ToShortDateString())));
-
-            dataSheet.Add(footerTable);
-
-            dataSheet.Close();
-            return fullPath;
+            if (printer.ShowDialog() == true)
+                printer.PrintDocument(paginator, "Report");
         }
-
     }
 }

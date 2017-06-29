@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Events
 {
-    public class ReportListUpdateRequested : PubSubEvent
+    public class ReportCompleted : PubSubEvent<Report>
     {
     }
 }

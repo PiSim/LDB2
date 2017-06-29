@@ -12,9 +12,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="35"/>
             <RowDefinition/>
-        </Grid.RowDefinitions>
-        
-        
+        </Grid.RowDefinitions>   
         
         <ContentControl prism:RegionManager.RegionName="MainExternalReportListRegion"
                         Grid.Row="1"/>

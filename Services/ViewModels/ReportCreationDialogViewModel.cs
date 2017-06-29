@@ -133,6 +133,11 @@ namespace Services.ViewModels
             }
         }
 
+        public bool IsSpecificationSelected
+        {
+            get { return _selectedSpecification != null; }
+        }
+
         public bool IsValidInput
         {
             get { return true; }
@@ -206,6 +211,7 @@ namespace Services.ViewModels
                 _selectedSpecification = value;
                 _selectedSpecification.Load();
 
+                RaisePropertyChanged("IsSpecificationSelected");
                 RaisePropertyChanged("SelectedSpecification");
                 RaisePropertyChanged("VersionList");
                 RaisePropertyChanged("ControlPlanList");

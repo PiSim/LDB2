@@ -262,7 +262,7 @@ namespace Materials.ViewModels
                 if (_externalConstructionInstance == null)
                     return;
                 else
-                    _externalConstructionInstance.Organization = value;
+                    _externalConstructionInstance.OemID = value.ID;
 
                 RaisePropertyChanged("SelectedOEM");
             }

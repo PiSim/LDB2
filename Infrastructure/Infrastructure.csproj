@@ -103,7 +103,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AdminViewNames.cs" />
+    <Compile Include="Events\BatchCreated.cs" />
     <Compile Include="Events\BatchCreationRequested.cs" />
+    <Compile Include="Events\BatchStatusListRefreshRequested.cs" />
     <Compile Include="Events\BatchVisualizationRequested.cs" />
     <Compile Include="Events\ExternalConstructionModified.cs" />
     <Compile Include="Events\ExternalReportCreationRequested.cs" />
@@ -119,6 +121,8 @@
     <Compile Include="Events\PersonCreationRequested.cs" />
     <Compile Include="Events\PersonRoleCreationRequested.cs" />
     <Compile Include="Events\ProjectCreationRequested.cs" />
+    <Compile Include="Events\ReportCompleted.cs" />
+    <Compile Include="Events\ReportDeleted.cs" />
     <Compile Include="Events\ReportStatusCheckRequested.cs" />
     <Compile Include="Events\SampleCreationRequested.cs" />
     <Compile Include="Events\SampleListUpdateRequested.cs" />
@@ -137,7 +141,7 @@
     <Compile Include="Events\NavigateForwardRequested.cs" />
     <Compile Include="Events\NavigationRequested.cs" />
     <Compile Include="Events\ProjectListUpdateRequested.cs" />
-    <Compile Include="Events\ReportListUpdateRequested.cs" />
+    <Compile Include="Events\ReportCreated.cs" />
     <Compile Include="Events\ReportCreationRequested.cs" />
     <Compile Include="Events\StatusNotificationIssued.cs" />
     <Compile Include="Events\TaskCompleted.cs" />
@@ -175,6 +179,7 @@
     <Compile Include="SpecificationViewNames.cs" />
     <Compile Include="UserRoleNames.cs" />
     <Compile Include="TaskViewNames.cs" />
+    <Compile Include="ValidationRules\ExistingReportRule.cs" />
     <Compile Include="Wrappers\ControlPlanItemWrapper.cs" />
     <Compile Include="Wrappers\ISelectableRequirement.cs" />
     <Compile Include="Wrappers\ReportItemWrapper.cs" />

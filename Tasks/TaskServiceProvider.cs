@@ -66,7 +66,7 @@ namespace Tasks
 
             if (conversionDialog.ShowDialog() == true)
             {
-                _eventAggregator.GetEvent<ReportListUpdateRequested>().Publish();
+                _eventAggregator.GetEvent<ReportCreated>().Publish(conversionDialog.ReportInstance);
 
                 NavigationToken token = new NavigationToken(ReportViewNames.ReportEditView,
                                                             conversionDialog.ReportInstance);

@@ -34,6 +34,18 @@ namespace DBManager.Services
             }
         }
 
+        public static Report GetReportByNumber(int number)
+        {
+            // Returns a report instance with the given number, or null if none exists
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.Reports.FirstOrDefault(rep => rep.Number == number);
+            }
+        }
+
         public static IEnumerable<Report> GetReports()
         {
             // Returns all Report entities

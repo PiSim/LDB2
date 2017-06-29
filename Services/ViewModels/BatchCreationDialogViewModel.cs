@@ -34,10 +34,8 @@ namespace Services.ViewModels
                         _batchNumber,
                         _lineCode,
                         _recipeCode,
-                        _trialScopeText,
                         _typeCode;
         private TrialArea _selectedTrialArea;
-        private TrialScope _selectedTrialScope;
 
         public BatchCreationDialogViewModel() : base()
         {
@@ -93,6 +91,28 @@ namespace Services.ViewModels
                                                                         _aspectInstance,
                                                                         _recipeInstance);
 
+                    if (tempMaterial != null)
+                    {
+                        bool requiresUpdate = false;
+
+                        if (_selectedConstruction != null
+                            && tempMaterial.ExternalConstructionID != _selectedConstruction.ID)
+                        {
+                            tempMaterial.ExternalConstructionID = _selectedConstruction.ID;
+                            requiresUpdate = true;
+                        }
+
+                        if (_selectedProject != null
+                            && tempMaterial.ProjectID != _selectedProject.ID)
+                        {
+                            tempMaterial.ProjectID = _selectedProject.ID;
+                            requiresUpdate = true;
+                        }
+
+                        if (requiresUpdate)
+                            tempMaterial.Update();
+                    }
+
                     if (tempMaterial == null)
                     {
                         tempMaterial = new Material()
@@ -102,6 +122,12 @@ namespace Services.ViewModels
                             RecipeID = RecipeInstance.ID,
                             TypeID = TypeInstance.ID
                         };
+
+                        if (_selectedConstruction != null)
+                            tempMaterial.ExternalConstructionID = _selectedConstruction.ID;
+
+                        if (_selectedProject != null)
+                            tempMaterial.ProjectID = _selectedProject.ID;
 
                         tempMaterial.Create();
                     }
@@ -113,15 +139,20 @@ namespace Services.ViewModels
                         MaterialID = tempMaterial.ID,
                         Number = _batchNumber
                     };
-                    
+
+                    if (_selectedTrialArea != null)
+                        _batchInstance.TrialAreaID = _selectedTrialArea.ID;
+
+                    _batchInstance.Create();
+
                     parentDialog.DialogResult = true;
                 });
         }
-        
+
         private void UpdateMaterial()
         {
             if (AspectInstance == null
-                || LineInstance == null 
+                || LineInstance == null
                 || RecipeInstance == null
                 || TypeInstance == null)
             {
@@ -154,6 +185,21 @@ namespace Services.ViewModels
             {
                 _aspectInstance = value;
                 RaisePropertyChanged("AspectInstance");
+                UpdateMaterial();
+            }
+        }
+
+        public Batch BatchInstance
+        {
+            get { return _batchInstance; }
+        }
+
+        public string BatchNumber
+        {
+            get { return _batchNumber; }
+            set
+            {
+                _batchNumber = value;
             }
         }
 
@@ -180,6 +226,11 @@ namespace Services.ViewModels
         public DelegateCommand<Window> ConfirmCommand
         {
             get { return _confirm; }
+        }
+
+        public IEnumerable<ExternalConstruction> ConstructionList
+        {
+            get { return _constructionList; }
         }
 
         public bool ConstructionPickEnabled
@@ -209,6 +260,7 @@ namespace Services.ViewModels
             {
                 _lineInstance = value;
                 RaisePropertyChanged("LineInstance");
+                UpdateMaterial();
             }
         }
 
@@ -264,7 +316,8 @@ namespace Services.ViewModels
                 if (_recipeInstance != null)
                     SelectedColour = _colourList.FirstOrDefault(col => col.ID == _recipeInstance.ColourID);
 
-                ColourPickEnabled = (SelectedColour != null);
+                ColourPickEnabled = (SelectedColour == null);
+                UpdateMaterial();
             }
         }
 
@@ -306,23 +359,9 @@ namespace Services.ViewModels
             }
         }
 
-        public TrialScope SelectedTrialScope
-        {
-            get { return _selectedTrialScope; }
-        }
-
         public IEnumerable<TrialArea> TrialAreaList
         {
             get { return MaterialService.GetTrialAreas(); }
-        }
-
-        public string TrialScopeText
-        {
-            get { return _trialScopeText; }
-            set
-            {
-                _trialScopeText = value;
-            }
         }
 
         public string TypeCode
@@ -342,6 +381,7 @@ namespace Services.ViewModels
             {
                 _typeInstance = value;
                 RaisePropertyChanged("TypeInstance");
+                UpdateMaterial();
             }
         }
 
