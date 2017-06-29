@@ -1,4 +1,4 @@
-﻿v 0.51 -- 
+﻿v 0.51 -- 29/6/2017
 
 -Corretta funzione AutoWireViewModel di ExternalReportCreationDialog
 -ReportEditView: Sostituita ListView prove con DataGrid
@@ -9,6 +9,11 @@
 -Corretta logica di aggiunta/Rimozione Override nelle versioni di specifica
 -Creata vista OrganizationEdit
 -Rivisto controllo stato Task
+-Creata vista BatchStatusList
+-Reimplementato ReportingEngine usando FlowDocument
+-Preparati modelli report per lista batch e raccolta dati report
+-Creata finestra dialogo per creazione batch
+-Integrata entità Construction in Material
 
 v 0.5.0 -- 07/06/2017
 
