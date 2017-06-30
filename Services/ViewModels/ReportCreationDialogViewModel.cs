@@ -10,19 +10,22 @@ using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Collections;
 
 namespace Services.ViewModels
 {   
-    public class ReportCreationDialogViewModel : BindableBase
+    public class ReportCreationDialogViewModel : BindableBase, INotifyDataErrorInfo
     {
         private Batch _selectedBatch;
         private ControlPlan _selectedControlPlan;
         private DBPrincipal _principal;
         private DelegateCommand<Window> _cancel, _confirm;
+        private readonly Dictionary<string, ICollection<string>> _validationErrors = new Dictionary<string, ICollection<string>>();
         private IEnumerable<ISelectableRequirement> _requirementList;
         private IEnumerable<Person> _techList;
         private IEnumerable<Specification> _specificationList;
@@ -72,7 +75,34 @@ namespace Services.ViewModels
                     parent.DialogResult = false;    
                 });
         }
-        
+
+        #region INotifyDataErrorInfo interface elements
+
+        public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
+
+        public IEnumerable GetErrors(string propertyName)
+        {
+            if (string.IsNullOrEmpty(propertyName)
+                || !_validationErrors.ContainsKey(propertyName))
+                return null;
+
+            return _validationErrors[propertyName];
+        }
+
+        public bool HasErrors
+        {
+            get { return _validationErrors.Count > 0; }
+        }
+
+        private void RaiseErrorsChanged(string propertyName)
+        {
+            if (ErrorsChanged != null)
+                ErrorsChanged(this, new DataErrorsChangedEventArgs(propertyName));
+        }
+
+        #endregion
+
+
         public Person Author
         {
             get { return _author; }

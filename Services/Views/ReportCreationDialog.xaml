@@ -6,7 +6,6 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Services.Views"
         xmlns:prism="http://prismlibrary.com/"
-        xmlns:val="clr-namespace:Infrastructure.ValidationRules;assembly=Infrastructure"
         prism:ViewModelLocator.AutoWireViewModel="True"
         mc:Ignorable="d"
         Title="Crea Report" Height="550" Width="750"
@@ -47,11 +46,7 @@
                      Margin="5">
                 <Binding Path="Number"
                          Mode="TwoWay"
-                         UpdateSourceTrigger="PropertyChanged">
-                    <Binding.ValidationRules>
-                        <val:ExistingReportRule/>
-                    </Binding.ValidationRules>
-                </Binding>
+                         UpdateSourceTrigger="PropertyChanged"/>
             </TextBox>
 
             <Label Content="Batch:"

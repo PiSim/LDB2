@@ -84,6 +84,7 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Windows" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Prism.Wpf.6.3.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
       <Private>True</Private>
@@ -179,7 +180,7 @@
     <Compile Include="SpecificationViewNames.cs" />
     <Compile Include="UserRoleNames.cs" />
     <Compile Include="TaskViewNames.cs" />
-    <Compile Include="ValidationRules\ExistingReportRule.cs" />
+    <Compile Include="Validation\ExistingReportRule.cs" />
     <Compile Include="Wrappers\ControlPlanItemWrapper.cs" />
     <Compile Include="Wrappers\ISelectableRequirement.cs" />
     <Compile Include="Wrappers\ReportItemWrapper.cs" />
@@ -214,7 +215,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Resource Include="Resources\Plus_icon.ico" />
   </ItemGroup>
