@@ -4,7 +4,9 @@ using DBManager.Services;
 using Prism.Commands;
 using Prism.Mvvm;
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,7 +14,7 @@ using System.Windows;
 
 namespace Services.ViewModels
 {
-    public class BatchCreationDialogViewModel : BindableBase
+    public class BatchCreationDialogViewModel : BindableBase, INotifyDataErrorInfo
     {
         private Aspect _aspectInstance;
         private Batch _batchInstance;
@@ -21,6 +23,7 @@ namespace Services.ViewModels
                     _projectPickEnabled;
         private Colour _selectedColour;
         private DelegateCommand<Window> _cancel, _confirm;
+        private readonly Dictionary<string, ICollection<string>> _validationErrors = new Dictionary<string, ICollection<string>>();
         private ExternalConstruction _selectedConstruction;
         private IEnumerable<Colour> _colourList;
         private IEnumerable<ExternalConstruction> _constructionList;
@@ -148,6 +151,32 @@ namespace Services.ViewModels
                     parentDialog.DialogResult = true;
                 });
         }
+
+        #region INotifyDataErrorInfo interface elements
+
+        public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
+
+        public IEnumerable GetErrors(string propertyName)
+        {
+            if (string.IsNullOrEmpty(propertyName)
+                || !_validationErrors.ContainsKey(propertyName))
+                return null;
+
+            return _validationErrors[propertyName];
+        }
+
+        public bool HasErrors
+        {
+            get { return _validationErrors.Count > 0; }
+        }
+
+        private void RaiseErrorsChanged(string propertyName)
+        {
+            ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
+            RaisePropertyChanged("HasErrors");
+        }
+
+        #endregion
 
         private void UpdateMaterial()
         {

@@ -68,7 +68,7 @@ namespace Services.ViewModels
                     _reportInstance.Create();
                     parent.DialogResult = true;
                 },
-                parent => IsValidInput);
+                parent => !HasErrors);
                 
             _cancel = new DelegateCommand<Window>(
                 parent => {
@@ -96,12 +96,11 @@ namespace Services.ViewModels
 
         private void RaiseErrorsChanged(string propertyName)
         {
-            if (ErrorsChanged != null)
-                ErrorsChanged(this, new DataErrorsChangedEventArgs(propertyName));
+            ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
+            RaisePropertyChanged("HasErrors");
         }
 
         #endregion
-
 
         public Person Author
         {
@@ -122,6 +121,8 @@ namespace Services.ViewModels
 
                 SelectedBatch = MaterialService.GetBatch(_batchNumber);
                 RaisePropertyChanged("BatchNumber");
+
+                RaiseErrorsChanged("BatchNumber");
             }
         }
         
@@ -184,7 +185,11 @@ namespace Services.ViewModels
         public Int32 Number
         {
             get { return _number; }
-            set { _number = value; }
+            set
+            {
+                _number = value;
+                RaiseErrorsChanged("Number");
+            }
         }
 
         public IEnumerable<ISelectableRequirement> RequirementList

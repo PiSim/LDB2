@@ -180,6 +180,7 @@
     <Compile Include="SpecificationViewNames.cs" />
     <Compile Include="UserRoleNames.cs" />
     <Compile Include="TaskViewNames.cs" />
+    <Compile Include="Validation\BatchExistRule.cs" />
     <Compile Include="Validation\ExistingReportRule.cs" />
     <Compile Include="Wrappers\ControlPlanItemWrapper.cs" />
     <Compile Include="Wrappers\ISelectableRequirement.cs" />
