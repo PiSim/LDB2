@@ -50,6 +50,15 @@ namespace Services
                                                     .Publish(tempReport);
                             });
 
+            _eventAggregator.GetEvent<PersonCreationRequested>()
+                            .Subscribe(
+                            () =>
+                            {
+                                if (ServiceProvider.AddPerson() != null)
+                                    _eventAggregator.GetEvent<PeopleListUpdateRequested>()
+                                                    .Publish();
+                            });
+
             _eventAggregator.GetEvent<UserRoleCreationRequested>()
                             .Subscribe(
                             () =>

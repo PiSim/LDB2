@@ -29,6 +29,7 @@ namespace Materials.ViewModels
         private ExternalConstruction _externalConstructionInstance;
         private IEnumerable<Organization> _oemList;
         private IEnumerable<Specification> _specificationList;
+        private IEnumerable<SpecificationVersion> _specificationVersionList;
         private Specification _selectedSpecification;
 
         public ExternalConstructionDetailViewModel(DBPrincipal principal,
@@ -165,7 +166,7 @@ namespace Materials.ViewModels
                     if (_externalConstructionInstance.DefaultSpecVersion != null)
                     {
                         _selectedSpecification = _specificationList.First(spec => spec.ID == _externalConstructionInstance.DefaultSpecVersion.Specification.ID);
-                        _selectedSpecification.Load();
+                        _specificationVersionList = _selectedSpecification.GetVersions();
                     }
                 }
 
@@ -180,8 +181,8 @@ namespace Materials.ViewModels
                 RaisePropertyChanged("ExternalConstructionName");
                 RaisePropertyChanged("SelectedOEM");
                 RaisePropertyChanged("SelectedSpecification");
-                RaisePropertyChanged("SpecificationVersionList");
                 RaisePropertyChanged("ExternalConstructionSpecificationVersion");
+                RaisePropertyChanged("SpecificationVersionList");
             }
         }
 
@@ -207,18 +208,18 @@ namespace Materials.ViewModels
         {
             get
             {
-                if (_externalConstructionInstance == null || _externalConstructionInstance.DefaultSpecVersion == null)
+                if (_externalConstructionInstance == null)
                     return null;
                 else
-                    return SpecificationVersionList.FirstOrDefault(spcv => spcv.ID == _externalConstructionInstance.DefaultSpecVersion.ID);
+                    return SpecificationVersionList?.FirstOrDefault(spcv => spcv.ID == _externalConstructionInstance.DefaultSpecVersionID);
             }
             set
             {
                 _externalConstructionInstance.DefaultSpecVersion = value;
-                _externalConstructionInstance.DefaultSpecVersionID = (value == null) ? 0 : value.ID;
+                _externalConstructionInstance.DefaultSpecVersionID = (value == null) ? (int?)null : value.ID;
             }
         }
-
+        
         public IEnumerable<Organization> OEMList
         {
             get
@@ -272,16 +273,15 @@ namespace Materials.ViewModels
         {
             get
             {
-                if (_externalConstructionInstance == null || _externalConstructionInstance.DefaultSpecVersion == null)
-                    return null;
-                else
-                    return _selectedSpecification;
+                return _selectedSpecification;
             }
             set
             {
                 _selectedSpecification = value;
                 _selectedSpecification.Load();
-                ExternalConstructionSpecificationVersion = _selectedSpecification.SpecificationVersions.FirstOrDefault(spcv => spcv.IsMain);
+
+                _specificationVersionList = _selectedSpecification.GetVersions();
+                ExternalConstructionSpecificationVersion = SpecificationVersionList.First(spcv => spcv.IsMain);
 
                 RaisePropertyChanged("EnableVersionSelection");
                 RaisePropertyChanged("SelectedSpecification");
@@ -314,11 +314,7 @@ namespace Materials.ViewModels
         {
             get
             {
-                if (_selectedSpecification == null)
-                    return new List<SpecificationVersion>();
-                
-                else
-                    return _selectedSpecification.SpecificationVersions;
+                return _specificationVersionList;
             }
         }
 

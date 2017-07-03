@@ -10,16 +10,16 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
         <TabControl>
-            <TabItem Header="Colore">
+            <TabItem Header="Colori">
                 <ContentControl prism:RegionManager.RegionName="{Binding MaterialInfoColourRegionName}"/>
             </TabItem>
-            <TabItem Header="Aspetto">
+            <TabItem Header="Aspetti">
                 <ContentControl prism:RegionManager.RegionName="{Binding MaterialInfoAspectRegionName}"/>
             </TabItem>
-            <TabItem Header="Construction">
+            <TabItem Header="Materiali">
                 <ContentControl prism:RegionManager.RegionName="{Binding MaterialInfoMaterialRegionName}"/>
             </TabItem>
-            <TabItem Header="Construction Esterna">
+            <TabItem Header="Constructions">
                 <ContentControl prism:RegionManager.RegionName="{Binding MaterialInfoExternalConstructionRegionName}"/>
             </TabItem>
         </TabControl>

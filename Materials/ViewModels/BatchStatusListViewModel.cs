@@ -42,6 +42,13 @@ namespace Materials.ViewModels
                     RaisePropertyChanged("BatchList");
                 });
 
+            _eventAggregator.GetEvent<SampleLogCreated>()
+                .Subscribe(
+                sample =>
+                {
+                    RaisePropertyChanged("BatchList");
+                });
+
             _eventAggregator.GetEvent<BatchStatusListRefreshRequested>()
                             .Subscribe(
                             () =>

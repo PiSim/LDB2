@@ -130,7 +130,7 @@
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
 
-                    <GroupBox Header="Assegnati al progetto"
+                    <GroupBox Header="Assegnati alla construction"
                               Grid.Column="0">
                         <ListView ItemsSource="{Binding Path=AssignedMaterials}"
                                   SelectedItem="{Binding Path=SelectedAssignedMaterial, Mode=TwoWay}">
@@ -145,6 +145,10 @@
                                                     DisplayMemberBinding="{Binding Path=MaterialLine.Code}"/>
                                     <GridViewColumn Header="Aspetto" 
                                                     DisplayMemberBinding="{Binding Path=Aspect.Code}"/>
+                                    <GridViewColumn Header="Ricetta" 
+                                                    DisplayMemberBinding="{Binding Path=Recipe.Code}"/>
+                                    <GridViewColumn Header="Colore"
+                                                    DisplayMemberBinding="{Binding Recipe.Colour.Name}"/>
                                     <GridViewColumn Header="" 
                                                     DisplayMemberBinding="{Binding Path=Aspect.Name}"/>
                                 </GridView>
@@ -152,7 +156,7 @@
                         </ListView>
                     </GroupBox>
 
-                    <GroupBox Header="Construction interne non assegnate"
+                    <GroupBox Header="Materiali senza construction"
                               Grid.Column="2">
                         <ListView ItemsSource="{Binding Path=UnassignedMaterials}"
                                   SelectedItem="{Binding Path=SelectedUnassignedMaterial, Mode=TwoWay}">
@@ -167,6 +171,11 @@
                                                     DisplayMemberBinding="{Binding Path=MaterialLine.Code}"/>
                                     <GridViewColumn Header="Aspetto" 
                                                     DisplayMemberBinding="{Binding Path=Aspect.Code}"/>
+
+                                    <GridViewColumn Header="Ricetta" 
+                                                    DisplayMemberBinding="{Binding Path=Recipe.Code}"/>
+                                    <GridViewColumn Header="Colore"
+                                                    DisplayMemberBinding="{Binding Recipe.Colour.Name}"/>
                                     <GridViewColumn Header="" 
                                                     DisplayMemberBinding="{Binding Path=Aspect.Name}"/>
                                 </GridView>

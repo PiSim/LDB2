@@ -1,5 +1,7 @@
-﻿using DBManager;
+﻿using Controls.Views;
+using DBManager;
 using DBManager.EntityExtensions;
+using DBManager.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +12,33 @@ namespace Services
 {
     internal class ServiceProvider
     {
+
+
+        internal static Person AddPerson()
+        {
+            StringInputDialog addPersonDialog = new StringInputDialog();
+            addPersonDialog.Title = "Creazione nuova Persona";
+            addPersonDialog.Message = "Nome:";
+
+            if (addPersonDialog.ShowDialog() != true)
+                return null;
+
+            Person newPerson = new Person();
+            newPerson.Name = addPersonDialog.InputString;
+
+            foreach (PersonRole prr in PeopleService.GetPersonRoles())
+            {
+                PersonRoleMapping tempPRM = new PersonRoleMapping();
+                tempPRM.Role = prr;
+                tempPRM.IsSelected = false;
+                newPerson.RoleMappings.Add(tempPRM);
+            }
+
+            newPerson.Create();
+
+            return newPerson;
+        }
+
         internal static void AddUserRole(string name)
         {
             UserRole newRole = new UserRole();

@@ -47,7 +47,8 @@ namespace Materials.ViewModels
                 () =>
                 {
                     CommonProcedures.StartSampleLog();
-                });
+                },
+                () => _principal.IsInRole(UserRoleNames.SampleEdit));
             
             _quickOpen = new DelegateCommand(
                 () =>

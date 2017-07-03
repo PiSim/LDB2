@@ -92,6 +92,22 @@ namespace DBManager.EntityExtensions
             }
         }
 
+        public static IEnumerable<SpecificationVersion> GetVersions(this Specification entry)
+        {
+            //Returns all version for a given specification entry
+
+            if (entry == null)
+                return null;
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.SpecificationVersions.Where(specv => specv.SpecificationID == entry.ID)
+                                                    .ToList();
+            }
+        }
+
         public static void Load(this Specification entry)
         {
             // Loads all relevant Related entities into a given Specification entry

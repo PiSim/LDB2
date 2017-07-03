@@ -42,11 +42,9 @@ namespace Materials.ViewModels
             {
                 _materialInstance = value;
 
-                RaisePropertyChanged();
+                RaisePropertyChanged("MaterialInstance");
                 RaisePropertyChanged("BatchList");
             }
         }
-
-
     }
 }

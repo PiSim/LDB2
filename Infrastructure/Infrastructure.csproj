@@ -104,6 +104,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AdminViewNames.cs" />
+    <Compile Include="Converters\CodeToActionConverter.cs" />
     <Compile Include="Events\BatchCreated.cs" />
     <Compile Include="Events\BatchCreationRequested.cs" />
     <Compile Include="Events\BatchStatusListRefreshRequested.cs" />
@@ -127,6 +128,7 @@
     <Compile Include="Events\ReportStatusCheckRequested.cs" />
     <Compile Include="Events\SampleCreationRequested.cs" />
     <Compile Include="Events\SampleListUpdateRequested.cs" />
+    <Compile Include="Events\SampleLogCreated.cs" />
     <Compile Include="Events\SpecificationMethodListChanged.cs" />
     <Compile Include="Events\TaskStatusCheckRequested.cs" />
     <Compile Include="Events\UserCreationRequested.cs" />

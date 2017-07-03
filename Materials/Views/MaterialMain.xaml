@@ -31,6 +31,10 @@
                                     DisplayMemberBinding="{Binding MaterialLine.Code}"/>
                     <GridViewColumn Header="Aspetto"
                                     DisplayMemberBinding="{Binding Aspect.Code}"/>
+                    <GridViewColumn Header="Ricetta"
+                                    DisplayMemberBinding="{Binding Recipe.Code}"/>
+                    <GridViewColumn Header="Colore"
+                                    DisplayMemberBinding="{Binding Recipe.Colour.Name}"/>
                     <GridViewColumn Header="Progetto"
                                     DisplayMemberBinding="{Binding Project.Name}"/>
                 </GridView>

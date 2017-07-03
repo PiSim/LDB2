@@ -2,7 +2,9 @@
 using DBManager.EntityExtensions;
 using DBManager.Services;
 using Infrastructure;
+using Infrastructure.Events;
 using Prism.Commands;
+using Prism.Events;
 using Prism.Mvvm;
 using System;
 using System.Collections;
@@ -23,6 +25,7 @@ namespace Services.ViewModels
                                 _deleteLast;
         private DelegateCommand<Window> _end;
         private readonly Dictionary<string, ICollection<string>> _validationErrors = new Dictionary<string, ICollection<string>>();
+        private EventAggregator _eventAggregator;
         private readonly List<Tuple<string,string>> _actions = new List<Tuple<string, string>>()
                                                                 {
                                                                     new Tuple<string, string>("Arrivato in laboratorio", "A"),
@@ -35,9 +38,14 @@ namespace Services.ViewModels
         private string _batchNumber;
         private Tuple<string, string> _selectedAction;
 
-        public SampleLogDialogViewModel(DBPrincipal principal) : base()
+        public SampleLogDialogViewModel(DBPrincipal principal,
+                                        EventAggregator aggregator) : base()
         {
             _principal = principal;
+            _eventAggregator = aggregator;
+
+            _selectedAction = _actions.First(act => act.Item2 == "A");
+            BatchNumber = "";
 
             _confirm = new DelegateCommand(
                 () =>
@@ -45,11 +53,17 @@ namespace Services.ViewModels
                     Sample newLog = new Sample();
                     newLog.BatchID = _batchInstance.ID;
                     newLog.Code = _selectedAction.Item2;
+                    newLog.Date = DateTime.Now.Date;
                     newLog.personID = _principal.CurrentPerson.ID;
 
                     newLog.Create();
 
-                    RaiseErrorsChanged("LatestSampleList");
+                    BatchNumber = null;
+
+                    _eventAggregator.GetEvent<SampleLogCreated>()
+                                    .Publish(newLog);
+
+                    RaisePropertyChanged("LatestSampleList");
                 },
                 () => !HasErrors);
 

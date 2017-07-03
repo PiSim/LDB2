@@ -79,6 +79,9 @@ namespace Infrastructure.Sorting
         {
             string column = SetAdorner(columnHeader);
 
+            if (column == null)
+                return;
+
             list.SortDescriptions.Clear();
             list.SortDescriptions.Add(
                 new SortDescription(column, _sortDirection));
