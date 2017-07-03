@@ -1,4 +1,10 @@
-﻿v 0.51 -- 29/6/2017
+﻿v 0.52 -- 03/07/2017
+
+-Iniziata implementazione della validazione input tramite INotifyDataErrorInfo
+-Reimplementato inserimento Sample con finestra di dialogo SampleCreationDialog
+
+
+v 0.51 -- 29/6/2017
 
 -Corretta funzione AutoWireViewModel di ExternalReportCreationDialog
 -ReportEditView: Sostituita ListView prove con DataGrid

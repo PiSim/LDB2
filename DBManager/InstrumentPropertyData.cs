@@ -12,13 +12,17 @@ namespace DBManager
     using System;
     using System.Collections.Generic;
     
-    public partial class BatchFile
+    public partial class InstrumentPropertyData
     {
-        public int ID { get; private set; }
-        public int BatchID { get; private set; }
-        public string Path { get; set; }
-        public string Description { get; set; }
+        public int ID { get; set; }
+        public int instrumentID { get; set; }
+        public int measurable_propertyID { get; set; }
+        public int umID { get; set; }
+        public string range { get; set; }
+        public string division { get; set; }
     
-        public virtual Batch Batch { get; set; }
+        public virtual Instrument instrument { get; set; }
+        public virtual MeasurableProperty measurable_properties { get; set; }
+        public virtual MeasureUnit measure_units { get; set; }
     }
 }

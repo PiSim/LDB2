@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Services.Views;
 
 namespace Services
 {
@@ -262,6 +263,13 @@ namespace Services
 
             else
                 return null;
+        }
+
+        public static void StartSampleLog()
+        {
+            SampleLogDialog logger = new SampleLogDialog();
+
+            logger.Show();
         }
     }
 }

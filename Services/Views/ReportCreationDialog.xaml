@@ -47,11 +47,7 @@
                      Margin="5">
                 <Binding Path="Number"
                          Mode="TwoWay"
-                         UpdateSourceTrigger="PropertyChanged">
-                    <Binding.ValidationRules>
-                        <val:ExistingReportRule/>
-                    </Binding.ValidationRules>
-                </Binding>
+                         UpdateSourceTrigger="PropertyChanged"/>
             </TextBox>
 
             <Label Content="Batch:"

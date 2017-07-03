@@ -96,6 +96,9 @@ namespace DBManager.EntityExtensions
         {
             // Loads all relevant Related entities into a given Specification entry
 
+            if (entry == null)
+                return;
+
             using (DBEntities entities = new DBEntities())
             {
                 entities.Configuration.LazyLoadingEnabled = false;

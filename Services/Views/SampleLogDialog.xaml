@@ -1,0 +1,146 @@
+﻿<Window x:Class="Services.Views.SampleLogDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Services.Views"
+        xmlns:prism="http://prismlibrary.com/"
+        xmlns:val="clr-namespace:Infrastructure.Validation;assembly=Infrastructure"
+        prism:ViewModelLocator.AutoWireViewModel="True"
+        mc:Ignorable="d"
+        Title="SampleLogDialog" Height="575" Width="500">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="130"/>
+            <RowDefinition/>
+            <RowDefinition Height="35"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Column="0"
+                       Grid.Row="0"
+                       VerticalAlignment="Center"
+                       Margin="5">
+                Batch:
+            </TextBlock>
+
+            <TextBox KeyDown="TextBox_KeyDown"
+                     Grid.Column="1"
+                     Grid.Row="0"
+                     Margin="5"
+                     HorizontalContentAlignment="Center"
+                     VerticalAlignment="Center">
+                <Binding Path="BatchNumber"
+                         Mode="TwoWay"
+                         UpdateSourceTrigger="PropertyChanged"/>
+            </TextBox>
+            
+            <TextBlock Grid.Column="0"
+                       Grid.Row="1"
+                       VerticalAlignment="Center"
+                       Margin="5">
+                Azione:
+            </TextBlock>
+
+
+            <ComboBox ItemsSource="{Binding Path=ActionList}"
+                      DisplayMemberPath="Item1"
+                      SelectedItem="{Binding Path=SelectedAction, Mode=TwoWay}"
+                      VerticalAlignment="Center"
+                      Grid.Column="1"
+                      Grid.Row="1"
+                      Margin="5"/>
+
+            <TextBlock Grid.Column="2"
+                       Grid.Row="0"
+                       VerticalAlignment="Center"
+                       Margin="5">
+                Materiale:
+            </TextBlock>
+
+            <TextBlock Text="{Binding MaterialCode}"
+                       Grid.Column="3"
+                       Grid.Row="0"
+                       Margin="5"
+                       VerticalAlignment="Center"/>
+
+            <TextBlock Grid.Column="2"
+                       Grid.Row="1"
+                       VerticalAlignment="Center"
+                       Margin="5">
+                Colore:
+            </TextBlock>
+
+            <TextBlock Text="{Binding BatchInstance.Material.Recipe.Colour.Name}"
+                       Grid.Column="3"
+                       Grid.Row="1"
+                       Margin="5"
+                       VerticalAlignment="Center"/>
+
+            <TextBlock Grid.Column="2"
+                       Grid.Row="2"
+                       VerticalAlignment="Center"
+                       Margin="5">
+                Construction:
+            </TextBlock>
+
+            <TextBlock Text="{Binding BatchInstance.Material.ExternalConstruction.Name}"
+                       Grid.Column="3"
+                       Grid.Row="2"
+                       Margin="5"
+                       VerticalAlignment="Center"/>
+
+            <Button Content="OK"
+                    Command="{Binding ConfirmCommand}"
+                    Name="ConfirmButton"
+                    Grid.Column="3"
+                    Grid.Row="3"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Width="40"
+                    Margin="5"/>
+        </Grid>
+        
+        <GroupBox Header="Recenti"
+                  Grid.Row="1">
+            <ListView ItemsSource="{Binding LatestSampleList}">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Batch"
+                                        DisplayMemberBinding="{Binding Batch.Number}"/>
+                        <GridViewColumn Header=""
+                                        DisplayMemberBinding="{Binding Code}"/>
+                        <GridViewColumn Header="Data"
+                                        DisplayMemberBinding="{Binding Date, 
+                                                                       StringFormat=d,
+                                                                       ConverterCulture=it-IT}"/>
+                        <GridViewColumn Header="Inserito da"
+                                        DisplayMemberBinding="{Binding LogAuthor.Name}"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </GroupBox>
+
+        <StackPanel Grid.Row="2"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center">
+            <Button Content="Fine"
+                    Command="{Binding EndCommand}"
+                    Width="50"
+                    Margin="5"/>
+        </StackPanel>
+    </Grid>
+</Window>

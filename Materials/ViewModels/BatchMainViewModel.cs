@@ -7,6 +7,7 @@ using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
 using Reporting;
+using Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -45,7 +46,7 @@ namespace Materials.ViewModels
             _openSampleLogView = new DelegateCommand(
                 () =>
                 {
-                    _eventAggregator.GetEvent<NavigationRequested>().Publish(new NavigationToken(MaterialViewNames.SampleLogView));
+                    CommonProcedures.StartSampleLog();
                 });
             
             _quickOpen = new DelegateCommand(

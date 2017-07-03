@@ -46,6 +46,7 @@ namespace Services.ViewModels
             _requirementList = new List<ISelectableRequirement>();
             _specificationList = SpecificationService.GetSpecifications();
 
+
             _confirm = new DelegateCommand<Window>(
                 parent => {
                     _reportInstance = new Report();
@@ -74,6 +75,8 @@ namespace Services.ViewModels
                 parent => {
                     parent.DialogResult = false;    
                 });
+            
+            SelectedSpecification = null;
         }
 
         #region INotifyDataErrorInfo interface elements
@@ -188,6 +191,15 @@ namespace Services.ViewModels
             set
             {
                 _number = value;
+                Report tempReport = ReportService.GetReportByNumber(_number);
+
+                if (tempReport != null)
+                    _validationErrors["Number"] = new List<string>() { "Il report " + value + " esiste già" };
+
+                else if (_validationErrors.ContainsKey("Number"))
+                    _validationErrors.Remove("Number");
+
+                _confirm.RaiseCanExecuteChanged();
                 RaiseErrorsChanged("Number");
             }
         }
@@ -208,6 +220,13 @@ namespace Services.ViewModels
             set
             {
                 _selectedBatch = value;
+
+                if (_selectedBatch == null)
+                    _validationErrors["BatchNumber"] = new List<string>() { "Batch inserito non valido" };
+
+                else if (_validationErrors.ContainsKey("BatchNumber"))
+                    _validationErrors.Remove("BatchNumber");
+                
                 _material = _selectedBatch.GetMaterial();
 
                 if (_material != null && _material.ExternalConstruction != null)
@@ -246,10 +265,19 @@ namespace Services.ViewModels
                 _selectedSpecification = value;
                 _selectedSpecification.Load();
 
+                if (_selectedSpecification == null)
+                    _validationErrors["SelectedSpecification"] = new List<string>() { "Selezionare una specifica" };
+
+                else if (_validationErrors.ContainsKey("SelectedSpecification"))
+                    _validationErrors.Remove("SelectedSpecification");
+
                 RaisePropertyChanged("IsSpecificationSelected");
                 RaisePropertyChanged("SelectedSpecification");
                 RaisePropertyChanged("VersionList");
                 RaisePropertyChanged("ControlPlanList");
+                RaiseErrorsChanged("SelectedSpecification");
+
+                _confirm.RaiseCanExecuteChanged();
 
                 SelectedControlPlan = ControlPlanList.FirstOrDefault(cp => cp.IsDefault);
                 SelectedVersion = VersionList.FirstOrDefault(sv => sv.IsMain);

@@ -55,6 +55,22 @@ namespace DBManager.Services
             }
         }
 
+        public static IEnumerable<Sample> GetLatestSamples(int number = 25)
+        {
+            // Returns a given number of the most recently inserted samples
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.Samples.Include(smp => smp.Batch)
+                                        .Include(smp => smp.LogAuthor)
+                                        .OrderByDescending(smp => smp.ID)
+                                        .Take(number)
+                                        .ToList();
+            }
+        }
+
         public static IEnumerable<Material> GetMaterials()
         {
             // Returns all material entities 
@@ -487,9 +503,6 @@ namespace DBManager.Services
         public static void Create(this Sample entry)
         {
             // Inserts a Sample entry in the DB
-
-            if (entry == null)
-                throw new NullReferenceException();
 
             using (DBEntities entities = new DBEntities())
             {

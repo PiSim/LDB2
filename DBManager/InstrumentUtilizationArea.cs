@@ -12,20 +12,18 @@ namespace DBManager
     using System;
     using System.Collections.Generic;
     
-    public partial class Aspect
+    public partial class InstrumentUtilizationArea
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Aspect()
+        public InstrumentUtilizationArea()
         {
-            this.Name = "";
-            this.materials = new HashSet<Material>();
+            this.instruments = new HashSet<Instrument>();
         }
     
         public int ID { get; set; }
-        public string Code { get; set; }
-        public string Name { get; set; }
+        public string name { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Material> materials { get; set; }
+        public virtual ICollection<Instrument> instruments { get; set; }
     }
 }
