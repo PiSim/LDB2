@@ -12,6 +12,7 @@ namespace Infrastructure
         public static string ExternalReportAdmin { get { return "EXREPORT_ADMIN"; } }
         public static string ExternalReportView { get { return "EXREPORT_VIEW"; } }
         public static string InstrumentAdmin { get { return "INSTRUMENT_ADMIN"; } }
+        public static string InstrumentView { get { return "INSTRUMENT_VIEW"; } }
         public static string MaterialAdmin { get { return "MATERIAL_ADMIN"; } }
         public static string ProjectAdmin { get { return "PRJ_ADMIN"; } }
         public static string ProjectEdit { get { return "PRJ_EDIT"; } }

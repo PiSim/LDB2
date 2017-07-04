@@ -10,34 +10,38 @@
              d:DesignHeight="500" d:DesignWidth="600">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="35"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <Grid Grid.Row="0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
 
-            <Label Content="Batch:"
-                   Grid.Column="0"
-                   Margin="5"/>
-            <Label Content="{Binding Path=Number}"
-                   Grid.Column="1"
-                   Margin="5"/>
-        </Grid>
+        <StackPanel Orientation="Horizontal"
+                    Grid.Row="0">
+            <Button Content="Modifica"
+                    Command="{Binding StartEditCommand}"
+                    Margin="5"/>
+            <Button Content="Salva"
+                    Command="{Binding SaveCommand}"
+                    Margin="5"/>
+            <Button Content="Annulla"
+                    Command="{Binding CancelEditCommand}"
+                    Margin="5"/>
+            <Button Content="Aggiorna"
+                    Command="{Binding RefreshCommand}"
+                    Margin="5"/>
+
+        </StackPanel>
+        
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            
-            <Grid DataContext="{Binding Path=Material}">
+
+            <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition/>
+                    <ColumnDefinition Width="60"/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
@@ -47,49 +51,155 @@
                     <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
+
+                <Label Content="Batch:"
+                       Grid.Column="0"
+                       Margin="5"/>
+
+                <Label Content="{Binding Number}"
+                       Grid.Column="1"
+                       Grid.ColumnSpan="2"
+                       Margin="5"
+                       VerticalAlignment="Center"/>
+
                 <Label Content="Tipo:"
                        Grid.Column="0"
-                       Grid.Row="0"/>
-                <Label Content="{Binding MaterialType.Code}"
-                       Grid.Column="1"
-                       Grid.Row="0"/>
+                       Grid.Row="1"
+                       VerticalAlignment="Center"
+                       Margin="5"/>
 
-                <Label Content="{Binding MaterialType.Description}"
+                <TextBox Text="{Binding TypeCode, 
+                                        Mode=TwoWay,
+                                        UpdateSourceTrigger=PropertyChanged}"
+                         IsEnabled="{Binding EditMode}"
+                         Grid.Column="1"
+                         Grid.Row="1"
+                         Margin="5"
+                         VerticalAlignment="Center"/>
+
+                <Label Content="{Binding TypeInstance.Description}"
                        Grid.Column="2"
-                       Grid.Row="0"/>
+                       Grid.Row="1"
+                       VerticalAlignment="Center"
+                       Margin="5"/>
 
                 <Label Content="Riga:"
                        Grid.Column="0"
-                       Grid.Row="1"/>
-                
-                <Label Content="{Binding MaterialLine.Code}"
-                       Grid.Column="1"
-                       Grid.Row="1"/>
-                
+                       Grid.Row="2"
+                       VerticalAlignment="Center"
+                       Margin="5"/>
+
+                <TextBox Text="{Binding LineCode,
+                                        Mode=TwoWay,
+                                        UpdateSourceTrigger=PropertyChanged}"
+                         IsEnabled="{Binding EditMode}"
+                         Grid.Column="1"
+                         Grid.Row="2"
+                         VerticalAlignment="Center"
+                         Margin="5"/>
+
                 <Label Content="Aspetto:"
                        Grid.Column="0"
-                       Grid.Row="2"/>
+                       Grid.Row="3"
+                       VerticalAlignment="Center"
+                       Margin="5"/>
+
+                <TextBox Text="{Binding AspectCode, 
+                                          Mode=TwoWay,
+                                          UpdateSourceTrigger=PropertyChanged}"
+                           IsEnabled="{Binding EditMode}"
+                           Grid.Column="1"
+                           Grid.Row="3"
+                           VerticalAlignment="Center"
+                           Margin="5"/>
                 
-                <Label Content="{Binding Aspect.Code}"
-                       Grid.Column="1"
-                       Grid.Row="2"/>
-                <Label Content="{Binding Aspect.Name}"
+                <Label Content="{Binding AspectInstance.Name}"
                        Grid.Column="2"
-                       Grid.Row="2"/>
+                       Grid.Row="3"
+                       VerticalAlignment="Center"
+                       Margin="5"/>
 
                 <Label Content="Colore:"
                        Grid.Column="0"
-                       Grid.Row="3"/>
-                <Label Content="{Binding Path=Recipe.Code}"
-                       Grid.Column="1"
-                       Grid.Row="3"/>
-                <Label Content="{Binding Recipe.Colour.Name}"
+                       Grid.Row="4"
+                       VerticalAlignment="Center"
+                       Margin="5"/>
+                
+                <TextBox Text="{Binding RecipeCode,
+                                          Mode=TwoWay,
+                                          UpdateSourceTrigger=PropertyChanged}"
+                         IsEnabled="{Binding EditMode}"
+                         Grid.Column="1"
+                         Grid.Row="4"
+                         VerticalAlignment="Center"
+                         Margin="5"/>
+
+                <ComboBox ItemsSource="{Binding ColourList}"
+                          SelectedItem="{Binding SelectedColour, 
+                                                 Mode=TwoWay}"
+                          IsEnabled="{Binding ColourPickEnabled}"
+                          DisplayMemberPath="Name"
+                          Grid.Column="2"
+                          Grid.Row="4"
+                          Margin="5"/>
+
+                <Label Content="{Binding RecipeInstance.Colour.Name}"
                        Grid.Column="2"
-                       Grid.Row="3"/>
+                       Grid.Row="4"/>
+            </Grid>
+
+            <Grid Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition Height="2*"/>
+                </Grid.RowDefinitions>
 
                 <Label Content="Construction:"
                        Grid.Column="0"
-                       Grid.Row="4"/>
+                       Grid.Row="1"
+                       VerticalAlignment="Center"
+                       Margin="5"/>
+
+                <TextBlock Text="{Binding ConstructionName}"
+                           IsEnabled="False"
+                           Grid.Column="2"
+                           Grid.Row="1"
+                           VerticalAlignment="Center"
+                           Margin="5"/>
+
+                <Label Content="Tipo Prova:"
+                       Grid.Column="0"
+                       Grid.Row="2"
+                       VerticalAlignment="Center"
+                       Margin="5"/>
+
+                <ComboBox ItemsSource="{Binding TrialScopeList}"
+                          SelectedItem="{Binding SelectedTrialScope}"
+                          IsEnabled="{Binding EditMode}"
+                          DisplayMemberPath="Name"
+                          Grid.Column="1"
+                          Grid.Row="2"
+                          Margin="5"/>
+
+                <Label Content="Note:"
+                       Grid.Column="0"
+                       Grid.Row="3"
+                       VerticalAlignment="Top"
+                       Margin="5"/>
+
+                <TextBox Text="{Binding Notes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         IsEnabled="{Binding EditMode}"
+                         TextWrapping="Wrap"
+                         AcceptsReturn="True"
+                         Grid.Column="1"
+                         Grid.Row="3"
+                         Margin="5"/>
             </Grid>
         </Grid>
         <TabControl Grid.Row="2">
@@ -162,7 +272,7 @@
                             <StackPanel Grid.Column="1">
                                 <Button Content="Apri"
                                         Command="{Binding OpenExternalReportCommand}"
-                                        Margin="5,30,0,0"/>        
+                                        Margin="5,30,0,0"/>
                             </StackPanel>
                         </Grid>
                     </GroupBox>
