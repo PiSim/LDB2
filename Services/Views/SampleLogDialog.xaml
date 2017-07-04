@@ -145,6 +145,7 @@
                     VerticalAlignment="Center">
             <Button Content="Fine"
                     Command="{Binding EndCommand}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
                     Width="50"
                     Margin="5"/>
         </StackPanel>

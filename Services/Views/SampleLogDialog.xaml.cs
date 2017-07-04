@@ -26,7 +26,7 @@ namespace Services.Views
 
         private void TextBox_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Enter)
+            if (e.Key == Key.Enter && ConfirmButton.Command.CanExecute(null))
                 ConfirmButton.Command.Execute(null);             
         }
     }

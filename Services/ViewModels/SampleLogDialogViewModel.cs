@@ -45,7 +45,6 @@ namespace Services.ViewModels
             _eventAggregator = aggregator;
 
             _selectedAction = _actions.First(act => act.Item2 == "A");
-            BatchNumber = "";
 
             _confirm = new DelegateCommand(
                 () =>
@@ -57,6 +56,13 @@ namespace Services.ViewModels
                     newLog.personID = _principal.CurrentPerson.ID;
 
                     newLog.Create();
+
+                    if (_batchInstance.FirstSampleArrived == false)
+                    {
+                        _batchInstance.FirstSampleArrived = true;
+                        _batchInstance.FirstSampleID = newLog.ID;
+                        _batchInstance.Update();
+                    }
 
                     BatchNumber = null;
 
@@ -78,6 +84,8 @@ namespace Services.ViewModels
                 {
                     parentDialog.Close();
                 });
+
+            BatchNumber = "";
         }
 
         #region INotifyDataErrorInfo interface elements

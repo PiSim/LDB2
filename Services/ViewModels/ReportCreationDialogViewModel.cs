@@ -77,6 +77,8 @@ namespace Services.ViewModels
                 });
             
             SelectedSpecification = null;
+            BatchNumber = "";
+            Number = 0;
         }
 
         #region INotifyDataErrorInfo interface elements
