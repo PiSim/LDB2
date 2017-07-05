@@ -40,6 +40,7 @@
                        VerticalAlignment="Center"/>
 
             <TextBox Text="{Binding BatchNumber, Mode=TwoWay}"
+                     MaxLength="10"
                      Grid.Column="1"
                      Grid.ColumnSpan="2"
                      Margin="5"
@@ -53,6 +54,7 @@
 
             <TextBox Text="{Binding TypeCode, 
                                     UpdateSourceTrigger=PropertyChanged}"
+                     MaxLength="4"
                      Grid.Column="1"
                      Grid.Row="1"
                      HorizontalContentAlignment="Center"
@@ -72,6 +74,7 @@
 
             <TextBox Text="{Binding LineCode,
                                     UpdateSourceTrigger=PropertyChanged}"
+                     MaxLength="3"
                      Grid.Column="1"
                      Grid.Row="2"
                      HorizontalContentAlignment="Center"
@@ -85,6 +88,7 @@
 
             <TextBox Text="{Binding AspectCode,
                                     UpdateSourceTrigger=PropertyChanged}"
+                     MaxLength="3"
                      Grid.Column="1"
                      Grid.Row="3"
                      HorizontalContentAlignment="Center"
@@ -105,6 +109,7 @@
 
             <TextBox Text="{Binding RecipeCode,
                                     UpdateSourceTrigger=PropertyChanged}"
+                     MaxLength="4"
                      Grid.Column="1"
                      Grid.Row="4"
                      HorizontalContentAlignment="Center"
@@ -112,7 +117,6 @@
 
             <ComboBox ItemsSource="{Binding ColourList}"
                       SelectedItem="{Binding SelectedColour, Mode=TwoWay}"
-                      IsEnabled="{Binding ColourPickEnabled}"
                       DisplayMemberPath="Name"
                       Grid.Column="2"
                       Grid.ColumnSpan="2"
@@ -160,6 +164,23 @@
                       Grid.ColumnSpan="3"
                       Grid.Row="7"
                       Margin="5"/>
+
+            <TextBlock Text="Note:"
+                       Grid.Column="0"
+                       Grid.Row="8"
+                       VerticalAlignment="Top"
+                       Margin="5"/>
+
+            <TextBox Text="{Binding Notes,
+                                    Mode=TwoWay}"
+                     AcceptsReturn="True"
+                     TextWrapping="Wrap"
+                     MaxLength="45"
+                     Grid.Column="1"
+                     Grid.ColumnSpan="3"
+                     Grid.Row="8"
+                     Margin="5"/>
+
         </Grid>
 
         <StackPanel Orientation="Horizontal"

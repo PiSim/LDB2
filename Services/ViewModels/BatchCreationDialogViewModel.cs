@@ -18,9 +18,7 @@ namespace Services.ViewModels
     {
         private Aspect _aspectInstance;
         private Batch _batchInstance;
-        private bool _colourPickEnabled,
-                    _constructionPickEnabled,
-                    _projectPickEnabled;
+        private bool _projectPickEnabled;
         private Colour _selectedColour;
         private DelegateCommand<Window> _cancel, _confirm;
         private readonly Dictionary<string, ICollection<string>> _validationErrors = new Dictionary<string, ICollection<string>>();
@@ -36,6 +34,7 @@ namespace Services.ViewModels
         private string _aspectCode,
                         _batchNumber,
                         _lineCode,
+                        _notes,
                         _recipeCode,
                         _typeCode;
         private TrialArea _selectedTrialArea;
@@ -43,9 +42,10 @@ namespace Services.ViewModels
         public BatchCreationDialogViewModel() : base()
         {
             _colourList = MaterialService.GetColours();
-            _colourPickEnabled = true;
             _constructionList = MaterialService.GetExternalConstructions();
             _projectList = ProjectService.GetProjects();
+
+            _notes = "";
 
             _cancel = new DelegateCommand<Window>(
                 parentDialog =>
@@ -140,6 +140,7 @@ namespace Services.ViewModels
                         BasicReportDone = false,
                         FirstSampleArrived = false,
                         MaterialID = tempMaterial.ID,
+                        Notes = _notes,
                         Number = _batchNumber
                     };
 
@@ -149,7 +150,14 @@ namespace Services.ViewModels
                     _batchInstance.Create();
 
                     parentDialog.DialogResult = true;
-                });
+                },
+                parentDialog => !HasErrors);
+
+            BatchNumber = "";
+            TypeCode = "";
+            LineCode = "";
+            AspectCode = "";
+            RecipeCode = "";
         }
 
         #region INotifyDataErrorInfo interface elements
@@ -173,7 +181,7 @@ namespace Services.ViewModels
         private void RaiseErrorsChanged(string propertyName)
         {
             ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
-            RaisePropertyChanged("HasErrors");
+            _confirm.RaiseCanExecuteChanged();
         }
 
         #endregion
@@ -203,7 +211,22 @@ namespace Services.ViewModels
             set
             {
                 _aspectCode = value;
-                AspectInstance = MaterialService.GetAspect(_aspectCode);
+
+                if (_aspectCode.Length == 3)
+                {
+                    AspectInstance = MaterialService.GetAspect(_aspectCode);
+                    if (_validationErrors.ContainsKey("AspectCode"))
+                    {
+                        _validationErrors.Remove("AspectCode");
+                        RaiseErrorsChanged("AspectCode");
+                    }
+                }
+                else
+                {
+                    AspectInstance = null;
+                    _validationErrors["AspectCode"] = new List<string>() { "Codice Aspetto non valido" };
+                    RaiseErrorsChanged("AspectCode");
+                }
             }
         }
 
@@ -221,6 +244,10 @@ namespace Services.ViewModels
         public Batch BatchInstance
         {
             get { return _batchInstance; }
+            private set
+            {
+                _batchInstance = value;
+            }
         }
 
         public string BatchNumber
@@ -229,6 +256,25 @@ namespace Services.ViewModels
             set
             {
                 _batchNumber = value;
+
+                if (string.IsNullOrEmpty(_batchNumber))
+                    BatchInstance = null;
+
+                else
+                    BatchInstance = MaterialService.GetBatch(_batchNumber);
+                
+                if (_batchInstance == null && 
+                    _validationErrors.ContainsKey("BatchNumber"))
+                {
+                    _validationErrors.Remove("BatchNumber");
+                    RaiseErrorsChanged("BatchNumber");
+                }
+
+                else
+                {
+                    _validationErrors["BatchNumber"] = new List<string>() { "Il batch " + _batchNumber + "  esiste già" };
+                    RaiseErrorsChanged("BatchNumber");
+                }
             }
         }
 
@@ -242,16 +288,6 @@ namespace Services.ViewModels
             get { return _colourList; }
         }
 
-        public bool ColourPickEnabled
-        {
-            get { return _colourPickEnabled; }
-            set
-            {
-                _colourPickEnabled = value;
-                RaisePropertyChanged("ColourPickEnabled");
-            }
-        }
-
         public DelegateCommand<Window> ConfirmCommand
         {
             get { return _confirm; }
@@ -262,23 +298,28 @@ namespace Services.ViewModels
             get { return _constructionList; }
         }
 
-        public bool ConstructionPickEnabled
-        {
-            get { return _constructionPickEnabled; }
-            set
-            {
-                _constructionPickEnabled = value;
-                RaisePropertyChanged("ConstructionPickEnabled");
-            }
-        }
-
         public string LineCode
         {
             get { return _lineCode; }
             set
             {
                 _lineCode = value;
-                LineInstance = MaterialService.GetLine(_lineCode);
+
+                if (_lineCode.Length == 3)
+                {
+                    LineInstance = MaterialService.GetLine(_lineCode);
+                    if (_validationErrors.ContainsKey("LineCode"))
+                    {
+                        _validationErrors.Remove("LineCode");
+                        RaiseErrorsChanged("LineCode");
+                    }
+                }
+                else
+                {
+                    LineInstance = null;
+                    _validationErrors["LineCode"] = new List<string>() { "Codice Riga non valido" };
+                    RaiseErrorsChanged("LineCode");
+                }
             }
         }
 
@@ -303,10 +344,18 @@ namespace Services.ViewModels
                 {
                     SelectedConstruction = _constructionList.FirstOrDefault(con => con.ID == _materialInstance.ExternalConstructionID);
                     SelectedProject = _projectList.FirstOrDefault(prj => prj.ID == _materialInstance.ProjectID);
-
-                    ConstructionPickEnabled = (SelectedConstruction == null);
+                    
                     ProjectPickEnabled = (SelectedProject == null);
                 }
+            }
+        }
+
+        public string Notes
+        {
+            get { return _notes; }
+            set
+            {
+                _notes = value;
             }
         }
 
@@ -331,7 +380,21 @@ namespace Services.ViewModels
             set
             {
                 _recipeCode = value;
-                RecipeInstance = MaterialService.GetRecipe(_recipeCode);
+
+                if (_recipeCode.Length == 4)
+                {
+                    RecipeInstance = MaterialService.GetRecipe(_recipeCode);
+                    if (_validationErrors.ContainsKey("RecipeCode"))
+                    {
+                        _validationErrors.Remove("RecipeCode");
+                        RaiseErrorsChanged("RecipeCode");
+                    }
+                }
+                else
+                {
+                    RecipeInstance = null;
+                    _validationErrors["RecipeCode"] = new List<string>() { "Codice colore non valido" };
+                }
             }
         }
 
@@ -344,8 +407,7 @@ namespace Services.ViewModels
 
                 if (_recipeInstance != null)
                     SelectedColour = _colourList.FirstOrDefault(col => col.ID == _recipeInstance.ColourID);
-
-                ColourPickEnabled = (SelectedColour == null);
+                
                 UpdateMaterial();
             }
         }
@@ -399,7 +461,24 @@ namespace Services.ViewModels
             set
             {
                 _typeCode = value;
-                TypeInstance = MaterialService.GetMaterialType(_typeCode);
+
+                if (_typeCode.Length == 4)
+                {
+                    TypeInstance = MaterialService.GetMaterialType(_typeCode);
+                    if (_validationErrors.ContainsKey("TypeCode"))
+                    {
+                        _validationErrors.Remove("TypeCode");
+                        RaiseErrorsChanged("TypeCode");
+                    }
+                }
+                else
+                    TypeInstance = null;
+
+                if (_typeInstance == null)
+                {
+                    _validationErrors["TypeCode"] = new List<string>() { "Codice Tipo non Valido" };
+                    RaiseErrorsChanged("TypeCode");
+                }
             }
         }
 

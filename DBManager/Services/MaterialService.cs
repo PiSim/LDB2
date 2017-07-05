@@ -55,6 +55,35 @@ namespace DBManager.Services
             }
         }
 
+        public static Colour GetColour(string name)
+        {
+            // Returns a Colour instance with the given name, or null if none exists
+
+            if (string.IsNullOrEmpty(name))
+                return null;
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.Colours.FirstOrDefault(col => col.Name == name);
+            }
+        }
+
+        public static IEnumerable<Colour> GetColours()
+        {
+            // Returns all Colour entities
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.Colours.Where(clr => true)
+                                        .OrderBy(clr => clr.Name)
+                                        .ToList();
+            }
+        }
+
         public static IEnumerable<Sample> GetLatestSamples(int number = 25)
         {
             // Returns a given number of the most recently inserted samples
@@ -117,6 +146,19 @@ namespace DBManager.Services
                                         .Include(mat => mat.Recipe.Colour)
                                         .Where(mat => mat.Project == null)
                                         .ToList();
+            }
+        }
+
+        public static Recipe GetRecipe(string code)
+        {
+            // Returns the recipe with the given code
+            // if none is found, null is returned
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.Recipes.FirstOrDefault(rec => rec.Code == code);
             }
         }
 
@@ -195,23 +237,6 @@ namespace DBManager.Services
 
         #endregion
 
-        #region Operations for Colour entities
-
-        public static IEnumerable<Colour> GetColours()
-        {
-            // Returns all Colour entities
-
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.Configuration.LazyLoadingEnabled = false;
-
-                return entities.Colours.Where(clr => true)
-                                        .OrderBy(clr => clr.Name)
-                                        .ToList();
-            }
-        }
-
-        #endregion
         
 
         #region Operations for ExternalConstruction entities
@@ -398,35 +423,8 @@ namespace DBManager.Services
         }
 
         #endregion
-
-        #region Operations for Recipe entities
-
-        public static void Create(this Recipe entry)
-        {
-            // Inserts a new Recipe entity in the DB
-
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.Recipes.Add(entry);
-                entities.SaveChanges();
-            }
-        }
-
-        public static Recipe GetRecipe(string code)
-        {
-            // Returns the recipe with the given code
-            // if none is found, null is returned
-
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.Configuration.LazyLoadingEnabled = false;
-
-                return entities.Recipes.FirstOrDefault(rec => rec.Code == code);
-            }
-        }
-
-        #endregion
-
+        
+        
         #region Operations for Sample entities
 
         public static void Create(this Sample entry)

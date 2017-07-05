@@ -12,20 +12,37 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="35"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        
-        <StackPanel Orientation="Horizontal">
-            <Label Content="Colore:"/>
-            <Label Content="{Binding ColourName}"/>
+
+        <StackPanel Orientation="Horizontal"
+                    Grid.Row="0">
+            <Button Content="Modifica"
+                    Command="{Binding StartEditCommand}"
+                    Margin="5"/>
+            <Button Content="Salva"
+                    Command="{Binding SaveCommand}"
+                    Margin="5"/>
         </StackPanel>
         
+        <StackPanel Orientation="Horizontal" Grid.Row="1">
+            <Label Content="Colore:"/>
+            <TextBox Text="{Binding ColourName,
+                                    Mode=TwoWay,
+                                    UpdateSourceTrigger=PropertyChanged}"
+                     IsEnabled="{Binding EditMode}"
+                     MaxLength="45"
+                     Width="150"
+                     Margin="5"/>
+        </StackPanel>
+
         <GroupBox Header="Commesse"
-                  Grid.Row="1">
-            
+                  Grid.Row="2">
+
         </GroupBox>
-        <TabControl Grid.Row="1">
+        <TabControl Grid.Row="2">
             <TabItem Header="Ricette">
                 <ListView ItemsSource="{Binding RecipeList}"
                           SelectedItem="{Binding SelectedRecipe, Mode=TwoWay}"

@@ -20,7 +20,8 @@ namespace Instruments
         }
 
         public void Initialize()
-        {     
+        {
+            DBPrincipal principal = _container.Resolve<DBPrincipal>();
 
             _container.RegisterType<Views.InstrumentCreationDialog>();
 
@@ -31,8 +32,9 @@ namespace Instruments
             _container.RegisterType<Object, Views.InstrumentEdit>(InstrumentViewNames.InstrumentEditView);
             _container.RegisterType<Object, Views.InstrumentMain>(InstrumentViewNames.InstrumentsMainView);
             
-            _regionManager.RegisterViewWithRegion(RegionNames.MainNavigationRegion, 
-                                                typeof(Views.InstrumentsNavigationItem));
+            if (principal.IsInRole(UserRoleNames.InstrumentView))
+                _regionManager.RegisterViewWithRegion(RegionNames.MainNavigationRegion, 
+                                                    typeof(Views.InstrumentsNavigationItem));
 
             _container.RegisterType<InstrumentServiceProvider>
                 (new ContainerControlledLifetimeManager());

@@ -86,7 +86,7 @@ namespace Reporting
 
             currentRow.Cells.Add(new TableCell
                                 (new Paragraph
-                                (new Run("Ricetta"))));
+                                (new Run("Cod.Colore"))));
 
             currentRow.Cells.Add(new TableCell
                                 (new Paragraph

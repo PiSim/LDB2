@@ -41,7 +41,7 @@ namespace Materials.ViewModels
                     _eventAggregator.GetEvent<BatchCreationRequested>()
                                     .Publish();
                 },
-                () => CanCreateBatch);
+                () => _principal.IsInRole(UserRoleNames.BatchEdit));
 
             _openSampleLogView = new DelegateCommand(
                 () =>
@@ -84,11 +84,6 @@ namespace Materials.ViewModels
         public string BatchStatusListRegionName
         {
             get { return RegionNames.BatchStatusListRegion; }
-        }
-
-        private bool CanCreateBatch
-        {
-            get { return _principal.IsInRole(UserRoleNames.MaterialAdmin); }
         }
 
         public DelegateCommand CreateBatchCommand

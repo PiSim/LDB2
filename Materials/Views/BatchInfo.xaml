@@ -29,7 +29,9 @@
             <Button Content="Aggiorna"
                     Command="{Binding RefreshCommand}"
                     Margin="5"/>
-
+            <Button Content="Elimina batch"
+                    Command="{Binding DeleteBatchCommand}"
+                    Margin="5"/>
         </StackPanel>
         
         <Grid Grid.Row="1">
@@ -72,6 +74,7 @@
                                         Mode=TwoWay,
                                         UpdateSourceTrigger=PropertyChanged}"
                          IsEnabled="{Binding EditMode}"
+                         MaxLength="4"
                          Grid.Column="1"
                          Grid.Row="1"
                          Margin="5"
@@ -93,6 +96,7 @@
                                         Mode=TwoWay,
                                         UpdateSourceTrigger=PropertyChanged}"
                          IsEnabled="{Binding EditMode}"
+                         MaxLength="3"
                          Grid.Column="1"
                          Grid.Row="2"
                          VerticalAlignment="Center"
@@ -108,6 +112,7 @@
                                           Mode=TwoWay,
                                           UpdateSourceTrigger=PropertyChanged}"
                            IsEnabled="{Binding EditMode}"
+                           MaxLength="3"
                            Grid.Column="1"
                            Grid.Row="3"
                            VerticalAlignment="Center"
@@ -129,6 +134,7 @@
                                           Mode=TwoWay,
                                           UpdateSourceTrigger=PropertyChanged}"
                          IsEnabled="{Binding EditMode}"
+                         MaxLength="4"
                          Grid.Column="1"
                          Grid.Row="4"
                          VerticalAlignment="Center"
@@ -137,15 +143,12 @@
                 <ComboBox ItemsSource="{Binding ColourList}"
                           SelectedItem="{Binding SelectedColour, 
                                                  Mode=TwoWay}"
-                          IsEnabled="{Binding ColourPickEnabled}"
+                          IsEnabled="{Binding EditMode}"
                           DisplayMemberPath="Name"
                           Grid.Column="2"
                           Grid.Row="4"
+                          VerticalAlignment="Center"
                           Margin="5"/>
-
-                <Label Content="{Binding RecipeInstance.Colour.Name}"
-                       Grid.Column="2"
-                       Grid.Row="4"/>
             </Grid>
 
             <Grid Grid.Column="1">
@@ -166,12 +169,15 @@
                        VerticalAlignment="Center"
                        Margin="5"/>
 
-                <TextBlock Text="{Binding ConstructionName}"
-                           IsEnabled="False"
-                           Grid.Column="2"
-                           Grid.Row="1"
-                           VerticalAlignment="Center"
-                           Margin="5"/>
+                <ComboBox ItemsSource="{Binding ExternalConstructionList}"
+                          SelectedItem="{Binding SelectedExternalConstruction,
+                                                 Mode=TwoWay}"
+                          DisplayMemberPath="Name"
+                          IsEnabled="{Binding EditMode}"
+                          Grid.Column="2"
+                          Grid.Row="1"
+                          VerticalAlignment="Center"
+                          Margin="5"/>
 
                 <Label Content="Tipo Prova:"
                        Grid.Column="0"
@@ -179,8 +185,8 @@
                        VerticalAlignment="Center"
                        Margin="5"/>
 
-                <ComboBox ItemsSource="{Binding TrialScopeList}"
-                          SelectedItem="{Binding SelectedTrialScope}"
+                <ComboBox ItemsSource="{Binding TrialAreaList}"
+                          SelectedItem="{Binding SelectedTrialArea}"
                           IsEnabled="{Binding EditMode}"
                           DisplayMemberPath="Name"
                           Grid.Column="1"
@@ -195,6 +201,7 @@
 
                 <TextBox Text="{Binding Notes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                          IsEnabled="{Binding EditMode}"
+                         MaxLength="100"
                          TextWrapping="Wrap"
                          AcceptsReturn="True"
                          Grid.Column="1"

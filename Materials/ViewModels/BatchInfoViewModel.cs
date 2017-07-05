@@ -1,5 +1,6 @@
 ﻿using Controls.Views;
 using DBManager;
+using DBManager.EntityExtensions;
 using DBManager.Services;
 using Infrastructure;
 using Infrastructure.Events;
@@ -26,6 +27,7 @@ namespace Materials.ViewModels
         private Colour _selectedColour;
         private DBPrincipal _principal;
         private DelegateCommand _cancelEdit,
+                                _deleteBatch,
                                 _openExternalReport, 
                                 _openReport,
                                 _refresh,
@@ -33,9 +35,10 @@ namespace Materials.ViewModels
                                 _startEdit;
         private readonly Dictionary<string, ICollection<string>> _validationErrors = new Dictionary<string, ICollection<string>>();
         private EventAggregator _eventAggregator;
-        private ExternalConstruction _externalConstructionInstance;
+        private ExternalConstruction _selectedExternalConstruction;
         private ExternalReport _selectedExternalReport;
         private IEnumerable<Colour> _colourList;
+        private IEnumerable<ExternalConstruction> _externalConstructionList;
         private IEnumerable<TrialArea> _trialAreaList; 
         private List<SamplesWrapper> _samplesList;
         private Material _materialInstance;
@@ -56,6 +59,8 @@ namespace Materials.ViewModels
             _principal = principal;
             _editMode = false;
 
+            _colourList = MaterialService.GetColours();
+            _externalConstructionList = MaterialService.GetExternalConstructions();
             _trialAreaList = MaterialService.GetTrialAreas();
 
             _eventAggregator.GetEvent<ReportCreated>().Subscribe(
@@ -71,7 +76,21 @@ namespace Materials.ViewModels
                     BatchInstance = MaterialService.GetBatch(_instance.ID);
                 },
                 () => EditMode);
-               
+
+            _deleteBatch = new DelegateCommand(
+                () =>
+                {
+                    _instance.Delete();
+
+                    BatchInstance = null;
+
+                    NavigationToken token = new NavigationToken(MaterialViewNames.BatchesView);
+
+                    _eventAggregator.GetEvent<NavigationRequested>()
+                                    .Publish(token);
+                },
+                () => _principal.IsInRole(UserRoleNames.BatchAdmin));
+
             _openExternalReport = new DelegateCommand(
                 () => 
                 {
@@ -100,6 +119,98 @@ namespace Materials.ViewModels
             _save = new DelegateCommand(
                 () =>
                 {
+                    if (_materialInstance == null)
+                    {
+                        _materialInstance = new Material();
+
+                        _materialInstance.TypeID = _typeInstance.ID;
+
+                        // If line exists sets the lineID in the material,
+                        // otherwise creates new line instance
+
+                        if (_lineInstance == null)
+                        {
+                            _lineInstance = new MaterialLine()
+                            {
+                                Code = LineCode                                
+                            };
+
+                            _materialInstance.MaterialLine = _lineInstance;
+                        }
+
+                        else
+                            _materialInstance.LineID = _lineInstance.ID;
+
+                        // If aspect exists sets the aspectID in the material,
+                        // otherwise creates new aspect instance
+
+
+                        if (_aspectInstance == null)
+                        {
+                            _aspectInstance = new Aspect()
+                            {
+                                Code = AspectCode,
+                                Name = ""
+                            };
+
+                            _materialInstance.Aspect = _aspectInstance;
+                        }
+
+                        else
+                            _materialInstance.AspectID = _aspectInstance.ID;
+
+                        // If recipe exists sets the recipeID in the material,
+                        // otherwise creates new recipe instance and sets the colour if one is selected
+
+                        if (_recipeInstance == null)
+                        {
+                            _recipeInstance = new Recipe()
+                            {
+                                Code = RecipeCode,
+                                ColourID = _selectedColour?.ID
+                            };
+
+                            _materialInstance.Recipe = _recipeInstance;
+                        }
+
+                        else
+                            _materialInstance.RecipeID = _recipeInstance.ID;
+
+                        // Sets the external construction if one is selected
+
+                        if (_selectedExternalConstruction != null)
+                            _materialInstance.ExternalConstructionID = _selectedExternalConstruction.ID;
+
+                        // Creates the material entry and any new sub-entries
+
+                        _materialInstance.Create();
+                    }
+
+                    // If material exists and material.construction is null and a construction is selected
+                    // sets the construction
+
+                    else if (_materialInstance.ExternalConstructionID == null
+                            && _selectedExternalConstruction != null)
+                    {
+                        _materialInstance.ExternalConstructionID = _selectedExternalConstruction.ID;
+                        _materialInstance.Update();
+                    }
+
+                    // If original recipe.colorID was null and a color was selected
+                    // sets the colorID 
+
+                    if (_selectedColour != null 
+                        && _recipeInstance.ColourID != _selectedColour.ID)
+                    {
+                        _recipeInstance.ColourID = _selectedColour.ID;
+                        _recipeInstance.Update();
+                    }
+
+                    // Updates the material FK if it's different from the one stored in the DB
+
+                    if (_materialInstance.ID != _instance.MaterialID)
+                        _instance.MaterialID = _materialInstance.ID;
+
                     _instance.Update();
                     EditMode = false;
                 },
@@ -110,7 +221,7 @@ namespace Materials.ViewModels
                 {
                     EditMode = true;
                 },
-                () => !EditMode);
+                () => !EditMode && _principal.IsInRole(UserRoleNames.BatchEdit));
         }
 
         #region Service method for internal use
@@ -201,31 +312,34 @@ namespace Materials.ViewModels
             get { return _instance; }
             set
             {
+                _validationErrors.Clear();
                 EditMode = false;
 
                 _instance = value;
-                _instance.Load();
+                if (_instance != null && _instance.ID != 0)
+                    _instance.Load();
+                
+                _samplesList = _instance.GetSamples()?.Select(smp => new SamplesWrapper(smp)).ToList();
 
-                _samplesList = _instance.GetSamples().Select(smp => new SamplesWrapper(smp)).ToList();
-
-                _selectedTrialArea = _trialAreaList.FirstOrDefault(tra => tra.ID == _instance.TrialAreaID);
+                _selectedTrialArea = _trialAreaList.FirstOrDefault(tra => tra.ID == _instance?.TrialAreaID);
                 
 
-                _typeInstance = _instance.Material.MaterialType;
-                _typeCode = _typeInstance.Code;
+                _typeInstance = _instance?.Material?.MaterialType;
+                _typeCode = _typeInstance?.Code;
 
-                _lineInstance = _instance.Material.MaterialLine;
-                _lineCode = _lineInstance.Code;
+                _lineInstance = _instance?.Material?.MaterialLine;
+                _lineCode = _lineInstance?.Code;
 
-                _aspectInstance = _instance.Material.Aspect;
-                _aspectCode = _aspectInstance.Code;
+                _aspectInstance = _instance?.Material?.Aspect;
+                _aspectCode = _aspectInstance?.Code;
 
-                _recipeInstance = _instance.Material.Recipe;
-                _recipeCode = _recipeInstance.Code;
+                _recipeInstance = _instance?.Material?.Recipe;
+                _recipeCode = _recipeInstance?.Code;
 
-                _materialInstance = _instance.Material;
+                _materialInstance = _instance?.Material;
 
-                _externalConstructionInstance = _materialInstance.ExternalConstruction;
+                SelectedExternalConstruction = _externalConstructionList.FirstOrDefault(excon => excon.ID == _materialInstance?.ID);
+                SelectedColour = _colourList.FirstOrDefault(col => col.ID == _recipeInstance?.ColourID);
 
                 SelectedExternalReport = null;
                 SelectedReport = null;
@@ -236,12 +350,10 @@ namespace Materials.ViewModels
                 RaisePropertyChanged("AspectInstance");
                 RaisePropertyChanged("AspectCode");
                 RaisePropertyChanged("RecipeCode");
-                RaisePropertyChanged("SelectedColour");
-
-                RaisePropertyChanged("ExternalConstructionName");
 
                 RaisePropertyChanged("ExternalReportList");
                 RaisePropertyChanged("Samples");
+                RaisePropertyChanged("Notes");
                 RaisePropertyChanged("Number");
                 RaisePropertyChanged("Project");
                 RaisePropertyChanged("ReportList");
@@ -258,15 +370,10 @@ namespace Materials.ViewModels
         {
             get { return _colourList; }
         }
-        
-        public bool ColourPickEnabled
-        {
-            get { return EditMode; }
-        }
 
-        public string ConstructionName
+        public DelegateCommand DeleteBatchCommand
         {
-            get { return _externalConstructionInstance?.Name; }
+            get { return _deleteBatch; }
         }
 
         public bool EditMode
@@ -284,6 +391,11 @@ namespace Materials.ViewModels
             }
         }
         
+        public IEnumerable<ExternalConstruction> ExternalConstructionList
+        {
+            get { return _externalConstructionList; }
+        }
+
         public IEnumerable<ExternalReport> ExternalReportList 
         {
             get 
@@ -412,6 +524,9 @@ namespace Materials.ViewModels
                 _recipeInstance = value;
                 CheckMaterial();
 
+                SelectedColour = _colourList.FirstOrDefault(col => col.ID == _recipeInstance?.ColourID);
+
+                RaisePropertyChanged("SelectedColour");
             }
         }
 
@@ -422,7 +537,7 @@ namespace Materials.ViewModels
 
         public IEnumerable<Report> ReportList
         {
-            get { return _instance.Reports; }
+            get { return _instance?.Reports; }
         }
 
         public DelegateCommand SaveCommand
@@ -437,6 +552,16 @@ namespace Materials.ViewModels
             {
                 _selectedColour = value;
                 RaisePropertyChanged("SelectedColour");
+            }
+        }
+
+        public ExternalConstruction SelectedExternalConstruction
+        {
+            get { return _selectedExternalConstruction; }
+            set
+            {
+                _selectedExternalConstruction = value;
+                RaisePropertyChanged("SelectedExternalConstruction");
             }
         }
 

@@ -16,9 +16,27 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
 
+        <Grid.RowDefinitions>
+            <RowDefinition Height="35"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    Grid.Row="0">
+            <Button Content="Nuovo"
+                    Command="{Binding CreateColourCommand}"
+                    Margin="5"/>
+            <Button Content="Elimina"
+                    Command="{Binding DeleteColourCommand}"
+                    Margin="5"/>
+        </StackPanel>
+        
         <ListView ItemsSource="{Binding ColourList}"
                   SelectedItem="{Binding SelectedColour, Mode=TwoWay}"
                   Grid.Column="0"
+                  Grid.Row="1"
                   Margin="5">
             <i:Interaction.Behaviors>
                 <sort:SortingBehavior/>
@@ -34,6 +52,7 @@
         
 
         <ContentControl prism:RegionManager.RegionName="{Binding ColourEditRegionName}"
-                        Grid.Column="1"/>
+                        Grid.Column="1"
+                        Grid.Row="1"/>
     </Grid>
 </UserControl>

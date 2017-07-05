@@ -9,11 +9,14 @@ namespace Infrastructure
     public class UserRoleNames
     {
         public static string Admin { get { return "ADMIN"; } }
+        public static string BatchAdmin { get { return "BATCH_ADMIN"; } }
+        public static string BatchEdit { get { return "BATCH_EDIT"; } }
         public static string ExternalReportAdmin { get { return "EXREPORT_ADMIN"; } }
         public static string ExternalReportView { get { return "EXREPORT_VIEW"; } }
         public static string InstrumentAdmin { get { return "INSTRUMENT_ADMIN"; } }
         public static string InstrumentView { get { return "INSTRUMENT_VIEW"; } }
         public static string MaterialAdmin { get { return "MATERIAL_ADMIN"; } }
+        public static string MaterialEdit { get { return "MATERIAL_EDIT"; } }
         public static string ProjectAdmin { get { return "PRJ_ADMIN"; } }
         public static string ProjectEdit { get { return "PRJ_EDIT"; } }
         public static string ProjectView { get { return "PRJ_VIEW"; } }

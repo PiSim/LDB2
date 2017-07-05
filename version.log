@@ -1,8 +1,12 @@
 ﻿v 0.52 -- 03/07/2017
 
--Iniziata implementazione della validazione input tramite INotifyDataErrorInfo
+-Implementata validazione input in diverse viste tramite INotifyDataErrorInfo
 -Reimplementato inserimento Sample con finestra di dialogo SampleCreationDialog
-
+-Implementata funzionalità di modifica batch
+-Implementata validazione input in BatchCreationDialog
+-Aggiunti controlli di autorizzazione per creazione/modifica/eliminazione batch
+-Aggiunto controllo autorizzazione per visualizzazione Strumenti
+-Implementata funzionalità eliminazione batch
 
 v 0.51 -- 29/6/2017
 
