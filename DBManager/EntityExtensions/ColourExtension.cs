@@ -53,7 +53,8 @@ namespace DBManager.EntityExtensions
                                         .Include(bat => bat.Material.MaterialLine)
                                         .Include(bat => bat.Material.MaterialType)
                                         .Include(bat => bat.Material.Recipe.Colour)
-                                        .Where(bat => bat.Material.Recipe.ColourID == entry.ID);
+                                        .Where(bat => bat.Material.Recipe.ColourID == entry.ID)
+                                        .ToList();
 
             }
         }
