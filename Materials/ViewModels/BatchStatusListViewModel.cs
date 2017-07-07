@@ -11,12 +11,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace Materials.ViewModels
 {
     public class BatchStatusListViewModel : BindableBase
     {
-        private DelegateCommand _openBatch;
+        private DelegateCommand<DataGrid> _openBatch;
         private DelegateCommand<Window> _cancel, _confirm;
         private EventAggregator _eventAggregator;
 
@@ -55,6 +56,17 @@ namespace Materials.ViewModels
                             {
                                 RaisePropertyChanged("BatchList");
                             });
+
+            _openBatch = new DelegateCommand<DataGrid>(
+                grid =>
+                {
+                    Batch btc = grid.SelectedItem as Batch;
+                    NavigationToken token = new NavigationToken(MaterialViewNames.BatchInfoView,
+                                                                btc);
+
+                    _eventAggregator.GetEvent<NavigationRequested>()
+                                    .Publish(token);
+                });
         }
 
         public IEnumerable<Batch> BatchList
@@ -72,7 +84,9 @@ namespace Materials.ViewModels
             get { return _confirm; }
         }
 
-
-
+        public DelegateCommand<DataGrid> OpenBatchCommand
+        {
+            get { return _openBatch; }
+        }
     }
 }

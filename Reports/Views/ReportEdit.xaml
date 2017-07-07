@@ -284,7 +284,14 @@
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Binding="{Binding Requirement}"
                                                         IsReadOnly="True"
-                                                        Width="*"/>
+                                                        Width="*">
+                                        <DataGridTextColumn.EditingElementStyle>
+                                            <Style TargetType="{x:Type TextBox}">
+                                                <Setter Property="MaxLength"
+                                                        Value="45"/>
+                                            </Style>
+                                        </DataGridTextColumn.EditingElementStyle>
+                                    </DataGridTextColumn>
                                 </DataGrid.Columns>
                             </DataGrid>
                         </DataTemplate>

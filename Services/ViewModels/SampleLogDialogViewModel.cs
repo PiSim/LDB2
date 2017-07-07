@@ -25,6 +25,14 @@ namespace Services.ViewModels
                                 _deleteLast;
         private DelegateCommand<Window> _end;
         private readonly Dictionary<string, ICollection<string>> _validationErrors = new Dictionary<string, ICollection<string>>();
+        private readonly Dictionary<string, int> _stockModifiers = new Dictionary<string, int>()
+                                                                {
+                                                                    {"A", 1 },
+                                                                    {"B", -1 },
+                                                                    {"F", -1 },
+                                                                    {"M", -1 },
+                                                                    {"S", -1 }
+                                                                };
         private EventAggregator _eventAggregator;
         private readonly List<Tuple<string,string>> _actions = new List<Tuple<string, string>>()
                                                                 {
@@ -61,6 +69,7 @@ namespace Services.ViewModels
                     {
                         _batchInstance.FirstSampleArrived = true;
                         _batchInstance.FirstSampleID = newLog.ID;
+                        _batchInstance.ArchiveStock += _stockModifiers[newLog.Code];
                         _batchInstance.Update();
                     }
 

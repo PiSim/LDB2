@@ -132,6 +132,7 @@
     <Compile Include="ViewModels\ExternalConstructionDetailViewModel.cs" />
     <Compile Include="ViewModels\ExternalConstructionMainViewModel.cs" />
     <Compile Include="ViewModels\MaterialInfoMainViewModel.cs" />
+    <Compile Include="ViewModels\SampleArchiveViewModel.cs" />
     <Compile Include="ViewModels\SampleLogViewModel.cs" />
     <Compile Include="Views\AspectDetail.xaml.cs">
       <DependentUpon>AspectDetail.xaml</DependentUpon>
@@ -180,6 +181,9 @@
     </Compile>
     <Compile Include="Views\MaterialsNavigationItem.xaml.cs">
       <DependentUpon>MaterialsNavigationItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SampleArchive.xaml.cs">
+      <DependentUpon>SampleArchive.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SampleLog.xaml.cs">
       <DependentUpon>SampleLog.xaml</DependentUpon>
@@ -289,6 +293,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MaterialsNavigationItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SampleArchive.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

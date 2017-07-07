@@ -162,9 +162,15 @@ namespace Reporting
                                     (new Paragraph
                                     (new Run((btc.FirstSample != null) ? btc.FirstSample.Date.ToShortDateString() : ""))));
 
-                currentRow.Cells.Add(new TableCell
-                                    (new Paragraph
-                                    (new Run((btc.BasicReport != null) ? btc.BasicReport.Number.ToString() : ""))));
+                if (btc.DoNotTest)
+                    currentRow.Cells.Add(new TableCell
+                                        (new Paragraph
+                                        (new Run("NO REPORT"))));
+
+                else
+                    currentRow.Cells.Add(new TableCell
+                                        (new Paragraph
+                                        (new Run((btc.BasicReport != null) ? btc.BasicReport.Number.ToString() : ""))));
 
                 if (isBlueRow)
                     currentRow.Background = Brushes.Azure;

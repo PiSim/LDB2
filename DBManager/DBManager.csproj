@@ -343,9 +343,6 @@
     <Compile Include="TrialArea.cs">
       <DependentUpon>LabDB.tt</DependentUpon>
     </Compile>
-    <Compile Include="TrialScope.cs">
-      <DependentUpon>LabDB.tt</DependentUpon>
-    </Compile>
     <Compile Include="User.cs">
       <DependentUpon>LabDB.tt</DependentUpon>
     </Compile>

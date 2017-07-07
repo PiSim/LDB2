@@ -104,6 +104,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AdminViewNames.cs" />
+    <Compile Include="Commands\CommandBinder.cs" />
     <Compile Include="Converters\CodeToActionConverter.cs" />
     <Compile Include="Events\BatchCreated.cs" />
     <Compile Include="Events\BatchCreationRequested.cs" />

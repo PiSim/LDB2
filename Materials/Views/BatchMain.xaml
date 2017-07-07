@@ -36,12 +36,16 @@
                     Margin="5"/>
         </StackPanel>
 
-        <Grid Grid.Column="0"
+        <TabControl Grid.Column="0"
               Grid.Row="1">
-
-            <ContentControl prism:RegionManager.RegionName="{Binding BatchStatusListRegionName}"
+            <TabItem Header="Lista Batch">
+                <ContentControl prism:RegionManager.RegionName="{Binding BatchStatusListRegionName}"
                             Margin="5"/>
-
-        </Grid>
+            </TabItem>
+            <TabItem Header="Archivio campioni">
+                <ContentControl prism:RegionManager.RegionName="{Binding SampleArchiveRegionName}"
+                                Margin="5"/>
+            </TabItem>
+        </TabControl>
     </Grid>
 </UserControl>

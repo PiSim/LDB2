@@ -237,6 +237,21 @@
                             </ListView.View>
                         </ListView>
                     </GroupBox>
+                    <Grid Grid.Column="0"
+                          Grid.Row="1">
+                        <StackPanel Orientation="Horizontal"
+                                    VerticalAlignment="Top"
+                                    >
+                            <TextBlock Margin="5">
+                                Non Effettuare Test su questa commessa: 
+                            </TextBlock>
+
+                            <CheckBox IsChecked="{Binding DoNotTest,
+                                                          Mode=TwoWay}"
+                                      IsEnabled="{Binding EditMode}"
+                                      Margin="5"/>
+                        </StackPanel>
+                    </Grid>
                 </Grid>
             </TabItem>
             <TabItem Header="Report">

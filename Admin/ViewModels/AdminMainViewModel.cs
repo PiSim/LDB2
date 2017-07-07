@@ -1,4 +1,5 @@
 ﻿using DBManager;
+using DBManager.EntityExtensions;
 using DBManager.Services;
 using Infrastructure;
 using Infrastructure.Events;
@@ -47,7 +48,34 @@ namespace Admin.ViewModels
 
             _runMethod = new DelegateCommand(
                 () =>
-                {} );
+                {
+                    using (DBEntities entities = new DBEntities())
+                    {
+                        IEnumerable<Batch> negativeStockBatches = entities.Batches.Where(btc => btc.ArchiveStock < 0)
+                                                                                   .ToList();
+
+                        foreach (Batch btc in negativeStockBatches)
+                        {
+                            DateTime tempDate = btc.Samples.First().Date;
+
+                            for (int ii = btc.ArchiveStock; ii < 0; ii++)
+                            {
+                                entities.Samples.Add(new Sample()
+                                {
+                                    Code = "A",
+                                    Batch = btc,
+                                    Date = tempDate,
+                                    personID = 1
+                                });
+
+                                btc.ArchiveStock += 1;
+                            }
+                            
+                        }
+
+                        entities.SaveChanges();
+                    }
+                } );
         }
 
         public string AdminUserMainRegionName

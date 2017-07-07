@@ -351,6 +351,7 @@ namespace Materials.ViewModels
                 RaisePropertyChanged("AspectCode");
                 RaisePropertyChanged("RecipeCode");
 
+                RaisePropertyChanged("DoNotTest");
                 RaisePropertyChanged("ExternalReportList");
                 RaisePropertyChanged("Samples");
                 RaisePropertyChanged("Notes");
@@ -374,6 +375,18 @@ namespace Materials.ViewModels
         public DelegateCommand DeleteBatchCommand
         {
             get { return _deleteBatch; }
+        }
+
+        public bool DoNotTest
+        {
+            get { return (_instance == null) ? false : _instance.DoNotTest; }
+            set
+            {
+                if (_instance == null)
+                    return;
+
+                _instance.DoNotTest = value;
+            }
         }
 
         public bool EditMode

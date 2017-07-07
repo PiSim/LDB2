@@ -19,8 +19,7 @@ namespace Tasks.ViewModels
     {
         private bool _editMode;
         private DBPrincipal _principal;
-        private DelegateCommand _addTest,
-                                _convertToReport,
+        private DelegateCommand _convertToReport,
                                 _save,
                                 _startEdit;
         private EventAggregator _eventAggregator;

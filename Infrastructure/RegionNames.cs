@@ -37,6 +37,7 @@ namespace Infrastructure
         public static string OrganizationEditRegion { get { return "OrganizationEditRegion"; } } 
         public static string ProjectBatchListRegion { get { return "ProjectBatchListRegion"; } }
         public static string ProjectReportListRegion { get { return "ProjectReportListRegion"; } }
+        public static string SampleArchiveRegion { get { return "SampleArchiveRegion"; } }
         public static string SpecificationIssueRegion { get { return "SpecificationIssueRegion"; } }
         public static string SpecificationIssueEditRegion { get { return "SpecificationIssueEditRegion"; } }
         public static string SpecificationReportListRegion { get { return "SpecificationReportListRegion"; } }

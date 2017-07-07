@@ -122,6 +122,11 @@ namespace Materials.ViewModels
             }
         }
 
+        public string SampleArchiveRegionName
+        {
+            get { return RegionNames.SampleArchiveRegion; }
+        }
+
         public Sample SelectedSampleArrival
         {
             get { return _selectedSampleArrival; }

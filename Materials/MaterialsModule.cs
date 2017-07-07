@@ -46,6 +46,7 @@ namespace Materials
             _container.RegisterType<ViewModels.ExternalConstructionDetailViewModel>();
             _container.RegisterType<ViewModels.ExternalConstructionMainViewModel>();
             _container.RegisterType<ViewModels.MaterialInfoMainViewModel>();
+            _container.RegisterType<ViewModels.SampleArchiveViewModel>();
             _container.RegisterType<ViewModels.SampleLogViewModel>();
 
             _container.RegisterType<MaterialServiceProvider>(new ContainerControlledLifetimeManager());
@@ -73,6 +74,8 @@ namespace Materials
                                                 typeof(Views.ExternalConstructionMain));
             _regionManager.RegisterViewWithRegion(RegionNames.ProjectBatchListRegion,
                                                 typeof(Views.BatchList));
+            _regionManager.RegisterViewWithRegion(RegionNames.SampleArchiveRegion,
+                                                typeof(Views.SampleArchive));
 
             _regionManager.RegisterViewWithRegion(RegionNames.MainNavigationRegion, 
                                                 typeof(Views.BatchesNavigationItem));

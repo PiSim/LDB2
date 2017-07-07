@@ -18,7 +18,7 @@ namespace Services.ViewModels
     {
         private Aspect _aspectInstance;
         private Batch _batchInstance;
-        private bool _projectPickEnabled;
+        private bool _doNotTest;
         private Colour _selectedColour;
         private DelegateCommand<Window> _cancel, _confirm;
         private readonly Dictionary<string, ICollection<string>> _validationErrors = new Dictionary<string, ICollection<string>>();
@@ -43,6 +43,7 @@ namespace Services.ViewModels
         {
             _colourList = MaterialService.GetColours();
             _constructionList = MaterialService.GetExternalConstructions();
+            _doNotTest = false;
             _projectList = ProjectService.GetProjects();
 
             _notes = "";
@@ -138,6 +139,7 @@ namespace Services.ViewModels
                     _batchInstance = new Batch()
                     {
                         BasicReportDone = false,
+                        DoNotTest = _doNotTest,
                         FirstSampleArrived = false,
                         MaterialID = tempMaterial.ID,
                         Notes = _notes,
@@ -298,6 +300,12 @@ namespace Services.ViewModels
             get { return _constructionList; }
         }
 
+        public bool DoNotTest
+        {
+            get { return _doNotTest; }
+            set { _doNotTest = value; }
+        }
+
         public string LineCode
         {
             get { return _lineCode; }
@@ -344,8 +352,6 @@ namespace Services.ViewModels
                 {
                     SelectedConstruction = _constructionList.FirstOrDefault(con => con.ID == _materialInstance.ExternalConstructionID);
                     SelectedProject = _projectList.FirstOrDefault(prj => prj.ID == _materialInstance.ProjectID);
-                    
-                    ProjectPickEnabled = (SelectedProject == null);
                 }
             }
         }
@@ -362,16 +368,6 @@ namespace Services.ViewModels
         public IEnumerable<Project> ProjectList
         {
             get { return ProjectService.GetProjects(); }
-        }
-        
-        public bool ProjectPickEnabled
-        {
-            get { return _projectPickEnabled; }
-            set
-            {
-                _projectPickEnabled = value;
-                RaisePropertyChanged("ProjectPickEnabled");
-            }
         }
 
         public string RecipeCode

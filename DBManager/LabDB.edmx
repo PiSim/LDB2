@@ -37,6 +37,8 @@
           <Property Name="basic_reportID" Type="int" />
           <Property Name="trial_scopeID" Type="int" />
           <Property Name="trial_scope_text" Type="varchar" MaxLength="45" />
+          <Property Name="archive_stock" Type="int" Nullable="false" />
+          <Property Name="do_not_test" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="calibration_files">
           <Key>
@@ -560,13 +562,6 @@
           <Property Name="requirementID" Type="int" />
         </EntityType>
         <EntityType Name="trial_areas">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="name" Type="varchar" MaxLength="45" Nullable="false" />
-        </EntityType>
-        <EntityType Name="trial_scopes">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
@@ -1782,18 +1777,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="trial_scope_to_batch">
-          <End Role="trial_scopes" Type="Self.trial_scopes" Multiplicity="0..1" />
-          <End Role="batches" Type="Self.batches" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="trial_scopes">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="batches">
-              <PropertyRef Name="trial_scopeID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="type_to_instrument">
           <End Role="instrument_types" Type="Self.instrument_types" Multiplicity="1" />
           <End Role="instruments" Type="Self.instruments" Multiplicity="*" />
@@ -1913,7 +1896,6 @@
           <EntitySet Name="tasks" EntityType="Self.tasks" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="tests" EntityType="Self.tests" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="trial_areas" EntityType="Self.trial_areas" Schema="labdb" store:Type="Tables" />
-          <EntitySet Name="trial_scopes" EntityType="Self.trial_scopes" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="user_role_mappings" EntityType="Self.user_role_mappings" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="user_roles" EntityType="Self.user_roles" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="users" EntityType="Self.users" Schema="labdb" store:Type="Tables" />
@@ -2289,10 +2271,6 @@
             <End Role="trial_areas" EntitySet="trial_areas" />
             <End Role="batches" EntitySet="batches" />
           </AssociationSet>
-          <AssociationSet Name="trial_scope_to_batch" Association="Self.trial_scope_to_batch">
-            <End Role="trial_scopes" EntitySet="trial_scopes" />
-            <End Role="batches" EntitySet="batches" />
-          </AssociationSet>
           <AssociationSet Name="type_to_instrument" Association="Self.type_to_instrument">
             <End Role="instrument_types" EntitySet="instrument_types" />
             <End Role="instruments" EntitySet="instruments" />
@@ -2360,9 +2338,9 @@
           <Property Name="BasicReportID" Type="Int32" />
           <NavigationProperty Name="BasicReport" Relationship="labdbModel.basic_report_to_batch" FromRole="Batch" ToRole="Report" />
           <NavigationProperty Name="FirstSample" Relationship="labdbModel.first_sample_to_batch" FromRole="Batch" ToRole="Sample" />
-          <Property Name="TrialScopeID" Type="Int32" />
           <Property Name="TrialScopeText" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="TrialScope" Relationship="labdbModel.trial_scope_to_batch" FromRole="Batch" ToRole="trial_scopes" />
+          <Property Name="ArchiveStock" Type="Int32" Nullable="false" />
+          <Property Name="DoNotTest" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="Colour">
           <Key>
@@ -3531,11 +3509,6 @@
             <End Role="Sample" EntitySet="Samples" />
             <End Role="Batch" EntitySet="Batches" />
           </AssociationSet>
-          <EntitySet Name="TrialScopes" EntityType="labdbModel.TrialScope" />
-          <AssociationSet Name="trial_scope_to_batch" Association="labdbModel.trial_scope_to_batch">
-            <End Role="trial_scopes" EntitySet="TrialScopes" />
-            <End Role="Batch" EntitySet="Batches" />
-          </AssociationSet>
           <EntitySet Name="InstrumentPropertyDatas" EntityType="labdbModel.InstrumentPropertyData" />
           <EntitySet Name="InstrumentUtilizationAreas" EntityType="labdbModel.InstrumentUtilizationArea" />
           <EntitySet Name="MeasurableProperties1" EntityType="labdbModel.MeasurableProperty" />
@@ -4562,26 +4535,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="TrialScope">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Batches" Relationship="labdbModel.trial_scope_to_batch" FromRole="trial_scopes" ToRole="Batch" />
-        </EntityType>
-        <Association Name="trial_scope_to_batch">
-          <End Type="labdbModel.TrialScope" Role="trial_scopes" Multiplicity="0..1" />
-          <End Type="labdbModel.Batch" Role="Batch" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="trial_scopes">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="Batch">
-              <PropertyRef Name="TrialScopeID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityType Name="InstrumentPropertyData">
           <Key>
             <PropertyRef Name="ID" />
@@ -4699,8 +4652,9 @@
           <EntitySetMapping Name="Batches">
             <EntityTypeMapping TypeName="labdbModel.Batch">
               <MappingFragment StoreEntitySet="batches">
+                <ScalarProperty Name="DoNotTest" ColumnName="do_not_test" />
+                <ScalarProperty Name="ArchiveStock" ColumnName="archive_stock" />
                 <ScalarProperty Name="TrialScopeText" ColumnName="trial_scope_text" />
-                <ScalarProperty Name="TrialScopeID" ColumnName="trial_scopeID" />
                 <ScalarProperty Name="BasicReportID" ColumnName="basic_reportID" />
                 <ScalarProperty Name="BasicReportDone" ColumnName="basic_report_done" />
                 <ScalarProperty Name="FirstSampleID" ColumnName="first_sampleID" />
@@ -5277,14 +5231,6 @@
           <EntitySetMapping Name="TrialAreas">
             <EntityTypeMapping TypeName="labdbModel.TrialArea">
               <MappingFragment StoreEntitySet="trial_areas">
-                <ScalarProperty Name="Name" ColumnName="name" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="TrialScopes">
-            <EntityTypeMapping TypeName="labdbModel.TrialScope">
-              <MappingFragment StoreEntitySet="trial_scopes">
                 <ScalarProperty Name="Name" ColumnName="name" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
