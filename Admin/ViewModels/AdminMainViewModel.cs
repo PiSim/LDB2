@@ -107,6 +107,11 @@ namespace Admin.ViewModels
             get { return _newUserRole; }
         }
 
+        public string OrganizationRoleManagementRegionName
+        {
+            get { return RegionNames.OrganizationRoleManagementRegion; }
+        }
+
         public IEnumerable<PersonRole> PersonRoleList
         {
             get { return PeopleService.GetPersonRoles(); }

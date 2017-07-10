@@ -25,7 +25,7 @@ namespace DBManager
         public Nullable<int> OemID { get; set; }
         public Nullable<int> DefaultSpecVersionID { get; set; }
     
-        public virtual Organization Organization { get; set; }
+        public virtual Organization Oem { get; set; }
         public virtual SpecificationVersion DefaultSpecVersion { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Material> Materials { get; set; }

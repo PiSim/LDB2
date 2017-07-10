@@ -13,39 +13,38 @@
             <ColumnDefinition MaxWidth="200"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
 
-        <GroupBox Header="Organizzazioni"
-                  Grid.Column="0">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    Grid.Row="0">
 
-                <Button Content="Nuova"
-                        Command="{Binding CreateNewOrganizationCommand}"
-                        Grid.Column="0"
-                        Grid.Row="0"
-                        Margin="5"
-                        HorizontalAlignment="Left"
-                        Width="Auto"/>
+            <Button Content="Nuova"
+                    Command="{Binding CreateNewOrganizationCommand}"
+                    Margin="5"/>
+            <Button Content="Crea Nuovo Ruolo"
+                    Command="{Binding CreateNewOrganizationRoleCommand}"
+                    Margin="5"/>
+        </StackPanel>
 
-                <ListView ItemsSource="{Binding OrganizationList}"
-                          SelectedItem="{Binding SelectedOrganization, Mode=TwoWay}"
-                          Grid.Row="1">
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn Header="Nome"
-                                            DisplayMemberBinding="{Binding Name}"/>
-                        </GridView>
-                    </ListView.View>        
-                </ListView>
-            </Grid>
-
-        </GroupBox>
+        <ListView ItemsSource="{Binding OrganizationList}"
+                    SelectedItem="{Binding SelectedOrganization, Mode=TwoWay}"
+                    Grid.Row="1">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Nome"
+                                    DisplayMemberBinding="{Binding Name}"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
 
         <ContentControl prism:RegionManager.RegionName="{Binding OrganizationEditRegionName}"
-                        Grid.Column="1"/>
+                        Grid.Column="1"
+                        Grid.Row="1"/>
 
     </Grid>
 </UserControl>

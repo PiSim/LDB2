@@ -9,6 +9,7 @@ namespace DBManager
     public class OrganizationRoleNames
     {
         public static string CalibrationLab { get { return "CAL_LAB"; } }
+        public static string Maintenance { get { return "MAINT"; } }
         public static string Manufacturer { get { return "MANUF"; } }
         public static string OEM { get { return "OEM"; } }
         public static string Supplier { get { return "SUPPL"; } }

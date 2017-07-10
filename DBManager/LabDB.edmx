@@ -2358,7 +2358,7 @@
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="OemID" Type="Int32" Nullable="true" a:SetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
-          <NavigationProperty Name="Organization" Relationship="Self.oemID" FromRole="external_constructions" ToRole="organizations" />
+          <NavigationProperty Name="Oem" Relationship="Self.oemID" FromRole="external_constructions" ToRole="organizations" />
           <Property Name="DefaultSpecVersionID" Type="Int32" Nullable="true" />
           <NavigationProperty Name="DefaultSpecVersion" Relationship="labdbModel.default_spec_version_to_ex_construction" FromRole="ExternalConstruction" ToRole="SpecificationVersion" />
           <NavigationProperty Name="Materials" Relationship="labdbModel.external_construction_to_material" FromRole="ExternalConstruction" ToRole="Material" />

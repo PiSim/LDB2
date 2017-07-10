@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DBManager;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Migrations;
@@ -10,8 +11,6 @@ namespace DBManager.Services
 {
     public static class OrganizationService
     {
-        #region Operations for Organization entities
-        
         public static IEnumerable<Organization> GetOrganizations(string roleName = null)
         {
             // Returns all Organization entities, filtering by role if one is provided
@@ -30,6 +29,25 @@ namespace DBManager.Services
             }
         }
 
-        #endregion
+        public static void CreateMappingsForNewRole(OrganizationRole newRole)
+        {
+            using (DBEntities entities = new DBEntities())
+            {
+                IEnumerable<Organization> _orgList = entities.Organizations.ToList();
+
+                foreach (Organization org in _orgList)
+                {
+                    OrganizationRoleMapping tempMap = new OrganizationRoleMapping()
+                    {
+                        IsSelected = false,
+                        roleID = newRole.ID
+                    };
+
+                    org.RoleMapping.Add(tempMap);
+                }
+
+                entities.SaveChanges();
+            }
+        }
     }
 }

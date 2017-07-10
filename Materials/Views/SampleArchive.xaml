@@ -28,6 +28,8 @@
                                     Binding="{Binding Material.Recipe.Code}"/>
                 <DataGridTextColumn Header="Colore"
                                     Binding="{Binding Material.Recipe.Colour.Name}"/>
+                <DataGridTextColumn Header="OEM"
+                                    Binding="{Binding Material.ExternalConstruction.Oem.Name}"/>
                 <DataGridTextColumn Header="Construction"
                                     Binding="{Binding Material.ExternalConstruction.Name}"/>
                 <DataGridTextColumn Header=""

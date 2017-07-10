@@ -73,7 +73,9 @@
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Header="Scadenza"
-                                        DisplayMemberBinding="{Binding CalibrationDueDate, StringFormat=d}"/>
+                                        DisplayMemberBinding="{Binding CalibrationDueDate, 
+                                                                       StringFormat=d,
+                                                                       ConverterCulture=it-IT}"/>
                         <GridViewColumn Header="Codice"
                                         DisplayMemberBinding="{Binding Code}"/>
                         <GridViewColumn Header="Tipo"

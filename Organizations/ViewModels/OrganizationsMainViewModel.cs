@@ -16,7 +16,8 @@ namespace Organizations.ViewModels
 {
     public class OrganizationsMainViewModel : BindableBase
     {
-        private DelegateCommand _createNewOrganization, 
+        private DelegateCommand _createNewOrganization,
+                                _createNewOrganizationRole,
                                 _deleteOrganization;
         private EventAggregator _eventAggregator;
         private Organization _selectedOrganization;
@@ -35,11 +36,22 @@ namespace Organizations.ViewModels
                     _eventAggregator.GetEvent<OrganizationCreationRequested>()
                                     .Publish();
                 });
+            _createNewOrganizationRole = new DelegateCommand(
+                () =>
+                {
+                    _eventAggregator.GetEvent<OrganizationRoleCreationRequested>()
+                                    .Publish();
+                });
         }
 
         public DelegateCommand CreateNewOrganizationCommand
         {
             get { return _createNewOrganization; }
+        }
+
+        public DelegateCommand CreateNewOrganizationRoleCommand
+        {
+            get { return _createNewOrganizationRole; }
         }
 
         public Organization SelectedOrganization

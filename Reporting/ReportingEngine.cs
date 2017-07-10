@@ -59,7 +59,7 @@ namespace Reporting
 
             Table batchTable = batchReport.BatchTable;
 
-            for (int ii = 0; ii < 11; ii++)
+            for (int ii = 0; ii < 12; ii++)
                 batchTable.Columns.Add(new TableColumn());
 
             TableRow currentRow;
@@ -91,6 +91,10 @@ namespace Reporting
             currentRow.Cells.Add(new TableCell
                                 (new Paragraph
                                 (new Run("Colore"))));
+
+            currentRow.Cells.Add(new TableCell
+                                (new Paragraph
+                                (new Run("OEM"))));
 
             currentRow.Cells.Add(new TableCell
                                 (new Paragraph
@@ -145,6 +149,10 @@ namespace Reporting
                 currentRow.Cells.Add(new TableCell
                                     (new Paragraph
                                     (new Run((btc.Material != null && btc.Material.Recipe.Colour != null) ? btc.Material.Recipe.Colour.Name : ""))));
+                
+                currentRow.Cells.Add(new TableCell
+                                    (new Paragraph
+                                    (new Run((btc.Material != null && btc.Material.ExternalConstruction != null) ? btc.Material.ExternalConstruction.Oem?.Name : ""))));
 
                 currentRow.Cells.Add(new TableCell
                                     (new Paragraph

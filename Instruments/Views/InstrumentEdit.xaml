@@ -187,7 +187,7 @@
                     <StackPanel Orientation="Vertical"
                                 Grid.Column="1">
                         <Button Content="Nuova"
-                                Command="{Binding AddCalibrationCommand}"
+                                Command="{Binding AddMaintenanceEventCommand}"
                                 Margin="5"/>
                     </StackPanel>
                 </Grid>

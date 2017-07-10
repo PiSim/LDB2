@@ -84,6 +84,7 @@ namespace Materials
                     curName = "Nuova Construction " + nameCounter++;
             }
             newEntry.Name = curName;
+            newEntry.OemID = 1;
 
             newEntry.Create();
 

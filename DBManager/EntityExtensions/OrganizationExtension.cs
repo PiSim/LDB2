@@ -10,6 +10,17 @@ namespace DBManager.EntityExtensions
 {
     public static class OrganizationExtension
     {
+        public static void Create(this Organization entry)
+        {
+            //Inserts a new Organization entry
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Organizations.Add(entry);
+                entities.SaveChanges();
+            }
+        }
+
         public static IEnumerable<OrganizationRoleMapping> GetRoles(this Organization entry)
         {
             // Returns the RoleMappings for an organization entry

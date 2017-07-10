@@ -90,6 +90,23 @@ namespace DBManager.EntityExtensions
             }
         }
 
+        public static IEnumerable<InstrumentMaintenanceEvent> GetMaintenanceEvents(this Instrument entry)
+        {
+            // Returns all InstrumentMaintenanceEvents for an Instrument
+
+            if (entry == null)
+                return null;
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.InstrumentMaintenanceEvents.Include(ime => ime.Organization)
+                                                            .Where(ime => ime.InstrumentID == entry.ID)
+                                                            .ToList();
+            }
+        }
+
         public static IEnumerable<Method> GetUnassociatedMethods(this Instrument entry)
         {
             // Returns all the methods not assigned to the instrument entry

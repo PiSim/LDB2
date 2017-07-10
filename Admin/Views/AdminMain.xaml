@@ -75,7 +75,11 @@
                     </Grid>
                 </Grid>
             </TabItem>
+
+            <TabItem Header="Gestione Enti">
+                <ContentControl prism:RegionManager.RegionName="{Binding OrganizationRoleManagementRegionName}"/>
+            </TabItem>
         </TabControl>
-        
+
     </Grid>
 </UserControl>

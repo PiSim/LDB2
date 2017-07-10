@@ -2,6 +2,7 @@
 using DBManager;
 using DBManager.EntityExtensions;
 using DBManager.Services;
+using Infrastructure.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -69,6 +70,49 @@ namespace Services
 
             else
                 return null;
+        }
+
+        public static Organization CreateNewOrganization()
+        {
+            StringInputDialog creationDialog = new StringInputDialog();
+            creationDialog.Title = "Crea nuovo Ente";
+
+            if (creationDialog.ShowDialog() == true)
+            {
+                Organization output = new Organization();
+                output.Category = "";
+                output.Name = creationDialog.InputString;
+                foreach (OrganizationRole orr in DataService.GetOrganizationRoles())
+                {
+                    OrganizationRoleMapping tempORM = new OrganizationRoleMapping();
+                    tempORM.IsSelected = false;
+                    tempORM.Role = orr;
+
+                    output.RoleMapping.Add(tempORM);
+                }
+
+                output.Create();
+
+                return output;
+            }
+            else return null;
+        }
+
+        public static void CreateNewOrganizationRole()
+        {
+            StringInputDialog creationDialog = new StringInputDialog();
+            creationDialog.Title = "Crea nuovo Ruolo Organizzazione";
+
+            if (creationDialog.ShowDialog() == true)
+            {
+                OrganizationRole output = new OrganizationRole();
+                output.Description = "";
+                output.Name = creationDialog.InputString;
+                output.Create();
+
+                OrganizationService.CreateMappingsForNewRole(output);
+            }
+
         }
 
         public static CalibrationReport RegisterNewCalibration(Instrument target)

@@ -16,6 +16,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Collections;
+using System.Windows.Forms;
 
 namespace Services.ViewModels
 {   
@@ -49,9 +50,24 @@ namespace Services.ViewModels
 
             _confirm = new DelegateCommand<Window>(
                 parent => {
+
+                    if (_selectedBatch.DoNotTest)
+                    {
+                        string confirmationMessage = "Nel batch " + _selectedBatch.Number + " è impostato il flag \"Non effettuare test su questo batch\".\nContinuando il flag verrà rimosso, continuare?";
+                        MessageBoxResult confirmationResult = System.Windows.MessageBox.Show(confirmationMessage,
+                                                                                            "Conferma",
+                                                                                            MessageBoxButton.YesNo);
+
+                        if (confirmationResult != MessageBoxResult.Yes)
+                            return;
+
+                        _selectedBatch.DoNotTest = false;
+                        _selectedBatch.Update();
+                    }                                       
+
                     _reportInstance = new Report();
                     _reportInstance.AuthorID = _author.ID;
-                    _reportInstance.BatchID = CommonProcedures.GetBatch(_batchNumber).ID;
+                    _reportInstance.BatchID = _selectedBatch.ID;
                     _reportInstance.Category = "TR";
                     if (_selectedControlPlan != null)
                         _reportInstance.Description = _selectedControlPlan.Name;

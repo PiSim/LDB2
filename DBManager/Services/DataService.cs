@@ -68,6 +68,19 @@ namespace DBManager
             }
         }
 
+        public static IEnumerable<OrganizationRole> GetOrganizationRoles()
+        {
+            //Returns all organization roles
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.OrganizationRoles
+                                .ToList();
+            }
+        }
+
         public static IEnumerable<InstrumentType> GetInstrumentTypes()
         {
             using (var entities = new DBEntities())

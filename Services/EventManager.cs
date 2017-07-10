@@ -35,7 +35,8 @@ namespace Services
                                 Views.MaintenanceEventCreationDialog newEventDialog = new Views.MaintenanceEventCreationDialog();
                                 if (newEventDialog.ShowDialog() == true)
                                 {
-
+                                    _eventAggregator.GetEvent<MaintenanceEventCreated>()
+                                                    .Publish(newEventDialog.InstrumentEventInstance);
                                 }
                             });
             
@@ -49,6 +50,22 @@ namespace Services
                                     _eventAggregator.GetEvent<CalibrationIssued>()
                                                     .Publish(tempReport);
                             });
+
+            _eventAggregator.GetEvent<OrganizationCreationRequested>()
+                        .Subscribe(() =>
+                        {
+                            if (ServiceProvider.CreateNewOrganization() != null)
+                            {
+                                _eventAggregator.GetEvent<OrganizationListRefreshRequested>()
+                                            .Publish();
+                            }
+                        });
+
+            _eventAggregator.GetEvent<OrganizationRoleCreationRequested>()
+                        .Subscribe(() =>
+                        {
+                            ServiceProvider.CreateNewOrganizationRole();
+                        });
 
             _eventAggregator.GetEvent<PersonCreationRequested>()
                             .Subscribe(

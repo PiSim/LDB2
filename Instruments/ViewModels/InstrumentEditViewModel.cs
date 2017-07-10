@@ -92,6 +92,19 @@ namespace Instruments.ViewModels
                     EditMode = true;
                 },
                 () => IsInstrumentAdmin && !_editMode);
+
+            #region Event Subscriptions
+
+            _eventAggregator.GetEvent<MaintenanceEventCreated>()
+                            .Subscribe(
+                            maint =>
+                            {
+                                if (maint.InstrumentID == _instance?.ID)
+                                    RaisePropertyChanged("MaintenanceEventList");
+                            });
+
+            #endregion
+
         }
 
         public DelegateCommand AddCalibrationCommand
@@ -99,7 +112,7 @@ namespace Instruments.ViewModels
             get { return _addCalibration; }
         }
 
-        public DelegateCommand AddMaintenanceEvent
+        public DelegateCommand AddMaintenanceEventCommand
         {
             get { return _addMaintenanceEvent; }
         }
@@ -322,6 +335,11 @@ namespace Instruments.ViewModels
         private bool IsInstrumentAdmin
         {
             get { return _principal.IsInRole(UserRoleNames.InstrumentAdmin); }
+        }
+
+        public IEnumerable<InstrumentMaintenanceEvent> MaintenanceEventList
+        {
+            get { return _instance.GetMaintenanceEvents(); }
         }
 
         public IEnumerable<Organization> ManufacturerList

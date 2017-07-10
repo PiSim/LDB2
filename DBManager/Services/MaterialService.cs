@@ -24,7 +24,7 @@ namespace DBManager.Services
                                         .Include(btc => btc.Material.MaterialLine)
                                         .Include(btc => btc.Material.MaterialType)
                                         .Include(btc => btc.Material.Recipe.Colour)
-                                        .Include(btc => btc.Material.ExternalConstruction.Organization)
+                                        .Include(btc => btc.Material.ExternalConstruction.Oem)
                                         .Include(btc => btc.TrialArea)
                                         .Where(btc => btc.ArchiveStock != 0)
                                         .OrderByDescending(btc => btc.Number)
@@ -43,7 +43,7 @@ namespace DBManager.Services
                 return entities.Batches.Include(btc => btc.BasicReport)
                                         .Include(btc => btc.FirstSample)
                                         .Include(btc => btc.Material.Aspect)
-                                        .Include(btc => btc.Material.ExternalConstruction)
+                                        .Include(btc => btc.Material.ExternalConstruction.Oem)
                                         .Include(btc => btc.Material.MaterialLine)
                                         .Include(btc => btc.Material.MaterialType)
                                         .Include(btc => btc.Material.Recipe.Colour)
@@ -65,7 +65,7 @@ namespace DBManager.Services
                 return entities.Batches.Include(btc => btc.BasicReport)
                                         .Include(btc => btc.FirstSample)
                                         .Include(btc => btc.Material.Aspect)
-                                        .Include(btc => btc.Material.ExternalConstruction)
+                                        .Include(btc => btc.Material.ExternalConstruction.Oem)
                                         .Include(btc => btc.Material.MaterialLine)
                                         .Include(btc => btc.Material.MaterialType)
                                         .Include(btc => btc.Material.Recipe.Colour)
@@ -118,6 +118,22 @@ namespace DBManager.Services
                                         .OrderByDescending(smp => smp.ID)
                                         .Take(number)
                                         .ToList();
+            }
+        }
+
+        public static IEnumerable<Organization> GetMaintenanceOrganizations()
+        {
+            // Returns all organizations with the MAINT role
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+                OrganizationRole tempRole = entities.OrganizationRoles.First(rol => rol.Name == OrganizationRoleNames.Maintenance);
+
+                return entities.Organizations.Where(org => org.RoleMapping
+                                            .FirstOrDefault(orm => orm.roleID == tempRole.ID)
+                                            .IsSelected == true)
+                                            .ToList();
             }
         }
 
@@ -288,7 +304,9 @@ namespace DBManager.Services
             {
                 entities.Configuration.LazyLoadingEnabled = false;
 
-                return entities.ExternalConstructions.Include(exc => exc.Organization)
+                return entities.ExternalConstructions.Include(exc => exc.Oem)
+                                                    .OrderBy(exc => exc.Oem.Name)
+                                                    .ThenBy(exc => exc.Name)
                                                     .ToList();
             }
         }
@@ -325,14 +343,14 @@ namespace DBManager.Services
                 ExternalConstruction tempEntry = entities.ExternalConstructions
                                                         .Include(extc => extc.DefaultSpecVersion.Specification)
                                                         .Include(extc => extc.DefaultSpecVersion.Specification.Standard)
-                                                        .Include(extc => extc.Organization)
+                                                        .Include(extc => extc.Oem)
                                                         .First(extc => extc.ID == entryID);
                 
                 entry.DefaultSpecVersion = tempEntry.DefaultSpecVersion;
                 entry.DefaultSpecVersionID = tempEntry.DefaultSpecVersionID;
                 entry.Name = tempEntry.Name;
                 entry.OemID = tempEntry.OemID;
-                entry.Organization = tempEntry.Organization;
+                entry.Oem = tempEntry.Oem;
             }
         }
 

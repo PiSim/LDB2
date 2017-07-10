@@ -1,4 +1,5 @@
 ﻿using DBManager;
+using DBManager.EntityExtensions;
 using DBManager.Services;
 using Infrastructure;
 using Prism.Commands;
@@ -17,6 +18,7 @@ namespace Services.ViewModels
         private DateTime _date;
         private DBPrincipal _principal;
         private DelegateCommand<Window> _cancel, _confirm;
+        private IEnumerable<Organization> _organizationList;
         private Instrument _instrumentInstance;
         private InstrumentMaintenanceEvent _eventInstance;
         private Organization _selectedOrganization;
@@ -27,6 +29,8 @@ namespace Services.ViewModels
         {
             _date = DateTime.Now.Date;
             _principal = principal;
+            _description = "";
+            _organizationList = MaterialService.GetMaintenanceOrganizations();
 
             _cancel = new DelegateCommand<Window>(
                 parentDialog =>
@@ -42,6 +46,8 @@ namespace Services.ViewModels
                     _eventInstance.Description = _description;
                     _eventInstance.InstrumentID = _instrumentInstance.ID;
                     _eventInstance.OrganizationID = _selectedOrganization.ID;
+
+                    _eventInstance.Create();
 
                     parentDialog.DialogResult = true;
                 });
@@ -87,6 +93,11 @@ namespace Services.ViewModels
             {
                 _instrumentInstance = value;
             }
+        }
+
+        public IEnumerable<Organization> OrganizationList
+        {
+            get { return _organizationList; }
         }
 
         public IEnumerable<Person> TechList

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DBManager;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,6 +23,11 @@ namespace Services.Views
         public MaintenanceEventCreationDialog()
         {
             InitializeComponent();
+        }
+
+        public InstrumentMaintenanceEvent InstrumentEventInstance
+        {
+            get { return (DataContext as ViewModels.MaintenanceEventCreationDialogViewModel).EventInstance; }
         }
     }
 }
