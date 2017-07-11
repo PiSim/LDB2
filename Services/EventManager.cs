@@ -33,6 +33,8 @@ namespace Services
                             .Subscribe(instrumentEntry =>
                             {
                                 Views.MaintenanceEventCreationDialog newEventDialog = new Views.MaintenanceEventCreationDialog();
+                                newEventDialog.InstrumentInstance = instrumentEntry;
+
                                 if (newEventDialog.ShowDialog() == true)
                                 {
                                     _eventAggregator.GetEvent<MaintenanceEventCreated>()

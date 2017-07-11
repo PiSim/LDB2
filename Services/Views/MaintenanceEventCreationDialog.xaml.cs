@@ -29,5 +29,11 @@ namespace Services.Views
         {
             get { return (DataContext as ViewModels.MaintenanceEventCreationDialogViewModel).EventInstance; }
         }
+
+        public Instrument InstrumentInstance
+        {
+            get { return (DataContext as ViewModels.MaintenanceEventCreationDialogViewModel).InstrumentInstance; }
+            set { (DataContext as ViewModels.MaintenanceEventCreationDialogViewModel).InstrumentInstance = value; }
+        }
     }
 }

@@ -28,8 +28,8 @@
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="number" Type="varchar" MaxLength="10" Nullable="false" />
-          <Property Name="materialID" Type="int" />
-          <Property Name="notes" Type="varchar" MaxLength="45" Nullable="false" />
+          <Property Name="materialID" Type="int" Nullable="false" />
+          <Property Name="notes" Type="varchar" MaxLength="100" Nullable="false" />
           <Property Name="trial_areaID" Type="int" />
           <Property Name="first_sample_arrived" Type="bit" Nullable="false" />
           <Property Name="first_sampleID" Type="int" />
@@ -164,7 +164,7 @@
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="date" Type="date" Nullable="false" />
-          <Property Name="description" Type="varchar" MaxLength="45" Nullable="false" />
+          <Property Name="description" Type="varchar" MaxLength="200" Nullable="false" />
           <Property Name="organizationID" Type="int" Nullable="false" />
           <Property Name="instrumentID" Type="int" Nullable="false" />
           <Property Name="techID" Type="int" />
@@ -646,7 +646,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="batch_by_material">
-          <End Role="materials" Type="Self.materials" Multiplicity="0..1" />
+          <End Role="materials" Type="Self.materials" Multiplicity="1" />
           <End Role="batches" Type="Self.batches" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="materials">
@@ -2322,7 +2322,7 @@
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Number" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="MaterialID" Type="Int32" a:SetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
-          <Property Name="Notes" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" DefaultValue="" />
+          <Property Name="Notes" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" DefaultValue="" />
           <NavigationProperty Name="BatchFiles" Relationship="Self.batch1" FromRole="batches" ToRole="batch_files" />
           <NavigationProperty Name="Material" Relationship="Self.batch_by_material" FromRole="batches" ToRole="materials" />
           <NavigationProperty Name="Masters" Relationship="Self.batch_to_master" FromRole="batches" ToRole="masters" />
@@ -4065,7 +4065,7 @@
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Date" Type="DateTime" Nullable="false" />
-          <Property Name="Description" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
           <Property Name="OrganizationID" Type="Int32" Nullable="false" />
           <Property Name="InstrumentID" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Instrument" Relationship="labdbModel.instrument_to_maintenance_event" FromRole="instrument_maintenance_events" ToRole="Instrument" />

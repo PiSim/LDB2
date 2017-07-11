@@ -130,10 +130,11 @@ namespace DBManager.Services
                 entities.Configuration.LazyLoadingEnabled = false;
                 OrganizationRole tempRole = entities.OrganizationRoles.First(rol => rol.Name == OrganizationRoleNames.Maintenance);
 
-                return entities.Organizations.Where(org => org.RoleMapping
-                                            .FirstOrDefault(orm => orm.roleID == tempRole.ID)
-                                            .IsSelected == true)
-                                            .ToList();
+                return entities.OrganizationRoleMappings.Include(orm => orm.Organization)
+                                                        .Where(orm => orm.roleID == tempRole.ID
+                                                                    && orm.IsSelected)
+                                                        .Select(orm => orm.Organization)
+                                                        .ToList();
             }
         }
 

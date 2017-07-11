@@ -32,7 +32,7 @@
                                     Binding="{Binding Material.ExternalConstruction.Oem.Name}"/>
                 <DataGridTextColumn Header="Construction"
                                     Binding="{Binding Material.ExternalConstruction.Name}"/>
-                <DataGridTextColumn Header=""
+                <DataGridTextColumn Header="Tipo prova"
                                     Binding="{Binding TrialArea.Name}"/>
                 <DataGridCheckBoxColumn Header="Ricevuto"
                                         Binding="{Binding FirstSampleArrived}"/>

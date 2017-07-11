@@ -73,7 +73,10 @@ namespace Materials.ViewModels
             _cancelEdit = new DelegateCommand(
                 () =>
                 {
-                    BatchInstance = MaterialService.GetBatch(_instance.ID);
+                    if (_instance == null)
+                        BatchInstance = null;
+                    else
+                        BatchInstance = MaterialService.GetBatch(_instance.ID);
                 },
                 () => EditMode);
 
