@@ -86,7 +86,7 @@ namespace Services
                 {
                     OrganizationRoleMapping tempORM = new OrganizationRoleMapping();
                     tempORM.IsSelected = false;
-                    tempORM.Role = orr;
+                    tempORM.RoleID = orr.ID;
 
                     output.RoleMapping.Add(tempORM);
                 }

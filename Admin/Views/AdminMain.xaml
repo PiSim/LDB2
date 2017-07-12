@@ -31,10 +31,10 @@
                     </Grid.RowDefinitions>
 
                     <TextBox Text="{Binding Name, Mode=TwoWay}"
-                 Grid.Column="0"
-                 Grid.Row="1"
-                 Margin="5"
-                 Width="100"/>
+                             Grid.Column="0"
+                             Grid.Row="1"
+                             Margin="5"
+                             Width="100"/>  
 
                     <Button Content="Nuovo Ruolo Utente"
                         Command="{Binding NewUserRoleCommand}"
@@ -78,6 +78,10 @@
 
             <TabItem Header="Gestione Enti">
                 <ContentControl prism:RegionManager.RegionName="{Binding OrganizationRoleManagementRegionName}"/>
+            </TabItem>
+
+            <TabItem Header="Grandezze Misurabili">
+                <ContentControl prism:RegionManager.RegionName="{Binding MeasurableQuantityManagementRegionName}"/>
             </TabItem>
         </TabControl>
 

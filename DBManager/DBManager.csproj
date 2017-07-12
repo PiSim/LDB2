@@ -175,7 +175,7 @@
     <Compile Include="EntityExtensions\UserExtension.cs" />
     <Compile Include="EntityExtensions\UserRoleExtension.cs" />
     <Compile Include="EntityExtensions\UserRoleMappingExtension.cs" />
-    <Compile Include="InstrumentPropertyData.cs">
+    <Compile Include="InstrumentMeasurableProperty.cs">
       <DependentUpon>LabDB.tt</DependentUpon>
     </Compile>
     <Compile Include="InstrumentUtilizationArea.cs">
@@ -184,7 +184,7 @@
     <Compile Include="MaterialLine.cs">
       <DependentUpon>LabDB.tt</DependentUpon>
     </Compile>
-    <Compile Include="MeasurableProperty.cs">
+    <Compile Include="MeasurableQuantity.cs">
       <DependentUpon>LabDB.tt</DependentUpon>
     </Compile>
     <Compile Include="MeasureUnit.cs">

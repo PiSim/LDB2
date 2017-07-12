@@ -118,6 +118,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="ViewModels\AdminMainViewModel.cs" />
+    <Compile Include="ViewModels\MeasurableQuantityMainViewModel.cs" />
     <Compile Include="ViewModels\NewUserDialogViewModel.cs" />
     <Compile Include="ViewModels\UserEditViewModel.cs" />
     <Compile Include="ViewModels\UserMainViewModel.cs" />
@@ -126,6 +127,9 @@
     </Compile>
     <Compile Include="Views\AdminNavigationItem.xaml.cs">
       <DependentUpon>AdminNavigationItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MeasurableQuantityMain.xaml.cs">
+      <DependentUpon>MeasurableQuantityMain.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\NewUserDialog.xaml.cs">
       <DependentUpon>NewUserDialog.xaml</DependentUpon>
@@ -177,6 +181,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\AdminNavigationItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MeasurableQuantityMain.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

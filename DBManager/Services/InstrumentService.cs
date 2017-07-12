@@ -10,7 +10,7 @@ namespace DBManager.Services
     public static class InstrumentService
     {
         #region Operations for Instrument entities
-
+        
         public static IEnumerable<Instrument> GetCalibrationCalendar()
         {
             // Returns a list of the instruments under control, ordered by due calibration date
@@ -37,6 +37,18 @@ namespace DBManager.Services
                                             .Include(inst => inst.Manufacturer)
                                             .Where(inst => true)
                                             .ToList();
+            }
+        }
+
+        public static IEnumerable<MeasurableQuantity> GetMeasurableQuantities()
+        {
+            // Returns all Measurable Quantities
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.MeasurableQuantities.ToList();
             }
         }
 

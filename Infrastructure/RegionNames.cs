@@ -29,6 +29,7 @@ namespace Infrastructure
         public static string MaterialInfoColourRegion { get { return "MaterialInfoColourRegion"; } }
         public static string MaterialInfoMaterialRegion { get { return "MaterialInfoMaterialRegion"; } }
         public static string MaterialInfoExternalCostructionRegion { get { return "MaterialInfoExternalCostructionRegion"; } }
+        public static string MeasurableQuantityManagementRegion { get { return "MeasurableQuantityManagementRegion"; } }
         public static string MethodEditRegion { get { return "MethodEditRegion"; } }
         public static string MethodIssueRegion { get { return "MethodIssueRegion"; } }
         public static string MethodIssueEditRegion { get { return "MethodIssueEditRegion"; } }

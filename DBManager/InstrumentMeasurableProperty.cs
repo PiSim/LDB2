@@ -12,21 +12,21 @@ namespace DBManager
     using System;
     using System.Collections.Generic;
     
-    public partial class MeasureUnit
+    public partial class InstrumentMeasurableProperty
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public MeasureUnit()
-        {
-            this.InstrumentMeasurableProperties = new HashSet<InstrumentMeasurableProperty>();
-        }
-    
         public int ID { get; set; }
-        public string Symbol { get; set; }
-        public string Name { get; set; }
+        public int InstrumentID { get; set; }
+        public string Description { get; set; }
+        public bool IsUnderControl { get; set; }
+        public float TargetUncertainty { get; set; }
+        public int UnitID { get; set; }
+        public float UpperLimit { get; set; }
+        public float LowerLimit { get; set; }
+        public float Resolution { get; set; }
         public int MeasurableQuantityID { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<InstrumentMeasurableProperty> InstrumentMeasurableProperties { get; set; }
+        public virtual Instrument Instrument { get; set; }
         public virtual MeasurableQuantity MeasurableQuantity { get; set; }
+        public virtual MeasureUnit UnitOfMeasurement { get; set; }
     }
 }

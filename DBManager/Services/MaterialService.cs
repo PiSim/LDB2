@@ -131,7 +131,7 @@ namespace DBManager.Services
                 OrganizationRole tempRole = entities.OrganizationRoles.First(rol => rol.Name == OrganizationRoleNames.Maintenance);
 
                 return entities.OrganizationRoleMappings.Include(orm => orm.Organization)
-                                                        .Where(orm => orm.roleID == tempRole.ID
+                                                        .Where(orm => orm.RoleID == tempRole.ID
                                                                     && orm.IsSelected)
                                                         .Select(orm => orm.Organization)
                                                         .ToList();

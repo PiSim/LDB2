@@ -32,7 +32,7 @@ namespace Materials.ViewModels
                     if (MaterialServiceProvider.CreateNewExternalConstruction() != null)
                         RaisePropertyChanged("ExternalConstructionList");
                 },
-                () => _principal.IsInRole(UserRoleNames.MaterialAdmin));
+                () => _principal.IsInRole(UserRoleNames.MaterialEdit));
 
             _removeExternalConstruction = new DelegateCommand(
                 () =>

@@ -169,6 +169,21 @@
           <Property Name="instrumentID" Type="int" Nullable="false" />
           <Property Name="techID" Type="int" />
         </EntityType>
+        <EntityType Name="instrument_measurable_property">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="instrumentID" Type="int" Nullable="false" />
+          <Property Name="description" Type="varchar" MaxLength="45" Nullable="false" />
+          <Property Name="is_under_control" Type="bit" Nullable="false" />
+          <Property Name="target_uncertainty" Type="float" Nullable="false" />
+          <Property Name="unitID" Type="int" Nullable="false" />
+          <Property Name="upper_limit" Type="float" Nullable="false" />
+          <Property Name="lower_limit" Type="float" Nullable="false" />
+          <Property Name="resolution" Type="float" Nullable="false" />
+          <Property Name="measurable_quantityID" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="instrument_method_mappings">
           <Key>
             <PropertyRef Name="methodID" />
@@ -176,17 +191,6 @@
           </Key>
           <Property Name="methodID" Type="int" Nullable="false" />
           <Property Name="instrumentID" Type="int" Nullable="false" />
-        </EntityType>
-        <EntityType Name="instrument_property_data">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="instrumentID" Type="int" Nullable="false" />
-          <Property Name="measurable_propertyID" Type="int" Nullable="false" />
-          <Property Name="umID" Type="int" Nullable="false" />
-          <Property Name="range" Type="varchar" MaxLength="45" Nullable="false" />
-          <Property Name="division" Type="varchar" MaxLength="45" Nullable="false" />
         </EntityType>
         <EntityType Name="instrument_types">
           <Key>
@@ -256,7 +260,7 @@
           <Property Name="projectID" Type="int" />
           <Property Name="external_constructionID" Type="int" />
         </EntityType>
-        <EntityType Name="measurable_properties">
+        <EntityType Name="measurable_quantities">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
@@ -270,6 +274,7 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="symbol" Type="varchar" MaxLength="45" Nullable="false" />
           <Property Name="name" Type="varchar" MaxLength="45" Nullable="false" />
+          <Property Name="measurable_quantityID" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="methods">
           <Key>
@@ -925,6 +930,20 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="instrument_to_measurable_property">
+          <End Role="instruments" Type="Self.instruments" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="instrument_measurable_property" Type="Self.instrument_measurable_property" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="instruments">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="instrument_measurable_property">
+              <PropertyRef Name="instrumentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="instrument_to_method_mapping">
           <End Role="instruments" Type="Self.instruments" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -935,20 +954,6 @@
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="instrument_method_mappings">
-              <PropertyRef Name="instrumentID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="instrument_to_property_data">
-          <End Role="instruments" Type="Self.instruments" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="instrument_property_data" Type="Self.instrument_property_data" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="instruments">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="instrument_property_data">
               <PropertyRef Name="instrumentID" />
             </Dependent>
           </ReferentialConstraint>
@@ -1025,15 +1030,15 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="measurable_to_property_data">
-          <End Role="measurable_properties" Type="Self.measurable_properties" Multiplicity="1" />
-          <End Role="instrument_property_data" Type="Self.instrument_property_data" Multiplicity="*" />
+        <Association Name="measurable_quantity_to_unit">
+          <End Role="measurable_quantities" Type="Self.measurable_quantities" Multiplicity="1" />
+          <End Role="measure_units" Type="Self.measure_units" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="measurable_properties">
+            <Principal Role="measurable_quantities">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="instrument_property_data">
-              <PropertyRef Name="measurable_propertyID" />
+            <Dependent Role="measure_units">
+              <PropertyRef Name="measurable_quantityID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1350,6 +1355,18 @@
             </Principal>
             <Dependent Role="po_file">
               <PropertyRef Name="poID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="quantity_to_instrument_measurable_property">
+          <End Role="measurable_quantities" Type="Self.measurable_quantities" Multiplicity="1" />
+          <End Role="instrument_measurable_property" Type="Self.instrument_measurable_property" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="measurable_quantities">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="instrument_measurable_property">
+              <PropertyRef Name="measurable_quantityID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1801,15 +1818,15 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="um_to_property_data">
+        <Association Name="unit_to_measurable_property">
           <End Role="measure_units" Type="Self.measure_units" Multiplicity="1" />
-          <End Role="instrument_property_data" Type="Self.instrument_property_data" Multiplicity="*" />
+          <End Role="instrument_measurable_property" Type="Self.instrument_measurable_property" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="measure_units">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="instrument_property_data">
-              <PropertyRef Name="umID" />
+            <Dependent Role="instrument_measurable_property">
+              <PropertyRef Name="unitID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1856,8 +1873,8 @@
           <EntitySet Name="external_report_method_mappings" EntityType="Self.external_report_method_mappings" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="external_reports" EntityType="Self.external_reports" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="instrument_maintenance_events" EntityType="Self.instrument_maintenance_events" Schema="labdb" store:Type="Tables" />
+          <EntitySet Name="instrument_measurable_property" EntityType="Self.instrument_measurable_property" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="instrument_method_mappings" EntityType="Self.instrument_method_mappings" Schema="labdb" store:Type="Tables" />
-          <EntitySet Name="instrument_property_data" EntityType="Self.instrument_property_data" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="instrument_types" EntityType="Self.instrument_types" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="instrument_utilization_areas" EntityType="Self.instrument_utilization_areas" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="instruments" EntityType="Self.instruments" Schema="labdb" store:Type="Tables" />
@@ -1865,7 +1882,7 @@
           <EntitySet Name="material_lines" EntityType="Self.material_lines" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="material_types" EntityType="Self.material_types" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="materials" EntityType="Self.materials" Schema="labdb" store:Type="Tables" />
-          <EntitySet Name="measurable_properties" EntityType="Self.measurable_properties" Schema="labdb" store:Type="Tables" />
+          <EntitySet Name="measurable_quantities" EntityType="Self.measurable_quantities" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="measure_units" EntityType="Self.measure_units" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="methods" EntityType="Self.methods" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="organization_role_mappings" EntityType="Self.organization_role_mappings" Schema="labdb" store:Type="Tables" />
@@ -2003,13 +2020,13 @@
             <End Role="instruments" EntitySet="instruments" />
             <End Role="instrument_maintenance_events" EntitySet="instrument_maintenance_events" />
           </AssociationSet>
+          <AssociationSet Name="instrument_to_measurable_property" Association="Self.instrument_to_measurable_property">
+            <End Role="instruments" EntitySet="instruments" />
+            <End Role="instrument_measurable_property" EntitySet="instrument_measurable_property" />
+          </AssociationSet>
           <AssociationSet Name="instrument_to_method_mapping" Association="Self.instrument_to_method_mapping">
             <End Role="instruments" EntitySet="instruments" />
             <End Role="instrument_method_mappings" EntitySet="instrument_method_mappings" />
-          </AssociationSet>
-          <AssociationSet Name="instrument_to_property_data" Association="Self.instrument_to_property_data">
-            <End Role="instruments" EntitySet="instruments" />
-            <End Role="instrument_property_data" EntitySet="instrument_property_data" />
           </AssociationSet>
           <AssociationSet Name="instrument_to_test" Association="Self.instrument_to_test">
             <End Role="instruments" EntitySet="instruments" />
@@ -2035,9 +2052,9 @@
             <End Role="masters" EntitySet="masters" />
             <End Role="recipes" EntitySet="recipes" />
           </AssociationSet>
-          <AssociationSet Name="measurable_to_property_data" Association="Self.measurable_to_property_data">
-            <End Role="measurable_properties" EntitySet="measurable_properties" />
-            <End Role="instrument_property_data" EntitySet="instrument_property_data" />
+          <AssociationSet Name="measurable_quantity_to_unit" Association="Self.measurable_quantity_to_unit">
+            <End Role="measurable_quantities" EntitySet="measurable_quantities" />
+            <End Role="measure_units" EntitySet="measure_units" />
           </AssociationSet>
           <AssociationSet Name="method_issue_to_test" Association="Self.method_issue_to_test">
             <End Role="standard_issues" EntitySet="standard_issues" />
@@ -2138,6 +2155,10 @@
           <AssociationSet Name="purchase_order_to_file" Association="Self.purchase_order_to_file">
             <End Role="purchase_orders" EntitySet="purchase_orders" />
             <End Role="po_file" EntitySet="po_file" />
+          </AssociationSet>
+          <AssociationSet Name="quantity_to_instrument_measurable_property" Association="Self.quantity_to_instrument_measurable_property">
+            <End Role="measurable_quantities" EntitySet="measurable_quantities" />
+            <End Role="instrument_measurable_property" EntitySet="instrument_measurable_property" />
           </AssociationSet>
           <AssociationSet Name="recipe_to_material" Association="Self.recipe_to_material">
             <End Role="recipes" EntitySet="recipes" />
@@ -2279,9 +2300,9 @@
             <End Role="material_types" EntitySet="material_types" />
             <End Role="materials" EntitySet="materials" />
           </AssociationSet>
-          <AssociationSet Name="um_to_property_data" Association="Self.um_to_property_data">
+          <AssociationSet Name="unit_to_measurable_property" Association="Self.unit_to_measurable_property">
             <End Role="measure_units" EntitySet="measure_units" />
-            <End Role="instrument_property_data" EntitySet="instrument_property_data" />
+            <End Role="instrument_measurable_property" EntitySet="instrument_measurable_property" />
           </AssociationSet>
           <AssociationSet Name="user_to_role_mapping" Association="Self.user_to_role_mapping">
             <End Role="users" EntitySet="users" />
@@ -2321,7 +2342,7 @@
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Number" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="MaterialID" Type="Int32" a:SetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+          <Property Name="MaterialID" Type="Int32" a:SetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" Nullable="false" />
           <Property Name="Notes" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" DefaultValue="" />
           <NavigationProperty Name="BatchFiles" Relationship="Self.batch1" FromRole="batches" ToRole="batch_files" />
           <NavigationProperty Name="Material" Relationship="Self.batch_by_material" FromRole="batches" ToRole="materials" />
@@ -2734,7 +2755,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="batch_by_material">
-          <End Role="materials" Type="labdbModel.Material" Multiplicity="0..1" />
+          <End Role="materials" Type="labdbModel.Material" Multiplicity="1" />
           <End Role="batches" Type="labdbModel.Batch" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="materials">
@@ -3509,25 +3530,29 @@
             <End Role="Sample" EntitySet="Samples" />
             <End Role="Batch" EntitySet="Batches" />
           </AssociationSet>
-          <EntitySet Name="InstrumentPropertyDatas" EntityType="labdbModel.InstrumentPropertyData" />
           <EntitySet Name="InstrumentUtilizationAreas" EntityType="labdbModel.InstrumentUtilizationArea" />
-          <EntitySet Name="MeasurableProperties1" EntityType="labdbModel.MeasurableProperty" />
           <EntitySet Name="MeasureUnits" EntityType="labdbModel.MeasureUnit" />
-          <AssociationSet Name="instrument_to_property_data" Association="labdbModel.instrument_to_property_data">
-            <End Role="Instrument" EntitySet="Instruments" />
-            <End Role="instrument_property_data" EntitySet="InstrumentPropertyDatas" />
-          </AssociationSet>
-          <AssociationSet Name="measurable_to_property_data" Association="labdbModel.measurable_to_property_data">
-            <End Role="measurable_properties" EntitySet="MeasurableProperties1" />
-            <End Role="instrument_property_data" EntitySet="InstrumentPropertyDatas" />
-          </AssociationSet>
-          <AssociationSet Name="um_to_property_data" Association="labdbModel.um_to_property_data">
-            <End Role="measure_units" EntitySet="MeasureUnits" />
-            <End Role="instrument_property_data" EntitySet="InstrumentPropertyDatas" />
-          </AssociationSet>
           <AssociationSet Name="utilization_area_to_instrument" Association="labdbModel.utilization_area_to_instrument">
             <End Role="instrument_utilization_areas" EntitySet="InstrumentUtilizationAreas" />
             <End Role="Instrument" EntitySet="Instruments" />
+          </AssociationSet>
+          <EntitySet Name="InstrumentMeasurableProperties" EntityType="labdbModel.InstrumentMeasurableProperty" />
+          <EntitySet Name="MeasurableQuantities" EntityType="labdbModel.MeasurableQuantity" />
+          <AssociationSet Name="instrument_to_measurable_property" Association="labdbModel.instrument_to_measurable_property">
+            <End Role="Instrument" EntitySet="Instruments" />
+            <End Role="instrument_measurable_property" EntitySet="InstrumentMeasurableProperties" />
+          </AssociationSet>
+          <AssociationSet Name="quantity_to_instrument_measurable_property" Association="labdbModel.quantity_to_instrument_measurable_property">
+            <End Role="measurable_quantities" EntitySet="MeasurableQuantities" />
+            <End Role="instrument_measurable_property" EntitySet="InstrumentMeasurableProperties" />
+          </AssociationSet>
+          <AssociationSet Name="unit_to_measurable_property" Association="labdbModel.unit_to_measurable_property">
+            <End Role="MeasureUnit" EntitySet="MeasureUnits" />
+            <End Role="instrument_measurable_property" EntitySet="InstrumentMeasurableProperties" />
+          </AssociationSet>
+          <AssociationSet Name="measurable_quantity_to_unit" Association="labdbModel.measurable_quantity_to_unit">
+            <End Role="MeasurableQuantity" EntitySet="MeasurableQuantities" />
+            <End Role="MeasureUnit" EntitySet="MeasureUnits" />
           </AssociationSet>
         </EntityContainer>
         <Association Name="overridden_to_requirement">
@@ -3843,13 +3868,13 @@
           <NavigationProperty Name="Supplier" Relationship="labdbModel.supplier_to_instrument" FromRole="instrument" ToRole="Organization" />
           <NavigationProperty Name="MaintenanceEvent" Relationship="labdbModel.instrument_to_maintenance_event" FromRole="Instrument" ToRole="instrument_maintenance_events" />
           <Property Name="CalibrationDueDate" Type="DateTime" />
-          <Property Name="calibration_responsibleID" Type="Int32" />
+          <Property Name="CalibrationResponsibleID" Type="Int32" />
           <NavigationProperty Name="CalibrationResponsible" Relationship="labdbModel.calibration_responsible_to_instrument" FromRole="Instrument" ToRole="Organization" />
           <NavigationProperty Name="CalibrationReportAsReference" Relationship="labdbModel.calibration_reference_mappings" FromRole="Instrument" ToRole="CalibrationReport" />
           <NavigationProperty Name="AssociatedMethods" Relationship="labdbModel.instrument_method_mappings" FromRole="Instrument" ToRole="Method" />
-          <Property Name="utilization_areaID" Type="Int32" />
-          <NavigationProperty Name="instrument_property_data" Relationship="labdbModel.instrument_to_property_data" FromRole="Instrument" ToRole="instrument_property_data" />
+          <Property Name="UtilizationAreaID" Type="Int32" />
           <NavigationProperty Name="instrument_utilization_areas" Relationship="labdbModel.utilization_area_to_instrument" FromRole="Instrument" ToRole="instrument_utilization_areas" />
+          <NavigationProperty Name="instrument_measurable_property" Relationship="labdbModel.instrument_to_measurable_property" FromRole="Instrument" ToRole="instrument_measurable_property" />
         </EntityType>
         <Association Name="instrument_to_calibration_report">
           <End Type="labdbModel.Instrument" Role="instrument" Multiplicity="1" />
@@ -3931,7 +3956,7 @@
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="OrganizationID" Type="Int32" Nullable="false" />
-          <Property Name="roleID" Type="Int32" Nullable="false" />
+          <Property Name="RoleID" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Organization" Relationship="labdbModel.organization_to_role_mapping" FromRole="organization_role_mappings" ToRole="Organization" />
           <NavigationProperty Name="Role" Relationship="labdbModel.role_to_organization_mapping" FromRole="organization_role_mappings" ToRole="organization_roles" />
           <Property Name="IsSelected" Type="Boolean" Nullable="false" />
@@ -3969,7 +3994,7 @@
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="organization_role_mappings">
-              <PropertyRef Name="roleID" />
+              <PropertyRef Name="RoleID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -4254,7 +4279,7 @@
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="Instrument">
-              <PropertyRef Name="calibration_responsibleID" />
+              <PropertyRef Name="CalibrationResponsibleID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -4535,20 +4560,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="InstrumentPropertyData">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="instrumentID" Type="Int32" Nullable="false" />
-          <Property Name="measurable_propertyID" Type="Int32" Nullable="false" />
-          <Property Name="umID" Type="Int32" Nullable="false" />
-          <Property Name="range" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
-          <Property Name="division" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="instrument" Relationship="labdbModel.instrument_to_property_data" FromRole="instrument_property_data" ToRole="Instrument" />
-          <NavigationProperty Name="measurable_properties" Relationship="labdbModel.measurable_to_property_data" FromRole="instrument_property_data" ToRole="measurable_properties" />
-          <NavigationProperty Name="measure_units" Relationship="labdbModel.um_to_property_data" FromRole="instrument_property_data" ToRole="measure_units" />
-        </EntityType>
         <EntityType Name="InstrumentUtilizationArea">
           <Key>
             <PropertyRef Name="ID" />
@@ -4557,61 +4568,17 @@
           <Property Name="name" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="instruments" Relationship="labdbModel.utilization_area_to_instrument" FromRole="instrument_utilization_areas" ToRole="Instrument" />
         </EntityType>
-        <EntityType Name="MeasurableProperty">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="name" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="instrument_property_data" Relationship="labdbModel.measurable_to_property_data" FromRole="measurable_properties" ToRole="instrument_property_data" />
-        </EntityType>
         <EntityType Name="MeasureUnit">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="symbol" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
-          <Property Name="name" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="instrument_property_data" Relationship="labdbModel.um_to_property_data" FromRole="measure_units" ToRole="instrument_property_data" />
+          <Property Name="Symbol" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="InstrumentMeasurableProperties" Relationship="labdbModel.unit_to_measurable_property" FromRole="MeasureUnit" ToRole="instrument_measurable_property" />
+          <Property Name="MeasurableQuantityID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="MeasurableQuantity" Relationship="labdbModel.measurable_quantity_to_unit" FromRole="MeasureUnit" ToRole="MeasurableQuantity" />
         </EntityType>
-        <Association Name="instrument_to_property_data">
-          <End Type="labdbModel.Instrument" Role="Instrument" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Type="labdbModel.InstrumentPropertyData" Role="instrument_property_data" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Instrument">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="instrument_property_data">
-              <PropertyRef Name="instrumentID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="measurable_to_property_data">
-          <End Type="labdbModel.MeasurableProperty" Role="measurable_properties" Multiplicity="1" />
-          <End Type="labdbModel.InstrumentPropertyData" Role="instrument_property_data" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="measurable_properties">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="instrument_property_data">
-              <PropertyRef Name="measurable_propertyID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="um_to_property_data">
-          <End Type="labdbModel.MeasureUnit" Role="measure_units" Multiplicity="1" />
-          <End Type="labdbModel.InstrumentPropertyData" Role="instrument_property_data" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="measure_units">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="instrument_property_data">
-              <PropertyRef Name="umID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="utilization_area_to_instrument">
           <End Type="labdbModel.InstrumentUtilizationArea" Role="instrument_utilization_areas" Multiplicity="0..1" />
           <End Type="labdbModel.Instrument" Role="Instrument" Multiplicity="*" />
@@ -4620,7 +4587,84 @@
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="Instrument">
-              <PropertyRef Name="utilization_areaID" />
+              <PropertyRef Name="UtilizationAreaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="InstrumentMeasurableProperty">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="InstrumentID" Type="Int32" Nullable="false" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="IsUnderControl" Type="Boolean" Nullable="false" />
+          <Property Name="TargetUncertainty" Type="Single" Nullable="false" />
+          <Property Name="UnitID" Type="Int32" Nullable="false" />
+          <Property Name="UpperLimit" Type="Single" Nullable="false" />
+          <Property Name="LowerLimit" Type="Single" Nullable="false" />
+          <Property Name="Resolution" Type="Single" Nullable="false" />
+          <Property Name="MeasurableQuantityID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Instrument" Relationship="labdbModel.instrument_to_measurable_property" FromRole="instrument_measurable_property" ToRole="Instrument" />
+          <NavigationProperty Name="MeasurableQuantity" Relationship="labdbModel.quantity_to_instrument_measurable_property" FromRole="instrument_measurable_property" ToRole="measurable_quantities" />
+          <NavigationProperty Name="UnitOfMeasurement" Relationship="labdbModel.unit_to_measurable_property" FromRole="instrument_measurable_property" ToRole="MeasureUnit" />
+        </EntityType>
+        <EntityType Name="MeasurableQuantity">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="InstrumentMeasurableProperties" Relationship="labdbModel.quantity_to_instrument_measurable_property" FromRole="measurable_quantities" ToRole="instrument_measurable_property" />
+          <NavigationProperty Name="UnitsOfMeasurement" Relationship="labdbModel.measurable_quantity_to_unit" FromRole="MeasurableQuantity" ToRole="MeasureUnit" />
+        </EntityType>
+        <Association Name="instrument_to_measurable_property">
+          <End Type="labdbModel.Instrument" Role="Instrument" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="labdbModel.InstrumentMeasurableProperty" Role="instrument_measurable_property" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Instrument">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="instrument_measurable_property">
+              <PropertyRef Name="InstrumentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="quantity_to_instrument_measurable_property">
+          <End Type="labdbModel.MeasurableQuantity" Role="measurable_quantities" Multiplicity="1" />
+          <End Type="labdbModel.InstrumentMeasurableProperty" Role="instrument_measurable_property" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="measurable_quantities">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="instrument_measurable_property">
+              <PropertyRef Name="MeasurableQuantityID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="unit_to_measurable_property">
+          <End Type="labdbModel.MeasureUnit" Role="MeasureUnit" Multiplicity="1" />
+          <End Type="labdbModel.InstrumentMeasurableProperty" Role="instrument_measurable_property" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MeasureUnit">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="instrument_measurable_property">
+              <PropertyRef Name="UnitID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="measurable_quantity_to_unit">
+          <End Type="labdbModel.MeasurableQuantity" Role="MeasurableQuantity" Multiplicity="1" />
+          <End Type="labdbModel.MeasureUnit" Role="MeasureUnit" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MeasurableQuantity">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="MeasureUnit">
+              <PropertyRef Name="MeasurableQuantityID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -5055,8 +5099,8 @@
           <EntitySetMapping Name="Instruments">
             <EntityTypeMapping TypeName="labdbModel.Instrument">
               <MappingFragment StoreEntitySet="instruments">
-                <ScalarProperty Name="utilization_areaID" ColumnName="utilization_areaID" />
-                <ScalarProperty Name="calibration_responsibleID" ColumnName="calibration_responsibleID" />
+                <ScalarProperty Name="UtilizationAreaID" ColumnName="utilization_areaID" />
+                <ScalarProperty Name="CalibrationResponsibleID" ColumnName="calibration_responsibleID" />
                 <ScalarProperty Name="CalibrationDueDate" ColumnName="calibration_due" />
                 <ScalarProperty Name="Model" ColumnName="model" />
                 <ScalarProperty Name="SerialNumber" ColumnName="serial_number" />
@@ -5075,7 +5119,7 @@
             <EntityTypeMapping TypeName="labdbModel.OrganizationRoleMapping">
               <MappingFragment StoreEntitySet="organization_role_mappings">
                 <ScalarProperty Name="IsSelected" ColumnName="is_selected" />
-                <ScalarProperty Name="roleID" ColumnName="roleID" />
+                <ScalarProperty Name="RoleID" ColumnName="roleID" />
                 <ScalarProperty Name="OrganizationID" ColumnName="organizationID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
@@ -5236,18 +5280,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="InstrumentPropertyDatas">
-            <EntityTypeMapping TypeName="labdbModel.InstrumentPropertyData">
-              <MappingFragment StoreEntitySet="instrument_property_data">
-                <ScalarProperty Name="division" ColumnName="division" />
-                <ScalarProperty Name="range" ColumnName="range" />
-                <ScalarProperty Name="umID" ColumnName="umID" />
-                <ScalarProperty Name="measurable_propertyID" ColumnName="measurable_propertyID" />
-                <ScalarProperty Name="instrumentID" ColumnName="instrumentID" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="InstrumentUtilizationAreas">
             <EntityTypeMapping TypeName="labdbModel.InstrumentUtilizationArea">
               <MappingFragment StoreEntitySet="instrument_utilization_areas">
@@ -5256,19 +5288,36 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="MeasurableProperties1">
-            <EntityTypeMapping TypeName="labdbModel.MeasurableProperty">
-              <MappingFragment StoreEntitySet="measurable_properties">
-                <ScalarProperty Name="name" ColumnName="name" />
+          <EntitySetMapping Name="MeasureUnits">
+            <EntityTypeMapping TypeName="labdbModel.MeasureUnit">
+              <MappingFragment StoreEntitySet="measure_units">
+                <ScalarProperty Name="MeasurableQuantityID" ColumnName="measurable_quantityID" />
+                <ScalarProperty Name="Name" ColumnName="name" />
+                <ScalarProperty Name="Symbol" ColumnName="symbol" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="MeasureUnits">
-            <EntityTypeMapping TypeName="labdbModel.MeasureUnit">
-              <MappingFragment StoreEntitySet="measure_units">
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="symbol" ColumnName="symbol" />
+          <EntitySetMapping Name="InstrumentMeasurableProperties">
+            <EntityTypeMapping TypeName="labdbModel.InstrumentMeasurableProperty">
+              <MappingFragment StoreEntitySet="instrument_measurable_property">
+                <ScalarProperty Name="MeasurableQuantityID" ColumnName="measurable_quantityID" />
+                <ScalarProperty Name="Resolution" ColumnName="resolution" />
+                <ScalarProperty Name="LowerLimit" ColumnName="lower_limit" />
+                <ScalarProperty Name="UpperLimit" ColumnName="upper_limit" />
+                <ScalarProperty Name="UnitID" ColumnName="unitID" />
+                <ScalarProperty Name="TargetUncertainty" ColumnName="target_uncertainty" />
+                <ScalarProperty Name="IsUnderControl" ColumnName="is_under_control" />
+                <ScalarProperty Name="Description" ColumnName="description" />
+                <ScalarProperty Name="InstrumentID" ColumnName="instrumentID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MeasurableQuantities">
+            <EntityTypeMapping TypeName="labdbModel.MeasurableQuantity">
+              <MappingFragment StoreEntitySet="measurable_quantities">
+                <ScalarProperty Name="Name" ColumnName="name" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

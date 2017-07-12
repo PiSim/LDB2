@@ -28,7 +28,7 @@ namespace DBManager
     
         public int ID { get; set; }
         public string Number { get; set; }
-        public Nullable<int> MaterialID { get; set; }
+        public int MaterialID { get; set; }
         public string Notes { get; set; }
         public Nullable<int> TrialAreaID { get; set; }
         public bool FirstSampleArrived { get; set; }

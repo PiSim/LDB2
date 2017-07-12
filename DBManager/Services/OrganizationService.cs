@@ -40,7 +40,7 @@ namespace DBManager.Services
                     OrganizationRoleMapping tempMap = new OrganizationRoleMapping()
                     {
                         IsSelected = false,
-                        roleID = newRole.ID
+                        RoleID = newRole.ID
                     };
 
                     org.RoleMapping.Add(tempMap);

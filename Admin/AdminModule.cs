@@ -26,6 +26,7 @@ namespace Admin
             _container.RegisterType<Object, Views.UserEdit>(AdminViewNames.UserEditView);
 
             _container.RegisterType<ViewModels.AdminMainViewModel>();
+            _container.RegisterType<ViewModels.MeasurableQuantityMainViewModel>();
             _container.RegisterType<ViewModels.NewUserDialogViewModel>();
             _container.RegisterType<ViewModels.UserEditViewModel>();
             _container.RegisterType<ViewModels.UserMainViewModel>();
@@ -36,6 +37,8 @@ namespace Admin
                                                     typeof(Views.AdminNavigationItem));
             _regionManager.RegisterViewWithRegion(RegionNames.AdminUserMainRegion,
                                                     typeof(Views.UserMain));
+            _regionManager.RegisterViewWithRegion(RegionNames.MeasurableQuantityManagementRegion,
+                                                    typeof(Views.MeasurableQuantityMain));
         }
     }
 }

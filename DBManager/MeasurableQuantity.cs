@@ -12,18 +12,21 @@ namespace DBManager
     using System;
     using System.Collections.Generic;
     
-    public partial class MeasurableProperty
+    public partial class MeasurableQuantity
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public MeasurableProperty()
+        public MeasurableQuantity()
         {
-            this.instrument_property_data = new HashSet<InstrumentPropertyData>();
+            this.InstrumentMeasurableProperties = new HashSet<InstrumentMeasurableProperty>();
+            this.UnitsOfMeasurement = new HashSet<MeasureUnit>();
         }
     
         public int ID { get; set; }
-        public string name { get; set; }
+        public string Name { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<InstrumentPropertyData> instrument_property_data { get; set; }
+        public virtual ICollection<InstrumentMeasurableProperty> InstrumentMeasurableProperties { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<MeasureUnit> UnitsOfMeasurement { get; set; }
     }
 }

@@ -22,7 +22,7 @@ namespace DBManager
             this.MaintenanceEvent = new HashSet<InstrumentMaintenanceEvent>();
             this.CalibrationReportAsReference = new HashSet<CalibrationReport>();
             this.AssociatedMethods = new HashSet<Method>();
-            this.instrument_property_data = new HashSet<InstrumentPropertyData>();
+            this.instrument_measurable_property = new HashSet<InstrumentMeasurableProperty>();
         }
     
         public int ID { get; set; }
@@ -36,8 +36,8 @@ namespace DBManager
         public string SerialNumber { get; set; }
         public string Model { get; set; }
         public Nullable<System.DateTime> CalibrationDueDate { get; set; }
-        public Nullable<int> calibration_responsibleID { get; set; }
-        public Nullable<int> utilization_areaID { get; set; }
+        public Nullable<int> CalibrationResponsibleID { get; set; }
+        public Nullable<int> UtilizationAreaID { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CalibrationReport> CalibrationReports { get; set; }
@@ -53,8 +53,8 @@ namespace DBManager
         public virtual ICollection<CalibrationReport> CalibrationReportAsReference { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Method> AssociatedMethods { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<InstrumentPropertyData> instrument_property_data { get; set; }
         public virtual InstrumentUtilizationArea instrument_utilization_areas { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<InstrumentMeasurableProperty> instrument_measurable_property { get; set; }
     }
 }

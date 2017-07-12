@@ -117,7 +117,7 @@ namespace Materials.ViewModels
         {
             get
             {
-                return _principal.IsInRole(UserRoleNames.MaterialAdmin);
+                return _principal.IsInRole(UserRoleNames.MaterialEdit);
             }
         }
 
