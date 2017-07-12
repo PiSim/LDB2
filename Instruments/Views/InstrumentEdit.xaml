@@ -316,6 +316,9 @@
                     </GroupBox>
                 </Grid>
             </TabItem>
+            <TabItem Header="Dati Metrologici">
+                <ContentControl prism:RegionManager.RegionName="{Binding InstrumentEditMetrologyRegionName}"/>
+            </TabItem>
         </TabControl>
     </Grid>
 </UserControl>

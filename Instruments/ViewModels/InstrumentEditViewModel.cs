@@ -220,6 +220,11 @@ namespace Instruments.ViewModels
             }
         }
 
+        public string InstrumentEditMetrologyRegionName
+        {
+            get { return RegionNames.InstrumentEditMetrologyRegion; }
+        }
+
         public Instrument InstrumentInstance
         {
             get { return _instance; }
