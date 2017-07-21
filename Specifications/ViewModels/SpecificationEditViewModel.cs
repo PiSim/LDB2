@@ -9,13 +9,15 @@ using Prism.Events;
 using Prism.Mvvm;
 using Services;
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows.Forms;
 
 namespace Specifications.ViewModels
 {
-    public class SpecificationEditViewModel : BindableBase
+    public class SpecificationEditViewModel : BindableBase, INotifyDataErrorInfo
     {
         private bool _editMode;
         private ControlPlan _selectedControlPlan;
@@ -32,7 +34,7 @@ namespace Specifications.ViewModels
                                 _removeVersion, 
                                 _save,
                                 _startEdit;
-
+        private readonly Dictionary<string, ICollection<string>> _validationErrors = new Dictionary<string, ICollection<string>>();
         private EventAggregator _eventAggregator;
         private IEnumerable<StandardIssue> _issueList;
         private List<ControlPlanItemWrapper> _controlPlanItemsList;
@@ -78,7 +80,8 @@ namespace Specifications.ViewModels
 
                     _issueList = _instance.GetIssues();
                     RaisePropertyChanged("IssueList");
-                });
+                },
+                () => CanEdit);
 
             _addTest = new DelegateCommand(
                 () =>
@@ -90,7 +93,8 @@ namespace Specifications.ViewModels
                     _eventAggregator.GetEvent<SpecificationMethodListChanged>()
                                     .Publish(_instance);
                 },
-                () => _selectedToAdd != null);
+                () => CanEdit
+                    && _selectedToAdd != null);
 
             _addVersion = new DelegateCommand(
                 () =>
@@ -103,14 +107,8 @@ namespace Specifications.ViewModels
                     temp.Create();
 
                     RaisePropertyChanged("VersionList");
-                });
-            
-            _newReport = new DelegateCommand(
-                () =>
-                {
-                    NewReportToken token = new NewReportToken();
-                    _eventAggregator.GetEvent<ReportCreationRequested>().Publish(token);
-                });
+                },
+                () => CanEdit);
 
             _openReport = new DelegateCommand(
                 () =>
@@ -127,7 +125,8 @@ namespace Specifications.ViewModels
                     _instance.ControlPlans.Remove(_selectedControlPlan);
                     SelectedControlPlan = null;
                 }, 
-                () => _selectedControlPlan != null);
+                () => CanEdit 
+                    && _selectedControlPlan != null);
 
             _removeIssue = new DelegateCommand(
                 () =>
@@ -135,9 +134,12 @@ namespace Specifications.ViewModels
                     _selectedIssue.Delete();
 
                     SelectedIssue = null;
+
+                    _issueList = _instance.GetIssues();
                     RaisePropertyChanged("IssueList");
                 },
-                () => _selectedIssue != null);
+                () => CanEdit 
+                    && _selectedIssue != null);
 
             _removeTest = new DelegateCommand(
                 () =>
@@ -149,7 +151,8 @@ namespace Specifications.ViewModels
                                     .Publish(_instance);
                 },
 
-                () => _selectedToRemove != null);
+                () => CanEdit 
+                    && _selectedToRemove != null);
 
             _removeVersion = new DelegateCommand(
                 () =>
@@ -159,29 +162,55 @@ namespace Specifications.ViewModels
 
                     RaisePropertyChanged("VersionList");
                 },
-                () => _selectedVersion != null);
+                () => _principal.IsInRole(UserRoleNames.Admin) 
+                    && _selectedVersion != null);
 
             _save = new DelegateCommand(
                 () =>
                 {
                     _instance.Update();
+                    EditMode = false;
                 },
-                () => _editMode);
+                () => _editMode && !HasErrors);
 
             _startEdit = new DelegateCommand(
                 () =>
                 {
                     EditMode = true;
                 },
-                () => CanEdit && !_editMode);
+                () => _principal.IsInRole(UserRoleNames.Admin) && !_editMode);
 
             // Event Subscriptions
             
-
             _eventAggregator.GetEvent<ReportCreated>().Subscribe(
                 report => RaisePropertyChanged("ReportList"));
 
         }
+
+        #region INotifyDataErrorInfo interface elements
+
+        public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
+
+        public IEnumerable GetErrors(string propertyName)
+        {
+            if (string.IsNullOrEmpty(propertyName)
+                || !_validationErrors.ContainsKey(propertyName))
+                return null;
+
+            return _validationErrors[propertyName];
+        }
+
+        public bool HasErrors
+        {
+            get { return _validationErrors.Count > 0; }
+        }
+
+        private void RaiseErrorsChanged(string propertyName)
+        {
+            ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
+        }
+
+        #endregion
 
         public DelegateCommand AddControlPlanCommand
         {
@@ -205,14 +234,14 @@ namespace Specifications.ViewModels
 
         private bool CanEdit
         {
-            get { return _principal.IsInRole(UserRoleNames.SpecificationAdmin); }
+            get { return _principal.IsInRole(UserRoleNames.SpecificationEdit); }
         }
 
         public bool CanModifyControlPlan
         {
             get
             {
-                if (!_principal.IsInRole(UserRoleNames.SpecificationAdmin))
+                if (!_principal.IsInRole(UserRoleNames.SpecificationEdit))
                     return false;
 
                 else if (_selectedControlPlan == null || _selectedControlPlan.IsDefault)

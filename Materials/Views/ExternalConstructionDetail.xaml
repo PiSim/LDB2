@@ -82,7 +82,6 @@
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
-                            <Label Content="{Binding Standard.Organization.Name}"/>
                             <Label Content="{Binding Standard.Name}"/>
                             <Label Content="{Binding Standard.CurrentIssue.Issue}"/>
                         </StackPanel>

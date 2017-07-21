@@ -31,7 +31,10 @@ namespace Instruments
 
             _container.RegisterType<Object, Views.InstrumentEdit>(InstrumentViewNames.InstrumentEditView);
             _container.RegisterType<Object, Views.InstrumentMain>(InstrumentViewNames.InstrumentsMainView);
-            
+
+            _regionManager.RegisterViewWithRegion(RegionNames.InstrumentEditMetrologyRegion,
+                                                    typeof(Views.Metrology));
+
             if (principal.IsInRole(UserRoleNames.InstrumentView))
                 _regionManager.RegisterViewWithRegion(RegionNames.MainNavigationRegion, 
                                                     typeof(Views.InstrumentsNavigationItem));

@@ -14,26 +14,41 @@
 
         <GroupBox Header="Grandezze Misurabili"
                   Grid.Row="0">
-            <ListView ItemsSource="{Binding InstrumentMeasurablePropertyList}"
-                      SelectedItem="{Binding SelectedInstrumentMeasurableProperty,
-                                             Mode=TwoWay}">
-                <ListView.View>
-                    <GridView>
-                        <GridViewColumn Header="Quantità"
-                                        DisplayMemberBinding="{Binding MeasurableQuantity}"/>
-                        <GridViewColumn Header="Range, Lim. Inferiore"
-                                        DisplayMemberBinding="{Binding LowerLimit}"/>
-                        <GridViewColumn Header="Range, Lim. Superiore"
-                                        DisplayMemberBinding="{Binding UpperLimit}"/>
-                        <GridViewColumn Header="Divisione"
-                                        DisplayMemberBinding="{Binding Resolution}"/>
-                        <GridViewColumn Header="UM"
-                                        DisplayMemberBinding="{Binding UnitOfMeasurement.Symbol}"/>
-                        <GridViewColumn Header="Controllo metrologico"
-                                        DisplayMemberBinding="{Binding IsUnderControl}"/>
-                    </GridView>
-                </ListView.View>
-            </ListView>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="35"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <StackPanel Orientation="Horizontal"
+                            Grid.Row="0">
+                    <Button Content="Aggiungi"
+                            Command="{Binding AddMeasurablePropertyCommand}"
+                            Margin="5"/>
+                </StackPanel>
+
+                <ListView ItemsSource="{Binding InstrumentMeasurablePropertyList}"
+                          SelectedItem="{Binding SelectedInstrumentMeasurableProperty,
+                                                 Mode=TwoWay}"
+                          Grid.Row="1">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Quantità"
+                                            DisplayMemberBinding="{Binding MeasurableQuantity}"/>
+                            <GridViewColumn Header="Range, Lim. Inferiore"
+                                            DisplayMemberBinding="{Binding LowerLimit}"/>
+                            <GridViewColumn Header="Range, Lim. Superiore"
+                                            DisplayMemberBinding="{Binding UpperLimit}"/>
+                            <GridViewColumn Header="Divisione"
+                                            DisplayMemberBinding="{Binding Resolution}"/>
+                            <GridViewColumn Header="UM"
+                                            DisplayMemberBinding="{Binding UnitOfMeasurement.Symbol}"/>
+                            <GridViewColumn Header="Controllo metrologico"
+                                            DisplayMemberBinding="{Binding IsUnderControl}"/>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </Grid>
         </GroupBox>
         
     </Grid>

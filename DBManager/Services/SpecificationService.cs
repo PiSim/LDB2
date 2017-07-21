@@ -20,6 +20,40 @@ namespace DBManager.Services
             }
         }
 
+        public static Specification GetSpecification(int ID)
+        {
+            using (DBEntities entities = new DBEntities())
+            {
+                return entities.Specifications.First(entry => entry.ID == ID);
+            }
+        }
+
+        public static Specification GetSpecification(string name)
+        {
+            // returns a specification with the given Standard name, or null if none is found
+            
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.Specifications.FirstOrDefault(spec => spec.Standard.Name == name);
+            }
+        }
+
+        public static IEnumerable<Specification> GetSpecifications()
+        {
+            using (var entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+                return entities.Specifications.Include(spec => spec.Standard)
+                                                .Include(spec => spec.Standard.CurrentIssue)
+                                                .Include(spec => spec.Standard.Organization)
+                                                .Where(spec => true)
+                                                .OrderBy(spec => spec.Standard.Name)
+                                                .ToList();
+            }
+        }
+
         public static Std GetStandard(string name)
         {
             // returns Standard entity with the provided name or null if none is found
@@ -154,34 +188,6 @@ namespace DBManager.Services
 
         #endregion
         
-        #region Operations for Specification entities
-
-        
-
-        
-        public static Specification GetSpecification(int ID)
-        {
-            using (DBEntities entities = new DBEntities())
-            {
-                return entities.Specifications.First(entry => entry.ID == ID);
-            }
-        }
-
-        public static IEnumerable<Specification> GetSpecifications()
-        {
-            using (var entities = new DBEntities())
-            {
-                entities.Configuration.LazyLoadingEnabled = false;
-                return entities.Specifications.Include(spec => spec.Standard)
-                                                .Include(spec => spec.Standard.CurrentIssue)
-                                                .Include(spec => spec.Standard.Organization)
-                                                .Where(spec => true)
-                                                .OrderBy(spec => spec.Standard.Name)
-                                                .ToList();
-            }
-        }
-
-        #endregion
         
         
         public static void UpdateRequirements(IEnumerable<Requirement> requirementEntries)

@@ -19,6 +19,8 @@ namespace Specifications
 
         public void Initialize()
         {
+            DBPrincipal principal = _container.Resolve<DBPrincipal>();
+
             _container.RegisterType<SpecificationServiceProvider>(new ContainerControlledLifetimeManager());
             _container.Resolve<SpecificationServiceProvider>();
 
@@ -43,8 +45,15 @@ namespace Specifications
 
             _regionManager.RegisterViewWithRegion(RegionNames.MainNavigationRegion, 
                                                 typeof(Views.MethodNavigationItem));
-            _regionManager.RegisterViewWithRegion(RegionNames.MainNavigationRegion, 
-                                                typeof(Views.SpecificationNavigationItem));
+
+
+            // ADD Specification tag to navigation Menu if user is authorized
+
+            if (principal.IsInRole(UserRoleNames.SpecificationView))
+                _regionManager.RegisterViewWithRegion(RegionNames.MainNavigationRegion, 
+                                                    typeof(Views.SpecificationNavigationItem));
+
+
             _regionManager.RegisterViewWithRegion(RegionNames.MethodIssueRegion,
                                                 typeof(Views.StandardIssueControl));
             _regionManager.RegisterViewWithRegion(RegionNames.SpecificationIssueRegion,

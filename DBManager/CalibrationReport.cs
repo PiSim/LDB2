@@ -19,6 +19,7 @@ namespace DBManager
         {
             this.CalibrationFiles = new HashSet<CalibrationFiles>();
             this.ReferenceInstruments = new HashSet<Instrument>();
+            this.instrument_measurable_property = new HashSet<InstrumentMeasurableProperty>();
         }
     
         public int ID { get; set; }
@@ -29,6 +30,7 @@ namespace DBManager
         public string Notes { get; set; }
         public int Number { get; set; }
         public string Result { get; set; }
+        public Nullable<int> instrument_measurable_propertyID { get; set; }
     
         public virtual Instrument Instrument { get; set; }
         public virtual Organization Laboratory { get; set; }
@@ -37,5 +39,7 @@ namespace DBManager
         public virtual ICollection<CalibrationFiles> CalibrationFiles { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Instrument> ReferenceInstruments { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<InstrumentMeasurableProperty> instrument_measurable_property { get; set; }
     }
 }

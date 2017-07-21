@@ -25,6 +25,8 @@ namespace Infrastructure
         public static string ReportView { get { return "REPORT_VIEW"; } }
         public static string SampleEdit { get { return "SAMPLE_EDIT"; } }
         public static string SpecificationAdmin { get { return "SPEC_ADMIN"; } }
+        public static string SpecificationEdit { get { return "SPEC_EDIT"; } }
+        public static string SpecificationView { get { return "SPEC_VIEW"; } }
         public static string TaskAdmin { get { return "TASK_ADMIN"; } }
         public static string TaskEdit { get { return "TASK_EDIT"; } }
     }

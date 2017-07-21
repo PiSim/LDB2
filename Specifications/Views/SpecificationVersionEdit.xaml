@@ -45,6 +45,7 @@
                    VerticalContentAlignment="Center"/>
             
             <TextBox Text="{Binding SpecificationVersionName}"
+                     MaxLength="45"
                      IsEnabled="{Binding EditMode}"
                      Grid.Column="1"
                      Grid.Row="0"
@@ -85,7 +86,8 @@
                                         <DataGrid.Columns>
                                             <DataGridTextColumn Binding="{Binding SubMethod.Name}"
                                                                 IsReadOnly="True"
-                                                                Width="*"/>
+                                                                Width="*">
+                                            </DataGridTextColumn>
                                         </DataGrid.Columns>
                                     </DataGrid>
                                 </DataTemplate>
@@ -115,7 +117,14 @@
                                               RowHeight="30">
                                         <DataGrid.Columns>
                                             <DataGridTextColumn Binding="{Binding RequiredValue}"
-                                                                Width="*"/>
+                                                                Width="*">
+                                                <DataGridTextColumn.EditingElementStyle>
+                                                    <Style TargetType="{x:Type TextBox}">
+                                                        <Setter Property="MaxLength"
+                                                                Value="45"/>
+                                                    </Style>
+                                                </DataGridTextColumn.EditingElementStyle>
+                                            </DataGridTextColumn>
                                         </DataGrid.Columns>
                                     </DataGrid>
                                 </DataTemplate>
@@ -156,6 +165,12 @@
                                             Source={x:Reference dummyElement}}"/>
                                 </Style>
                             </DataGridTextColumn.CellStyle>
+                            <DataGridTextColumn.EditingElementStyle>
+                                <Style TargetType="{x:Type TextBox}">
+                                    <Setter Property="MaxLength"
+                                            Value="100"/>
+                                </Style>
+                            </DataGridTextColumn.EditingElementStyle>
                         </DataGridTextColumn>
 
                         <DataGridTextColumn Header="Metodo"

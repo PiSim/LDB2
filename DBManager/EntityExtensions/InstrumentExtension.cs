@@ -107,6 +107,24 @@ namespace DBManager.EntityExtensions
             }
         }
 
+        public static IEnumerable<InstrumentMeasurableProperty> GetMeasurableProperties(this Instrument entry)
+        {
+            // Returns all MeasurableProperties for an Instrument
+
+            if (entry == null)
+                return null;
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.InstrumentMeasurableProperties.Include(imp => imp.MeasurableQuantity)
+                                                                .Include(imp => imp.UnitOfMeasurement)
+                                                                .Where(imp => imp.InstrumentID == entry.ID)
+                                                                .ToList();
+            }
+        }
+
         public static IEnumerable<Method> GetUnassociatedMethods(this Instrument entry)
         {
             // Returns all the methods not assigned to the instrument entry

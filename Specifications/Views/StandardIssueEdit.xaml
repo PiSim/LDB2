@@ -23,7 +23,7 @@
                     Command="{Binding SaveCommand}"
                     Margin="5"/>
             <Button Content="Imposta versione corrente"
-                    Command="{Binding SetCurrent}"
+                    Command="{Binding SetCurrentCommand}"
                     Margin="5"/>
         </StackPanel>
 
@@ -43,6 +43,7 @@
                    Grid.Row="0"/>
 
             <TextBox Text="{Binding Issue}"
+                     MaxLength="45"
                      IsEnabled="{Binding EditMode}"
                      HorizontalContentAlignment="Center"
                      Grid.Column="1"

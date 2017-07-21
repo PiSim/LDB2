@@ -25,7 +25,10 @@
                Grid.Column="0"
                Grid.Row="0"
                Margin="5"/>
-        <TextBox Text="{Binding Name, Mode=TwoWay}"
+        <TextBox Text="{Binding Name, 
+                                Mode=TwoWay,
+                                UpdateSourceTrigger=PropertyChanged}"
+                 MaxLength="45"
                  Grid.Column="1"
                  Grid.ColumnSpan="3"
                  Grid.Row="0"

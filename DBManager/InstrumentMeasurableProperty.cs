@@ -14,6 +14,12 @@ namespace DBManager
     
     public partial class InstrumentMeasurableProperty
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public InstrumentMeasurableProperty()
+        {
+            this.calibration_reports = new HashSet<CalibrationReport>();
+        }
+    
         public int ID { get; set; }
         public int InstrumentID { get; set; }
         public string Description { get; set; }
@@ -28,5 +34,7 @@ namespace DBManager
         public virtual Instrument Instrument { get; set; }
         public virtual MeasurableQuantity MeasurableQuantity { get; set; }
         public virtual MeasureUnit UnitOfMeasurement { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<CalibrationReport> calibration_reports { get; set; }
     }
 }

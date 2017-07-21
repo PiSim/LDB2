@@ -42,7 +42,7 @@ namespace Specifications.ViewModels
                         RaisePropertyChanged("SpecificationList");
                     }                        
                 },
-                () => IsSpecAdmin);
+                () => _principal.IsInRole(UserRoleNames.SpecificationEdit));
 
             _openSpecification = new DelegateCommand(
                 () => 
@@ -52,11 +52,6 @@ namespace Specifications.ViewModels
                     _eventAggregator.GetEvent<NavigationRequested>().Publish(token);
                 },
                 () => SelectedSpecification != null);
-        }
-        
-        private bool IsSpecAdmin
-        {
-            get { return _principal.IsInRole(UserRoleNames.SpecificationAdmin); }
         }
 
         public DelegateCommand NewSpecificationCommand

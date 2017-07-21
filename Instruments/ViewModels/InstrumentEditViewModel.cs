@@ -272,6 +272,11 @@ namespace Instruments.ViewModels
             }
         }
 
+        public IEnumerable<InstrumentMeasurableProperty> InstrumentMeasurablePropertyList
+        {
+            get { return _instance.GetMeasurableProperties(); }
+        }
+
         public string InstrumentModel
         {
             get

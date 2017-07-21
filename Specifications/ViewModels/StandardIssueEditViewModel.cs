@@ -1,5 +1,6 @@
 ﻿using DBManager;
 using DBManager.EntityExtensions;
+using Infrastructure;
 using Infrastructure.Events;
 using Prism.Commands;
 using Prism.Events;
@@ -17,6 +18,7 @@ namespace Specifications.ViewModels
     public class StandardIssueEditViewModel : BindableBase
     {
         private bool _editMode;
+        private DBPrincipal _principal;
         private DelegateCommand _addFile,
                                 _openFile,
                                 _removeFile,
@@ -27,11 +29,13 @@ namespace Specifications.ViewModels
         private StandardFile _selectedFile;
         private StandardIssue _standardIssueInstance;
 
-        public StandardIssueEditViewModel(EventAggregator eventAggregator)
+        public StandardIssueEditViewModel(DBPrincipal principal,
+                                        EventAggregator eventAggregator)
         {
             _editMode = false;
             _eventAggregator = eventAggregator;
 
+            _principal = principal;
 
             _addFile = new DelegateCommand(
                 () =>
@@ -53,7 +57,8 @@ namespace Specifications.ViewModels
 
                         RaisePropertyChanged("FileList");
                     }
-                });
+                },
+                () => CanEdit);
             
             _openFile = new DelegateCommand(
                 () =>
@@ -78,7 +83,8 @@ namespace Specifications.ViewModels
 
                     RaisePropertyChanged("FileList");
                 },
-                () => _selectedFile != null);
+                () => CanEdit
+                    && _selectedFile != null);
 
             _save = new DelegateCommand(
                 () =>
@@ -94,20 +100,27 @@ namespace Specifications.ViewModels
                     _standardIssueInstance.Standard.SetCurrentIssue(_standardIssueInstance);
                     RaisePropertyChanged("IsCurrent");
                 },
-                () => !_standardIssueInstance.IsCurrent);
+                () => CanEdit
+                    && !IsCurrent);
 
             _startEdit = new DelegateCommand(
                 () =>
                 {
                     EditMode = true;
                 },
-                () => !_editMode);
+                () => CanEdit
+                    && !_editMode);
         }
 
 
         public DelegateCommand AddFileCommand
         {
             get { return _addFile; }
+        }
+
+        public bool CanEdit
+        {
+            get { return _principal.IsInRole(UserRoleNames.SpecificationEdit); }
         }
 
         public bool EditMode

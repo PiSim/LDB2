@@ -5,10 +5,13 @@
 -Implementata funzionalità di modifica batch
 -Implementata validazione input in BatchCreationDialog
 -Aggiunti controlli di autorizzazione per creazione/modifica/eliminazione batch
+-Aggiunti controlli di autorizzazione per creazione/modifica/eliminazione Specifiche
 -Aggiunto controllo autorizzazione per visualizzazione Strumenti
 -Implementata funzionalità eliminazione batch
 -Aggiunta funzione apertura batch tramite doppio click in BatchStatusList
 -Aggiunto campo "stock" alle entità Batch
+-Aggiunta vista archivio in Batch
+-Implementate viste Admin per gestione enti ed Utenti
 
 v 0.51 -- 29/6/2017
 
