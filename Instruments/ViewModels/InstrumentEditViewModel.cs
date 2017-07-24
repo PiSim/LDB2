@@ -171,6 +171,11 @@ namespace Instruments.ViewModels
             }
         }
 
+        public IEnumerable<InstrumentMaintenanceEvent> EventList
+        {
+            get { return _instance.GetMaintenanceEvents(); }
+        }
+
         public Property FilterProperty
         {
             get { return _filterProperty; }
@@ -241,6 +246,7 @@ namespace Instruments.ViewModels
                 RaisePropertyChanged("AssociatedMethods");
                 RaisePropertyChanged("CalibrationReportList");
                 RaisePropertyChanged("CalibrationTabVisible");
+                RaisePropertyChanged("EventList");
                 RaisePropertyChanged("InstrumentCode");
                 RaisePropertyChanged("InstrumentDescription");
                 RaisePropertyChanged("InstrumentManufacturer");

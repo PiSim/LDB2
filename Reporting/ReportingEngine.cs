@@ -6,6 +6,7 @@ using Prism.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Printing;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -58,9 +59,29 @@ namespace Reporting
             IEnumerable<Batch> statusList = MaterialService.GetBatches(100);
 
             Table batchTable = batchReport.BatchTable;
+            batchTable.FontSize = 16;
 
-            for (int ii = 0; ii < 12; ii++)
-                batchTable.Columns.Add(new TableColumn());
+            double[] columnWidths = new double[]{ 2,
+                                                    2,
+                                                    2,
+                                                    2,
+                                                    2,
+                                                    3,
+                                                    2,
+                                                    2,
+                                                    2,
+                                                    2,
+                                                    2,
+                                                    2};
+
+            TableColumn currentColumn;
+
+            foreach (double colWidth in columnWidths)
+            {
+                currentColumn = new TableColumn();
+                currentColumn.Width = new GridLength(colWidth, GridUnitType.Star);
+                batchTable.Columns.Add(currentColumn);
+            }
 
             TableRow currentRow;
 
@@ -95,7 +116,7 @@ namespace Reporting
             currentRow.Cells.Add(new TableCell
                                 (new Paragraph
                                 (new Run("OEM"))));
-
+            
             currentRow.Cells.Add(new TableCell
                                 (new Paragraph
                                 (new Run("Construction"))));
@@ -192,10 +213,15 @@ namespace Reporting
 
             PrintDialog printer = new PrintDialog();
 
-            DocumentPaginator paginator = ((IDocumentPaginatorSource)batchReport).DocumentPaginator;
-
             if (printer.ShowDialog() == true)
+            {
+                printer.PrintTicket.PageOrientation = PageOrientation.Landscape;
+                batchReport.PageWidth = printer.PrintableAreaWidth;
+                batchReport.PagePadding = new Thickness(10);
+                batchReport.ColumnWidth = printer.PrintableAreaWidth;
+                DocumentPaginator paginator = ((IDocumentPaginatorSource)batchReport).DocumentPaginator;
                 printer.PrintDocument(paginator, "Report");
+            }
         }
     }
 }

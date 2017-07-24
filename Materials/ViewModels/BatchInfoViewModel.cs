@@ -341,7 +341,7 @@ namespace Materials.ViewModels
 
                 _materialInstance = _instance?.Material;
 
-                SelectedExternalConstruction = _externalConstructionList.FirstOrDefault(excon => excon.ID == _materialInstance?.ID);
+                SelectedExternalConstruction = _externalConstructionList.FirstOrDefault(excon => excon.ID == _materialInstance?.ExternalConstructionID);
                 SelectedColour = _colourList.FirstOrDefault(col => col.ID == _recipeInstance?.ColourID);
 
                 SelectedExternalReport = null;
