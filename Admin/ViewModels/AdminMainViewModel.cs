@@ -97,6 +97,11 @@ namespace Admin.ViewModels
             get { return _newPersonRole; }
         }
 
+        public string InstrumentTypeManagementRegionName
+        {
+            get { return RegionNames.InstrumentTypeManagementRegion; }
+        }
+
         public string MeasurableQuantityManagementRegionName
         {
             get { return RegionNames.MeasurableQuantityManagementRegion; }

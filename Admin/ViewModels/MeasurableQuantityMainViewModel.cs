@@ -1,4 +1,5 @@
 ﻿using DBManager;
+using DBManager.EntityExtensions;
 using DBManager.Services;
 using Infrastructure.Events;
 using Prism.Commands;
@@ -35,6 +36,13 @@ namespace Admin.ViewModels
                     _eventAggregator.GetEvent<MeasurableQuantityCreationRequested>()
                                     .Publish();
                 });
+
+            _eventAggregator.GetEvent<MeasurableQuantityCreated>()
+                            .Subscribe(
+                            quantity =>
+                            {
+                                RaisePropertyChanged("MeasurableQuantityList");
+                            });
         }
 
         public IEnumerable<MeasurableQuantity> MeasurableQuantityList
@@ -47,7 +55,7 @@ namespace Admin.ViewModels
             get { return _deleteQuantity; }
         }
 
-        public DelegateCommand NewQuantityCommand
+        public DelegateCommand NewMeasurableQuantityCommand
         {
             get { return _newQuantity; }
         }

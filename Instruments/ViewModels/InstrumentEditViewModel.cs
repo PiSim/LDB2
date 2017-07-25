@@ -39,7 +39,7 @@ namespace Instruments.ViewModels
             _editMode = false;
             _eventAggregator = aggregator;
             _principal = principal;
-            _instrumentTypeList = DataService.GetInstrumentTypes();
+            _instrumentTypeList = InstrumentService.GetInstrumentTypes();
             _manufacturerList = OrganizationService.GetOrganizations(OrganizationRoleNames.Manufacturer);
             
             _addCalibration = new DelegateCommand(

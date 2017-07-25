@@ -113,9 +113,11 @@
     <Compile Include="Events\ExternalConstructionModified.cs" />
     <Compile Include="Events\ExternalReportCreationRequested.cs" />
     <Compile Include="Events\InstrumentCreationRequested.cs" />
+    <Compile Include="Events\InstrumentTypeCreated.cs" />
+    <Compile Include="Events\InstrumentTypeCreationRequested.cs" />
     <Compile Include="Events\MaintenanceEventCreated.cs" />
+    <Compile Include="Events\MeasurableQuantityCreated.cs" />
     <Compile Include="Events\MeasurableQuantityCreationRequested.cs" />
-    <Compile Include="Events\MeasurableQuantityExtension.cs" />
     <Compile Include="Events\MethodCreationRequested.cs" />
     <Compile Include="Events\MethodListUpdateRequested.cs" />
     <Compile Include="Events\NewCalibrationRequested.cs" />

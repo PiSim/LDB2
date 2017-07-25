@@ -40,6 +40,20 @@ namespace DBManager.Services
             }
         }
 
+        public static IEnumerable<InstrumentType> GetInstrumentTypes()
+        {
+            // Returns all InstrumentType entities
+
+            using (var entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.InstrumentTypes
+                                .OrderBy(insty => insty.Name)
+                                .ToList();
+            }
+        }
+
         public static IEnumerable<MeasurableQuantity> GetMeasurableQuantities()
         {
             // Returns all Measurable Quantities

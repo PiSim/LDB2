@@ -19,7 +19,7 @@ namespace DBManager
         {
             this.InstrumentMeasurableProperties = new HashSet<InstrumentMeasurableProperty>();
             this.UnitsOfMeasurement = new HashSet<MeasureUnit>();
-            this.instrument_types = new HashSet<InstrumentType>();
+            this.InstrumentTypes = new HashSet<InstrumentType>();
         }
     
         public int ID { get; set; }
@@ -30,6 +30,6 @@ namespace DBManager
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<MeasureUnit> UnitsOfMeasurement { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<InstrumentType> instrument_types { get; set; }
+        public virtual ICollection<InstrumentType> InstrumentTypes { get; set; }
     }
 }

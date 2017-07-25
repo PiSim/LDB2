@@ -4720,7 +4720,7 @@
           <Property Name="Name" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="InstrumentMeasurableProperties" Relationship="labdbModel.quantity_to_instrument_measurable_property" FromRole="measurable_quantities" ToRole="instrument_measurable_property" />
           <NavigationProperty Name="UnitsOfMeasurement" Relationship="labdbModel.measurable_quantity_to_unit" FromRole="MeasurableQuantity" ToRole="MeasureUnit" />
-          <NavigationProperty Name="instrument_types" Relationship="labdbModel.instrument_type_measurable_quantity_mappings" FromRole="MeasurableQuantity" ToRole="InstrumentType" />
+          <NavigationProperty Name="InstrumentTypes" Relationship="labdbModel.instrument_type_measurable_quantity_mappings" FromRole="MeasurableQuantity" ToRole="InstrumentType" />
         </EntityType>
         <Association Name="instrument_to_measurable_property">
           <End Type="labdbModel.Instrument" Role="Instrument" Multiplicity="1">

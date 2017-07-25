@@ -142,7 +142,7 @@ namespace Instruments.ViewModels
 
         public IEnumerable<InstrumentType> TypeList
         {
-            get { return DataService.GetInstrumentTypes(); }
+            get { return InstrumentService.GetInstrumentTypes(); }
         }
     }
 }

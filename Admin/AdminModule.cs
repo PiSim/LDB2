@@ -37,6 +37,8 @@ namespace Admin
                                                     typeof(Views.AdminNavigationItem));
             _regionManager.RegisterViewWithRegion(RegionNames.AdminUserMainRegion,
                                                     typeof(Views.UserMain));
+            _regionManager.RegisterViewWithRegion(RegionNames.InstrumentTypeManagementRegion,
+                                                    typeof(Views.InstrumentTypeMain));
             _regionManager.RegisterViewWithRegion(RegionNames.MeasurableQuantityManagementRegion,
                                                     typeof(Views.MeasurableQuantityMain));
         }

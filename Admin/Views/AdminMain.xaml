@@ -83,6 +83,10 @@
             <TabItem Header="Grandezze Misurabili">
                 <ContentControl prism:RegionManager.RegionName="{Binding MeasurableQuantityManagementRegionName}"/>
             </TabItem>
+            
+            <TabItem Header="Tipi Strumenti">
+                <ContentControl prism:RegionManager.RegionName="{Binding InstrumentTypeManagementRegionName}"/>
+            </TabItem>
         </TabControl>
 
     </Grid>

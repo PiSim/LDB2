@@ -41,7 +41,17 @@ namespace Services
                                                     .Publish(newEventDialog.InstrumentEventInstance);
                                 }
                             });
-            
+
+            _eventAggregator.GetEvent<MeasurableQuantityCreationRequested>()
+                            .Subscribe(
+                            () =>
+                            {
+                                MeasurableQuantity output = ServiceProvider.CreateNewMeasurableQuantity();
+                                if (output != null)
+                                    _eventAggregator.GetEvent<MeasurableQuantityCreated>()
+                                                    .Publish(output);
+                            });
+
             _eventAggregator.GetEvent<NewCalibrationRequested>()
                             .Subscribe(
                             instrument =>

@@ -14,7 +14,6 @@ namespace Services
     internal class ServiceProvider
     {
 
-
         internal static Person AddPerson()
         {
             StringInputDialog addPersonDialog = new StringInputDialog();
@@ -70,6 +69,25 @@ namespace Services
 
             else
                 return null;
+        }
+
+        public static MeasurableQuantity CreateNewMeasurableQuantity()
+        {
+            StringInputDialog creationDialog = new StringInputDialog();
+            creationDialog.Title = "Crea nuova quantità misurabile";
+
+            if (creationDialog.ShowDialog() == true)
+            {
+                MeasurableQuantity output = new MeasurableQuantity()
+                {
+                    Name = creationDialog.InputString
+                };
+
+                output.Create();
+                return output;
+            }
+
+            return null;
         }
 
         public static Organization CreateNewOrganization()
