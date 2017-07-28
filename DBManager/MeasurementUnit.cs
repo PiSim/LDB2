@@ -12,10 +12,10 @@ namespace DBManager
     using System;
     using System.Collections.Generic;
     
-    public partial class MeasureUnit
+    public partial class MeasurementUnit
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public MeasureUnit()
+        public MeasurementUnit()
         {
             this.InstrumentMeasurableProperties = new HashSet<InstrumentMeasurableProperty>();
         }
@@ -27,6 +27,6 @@ namespace DBManager
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<InstrumentMeasurableProperty> InstrumentMeasurableProperties { get; set; }
-        public virtual MeasurableQuantity MeasurableQuantity { get; set; }
+        public virtual MeasurableQuantity MeasurableQuantities { get; set; }
     }
 }

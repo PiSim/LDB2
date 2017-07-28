@@ -77,7 +77,7 @@ namespace DBManager
         public virtual DbSet<MaterialLine> MaterialLines { get; set; }
         public virtual DbSet<TrialArea> TrialAreas { get; set; }
         public virtual DbSet<InstrumentUtilizationArea> InstrumentUtilizationAreas { get; set; }
-        public virtual DbSet<MeasureUnit> MeasureUnits { get; set; }
+        public virtual DbSet<MeasurementUnit> MeasurementUnits { get; set; }
         public virtual DbSet<InstrumentMeasurableProperty> InstrumentMeasurableProperties { get; set; }
         public virtual DbSet<MeasurableQuantity> MeasurableQuantities { get; set; }
     }

@@ -66,6 +66,18 @@ namespace DBManager.Services
             }
         }
 
+        public static IEnumerable<MeasurementUnit> GetMeasurementUnits()
+        {
+            // Returns all measurement units
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.MeasurementUnits.ToList();
+            }
+        }
+
         #endregion
         
     }

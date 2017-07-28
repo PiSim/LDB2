@@ -29,6 +29,16 @@ namespace Services
                                                     .Publish(tmp);
                             });
 
+            _eventAggregator.GetEvent<InstrumentTypeCreationRequested>()
+                            .Subscribe(
+                            () =>
+                            {
+                                InstrumentType output = ServiceProvider.CreateNewInstrumentType();
+                                if (output != null)
+                                    _eventAggregator.GetEvent<InstrumentTypeCreated>()
+                                                    .Publish(output);
+                            });
+
             _eventAggregator.GetEvent<MaintenanceEventCreationRequested>()
                             .Subscribe(instrumentEntry =>
                             {

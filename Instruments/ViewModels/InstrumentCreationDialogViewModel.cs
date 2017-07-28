@@ -46,9 +46,20 @@ namespace Instruments.ViewModels
                     _instrumentInstance.manufacturerID = SelectedManufacturer.ID;
                     _instrumentInstance.Model = Model;
                     _instrumentInstance.SerialNumber = _serial;
+                    
+                    foreach (MeasurableQuantity meq in _selectedType.GetAssociatedMeasurableQuantities())
+                    {
+                        InstrumentMeasurableProperty tempIMP = new InstrumentMeasurableProperty()
+                        {
+                            MeasurableQuantityID = meq.ID
+                        };
+
+                        _instrumentInstance.instrument_measurable_property.Add(tempIMP);
+                    }
 
                     _instrumentInstance.Create();
-                    
+
+
                     parent.DialogResult = true;
                 },
                 parent => IsValidInput);

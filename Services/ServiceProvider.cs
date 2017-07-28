@@ -71,6 +71,25 @@ namespace Services
                 return null;
         }
 
+        public static InstrumentType CreateNewInstrumentType()
+        {
+            StringInputDialog creationDialog = new StringInputDialog();
+            creationDialog.Title = "Crea nuovo Tipo strumenti";
+
+            if (creationDialog.ShowDialog() == true)
+            {
+                InstrumentType output = new InstrumentType()
+                {
+                    Name = creationDialog.InputString
+                };
+
+                output.Create();
+                return output;
+            }
+
+            return null;
+        }
+
         public static MeasurableQuantity CreateNewMeasurableQuantity()
         {
             StringInputDialog creationDialog = new StringInputDialog();

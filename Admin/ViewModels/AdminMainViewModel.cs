@@ -51,28 +51,20 @@ namespace Admin.ViewModels
                 {
                     using (DBEntities entities = new DBEntities())
                     {
-                        IEnumerable<Batch> negativeStockBatches = entities.Batches.Where(btc => btc.ArchiveStock < 0)
-                                                                                   .ToList();
+                        IEnumerable<Instrument> iList = InstrumentService.GetInstruments();
 
-                        foreach (Batch btc in negativeStockBatches)
+                        foreach (Instrument ins in iList)
                         {
-                            DateTime tempDate = btc.Samples.First().Date;
-
-                            for (int ii = btc.ArchiveStock; ii < 0; ii++)
+                            foreach (MeasurableQuantity meq in entities.InstrumentTypes.First(ist => ist.ID == ins.InstrumentTypeID).MeasurableQuantities)
                             {
-                                entities.Samples.Add(new Sample()
-                                {
-                                    Code = "A",
-                                    Batch = btc,
-                                    Date = tempDate,
-                                    personID = 1
-                                });
-
-                                btc.ArchiveStock += 1;
+                                meq.InstrumentMeasurableProperties.Add(
+                                    new InstrumentMeasurableProperty()
+                                    {
+                                        InstrumentID = ins.ID
+                                    });
                             }
-                            
                         }
-
+                            
                         entities.SaveChanges();
                     }
                 } );
@@ -130,6 +122,11 @@ namespace Admin.ViewModels
         public DelegateCommand RunMethodCommand
         {
             get { return _runMethod; }
+        }
+
+        public string UnitOfMeasurementManagementRegionName
+        {
+            get { return RegionNames.UnitOfMeasurementManagementRegion; }
         }
     }
 }

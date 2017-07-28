@@ -59,6 +59,13 @@ namespace Admin.ViewModels
             set
             {
                 _selectedInstrumentType = value;
+
+                NavigationToken token = new NavigationToken(AdminViewNames.InstrumentTypeEditView,
+                                                            _selectedInstrumentType,
+                                                            RegionNames.InstrumentTypeManagementEditRegion);
+
+                _eventAggregator.GetEvent<NavigationRequested>()
+                                .Publish(token);
             }
         }
 

@@ -17,7 +17,8 @@ namespace DBManager
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public InstrumentMeasurableProperty()
         {
-            this.calibration_reports = new HashSet<CalibrationReport>();
+            this.Description = "";
+            this.CalibrationReports = new HashSet<CalibrationReport>();
         }
     
         public int ID { get; set; }
@@ -26,15 +27,17 @@ namespace DBManager
         public bool IsUnderControl { get; set; }
         public float TargetUncertainty { get; set; }
         public int UnitID { get; set; }
-        public float UpperLimit { get; set; }
-        public float LowerLimit { get; set; }
         public float Resolution { get; set; }
         public int MeasurableQuantityID { get; set; }
+        public double CalibrationRangeUpperLimit { get; set; }
+        public double CalibrationRangeLowerLimit { get; set; }
+        public double RangeUpperLimit { get; set; }
+        public double RangeLowerLimit { get; set; }
     
         public virtual Instrument Instrument { get; set; }
         public virtual MeasurableQuantity MeasurableQuantity { get; set; }
-        public virtual MeasureUnit UnitOfMeasurement { get; set; }
+        public virtual MeasurementUnit UnitOfMeasurement { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<CalibrationReport> calibration_reports { get; set; }
+        public virtual ICollection<CalibrationReport> CalibrationReports { get; set; }
     }
 }

@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="9fa1cdb38a7949d89850433ccf2fcd72" Name="Diagram1" ZoomLevel="36" ShowGrid="false">
+      <Diagram DiagramId="9fa1cdb38a7949d89850433ccf2fcd72" Name="Diagram1" ZoomLevel="93" ShowGrid="false">
         <EntityTypeShape EntityType="labdbModel.Aspect" Width="1.5" PointX="35.875" PointY="23.125" IsExpanded="true" />
         <EntityTypeShape EntityType="labdbModel.BatchFile" Width="1.5" PointX="32.75" PointY="6.75" IsExpanded="true" />
         <EntityTypeShape EntityType="labdbModel.Batch" Width="1.5" PointX="30.875" PointY="11.375" IsExpanded="true" />
@@ -151,10 +151,10 @@
         <AssociationConnector Association="labdbModel.basic_report_to_batch" />
         <AssociationConnector Association="labdbModel.first_sample_to_batch" />
         <EntityTypeShape EntityType="labdbModel.InstrumentUtilizationArea" Width="1.875" PointX="3.375" PointY="25.75" />
-        <EntityTypeShape EntityType="labdbModel.MeasureUnit" Width="1.5" PointX="3.375" PointY="33" />
+        <EntityTypeShape EntityType="labdbModel.MeasurementUnit" Width="1.5" PointX="3.375" PointY="33" />
         <AssociationConnector Association="labdbModel.utilization_area_to_instrument" />
         <EntityTypeShape EntityType="labdbModel.InstrumentMeasurableProperty" Width="1.5" PointX="5.375" PointY="33.375" />
-        <EntityTypeShape EntityType="labdbModel.MeasurableQuantity" Width="1.5" PointX="3.375" PointY="36" />
+        <EntityTypeShape EntityType="labdbModel.MeasurableQuantity" Width="1.5" PointX="3.375" PointY="35.75" />
         <AssociationConnector Association="labdbModel.instrument_to_measurable_property" />
         <AssociationConnector Association="labdbModel.quantity_to_instrument_measurable_property" />
         <AssociationConnector Association="labdbModel.unit_to_measurable_property" />

@@ -87,6 +87,10 @@
             <TabItem Header="Tipi Strumenti">
                 <ContentControl prism:RegionManager.RegionName="{Binding InstrumentTypeManagementRegionName}"/>
             </TabItem>
+
+            <TabItem Header="Unità di misura">
+                <ContentControl prism:RegionManager.RegionName="{Binding UnitOfMeasurementManagementRegionName}"/>
+            </TabItem>
         </TabControl>
 
     </Grid>

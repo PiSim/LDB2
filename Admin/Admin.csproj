@@ -121,6 +121,9 @@
     <Compile Include="ViewModels\InstrumentTypeEditViewModel.cs" />
     <Compile Include="ViewModels\InstrumentTypeMainViewModel.cs" />
     <Compile Include="ViewModels\MeasurableQuantityMainViewModel.cs" />
+    <Compile Include="ViewModels\MeasurementUnitCreationDialogViewModel.cs" />
+    <Compile Include="ViewModels\MeasurementUnitEditViewModel.cs" />
+    <Compile Include="ViewModels\MeasurementUnitMainViewModel.cs" />
     <Compile Include="ViewModels\NewUserDialogViewModel.cs" />
     <Compile Include="ViewModels\UserEditViewModel.cs" />
     <Compile Include="ViewModels\UserMainViewModel.cs" />
@@ -138,6 +141,15 @@
     </Compile>
     <Compile Include="Views\MeasurableQuantityMain.xaml.cs">
       <DependentUpon>MeasurableQuantityMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MeasurementUnitCreationDialog.xaml.cs">
+      <DependentUpon>MeasurementUnitCreationDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MeasurementUnitEdit.xaml.cs">
+      <DependentUpon>MeasurementUnitEdit.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MeasurementUnitMain.xaml.cs">
+      <DependentUpon>MeasurementUnitMain.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\NewUserDialog.xaml.cs">
       <DependentUpon>NewUserDialog.xaml</DependentUpon>
@@ -201,6 +213,18 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MeasurableQuantityMain.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MeasurementUnitCreationDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MeasurementUnitEdit.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MeasurementUnitMain.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

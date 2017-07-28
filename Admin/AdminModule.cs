@@ -23,6 +23,7 @@ namespace Admin
             _container.Resolve<AdminServiceProvider>();
 
             _container.RegisterType<Object, Views.AdminMain>(AdminViewNames.AdminMainView);
+            _container.RegisterType<Object, Views.InstrumentTypeEdit>(AdminViewNames.InstrumentTypeEditView);
             _container.RegisterType<Object, Views.UserEdit>(AdminViewNames.UserEditView);
 
             _container.RegisterType<ViewModels.AdminMainViewModel>();
@@ -41,6 +42,8 @@ namespace Admin
                                                     typeof(Views.InstrumentTypeMain));
             _regionManager.RegisterViewWithRegion(RegionNames.MeasurableQuantityManagementRegion,
                                                     typeof(Views.MeasurableQuantityMain));
+            _regionManager.RegisterViewWithRegion(RegionNames.UnitOfMeasurementManagementRegion,
+                                                    typeof(Views.MeasurementUnitMain));
         }
     }
 }

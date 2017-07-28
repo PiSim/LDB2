@@ -183,13 +183,18 @@
     <Compile Include="InstrumentUtilizationArea.cs">
       <DependentUpon>LabDB.tt</DependentUpon>
     </Compile>
+    <Compile Include="LabDB.Context1.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LabDB.Context.tt</DependentUpon>
+    </Compile>
     <Compile Include="MaterialLine.cs">
       <DependentUpon>LabDB.tt</DependentUpon>
     </Compile>
     <Compile Include="MeasurableQuantity.cs">
       <DependentUpon>LabDB.tt</DependentUpon>
     </Compile>
-    <Compile Include="MeasureUnit.cs">
+    <Compile Include="MeasurementUnit.cs">
       <DependentUpon>LabDB.tt</DependentUpon>
     </Compile>
     <Compile Include="PersonRoleNames.cs" />
@@ -212,11 +217,6 @@
     </Compile>
     <Compile Include="InstrumentType.cs">
       <DependentUpon>LabDB.tt</DependentUpon>
-    </Compile>
-    <Compile Include="LabDB.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>LabDB.Context.tt</DependentUpon>
     </Compile>
     <Compile Include="LabDB.cs">
       <AutoGen>True</AutoGen>
@@ -381,7 +381,7 @@
     <Content Include="LabDB.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>LabDB.edmx</DependentUpon>
-      <LastGenOutput>LabDB.Context.cs</LastGenOutput>
+      <LastGenOutput>LabDB.Context1.cs</LastGenOutput>
     </Content>
     <Content Include="LabDB.tt">
       <Generator>TextTemplatingFileGenerator</Generator>

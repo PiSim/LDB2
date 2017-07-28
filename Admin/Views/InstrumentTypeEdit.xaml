@@ -35,12 +35,12 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
 
-            <Button Content=">"
-                    Command="{Binding AssignMeasurableCommand}"
+            <Button Content="◄"
+                    Command="{Binding AssociateMeasurableCommand}"
                     Grid.Row="0"
                     Margin="5"/>
-            <Button Content=">"
-                    Command="{Binding UnassignMeasurableCommand}"
+            <Button Content="►"
+                    Command="{Binding UnassociateMeasurableCommand}"
                     Grid.Row="2"
                     Margin="5"/>
         </Grid>

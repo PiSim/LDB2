@@ -13,36 +13,44 @@ namespace Admin.ViewModels
 {
     public class InstrumentTypeEditViewModel : BindableBase
     {
-        private DelegateCommand _assignMeasurable,
-                                _unassignMeasurable;
+        private DelegateCommand _associateMeasurable,
+                                _unassociateMeasurable;
         private EventAggregator _eventAggregator;
         private InstrumentType _instrumentTypeInstance;
-        private MeasurableQuantity _selectedAssigned,
-                                    _selectedUnassigned;
+        private MeasurableQuantity _selectedAssociated,
+                                    _selectedUnassociated;
 
         public InstrumentTypeEditViewModel(EventAggregator eventAggregator)
         {
             _eventAggregator = eventAggregator;
 
-            _assignMeasurable = new DelegateCommand(
+            _associateMeasurable = new DelegateCommand(
                 () =>
                 {
+                    _instrumentTypeInstance.AddMeasurableQuantityAssociation(_selectedUnassociated);
+                    RaisePropertyChanged("AssociatedMeasurableQuantityList");
+                    RaisePropertyChanged("UnassociatedMeasurableQuantityList");
+                },
+                () => _instrumentTypeInstance != null
+                    && _selectedUnassociated != null);
 
-                });
-
-            _unassignMeasurable = new DelegateCommand(
+            _unassociateMeasurable = new DelegateCommand(
                 () =>
                 {
-
-                });
+                    _instrumentTypeInstance.RemoveMeasurableQuantityAssociation(_selectedAssociated);
+                    RaisePropertyChanged("AssociatedMeasurableQuantityList");
+                    RaisePropertyChanged("UnassociatedMeasurableQuantityList");
+                },
+                () => _instrumentTypeInstance != null
+                    && _selectedAssociated != null);
         }
 
-        public DelegateCommand AssignMeasurableCommand
+        public DelegateCommand AssociateMeasurableCommand
         {
-            get { return _assignMeasurable; }
+            get { return _associateMeasurable; }
         }
 
-        public IEnumerable<MeasurableQuantity> AssociatedMeasurablesList
+        public IEnumerable<MeasurableQuantity> AssociatedMeasurableQuantityList
         {
             get { return _instrumentTypeInstance.GetAssociatedMeasurableQuantities(); }
         }
@@ -53,39 +61,41 @@ namespace Admin.ViewModels
             set
             {
                 _instrumentTypeInstance = value;
-                SelectedAssigned = null;
-                SelectedUnassigned = null;
+                SelectedAssociated = null;
+                SelectedUnassociated = null;
+                RaisePropertyChanged("AssociatedMeasurableQuantityList");
+                RaisePropertyChanged("UnassociatedMeasurableQuantityList");
             }
         }
 
-        public MeasurableQuantity SelectedAssigned
+        public MeasurableQuantity SelectedAssociated
         {
-            get { return _selectedAssigned; }
+            get { return _selectedAssociated; }
             set
             {
-                _selectedAssigned = value;
-                RaisePropertyChanged("AssociatedMeasurablesList");
-                RaisePropertyChanged("SelectedAssigned");
-                RaisePropertyChanged("UnassociatedMeasurablesList");
+                _selectedAssociated = value;
+                _unassociateMeasurable.RaiseCanExecuteChanged();
+                RaisePropertyChanged("SelectedAssociated");
             }
         }
 
-        public MeasurableQuantity SelectedUnassigned
+        public MeasurableQuantity SelectedUnassociated
         {
-            get { return _selectedUnassigned; }
+            get { return _selectedUnassociated; }
             set
             {
-                _selectedUnassigned = value;
-                RaisePropertyChanged("SelectedUnassigned");
+                _selectedUnassociated = value;
+                _associateMeasurable.RaiseCanExecuteChanged();
+                RaisePropertyChanged("SelectedUnassociated");
             }
         }
 
-        public DelegateCommand UnassignMeasurableCommand
+        public DelegateCommand UnassociateMeasurableCommand
         {
-            get { return _unassignMeasurable; }
+            get { return _unassociateMeasurable; }
         }
 
-        public IEnumerable<MeasurableQuantity> UnassociatedMeasurablesList
+        public IEnumerable<MeasurableQuantity> UnassociatedMeasurableQuantityList
         {
             get { return _instrumentTypeInstance.GetUnassociatedMeasurableQuantities(); }
         }

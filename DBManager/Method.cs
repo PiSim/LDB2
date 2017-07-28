@@ -22,7 +22,7 @@ namespace DBManager
             this.SubMethods = new HashSet<SubMethod>();
             this.AssociatedInstruments = new HashSet<Instrument>();
             this.ExternalReports = new HashSet<ExternalReport>();
-            this.task_items = new HashSet<TaskItem>();
+            this.TaskItems = new HashSet<TaskItem>();
         }
     
         public int ID { get; private set; }
@@ -45,6 +45,6 @@ namespace DBManager
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ExternalReport> ExternalReports { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<TaskItem> task_items { get; set; }
+        public virtual ICollection<TaskItem> TaskItems { get; set; }
     }
 }
