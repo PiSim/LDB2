@@ -34,17 +34,24 @@
                     <ListView.View>
                         <GridView>
                             <GridViewColumn Header="Quantità"
-                                            DisplayMemberBinding="{Binding MeasurableQuantity}"/>
+                                            DisplayMemberBinding="{Binding MeasurableQuantity.Name}"/>
                             <GridViewColumn Header="Range, Lim. Inferiore"
-                                            DisplayMemberBinding="{Binding LowerLimit}"/>
+                                            DisplayMemberBinding="{Binding RangeLowerLimit}"/>
                             <GridViewColumn Header="Range, Lim. Superiore"
-                                            DisplayMemberBinding="{Binding UpperLimit}"/>
+                                            DisplayMemberBinding="{Binding RangeUpperLimit}"/>
                             <GridViewColumn Header="Divisione"
                                             DisplayMemberBinding="{Binding Resolution}"/>
                             <GridViewColumn Header="UM"
                                             DisplayMemberBinding="{Binding UnitOfMeasurement.Symbol}"/>
-                            <GridViewColumn Header="Controllo metrologico"
-                                            DisplayMemberBinding="{Binding IsUnderControl}"/>
+                            <GridViewColumn Header="Controllo metrologico">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <CheckBox IsChecked="{Binding IsUnderControl}"
+                                                    IsEnabled="False"
+                                                    HorizontalAlignment="Center"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
                         </GridView>
                     </ListView.View>
                 </ListView>

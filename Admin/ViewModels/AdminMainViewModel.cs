@@ -51,20 +51,8 @@ namespace Admin.ViewModels
                 {
                     using (DBEntities entities = new DBEntities())
                     {
-                        IEnumerable<Instrument> iList = InstrumentService.GetInstruments();
 
-                        foreach (Instrument ins in iList)
-                        {
-                            foreach (MeasurableQuantity meq in entities.InstrumentTypes.First(ist => ist.ID == ins.InstrumentTypeID).MeasurableQuantities)
-                            {
-                                meq.InstrumentMeasurableProperties.Add(
-                                    new InstrumentMeasurableProperty()
-                                    {
-                                        InstrumentID = ins.ID
-                                    });
-                            }
-                        }
-                            
+                        
                         entities.SaveChanges();
                     }
                 } );

@@ -57,6 +57,7 @@
         <ComboBox ItemsSource="{Binding MeasurableQuantityList}"
                   SelectedItem="{Binding SelectedMeasurableQuantity,
                                          Mode=TwoWay}"
+                  IsEnabled="{Binding CanModifyQuantity}"
                   DisplayMemberPath="Name"
                   Grid.Column="1"
                   Grid.ColumnSpan="2"

@@ -18,7 +18,7 @@ namespace DBManager
         public InstrumentMeasurableProperty()
         {
             this.Description = "";
-            this.CalibrationReports = new HashSet<CalibrationReport>();
+            this.CalibrationReportMappings = new HashSet<CalibrationReportInstrumentPropertyMapping>();
         }
     
         public int ID { get; set; }
@@ -33,11 +33,13 @@ namespace DBManager
         public double CalibrationRangeLowerLimit { get; set; }
         public double RangeUpperLimit { get; set; }
         public double RangeLowerLimit { get; set; }
+        public int ControlPeriod { get; set; }
+        public Nullable<System.DateTime> CalibrationDue { get; set; }
     
         public virtual Instrument Instrument { get; set; }
         public virtual MeasurableQuantity MeasurableQuantity { get; set; }
         public virtual MeasurementUnit UnitOfMeasurement { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<CalibrationReport> CalibrationReports { get; set; }
+        public virtual ICollection<CalibrationReportInstrumentPropertyMapping> CalibrationReportMappings { get; set; }
     }
 }

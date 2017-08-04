@@ -9,11 +9,17 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="150"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        
         <Grid.RowDefinitions>
             <RowDefinition Height="35"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-
+        
+        
         <StackPanel Orientation="Horizontal"
                     Margin="5">
             <Button Content="Nuova"
@@ -26,6 +32,11 @@
                                          Mode=TwoWay}"
                   DisplayMemberPath="Name"
                   Margin="5"
+                  Grid.Column="0"
                   Grid.Row="1"/>
+
+        <ContentControl prism:RegionManager.RegionName="{Binding MeasurableQuantityManagementEditRegionName}"
+                        Grid.Column="1"
+                        Grid.Row="1"/>
     </Grid>
 </UserControl>

@@ -1,4 +1,5 @@
 ﻿using DBManager;
+using DBManager.EntityExtensions;
 using Infrastructure;
 using Infrastructure.Events;
 using Prism.Commands;
@@ -104,6 +105,22 @@ namespace Services.ViewModels
 
                     foreach (CalibrationFiles calFile in _calibrationFileList)
                         _reportInstance.CalibrationFiles.Add(calFile);
+
+                    foreach (InstrumentMeasurableProperty imp in _instumentInstance.GetMeasurableProperties())
+                    {
+                        CalibrationReportInstrumentPropertyMapping cripm = new CalibrationReportInstrumentPropertyMapping()
+                        {
+                            ExtendedUncertainty = 0,
+                            IsVerification = false,
+                            LowerRangeValue = imp.CalibrationRangeLowerLimit,
+                            MeasurablePropertyID = imp.ID,
+                            MeasurementUnitID = imp.UnitID,
+                            Result = DBManager.CalibrationResult.Accepted,
+                            UpperRangeValue = imp.CalibrationRangeUpperLimit
+                        };
+
+                        _reportInstance.InstrumentMeasurablePropertyMappings.Add(cripm);
+                    }
 
                     _entities.CalibrationReports.Add(_reportInstance);
                     _entities.SaveChanges();

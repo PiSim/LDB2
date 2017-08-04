@@ -1,4 +1,5 @@
-﻿using Microsoft.Practices.Prism.Mvvm;
+﻿using DBManager;
+using Microsoft.Practices.Prism.Mvvm;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +24,21 @@ namespace Admin.Views
         public MeasurementUnitCreationDialog()
         {
             InitializeComponent();
+        }
+
+        public bool CanModifyQuantity
+        {
+            get { return (DataContext as ViewModels.MeasurementUnitCreationDialogViewModel).CanModifyQuantity; }
+            set { (DataContext as ViewModels.MeasurementUnitCreationDialogViewModel).CanModifyQuantity = value; }
+        }
+
+        public MeasurableQuantity MeasurableQuantityInstance
+        {
+            get { return (DataContext as ViewModels.MeasurementUnitCreationDialogViewModel).SelectedMeasurableQuantity; }
+            set
+            {
+                (DataContext as ViewModels.MeasurementUnitCreationDialogViewModel).SetQuantity(value);
+            }
         }
     }
 }

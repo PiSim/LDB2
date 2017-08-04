@@ -20,8 +20,7 @@ namespace DBManager.EntityExtensions
                 entities.SaveChanges();
             }
         }
-
-
+        
         public static void Delete(this MeasurableQuantity entry)
         {
             using (DBEntities entities = new DBEntities())
@@ -34,6 +33,22 @@ namespace DBManager.EntityExtensions
                 entities.SaveChanges();
 
                 entry.ID = 0;
+            }
+        }
+
+        public static IEnumerable<MeasurementUnit> GetMeasurementUnits(this MeasurableQuantity entry)
+        {
+            // Returns all MeasurementUnit for a given MeasurableQuantity
+
+            if (entry == null)
+                return new List<MeasurementUnit>();
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.MeasurementUnits.Where(meu => meu.MeasurableQuantityID == entry.ID)
+                                                .ToList();
             }
         }
     }

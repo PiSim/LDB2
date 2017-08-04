@@ -1,4 +1,5 @@
 ﻿using DBManager;
+using DBManager.EntityExtensions;
 using DBManager.Services;
 using Prism.Commands;
 using Prism.Mvvm;
@@ -15,10 +16,12 @@ namespace Admin.ViewModels
 {
     public class MeasurementUnitCreationDialogViewModel : BindableBase, INotifyDataErrorInfo
     {
+        private bool _canModifyQuantity;
         private DelegateCommand<Window> _cancel,
                                         _confirm;
 
         private readonly Dictionary<string, ICollection<string>> _validationErrors = new Dictionary<string, ICollection<string>>();
+        private IEnumerable<MeasurableQuantity> _measurableQuantityList;
         private MeasurableQuantity _selectedMeasurableQuantity;
         private MeasurementUnit _measurementUnitInstance;
         private string _name,
@@ -27,6 +30,9 @@ namespace Admin.ViewModels
 
         public MeasurementUnitCreationDialogViewModel()
         {
+            _canModifyQuantity = false;
+            _measurableQuantityList = InstrumentService.GetMeasurableQuantities();
+
             _cancel = new DelegateCommand<Window>(
                 parentDialog =>
                 {
@@ -43,10 +49,24 @@ namespace Admin.ViewModels
                         Symbol = _symbol
                     };
 
+                    _measurementUnitInstance.Create();
+
                     parentDialog.DialogResult = true;
                 },
                 parentDialog => !HasErrors);
         }
+
+        #region Service Methods
+
+        public void SetQuantity(MeasurableQuantity entry)
+        {
+            _selectedMeasurableQuantity = _measurableQuantityList.First(meq => meq.ID == entry.ID);
+            RaisePropertyChanged("SelectedMeasurableQuantity");
+        }
+
+        #endregion
+
+
 
         #region INotifyDataErrorInfo interface elements
 
@@ -79,6 +99,16 @@ namespace Admin.ViewModels
             get { return _cancel; }
         }
 
+        public bool CanModifyQuantity
+        {
+            get { return _canModifyQuantity; }
+            set
+            {
+                _canModifyQuantity = value;
+                RaisePropertyChanged("CanModifyQuantity");
+            }
+        }
+
         public DelegateCommand<Window> ConfirmCommand
         {
             get { return _confirm; }
@@ -86,7 +116,7 @@ namespace Admin.ViewModels
 
         public IEnumerable<MeasurableQuantity> MeasurableQuantityList
         {
-            get { return InstrumentService.GetMeasurableQuantities(); }
+            get { return _measurableQuantityList; }
         }
 
         public MeasurementUnit MeasurementUnitInstance

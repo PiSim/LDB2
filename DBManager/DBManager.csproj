@@ -131,6 +131,12 @@
     <Compile Include="CalibrationReport.cs">
       <DependentUpon>LabDB.tt</DependentUpon>
     </Compile>
+    <Compile Include="CalibrationReportInstrumentPropertyMapping.cs">
+      <DependentUpon>LabDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CalibrationResult.cs">
+      <DependentUpon>LabDB.tt</DependentUpon>
+    </Compile>
     <Compile Include="Colour.cs">
       <DependentUpon>LabDB.tt</DependentUpon>
     </Compile>
@@ -156,6 +162,7 @@
     <Compile Include="EntityExtensions\MaterialLineExtension.cs" />
     <Compile Include="EntityExtensions\MaterialTypeExtension.cs" />
     <Compile Include="EntityExtensions\MeasurableQuantityExtension.cs" />
+    <Compile Include="EntityExtensions\MeasurementUnitExtension.cs" />
     <Compile Include="EntityExtensions\MethodExtension.cs" />
     <Compile Include="EntityExtensions\OrganizationExtension.cs" />
     <Compile Include="EntityExtensions\OrganizationRoleExtension.cs" />

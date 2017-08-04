@@ -24,6 +24,7 @@ namespace Admin
 
             _container.RegisterType<Object, Views.AdminMain>(AdminViewNames.AdminMainView);
             _container.RegisterType<Object, Views.InstrumentTypeEdit>(AdminViewNames.InstrumentTypeEditView);
+            _container.RegisterType<Object, Views.MeasurableQuantityEdit>(AdminViewNames.MeasurableQuantityEdit);
             _container.RegisterType<Object, Views.UserEdit>(AdminViewNames.UserEditView);
 
             _container.RegisterType<ViewModels.AdminMainViewModel>();

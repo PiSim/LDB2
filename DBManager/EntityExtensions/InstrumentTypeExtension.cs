@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data.Entity;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -48,7 +49,8 @@ namespace DBManager.EntityExtensions
             {
                 entities.Configuration.LazyLoadingEnabled = false;
 
-                return entities.MeasurableQuantities.Where(meq => meq.InstrumentTypes
+                return entities.MeasurableQuantities.Include(meq => meq.UnitsOfMeasurement)
+                                                    .Where(meq => meq.InstrumentTypes
                                                     .Any(mit => mit.ID == entry.ID))
                                                     .ToList();
             }

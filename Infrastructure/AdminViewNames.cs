@@ -10,6 +10,7 @@ namespace Infrastructure
     {
         public static string AdminMainView { get { return "AdminMainView"; } }
         public static string InstrumentTypeEditView { get { return "InstrumentTypeEditView"; } }
+        public static string MeasurableQuantityEdit { get { return "MeasurableQuantityEdit"; } }
         public static string UserEditView { get { return "UserEditView"; } }
         public static string UserMainView { get { return "UserMainView"; } }
     }

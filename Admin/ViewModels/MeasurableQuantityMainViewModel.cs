@@ -1,6 +1,7 @@
 ﻿using DBManager;
 using DBManager.EntityExtensions;
 using DBManager.Services;
+using Infrastructure;
 using Infrastructure.Events;
 using Prism.Commands;
 using Prism.Events;
@@ -45,6 +46,11 @@ namespace Admin.ViewModels
                             });
         }
 
+        public string MeasurableQuantityManagementEditRegionName
+        {
+            get { return RegionNames.MeasurableQuantityManagementEditRegion; }
+        }
+
         public IEnumerable<MeasurableQuantity> MeasurableQuantityList
         {
             get { return InstrumentService.GetMeasurableQuantities(); }
@@ -54,6 +60,7 @@ namespace Admin.ViewModels
         {
             get { return _deleteQuantity; }
         }
+
 
         public DelegateCommand NewMeasurableQuantityCommand
         {
@@ -66,6 +73,13 @@ namespace Admin.ViewModels
             set
             {
                 _selectedMeasurableQuantity = value;
+
+                NavigationToken token = new NavigationToken(AdminViewNames.MeasurableQuantityEdit,
+                                                            _selectedMeasurableQuantity,
+                                                            RegionNames.MeasurableQuantityManagementEditRegion);
+
+                _eventAggregator.GetEvent<NavigationRequested>()
+                                .Publish(token);
             }
         }
     }

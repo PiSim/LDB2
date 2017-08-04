@@ -18,7 +18,7 @@ namespace DBManager
         public SubMethod()
         {
             this.SubRequirements = new HashSet<SubRequirement>();
-            this.sub_task_items = new HashSet<SubTaskItem>();
+            this.SubTaskItems = new HashSet<SubTaskItem>();
         }
     
         public int ID { get; set; }
@@ -30,6 +30,6 @@ namespace DBManager
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SubRequirement> SubRequirements { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SubTaskItem> sub_task_items { get; set; }
+        public virtual ICollection<SubTaskItem> SubTaskItems { get; set; }
     }
 }

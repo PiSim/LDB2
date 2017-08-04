@@ -51,7 +51,8 @@ namespace Instruments.ViewModels
                     {
                         InstrumentMeasurableProperty tempIMP = new InstrumentMeasurableProperty()
                         {
-                            MeasurableQuantityID = meq.ID
+                            MeasurableQuantityID = meq.ID,
+                            UnitID = meq.UnitsOfMeasurement.First().ID
                         };
 
                         _instrumentInstance.instrument_measurable_property.Add(tempIMP);
