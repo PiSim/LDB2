@@ -140,28 +140,40 @@
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
-                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="2*"/>
                     </Grid.ColumnDefinitions>
 
-                    <ListView ItemsSource="{Binding CalibrationReportList}"
-                              SelectedItem="{Binding SelectedCalibration, Mode=TwoWay}">
-                        <ListView.View>
-                            <GridView>
-                                <GridViewColumn Header="Report"
-                                                DisplayMemberBinding="{Binding Number}"/>
-                                <GridViewColumn Header="Data"
-                                                DisplayMemberBinding="{Binding Date, StringFormat=d}"/>
-                                <GridViewColumn Header="Ente"
-                                                DisplayMemberBinding="{Binding Laboratory.Name}"/>
-                            </GridView>
-                        </ListView.View>
-                    </ListView>
-                    <StackPanel Orientation="Vertical"
-                                Grid.Column="1">
-                        <Button Content="Nuova"
-                                Command="{Binding AddCalibrationCommand}"
-                                Margin="5"/>
-                    </StackPanel>
+                    <Grid Grid.Column="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="35"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+
+                        <StackPanel Orientation="Horizontal"
+                                    Grid.Row="0">
+                            <Button Content="Nuova"
+                                    Command="{Binding AddCalibrationCommand}"
+                                    Margin="5"/>
+                        </StackPanel>
+
+
+                        <ListView ItemsSource="{Binding CalibrationReportList}"
+                                  SelectedItem="{Binding SelectedCalibration, Mode=TwoWay}"
+                                  Grid.Row="1">
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="Report"
+                                                    DisplayMemberBinding="{Binding Number}"/>
+                                    <GridViewColumn Header="Data"
+                                                    DisplayMemberBinding="{Binding Date, StringFormat=d}"/>
+                                    <GridViewColumn Header="Ente"
+                                                    DisplayMemberBinding="{Binding Laboratory.Name}"/>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                    </Grid>
+                    <ContentControl prism:RegionManager.RegionName="{Binding InstrumentEditCalibrationEditRegionName}"
+                                    Grid.Column="1"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Manutenzione">

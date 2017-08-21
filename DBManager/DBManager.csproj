@@ -151,6 +151,7 @@
     </Compile>
     <Compile Include="EntityExtensions\AspectExtension.cs" />
     <Compile Include="EntityExtensions\BatchExtension.cs" />
+    <Compile Include="EntityExtensions\CalibrationReportExtension.cs" />
     <Compile Include="EntityExtensions\ColourExtension.cs" />
     <Compile Include="EntityExtensions\ExternalConstructionExtension.cs" />
     <Compile Include="EntityExtensions\ExternalReportExtension.cs" />

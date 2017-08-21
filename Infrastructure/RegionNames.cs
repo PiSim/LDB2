@@ -17,6 +17,8 @@ namespace Infrastructure
         public static string ExternalConstructionBatchListRegion { get { return "ExternalConstructionBatchListRegion"; } }
         public static string ExternalReportBatchListRegion { get { return "ExternalReportBatchListRegion"; } }
         public static string ExternalReportProjectDetailsRegion { get { return "ExternalReportProjectDetailsRegion"; } }
+        public static string InstrumentEditCalibrationEditRegion { get { return "InstrumentEditCalibrationEditRegion"; } }
+        public static string InstrumentEditMeasurablePropertyEditRegion { get { return "InstrumentEditMeasurablePropertyEditRegion"; } }
         public static string InstrumentEditMetrologyRegion { get { return "InstrumentEditMetrologyRegion"; } }
         public static string InstrumentTypeManagementEditRegion { get { return "InstrumentTypeManagementEditRegion"; } }
         public static string InstrumentTypeManagementRegion { get { return "InstrumentTypeManagementRegion"; } }

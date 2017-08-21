@@ -30,6 +30,7 @@ namespace Instruments.ViewModels
         private IEnumerable<InstrumentType> _instrumentTypeList;
         private IEnumerable<Organization> _manufacturerList;
         private Instrument _instance;
+        private InstrumentMeasurableProperty _selectedMeasurableProperty;
         private Method _selectedAssociated, _selectedUnassociated;
         private Property _filterProperty;
 
@@ -225,6 +226,16 @@ namespace Instruments.ViewModels
             }
         }
 
+        public string InstrumentEditCalibrationEditRegionName
+        {
+            get { return RegionNames.InstrumentEditCalibrationEditRegion; }
+        }
+
+        public string InstrumentEditMeasurablePropertyEditRegionName
+        {
+            get { return RegionNames.InstrumentEditMeasurablePropertyEditRegion; }
+        }
+
         public string InstrumentEditMetrologyRegionName
         {
             get { return RegionNames.InstrumentEditMetrologyRegion; }
@@ -241,6 +252,7 @@ namespace Instruments.ViewModels
                 EditMode = false;
                 SelectedAssociatedMethod = null;
                 SelectedCalibration = null;
+                SelectedInstrumentMeasurableProperty = null;
                 SelectedUnassociatedMethod = null;
 
                 RaisePropertyChanged("AssociatedMethods");
@@ -389,6 +401,22 @@ namespace Instruments.ViewModels
             }
         }
 
+        public InstrumentMeasurableProperty SelectedInstrumentMeasurableProperty
+        {
+            get { return _selectedMeasurableProperty; }
+            set
+            {
+                _selectedMeasurableProperty = value;
+
+                NavigationToken token = new NavigationToken(InstrumentViewNames.InstrumentMeasurablePropertyEditView,
+                                                            _selectedMeasurableProperty,
+                                                            RegionNames.InstrumentEditMeasurablePropertyEditRegion);
+
+                _eventAggregator.GetEvent<NavigationRequested>()
+                                .Publish(token);
+            }
+        }
+
         public Method SelectedUnassociatedMethod
         {
             get { return _selectedUnassociated; }
@@ -407,6 +435,13 @@ namespace Instruments.ViewModels
             {
                 _selectedCalibration = value;
                 RaisePropertyChanged("SelectedCalibration");
+
+                NavigationToken token = new NavigationToken(InstrumentViewNames.CalibrationReportEditView,
+                                                            _selectedCalibration,
+                                                            RegionNames.InstrumentEditCalibrationEditRegion);
+
+                _eventAggregator.GetEvent<NavigationRequested>()
+                                .Publish(token);
             }
         }
 

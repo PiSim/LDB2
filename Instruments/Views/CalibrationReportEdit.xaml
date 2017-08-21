@@ -1,0 +1,182 @@
+﻿<UserControl x:Class="Instruments.Views.CalibrationReportEdit"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Instruments.Views"
+             xmlns:prism="http://prismlibrary.com/"
+             prism:ViewModelLocator.AutoWireViewModel="True"
+             mc:Ignorable="d" 
+             d:DesignHeight="500" d:DesignWidth="300">
+    <Grid Visibility="{Binding ReportViewVisibility}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="35"/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+
+        <StackPanel Orientation="Horizontal"
+                    Grid.Row="0">
+            <Button Content="Modifica"
+                    Command="{Binding StartEditCommand}"
+                    Margin="5"/>
+            <Button Content="Salva"
+                    Command="{Binding SaveCommand}"
+                    Margin="5"/>
+            <Button Content="Elimina"
+                    Command="{Binding DeleteCommand}"
+                    Margin="5"/>
+        </StackPanel>
+        
+        <Grid Grid.Row="1">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <Label Content="Numero report:"
+                   Grid.Column="0"
+                   Grid.Row="0"
+                   VerticalAlignment="Center"
+                   Margin="5"/>
+
+            <TextBlock Text="{Binding CalibrationInstance.ReportNumber}"
+                       Grid.Column="1"
+                       Grid.Row="0"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       Margin="5"/>
+
+            <Label Content="Data:"
+                   Grid.Column="0"
+                   Grid.Row="2"
+                   VerticalAlignment="Center"
+                   Margin="5"/>
+
+            <Label Content="Strumento:"
+                   Grid.Column="0"
+                   Grid.Row="1"
+                   VerticalAlignment="Center"
+                   Margin="5"/>
+
+            <Label Content="{Binding CalibrationInstance.Instrument.Code}"
+                   Grid.Column="1"
+                   Grid.Row="1"
+                   VerticalAlignment="Center"
+                   Margin="5"/>
+
+            <DatePicker SelectedDate="{Binding CalibrationInstance.Date, Mode=TwoWay}"
+                        Grid.Column="1"
+                        Grid.Row="2"
+                        VerticalAlignment="Center"
+                        Margin="5"/>
+
+            <Label Content="Laboratorio:"
+                   Grid.Column="0"
+                   Grid.Row="3"
+                   VerticalAlignment="Center"
+                   Margin="5"/>
+
+            <ComboBox ItemsSource="{Binding LabList}"
+                      SelectedItem="{Binding SelectedLab, Mode=TwoWay}"
+                      DisplayMemberPath="Name"
+                      Grid.Column="1"
+                      Grid.Row="3"
+                      VerticalAlignment="Center"
+                      Margin="5"/>
+
+            <Label Content="Tecnico:"
+                   Grid.Column="0"
+                   Grid.Row="4"
+                   VerticalAlignment="Center"
+                   Margin="5"/>
+
+            <ComboBox ItemsSource="{Binding TechList}"
+                      SelectedItem="{Binding SelectedTech, Mode=TwoWay}"
+                      IsEnabled="{Binding TechSelectionEnabled}"
+                      DisplayMemberPath="Name"
+                      Grid.Column="1"
+                      Grid.Row="4"
+                   VerticalAlignment="Center"
+                      Margin="5"/>
+        </Grid>
+
+        <TabControl Grid.Row="2">
+
+            <TabItem Header="Risultati">
+                
+            </TabItem>
+            
+            <TabItem Header="File">
+                <ContentControl prism:RegionManager.RegionName="{Binding FileListRegionName}"/>
+            </TabItem>
+
+            <TabItem Header="Primari"
+                     IsEnabled="{Binding IsNotExternalLab}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition Height="3*"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBox Text="{Binding ReferenceCode, Mode=TwoWay}"
+                         x:Name="ReferenceTextBox"
+                         KeyDown="ReferenceTextBox_KeyDown"
+                         Grid.Column="0"
+                         Grid.Row="0"
+                         Margin="5"/>
+
+                    <Button Content="Aggiungi"
+                            Command="{Binding AddReferenceCommand}"
+                            CommandParameter="{Binding ElementName=ReferenceTextBox, Path=Text}"
+                            x:Name="AddReferenceButton"
+                            Grid.Column="1"
+                            Grid.Row="0"
+                            Margin="5"/>
+
+                    <ListView ItemsSource="{Binding ReferenceList}"
+                          SelectedItem="{Binding SelectedReference, Mode=TwoWay}"
+                          Grid.Column="0"
+                          Grid.Row="1"
+                          Grid.RowSpan="2"
+                          Margin="5">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Codice"
+                                            DisplayMemberBinding="{Binding Code}"
+                                            Width="Auto"/>
+                                <GridViewColumn Header="Tipo"
+                                            DisplayMemberBinding="{Binding InstrumentType.Name}"
+                                            Width="Auto"/>
+                                <GridViewColumn Header="Scadenza Taratura"
+                                            DisplayMemberBinding="{Binding CalibrationDueDate, StringFormat=d}"
+                                            Width="Auto"/>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+
+                    <Button Content="Rimuovi"
+                            Command="{Binding RemoveReferenceCommand}"
+                            Grid.Column="1"
+                            Grid.Row="1"
+                            Margin="5"/>
+                </Grid>
+            </TabItem>
+        </TabControl>
+
+    </Grid>
+</UserControl>

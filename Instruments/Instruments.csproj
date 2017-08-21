@@ -121,9 +121,14 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="ViewModels\CalibrationReportEditViewModel.cs" />
     <Compile Include="ViewModels\InstrumentCreationDialogViewModel.cs" />
     <Compile Include="ViewModels\InstrumentEditViewModel.cs" />
     <Compile Include="ViewModels\InstrumentMainViewModel.cs" />
+    <Compile Include="ViewModels\InstrumentMeasurablePropertyEditViewModel.cs" />
+    <Compile Include="Views\CalibrationReportEdit.xaml.cs">
+      <DependentUpon>CalibrationReportEdit.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\InstrumentCreationDialog.xaml.cs">
       <DependentUpon>InstrumentCreationDialog.xaml</DependentUpon>
     </Compile>
@@ -132,6 +137,9 @@
     </Compile>
     <Compile Include="Views\InstrumentMain.xaml.cs">
       <DependentUpon>InstrumentMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InstrumentMeasurablePropertyEdit.xaml.cs">
+      <DependentUpon>InstrumentMeasurablePropertyEdit.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\InstrumentsNavigationItem.xaml.cs">
       <DependentUpon>InstrumentsNavigationItem.xaml</DependentUpon>
@@ -171,6 +179,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Views\CalibrationReportEdit.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\InstrumentCreationDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -180,6 +192,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\InstrumentMain.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\InstrumentMeasurablePropertyEdit.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

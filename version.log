@@ -1,4 +1,8 @@
-﻿v 0.52 -- 03/07/2017
+﻿v 0.53 -- 
+
+-
+
+v 0.52 -- 03/07/2017
 
 -Implementata validazione input in diverse viste tramite INotifyDataErrorInfo
 -Reimplementato inserimento Sample con finestra di dialogo SampleCreationDialog
@@ -11,7 +15,8 @@
 -Aggiunta funzione apertura batch tramite doppio click in BatchStatusList
 -Aggiunto campo "stock" alle entità Batch
 -Aggiunta vista archivio in Batch
--Implementate viste Admin per gestione enti ed Utenti
+-Implementate viste Admin per gestione enti, strumenti, quantità, UM ed Utenti
+-Impostate entità per la gestione di quantità misurabili multiple per strumento
 
 v 0.51 -- 29/6/2017
 
