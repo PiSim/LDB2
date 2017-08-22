@@ -1,5 +1,6 @@
 ﻿using DBManager;
 using DBManager.EntityExtensions;
+using DBManager.Services;
 using Infrastructure;
 using Infrastructure.Events;
 using Prism.Commands;
@@ -28,7 +29,6 @@ namespace Services.ViewModels
         private DelegateCommand<Window> _cancel, _confirm;
         private EventAggregator _eventAggregator;
         private Instrument _instumentInstance, _selectedReference;
-        private Int32 _reportNumber;
         private Person _selectedTech;
         private string _calibrationNotes, _calibrationResult, _referenceCode;
         private ObservableCollection<CalibrationFiles> _calibrationFileList;
@@ -89,9 +89,10 @@ namespace Services.ViewModels
                 {
                     _reportInstance = new CalibrationReport();
                     _reportInstance.Date = _calibrationDate;
+                    _reportInstance.Year = _calibrationDate.Year - 2000;
+                    _reportInstance.Number = InstrumentService.GetNextCalibrationNumber(_reportInstance.Year);
                     _reportInstance.Instrument = _instumentInstance;
                     _reportInstance.Laboratory = _selectedLab;
-                    _reportInstance.Number = ReportNumber;
                     _reportInstance.Notes = "";
                     _reportInstance.Result = "";
 
@@ -297,13 +298,7 @@ namespace Services.ViewModels
         {
             get { return _reportInstance; }
         }
-
-        public Int32 ReportNumber
-        {
-            get { return _reportNumber; }
-            set { _reportNumber = value; }
-        }
-
+        
         public DelegateCommand RemoveFileCommand
         {
             get { return _removeFile; }

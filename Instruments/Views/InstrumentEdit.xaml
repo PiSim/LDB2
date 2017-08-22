@@ -162,8 +162,16 @@
                                   Grid.Row="1">
                             <ListView.View>
                                 <GridView>
-                                    <GridViewColumn Header="Report"
-                                                    DisplayMemberBinding="{Binding Number}"/>
+                                    <GridViewColumn Header="Report">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock>
+                                                    <Run Text="{Binding Year}"/>
+                                                    <Run Text="{Binding Number, StringFormat=D3}"/>
+                                                </TextBlock>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
                                     <GridViewColumn Header="Data"
                                                     DisplayMemberBinding="{Binding Date, StringFormat=d}"/>
                                     <GridViewColumn Header="Ente"

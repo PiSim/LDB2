@@ -9,8 +9,18 @@ namespace DBManager.Services
 {
     public static class InstrumentService
     {
-        #region Operations for Instrument entities
-        
+        public static void AddCalibrationFiles(IEnumerable<CalibrationFiles> fileList)
+        {
+            // inserts a set of CalibrationFiles entries in the DB
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.CalibrationFiles.AddRange(fileList);
+                entities.SaveChanges();
+            }
+        }
+
+
         public static IEnumerable<Instrument> GetCalibrationCalendar()
         {
             // Returns a list of the instruments under control, ordered by due calibration date
@@ -77,8 +87,17 @@ namespace DBManager.Services
                 return entities.MeasurementUnits.ToList();
             }
         }
-
-        #endregion
         
+        public static int GetNextCalibrationNumber(int year)
+        {
+            // Returns the next available calibration number for a given year
+
+            using (DBEntities entities = new DBEntities())
+            {
+                return entities.CalibrationReports
+                                .Where(crep => crep.Year == year)
+                                .Max(crep => crep.Number) + 1;                                
+            }
+        }
     }
 }

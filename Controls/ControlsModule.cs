@@ -28,6 +28,8 @@ namespace Controls
             _container.RegisterType<ViewModels.StatusBarViewModel>();
             _container.RegisterType<ViewModels.ToolbarViewModel>();
 
+            _regionManager.RegisterViewWithRegion(RegionNames.CalibrationEditFileListRegion,
+                                                typeof(Views.FileListControl));
             _regionManager.RegisterViewWithRegion(RegionNames.NewCalibrationFileListRegion, 
                                                 typeof(Views.FileListControl));
             _regionManager.RegisterViewWithRegion(RegionNames.ToolbarRegion, 

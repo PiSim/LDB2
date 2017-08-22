@@ -69,8 +69,12 @@ namespace Services
                                 CalibrationReport tempReport = ServiceProvider.RegisterNewCalibration(instrument);
 
                                 if (tempReport != null)
+                                {
                                     _eventAggregator.GetEvent<CalibrationIssued>()
                                                     .Publish(tempReport);
+                                    _eventAggregator.GetEvent<StatusNotificationIssued>()
+                                                    .Publish("Report calibrazione creato con il numero " + tempReport.GetFormattedNumber());
+                                }
                             });
 
             _eventAggregator.GetEvent<OrganizationCreationRequested>()

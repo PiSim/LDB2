@@ -10,6 +10,7 @@ namespace Infrastructure
         public static string BatchExternalReportListRegion { get { return "BatchExternalReportListRegion"; } }
         public static string BatchReportListRegion { get { return "BatchReportListRegion"; } }
         public static string BatchStatusListRegion { get { return "BatchStatusListRegion"; } }
+        public static string CalibrationEditFileListRegion { get { return "CalibrationEditFileListRegion"; } }
         public static string ColourEditBatchListRegion { get { return "ColourEditBatchListRegion"; } }
         public static string ColourEditRegion { get { return "ColourEditRegion"; } }
         public static string CurrentUserMainReportListRegion { get { return "CurrentUserMainReportListRegion"; } }

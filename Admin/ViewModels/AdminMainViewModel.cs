@@ -51,7 +51,6 @@ namespace Admin.ViewModels
                 {
                     using (DBEntities entities = new DBEntities())
                     {
-
                         
                         entities.SaveChanges();
                     }

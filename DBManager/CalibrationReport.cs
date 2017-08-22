@@ -23,12 +23,13 @@ namespace DBManager
         }
     
         public int ID { get; set; }
+        public int Year { get; set; }
+        public int Number { get; set; }
         public System.DateTime Date { get; set; }
         public Nullable<int> OperatorID { get; set; }
         public int laboratoryID { get; set; }
         public int instrumentID { get; set; }
         public string Notes { get; set; }
-        public int Number { get; set; }
         public string Result { get; set; }
     
         public virtual Instrument Instrument { get; set; }

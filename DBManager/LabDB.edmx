@@ -61,7 +61,7 @@
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="None" Nullable="false" />
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="calibration_reportID" Type="int" Nullable="false" />
           <Property Name="measurable_propertyID" Type="int" Nullable="false" />
           <Property Name="upper_range_value" Type="double" Nullable="false" />
@@ -76,6 +76,7 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="year" Type="int" Nullable="false" />
           <Property Name="number" Type="int" Nullable="false" />
           <Property Name="date" Type="date" Nullable="false" />
           <Property Name="operatorID" Type="int" />
@@ -3958,6 +3959,8 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Year" Type="Int32" Nullable="false" />
+          <Property Name="Number" Type="Int32" Nullable="false" />
           <Property Name="Date" Type="DateTime" Nullable="false" />
           <Property Name="OperatorID" Type="Int32" />
           <Property Name="laboratoryID" Type="Int32" Nullable="false" />
@@ -3967,7 +3970,6 @@
           <NavigationProperty Name="Tech" Relationship="labdbModel.operator_to_calibration_report" FromRole="calibration_reports" ToRole="Person" />
           <NavigationProperty Name="CalibrationFiles" Relationship="labdbModel.calibration_report_to_files" FromRole="calibration_reports" ToRole="calibration_files" />
           <Property Name="Notes" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
-          <Property Name="Number" Type="Int32" Nullable="false" />
           <Property Name="Result" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="ReferenceInstruments" Relationship="labdbModel.calibration_reference_mappings" FromRole="CalibrationReport" ToRole="Instrument" />
           <NavigationProperty Name="InstrumentMeasurablePropertyMappings" Relationship="labdbModel.calibration_report_to_property_mapping" FromRole="CalibrationReport" ToRole="calibration_report_measurable_property_mappings" />
@@ -5282,6 +5284,7 @@
           <EntitySetMapping Name="CalibrationReports">
             <EntityTypeMapping TypeName="labdbModel.CalibrationReport">
               <MappingFragment StoreEntitySet="calibration_reports">
+                <ScalarProperty Name="Year" ColumnName="year" />
                 <ScalarProperty Name="Number" ColumnName="number" />
                 <ScalarProperty Name="Result" ColumnName="result" />
                 <ScalarProperty Name="Notes" ColumnName="notes" />
