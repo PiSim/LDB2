@@ -5,9 +5,11 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Instruments.Views"
              xmlns:prism="http://prismlibrary.com/"
+             xmlns:con="clr-namespace:Infrastructure.Converters;assembly=Infrastructure"
              prism:ViewModelLocator.AutoWireViewModel="True"
              mc:Ignorable="d" 
              d:DesignHeight="500" d:DesignWidth="300">
+    
     <Grid Visibility="{Binding ReportViewVisibility}">
         <Grid.RowDefinitions>
             <RowDefinition Height="35"/>
@@ -15,6 +17,8 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
 
+        <!-- Invisible FrameworkElement only used as reference to access DataContext-->
+        <FrameworkElement x:Name="dummyElement" Visibility="Collapsed"/>
 
         <StackPanel Orientation="Horizontal"
                     Grid.Row="0">
@@ -23,6 +27,9 @@
                     Margin="5"/>
             <Button Content="Salva"
                     Command="{Binding SaveCommand}"
+                    Margin="5"/>
+            <Button Content="Annulla"
+                    Command="{Binding CancelEditCommand}"
                     Margin="5"/>
             <Button Content="Elimina"
                     Command="{Binding DeleteCommand}"
@@ -33,6 +40,8 @@
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition MinWidth="100"
+                                  MaxWidth="200"/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
@@ -74,6 +83,7 @@
                    Grid.Column="1"
                    Grid.Row="1"
                    VerticalAlignment="Center"
+                   HorizontalAlignment="Center"
                    Margin="5"/>
 
             <DatePicker SelectedDate="{Binding CalibrationInstance.Date, Mode=TwoWay}"
@@ -110,37 +120,97 @@
                       DisplayMemberPath="Name"
                       Grid.Column="1"
                       Grid.Row="4"
-                   VerticalAlignment="Center"
+                      VerticalAlignment="Center"
                       Margin="5"/>
         </Grid>
 
         <TabControl Grid.Row="2">
 
             <TabItem Header="Risultati">
-                <DataGrid ItemsSource="{Binding PropertyMappingList}"
-                          AutoGenerateColumns="False"
-                          CanUserAddRows="False"
-                          CanUserDeleteRows="False"
-                          Margin="2">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="Quantità"
-                                            Binding="{Binding InstrumentMeasurableProperty.MeasurableQuantity.Name}"
-                                            IsReadOnly="True"/>
-                        <DataGridTextColumn Header="UM"
-                                            Binding="{Binding InstrumentMeasurableProperty.UM.Symbol}"
-                                            IsReadOnly="True"/>
-                        <DataGridTextColumn Header="Limite Sup. Taratura"
-                                            Binding="{Binding }"
-                                            IsReadOnly="{Binding EditMode}"/>
-                        <DataGridTextColumn Header="Limite Inf. Taratura"
-                                            Binding="{Binding }"
-                                            IsReadOnly="{Binding EditMode}"/>
-                        <DataGridComboBoxColumn Header="Risultato"
-                                                ItemsSource="{Binding}"
-                                                SelectedItemBinding="{Binding}"
-                                                IsReadOnly="{Binding EditMode}"/>
-                    </DataGrid.Columns>
-                </DataGrid>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="35"/>
+                        <RowDefinition/>
+                        <RowDefinition MinHeight="70"/>
+                    </Grid.RowDefinitions>
+                    <CheckBox Content="Solo Verifica"
+                              IsChecked="{Binding IsVerification}"
+                              IsEnabled="{Binding EditMode}"
+                              ToolTip="Se spuntato indica che il report non rappresenta una taratura completa ma solo una verifica dei parametri metrologici noti"
+                              Grid.Row="0"
+                              Margin="5"
+                              VerticalAlignment="Center"/>
+
+                    <DataGrid ItemsSource="{Binding PropertyMappingList}"
+                              AutoGenerateColumns="False"
+                              CanUserAddRows="False"
+                              CanUserDeleteRows="False"
+                              Margin="2"
+                              IsReadOnly="{Binding ReadOnlyMode}"
+                              Grid.Row="1">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Quantità"
+                                                Binding="{Binding InstrumentMeasurableProperty.MeasurableQuantity.Name}"
+                                                IsReadOnly="True"/>
+                            <DataGridTextColumn Header="UM"
+                                                Binding="{Binding MeasurementUnit.Symbol}"
+                                                IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Limite Sup. Taratura"
+                                                Binding="{Binding UpperRangeValue}"/>
+                            <DataGridTextColumn Header="Limite Inf. Taratura"
+                                                Binding="{Binding LowerRangeValue}"/>
+                            <DataGridTextColumn Header="{Binding DataContext.UncertaintyHeader,
+                                                                 Source={x:Reference dummyElement}}"
+                                                Binding="{Binding ExtendedUncertainty}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                    <Grid Grid.Row="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition MinWidth="100"
+                                              MaxWidth="200"/>
+                            <ColumnDefinition MaxWidth="200"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="35"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Text="Risultato:"
+                                   Grid.Column="0"
+                                   Grid.Row="0"
+                                   Margin="5"
+                                   VerticalAlignment="Center"/>
+
+                        <ComboBox ItemsSource="{Binding CalibrationResultList}"
+                                  SelectedItem="{Binding SelectedResult}"
+                                  DisplayMemberPath="Description"
+                                  IsEnabled="{Binding EditMode}"
+                                  Grid.Row="0"
+                                  Grid.Column="1"
+                                  VerticalAlignment="Center"
+                                  Margin="5"/>
+
+                        <TextBlock Text="Note:"
+                                   Grid.Column="0"
+                                   Grid.Row="1"
+                                   Margin="5"
+                                   VerticalAlignment="Top"/>
+
+                        <TextBox Text="{Binding CalibrationInstance.Notes}"
+                                 IsEnabled="{Binding EditMode}"
+                                 AcceptsReturn="True"
+                                 TextWrapping="Wrap"
+                                 Grid.Column="1"
+                                 Grid.ColumnSpan="2"
+                                 Grid.Row="1"
+                                 Margin="5"/>
+
+                    </Grid>
+                </Grid>
+                
             </TabItem>
             
             <TabItem Header="File">

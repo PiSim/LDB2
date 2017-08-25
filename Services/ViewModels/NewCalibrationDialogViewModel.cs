@@ -19,19 +19,17 @@ namespace Services.ViewModels
 {
     public class NewCalibrationDialogViewModel : BindableBase
     {
-        private CalibrationFiles _selectedFile;
         private CalibrationReport _reportInstance;
         private DateTime _calibrationDate;
         private DBEntities _entities;
         private DBPrincipal _principal;
-        private DelegateCommand _addFile, _openFile, _removeFile, _removeReference;
+        private DelegateCommand _removeReference;
         private DelegateCommand<string> _addReference;
         private DelegateCommand<Window> _cancel, _confirm;
         private EventAggregator _eventAggregator;
         private Instrument _instumentInstance, _selectedReference;
         private Person _selectedTech;
         private string _calibrationNotes, _calibrationResult, _referenceCode;
-        private ObservableCollection<CalibrationFiles> _calibrationFileList;
         private ObservableCollection<Instrument> _referenceList;
         private Organization _selectedLab;
 
@@ -40,33 +38,12 @@ namespace Services.ViewModels
                                             EventAggregator eventAggregator) : base()
         {
             _entities = entities;
-            _calibrationFileList = new ObservableCollection<CalibrationFiles>();
             _referenceList = new ObservableCollection<Instrument>();
             _eventAggregator = eventAggregator;
             _principal = principal;
 
             _calibrationDate = DateTime.Now.Date;
-
-            _addFile = new DelegateCommand(
-                () =>
-                {
-                    OpenFileDialog fileDialog = new OpenFileDialog();
-                    fileDialog.Multiselect = true;
-                    
-                    if (fileDialog.ShowDialog() == DialogResult.OK)
-                    {
-                        foreach (string pth in fileDialog.FileNames)
-                        {
-                            CalibrationFiles temp = new CalibrationFiles();
-                            temp.Path = pth;
-                            temp.Description = "";
-                            _calibrationFileList.Add(temp);
-                        }
-
-                        RaisePropertyChanged("FileList");
-                    }
-                });
-
+            
             _addReference = new DelegateCommand<string>(
                 code =>
                 {
@@ -89,12 +66,13 @@ namespace Services.ViewModels
                 {
                     _reportInstance = new CalibrationReport();
                     _reportInstance.Date = _calibrationDate;
-                    _reportInstance.Year = _calibrationDate.Year - 2000;
+                    _reportInstance.Year = DateTime.Now.Year - 2000;
                     _reportInstance.Number = InstrumentService.GetNextCalibrationNumber(_reportInstance.Year);
                     _reportInstance.Instrument = _instumentInstance;
+                    _reportInstance.IsVerification = false;
                     _reportInstance.Laboratory = _selectedLab;
                     _reportInstance.Notes = "";
-                    _reportInstance.Result = "";
+                    _reportInstance.ResultID = 1;
 
                     if (IsNotExternalLab)
                     {
@@ -103,20 +81,15 @@ namespace Services.ViewModels
                         foreach (Instrument refInstrument in _referenceList)
                             _reportInstance.ReferenceInstruments.Add(refInstrument);
                     }
-
-                    foreach (CalibrationFiles calFile in _calibrationFileList)
-                        _reportInstance.CalibrationFiles.Add(calFile);
-
+                    
                     foreach (InstrumentMeasurableProperty imp in _instumentInstance.GetMeasurableProperties())
                     {
                         CalibrationReportInstrumentPropertyMapping cripm = new CalibrationReportInstrumentPropertyMapping()
                         {
                             ExtendedUncertainty = 0,
-                            IsVerification = false,
                             LowerRangeValue = imp.CalibrationRangeLowerLimit,
                             MeasurablePropertyID = imp.ID,
                             MeasurementUnitID = imp.UnitID,
-                            Result = DBManager.CalibrationResult.Accepted,
                             UpperRangeValue = imp.CalibrationRangeUpperLimit
                         };
 
@@ -128,30 +101,7 @@ namespace Services.ViewModels
 
                     parentDialog.DialogResult = true;
                 });
-
-            _openFile = new DelegateCommand(
-                () =>
-                {
-                    try
-                    {
-                        System.Diagnostics.Process.Start(_selectedFile.Path);
-                    }
-
-                    catch (Exception)
-                    {
-                        _eventAggregator.GetEvent<StatusNotificationIssued>().Publish("File non trovato");
-                    }
-                },
-                () => _selectedFile != null);
-
-            _removeFile = new DelegateCommand(
-                () =>
-                {
-                    _calibrationFileList.Remove(_selectedFile);
-                    SelectedFile = null;
-                },
-                () => _selectedFile != null);
-
+            
             _removeReference = new DelegateCommand(
                 () =>
                 {
@@ -160,12 +110,7 @@ namespace Services.ViewModels
                 },
                 () => _selectedReference != null);
         }
-
-        public DelegateCommand AddFileCommand
-        {
-            get { return _addFile; }
-        }
-
+        
         public DelegateCommand<string> AddReferenceCommand
         {
             get { return _addReference; }
@@ -216,11 +161,6 @@ namespace Services.ViewModels
             get { return _confirm; }
         }
 
-        public ObservableCollection<CalibrationFiles> FileList
-        {
-            get { return _calibrationFileList; }
-        }
-
         public string FileListRegionName
         {
             get { return RegionNames.NewCalibrationFileListRegion; }
@@ -269,11 +209,6 @@ namespace Services.ViewModels
             }
         }
 
-        public DelegateCommand OpenFileCommand
-        {
-            get { return _openFile; }
-        }
-
         public string ReferenceCode
         {
             get { return _referenceCode; }
@@ -299,23 +234,6 @@ namespace Services.ViewModels
             get { return _reportInstance; }
         }
         
-        public DelegateCommand RemoveFileCommand
-        {
-            get { return _removeFile; }
-        }
-
-        public CalibrationFiles SelectedFile
-        {
-            get { return _selectedFile; }
-            set
-            {
-                _selectedFile = value;
-                RaisePropertyChanged("SelectedFile");
-                _openFile.RaiseCanExecuteChanged();
-                _removeFile.RaiseCanExecuteChanged();
-            }
-        }
-
         public Organization SelectedLab
         {
             get { return _selectedLab; }

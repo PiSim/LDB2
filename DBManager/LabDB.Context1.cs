@@ -81,5 +81,6 @@ namespace DBManager
         public virtual DbSet<InstrumentMeasurableProperty> InstrumentMeasurableProperties { get; set; }
         public virtual DbSet<MeasurableQuantity> MeasurableQuantities { get; set; }
         public virtual DbSet<CalibrationReportInstrumentPropertyMapping> CalibrationReportInstrumentPropertyMappings { get; set; }
+        public virtual DbSet<CalibrationResult> CalibrationResults { get; set; }
     }
 }

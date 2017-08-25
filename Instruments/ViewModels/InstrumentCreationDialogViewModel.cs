@@ -51,12 +51,13 @@ namespace Instruments.ViewModels
                     {
                         InstrumentMeasurableProperty tempIMP = new InstrumentMeasurableProperty()
                         {
+                            CalibrationDue = _instrumentInstance.CalibrationDueDate,
                             IsUnderControl = _isUnderControl,
                             MeasurableQuantityID = meq.ID,
                             UnitID = meq.UnitsOfMeasurement.First().ID
                         };
                         
-                        _instrumentInstance.instrument_measurable_property.Add(tempIMP);
+                        _instrumentInstance.InstrumentMeasurableProperties.Add(tempIMP);
                     }
 
                     _instrumentInstance.Create();

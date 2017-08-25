@@ -104,6 +104,14 @@ namespace Instruments.ViewModels
                                     RaisePropertyChanged("MaintenanceEventList");
                             });
 
+            _eventAggregator.GetEvent<CalibrationIssued>()
+                            .Subscribe(
+                            report =>
+                            {
+                                if (report.instrumentID == _instance?.ID)
+                                    RaisePropertyChanged("CalibrationReportList");
+                            });
+
             #endregion
 
         }
@@ -262,6 +270,7 @@ namespace Instruments.ViewModels
                 RaisePropertyChanged("InstrumentCode");
                 RaisePropertyChanged("InstrumentDescription");
                 RaisePropertyChanged("InstrumentManufacturer");
+                RaisePropertyChanged("InstrumentMeasurablePropertyList");
                 RaisePropertyChanged("InstrumentModel");
                 RaisePropertyChanged("InstrumentSerialNumber");
                 RaisePropertyChanged("InstrumentType");

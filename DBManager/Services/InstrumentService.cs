@@ -27,11 +27,69 @@ namespace DBManager.Services
 
             using (DBEntities entities = new DBEntities())
             {
+                entities.Configuration.LazyLoadingEnabled = false;
+
                 return entities.Instruments.Include(inst => inst.CalibrationResponsible)
                                             .Include(inst => inst.InstrumentType)
                                             .Where(inst => inst.IsUnderControl)
                                             .OrderBy(inst => inst.CalibrationDueDate)
                                             .ToList();                                            
+            }
+        }
+
+        public static CalibrationReport GetCalibrationReport(int ID)
+        {
+            // Returns a calibration report with the given ID, or null if none is found
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.CalibrationReports.FirstOrDefault(calrep => calrep.ID == ID);
+            }
+        }
+
+        public static IEnumerable<CalibrationReport> GetCalibrationReports()
+        {
+            // Returns all Calibrationreport entities, ordered by number descending
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.CalibrationReports
+                                .Include(crep => crep.Instrument)
+                                .Include(crep => crep.Laboratory)
+                                .Include(crep => crep.CalibrationResult)
+                                .Include(crep => crep.Tech)
+                                .OrderByDescending(crep => crep.Year)
+                                .ThenByDescending(crep => crep.Number)
+                                .ToList();
+            }
+        }
+
+        public static IEnumerable<CalibrationResult> GetCalibrationResults()
+        {
+            // Returns all CalibrationResult entities
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.CalibrationResults
+                                .ToList();
+            }
+        }
+
+        public static Instrument GetInstrument(string code)
+        {
+            // Returns the instrument entry with the given code, or null if none is found
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.Instruments.FirstOrDefault(inst => inst.Code == code);
             }
         }
 

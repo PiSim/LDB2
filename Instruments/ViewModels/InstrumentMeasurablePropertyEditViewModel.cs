@@ -17,18 +17,28 @@ namespace Instruments.ViewModels
     public class InstrumentMeasurablePropertyEditViewModel : BindableBase
     {
         private bool _editMode;
-        private DelegateCommand _save,
+        private DelegateCommand _cancelEdit,
+                                _save,
                                 _startEdit;
+        private IEnumerable<MeasurementUnit> _umList;
         private InstrumentMeasurableProperty _measurablePropertyInstance;
+        private MeasurementUnit _selectedUM;
 
 
         public InstrumentMeasurablePropertyEditViewModel()
         {
             _editMode = false;
 
+            _cancelEdit = new DelegateCommand(
+                () =>
+                {
+                    EditMode = false;
+                });
+
             _save = new DelegateCommand(
                 () =>
                 {
+                    _measurablePropertyInstance.Update();
                     EditMode = false;
                 },
                 () => EditMode);
@@ -39,6 +49,34 @@ namespace Instruments.ViewModels
                     EditMode = true;
                 },
                 () => !EditMode);
+        }
+
+        public string CalibrationDueDate
+        {
+            get
+            {
+                if (_measurablePropertyInstance == null || _measurablePropertyInstance.CalibrationDue == null)
+                    return "//";
+
+                return _measurablePropertyInstance?.CalibrationDue.Value.ToShortDateString();
+            }
+        }
+
+        public int ControlPeriod
+        {
+            get
+            {
+                if (_measurablePropertyInstance == null)
+                    return 0;
+
+                return _measurablePropertyInstance.ControlPeriod;
+            }
+            set
+            {
+                _measurablePropertyInstance.ControlPeriod = value;
+                if (_measurablePropertyInstance.UpdateCalibrationDueDate())
+                    RaisePropertyChanged("CalibrationDueDate");
+            }
         }
 
         public bool EditMode
@@ -53,6 +91,44 @@ namespace Instruments.ViewModels
             }
         }
 
+        public bool IsUnderControl
+        {
+            get
+            {
+                if (_measurablePropertyInstance == null)
+                    return false;
+
+                return _measurablePropertyInstance.IsUnderControl;
+            }
+
+            set
+            {
+                _measurablePropertyInstance.IsUnderControl = value;
+                _measurablePropertyInstance.UpdateCalibrationDueDate();
+                RaisePropertyChanged("CalibrationDueDate");
+            }
+        }
+
+        public string LastCalibration
+        {
+            get
+            {
+                if (_measurablePropertyInstance == null)
+                    return "Mai";
+
+                else
+                {
+                    DateTime _lastCalibration = _measurablePropertyInstance.GetLastCalibration().Date;
+
+                    if (_lastCalibration == null)
+                        return "Mai";
+
+                    else
+                        return _lastCalibration.ToShortDateString();
+                }
+            }
+        }
+
         public InstrumentMeasurableProperty MeasurablePropertyInstance
         {
             get { return _measurablePropertyInstance; }
@@ -60,6 +136,17 @@ namespace Instruments.ViewModels
             {
                 _measurablePropertyInstance = value;
                 EditMode = false;
+
+                _umList = _measurablePropertyInstance.MeasurableQuantity.GetMeasurementUnits();
+                RaisePropertyChanged("UMList");
+
+                _selectedUM = _umList.FirstOrDefault(um => um.ID == _measurablePropertyInstance?.UnitID);
+
+                RaisePropertyChanged("CalibrationDueDate");
+                RaisePropertyChanged("IsUnderControl");
+                RaisePropertyChanged("LastCalibration");
+                RaisePropertyChanged("MeasurablePropertyInstance");
+                RaisePropertyChanged("SelectedUM");
             }
         }
 
@@ -68,9 +155,24 @@ namespace Instruments.ViewModels
             get { return _save; }
         }
 
+        public MeasurementUnit SelectedUM
+        {
+            get { return _selectedUM; }
+            set
+            {
+                _selectedUM = value;
+                _measurablePropertyInstance.UnitID = _selectedUM.ID;
+            }
+        }
+
         public DelegateCommand StartEditCommand
         {
             get { return _startEdit; }
+        }
+
+        public IEnumerable<MeasurementUnit> UMList
+        {
+            get { return _umList; }
         }
     }
 }

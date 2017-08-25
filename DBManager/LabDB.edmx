@@ -67,9 +67,7 @@
           <Property Name="upper_range_value" Type="double" Nullable="false" />
           <Property Name="lower_range_value" Type="double" Nullable="false" />
           <Property Name="extended_uncertainty" Type="double" Nullable="false" />
-          <Property Name="result" Type="int" Nullable="false" />
           <Property Name="measurement_unitID" Type="int" Nullable="false" />
-          <Property Name="is_verification" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="calibration_reports">
           <Key>
@@ -83,8 +81,15 @@
           <Property Name="laboratoryID" Type="int" Nullable="false" />
           <Property Name="instrumentID" Type="int" Nullable="false" />
           <Property Name="notes" Type="varchar" MaxLength="200" />
-          <Property Name="result" Type="varchar" MaxLength="45" Nullable="false" />
-          <Property Name="instrument_measurable_propertyID" Type="int" />
+          <Property Name="is_verification" Type="bit" Nullable="false" />
+          <Property Name="resultID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="calibration_results">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="description" Type="varchar" MaxLength="45" Nullable="false" />
         </EntityType>
         <EntityType Name="colours">
           <Key>
@@ -803,6 +808,18 @@
             </Principal>
             <Dependent Role="instruments">
               <PropertyRef Name="calibration_responsibleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="calibration_result_to_report">
+          <End Role="calibration_results" Type="Self.calibration_results" Multiplicity="1" />
+          <End Role="calibration_reports" Type="Self.calibration_reports" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="calibration_results">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="calibration_reports">
+              <PropertyRef Name="resultID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1958,6 +1975,7 @@
           <EntitySet Name="calibration_reference_mappings" EntityType="Self.calibration_reference_mappings" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="calibration_report_measurable_property_mappings" EntityType="Self.calibration_report_measurable_property_mappings" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="calibration_reports" EntityType="Self.calibration_reports" Schema="labdb" store:Type="Tables" />
+          <EntitySet Name="calibration_results" EntityType="Self.calibration_results" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="colours" EntityType="Self.colours" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="control_plan_items" EntityType="Self.control_plan_items" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="control_plans" EntityType="Self.control_plans" Schema="labdb" store:Type="Tables" />
@@ -2067,6 +2085,10 @@
           <AssociationSet Name="calibration_responsible_to_instrument" Association="Self.calibration_responsible_to_instrument">
             <End Role="organizations" EntitySet="organizations" />
             <End Role="instruments" EntitySet="instruments" />
+          </AssociationSet>
+          <AssociationSet Name="calibration_result_to_report" Association="Self.calibration_result_to_report">
+            <End Role="calibration_results" EntitySet="calibration_results" />
+            <End Role="calibration_reports" EntitySet="calibration_reports" />
           </AssociationSet>
           <AssociationSet Name="color_to_recipe" Association="Self.color_to_recipe">
             <End Role="colours" EntitySet="colours" />
@@ -3687,6 +3709,11 @@
             <End Role="MeasurementUnit" EntitySet="MeasurementUnits" />
             <End Role="calibration_report_measurable_property_mappings" EntitySet="CalibrationReportInstrumentPropertyMappings" />
           </AssociationSet>
+          <EntitySet Name="CalibrationResults" EntityType="labdbModel.CalibrationResult" />
+          <AssociationSet Name="calibration_result_to_report" Association="labdbModel.calibration_result_to_report">
+            <End Role="CalibrationResult" EntitySet="CalibrationResults" />
+            <End Role="CalibrationReport" EntitySet="CalibrationReports" />
+          </AssociationSet>
         </EntityContainer>
         <Association Name="overridden_to_requirement">
           <End Type="labdbModel.Requirement" Role="Requirement" Multiplicity="0..1">
@@ -3970,9 +3997,11 @@
           <NavigationProperty Name="Tech" Relationship="labdbModel.operator_to_calibration_report" FromRole="calibration_reports" ToRole="Person" />
           <NavigationProperty Name="CalibrationFiles" Relationship="labdbModel.calibration_report_to_files" FromRole="calibration_reports" ToRole="calibration_files" />
           <Property Name="Notes" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
-          <Property Name="Result" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="ReferenceInstruments" Relationship="labdbModel.calibration_reference_mappings" FromRole="CalibrationReport" ToRole="Instrument" />
           <NavigationProperty Name="InstrumentMeasurablePropertyMappings" Relationship="labdbModel.calibration_report_to_property_mapping" FromRole="CalibrationReport" ToRole="calibration_report_measurable_property_mappings" />
+          <Property Name="IsVerification" Type="Boolean" Nullable="false" />
+          <Property Name="ResultID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="CalibrationResult" Relationship="labdbModel.calibration_result_to_report" FromRole="CalibrationReport" ToRole="CalibrationResult" />
         </EntityType>
         <EntityType Name="InstrumentType">
           <Key>
@@ -4010,7 +4039,7 @@
           <NavigationProperty Name="AssociatedMethods" Relationship="labdbModel.instrument_method_mappings" FromRole="Instrument" ToRole="Method" />
           <Property Name="UtilizationAreaID" Type="Int32" />
           <NavigationProperty Name="instrument_utilization_areas" Relationship="labdbModel.utilization_area_to_instrument" FromRole="Instrument" ToRole="instrument_utilization_areas" />
-          <NavigationProperty Name="instrument_measurable_property" Relationship="labdbModel.instrument_to_measurable_property" FromRole="Instrument" ToRole="instrument_measurable_property" />
+          <NavigationProperty Name="InstrumentMeasurableProperties" Relationship="labdbModel.instrument_to_measurable_property" FromRole="Instrument" ToRole="instrument_measurable_property" />
         </EntityType>
         <Association Name="instrument_to_calibration_report">
           <End Type="labdbModel.Instrument" Role="instrument" Multiplicity="1" />
@@ -4825,12 +4854,10 @@
           <Property Name="UpperRangeValue" Type="Double" Nullable="false" />
           <Property Name="LowerRangeValue" Type="Double" Nullable="false" />
           <Property Name="ExtendedUncertainty" Type="Double" Nullable="false" />
-          <Property Name="Result" Type="labdbModel.CalibrationResult" Nullable="false" />
           <Property Name="MeasurementUnitID" Type="Int32" Nullable="false" />
           <NavigationProperty Name="CalibrationReport" Relationship="labdbModel.calibration_report_to_property_mapping" FromRole="calibration_report_measurable_property_mappings" ToRole="CalibrationReport" />
           <NavigationProperty Name="InstrumentMeasurableProperty" Relationship="labdbModel.instrument_property_to_calibration_report_mapping" FromRole="calibration_report_measurable_property_mappings" ToRole="InstrumentMeasurableProperty" />
           <NavigationProperty Name="MeasurementUnit" Relationship="labdbModel.measurement_unit_to_calibration_property_mapping" FromRole="calibration_report_measurable_property_mappings" ToRole="MeasurementUnit" />
-          <Property Name="IsVerification" Type="Boolean" Nullable="false" />
         </EntityType>
         <Association Name="calibration_report_to_property_mapping">
           <End Type="labdbModel.CalibrationReport" Role="CalibrationReport" Multiplicity="1">
@@ -4870,11 +4897,26 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EnumType Name="CalibrationResult">
-          <Member Name="Accepted" />
-          <Member Name="AcceptedConditionally" />
-          <Member Name="Rejected" />
-        </EnumType>
+        <EntityType Name="CalibrationResult">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="CalibrationReports" Relationship="labdbModel.calibration_result_to_report" FromRole="CalibrationResult" ToRole="CalibrationReport" />
+        </EntityType>
+        <Association Name="calibration_result_to_report">
+          <End Type="labdbModel.CalibrationResult" Role="CalibrationResult" Multiplicity="1" />
+          <End Type="labdbModel.CalibrationReport" Role="CalibrationReport" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CalibrationResult">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="CalibrationReport">
+              <PropertyRef Name="ResultID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -5284,9 +5326,10 @@
           <EntitySetMapping Name="CalibrationReports">
             <EntityTypeMapping TypeName="labdbModel.CalibrationReport">
               <MappingFragment StoreEntitySet="calibration_reports">
+                <ScalarProperty Name="ResultID" ColumnName="resultID" />
+                <ScalarProperty Name="IsVerification" ColumnName="is_verification" />
                 <ScalarProperty Name="Year" ColumnName="year" />
                 <ScalarProperty Name="Number" ColumnName="number" />
-                <ScalarProperty Name="Result" ColumnName="result" />
                 <ScalarProperty Name="Notes" ColumnName="notes" />
                 <ScalarProperty Name="instrumentID" ColumnName="instrumentID" />
                 <ScalarProperty Name="laboratoryID" ColumnName="laboratoryID" />
@@ -5545,14 +5588,20 @@
           <EntitySetMapping Name="CalibrationReportInstrumentPropertyMappings">
             <EntityTypeMapping TypeName="labdbModel.CalibrationReportInstrumentPropertyMapping">
               <MappingFragment StoreEntitySet="calibration_report_measurable_property_mappings">
-                <ScalarProperty Name="Result" ColumnName="result" />
-                <ScalarProperty Name="IsVerification" ColumnName="is_verification" />
                 <ScalarProperty Name="MeasurementUnitID" ColumnName="measurement_unitID" />
                 <ScalarProperty Name="ExtendedUncertainty" ColumnName="extended_uncertainty" />
                 <ScalarProperty Name="LowerRangeValue" ColumnName="lower_range_value" />
                 <ScalarProperty Name="UpperRangeValue" ColumnName="upper_range_value" />
                 <ScalarProperty Name="MeasurablePropertyID" ColumnName="measurable_propertyID" />
                 <ScalarProperty Name="CalibrationReportID" ColumnName="calibration_reportID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CalibrationResults">
+            <EntityTypeMapping TypeName="labdbModel.CalibrationResult">
+              <MappingFragment StoreEntitySet="calibration_results">
+                <ScalarProperty Name="Description" ColumnName="description" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

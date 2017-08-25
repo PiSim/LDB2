@@ -173,7 +173,9 @@
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
                                     <GridViewColumn Header="Data"
-                                                    DisplayMemberBinding="{Binding Date, StringFormat=d}"/>
+                                                    DisplayMemberBinding="{Binding Date, 
+                                                                                   StringFormat=d,
+                                                                                   ConverterCulture=it-IT}"/>
                                     <GridViewColumn Header="Ente"
                                                     DisplayMemberBinding="{Binding Laboratory.Name}"/>
                                 </GridView>

@@ -10,6 +10,24 @@ namespace DBManager.EntityExtensions
 {
     public static class CalibrationReportExtension
     {
+        public static void AddReference(this CalibrationReport entry,
+                                        Instrument referenceEntry)
+        {
+            // Adds an association with the given reference instrument
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.CalibrationReports
+                        .First(calrep => calrep.ID == entry.ID)
+                        .ReferenceInstruments
+                        .Add(entities
+                        .Instruments
+                        .First(inst => inst.ID == referenceEntry.ID));
+
+                entities.SaveChanges();
+            }
+        }
+
         public static void Create(this CalibrationReport entry)
         {
             // Inserts a calibration entry in the DB
@@ -100,6 +118,43 @@ namespace DBManager.EntityExtensions
                                 .First(calr => calr.ID == entry.ID)
                                 .ReferenceInstruments
                                 .ToList();                                
+            }
+        }
+
+        public static void Load(this CalibrationReport entry)
+        {
+            // Loads relevant values in a CalibrationReport instance
+
+            if (entry == null)
+                return;
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                CalibrationReport tempEntry = entities.CalibrationReports
+                                                        .Include(calr => calr.Instrument)
+                                                        .First(calr => calr.ID == entry.ID);
+
+                entry.Instrument = tempEntry.Instrument;
+            }
+        }
+
+        public static void RemoveReference(this CalibrationReport entry,
+                                            Instrument referenceEntry)
+        {
+            // Deletes an association between a CalibrationReport and a reference instrument
+
+            using (DBEntities entities = new DBEntities())
+            {
+                CalibrationReport tempEntry = entities.CalibrationReports
+                                                        .First(calrep => calrep.ID == entry.ID);
+
+                tempEntry.ReferenceInstruments
+                        .Remove(tempEntry.ReferenceInstruments
+                        .First(inst => inst.ID == referenceEntry.ID));
+
+                entities.SaveChanges();
             }
         }
 

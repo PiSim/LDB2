@@ -22,7 +22,7 @@ namespace DBManager
             this.MaintenanceEvent = new HashSet<InstrumentMaintenanceEvent>();
             this.CalibrationReportAsReference = new HashSet<CalibrationReport>();
             this.AssociatedMethods = new HashSet<Method>();
-            this.instrument_measurable_property = new HashSet<InstrumentMeasurableProperty>();
+            this.InstrumentMeasurableProperties = new HashSet<InstrumentMeasurableProperty>();
         }
     
         public int ID { get; set; }
@@ -55,6 +55,6 @@ namespace DBManager
         public virtual ICollection<Method> AssociatedMethods { get; set; }
         public virtual InstrumentUtilizationArea instrument_utilization_areas { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<InstrumentMeasurableProperty> instrument_measurable_property { get; set; }
+        public virtual ICollection<InstrumentMeasurableProperty> InstrumentMeasurableProperties { get; set; }
     }
 }

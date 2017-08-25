@@ -73,7 +73,7 @@ namespace Services
                                     _eventAggregator.GetEvent<CalibrationIssued>()
                                                     .Publish(tempReport);
                                     _eventAggregator.GetEvent<StatusNotificationIssued>()
-                                                    .Publish("Report calibrazione creato con il numero " + tempReport.GetFormattedNumber());
+                                                    .Publish("Report taratura creato con il numero " + tempReport.GetFormattedNumber());
                                 }
                             });
 

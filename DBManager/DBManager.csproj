@@ -153,12 +153,14 @@
     <Compile Include="EntityExtensions\BatchExtension.cs" />
     <Compile Include="EntityExtensions\CalibrationFileExtension.cs" />
     <Compile Include="EntityExtensions\CalibrationReportExtension.cs" />
+    <Compile Include="EntityExtensions\CalibrationReportInstrumentPropertyMappingExtension.cs" />
     <Compile Include="EntityExtensions\ColourExtension.cs" />
     <Compile Include="EntityExtensions\ExternalConstructionExtension.cs" />
     <Compile Include="EntityExtensions\ExternalReportExtension.cs" />
     <Compile Include="EntityExtensions\ExternalReportFileExtension.cs" />
     <Compile Include="EntityExtensions\InstrumentExtension.cs" />
     <Compile Include="EntityExtensions\InstrumentMaintenanceEventExtension.cs" />
+    <Compile Include="EntityExtensions\InstrumentMeasurablePropertyExtension.cs" />
     <Compile Include="EntityExtensions\InstrumentTypeExtension.cs" />
     <Compile Include="EntityExtensions\MaterialExtension.cs" />
     <Compile Include="EntityExtensions\MaterialLineExtension.cs" />
@@ -186,29 +188,6 @@
     <Compile Include="EntityExtensions\UserExtension.cs" />
     <Compile Include="EntityExtensions\UserRoleExtension.cs" />
     <Compile Include="EntityExtensions\UserRoleMappingExtension.cs" />
-    <Compile Include="InstrumentMeasurableProperty.cs">
-      <DependentUpon>LabDB.tt</DependentUpon>
-    </Compile>
-    <Compile Include="InstrumentUtilizationArea.cs">
-      <DependentUpon>LabDB.tt</DependentUpon>
-    </Compile>
-    <Compile Include="LabDB.Context1.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>LabDB.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="MaterialLine.cs">
-      <DependentUpon>LabDB.tt</DependentUpon>
-    </Compile>
-    <Compile Include="MeasurableQuantity.cs">
-      <DependentUpon>LabDB.tt</DependentUpon>
-    </Compile>
-    <Compile Include="MeasurementUnit.cs">
-      <DependentUpon>LabDB.tt</DependentUpon>
-    </Compile>
-    <Compile Include="PersonRoleNames.cs" />
-    <Compile Include="Services\DataService.cs" />
-    <Compile Include="DBManagerModule.cs" />
     <Compile Include="ExternalConstruction.cs">
       <DependentUpon>LabDB.tt</DependentUpon>
     </Compile>
@@ -224,27 +203,36 @@
     <Compile Include="InstrumentMaintenanceEvent.cs">
       <DependentUpon>LabDB.tt</DependentUpon>
     </Compile>
+    <Compile Include="InstrumentMeasurableProperty.cs">
+      <DependentUpon>LabDB.tt</DependentUpon>
+    </Compile>
     <Compile Include="InstrumentType.cs">
       <DependentUpon>LabDB.tt</DependentUpon>
     </Compile>
-    <Compile Include="LabDB.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
+    <Compile Include="InstrumentUtilizationArea.cs">
       <DependentUpon>LabDB.tt</DependentUpon>
     </Compile>
-    <Compile Include="LabDB.Designer.cs">
+    <Compile Include="LabDB.Context1.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>LabDB.edmx</DependentUpon>
+      <DependentUpon>LabDB.Context.tt</DependentUpon>
     </Compile>
-    <Compile Include="LabDBConfig.cs" />
     <Compile Include="Master.cs">
       <DependentUpon>LabDB.tt</DependentUpon>
     </Compile>
     <Compile Include="Material.cs">
       <DependentUpon>LabDB.tt</DependentUpon>
     </Compile>
+    <Compile Include="MaterialLine.cs">
+      <DependentUpon>LabDB.tt</DependentUpon>
+    </Compile>
     <Compile Include="MaterialType.cs">
+      <DependentUpon>LabDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MeasurableQuantity.cs">
+      <DependentUpon>LabDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MeasurementUnit.cs">
       <DependentUpon>LabDB.tt</DependentUpon>
     </Compile>
     <Compile Include="Method.cs">
@@ -259,7 +247,6 @@
     <Compile Include="OrganizationRoleMapping.cs">
       <DependentUpon>LabDB.tt</DependentUpon>
     </Compile>
-    <Compile Include="OrganizationRoleNames.cs" />
     <Compile Include="Person.cs">
       <DependentUpon>LabDB.tt</DependentUpon>
     </Compile>
@@ -269,21 +256,9 @@
     <Compile Include="PersonRoleMapping.cs">
       <DependentUpon>LabDB.tt</DependentUpon>
     </Compile>
+    <Compile Include="PersonRoleNames.cs" />
     <Compile Include="Project.cs">
       <DependentUpon>LabDB.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\AssemblyInfo.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="Property.cs">
       <DependentUpon>LabDB.tt</DependentUpon>
@@ -308,6 +283,33 @@
     </Compile>
     <Compile Include="Sample.cs">
       <DependentUpon>LabDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Services\DataService.cs" />
+    <Compile Include="DBManagerModule.cs" />
+    <Compile Include="LabDB.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LabDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LabDB.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LabDB.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="LabDBConfig.cs" />
+    <Compile Include="OrganizationRoleNames.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="Services\InstrumentService.cs" />
     <Compile Include="Services\MaterialService.cs" />

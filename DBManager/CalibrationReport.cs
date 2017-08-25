@@ -30,7 +30,8 @@ namespace DBManager
         public int laboratoryID { get; set; }
         public int instrumentID { get; set; }
         public string Notes { get; set; }
-        public string Result { get; set; }
+        public bool IsVerification { get; set; }
+        public int ResultID { get; set; }
     
         public virtual Instrument Instrument { get; set; }
         public virtual Organization Laboratory { get; set; }
@@ -41,5 +42,6 @@ namespace DBManager
         public virtual ICollection<Instrument> ReferenceInstruments { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CalibrationReportInstrumentPropertyMapping> InstrumentMeasurablePropertyMappings { get; set; }
+        public virtual CalibrationResult CalibrationResult { get; set; }
     }
 }

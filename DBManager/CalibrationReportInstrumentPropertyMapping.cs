@@ -20,9 +20,7 @@ namespace DBManager
         public double UpperRangeValue { get; set; }
         public double LowerRangeValue { get; set; }
         public double ExtendedUncertainty { get; set; }
-        public CalibrationResult Result { get; set; }
         public int MeasurementUnitID { get; set; }
-        public bool IsVerification { get; set; }
     
         public virtual CalibrationReport CalibrationReport { get; set; }
         public virtual InstrumentMeasurableProperty InstrumentMeasurableProperty { get; set; }

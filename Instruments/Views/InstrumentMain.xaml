@@ -11,78 +11,143 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-    
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
+        <TabControl>
+            <TabItem Header="Lista strumenti">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="35"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Orientation="Horizontal"
+                                Grid.Column="0"
+                                Grid.Row="0">
+
+                        <Button Content="Nuovo"
+                                Command="{Binding NewInstrumentCommand}"
+                                Grid.Column="0"
+                                Grid.Row="0"
+                                Margin="5"/>
+
+                        <Button Content="Apri"
+                                Command="{Binding OpenInstrumentCommand}"
+                                Margin="5"/>
+
+                        <Button Content="Elimina"
+                                Command="{Binding DeleteInstrumentCommand}"
+                                Margin="5"/>
+                    </StackPanel>
+                    
+                    <ListView ItemsSource="{Binding InstrumentList}"
+                                SelectedItem="{Binding SelectedInstrument, Mode=TwoWay}"
+                                Grid.Row="1">
+                        <i:Interaction.Behaviors>
+                            <sort:SortingBehavior/>
+                        </i:Interaction.Behaviors>
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Codice"
+                                                DisplayMemberBinding="{Binding Code}"/>
+                                <GridViewColumn Header="Tipo"
+                                                DisplayMemberBinding="{Binding InstrumentType.Name}"/>
+                                <GridViewColumn Header="Produttore"
+                                                DisplayMemberBinding="{Binding Manufacturer.Name}"/>
+                                <GridViewColumn Header="Modello"
+                                                DisplayMemberBinding="{Binding Model}"/>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Lista Tarature">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="35"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Orientation="Horizontal"
+                                Grid.Column="0"
+                                Grid.Row="0">
+
+                        <Button Content="Nuovo"
+                                Command="{Binding NewInstrumentCommand}"
+                                Grid.Column="0"
+                                Grid.Row="0"
+                                Margin="5"/>
+
+                        <Button Content="Apri"
+                                Command="{Binding OpenInstrumentCommand}"
+                                Margin="5"/>
+
+                        <Button Content="Elimina"
+                                Command="{Binding DeleteInstrumentCommand}"
+                                Margin="5"/>
+                    </StackPanel>
+
+                    <ListView ItemsSource="{Binding CalibrationsList}"
+                                SelectedItem="{Binding SelectedCalibration, Mode=TwoWay}"
+                                Grid.Row="1">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Numero">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock>
+                                                <Run Text="{Binding Year}"/>
+                                                <Run Text="{Binding Number, 
+                                                                    StringFormat=d3}"/>
+                                            </TextBlock>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="Strumento"
+                                                    DisplayMemberBinding="{Binding Instrument.Code}"/>
+                                <GridViewColumn Header="Data"
+                                                DisplayMemberBinding="{Binding Date,
+                                                                                StringFormat=d,
+                                                                                ConverterCulture=it-IT}"/>
+                                <GridViewColumn Header="Laboratorio"
+                                                DisplayMemberBinding="{Binding Laboratory.Name}"/>
+                                <GridViewColumn Header="Risultato"
+                                                DisplayMemberBinding="{Binding CalibrationResult.Description}"/>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Calendario Tarature">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="35"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Orientation="Horizontal"
+                                Grid.Column="0"
+                                Grid.Row="0">
+                        
+                    </StackPanel>
+                    <ListView ItemsSource="{Binding PendingCalibrationsList}"
+                                SelectedItem="{Binding SelectedInstrument, Mode=TwoWay}"
+                                Grid.Row="1">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Scadenza"
+                                                    DisplayMemberBinding="{Binding CalibrationDueDate, 
+                                                                                    StringFormat=d,
+                                                                                    ConverterCulture=it-IT}"/>
+                                <GridViewColumn Header="Codice"
+                                                    DisplayMemberBinding="{Binding Code}"/>
+                                <GridViewColumn Header="Tipo"
+                                                    DisplayMemberBinding="{Binding InstrumentType.Name}"/>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </Grid>
+            </TabItem>
+        </TabControl>
+
         
-        <Grid.RowDefinitions>
-            <RowDefinition Height="35"/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
-
-        <StackPanel Orientation="Horizontal"
-                    Grid.Column="0"
-                    Grid.ColumnSpan="2"
-                    Grid.Row="0">
-
-            <Button Content="Nuovo"
-                    Command="{Binding NewInstrumentCommand}"
-                    Grid.Column="0"
-                    Grid.Row="0"
-                    Margin="5"/>
-
-            <Button Content="Apri"
-                    Command="{Binding OpenInstrumentCommand}"
-                    Margin="5"/>
-
-            <Button Content="Elimina"
-                    Command="{Binding DeleteInstrumentCommand}"
-                    Margin="5"/>
-        </StackPanel>
-
-        <GroupBox Header="Strumenti"
-                  Grid.Column="0"
-                  Grid.Row="1">
-
-            <ListView ItemsSource="{Binding InstrumentList}"
-                          SelectedItem="{Binding SelectedInstrument, Mode=TwoWay}"
-                          Grid.Row="1">
-                <i:Interaction.Behaviors>
-                    <sort:SortingBehavior/>
-                </i:Interaction.Behaviors>
-                <ListView.View>
-                    <GridView>
-                        <GridViewColumn Header="Codice"
-                                        DisplayMemberBinding="{Binding Code}"/>
-                        <GridViewColumn Header="Tipo"
-                                        DisplayMemberBinding="{Binding InstrumentType.Name}"/>
-                    </GridView>
-                </ListView.View>
-            </ListView>
-
-        </GroupBox>
-
-        <GroupBox Header="Calendario tarature"
-                  Grid.Column="1"
-                  Grid.Row="1">
-            <ListView ItemsSource="{Binding PendingCalibrationsList}"
-                          SelectedItem="{Binding SelectedInstrument, Mode=TwoWay}"
-                          Grid.Row="1">
-                <ListView.View>
-                    <GridView>
-                        <GridViewColumn Header="Scadenza"
-                                        DisplayMemberBinding="{Binding CalibrationDueDate, 
-                                                                       StringFormat=d,
-                                                                       ConverterCulture=it-IT}"/>
-                        <GridViewColumn Header="Codice"
-                                        DisplayMemberBinding="{Binding Code}"/>
-                        <GridViewColumn Header="Tipo"
-                                        DisplayMemberBinding="{Binding InstrumentType.Name}"/>
-                    </GridView>
-                </ListView.View>   
-            </ListView>
-        </GroupBox>
     </Grid>
 </UserControl>

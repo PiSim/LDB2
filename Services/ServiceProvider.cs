@@ -29,7 +29,7 @@ namespace Services
             foreach (PersonRole prr in PeopleService.GetPersonRoles())
             {
                 PersonRoleMapping tempPRM = new PersonRoleMapping();
-                tempPRM.Role = prr;
+                tempPRM.roleID = prr.ID;
                 tempPRM.IsSelected = false;
                 newPerson.RoleMappings.Add(tempPRM);
             }
@@ -166,6 +166,10 @@ namespace Services
                     target.CalibrationDueDate = tempNewDate;
                     target.Update();
                 }
+
+                foreach (InstrumentMeasurableProperty imp in output.GetPropertyMappings().Select(impm => impm.InstrumentMeasurableProperty))
+                if (imp.UpdateCalibrationDueDate())
+                    imp.Update();
 
                 return output;
             }

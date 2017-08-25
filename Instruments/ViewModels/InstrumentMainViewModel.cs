@@ -58,6 +58,7 @@ namespace Instruments.ViewModels
                 calRep => 
                 {
                     RaisePropertyChanged("PendingCalibrationsList");
+                    RaisePropertyChanged("CalibrationsList");
                 });
 
             _eventAggregator.GetEvent<InstrumentListUpdateRequested>().Subscribe(
@@ -67,6 +68,11 @@ namespace Instruments.ViewModels
                      RaisePropertyChanged("PendingCalibrationsList");
                 });
 
+        }
+
+        public IEnumerable<CalibrationReport> CalibrationsList
+        {
+            get { return InstrumentService.GetCalibrationReports(); }
         }
 
         public DelegateCommand DeleteInstrumentCommand
