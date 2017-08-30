@@ -19,7 +19,7 @@ namespace Instruments.Views
     /// <summary>
     /// Logica di interazione per AddPropertyDialog.xaml
     /// </summary>
-    public partial class AddPropertyDialog : Window : IView
+    public partial class AddPropertyDialog : Window, IView
     {
         public AddPropertyDialog()
         {
