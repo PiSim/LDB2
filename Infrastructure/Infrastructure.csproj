@@ -191,6 +191,7 @@
     <Compile Include="Validation\BatchExistRule.cs" />
     <Compile Include="Validation\ExistingReportRule.cs" />
     <Compile Include="Wrappers\ControlPlanItemWrapper.cs" />
+    <Compile Include="Wrappers\InstrumentMeasurablePropertyWrapper.cs" />
     <Compile Include="Wrappers\ISelectableRequirement.cs" />
     <Compile Include="Wrappers\ReportItemWrapper.cs" />
     <Compile Include="Wrappers\RequirementWrapper.cs" />

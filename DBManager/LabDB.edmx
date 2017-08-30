@@ -80,7 +80,7 @@
           <Property Name="operatorID" Type="int" />
           <Property Name="laboratoryID" Type="int" Nullable="false" />
           <Property Name="instrumentID" Type="int" Nullable="false" />
-          <Property Name="notes" Type="varchar" MaxLength="200" />
+          <Property Name="notes" Type="varchar" MaxLength="200" Nullable="false" />
           <Property Name="is_verification" Type="bit" Nullable="false" />
           <Property Name="resultID" Type="int" Nullable="false" />
         </EntityType>
@@ -256,6 +256,7 @@
           <Property Name="calibration_due" Type="date" />
           <Property Name="calibration_responsibleID" Type="int" />
           <Property Name="utilization_areaID" Type="int" />
+          <Property Name="is_in_service" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="masters">
           <Key>
@@ -3996,7 +3997,7 @@
           <NavigationProperty Name="Laboratory" Relationship="labdbModel.laboratory_to_calibration_report" FromRole="calibration_reports" ToRole="Organization" />
           <NavigationProperty Name="Tech" Relationship="labdbModel.operator_to_calibration_report" FromRole="calibration_reports" ToRole="Person" />
           <NavigationProperty Name="CalibrationFiles" Relationship="labdbModel.calibration_report_to_files" FromRole="calibration_reports" ToRole="calibration_files" />
-          <Property Name="Notes" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="Notes" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="ReferenceInstruments" Relationship="labdbModel.calibration_reference_mappings" FromRole="CalibrationReport" ToRole="Instrument" />
           <NavigationProperty Name="InstrumentMeasurablePropertyMappings" Relationship="labdbModel.calibration_report_to_property_mapping" FromRole="CalibrationReport" ToRole="calibration_report_measurable_property_mappings" />
           <Property Name="IsVerification" Type="Boolean" Nullable="false" />
@@ -4038,8 +4039,9 @@
           <NavigationProperty Name="CalibrationReportAsReference" Relationship="labdbModel.calibration_reference_mappings" FromRole="Instrument" ToRole="CalibrationReport" />
           <NavigationProperty Name="AssociatedMethods" Relationship="labdbModel.instrument_method_mappings" FromRole="Instrument" ToRole="Method" />
           <Property Name="UtilizationAreaID" Type="Int32" />
-          <NavigationProperty Name="instrument_utilization_areas" Relationship="labdbModel.utilization_area_to_instrument" FromRole="Instrument" ToRole="instrument_utilization_areas" />
+          <NavigationProperty Name="InstrumentUtilizationArea" Relationship="labdbModel.utilization_area_to_instrument" FromRole="Instrument" ToRole="instrument_utilization_areas" />
           <NavigationProperty Name="InstrumentMeasurableProperties" Relationship="labdbModel.instrument_to_measurable_property" FromRole="Instrument" ToRole="instrument_measurable_property" />
+          <Property Name="IsInService" Type="Boolean" Nullable="false" />
         </EntityType>
         <Association Name="instrument_to_calibration_report">
           <End Type="labdbModel.Instrument" Role="instrument" Multiplicity="1" />
@@ -4730,7 +4732,7 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="name" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="instruments" Relationship="labdbModel.utilization_area_to_instrument" FromRole="instrument_utilization_areas" ToRole="Instrument" />
         </EntityType>
         <EntityType Name="MeasurementUnit">
@@ -5350,6 +5352,7 @@
           <EntitySetMapping Name="Instruments">
             <EntityTypeMapping TypeName="labdbModel.Instrument">
               <MappingFragment StoreEntitySet="instruments">
+                <ScalarProperty Name="IsInService" ColumnName="is_in_service" />
                 <ScalarProperty Name="UtilizationAreaID" ColumnName="utilization_areaID" />
                 <ScalarProperty Name="CalibrationResponsibleID" ColumnName="calibration_responsibleID" />
                 <ScalarProperty Name="CalibrationDueDate" ColumnName="calibration_due" />
@@ -5534,7 +5537,7 @@
           <EntitySetMapping Name="InstrumentUtilizationAreas">
             <EntityTypeMapping TypeName="labdbModel.InstrumentUtilizationArea">
               <MappingFragment StoreEntitySet="instrument_utilization_areas">
-                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="Name" ColumnName="name" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

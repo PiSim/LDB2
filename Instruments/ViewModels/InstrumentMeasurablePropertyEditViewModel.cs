@@ -118,13 +118,13 @@ namespace Instruments.ViewModels
 
                 else
                 {
-                    DateTime _lastCalibration = _measurablePropertyInstance.GetLastCalibration().Date;
+                    CalibrationReport _lastCalibration = _measurablePropertyInstance.GetLastCalibration();
 
                     if (_lastCalibration == null)
                         return "Mai";
 
                     else
-                        return _lastCalibration.ToShortDateString();
+                        return _lastCalibration.Date.ToShortDateString();
                 }
             }
         }
@@ -137,10 +137,13 @@ namespace Instruments.ViewModels
                 _measurablePropertyInstance = value;
                 EditMode = false;
 
-                _umList = _measurablePropertyInstance.MeasurableQuantity.GetMeasurementUnits();
+                _umList = _measurablePropertyInstance?.MeasurableQuantity.GetMeasurementUnits();
                 RaisePropertyChanged("UMList");
 
-                _selectedUM = _umList.FirstOrDefault(um => um.ID == _measurablePropertyInstance?.UnitID);
+                if (_umList != null)
+                    _selectedUM = _umList.FirstOrDefault(um => um.ID == _measurablePropertyInstance?.UnitID);
+                else
+                    _selectedUM = null;
 
                 RaisePropertyChanged("CalibrationDueDate");
                 RaisePropertyChanged("IsUnderControl");
@@ -161,7 +164,8 @@ namespace Instruments.ViewModels
             set
             {
                 _selectedUM = value;
-                _measurablePropertyInstance.UnitID = _selectedUM.ID;
+                if (_measurablePropertyInstance != null)
+                    _measurablePropertyInstance.UnitID = _selectedUM.ID;
             }
         }
 

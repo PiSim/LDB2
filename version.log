@@ -1,6 +1,10 @@
-﻿v 0.53 -- 
+﻿v 0.53 -- 30/08/2017
 
--
+-Aggiunti diversi campi di gestione all'interfaccia strumenti
+-Implementata vista per la gestione delle grandezze associate ad uno strumento
+-Rivisti i campi delle entità riguardanti la gestione Metrologica
+-Implementate viste per la gestione tarature 
+-Svariate correzioni all'interfaccia
 
 v 0.52 -- 03/07/2017
 

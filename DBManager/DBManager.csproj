@@ -162,6 +162,7 @@
     <Compile Include="EntityExtensions\InstrumentMaintenanceEventExtension.cs" />
     <Compile Include="EntityExtensions\InstrumentMeasurablePropertyExtension.cs" />
     <Compile Include="EntityExtensions\InstrumentTypeExtension.cs" />
+    <Compile Include="EntityExtensions\InstrumentUtilizationAreaExtension.cs" />
     <Compile Include="EntityExtensions\MaterialExtension.cs" />
     <Compile Include="EntityExtensions\MaterialLineExtension.cs" />
     <Compile Include="EntityExtensions\MaterialTypeExtension.cs" />

@@ -74,6 +74,7 @@
                        Margin="5"/>
 
                 <TextBox Text="{Binding InstrumentDescription}"
+                         MaxLength="45"
                          AcceptsReturn="True"
                          TextWrapping="Wrap"
                          IsEnabled="{Binding EditMode}"
@@ -131,12 +132,25 @@
                          Grid.Column="1"
                          Grid.Row="2"
                          Margin="5"/>
+
+                <Label Content="Area d'uso:"
+                       Grid.Column="0"
+                       Grid.Row="3"
+                       VerticalAlignment="Center"
+                       Margin="5"/>
+
+                <ComboBox ItemsSource="{Binding AreaList}"
+                          DisplayMemberPath="Name"
+                          SelectedItem="{Binding SelectedArea}"
+                          IsEnabled="{Binding EditMode}"
+                          Grid.Column="1"
+                          Grid.Row="3"
+                          Margin="5"/>
             </Grid>
         </Grid>
 
         <TabControl Grid.Row="2">
-            <TabItem Header="Tarature"
-                     Visibility="{Binding CalibrationTabVisible}">
+            <TabItem Header="Tarature">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
@@ -338,8 +352,26 @@
                     </GroupBox>
                 </Grid>
             </TabItem>
-            <TabItem Header="Dati Metrologici">
-                <ContentControl prism:RegionManager.RegionName="{Binding InstrumentEditMetrologyRegionName}"/>
+            <TabItem Header="Caratteristiche">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="35"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <CheckBox IsChecked="{Binding IsInService}"
+                              IsEnabled="{Binding EditMode}"
+                              Content="In Servizio"
+                              Grid.Row="0"
+                              VerticalAlignment="Center"
+                              HorizontalAlignment="Left"
+                              Margin="5"/>
+
+                    <GroupBox Header="Grandezze Associate"
+                              Grid.Row="1">
+                        <ContentControl prism:RegionManager.RegionName="{Binding InstrumentEditMetrologyRegionName}"
+                                        Grid.Row="1"/>
+                    </GroupBox>
+                </Grid>
             </TabItem>
         </TabControl>
     </Grid>

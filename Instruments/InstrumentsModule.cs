@@ -25,6 +25,7 @@ namespace Instruments
 
             _container.RegisterType<Views.InstrumentCreationDialog>();
 
+            _container.RegisterType <ViewModels.AddPropertyDialogViewModel>();
             _container.RegisterType<ViewModels.InstrumentCreationDialogViewModel>();
             _container.RegisterType<ViewModels.InstrumentEditViewModel>();
             _container.RegisterType<ViewModels.InstrumentMainViewModel>();

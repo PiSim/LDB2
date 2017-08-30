@@ -23,14 +23,17 @@ namespace Instruments.ViewModels
         private DelegateCommand _addCalibration, 
                                 _addMaintenanceEvent, 
                                 _addMethodAssociation,
+                                _addProperty,
                                 _removeMethodAssociation, 
                                 _save,
                                 _startEdit;
         private EventAggregator _eventAggregator;
         private IEnumerable<InstrumentType> _instrumentTypeList;
+        private IEnumerable<InstrumentUtilizationArea> _areaList;
         private IEnumerable<Organization> _manufacturerList;
         private Instrument _instance;
         private InstrumentMeasurableProperty _selectedMeasurableProperty;
+        private InstrumentUtilizationArea _selectedArea;
         private Method _selectedAssociated, _selectedUnassociated;
         private Property _filterProperty;
 
@@ -40,6 +43,7 @@ namespace Instruments.ViewModels
             _editMode = false;
             _eventAggregator = aggregator;
             _principal = principal;
+            _areaList = InstrumentService.GetUtilizationAreas();
             _instrumentTypeList = InstrumentService.GetInstrumentTypes();
             _manufacturerList = OrganizationService.GetOrganizations(OrganizationRoleNames.Manufacturer);
             
@@ -68,6 +72,34 @@ namespace Instruments.ViewModels
                     RaisePropertyChanged("UnassociatedMethods");
                 },
                 () => IsInstrumentAdmin && _selectedUnassociated != null);
+
+            _addProperty = new DelegateCommand(
+                () =>
+                {
+                    Views.AddPropertyDialog propertyDialog = new Views.AddPropertyDialog();
+                    if (propertyDialog.ShowDialog() == true)
+                    {
+                        InstrumentMeasurableProperty newIMP = new InstrumentMeasurableProperty()
+                        {
+                            CalibrationRangeLowerLimit = 0,
+                            CalibrationRangeUpperLimit = 0,
+                            ControlPeriod = 0,
+                            Description = "",
+                            InstrumentID = _instance.ID,
+                            IsUnderControl = false,
+                            MeasurableQuantityID = propertyDialog.QuantityInstance.ID,
+                            RangeLowerLimit = 0,
+                            RangeUpperLimit = 0,
+                            Resolution = 0,
+                            TargetUncertainty = 0,
+                            UnitID = propertyDialog.QuantityInstance.GetMeasurementUnits().First().ID
+                        };
+
+                        newIMP.Create();
+                        RaisePropertyChanged("InstrumentMeasurablePropertyList");
+                    }
+                },
+                () => IsInstrumentAdmin);
 
             _removeMethodAssociation = new DelegateCommand(
                 () =>
@@ -131,6 +163,11 @@ namespace Instruments.ViewModels
             get { return _addMethodAssociation; }
         }
 
+        public IEnumerable<InstrumentUtilizationArea> AreaList
+        {
+            get { return _areaList; }
+        }
+
         public IEnumerable<Method> AssociatedMethods
         {
             get { return _instance.GetAssociatedMethods(); }
@@ -144,21 +181,6 @@ namespace Instruments.ViewModels
                     return new List<CalibrationReport>();
                     
                 return _instance.GetCalibrationReports(); 
-            }
-        }
-
-        public Visibility CalibrationTabVisible
-        {
-            get
-            {
-                if (_instance == null)
-                    return Visibility.Visible;
-
-                else if (_instance.IsUnderControl)
-                    return Visibility.Visible;
-
-                else
-                    return Visibility.Hidden;
             }
         }
 
@@ -257,6 +279,8 @@ namespace Instruments.ViewModels
                 _instance = value;
                 _instance.Load();
 
+                _selectedArea = _areaList.FirstOrDefault(iua => iua.ID == _instance.UtilizationAreaID);
+
                 EditMode = false;
                 SelectedAssociatedMethod = null;
                 SelectedCalibration = null;
@@ -274,6 +298,8 @@ namespace Instruments.ViewModels
                 RaisePropertyChanged("InstrumentModel");
                 RaisePropertyChanged("InstrumentSerialNumber");
                 RaisePropertyChanged("InstrumentType");
+                RaisePropertyChanged("IsInService");
+                RaisePropertyChanged("SelectedArea");
                 RaisePropertyChanged("UnassociatedMethods");
             }
         }
@@ -369,6 +395,28 @@ namespace Instruments.ViewModels
             get { return _instrumentTypeList; }
         }
 
+        public bool IsInService
+        {
+            get
+            {
+                if (_instance == null)
+                    return false;
+
+                return _instance.IsInService;
+            }
+
+            set
+            {
+                _instance.IsInService = value;
+                if (!value)
+                    foreach (InstrumentMeasurableProperty imp in InstrumentMeasurablePropertyList)
+                    {
+                        imp.IsUnderControl = false;
+                        imp.UpdateCalibrationDueDate();
+                    }
+            }
+        }
+
         private bool IsInstrumentAdmin
         {
             get { return _principal.IsInRole(UserRoleNames.InstrumentAdmin); }
@@ -397,6 +445,17 @@ namespace Instruments.ViewModels
         public DelegateCommand SaveCommand
         {
             get { return _save; }
+        }
+
+        public InstrumentUtilizationArea SelectedArea
+        {
+            get { return _selectedArea; }
+            set
+            {
+                _selectedArea = value;
+                if (_instance != null)
+                    _instance.UtilizationAreaID = value.ID;
+            }
         }
 
         public Method SelectedAssociatedMethod

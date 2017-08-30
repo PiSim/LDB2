@@ -37,6 +37,19 @@ namespace DBManager.Services
             }
         }
 
+        public static IEnumerable<InstrumentUtilizationArea> GetUtilizationAreas()
+        {
+            // Returns all InstrumentUtilizationArea entities
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.InstrumentUtilizationAreas
+                                .ToList();
+            }
+        }
+
         public static CalibrationReport GetCalibrationReport(int ID)
         {
             // Returns a calibration report with the given ID, or null if none is found

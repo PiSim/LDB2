@@ -80,7 +80,7 @@ namespace Instruments.ViewModels
             _addReference = new DelegateCommand<string>(
                 code =>
                 {
-                    Instrument tempRef = InstrumentService.GetInstrument(_referenceCode);
+                    Instrument tempRef = InstrumentService.GetInstrument(code);
                     if (tempRef != null)
                     {
                         _calibrationInstance.AddReference(tempRef);
@@ -161,6 +161,12 @@ namespace Instruments.ViewModels
         {
             get { return _addFile; }
         }
+
+        public DelegateCommand<string> AddReferenceCommand
+        {
+            get { return _addReference; }
+        }
+
 
         public CalibrationReport CalibrationInstance
         {

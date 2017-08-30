@@ -38,11 +38,6 @@ namespace Services.Views
         {
             get { return (DataContext as ViewModels.NewCalibrationDialogViewModel).ReportInstance; }
         }
-
-        private void ReferenceTextBox_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter)
-                AddReferenceButton.Command.Execute(AddReferenceButton.CommandParameter);
-        }
+        
     }
 }

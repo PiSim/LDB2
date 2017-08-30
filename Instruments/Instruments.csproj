@@ -121,11 +121,15 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="ViewModels\AddPropertyDialogViewModel.cs" />
     <Compile Include="ViewModels\CalibrationReportEditViewModel.cs" />
     <Compile Include="ViewModels\InstrumentCreationDialogViewModel.cs" />
     <Compile Include="ViewModels\InstrumentEditViewModel.cs" />
     <Compile Include="ViewModels\InstrumentMainViewModel.cs" />
     <Compile Include="ViewModels\InstrumentMeasurablePropertyEditViewModel.cs" />
+    <Compile Include="Views\AddPropertyDialog.xaml.cs">
+      <DependentUpon>AddPropertyDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\CalibrationReportEdit.xaml.cs">
       <DependentUpon>CalibrationReportEdit.xaml</DependentUpon>
     </Compile>
@@ -179,6 +183,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Views\AddPropertyDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\CalibrationReportEdit.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

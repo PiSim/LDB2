@@ -23,6 +23,7 @@ namespace Infrastructure
         public static string InstrumentEditMetrologyRegion { get { return "InstrumentEditMetrologyRegion"; } }
         public static string InstrumentTypeManagementEditRegion { get { return "InstrumentTypeManagementEditRegion"; } }
         public static string InstrumentTypeManagementRegion { get { return "InstrumentTypeManagementRegion"; } }
+        public static string InstrumentUtilizationAreasRegion { get { return "InstrumentUtilizationAreasRegion"; } }
         public static string MainNavigationRegion { get { return "MainNavigationRegion"; } }
         public static string MainRegion { get { return "MainRegion"; } }
         public static string MainExternalReportListRegion { get { return "MainExternalReportListRegion"; } }

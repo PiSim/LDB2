@@ -3,6 +3,7 @@ using DBManager.EntityExtensions;
 using DBManager.Services;
 using Infrastructure;
 using Infrastructure.Events;
+using Infrastructure.Wrappers;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
@@ -19,6 +20,7 @@ namespace Services.ViewModels
 {
     public class NewCalibrationDialogViewModel : BindableBase
     {
+        private bool _isVerificationOnly;
         private CalibrationReport _reportInstance;
         private DateTime _calibrationDate;
         private DBEntities _entities;
@@ -27,6 +29,7 @@ namespace Services.ViewModels
         private DelegateCommand<string> _addReference;
         private DelegateCommand<Window> _cancel, _confirm;
         private EventAggregator _eventAggregator;
+        private IEnumerable<InstrumentMeasurablePropertyWrapper> _propertyList;
         private Instrument _instumentInstance, _selectedReference;
         private Person _selectedTech;
         private string _calibrationNotes, _calibrationResult, _referenceCode;
@@ -38,6 +41,7 @@ namespace Services.ViewModels
                                             EventAggregator eventAggregator) : base()
         {
             _entities = entities;
+            _isVerificationOnly = false;
             _referenceList = new ObservableCollection<Instrument>();
             _eventAggregator = eventAggregator;
             _principal = principal;
@@ -69,7 +73,7 @@ namespace Services.ViewModels
                     _reportInstance.Year = DateTime.Now.Year - 2000;
                     _reportInstance.Number = InstrumentService.GetNextCalibrationNumber(_reportInstance.Year);
                     _reportInstance.Instrument = _instumentInstance;
-                    _reportInstance.IsVerification = false;
+                    _reportInstance.IsVerification = _isVerificationOnly;
                     _reportInstance.Laboratory = _selectedLab;
                     _reportInstance.Notes = "";
                     _reportInstance.ResultID = 1;
@@ -82,15 +86,16 @@ namespace Services.ViewModels
                             _reportInstance.ReferenceInstruments.Add(refInstrument);
                     }
                     
-                    foreach (InstrumentMeasurableProperty imp in _instumentInstance.GetMeasurableProperties())
+                    foreach (InstrumentMeasurableProperty imp in _propertyList.Where(prp => prp.IsSelected)
+                                                                                .Select(prp => prp.PropertyInstance))
                     {
                         CalibrationReportInstrumentPropertyMapping cripm = new CalibrationReportInstrumentPropertyMapping()
                         {
                             ExtendedUncertainty = 0,
-                            LowerRangeValue = imp.CalibrationRangeLowerLimit,
+                            LowerRangeValue = imp.RangeLowerLimit,
                             MeasurablePropertyID = imp.ID,
                             MeasurementUnitID = imp.UnitID,
-                            UpperRangeValue = imp.CalibrationRangeUpperLimit
+                            UpperRangeValue = imp.RangeUpperLimit
                         };
 
                         _reportInstance.InstrumentMeasurablePropertyMappings.Add(cripm);
@@ -183,9 +188,26 @@ namespace Services.ViewModels
             set
             {
                 _instumentInstance = _entities.Instruments.First(ins => ins.ID == value.ID);
+                _propertyList = _instumentInstance.GetMeasurableProperties()
+                                                    .Where(imp => imp.IsUnderControl)
+                                                    .Select(imp => new InstrumentMeasurablePropertyWrapper(imp))
+                                                    .ToList();
                 RaisePropertyChanged("InstrumentCode");
+                RaisePropertyChanged("PropertyList");
             }
         }
+
+        public bool IsVerificationOnly
+        {
+            get { return _isVerificationOnly; }
+            set { _isVerificationOnly = value; }
+        }
+
+        public IEnumerable<InstrumentMeasurablePropertyWrapper> PropertyList
+        {
+            get { return _propertyList; }
+        }
+            
 
         public bool IsNotExternalLab
         {

@@ -231,15 +231,17 @@
                     </Grid.RowDefinitions>
 
                     <TextBox Text="{Binding ReferenceCode, Mode=TwoWay}"
-                         x:Name="ReferenceTextBox"
-                         KeyDown="ReferenceTextBox_KeyDown"
-                         Grid.Column="0"
-                         Grid.Row="0"
-                         Margin="5"/>
+                             x:Name="ReferenceTextBox"
+                             KeyDown="ReferenceTextBox_KeyDown"
+                             Grid.Column="0"
+                             Grid.Row="0"
+                             Margin="5"/>
 
                     <Button Content="Aggiungi"
                             Command="{Binding AddReferenceCommand}"
-                            CommandParameter="{Binding ElementName=ReferenceTextBox, Path=Text}"
+                            CommandParameter="{Binding ElementName=ReferenceTextBox, 
+                                                       Path=Text,
+                                                       UpdateSourceTrigger=PropertyChanged}"
                             x:Name="AddReferenceButton"
                             Grid.Column="1"
                             Grid.Row="0"

@@ -39,6 +39,7 @@ namespace Instruments.ViewModels
                     _instrumentInstance.ControlPeriod = (sbyte)_controlPeriod;
                     _instrumentInstance.InstrumentTypeID = _selectedType.ID;
                     _instrumentInstance.IsUnderControl = IsUnderControl;
+                    _instrumentInstance.IsInService = true;
 
                     if (_isUnderControl)
                         _instrumentInstance.CalibrationDueDate = DateTime.Now.Date;

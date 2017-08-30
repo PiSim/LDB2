@@ -11,6 +11,17 @@ namespace DBManager.EntityExtensions
 {
     public static class InstrumentMeasurablePropertyExtension
     {
+        public static void Create(this InstrumentMeasurableProperty entry)
+        {
+            // Inserts a new InstrumentMeasurableProperty entry in the DB
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.InstrumentMeasurableProperties.Add(entry);
+                entities.SaveChanges();
+            }
+        }
+
         public static DateTime GetCalibrationDueDateFrom(this InstrumentMeasurableProperty entry,
                                                         DateTime lastCalibration)
         {
@@ -53,7 +64,7 @@ namespace DBManager.EntityExtensions
             // Updates the value for CalibrationDueDate using the latest calibration in the DB and the parameters set in the entry instance
             // Returns true if the new value differs from the old one
 
-            DateTime oldvalue = entry.CalibrationDue.Value;
+            DateTime oldvalue = (entry.CalibrationDue == null) ? DateTime.MinValue : entry.CalibrationDue.Value;
 
             if (!entry.IsUnderControl)
                 entry.CalibrationDue = null;

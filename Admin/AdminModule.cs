@@ -41,6 +41,8 @@ namespace Admin
                                                     typeof(Views.UserMain));
             _regionManager.RegisterViewWithRegion(RegionNames.InstrumentTypeManagementRegion,
                                                     typeof(Views.InstrumentTypeMain));
+            _regionManager.RegisterViewWithRegion(RegionNames.InstrumentUtilizationAreasRegion,
+                                                    typeof(Views.InstrumentUtilizationAreaMain));
             _regionManager.RegisterViewWithRegion(RegionNames.MeasurableQuantityManagementRegion,
                                                     typeof(Views.MeasurableQuantityMain));
             _regionManager.RegisterViewWithRegion(RegionNames.UnitOfMeasurementManagementRegion,

@@ -38,6 +38,7 @@ namespace DBManager
         public Nullable<System.DateTime> CalibrationDueDate { get; set; }
         public Nullable<int> CalibrationResponsibleID { get; set; }
         public Nullable<int> UtilizationAreaID { get; set; }
+        public bool IsInService { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CalibrationReport> CalibrationReports { get; set; }
@@ -53,7 +54,7 @@ namespace DBManager
         public virtual ICollection<CalibrationReport> CalibrationReportAsReference { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Method> AssociatedMethods { get; set; }
-        public virtual InstrumentUtilizationArea instrument_utilization_areas { get; set; }
+        public virtual InstrumentUtilizationArea InstrumentUtilizationArea { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<InstrumentMeasurableProperty> InstrumentMeasurableProperties { get; set; }
     }

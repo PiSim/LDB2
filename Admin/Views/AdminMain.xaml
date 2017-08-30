@@ -34,7 +34,7 @@
                              Grid.Column="0"
                              Grid.Row="1"
                              Margin="5"
-                             Width="100"/>  
+                             Width="100"/>
 
                     <Button Content="Nuovo Ruolo Utente"
                         Command="{Binding NewUserRoleCommand}"
@@ -83,7 +83,7 @@
             <TabItem Header="Grandezze Misurabili">
                 <ContentControl prism:RegionManager.RegionName="{Binding MeasurableQuantityManagementRegionName}"/>
             </TabItem>
-            
+
             <TabItem Header="Tipi Strumenti">
                 <ContentControl prism:RegionManager.RegionName="{Binding InstrumentTypeManagementRegionName}"/>
             </TabItem>
@@ -91,7 +91,9 @@
             <TabItem Header="Unità di misura">
                 <ContentControl prism:RegionManager.RegionName="{Binding UnitOfMeasurementManagementRegionName}"/>
             </TabItem>
+            <TabItem Header="Aree Utilizzo strumenti">
+                <ContentControl prism:RegionManager.RegionName="{Binding InstrumentUtilizationAreasRegionName}"/>
+            </TabItem>
         </TabControl>
-
     </Grid>
 </UserControl>

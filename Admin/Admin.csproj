@@ -120,6 +120,7 @@
     <Compile Include="ViewModels\AdminMainViewModel.cs" />
     <Compile Include="ViewModels\InstrumentTypeEditViewModel.cs" />
     <Compile Include="ViewModels\InstrumentTypeMainViewModel.cs" />
+    <Compile Include="ViewModels\InstrumentUtilizationAreaMainViewModel.cs" />
     <Compile Include="ViewModels\MeasurableQuantityEditViewModel.cs" />
     <Compile Include="ViewModels\MeasurableQuantityMainViewModel.cs" />
     <Compile Include="ViewModels\MeasurementUnitCreationDialogViewModel.cs" />
@@ -139,6 +140,9 @@
     </Compile>
     <Compile Include="Views\InstrumentTypeMain.xaml.cs">
       <DependentUpon>InstrumentTypeMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InstrumentUtilizationAreaMain.xaml.cs">
+      <DependentUpon>InstrumentUtilizationAreaMain.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MeasurableQuantityEdit.xaml.cs">
       <DependentUpon>MeasurableQuantityEdit.xaml</DependentUpon>
@@ -213,6 +217,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\InstrumentTypeMain.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\InstrumentUtilizationAreaMain.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
