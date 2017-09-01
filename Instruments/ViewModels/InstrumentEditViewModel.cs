@@ -20,10 +20,13 @@ namespace Instruments.ViewModels
         private bool _editMode;
         private CalibrationReport _selectedCalibration;
         private DBPrincipal _principal;
-        private DelegateCommand _addCalibration, 
+        private DelegateCommand _addCalibration,
+                                _addFileCommand,
                                 _addMaintenanceEvent, 
                                 _addMethodAssociation,
                                 _addProperty,
+                                _openFileCommand,
+                                _removeFileCommand,
                                 _removeMethodAssociation, 
                                 _save,
                                 _startEdit;
@@ -161,6 +164,11 @@ namespace Instruments.ViewModels
         public DelegateCommand AddMethodAssociationCommand
         {
             get { return _addMethodAssociation; }
+        }
+
+        public DelegateCommand AddPropertyCommand
+        {
+            get { return _addProperty; }
         }
 
         public IEnumerable<InstrumentUtilizationArea> AreaList

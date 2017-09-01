@@ -189,17 +189,16 @@ namespace Materials.ViewModels
                         _materialInstance.Create();
                     }
 
-                    // If material exists and material.construction is null and a construction is selected
+                    // If material exists and a construction is selected
                     // sets the construction
 
-                    else if (_materialInstance.ExternalConstructionID == null
-                            && _selectedExternalConstruction != null)
+                    else if (_selectedExternalConstruction != null)
                     {
                         _materialInstance.ExternalConstructionID = _selectedExternalConstruction.ID;
                         _materialInstance.Update();
                     }
 
-                    // If original recipe.colorID was null and a color was selected
+                    // If a color was selected
                     // sets the colorID 
 
                     if (_selectedColour != null 

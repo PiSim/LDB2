@@ -30,7 +30,9 @@
                Grid.Row="0"
                Margin="5"/>
 
-        <TextBox Text="{Binding ProjectName, Mode=TwoWay}"
+        <TextBox Text="{Binding ProjectName, 
+                                Mode=TwoWay,
+                                UpdateSourceTrigger=PropertyChanged}"
                  Grid.Column="1"
                  Grid.ColumnSpan="3"
                  Grid.Row="0"
@@ -68,10 +70,12 @@
                Margin="5"/>
 
         <TextBox Text="{Binding ProjectDescription, Mode=TwoWay}"
+                 MaxLength="45"
                  Grid.Column="1"
                  Grid.ColumnSpan="3"
                  Grid.Row="3"
                  Margin="5"/>
+        
         <Button Content="Annulla"
                 Command="{Binding CancelCommand}"
                 CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"

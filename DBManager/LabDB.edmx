@@ -179,6 +179,15 @@
           <Property Name="purchase_orderID" Type="int" />
           <Property Name="arrival_date" Type="date" />
         </EntityType>
+        <EntityType Name="instrument_files">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="path" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="description" Type="varchar" MaxLength="50" />
+          <Property Name="instrumentID" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="instrument_maintenance_events">
           <Key>
             <PropertyRef Name="ID" />
@@ -984,6 +993,20 @@
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="calibration_reports">
+              <PropertyRef Name="instrumentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="instrument_to_file">
+          <End Role="instruments" Type="Self.instruments" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="instrument_files" Type="Self.instrument_files" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="instruments">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="instrument_files">
               <PropertyRef Name="instrumentID" />
             </Dependent>
           </ReferentialConstraint>
@@ -1986,6 +2009,7 @@
           <EntitySet Name="external_report_files" EntityType="Self.external_report_files" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="external_report_method_mappings" EntityType="Self.external_report_method_mappings" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="external_reports" EntityType="Self.external_reports" Schema="labdb" store:Type="Tables" />
+          <EntitySet Name="instrument_files" EntityType="Self.instrument_files" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="instrument_maintenance_events" EntityType="Self.instrument_maintenance_events" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="instrument_measurable_property" EntityType="Self.instrument_measurable_property" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="instrument_method_mappings" EntityType="Self.instrument_method_mappings" Schema="labdb" store:Type="Tables" />
@@ -2142,6 +2166,10 @@
           <AssociationSet Name="instrument_to_calibration_report" Association="Self.instrument_to_calibration_report">
             <End Role="instruments" EntitySet="instruments" />
             <End Role="calibration_reports" EntitySet="calibration_reports" />
+          </AssociationSet>
+          <AssociationSet Name="instrument_to_file" Association="Self.instrument_to_file">
+            <End Role="instruments" EntitySet="instruments" />
+            <End Role="instrument_files" EntitySet="instrument_files" />
           </AssociationSet>
           <AssociationSet Name="instrument_to_maintenance_event" Association="Self.instrument_to_maintenance_event">
             <End Role="instruments" EntitySet="instruments" />
@@ -3715,6 +3743,11 @@
             <End Role="CalibrationResult" EntitySet="CalibrationResults" />
             <End Role="CalibrationReport" EntitySet="CalibrationReports" />
           </AssociationSet>
+          <EntitySet Name="InstrumentFiles" EntityType="labdbModel.InstrumentFiles" />
+          <AssociationSet Name="instrument_to_file" Association="labdbModel.instrument_to_file">
+            <End Role="Instrument" EntitySet="Instruments" />
+            <End Role="instrument_files" EntitySet="InstrumentFiles" />
+          </AssociationSet>
         </EntityContainer>
         <Association Name="overridden_to_requirement">
           <End Type="labdbModel.Requirement" Role="Requirement" Multiplicity="0..1">
@@ -4042,6 +4075,7 @@
           <NavigationProperty Name="InstrumentUtilizationArea" Relationship="labdbModel.utilization_area_to_instrument" FromRole="Instrument" ToRole="instrument_utilization_areas" />
           <NavigationProperty Name="InstrumentMeasurableProperties" Relationship="labdbModel.instrument_to_measurable_property" FromRole="Instrument" ToRole="instrument_measurable_property" />
           <Property Name="IsInService" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="InstrumentFiles" Relationship="labdbModel.instrument_to_file" FromRole="Instrument" ToRole="instrument_files" />
         </EntityType>
         <Association Name="instrument_to_calibration_report">
           <End Type="labdbModel.Instrument" Role="instrument" Multiplicity="1" />
@@ -4919,6 +4953,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="InstrumentFiles">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Path" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="InstrumentID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Instrument" Relationship="labdbModel.instrument_to_file" FromRole="instrument_files" ToRole="Instrument" />
+        </EntityType>
+        <Association Name="instrument_to_file">
+          <End Type="labdbModel.Instrument" Role="Instrument" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="labdbModel.InstrumentFiles" Role="instrument_files" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Instrument">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="instrument_files">
+              <PropertyRef Name="InstrumentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -5605,6 +5663,16 @@
             <EntityTypeMapping TypeName="labdbModel.CalibrationResult">
               <MappingFragment StoreEntitySet="calibration_results">
                 <ScalarProperty Name="Description" ColumnName="description" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="InstrumentFiles">
+            <EntityTypeMapping TypeName="labdbModel.InstrumentFiles">
+              <MappingFragment StoreEntitySet="instrument_files">
+                <ScalarProperty Name="InstrumentID" ColumnName="instrumentID" />
+                <ScalarProperty Name="Description" ColumnName="description" />
+                <ScalarProperty Name="Path" ColumnName="path" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

@@ -164,7 +164,7 @@ namespace Instruments.ViewModels
             set
             {
                 _selectedUM = value;
-                if (_measurablePropertyInstance != null)
+                if (_measurablePropertyInstance != null && _selectedUM != null)
                     _measurablePropertyInstance.UnitID = _selectedUM.ID;
             }
         }

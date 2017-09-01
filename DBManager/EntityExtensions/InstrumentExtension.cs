@@ -9,6 +9,29 @@ namespace DBManager.EntityExtensions
 {
     public static class InstrumentExtension
     {
+        public static void AddFiles(this Instrument entry,
+                                    IEnumerable<string> paths)
+        {
+            // Given a list of paths creates and adds a corresponding series of InstrumentFiles entities
+
+            using (DBEntities entities = new DBEntities())
+            {
+                foreach (string pth in paths)
+                {
+                    InstrumentFiles inf = new InstrumentFiles()
+                    {
+                        Path = pth,
+                        InstrumentID = entry.ID
+                    };
+
+                    entities.InstrumentFiles.Add(inf);
+                }
+
+                entities.SaveChanges();
+            }
+
+        }
+
         public static void AddMethodAssociation(this Instrument entry,
                                                 Method methodEntity)
         {

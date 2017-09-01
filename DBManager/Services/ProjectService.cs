@@ -45,6 +45,18 @@ namespace DBManager.Services
             }
         }
 
+        public static Project GetProject(string name)
+        {
+            // Returns a Project with the given name or null if none exists
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.Projects.FirstOrDefault(prj => prj.Name == name);
+            }
+        }
+
         public static IEnumerable<Project> GetProjects()
         {
             // Returns all Project entities

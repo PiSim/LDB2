@@ -4,7 +4,9 @@ using Infrastructure;
 using Prism.Commands;
 using Prism.Mvvm;
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,9 +14,10 @@ using System.Windows;
 
 namespace Projects.ViewModels
 {
-    public class ProjectCreationDialogViewModel : BindableBase
+    public class ProjectCreationDialogViewModel : BindableBase, INotifyDataErrorInfo
     {
         private DelegateCommand<Window> _cancel, _confirm;
+        private readonly Dictionary<string, ICollection<string>> _validationErrors = new Dictionary<string, ICollection<string>>();
         private Organization _selectedOem;
         private Person _selectedLeader;
         private Project _projectInstance;
@@ -22,6 +25,7 @@ namespace Projects.ViewModels
         
         public ProjectCreationDialogViewModel(DBEntities entities) : base()
         {
+            _description = "";
 
             _cancel = new DelegateCommand<Window>(
                 parent =>
@@ -42,8 +46,37 @@ namespace Projects.ViewModels
                     
                     parent.DialogResult = true;
                 },
-                parent => IsValidInput);
+                parent => !HasErrors);
+
+            SelectedLeader = null;
+            SelectedOem = null;
         }
+
+        #region INotifyDataErrorInfo interface elements
+
+        public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
+
+        public IEnumerable GetErrors(string propertyName)
+        {
+            if (string.IsNullOrEmpty(propertyName)
+                || !_validationErrors.ContainsKey(propertyName))
+                return null;
+
+            return _validationErrors[propertyName];
+        }
+
+        public bool HasErrors
+        {
+            get { return _validationErrors.Count > 0; }
+        }
+
+        private void RaiseErrorsChanged(string propertyName)
+        {
+            ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
+            _confirm.RaiseCanExecuteChanged();
+        }
+
+        #endregion
 
         public DelegateCommand<Window> CancelCommand
         {
@@ -53,17 +86,6 @@ namespace Projects.ViewModels
         public DelegateCommand<Window> ConfirmCommand
         {
             get { return _confirm; }
-        }
-
-        public bool IsValidInput
-        {
-            get
-            {
-                return _description != null &&
-                      _name != null &&
-                      _selectedLeader != null &&
-                      _selectedOem != null;
-            }
         }
 
         public IEnumerable<Person> LeaderList
@@ -85,7 +107,6 @@ namespace Projects.ViewModels
             set
             {
                 _description = value;
-                _confirm.RaiseCanExecuteChanged();
             }
         }
 
@@ -100,7 +121,19 @@ namespace Projects.ViewModels
             set
             {
                 _name = value;
-                _confirm.RaiseCanExecuteChanged();
+                if (_name != null && ProjectService.GetProject(_name) == null)
+                {
+                    if (_validationErrors.ContainsKey("ProjectName"))
+                    {
+                        _validationErrors.Remove("ProjectName");
+                        RaiseErrorsChanged("ProjectName");
+                    }
+                }
+                else
+                {
+                    _validationErrors["ProjectName"] = new List<string>() { "Nome non valido" };
+                    RaiseErrorsChanged("ProjectName");
+                }
             }
         }
 
@@ -110,7 +143,19 @@ namespace Projects.ViewModels
             set
             {
                 _selectedLeader = value;
-                _confirm.RaiseCanExecuteChanged();
+                if (_selectedLeader != null)
+                {
+                    if (_validationErrors.ContainsKey("SelectedLeader"))
+                    {
+                        _validationErrors.Remove("SelectedLeader");
+                        RaiseErrorsChanged("SelectedLeader");
+                    }
+                }
+                else
+                {
+                    _validationErrors["SelectedLeader"] = new List<string>() { "Selezionare un capo progetto" };
+                    RaiseErrorsChanged("SelectedLeader");
+                }
             }
         }
 
@@ -120,7 +165,19 @@ namespace Projects.ViewModels
             set
             {
                 _selectedOem = value;
-                _confirm.RaiseCanExecuteChanged();
+                if (_selectedOem != null)
+                {
+                    if (_validationErrors.ContainsKey("SelectedOem"))
+                    {
+                        _validationErrors.Remove("SelectedOem");
+                        RaiseErrorsChanged("SelectedOem");
+                    }
+                }
+                else
+                {
+                    _validationErrors["SelectedOem"] = new List<string>() { "Selezionare un OEM" };
+                    RaiseErrorsChanged("SelectedOem");
+                }
             }
         }
     }

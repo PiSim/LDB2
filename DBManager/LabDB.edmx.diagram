@@ -166,6 +166,8 @@
         <AssociationConnector Association="labdbModel.measurement_unit_to_calibration_property_mapping" />
         <EntityTypeShape EntityType="labdbModel.CalibrationResult" Width="1.5" PointX="13.125" PointY="38" />
         <AssociationConnector Association="labdbModel.calibration_result_to_report" />
+        <EntityTypeShape EntityType="labdbModel.InstrumentFiles" Width="1.5" PointX="8.5" PointY="23.75" />
+        <AssociationConnector Association="labdbModel.instrument_to_file" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

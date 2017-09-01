@@ -201,6 +201,9 @@
     <Compile Include="Instrument.cs">
       <DependentUpon>LabDB.tt</DependentUpon>
     </Compile>
+    <Compile Include="InstrumentFiles.cs">
+      <DependentUpon>LabDB.tt</DependentUpon>
+    </Compile>
     <Compile Include="InstrumentMaintenanceEvent.cs">
       <DependentUpon>LabDB.tt</DependentUpon>
     </Compile>

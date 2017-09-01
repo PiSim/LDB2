@@ -109,7 +109,7 @@ namespace Projects.ViewModels
                 {
                     EditMode = true;
                 },
-                () => !_editMode);
+                () => !_editMode && _principal.IsInRole(UserRoleNames.ProjectAdmin));
 
             _unassignMaterial = new DelegateCommand(
                 () => 
