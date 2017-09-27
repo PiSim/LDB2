@@ -1,6 +1,10 @@
-﻿v 0.54 -- 
+﻿v 0.54 -- 27/9/2017
 
-
+-Implementato conteggio ore per report/durata metodi
+-Sostituite diverse listview con DataGrid
+-Semplificato inserimento report esterni
+-Impostato suggerimento automatico numero report
+-Aggiunto campo note alla creazione di un report
 
 v 0.53 -- 30/08/2017
 

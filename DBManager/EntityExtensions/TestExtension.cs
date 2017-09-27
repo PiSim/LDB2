@@ -59,7 +59,6 @@ namespace DBManager.EntityExtensions
                 Test tempEntry = entities.Tests.Include(tst => tst.Instrument)
                                                 .Include(tst => tst.Method.Property)
                                                 .Include(tst => tst.Method.Standard.Organization)
-                                                .Include(tst => tst.MethodIssue)
                                                 .Include(tst => tst.Person)
                                                 .Include(tst => tst.Report)
                                                 .Include(tst => tst.SubTests)
@@ -71,8 +70,6 @@ namespace DBManager.EntityExtensions
                 entry.IsComplete = tempEntry.IsComplete;
                 entry.Method = tempEntry.Method;
                 entry.MethodID = tempEntry.MethodID;
-                entry.MethodIssue = tempEntry.MethodIssue;
-                entry.MethodIssueID = tempEntry.MethodIssueID;
                 entry.Notes = tempEntry.Notes;
                 entry.operatorID = tempEntry.operatorID;
                 entry.Person = tempEntry.Person;

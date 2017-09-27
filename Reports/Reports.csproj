@@ -125,15 +125,11 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="TestWrapper.cs" />
-    <Compile Include="ViewModels\ExternalReportCreationDialogViewModel.cs" />
     <Compile Include="ViewModels\ExternalReportEditViewModel.cs" />
     <Compile Include="ViewModels\ExternalReportMainViewModel.cs" />
     <Compile Include="ViewModels\ReportEditViewModel.cs" />
     <Compile Include="ViewNames.cs" />
     <Compile Include="ViewModels\ReportMainViewModel.cs" />
-    <Compile Include="Views\ExternalReportCreationDialog.xaml.cs">
-      <DependentUpon>ExternalReportCreationDialog.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\ExternalReportEdit.xaml.cs">
       <DependentUpon>ExternalReportEdit.xaml</DependentUpon>
     </Compile>
@@ -194,10 +190,6 @@
     <Page Include="Views\ReportList.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\ExternalReportCreationDialog.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ExternalReportEdit.xaml">
       <SubType>Designer</SubType>

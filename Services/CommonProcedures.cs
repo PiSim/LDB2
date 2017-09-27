@@ -151,8 +151,6 @@ namespace Services
                 tempTest.IsComplete = false;
                 tempTest.MethodID = req.TaskItemInstance.MethodID;
                 
-                tempTest.MethodIssueID = req.TaskItemInstance.Method.Standard.CurrentIssueID;
-
                 tempTest.Notes = req.TaskItemInstance.Description;
                 tempTest.RequirementID = req.TaskItemInstance.RequirementID;
 
@@ -180,13 +178,11 @@ namespace Services
                 req.RequirementInstance.Load();
 
                 Test tempTest = new Test();
+                tempTest.Duration = req.RequirementInstance.Method.Duration;
                 tempTest.IsComplete = false;
                 tempTest.MethodID = req.RequirementInstance.Method.ID;
                 tempTest.RequirementID = req.RequirementInstance.ID;
-
-                if (req.RequirementInstance.Method.Standard.CurrentIssue != null)
-                    tempTest.MethodIssueID = req.RequirementInstance.Method.Standard.CurrentIssue.ID;
-
+                
                 tempTest.Notes = req.RequirementInstance.Description;
 
                 foreach (SubRequirement subReq in req.RequirementInstance.SubRequirements)

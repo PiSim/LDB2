@@ -5,11 +5,16 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:sort="clr-namespace:Infrastructure.Sorting;assembly=Infrastructure"
+             xmlns:cmd="clr-namespace:Infrastructure.Commands;assembly=Infrastructure"
+             xmlns:con="clr-namespace:Infrastructure.Converters;assembly=Infrastructure"
              xmlns:local="clr-namespace:Instruments.Views"
              xmlns:prism="http://prismlibrary.com/"
              prism:ViewModelLocator.AutoWireViewModel="True"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <con:CalibrationDueDateToStatusLightConverter x:Key="DateToColorConverter"/>
+    </UserControl.Resources>
     <Grid>
         <TabControl>
             <TabItem Header="Lista strumenti">
@@ -38,25 +43,28 @@
                                 Margin="5"/>
                     </StackPanel>
                     
-                    <ListView ItemsSource="{Binding InstrumentList}"
-                                SelectedItem="{Binding SelectedInstrument, Mode=TwoWay}"
-                                Grid.Row="1">
-                        <i:Interaction.Behaviors>
-                            <sort:SortingBehavior/>
-                        </i:Interaction.Behaviors>
-                        <ListView.View>
-                            <GridView>
-                                <GridViewColumn Header="Codice"
-                                                DisplayMemberBinding="{Binding Code}"/>
-                                <GridViewColumn Header="Tipo"
-                                                DisplayMemberBinding="{Binding InstrumentType.Name}"/>
-                                <GridViewColumn Header="Produttore"
-                                                DisplayMemberBinding="{Binding Manufacturer.Name}"/>
-                                <GridViewColumn Header="Modello"
-                                                DisplayMemberBinding="{Binding Model}"/>
-                            </GridView>
-                        </ListView.View>
-                    </ListView>
+                    <DataGrid ItemsSource="{Binding InstrumentList}"
+                              SelectedItem="{Binding SelectedInstrument, Mode=TwoWay}"
+                              AutoGenerateColumns="False"
+                              CanUserAddRows="False"
+                              CanUserDeleteRows="False"
+                              CanUserResizeRows="False"
+                              cmd:CommandBinder.DataGridDoubleClickCommand="{Binding OpenInstrumentCommand}"
+                              GridLinesVisibility="None"
+                              SelectionUnit="FullRow"
+                              IsReadOnly="True"
+                              Grid.Row="1">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Codice"
+                                                Binding="{Binding Code}"/>
+                            <DataGridTextColumn Header="Tipo"
+                                                Binding="{Binding InstrumentType.Name}"/>
+                            <DataGridTextColumn Header="Produttore"
+                                                Binding="{Binding Manufacturer.Name}"/>
+                            <DataGridTextColumn Header="Modello"
+                                                Binding="{Binding Model}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
                 </Grid>
             </TabItem>
             <TabItem Header="Lista Tarature">
@@ -71,22 +79,19 @@
                                 Grid.Row="0">
 
                         <Button Content="Nuovo"
-                                Command="{Binding NewInstrumentCommand}"
+                                Command="{Binding NewCalibrationCommand}"
                                 Grid.Column="0"
                                 Grid.Row="0"
                                 Margin="5"/>
 
                         <Button Content="Apri"
-                                Command="{Binding OpenInstrumentCommand}"
-                                Margin="5"/>
-
-                        <Button Content="Elimina"
-                                Command="{Binding DeleteInstrumentCommand}"
+                                Command="{Binding OpenCalibrationCommand}"
                                 Margin="5"/>
                     </StackPanel>
 
                     <ListView ItemsSource="{Binding CalibrationsList}"
                                 SelectedItem="{Binding SelectedCalibration, Mode=TwoWay}"
+                                cmd:CommandBinder.DataGridDoubleClickCommand="{Binding OpenCalibrationCommand}"
                                 Grid.Row="1">
                         <ListView.View>
                             <GridView>
@@ -128,22 +133,42 @@
                                 Grid.Row="0">
                         
                     </StackPanel>
-                    <ListView ItemsSource="{Binding PendingCalibrationsList}"
-                                SelectedItem="{Binding SelectedInstrument, Mode=TwoWay}"
-                                Grid.Row="1">
-                        <ListView.View>
-                            <GridView>
-                                <GridViewColumn Header="Scadenza"
-                                                    DisplayMemberBinding="{Binding CalibrationDueDate, 
-                                                                                    StringFormat=d,
-                                                                                    ConverterCulture=it-IT}"/>
-                                <GridViewColumn Header="Codice"
-                                                    DisplayMemberBinding="{Binding Code}"/>
-                                <GridViewColumn Header="Tipo"
-                                                    DisplayMemberBinding="{Binding InstrumentType.Name}"/>
-                            </GridView>
-                        </ListView.View>
-                    </ListView>
+                    <DataGrid ItemsSource="{Binding PendingCalibrationsList}"
+                              SelectedItem="{Binding SelectedPending, Mode=TwoWay}"
+                              cmd:CommandBinder.DataGridDoubleClickCommand="{Binding OpenPendingCommand}"  
+                              AutoGenerateColumns="False"
+                              CanUserAddRows="False"
+                              CanUserDeleteRows="False"
+                              IsReadOnly="True"
+                              GridLinesVisibility="None"
+                              SelectionUnit="FullRow"
+                              Grid.Row="1">
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn>
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+
+                                        <Ellipse Height="10"
+                                                     Width="10"
+                                                     HorizontalAlignment="Center"
+                                                     VerticalAlignment="Center"
+                                                     Fill="{Binding CalibrationDueDate,
+                                                                    Converter={StaticResource DateToColorConverter}}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            
+                            <DataGridTextColumn Header="Scadenza"
+                                                Binding="{Binding CalibrationDueDate, 
+                                                                  StringFormat=d,
+                                                                  ConverterCulture=it-IT}"/>
+                            <DataGridTextColumn Header="Codice"
+                                                Binding="{Binding Code}"/>
+                            
+                            <DataGridTextColumn Header="Tipo"
+                                                Binding="{Binding InstrumentType.Name}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
                 </Grid>
             </TabItem>
         </TabControl>

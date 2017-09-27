@@ -34,21 +34,14 @@ namespace DBManager.EntityExtensions
             }
         }
 
-        public static void SetCurrentIssue(this Std entry, 
-                                            StandardIssue issueEntity)
+        public static void Update(this Std entry)
         {
-            // sets the current Issue of a standandard
+            // Updates a STD entry in the DB
 
             using (DBEntities entities = new DBEntities())
             {
-                if (entry.CurrentIssue != null)
-                    entry.CurrentIssue.IsCurrent = false;
-
-                entry.CurrentIssue = issueEntity;
-                entry.CurrentIssue.IsCurrent = true;
-
-                entities.Stds.AddOrUpdate(entry);
-                entities.StandardIssues.AddOrUpdate(issueEntity);
+                entities.Stds
+                        .AddOrUpdate(entry);
 
                 entities.SaveChanges();
             }

@@ -40,8 +40,6 @@ namespace Specifications.Views
 
         public void OnNavigatedTo(NavigationContext ncontext)
         {
-            (DataContext as ViewModels.StandardIssueEditViewModel).StandardIssueInstance
-                = ncontext.Parameters["ObjectInstance"] as StandardIssue;
         }
     }
 }

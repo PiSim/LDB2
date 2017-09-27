@@ -51,7 +51,11 @@ namespace Admin.ViewModels
                 {
                     using (DBEntities entities = new DBEntities())
                     {
-                        
+                        foreach (ExternalReport erep in entities.ExternalReports)
+                        {
+                            erep.Year = erep.InternalNumber / 1000;
+                            erep.Number = erep.InternalNumber % (erep.Year * 1000);
+                        }
                         entities.SaveChanges();
                     }
                 } );

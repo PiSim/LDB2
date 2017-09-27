@@ -12,6 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Forms;
 
 namespace Instruments.ViewModels
 {
@@ -57,6 +58,29 @@ namespace Instruments.ViewModels
                                     .Publish(_instance);
                 },
                 () => IsInstrumentAdmin);
+
+            _addFileCommand = new DelegateCommand(
+                () =>
+                {
+
+                    OpenFileDialog fileDialog = new OpenFileDialog();
+                    fileDialog.Multiselect = true;
+
+                    if (fileDialog.ShowDialog() == DialogResult.OK)
+                    {
+
+                        IEnumerable<InstrumentFiles> fileList = fileDialog.FileNames
+                                                                            .Select(file => new InstrumentFiles()
+                                                                            {
+                                                                                InstrumentID = _instance.ID,
+                                                                                Path = file,
+                                                                                Description = ""
+                                                                            });
+
+                        InstrumentService.AddInstrumentFiles(fileList);
+                        RaisePropertyChanged("FileList");
+                    }
+                });
 
             _addMaintenanceEvent = new DelegateCommand(
                 () =>

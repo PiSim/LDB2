@@ -45,9 +45,7 @@ namespace DBManager.Services
             using (var entities = new DBEntities())
             {
                 entities.Configuration.LazyLoadingEnabled = false;
-                return entities.Specifications.Include(spec => spec.Standard)
-                                                .Include(spec => spec.Standard.CurrentIssue)
-                                                .Include(spec => spec.Standard.Organization)
+                return entities.Specifications.Include(spec => spec.Standard.Organization)
                                                 .Where(spec => true)
                                                 .OrderBy(spec => spec.Standard.Name)
                                                 .ToList();
@@ -63,7 +61,6 @@ namespace DBManager.Services
                 entities.Configuration.LazyLoadingEnabled = false;
 
                 return entities.Stds.Include(std => std.Organization)
-                                    .Include(std => std.CurrentIssue)
                                     .FirstOrDefault(std => std.Name == name);
             }
         }

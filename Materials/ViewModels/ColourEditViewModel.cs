@@ -114,7 +114,7 @@ namespace Materials.ViewModels
             get { return _openBatch; }
         }
 
-        public List<Recipe> RecipeList
+        public IEnumerable<Recipe> RecipeList
         {
             get
             {
@@ -122,7 +122,7 @@ namespace Materials.ViewModels
                     return new List<Recipe>();
 
                 else
-                    return new List<Recipe>(_colourInstance.Recipes);
+                    return _colourInstance.GetRecipes();
             }
         }
 

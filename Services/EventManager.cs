@@ -29,6 +29,21 @@ namespace Services
                                                     .Publish(tmp);
                             });
 
+            _eventAggregator.GetEvent<ExternalReportCreationRequested>()
+                            .Subscribe(
+                () =>
+                {
+                    ExternalReport tmp = ServiceProvider.StartExternalReportCreation();
+                    if (tmp != null)
+                    {
+                        _eventAggregator.GetEvent<ExternalReportCreated>()
+                                        .Publish(tmp);
+                        _eventAggregator.GetEvent<StatusNotificationIssued>()
+                                        .Publish("Report esterno creato con il numero " + tmp.InternalNumber);
+                    }
+
+                });
+
             _eventAggregator.GetEvent<InstrumentTypeCreationRequested>()
                             .Subscribe(
                             () =>

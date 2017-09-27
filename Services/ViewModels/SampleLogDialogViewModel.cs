@@ -69,9 +69,10 @@ namespace Services.ViewModels
                     {
                         _batchInstance.FirstSampleArrived = true;
                         _batchInstance.FirstSampleID = newLog.ID;
-                        _batchInstance.ArchiveStock += _stockModifiers[newLog.Code];
-                        _batchInstance.Update();
                     }
+
+                    _batchInstance.ArchiveStock += _stockModifiers[newLog.Code];
+                    _batchInstance.Update();
 
                     BatchNumber = null;
 

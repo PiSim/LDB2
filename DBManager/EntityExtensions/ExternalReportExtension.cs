@@ -88,6 +88,16 @@ namespace DBManager.EntityExtensions
             }
         }
 
+        public static void GetNumberAndCreate(this ExternalReport entry)
+        {
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.ExternalReports.Add(entry);
+                entities.SaveChanges();
+            }
+        }
+
+
         public static void Load(this ExternalReport entry)
         {
             using (DBEntities entities = new DBEntities())

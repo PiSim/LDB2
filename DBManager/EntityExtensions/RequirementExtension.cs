@@ -50,7 +50,6 @@ namespace DBManager.EntityExtensions
                 entities.Requirements.Attach(entry);
 
                 Requirement tempEntry = entities.Requirements.Include(req => req.Method.Property)
-                                                                .Include(req => req.Method.Standard.CurrentIssue)
                                                                 .Include(req => req.Method.Standard.Organization)
                                                                 .Include(req => req.Overridden)
                                                                 .Include(req => req.SubRequirements

@@ -25,7 +25,7 @@
         
         <ListView ItemsSource="{Binding UtilizationAreaList}"
                   SelectedItem="{Binding SelectedUtilizationArea}"
-                  DisplayMemberPath="name"
+                  DisplayMemberPath="Name"
                   Grid.Row="1"
                   Margin="5"/>
     </Grid>

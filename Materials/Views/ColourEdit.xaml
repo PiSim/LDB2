@@ -37,11 +37,6 @@
                      Width="150"
                      Margin="5"/>
         </StackPanel>
-
-        <GroupBox Header="Commesse"
-                  Grid.Row="2">
-
-        </GroupBox>
         <TabControl Grid.Row="2">
             <TabItem Header="Ricette">
                 <ListView ItemsSource="{Binding RecipeList}"

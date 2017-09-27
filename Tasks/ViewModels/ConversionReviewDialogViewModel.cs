@@ -52,7 +52,6 @@ namespace Tasks.ViewModels
                     _reportInstance.IsComplete = false;
                     _reportInstance.Number = _reportNumber;
                     _reportInstance.ParentTaskID = _taskInstance.ID;
-                    _reportInstance.SpecificationIssueID = _taskInstance.SpecificationVersion.Specification.Standard.CurrentIssueID;
                     _reportInstance.SpecificationVersionID = _taskInstance.SpecificationVersion.ID;
                     _reportInstance.StartDate = DateTime.Now.Date.ToShortDateString();
 
@@ -139,9 +138,7 @@ namespace Tasks.ViewModels
                 if (_taskInstance == null)
                     return null;
                 else
-                   return _taskInstance.SpecificationVersion.Specification.Standard.Name + (
-                        (_taskInstance.SpecificationVersion.Specification.Standard.CurrentIssue != null) ? (" : "
-                            + _taskInstance.SpecificationVersion.Specification.Standard.CurrentIssue.Issue) : "");
+                    return _taskInstance.SpecificationVersion.Specification.Standard.Name;
             }
         }
 

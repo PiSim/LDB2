@@ -19,13 +19,14 @@ namespace DBManager
         {
             this.Methods = new HashSet<Method>();
             this.Specifications = new HashSet<Specification>();
-            this.StandardIssues = new HashSet<StandardIssue>();
+            this.StandardFiles = new HashSet<StandardFile>();
         }
     
         public int ID { get; set; }
         public string Name { get; set; }
         public int OrganizationID { get; set; }
         public Nullable<int> CurrentIssueID { get; set; }
+        public string current_issue { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Method> Methods { get; set; }
@@ -33,7 +34,6 @@ namespace DBManager
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Specification> Specifications { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<StandardIssue> StandardIssues { get; set; }
-        public virtual StandardIssue CurrentIssue { get; set; }
+        public virtual ICollection<StandardFile> StandardFiles { get; set; }
     }
 }

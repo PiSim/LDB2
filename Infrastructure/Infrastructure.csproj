@@ -105,6 +105,7 @@
   <ItemGroup>
     <Compile Include="AdminViewNames.cs" />
     <Compile Include="Commands\CommandBinder.cs" />
+    <Compile Include="Converters\CalibrationDueDateToStatusLightConverter.cs" />
     <Compile Include="Converters\CodeToActionConverter.cs" />
     <Compile Include="Events\BatchCreated.cs" />
     <Compile Include="Events\BatchCreationRequested.cs" />
@@ -139,11 +140,12 @@
     <Compile Include="Events\TaskStatusCheckRequested.cs" />
     <Compile Include="Events\UserCreationRequested.cs" />
     <Compile Include="Events\UserRoleCreationRequested.cs" />
+    <Compile Include="IRequirementSelector.cs" />
     <Compile Include="Resources\CommonResourceDictionary.xaml.cs" />
     <Compile Include="DBIdentity.cs" />
     <Compile Include="DBPrincipal.cs" />
     <Compile Include="Events\CalibrationIssued.cs" />
-    <Compile Include="Events\ExternalReportListUpdateRequested.cs" />
+    <Compile Include="Events\ExternalReportCreated.cs" />
     <Compile Include="Events\GenerateReportDataSheetRequested.cs" />
     <Compile Include="Events\InstrumentListUpdateRequested.cs" />
     <Compile Include="Events\NavigateBackRequested.cs" />

@@ -1,4 +1,5 @@
-﻿using Prism.Events;
+﻿using DBManager;
+using Prism.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Events
 {
-    public class ExternalReportListUpdateRequested : PubSubEvent
+    public class ExternalReportCreated : PubSubEvent<ExternalReport>
     {
     }
 }

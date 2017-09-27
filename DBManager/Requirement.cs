@@ -33,6 +33,7 @@ namespace DBManager
         public int SpecificationVersionID { get; set; }
         public bool IsOverride { get; set; }
         public Nullable<int> OverriddenID { get; set; }
+        public bool skip_test { get; set; }
     
         public virtual Method Method { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

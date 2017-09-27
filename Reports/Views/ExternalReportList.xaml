@@ -3,61 +3,48 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:cmd="clr-namespace:Infrastructure.Commands;assembly=Infrastructure"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:sort="clr-namespace:Infrastructure.Sorting;assembly=Infrastructure"
              xmlns:local="clr-namespace:Reports.Views"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        <ListView ItemsSource="{Binding ExternalReportList}"
-                  SelectedItem="{Binding SelectedExternalReport, Mode=TwoWay}">
-            <i:Interaction.Behaviors>
-                <sort:SortingBehavior/>
-            </i:Interaction.Behaviors>
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Header="Numero"
-                                    DisplayMemberBinding="{Binding InternalNumber}"/>
-                    <GridViewColumn Header="Campioni"
-                                    DisplayMemberBinding="{Binding Samples}"/>
-                    <GridViewColumn Header="Prove"
-                                    DisplayMemberBinding="{Binding Description}"/>
-                    <GridViewColumn Header="Laboratorio"
-                                    DisplayMemberBinding="{Binding ExternalLab.Name}"/>
-                    <GridViewColumn>
-                        <GridViewColumnHeader Content="RDA"
-                                              IsEnabled="False"/>
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <CheckBox IsChecked="{Binding RequestDone}"
-                                          IsEnabled="False"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                    
-                    <GridViewColumn>
-                        <GridViewColumnHeader Content="Invio"
-                                              IsEnabled="False"/>
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <CheckBox IsChecked="{Binding MaterialSent}"
-                                          IsEnabled="False"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                    
-                    <GridViewColumn>
-                        <GridViewColumnHeader Content="Ricevuto"
-                                              IsEnabled="False"/>
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <CheckBox IsChecked="{Binding ReportReceived}"
-                                          IsEnabled="False"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                </GridView>
-            </ListView.View>
-        </ListView>    
+        <DataGrid ItemsSource="{Binding ExternalReportList}"
+                  SelectedItem="{Binding SelectedExternalReport, Mode=TwoWay}"
+                  IsReadOnly="True"
+                  AutoGenerateColumns="False"
+                  CanUserAddRows="False"
+                  CanUserDeleteRows="False"
+                  SelectionMode="Single"
+                  SelectionUnit="FullRow"
+                  GridLinesVisibility="None"
+                  cmd:CommandBinder.DataGridDoubleClickCommand="{Binding OpenExternalReportCommand}">
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Header="Numero">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock>
+                                <Run Text="{Binding Year}"/>
+                                <Run Text="{Binding Number,
+                                                    StringFormat=d3}"/>
+                            </TextBlock>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Header="Campioni"
+                                    Binding="{Binding Samples}"/>
+                <DataGridTextColumn Header="Prove"
+                                    Binding="{Binding Description}"/>
+                <DataGridTextColumn Header="Laboratorio"
+                                    Binding="{Binding ExternalLab.Name}"/>
+                <DataGridCheckBoxColumn Header="RDA"
+                                        Binding="{Binding RequestDone}"/>
+                <DataGridCheckBoxColumn Header="Invio"
+                                        Binding="{Binding MaterialSent}"/>
+                <DataGridCheckBoxColumn Header="Ricevuto"
+                                        Binding="{Binding ReportReceived}"/>
+            </DataGrid.Columns>
+        </DataGrid>    
     </Grid>
 </UserControl>

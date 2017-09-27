@@ -39,9 +39,8 @@ namespace Materials.ViewModels
             set
             {
                 _selectedMaterial = value;
-                _selectedMaterial.Load();
 
-                RaisePropertyChanged();
+                RaisePropertyChanged("SelectedMaterial");
 
                 NavigationToken token = new NavigationToken(MaterialViewNames.MaterialDetail,
                                                             _selectedMaterial,

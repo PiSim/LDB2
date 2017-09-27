@@ -24,7 +24,6 @@ namespace DBManager.EntityExtensions
 
                 TaskItem tempEntry = entities.TaskItems.Include(tskI => tskI.SubTaskItems)
                                                         .Include(tskI => tskI.Method.Property)
-                                                        .Include(tskI => tskI.Method.Standard.CurrentIssue)
                                                         .Include(tskI => tskI.Method.Standard.Organization)
                                                         .First(tskI => tskI.ID == entry.ID);
 

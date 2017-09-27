@@ -35,8 +35,7 @@ namespace DBManager.Services.Tests
             Assert.IsTrue(tempSpec.SpecificationVersions.Count != 0);
 
             SpecificationVersion main = tempSpec.SpecificationVersions.First(spcv => spcv.IsMain);
-
-            Assert.IsTrue(tempSpec.Standard.StandardIssues.Count != 0);
+            
             Assert.IsTrue(tempSpec.ControlPlans.Count != 0);
         }
 

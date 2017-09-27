@@ -43,7 +43,7 @@ namespace Specifications.ViewModels
                     }
 
                     _methodInstance.StandardID = tempStd.ID;
-                    _methodInstance.CostUnits = 0;
+                    _methodInstance.Duration = 0;
                     _methodInstance.Description = "";
                     _methodInstance.PropertyID = _selectedProperty.ID;
                     _methodInstance.UM = "";

@@ -21,20 +21,20 @@ namespace Specifications.ViewModels
         private bool _editMode;
         private DBPrincipal _principal;
         private DelegateCommand _addFile,
-                                _addIssue,
                                 _addMeasurement,
                                 _openFile,
                                 _removeFile,
-                                _removeIssue,
                                 _removeMeasurement,
                                 _save,
-                                _setCurrent,
                                 _startEdit;
         private EventAggregator _eventAggregator;
+        private IEnumerable<Organization> _organizationList;
+        private IEnumerable<Property> _propertyList;
         private IEnumerable<SubMethod> _subMethodList;
         private Method _methodInstance;
+        private Organization _selectedOrganization;
+        private Property _selectedProperty;
         private SubMethod _selectedMeasurement;
-        private StandardIssue _selectedIssue;
         private StandardFile _selectedFile;
 
         public MethodEditViewModel(DBPrincipal principal,
@@ -44,7 +44,12 @@ namespace Specifications.ViewModels
             _eventAggregator = aggregator;
             _principal = principal;
 
+            _organizationList = OrganizationService.GetOrganizations(OrganizationRoleNames.StandardPublisher);
+            _propertyList = DataService.GetProperties();
+
             _subMethodList = new List<SubMethod>();
+            
+
 
             _addFile = new DelegateCommand(
                 () =>
@@ -59,27 +64,13 @@ namespace Specifications.ViewModels
                             StandardFile temp = new StandardFile();
                             temp.Path = pth;
                             temp.Description = "";
-                            temp.IssueID = _selectedIssue.ID;
+                            temp.standardID = _methodInstance.StandardID;
 
                             temp.Create();
                         }
 
                         RaisePropertyChanged("FileList");
                     }
-                },
-                () => IsSpecAdmin && SelectedIssue != null);
-
-            _addIssue = new DelegateCommand(
-                () =>
-                {
-                    StandardIssue temp = new StandardIssue();
-                    temp.IsCurrent = false;
-                    temp.Issue = DateTime.Now.ToShortDateString();
-                    temp.StandardID = _methodInstance.Standard.ID;
-
-                    temp.Create();
-
-                    RaisePropertyChanged("IssueList");
                 },
                 () => IsSpecAdmin);
 
@@ -112,15 +103,6 @@ namespace Specifications.ViewModels
                 },
                 () => IsSpecAdmin && _selectedFile != null);
 
-            _removeIssue = new DelegateCommand(
-                () =>
-                {
-                    _methodInstance.Standard.StandardIssues.Remove(_selectedIssue);
-                    RaisePropertyChanged("IssueList");
-                    SelectedIssue = null;
-                },
-                () => IsSpecAdmin && _selectedIssue != null);
-
             _removeMeasurement = new DelegateCommand(
                 () =>
                 {
@@ -137,16 +119,16 @@ namespace Specifications.ViewModels
                 {
                     _methodInstance.Update();
                     SpecificationService.UpdateSubMethods(_subMethodList);
+
+                    if (_selectedOrganization.ID != _methodInstance.Standard.OrganizationID)
+                    {
+                        _methodInstance.Standard.OrganizationID = _selectedOrganization.ID;
+                        _methodInstance.Standard.Update();
+                    }
+
                     EditMode = false;
                 },
                 () => _editMode);
-
-            _setCurrent = new DelegateCommand(
-                () =>
-                {
-                    _methodInstance.Standard.SetCurrentIssue(_selectedIssue);
-                },
-                () => IsSpecAdmin && _selectedIssue != null);
 
             _startEdit = new DelegateCommand(
                 () =>
@@ -161,14 +143,25 @@ namespace Specifications.ViewModels
             get { return _addFile; }
         }
 
-        public DelegateCommand AddIssueCommand
-        {
-            get { return _addIssue; }
-        }
-
         public DelegateCommand AddMeasurementCommand
         {
             get { return _addMeasurement; }
+        }
+
+        public double Duration
+        {
+            get
+            {
+                if (_methodInstance != null)
+                    return _methodInstance.Duration;
+                else
+                    return 0;
+            }
+            set
+            {
+                if (_methodInstance !=null)
+                    _methodInstance.Duration = value;
+            }
         }
 
         public bool EditMode
@@ -187,7 +180,7 @@ namespace Specifications.ViewModels
         {
             get
             {
-                return _selectedIssue.GetIssueFiles();
+                return _methodInstance.GetFiles();
             }
         }
 
@@ -195,15 +188,6 @@ namespace Specifications.ViewModels
         {
             get { return _principal.IsInRole(UserRoleNames.SpecificationAdmin); }
         }
-
-        public IEnumerable<StandardIssue> IssueList
-        {
-            get
-            {
-                return _methodInstance.GetIssues();
-            }
-        }
-
         public Method MethodInstance
         {
             get { return _methodInstance; }
@@ -214,21 +198,27 @@ namespace Specifications.ViewModels
                 _methodInstance = value;
                 _methodInstance.Load();
 
+                SelectedOrganization = _organizationList.FirstOrDefault(org => org.ID == _methodInstance?.Standard.OrganizationID);
+                SelectedProperty = _propertyList.FirstOrDefault(prp => prp.ID == _methodInstance?.PropertyID);
                 _subMethodList = _methodInstance.GetSubMethods();
 
+                RaisePropertyChanged("Duration");
+                RaisePropertyChanged("FileList");
                 RaisePropertyChanged("IssueList");
                 RaisePropertyChanged("Measurements");
                 RaisePropertyChanged("Name");
                 RaisePropertyChanged("Oem");
                 RaisePropertyChanged("Property");
+                RaisePropertyChanged("SelectedOrganization");
+                RaisePropertyChanged("SelectedProperty");
                 RaisePropertyChanged("SpecificationList");
                 RaisePropertyChanged("ResultList");
             }
         }
 
-        public string MethodIssueEditRegionName
+        public string MethodFileRegionName
         {
-            get { return RegionNames.MethodIssueEditRegion; }
+            get { return RegionNames.MethodFileRegion; }
         }
 
         public IEnumerable<SubMethod> Measurements
@@ -247,25 +237,19 @@ namespace Specifications.ViewModels
             }
         }
 
-        public string Oem
-        {
-            get
-            {
-                return (_methodInstance != null) ? _methodInstance.Standard.Organization.Name : null;
-            }
-        }
-
         public DelegateCommand OpenFileCommand
         {
             get { return _openFile; }
         }
 
-        public string Property
+        public IEnumerable<Organization> OrganizationList
         {
-            get
-            {
-                return (_methodInstance != null) ? _methodInstance.Property.Name : null;
-            }
+            get { return _organizationList; }
+        }
+
+        public IEnumerable<Property> PropertyList
+        {
+            get { return _propertyList; }
         }
 
         public DelegateCommand RemoveFileCommand
@@ -301,19 +285,6 @@ namespace Specifications.ViewModels
             }
         }
 
-        public StandardIssue SelectedIssue
-        {
-            get { return _selectedIssue; }
-            set
-            {
-                _selectedIssue = value;
-                RaisePropertyChanged("FileList");
-                _addFile.RaiseCanExecuteChanged();
-                _removeIssue.RaiseCanExecuteChanged();
-                _setCurrent.RaiseCanExecuteChanged();
-            }
-        }
-        
         public SubMethod SelectedMeasurement
         {
             get 
@@ -328,21 +299,39 @@ namespace Specifications.ViewModels
             }
         }
 
-        public DelegateCommand SetCurrentCommand
-        {
-            get { return _setCurrent; }
-        }
-
-        public List<Specification> SpecificationList
+        public Organization SelectedOrganization
         {
             get
             {
-                if (_methodInstance == null)
-                    return null;
-                else
-                    return new List<Specification>(_methodInstance.Requirements
-                        .Select(req => (req.SpecificationVersions !=  null) 
-                            ? req.SpecificationVersions.Specification : null));
+                return _selectedOrganization;
+            }
+            set
+            {
+                _selectedOrganization = value;
+
+                RaisePropertyChanged("SelectedOrganization");
+            }
+        }
+
+        public Property SelectedProperty
+        {
+            get
+            {
+                return _selectedProperty;
+            }
+            set
+            {
+                _selectedProperty = value;
+                _methodInstance.PropertyID = _selectedProperty.ID;
+                RaisePropertyChanged("SelectedProeprty");
+            }
+        }
+
+        public IEnumerable<Specification> SpecificationList
+        {
+            get
+            {
+                return _methodInstance.GetSpecifications();
             }
         }
         

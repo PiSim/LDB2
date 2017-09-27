@@ -26,13 +26,6 @@ namespace Reports
             _container = container;
             _entities = entities;
             _eventAggregator = aggregator;
-
-            _eventAggregator.GetEvent<ExternalReportCreationRequested>()
-                            .Subscribe(
-                () =>
-                {
-                    CreateNewExternalReport();
-                });
         }
 
         public static PurchaseOrder AddPOToExternalReport(ExternalReport target)
@@ -69,16 +62,6 @@ namespace Reports
 
                 else
                     return null;
-            }
-        }
-
-        public void CreateNewExternalReport()
-        {
-            Views.ExternalReportCreationDialog creationDialog = _container.Resolve<Views.ExternalReportCreationDialog>();
-            if (creationDialog.ShowDialog() == true)
-            {
-                _eventAggregator.GetEvent<ExternalReportListUpdateRequested>()
-                                .Publish();
             }
         }
 

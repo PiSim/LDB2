@@ -29,8 +29,8 @@ namespace DBManager
         public Nullable<System.DateTime> Date { get; set; }
         public bool IsComplete { get; set; }
         public Nullable<int> instrumentID { get; set; }
-        public Nullable<int> MethodIssueID { get; set; }
         public Nullable<int> RequirementID { get; set; }
+        public double Duration { get; set; }
     
         public virtual Person Person { get; set; }
         public virtual Report Report { get; set; }
@@ -38,7 +38,6 @@ namespace DBManager
         public virtual ICollection<SubTest> SubTests { get; set; }
         public virtual Method Method { get; set; }
         public virtual Instrument Instrument { get; set; }
-        public virtual StandardIssue MethodIssue { get; set; }
         public virtual Requirement Requirement { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<TaskItem> TaskItems { get; set; }

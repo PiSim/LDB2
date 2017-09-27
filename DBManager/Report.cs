@@ -31,8 +31,8 @@ namespace DBManager
         public int SpecificationVersionID { get; set; }
         public string StartDate { get; set; }
         public bool IsComplete { get; set; }
-        public Nullable<int> SpecificationIssueID { get; set; }
         public Nullable<int> ParentTaskID { get; set; }
+        public double TotalDuration { get; set; }
     
         public virtual Batch Batch { get; set; }
         public virtual Person Author { get; set; }
@@ -41,7 +41,6 @@ namespace DBManager
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Test> Tests { get; set; }
         public virtual SpecificationVersion SpecificationVersion { get; set; }
-        public virtual StandardIssue SpecificationIssues { get; set; }
         public virtual Task ParentTask { get; set; }
     }
 }

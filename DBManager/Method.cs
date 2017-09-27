@@ -17,6 +17,7 @@ namespace DBManager
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Method()
         {
+            this.CostUnits_DEPRECATED = 0;
             this.Requirements = new HashSet<Requirement>();
             this.Tests = new HashSet<Test>();
             this.SubMethods = new HashSet<SubMethod>();
@@ -30,7 +31,8 @@ namespace DBManager
         public int PropertyID { get; set; }
         public string Description { get; set; }
         public string UM { get; set; }
-        public int CostUnits { get; set; }
+        public double Duration { get; set; }
+        public int CostUnits_DEPRECATED { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Requirement> Requirements { get; set; }

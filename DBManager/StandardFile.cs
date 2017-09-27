@@ -18,7 +18,8 @@ namespace DBManager
         public string Path { get; set; }
         public string Description { get; set; }
         public int IssueID { get; set; }
+        public int standardID { get; set; }
     
-        public virtual StandardIssue StandardIssue { get; set; }
+        public virtual Std Standard { get; set; }
     }
 }

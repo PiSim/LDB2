@@ -15,51 +15,48 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <GroupBox Header="Grandezze Misurabili"
-                  Grid.Row="0">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="35"/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="35"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
 
-                <StackPanel Orientation="Horizontal"
-                            Grid.Row="0">
-                    <Button Content="Aggiungi"
-                            Command="{Binding AddPropertyCommand}"
-                            Margin="5"/>
-                </StackPanel>
+            <StackPanel Orientation="Horizontal"
+                        Grid.Row="0">
+                <Button Content="Aggiungi"
+                        Command="{Binding AddPropertyCommand}"
+                        Margin="5"/>
+            </StackPanel>
 
-                <ListView ItemsSource="{Binding InstrumentMeasurablePropertyList}"
-                          SelectedItem="{Binding SelectedInstrumentMeasurableProperty,
-                                                 Mode=TwoWay}"
-                          Grid.Row="1">
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn Header="Quantità"
-                                            DisplayMemberBinding="{Binding MeasurableQuantity.Name}"/>
-                            <GridViewColumn Header="Range, Lim. Inferiore"
-                                            DisplayMemberBinding="{Binding RangeLowerLimit}"/>
-                            <GridViewColumn Header="Range, Lim. Superiore"
-                                            DisplayMemberBinding="{Binding RangeUpperLimit}"/>
-                            <GridViewColumn Header="Divisione"
-                                            DisplayMemberBinding="{Binding Resolution}"/>
-                            <GridViewColumn Header="UM"
-                                            DisplayMemberBinding="{Binding UnitOfMeasurement.Symbol}"/>
-                            <GridViewColumn Header="Controllo metrologico">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <CheckBox IsChecked="{Binding IsUnderControl}"
-                                                    IsEnabled="False"
-                                                    HorizontalAlignment="Center"/>
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                        </GridView>
-                    </ListView.View>
-                </ListView>
-            </Grid>
-        </GroupBox>
+            <ListView ItemsSource="{Binding InstrumentMeasurablePropertyList}"
+                        SelectedItem="{Binding SelectedInstrumentMeasurableProperty,
+                                                Mode=TwoWay}"
+                        Grid.Row="1">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Quantità"
+                                        DisplayMemberBinding="{Binding MeasurableQuantity.Name}"/>
+                        <GridViewColumn Header="Range, Lim. Inferiore"
+                                        DisplayMemberBinding="{Binding RangeLowerLimit}"/>
+                        <GridViewColumn Header="Range, Lim. Superiore"
+                                        DisplayMemberBinding="{Binding RangeUpperLimit}"/>
+                        <GridViewColumn Header="Divisione"
+                                        DisplayMemberBinding="{Binding Resolution}"/>
+                        <GridViewColumn Header="UM"
+                                        DisplayMemberBinding="{Binding UnitOfMeasurement.Symbol}"/>
+                        <GridViewColumn Header="Controllo metrologico">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox IsChecked="{Binding IsUnderControl}"
+                                                IsEnabled="False"
+                                                HorizontalAlignment="Center"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </Grid>
 
         <ContentControl prism:RegionManager.RegionName="{Binding InstrumentEditMeasurablePropertyEditRegionName}"
                         Grid.Row="1"/>

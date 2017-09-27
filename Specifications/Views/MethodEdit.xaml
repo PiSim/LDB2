@@ -28,10 +28,11 @@
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="200"/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
+                <RowDefinition/>
                 <RowDefinition/>
                 <RowDefinition/>
                 <RowDefinition/>
@@ -52,20 +53,48 @@
                    Grid.Row="1"
                    Margin="5"/>
 
-            <Label Content="{Binding Property}"
-                   Grid.Column="1"
-                   Grid.Row="1"
-                   Margin="5"/>
+            <ComboBox ItemsSource="{Binding PropertyList}"
+                      SelectedItem="{Binding SelectedProperty}"
+                      IsEnabled="{Binding EditMode}"
+                      DisplayMemberPath="Name"
+                      Grid.Column="1"
+                      Grid.Row="1"
+                      Margin="5"/>
 
             <Label Content="Ente:"
                    Grid.Column="0"
                    Grid.Row="2"
                    Margin="5"/>
 
-            <Label Content="{Binding Oem}"
-                   Grid.Column="1"
-                   Grid.Row="2"
+            <ComboBox ItemsSource="{Binding OrganizationList}"
+                      SelectedItem="{Binding SelectedOrganization}"
+                      IsEnabled="{Binding EditMode}"
+                      DisplayMemberPath="Name"
+                      Grid.Column="1"
+                      Grid.Row="2"
+                      Margin="5"/>
+
+            <Label Content="Durata:"
+                   Grid.Column="0"
+                   Grid.Row="3"
                    Margin="5"/>
+
+            <StackPanel Orientation="Horizontal"
+                        Grid.Column="1"
+                        Grid.Row="3"
+                        HorizontalAlignment="Left">
+                <TextBox Text="{Binding Duration}"
+                         IsEnabled="{Binding EditMode}"
+                         Width="50"
+                         Margin="5"/>
+
+                <Label Content="ore"
+                       Grid.Column="2"
+                       Grid.Row="3"
+                       HorizontalAlignment="Left"
+                       Margin="5"/>
+            </StackPanel>
+
         </Grid>
         <TabControl Grid.Row="2"
                     Margin="5">
@@ -76,34 +105,26 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
-                    <ListView ItemsSource="{Binding Measurements}"
+                    <DataGrid ItemsSource="{Binding Measurements}"
                               SelectedItem="{Binding SelectedMeasurement, Mode=TwoWay}"
+                              IsEnabled="{Binding EditMode}"
+                              AutoGenerateColumns="False"
+                              CanUserAddRows="False"
+                              CanUserDeleteRows="False"
+                              CanUserResizeRows="False"
+                              GridLinesVisibility="None"
+                              SelectionMode="Single"
+                              SelectionUnit="FullRow"
                               Name="TestGrid"
                               Grid.Column="0">
-                        <ListView.View>
-                            <GridView>
-                                <GridViewColumn Header="Nome">
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <TextBox Text="{Binding Name, Mode=TwoWay}"
-                                                     IsEnabled="{Binding ElementName=TestGrid,
-                                                                         Path=DataContext.EditMode}"/>
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Nome"
+                                                Binding="{Binding Name}"/>
 
-                                <GridViewColumn Header="UM">
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <TextBox Text="{Binding UM, Mode=TwoWay}"
-                                                     IsEnabled="{Binding ElementName=TestGrid,
-                                                                         Path=DataContext.EditMode}"/>
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
-                            </GridView>
-                        </ListView.View>
-                    </ListView>
+                            <DataGridTextColumn Header="UM"
+                                                Binding="{Binding UM}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
                     <StackPanel Orientation="Vertical"
                                 Grid.Column="1">
                         <Button Content="Aggiungi"
@@ -181,16 +202,9 @@
                 </ListView>
             </TabItem>
             
-            <TabItem Header="Edizioni/File">
+            <TabItem Header="File">
                 <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-
-                    <ContentControl prism:RegionManager.RegionName="MethodIssueRegion"
-                                    Grid.Column="0"/>
-                    <ContentControl prism:RegionManager.RegionName="{Binding MethodIssueEditRegionName}"
+                    <ContentControl prism:RegionManager.RegionName="{Binding MethodFileRegionName}"
                                     Grid.Column="0"/>
                 </Grid>
             </TabItem>

@@ -30,7 +30,11 @@ namespace Controls
 
             _regionManager.RegisterViewWithRegion(RegionNames.CalibrationEditFileListRegion,
                                                 typeof(Views.FileListControl));
+            _regionManager.RegisterViewWithRegion(RegionNames.MethodFileRegion,
+                                                typeof(Views.FileListControl));
             _regionManager.RegisterViewWithRegion(RegionNames.NewCalibrationFileListRegion, 
+                                                typeof(Views.FileListControl));
+            _regionManager.RegisterViewWithRegion(RegionNames.SpecificationEditFileRegion,
                                                 typeof(Views.FileListControl));
             _regionManager.RegisterViewWithRegion(RegionNames.ToolbarRegion, 
                                                 typeof(Views.Toolbar));

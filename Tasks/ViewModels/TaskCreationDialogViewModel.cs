@@ -15,7 +15,7 @@ using System.Windows;
 
 namespace Tasks.ViewModels
 {
-    public class TaskCreationDialogViewModel : BindableBase
+    public class TaskCreationDialogViewModel : BindableBase, IRequirementSelector
     {
         private Batch _selectedBatch;
         private ControlPlan _selectedControlPlan;
@@ -75,6 +75,11 @@ namespace Tasks.ViewModels
                 parent => IsValidInput
             );
             
+        }
+
+        public void OnRequirementSelectionChanged()
+        {
+            RaisePropertyChanged("TotalDuration");
         }
 
         public string BatchNumber
@@ -242,7 +247,7 @@ namespace Tasks.ViewModels
                 {
 
                     _requirementList = _selectedVersion.GenerateRequirementList()
-                                                        .Select(req => new ReportItemWrapper(req))
+                                                        .Select(req => new ReportItemWrapper(req, this))
                                                         .ToList();
                     CommonProcedures.ApplyControlPlan(_requirementList, _selectedControlPlan);
                 }
@@ -275,6 +280,11 @@ namespace Tasks.ViewModels
         public Task TaskInstance
         {
             get { return _taskInstance; }
+        }
+
+        public double TotalDuration
+        {
+            get { return _requirementList.Sum(req => req.Duration); }
         }
     }
 }

@@ -54,7 +54,6 @@ namespace DBManager.EntityExtensions
                                                 .Include(tsk => tsk.Batch.Material.Recipe.Colour)
                                                 .Include(tsk => tsk.Batch.Material.Recipe.Master)
                                                 .Include(tsk => tsk.Requester)
-                                                .Include(tsk => tsk.SpecificationVersion.Specification.Standard.CurrentIssue)
                                                 .Include(tsk => tsk.SpecificationVersion.Specification.Standard.Organization)
                                                 .Include(tsk => tsk.TaskItems
                                                 .Select(tski => tski.SubTaskItems))

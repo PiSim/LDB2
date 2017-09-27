@@ -39,7 +39,7 @@ namespace Infrastructure
         public static string MeasurableQuantityManagementEditRegion { get { return "MeasurableQuantityManagementEditRegion"; } }
         public static string MeasurableQuantityManagementRegion { get { return "MeasurableQuantityManagementRegion"; } }
         public static string MethodEditRegion { get { return "MethodEditRegion"; } }
-        public static string MethodIssueRegion { get { return "MethodIssueRegion"; } }
+        public static string MethodFileRegion { get { return "MethodFileRegion"; } }
         public static string MethodIssueEditRegion { get { return "MethodIssueEditRegion"; } }
         public static string MethodReportListRegion { get { return "MethodReportListRegion"; } }
         public static string NewCalibrationFileListRegion { get { return "NewCalibrationFileListRegion"; } }
@@ -48,8 +48,7 @@ namespace Infrastructure
         public static string ProjectBatchListRegion { get { return "ProjectBatchListRegion"; } }
         public static string ProjectReportListRegion { get { return "ProjectReportListRegion"; } }
         public static string SampleArchiveRegion { get { return "SampleArchiveRegion"; } }
-        public static string SpecificationIssueRegion { get { return "SpecificationIssueRegion"; } }
-        public static string SpecificationIssueEditRegion { get { return "SpecificationIssueEditRegion"; } }
+        public static string SpecificationEditFileRegion { get { return "SpecificationEditFileRegion"; } }
         public static string SpecificationReportListRegion { get { return "SpecificationReportListRegion"; } }
         public static string SpecificationVersionEditRegion { get { return "SpecificationVersionEditRegion"; } }
         public static string StatusbarRegion { get { return "StatusBarRegion"; } }

@@ -178,9 +178,7 @@ namespace Tasks.ViewModels
                     return null;
 
                 else
-                    return _instance.SpecificationVersion.Specification.Standard.Name + " : "
-                        + ((_instance.SpecificationVersion.Specification.Standard.CurrentIssue != null) 
-                            ? _instance.SpecificationVersion.Specification.Standard.CurrentIssue.Issue : " ");
+                    return _instance.SpecificationVersion.Specification.Standard.Name;
             }
         }
 

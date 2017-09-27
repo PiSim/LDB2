@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Instruments.ViewModels
 {
@@ -146,11 +147,20 @@ namespace Instruments.ViewModels
                     _selectedUM = null;
 
                 RaisePropertyChanged("CalibrationDueDate");
+                RaisePropertyChanged("ControlPeriod");
                 RaisePropertyChanged("IsUnderControl");
                 RaisePropertyChanged("LastCalibration");
                 RaisePropertyChanged("MeasurablePropertyInstance");
+                RaisePropertyChanged("PropertyViewVisibility");
                 RaisePropertyChanged("SelectedUM");
             }
+        }
+
+        public Visibility PropertyViewVisibility
+        {
+            get
+            {
+                return (_measurablePropertyInstance != null) ? Visibility.Visible : Visibility.Hidden; }
         }
 
         public DelegateCommand SaveCommand

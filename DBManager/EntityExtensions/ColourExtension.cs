@@ -59,6 +59,21 @@ namespace DBManager.EntityExtensions
             }
         }
 
+        public static IEnumerable<Recipe> GetRecipes(this Colour entry)
+        {
+            if (entry == null)
+                return new List<Recipe>();
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.Recipes
+                                .Where(rec => rec.ColourID == entry.ID)
+                                .ToList();
+            }
+        }
+
         public static void Update(this Colour entry)
         {
             // Updates a colour entry

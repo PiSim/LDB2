@@ -23,20 +23,19 @@ namespace Specifications.ViewModels
         private ControlPlan _selectedControlPlan;
         private DBPrincipal _principal;
         private DelegateCommand _addControlPlan, 
-                                _addIssue, 
+                                _addFile,
                                 _addTest, 
-                                _addVersion, 
-                                _newReport, 
+                                _addVersion,  
+                                _openFile,
                                 _openReport, 
                                 _removeControlPlan, 
-                                _removeIssue, 
+                                _removeFile,
                                 _removeTest, 
                                 _removeVersion, 
                                 _save,
                                 _startEdit;
         private readonly Dictionary<string, ICollection<string>> _validationErrors = new Dictionary<string, ICollection<string>>();
         private EventAggregator _eventAggregator;
-        private IEnumerable<StandardIssue> _issueList;
         private List<ControlPlanItemWrapper> _controlPlanItemsList;
         private Method _selectedToAdd;
         private Property _filterProperty;
@@ -44,7 +43,7 @@ namespace Specifications.ViewModels
         private Report _selectedReport;
         private Specification _instance;
         private SpecificationVersion _selectedVersion;
-        private StandardIssue _selectedIssue;
+        private StandardFile _selectedFile;
 
         public SpecificationEditViewModel(DBPrincipal principal,
                                             EventAggregator aggregator) 
@@ -52,8 +51,6 @@ namespace Specifications.ViewModels
         {
             _eventAggregator = aggregator;
             _principal = principal;
-
-            _issueList = _instance.GetIssues();
 
             _addControlPlan = new DelegateCommand(
                 () =>
@@ -66,22 +63,29 @@ namespace Specifications.ViewModels
                     SelectedControlPlan = temp;
                     RaisePropertyChanged("ControlPlanList");
                 });
-
-            _addIssue = new DelegateCommand(
+            
+            _addFile = new DelegateCommand(
                 () =>
                 {
-                    StandardIssue temp = new StandardIssue();
+                    OpenFileDialog fileDialog = new OpenFileDialog();
+                    fileDialog.Multiselect = true;
 
-                    temp.IsCurrent = false;
-                    temp.Issue = DateTime.Now.ToShortDateString();
-                    temp.StandardID = _instance.StandardID;
+                    if (fileDialog.ShowDialog() == DialogResult.OK)
+                    {
+                        foreach (string pth in fileDialog.FileNames)
+                        {
+                            StandardFile temp = new StandardFile();
+                            temp.Path = pth;
+                            temp.Description = "";
+                            temp.standardID = _instance.StandardID;
 
-                    temp.Create();
+                            temp.Create();
+                        }
 
-                    _issueList = _instance.GetIssues();
-                    RaisePropertyChanged("IssueList");
+                        RaisePropertyChanged("FileList");
+                    }
                 },
-                () => CanEdit);
+                () => _principal.IsInRole(UserRoleNames.SpecificationEdit));
 
             _addTest = new DelegateCommand(
                 () =>
@@ -110,6 +114,13 @@ namespace Specifications.ViewModels
                 },
                 () => CanEdit);
 
+            _openFile = new DelegateCommand(
+                () =>
+                {
+                    System.Diagnostics.Process.Start(_selectedFile.Path);
+                },
+                () => _selectedFile != null);
+
             _openReport = new DelegateCommand(
                 () =>
                 {
@@ -127,19 +138,14 @@ namespace Specifications.ViewModels
                 }, 
                 () => CanEdit 
                     && _selectedControlPlan != null);
-
-            _removeIssue = new DelegateCommand(
+            
+            _removeFile = new DelegateCommand(
                 () =>
                 {
-                    _selectedIssue.Delete();
-
-                    SelectedIssue = null;
-
-                    _issueList = _instance.GetIssues();
-                    RaisePropertyChanged("IssueList");
+                    _selectedFile.Delete();
+                    SelectedFile = null;
                 },
-                () => CanEdit 
-                    && _selectedIssue != null);
+                () => _principal.IsInRole(UserRoleNames.SpecificationEdit) && _selectedFile != null);
 
             _removeTest = new DelegateCommand(
                 () =>
@@ -216,10 +222,10 @@ namespace Specifications.ViewModels
         {
             get { return _addControlPlan; }
         }
-
-        public DelegateCommand AddIssueCommand
+        
+        public DelegateCommand AddFileCommand
         {
-            get { return _addIssue; }
+            get { return _addFile; }
         }
 
         public DelegateCommand AddTestCommand
@@ -293,6 +299,11 @@ namespace Specifications.ViewModels
             }
         }
 
+        public IEnumerable<StandardFile> FileList
+        {
+            get { return _instance.GetFiles(); }
+        }
+
         public Property FilterProperty
         {
             get { return _filterProperty; }
@@ -309,11 +320,6 @@ namespace Specifications.ViewModels
             {
                 return SpecificationService.GetMethods().Where(mtd => _filterProperty == null || mtd.Property.ID == _filterProperty.ID);
             }
-        }
-        
-        public IEnumerable<StandardIssue> IssueList
-        {
-            get { return _issueList; }
         }
 
         public SpecificationVersion MainVersion
@@ -336,10 +342,10 @@ namespace Specifications.ViewModels
                 return _instance.GetMainVersionRequirements();
             }
         }
-        
-        public DelegateCommand NewReportCommand
+
+        public DelegateCommand OpenFileCommand
         {
-            get { return _newReport; }
+            get { return _openFile; }
         }
 
         public IEnumerable<Property> Properties
@@ -352,9 +358,9 @@ namespace Specifications.ViewModels
             get { return _removeControlPlan; }
         }
 
-        public DelegateCommand RemoveIssueCommand
+        public DelegateCommand RemoveFileCommand
         {
-            get { return _removeIssue; }
+            get { return _removeFile; }
         }
 
         public DelegateCommand  RemoveTestCommand
@@ -400,22 +406,17 @@ namespace Specifications.ViewModels
                 _removeControlPlan.RaiseCanExecuteChanged();
             }
         }
-        
-        public StandardIssue SelectedIssue
+
+        public StandardFile SelectedFile
         {
-            get { return _selectedIssue; }
-            set 
+            get { return _selectedFile; }
+            set
             {
-                _selectedIssue = value;
-                _removeIssue.RaiseCanExecuteChanged();
+                _selectedFile = value;
+                _openFile.RaiseCanExecuteChanged();
+                _removeFile.RaiseCanExecuteChanged();
 
-                NavigationToken token = new NavigationToken(SpecificationViewNames.StandardIssueEdit,
-                                                            _selectedIssue,
-                                                            RegionNames.SpecificationIssueEditRegion);
-
-                _eventAggregator.GetEvent<NavigationRequested>()
-                                .Publish(token);
-
+                RaisePropertyChanged("SelectedFile");
             }
         }
 
@@ -476,15 +477,11 @@ namespace Specifications.ViewModels
                     _instance.Load();
                     MainVersion.Load();
                 }
-                
-                _issueList = _instance.GetIssues();
 
                 SelectedControlPlan = null;
-                SelectedIssue = null;
                 SelectedVersion = null;
 
                 RaisePropertyChanged("ControlPlanList");
-                RaisePropertyChanged("IssueList");
                 RaisePropertyChanged("MainVersion");
                 RaisePropertyChanged("MainVersionRequirements");
                 RaisePropertyChanged("ReportList");
@@ -498,9 +495,9 @@ namespace Specifications.ViewModels
             get { return RegionNames.SpecificationVersionEditRegion; }
         }
 
-        public string SpecificationIssueEditRegionName
+        public string SpecificationEditFileRegionName
         {
-            get { return RegionNames.SpecificationIssueEditRegion; }
+            get { return RegionNames.SpecificationEditFileRegion; }
         }
 
         public string Standard

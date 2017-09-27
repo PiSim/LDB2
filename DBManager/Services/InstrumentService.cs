@@ -94,6 +94,11 @@ namespace DBManager.Services
             }
         }
 
+        public static void AddInstrumentFiles(IEnumerable<InstrumentFiles> fileList)
+        {
+            throw new NotImplementedException();
+        }
+
         public static Instrument GetInstrument(string code)
         {
             // Returns the instrument entry with the given code, or null if none is found

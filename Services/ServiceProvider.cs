@@ -175,5 +175,15 @@ namespace Services
             }
             else return null;
         }
+
+        internal static ExternalReport StartExternalReportCreation()
+        {
+            Views.ExternalReportCreationDialog creationDialog = new Views.ExternalReportCreationDialog();
+
+            if (creationDialog.ShowDialog() == true)
+                return creationDialog.ExternalReportInstance;
+            else
+                return null;
+        }
     }
 }

@@ -120,6 +120,7 @@
     </Compile>
     <Compile Include="ValidationService.cs" />
     <Compile Include="ViewModels\AddTestDialogViewModel.cs" />
+    <Compile Include="ViewModels\ExternalReportCreationDialogViewModel.cs" />
     <Compile Include="ViewModels\MaintenanceEventCreationDialogViewModel.cs" />
     <Compile Include="ViewModels\BatchCreationDialogViewModel.cs" />
     <Compile Include="ViewModels\NewCalibrationDialogViewModel.cs" />
@@ -130,6 +131,9 @@
     </Compile>
     <Compile Include="Views\BatchCreationDialog.xaml.cs">
       <DependentUpon>BatchCreationDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ExternalReportCreationDialog.xaml.cs">
+      <DependentUpon>ExternalReportCreationDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MaintenanceEventCreationDialog.xaml.cs">
       <DependentUpon>MaintenanceEventCreationDialog.xaml</DependentUpon>
@@ -163,6 +167,10 @@
     <Page Include="Views\BatchCreationDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ExternalReportCreationDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\MaintenanceEventCreationDialog.xaml">
       <SubType>Designer</SubType>

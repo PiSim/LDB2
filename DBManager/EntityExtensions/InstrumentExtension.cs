@@ -190,7 +190,7 @@ namespace DBManager.EntityExtensions
                                                             .Include(inst => inst.Tests
                                                             .Select(tst => tst.Method.Property))
                                                             .Include(inst => inst.Tests
-                                                            .Select(tst => tst.Method.Standard.CurrentIssue))
+                                                            .Select(tst => tst.Method.Standard))
                                                             .First(inst => inst.ID == entry.ID);
 
                 entry.AssociatedMethods = tempEntry.AssociatedMethods;

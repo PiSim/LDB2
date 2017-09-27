@@ -59,19 +59,20 @@ namespace DBManager.EntityExtensions
             }
         }
 
-        public static IEnumerable<StandardIssue> GetIssues(this Method entry)
+        public static IEnumerable<StandardFile> GetFiles(this Method entry)
         {
-            // Returns all Issue entities for a given Method entry
+            // Returns all standard Files for a method standard
 
             if (entry == null)
-                return new List<StandardIssue>();
+                return new List<StandardFile>();
 
             using (DBEntities entities = new DBEntities())
             {
                 entities.Configuration.LazyLoadingEnabled = false;
 
-                return entities.StandardIssues.Where(stdi => stdi.StandardID == entry.StandardID)
-                                                .ToList();
+                return entities.StandardFiles
+                                .Where(stdf => stdf.standardID == entry.StandardID)
+                                .ToList();
             }
         }
 
@@ -89,6 +90,29 @@ namespace DBManager.EntityExtensions
                 return entities.Tests.Include(tst => tst.SubTests)
                                     .Where(tst => tst.MethodID == entry.ID)
                                     .ToList();
+            }
+        }
+
+        public static IEnumerable<Specification> GetSpecifications(this Method entry)
+        {
+            // Returns all the specifications referring to the given method
+
+            if (entry == null)
+                return new List<Specification>();
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.Specifications
+                                .Include(spec => spec.Standard.Organization)
+                                .Where(spec => spec
+                                .SpecificationVersions
+                                .Any(specv => specv
+                                .Requirements
+                                .Any(req => req
+                                .MethodID == entry.ID)))
+                                .ToList();
             }
         }
 
@@ -142,12 +166,11 @@ namespace DBManager.EntityExtensions
                                                     .Include(mtd => mtd.ExternalReports
                                                     .Select(extr => extr.ExternalLab))
                                                     .Include(mtd => mtd.Property)
-                                                    .Include(mtd => mtd.Standard.CurrentIssue)
                                                     .Include(mtd => mtd.Standard.Organization)
                                                     .First(spec => spec.ID == entry.ID);
 
                 entry.AssociatedInstruments = tempEntry.AssociatedInstruments;
-                entry.CostUnits = tempEntry.CostUnits;
+                entry.Duration = tempEntry.Duration;
                 entry.Description = tempEntry.Description;
                 entry.ExternalReports = tempEntry.ExternalReports;
                 entry.Property = tempEntry.Property;

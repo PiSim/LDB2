@@ -112,7 +112,6 @@ namespace DBManager.EntityExtensions
                                                                                 .Include(specv => specv.Requirements
                                                                                 .Select(req => req.Method.Standard.Organization))
                                                                                 .Include(req => req.Specification.Standard.Organization)
-                                                                                .Include(req => req.Specification.Standard.CurrentIssue)
                                                                                 .First(specv => specv.ID == entry.ID);
 
                 entry.ExternalConstructions = tempEntry.ExternalConstructions;

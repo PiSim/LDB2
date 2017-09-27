@@ -20,13 +20,14 @@ using System.Windows.Forms;
 
 namespace Services.ViewModels
 {   
-    public class ReportCreationDialogViewModel : BindableBase, INotifyDataErrorInfo
+    public class ReportCreationDialogViewModel : BindableBase, INotifyDataErrorInfo, IRequirementSelector 
     {
         private Batch _selectedBatch;
         private ControlPlan _selectedControlPlan;
         private DBPrincipal _principal;
         private DelegateCommand<Window> _cancel, _confirm;
         private readonly Dictionary<string, ICollection<string>> _validationErrors = new Dictionary<string, ICollection<string>>();
+        private EventAggregator _eventAggregator;
         private IEnumerable<ISelectableRequirement> _requirementList;
         private IEnumerable<Person> _techList;
         private IEnumerable<Specification> _specificationList;
@@ -36,17 +37,21 @@ namespace Services.ViewModels
         private Report _reportInstance;
         private Specification _selectedSpecification;
         private SpecificationVersion _selectedVersion;
-        private string _batchNumber, _category;
+        private string _batchNumber, 
+                        _category,
+                        _description;
         
-        public ReportCreationDialogViewModel(DBPrincipal principal) : base()
+        public ReportCreationDialogViewModel(DBPrincipal principal,
+                                            EventAggregator aggregator) : base()
         {
+            _eventAggregator = aggregator;
             _principal = principal;
 
+            _number = ReportService.GetNextReportNumber();
             _techList = PeopleService.GetPeople(PersonRoleNames.MaterialTestingTech);
             _author = _techList.First(prs => prs.ID == _principal.CurrentPerson.ID);
             _requirementList = new List<ISelectableRequirement>();
             _specificationList = SpecificationService.GetSpecifications();
-
 
             _confirm = new DelegateCommand<Window>(
                 parent => {
@@ -72,15 +77,16 @@ namespace Services.ViewModels
                     if (_selectedControlPlan != null)
                         _reportInstance.Description = _selectedControlPlan.Name;
                     else
-                        _reportInstance.Description = _selectedSpecification.Description;
+                        _reportInstance.Description = _description;
                     _reportInstance.IsComplete = false;
                     _reportInstance.Number = _number;
                     _reportInstance.SpecificationVersionID = _selectedVersion.ID;
                     _reportInstance.StartDate = DateTime.Now.ToShortDateString();
-                    _reportInstance.SpecificationIssueID = _selectedVersion.Specification.Standard.CurrentIssueID;
 
                     foreach (Test tst in CommonProcedures.GenerateTestList(_requirementList))
                         _reportInstance.Tests.Add(tst);
+
+                    _reportInstance.TotalDuration = _reportInstance.Tests.Sum(tst => tst.Duration);
 
                     _reportInstance.Create();
                     parent.DialogResult = true;
@@ -94,7 +100,11 @@ namespace Services.ViewModels
             
             SelectedSpecification = null;
             BatchNumber = "";
-            Number = 0;
+        }
+
+        public void OnRequirementSelectionChanged()
+        {
+            RaisePropertyChanged("TotalDuration");
         }
 
         #region INotifyDataErrorInfo interface elements
@@ -171,6 +181,16 @@ namespace Services.ViewModels
                     return new List<ControlPlan>();
                 else
                     return _selectedSpecification.ControlPlans;
+            }
+        }
+
+        public string Description
+        {
+            get { return _description; }
+            set
+            {
+                _description = value;
+                RaisePropertyChanged("Description");
             }
         }
         
@@ -267,6 +287,8 @@ namespace Services.ViewModels
                 _selectedControlPlan = value;
                 _selectedControlPlan.Load();
 
+                Description = (_selectedControlPlan == null) ? "" : _selectedControlPlan.Name;
+
                 RaisePropertyChanged("SelectedControlPlan");
                 if (value != null)
                 {
@@ -313,7 +335,7 @@ namespace Services.ViewModels
                 if (_selectedVersion != null)
                 {
                     _requirementList = _selectedVersion.GenerateRequirementList()
-                                                        .Select(req => new ReportItemWrapper(req))
+                                                        .Select(req => new ReportItemWrapper(req, this))
                                                         .ToList();
                     CommonProcedures.ApplyControlPlan(_requirementList, _selectedControlPlan);
                 }
@@ -348,6 +370,15 @@ namespace Services.ViewModels
             get
             {
                 return _techList;
+            }
+        }
+
+        public double TotalDuration
+        {
+            get
+            {
+                return _requirementList.Where(req => req.IsSelected)
+                                        .Sum(req => req.Duration);
             }
         }
     }

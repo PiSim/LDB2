@@ -37,6 +37,8 @@ namespace DBManager
         public Nullable<int> ProjectID { get; set; }
         public Nullable<int> PurchaseOrderID { get; set; }
         public Nullable<System.DateTime> ArrivalDate { get; set; }
+        public int Year { get; set; }
+        public int Number { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ExternalReportFile> ExternalReportFiles { get; set; }

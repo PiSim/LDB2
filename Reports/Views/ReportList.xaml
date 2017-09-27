@@ -3,48 +3,51 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:cmd="clr-namespace:Infrastructure.Commands;assembly=Infrastructure"
              xmlns:sort="clr-namespace:Infrastructure.Sorting;assembly=Infrastructure"
              xmlns:local="clr-namespace:Reports.Views"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        <ListView ItemsSource="{Binding Path=ReportList}"
+        <DataGrid ItemsSource="{Binding Path=ReportList}"
                   SelectedItem="{Binding Path=SelectedReport, Mode=TwoWay}"
-                  Grid.Column="0">
-            <i:Interaction.Behaviors>
-                <sort:SortingBehavior/>
-            </i:Interaction.Behaviors>
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn>
-                        <GridViewColumnHeader Content="Completo"
-                                              IsEnabled="False"/>
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <CheckBox IsChecked="{Binding IsComplete}"
-                                          IsEnabled="False"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                    <GridViewColumn Header="Tipo" DisplayMemberBinding="{Binding Category}"/>
-                    <GridViewColumn Header="Numero" DisplayMemberBinding="{Binding Number}"/>
-                    <GridViewColumn Header="Commessa" DisplayMemberBinding="{Binding Batch.Number}"/>
-                    <GridViewColumn Header="Progetto" DisplayMemberBinding="{Binding Batch.Material.Project.Name}"/>
-                    <GridViewColumn Header="Materiale"
-                                    DisplayMemberBinding="{Binding Batch.Material.MaterialType.Code}"/>
-                    <GridViewColumn Header="Riga"
-                                    DisplayMemberBinding="{Binding Batch.Material.MaterialLine.Code}"/>
-                    <GridViewColumn Header="Aspetto"
-                                    DisplayMemberBinding="{Binding Batch.Material.Aspect.Code}"/>
-                    <GridViewColumn Header="Ricetta"
-                                    DisplayMemberBinding="{Binding Batch.Material.Recipe.Code}"/>
-                    <GridViewColumn Header="Specifica" DisplayMemberBinding="{Binding SpecificationVersion.Specification.Standard.Name}"/>
-                    <GridViewColumn Header="Versione" DisplayMemberBinding="{Binding SpecificationVersion.Name}"/>
-                    <GridViewColumn Header="Descrizione" DisplayMemberBinding="{Binding SpecificationVersion.Specification.Description}"/>
-                    <GridViewColumn Header="Autore" DisplayMemberBinding="{Binding Author.Name}"/>
-                </GridView>
-            </ListView.View>
-        </ListView>
+                  AutoGenerateColumns="False"
+                  CanUserAddRows="False"
+                  CanUserDeleteRows="False"
+                  GridLinesVisibility="None"
+                  SelectionMode="Single"
+                  SelectionUnit="FullRow"
+                  IsReadOnly="True"
+                  Grid.Column="0"
+                  cmd:CommandBinder.DataGridDoubleClickCommand="{Binding OpenReportCommand}">
+            <DataGrid.Columns>
+                <DataGridCheckBoxColumn Header="Completo"
+                                        Binding="{Binding IsComplete}"/>
+                <DataGridTextColumn Header="Tipo"
+                                    Binding="{Binding Category}"/>
+                <DataGridTextColumn Header="Numero"
+                                    Binding="{Binding Number}"/>
+                <DataGridTextColumn Header="Commessa"
+                                    Binding="{Binding Batch.Number}"/>
+                <DataGridTextColumn Header="Progetto"
+                                    Binding="{Binding Batch.Material.Project.Name}"/>
+                <DataGridTextColumn Header="Materiale"
+                                    Binding="{Binding Batch.Material.MaterialType.Code}"/>
+                <DataGridTextColumn Header="Riga"
+                                    Binding="{Binding Batch.Material.MaterialLine.Code}"/>
+                <DataGridTextColumn Header="Aspetto"
+                                    Binding="{Binding Batch.Material.Aspect.Code}"/>
+                <DataGridTextColumn Header="Ricetta"
+                                    Binding="{Binding Batch.Material.Recipe.Code}"/>
+                <DataGridTextColumn Header="Specifica"
+                                    Binding="{Binding SpecificationVersion.Specification.Standard.Name}"/>
+                <DataGridTextColumn Header="Versione"
+                                    Binding="{Binding SpecificationVersion.Name}"/>
+                <DataGridTextColumn Header="Descrizione"
+                                    Binding="{Binding SpecificationVersion.Specification.Description}"/>
+                <DataGridTextColumn Header="Autore"
+                                    Binding="{Binding Author.Name}"/>
+            </DataGrid.Columns>
+        </DataGrid>
     </Grid>
 </UserControl>

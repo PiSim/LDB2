@@ -44,6 +44,13 @@ namespace Reports.ViewModels
                     _eventAggregator.GetEvent<NavigationRequested>().Publish(token);
                 },
                 () => _selectedReport != null);
+
+            _eventAggregator.GetEvent<ExternalReportCreated>()
+                            .Subscribe(
+                            extr =>
+                            {
+                                RaisePropertyChanged("ExternalReportList");
+                            });
         } 
 
         public bool CanCreateExternalReport

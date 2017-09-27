@@ -73,11 +73,25 @@ namespace DBManager.EntityExtensions
                 return entities.Tests.Include(tst => tst.Instrument.InstrumentType)
                                     .Include(tst => tst.Method.Property)
                                     .Include(tst => tst.Method.Standard.Organization)
-                                    .Include(tst => tst.MethodIssue)
                                     .Include(tst => tst.Person)
                                     .Include(tst => tst.SubTests)
                                     .Where(tst => tst.ReportID == entry.ID)
                                     .ToList();
+            }
+        }
+
+        public static double GetTotalDuration(this Report entry)
+        {
+            //Returns the sum of the duration of all the tests in the report
+
+            if (entry == null)
+                return 0;
+
+            using (DBEntities entities = new DBEntities())
+            {
+                return entities.Tests
+                                .Where(tst => tst.ReportID == entry.ID)
+                                .Sum(tst => tst.Method.Duration);
             }
         }
 
@@ -99,7 +113,6 @@ namespace DBManager.EntityExtensions
                                             .Include(rep => rep.Batch.Material.MaterialType)
                                             .Include(rep => rep.Batch.Material.Recipe.Colour)
                                             .Include(rep => rep.ParentTask)
-                                            .Include(rep => rep.SpecificationIssues)
                                             .Include(rep => rep.Tests)
                                             .Include(rep => rep.SpecificationVersion.Specification.Standard.Organization)
                                             .First(rep => rep.ID == entry.ID);
@@ -115,8 +128,6 @@ namespace DBManager.EntityExtensions
                 entry.Number = tempEntry.Number;
                 entry.ParentTask = tempEntry.ParentTask;
                 entry.ParentTaskID = tempEntry.ParentTaskID;
-                entry.SpecificationIssueID = tempEntry.SpecificationIssueID;
-                entry.SpecificationIssues = tempEntry.SpecificationIssues;
                 entry.SpecificationVersion = tempEntry.SpecificationVersion;
                 entry.SpecificationVersionID = tempEntry.SpecificationVersionID;
                 entry.StartDate = tempEntry.StartDate;

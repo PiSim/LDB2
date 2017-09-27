@@ -178,6 +178,8 @@
           <Property Name="projectID" Type="int" />
           <Property Name="purchase_orderID" Type="int" />
           <Property Name="arrival_date" Type="date" />
+          <Property Name="year" Type="int" Nullable="false" />
+          <Property Name="number" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="instrument_files">
           <Key>
@@ -329,6 +331,7 @@
           <Property Name="description" Type="text" Nullable="false" />
           <Property Name="um" Type="text" Nullable="false" />
           <Property Name="cost_units" Type="int" Nullable="false" />
+          <Property Name="duration" Type="double" Nullable="false" />
         </EntityType>
         <EntityType Name="organization_role_mappings">
           <Key>
@@ -452,6 +455,7 @@
           <Property Name="is_complete" Type="bit" Nullable="false" />
           <Property Name="specification_issueID" Type="int" />
           <Property Name="parent_taskID" Type="int" />
+          <Property Name="total_duration" Type="double" Nullable="false" />
         </EntityType>
         <EntityType Name="requirements">
           <Key>
@@ -465,6 +469,7 @@
           <Property Name="specification_versionID" Type="int" Nullable="false" />
           <Property Name="is_override" Type="bit" Nullable="false" />
           <Property Name="overriddenID" Type="int" />
+          <Property Name="skip_test" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="samples">
           <Key>
@@ -501,14 +506,6 @@
           <Property Name="issueID" Type="int" Nullable="false" />
           <Property Name="path" Type="varchar" MaxLength="100" Nullable="false" />
           <Property Name="description" Type="varchar" MaxLength="45" Nullable="false" />
-        </EntityType>
-        <EntityType Name="standard_issues">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="issue" Type="varchar" MaxLength="45" Nullable="false" />
-          <Property Name="is_current" Type="bit" Nullable="false" />
           <Property Name="standardID" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="standards">
@@ -519,6 +516,7 @@
           <Property Name="name" Type="varchar" MaxLength="45" Nullable="false" />
           <Property Name="organizationID" Type="int" Nullable="false" />
           <Property Name="current_issueID" Type="int" />
+          <Property Name="current_issue" Type="varchar" MaxLength="45" Nullable="false" />
         </EntityType>
         <EntityType Name="sub_methods">
           <Key>
@@ -608,6 +606,7 @@
           <Property Name="instrumentID" Type="int" />
           <Property Name="method_issueID" Type="int" />
           <Property Name="requirementID" Type="int" />
+          <Property Name="duration" Type="double" Nullable="false" />
         </EntityType>
         <EntityType Name="trial_areas">
           <Key>
@@ -868,18 +867,6 @@
             </Principal>
             <Dependent Role="purchase_orders">
               <PropertyRef Name="currencyID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="current_issue_to_standard">
-          <End Role="standard_issues" Type="Self.standard_issues" Multiplicity="0..1" />
-          <End Role="standards" Type="Self.standards" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="standard_issues">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="standards">
-              <PropertyRef Name="current_issueID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1174,18 +1161,6 @@
             </Principal>
             <Dependent Role="calibration_report_measurable_property_mappings">
               <PropertyRef Name="measurement_unitID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="method_issue_to_test">
-          <End Role="standard_issues" Type="Self.standard_issues" Multiplicity="0..1" />
-          <End Role="tests" Type="Self.tests" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="standard_issues">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="tests">
-              <PropertyRef Name="method_issueID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1687,18 +1662,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="specissue_to_report">
-          <End Role="standard_issues" Type="Self.standard_issues" Multiplicity="0..1" />
-          <End Role="reports" Type="Self.reports" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="standard_issues">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="reports">
-              <PropertyRef Name="specification_issueID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="specversion_to_report">
           <End Role="specification_versions" Type="Self.specification_versions" Multiplicity="1" />
           <End Role="reports" Type="Self.reports" Multiplicity="*" />
@@ -1737,30 +1700,16 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="standard_issue_to_file">
-          <End Role="standard_issues" Type="Self.standard_issues" Multiplicity="1">
+        <Association Name="standard_to_file">
+          <End Role="standards" Type="Self.standards" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
           <End Role="standard_files" Type="Self.standard_files" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="standard_issues">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="standard_files">
-              <PropertyRef Name="issueID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="standard_to_issue">
-          <End Role="standards" Type="Self.standards" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="standard_issues" Type="Self.standard_issues" Multiplicity="*" />
-          <ReferentialConstraint>
             <Principal Role="standards">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="standard_issues">
+            <Dependent Role="standard_files">
               <PropertyRef Name="standardID" />
             </Dependent>
           </ReferentialConstraint>
@@ -2042,7 +1991,6 @@
           <EntitySet Name="specification_versions" EntityType="Self.specification_versions" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="specifications" EntityType="Self.specifications" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="standard_files" EntityType="Self.standard_files" Schema="labdb" store:Type="Tables" />
-          <EntitySet Name="standard_issues" EntityType="Self.standard_issues" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="standards" EntityType="Self.standards" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="sub_methods" EntityType="Self.sub_methods" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="sub_requirements" EntityType="Self.sub_requirements" Schema="labdb" store:Type="Tables" />
@@ -2126,10 +2074,6 @@
           <AssociationSet Name="currency_to_purchase_order" Association="Self.currency_to_purchase_order">
             <End Role="currencies" EntitySet="currencies" />
             <End Role="purchase_orders" EntitySet="purchase_orders" />
-          </AssociationSet>
-          <AssociationSet Name="current_issue_to_standard" Association="Self.current_issue_to_standard">
-            <End Role="standard_issues" EntitySet="standard_issues" />
-            <End Role="standards" EntitySet="standards" />
           </AssociationSet>
           <AssociationSet Name="default_spec_version_to_ex_construction" Association="Self.default_spec_version_to_ex_construction">
             <End Role="specification_versions" EntitySet="specification_versions" />
@@ -2222,10 +2166,6 @@
           <AssociationSet Name="measurement_unit_to_calibration_property_mapping" Association="Self.measurement_unit_to_calibration_property_mapping">
             <End Role="measure_units" EntitySet="measure_units" />
             <End Role="calibration_report_measurable_property_mappings" EntitySet="calibration_report_measurable_property_mappings" />
-          </AssociationSet>
-          <AssociationSet Name="method_issue_to_test" Association="Self.method_issue_to_test">
-            <End Role="standard_issues" EntitySet="standard_issues" />
-            <End Role="tests" EntitySet="tests" />
           </AssociationSet>
           <AssociationSet Name="method_to_external_report_mapping" Association="Self.method_to_external_report_mapping">
             <End Role="methods" EntitySet="methods" />
@@ -2383,10 +2323,6 @@
             <End Role="specification_versions" EntitySet="specification_versions" />
             <End Role="task_items" EntitySet="task_items" />
           </AssociationSet>
-          <AssociationSet Name="specissue_to_report" Association="Self.specissue_to_report">
-            <End Role="standard_issues" EntitySet="standard_issues" />
-            <End Role="reports" EntitySet="reports" />
-          </AssociationSet>
           <AssociationSet Name="specversion_to_report" Association="Self.specversion_to_report">
             <End Role="specification_versions" EntitySet="specification_versions" />
             <End Role="reports" EntitySet="reports" />
@@ -2399,13 +2335,9 @@
             <End Role="specification_versions" EntitySet="specification_versions" />
             <End Role="tasks" EntitySet="tasks" />
           </AssociationSet>
-          <AssociationSet Name="standard_issue_to_file" Association="Self.standard_issue_to_file">
-            <End Role="standard_issues" EntitySet="standard_issues" />
-            <End Role="standard_files" EntitySet="standard_files" />
-          </AssociationSet>
-          <AssociationSet Name="standard_to_issue" Association="Self.standard_to_issue">
+          <AssociationSet Name="standard_to_file" Association="Self.standard_to_file">
             <End Role="standards" EntitySet="standards" />
-            <End Role="standard_issues" EntitySet="standard_issues" />
+            <End Role="standard_files" EntitySet="standard_files" />
           </AssociationSet>
           <AssociationSet Name="standard_to_method" Association="Self.standard_to_method">
             <End Role="standards" EntitySet="standards" />
@@ -2586,6 +2518,8 @@
           <NavigationProperty Name="PO" Relationship="labdbModel.purchase_order_to_external_report" FromRole="ExternalReport" ToRole="PurchaseOrder" />
           <NavigationProperty Name="Methods" Relationship="labdbModel.external_report_method_mappings" FromRole="ExternalReport" ToRole="Method" />
           <NavigationProperty Name="Batches" Relationship="labdbModel.external_report_batch_mapping" FromRole="ExternalReport" ToRole="Batch" />
+          <Property Name="Year" Type="Int32" Nullable="false" />
+          <Property Name="Number" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="Master">
           <Key>
@@ -2626,7 +2560,6 @@
           <Property Name="PropertyID" Type="Int32" Nullable="false" a:GetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:SetterAccess="Public" />
           <Property Name="Description" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="UM" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="CostUnits" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Requirements" Relationship="Self.method_to_requirement" FromRole="methods" ToRole="requirements" />
           <NavigationProperty Name="Property" Relationship="Self.property_to_method" FromRole="methods" ToRole="properties" />
           <NavigationProperty Name="Standard" Relationship="Self.standard_to_method" FromRole="methods" ToRole="standards" />
@@ -2635,6 +2568,8 @@
           <NavigationProperty Name="AssociatedInstruments" Relationship="labdbModel.instrument_method_mappings" FromRole="Method" ToRole="Instrument" />
           <NavigationProperty Name="ExternalReports" Relationship="labdbModel.external_report_method_mappings" FromRole="Method" ToRole="ExternalReport" />
           <NavigationProperty Name="TaskItems" Relationship="labdbModel.method_to_task_item" FromRole="Method" ToRole="TaskItem" />
+          <Property Name="Duration" Type="Double" Nullable="false" />
+          <Property Name="CostUnits_DEPRECATED" Type="Int32" Nullable="false" DefaultValue="0" />
         </EntityType>
         <EntityType Name="Organization">
           <Key>
@@ -2735,10 +2670,9 @@
           <NavigationProperty Name="Tests" Relationship="Self.report_to_test" FromRole="reports" ToRole="tests" />
           <NavigationProperty Name="SpecificationVersion" Relationship="Self.specversion_to_report" FromRole="reports" ToRole="specification_versions" />
           <Property Name="IsComplete" Type="Boolean" Nullable="false" />
-          <Property Name="SpecificationIssueID" Type="Int32" />
-          <NavigationProperty Name="SpecificationIssues" Relationship="labdbModel.specissue_to_report1" FromRole="Report" ToRole="StandardIssue" />
           <Property Name="ParentTaskID" Type="Int32" />
           <NavigationProperty Name="ParentTask" Relationship="labdbModel.task_to_report" FromRole="Report" ToRole="Task" />
+          <Property Name="TotalDuration" Type="Double" Nullable="false" />
         </EntityType>
         <EntityType Name="Requirement">
           <Key>
@@ -2760,6 +2694,7 @@
           <NavigationProperty Name="TaskItems" Relationship="labdbModel.requirement_to_task_item" FromRole="Requirement" ToRole="task_items" />
           <NavigationProperty Name="ControlPlanItems" Relationship="labdbModel.requirement_to_control_plan" FromRole="Requirement" ToRole="ControlPlanItem" />
           <NavigationProperty Name="tests" Relationship="labdbModel.requirement_to_test1" FromRole="Requirement" ToRole="Test" />
+          <Property Name="skip_test" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="Sample">
           <Key>
@@ -2807,7 +2742,8 @@
           <Property Name="Path" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Description" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="IssueID" Type="Int32" Nullable="false" a:SetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
-          <NavigationProperty Name="StandardIssue" Relationship="labdbModel.standard_issue_to_file" FromRole="StandardFile" ToRole="standard_issues" />
+          <Property Name="standardID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Standard" Relationship="labdbModel.standard_to_file" FromRole="StandardFile" ToRole="Std" />
         </EntityType>
         <EntityType Name="Std">
           <Key>
@@ -2819,9 +2755,9 @@
           <NavigationProperty Name="Methods" Relationship="Self.standard_to_method" FromRole="standards" ToRole="methods" />
           <NavigationProperty Name="Organization" Relationship="Self.organization_to_standard" FromRole="standards" ToRole="organizations" />
           <NavigationProperty Name="Specifications" Relationship="Self.standard_to_specification" FromRole="standards" ToRole="specifications" />
-          <NavigationProperty Name="StandardIssues" Relationship="labdbModel.standard_to_issue" FromRole="Std" ToRole="StandardIssue" />
           <Property Name="CurrentIssueID" Type="Int32" />
-          <NavigationProperty Name="CurrentIssue" Relationship="labdbModel.current_issue_to_standard" FromRole="Std" ToRole="StandardIssue" />
+          <NavigationProperty Name="StandardFiles" Relationship="labdbModel.standard_to_file" FromRole="Std" ToRole="StandardFile" />
+          <Property Name="current_issue" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="SubRequirement">
           <Key>
@@ -2889,11 +2825,10 @@
           <Property Name="IsComplete" Type="Boolean" Nullable="false" />
           <Property Name="instrumentID" Type="Int32" />
           <NavigationProperty Name="Instrument" Relationship="labdbModel.instrument_to_test" FromRole="Test" ToRole="instrument" />
-          <Property Name="MethodIssueID" Type="Int32" />
-          <NavigationProperty Name="MethodIssue" Relationship="labdbModel.method_issue_to_test" FromRole="Test" ToRole="StandardIssue" />
           <Property Name="RequirementID" Type="Int32" />
           <NavigationProperty Name="Requirement" Relationship="labdbModel.requirement_to_test1" FromRole="Test" ToRole="Requirement" />
           <NavigationProperty Name="TaskItems" Relationship="labdbModel.test_to_task_item" FromRole="Test" ToRole="TaskItem" />
+          <Property Name="Duration" Type="Double" Nullable="false" />
         </EntityType>
         <EntityType Name="User">
           <Key>
@@ -3447,19 +3382,6 @@
             <End Role="Person" EntitySet="People" />
             <End Role="User" EntitySet="Users" />
           </AssociationSet>
-          <EntitySet Name="StandardIssues" EntityType="labdbModel.StandardIssue" />
-          <AssociationSet Name="standard_issue_to_file" Association="labdbModel.standard_issue_to_file">
-            <End Role="standard_issues" EntitySet="StandardIssues" />
-            <End Role="StandardFile" EntitySet="StandardFiles" />
-          </AssociationSet>
-          <AssociationSet Name="standard_to_issue" Association="labdbModel.standard_to_issue">
-            <End Role="Std" EntitySet="Stds" />
-            <End Role="StandardIssue" EntitySet="StandardIssues" />
-          </AssociationSet>
-          <AssociationSet Name="current_issue_to_standard" Association="labdbModel.current_issue_to_standard">
-            <End Role="StandardIssue" EntitySet="StandardIssues" />
-            <End Role="Std" EntitySet="Stds" />
-          </AssociationSet>
           <EntitySet Name="TaskItems" EntityType="labdbModel.TaskItem" />
           <AssociationSet Name="requirement_to_task_item" Association="labdbModel.requirement_to_task_item">
             <End Role="Requirement" EntitySet="Requirements" />
@@ -3517,10 +3439,6 @@
             <End Role="calibration_reports" EntitySet="CalibrationReports" />
             <End Role="calibration_files" EntitySet="CalibrationFiles" />
           </AssociationSet>
-          <AssociationSet Name="specissue_to_report1" Association="labdbModel.specissue_to_report1">
-            <End Role="StandardIssue" EntitySet="StandardIssues" />
-            <End Role="Report" EntitySet="Reports" />
-          </AssociationSet>
           <EntitySet Name="OrganizationRoleMappings" EntityType="labdbModel.OrganizationRoleMapping" />
           <EntitySet Name="OrganizationRoles" EntityType="labdbModel.OrganizationRole" />
           <AssociationSet Name="organization_to_role_mapping" Association="labdbModel.organization_to_role_mapping">
@@ -3570,10 +3488,6 @@
           <AssociationSet Name="submethod_to_subreq1" Association="labdbModel.submethod_to_subreq1">
             <End Role="sub_methods" EntitySet="SubMethods" />
             <End Role="SubRequirement" EntitySet="SubRequirements" />
-          </AssociationSet>
-          <AssociationSet Name="method_issue_to_test" Association="labdbModel.method_issue_to_test">
-            <End Role="StandardIssue" EntitySet="StandardIssues" />
-            <End Role="Test" EntitySet="Tests" />
           </AssociationSet>
           <AssociationSet Name="purchase_order_to_external_report" Association="labdbModel.purchase_order_to_external_report">
             <End Role="PurchaseOrder" EntitySet="PurchaseOrders" />
@@ -3748,6 +3662,10 @@
             <End Role="Instrument" EntitySet="Instruments" />
             <End Role="instrument_files" EntitySet="InstrumentFiles" />
           </AssociationSet>
+          <AssociationSet Name="standard_to_file" Association="labdbModel.standard_to_file">
+            <End Role="Std" EntitySet="Stds" />
+            <End Role="StandardFile" EntitySet="StandardFiles" />
+          </AssociationSet>
         </EntityContainer>
         <Association Name="overridden_to_requirement">
           <End Type="labdbModel.Requirement" Role="Requirement" Multiplicity="0..1">
@@ -3793,59 +3711,6 @@
             </Principal>
             <Dependent Role="User">
               <PropertyRef Name="PersonID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <EntityType Name="StandardIssue">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Issue" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
-          <Property Name="StandardID" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="StandardFiles" Relationship="labdbModel.standard_issue_to_file" FromRole="standard_issues" ToRole="StandardFile" />
-          <NavigationProperty Name="Standard" Relationship="labdbModel.standard_to_issue" FromRole="StandardIssue" ToRole="Std" />
-          <NavigationProperty Name="Reports" Relationship="labdbModel.specissue_to_report1" FromRole="StandardIssue" ToRole="Report" />
-          <Property Name="IsCurrent" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="Tests" Relationship="labdbModel.method_issue_to_test" FromRole="StandardIssue" ToRole="Test" />
-        </EntityType>
-        <Association Name="standard_issue_to_file">
-          <End Type="labdbModel.StandardIssue" Role="standard_issues" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Type="labdbModel.StandardFile" Role="StandardFile" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="standard_issues">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="StandardFile">
-              <PropertyRef Name="IssueID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="standard_to_issue">
-          <End Type="labdbModel.Std" Role="Std" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Type="labdbModel.StandardIssue" Role="StandardIssue" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Std">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="StandardIssue">
-              <PropertyRef Name="StandardID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="current_issue_to_standard">
-          <End Type="labdbModel.StandardIssue" Role="StandardIssue" Multiplicity="0..1" />
-          <End Type="labdbModel.Std" Role="Std" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="StandardIssue">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="Std">
-              <PropertyRef Name="CurrentIssueID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -4139,18 +4004,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="specissue_to_report1">
-          <End Type="labdbModel.StandardIssue" Role="StandardIssue" Multiplicity="0..1" />
-          <End Type="labdbModel.Report" Role="Report" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="StandardIssue">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="Report">
-              <PropertyRef Name="SpecificationIssueID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityType Name="OrganizationRoleMapping">
           <Key>
             <PropertyRef Name="ID" />
@@ -4361,18 +4214,6 @@
             </Principal>
             <Dependent Role="SubRequirement">
               <PropertyRef Name="SubMethodID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="method_issue_to_test">
-          <End Type="labdbModel.StandardIssue" Role="StandardIssue" Multiplicity="0..1" />
-          <End Type="labdbModel.Test" Role="Test" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="StandardIssue">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="Test">
-              <PropertyRef Name="MethodIssueID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -4977,6 +4818,20 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="standard_to_file">
+          <End Type="labdbModel.Std" Role="Std" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="labdbModel.StandardFile" Role="StandardFile" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Std">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="StandardFile">
+              <PropertyRef Name="standardID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -5052,6 +4907,8 @@
           <EntitySetMapping Name="ExternalReports">
             <EntityTypeMapping TypeName="labdbModel.ExternalReport">
               <MappingFragment StoreEntitySet="external_reports">
+                <ScalarProperty Name="Number" ColumnName="number" />
+                <ScalarProperty Name="Year" ColumnName="year" />
                 <ScalarProperty Name="ArrivalDate" ColumnName="arrival_date" />
                 <ScalarProperty Name="PurchaseOrderID" ColumnName="purchase_orderID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
@@ -5083,12 +4940,13 @@
           <EntitySetMapping Name="Methods">
             <EntityTypeMapping TypeName="labdbModel.Method">
               <MappingFragment StoreEntitySet="methods">
+                <ScalarProperty Name="CostUnits_DEPRECATED" ColumnName="cost_units" />
+                <ScalarProperty Name="Duration" ColumnName="duration" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="StandardID" ColumnName="standardID" />
                 <ScalarProperty Name="PropertyID" ColumnName="propertyID" />
                 <ScalarProperty Name="Description" ColumnName="description" />
                 <ScalarProperty Name="UM" ColumnName="um" />
-                <ScalarProperty Name="CostUnits" ColumnName="cost_units" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -5153,8 +5011,8 @@
           <EntitySetMapping Name="Reports">
             <EntityTypeMapping TypeName="labdbModel.Report">
               <MappingFragment StoreEntitySet="reports">
+                <ScalarProperty Name="TotalDuration" ColumnName="total_duration" />
                 <ScalarProperty Name="ParentTaskID" ColumnName="parent_taskID" />
-                <ScalarProperty Name="SpecificationIssueID" ColumnName="specification_issueID" />
                 <ScalarProperty Name="IsComplete" ColumnName="is_complete" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="AuthorID" ColumnName="authorID" />
@@ -5171,6 +5029,7 @@
           <EntitySetMapping Name="Requirements">
             <EntityTypeMapping TypeName="labdbModel.Requirement">
               <MappingFragment StoreEntitySet="requirements">
+                <ScalarProperty Name="skip_test" ColumnName="skip_test" />
                 <ScalarProperty Name="OverriddenID" ColumnName="overriddenID" />
                 <ScalarProperty Name="IsOverride" ColumnName="is_override" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
@@ -5215,6 +5074,7 @@
           <EntitySetMapping Name="StandardFiles">
             <EntityTypeMapping TypeName="labdbModel.StandardFile">
               <MappingFragment StoreEntitySet="standard_files">
+                <ScalarProperty Name="standardID" ColumnName="standardID" />
                 <ScalarProperty Name="IssueID" ColumnName="issueID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Path" ColumnName="path" />
@@ -5225,6 +5085,7 @@
           <EntitySetMapping Name="Stds">
             <EntityTypeMapping TypeName="labdbModel.Std">
               <MappingFragment StoreEntitySet="standards">
+                <ScalarProperty Name="current_issue" ColumnName="current_issue" />
                 <ScalarProperty Name="CurrentIssueID" ColumnName="current_issueID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Name" ColumnName="name" />
@@ -5276,8 +5137,8 @@
           <EntitySetMapping Name="Tests">
             <EntityTypeMapping TypeName="labdbModel.Test">
               <MappingFragment StoreEntitySet="tests">
+                <ScalarProperty Name="Duration" ColumnName="duration" />
                 <ScalarProperty Name="RequirementID" ColumnName="requirementID" />
-                <ScalarProperty Name="MethodIssueID" ColumnName="method_issueID" />
                 <ScalarProperty Name="instrumentID" ColumnName="instrumentID" />
                 <ScalarProperty Name="IsComplete" ColumnName="is_complete" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
@@ -5305,16 +5166,6 @@
               <MappingFragment StoreEntitySet="material_types">
                 <ScalarProperty Name="Description" ColumnName="description" />
                 <ScalarProperty Name="Code" ColumnName="code" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="StandardIssues">
-            <EntityTypeMapping TypeName="labdbModel.StandardIssue">
-              <MappingFragment StoreEntitySet="standard_issues">
-                <ScalarProperty Name="IsCurrent" ColumnName="is_current" />
-                <ScalarProperty Name="StandardID" ColumnName="standardID" />
-                <ScalarProperty Name="Issue" ColumnName="issue" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

@@ -38,19 +38,20 @@ namespace DBManager.EntityExtensions
             }
         }
 
-        public static IEnumerable<StandardIssue> GetIssues(this Specification entry)
+        public static IEnumerable<StandardFile> GetFiles(this Specification entry)
         {
-            // Returns all Issue entities for a given Specification entry
+            // Returns all standard files for specification standard
 
             if (entry == null)
-                return new List<StandardIssue>();
+                return new List<StandardFile>();
 
             using (DBEntities entities = new DBEntities())
             {
                 entities.Configuration.LazyLoadingEnabled = false;
 
-                return entities.StandardIssues.Where(stdi => stdi.StandardID == entry.StandardID)
-                                                .ToList();
+                return entities.StandardFiles
+                                .Where(stdf => stdf.standardID == entry.StandardID)
+                                .ToList();
             }
         }
 
@@ -86,7 +87,7 @@ namespace DBManager.EntityExtensions
                                         .Include(rep => rep.Batch.Material.MaterialType)
                                         .Include(rep => rep.Batch.Material.Project.Oem)
                                         .Include(rep => rep.Batch.Material.Recipe.Colour)
-                                        .Include(rep => rep.SpecificationVersion.Specification.Standard.CurrentIssue)
+                                        .Include(rep => rep.SpecificationVersion.Specification.Standard)
                                         .Where(rep => rep.SpecificationVersion.Specification.ID == entry.ID)
                                         .ToList();
             }
@@ -120,9 +121,6 @@ namespace DBManager.EntityExtensions
                 entities.Configuration.LazyLoadingEnabled = false;
                 
                 Specification tempEntry = entities.Specifications.Include(spec => spec.SpecificationVersions)
-                                                                .Include(spec => spec.Standard)
-                                                                .Include(spec => spec.Standard.CurrentIssue)
-                                                                .Include(spec => spec.Standard.StandardIssues)
                                                                 .Include(spec => spec.Standard.Organization)
                                                                 .Include(spec => spec.ControlPlans)
                                                                 .First(spec => spec.ID == entry.ID);

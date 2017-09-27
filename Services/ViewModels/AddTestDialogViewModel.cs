@@ -1,5 +1,6 @@
 ﻿using DBManager;
 using DBManager.EntityExtensions;
+using Infrastructure;
 using Infrastructure.Wrappers;
 using Prism.Commands;
 using Prism.Mvvm;
@@ -12,7 +13,7 @@ using System.Windows;
 
 namespace Services.ViewModels
 {
-    public class AddTestDialogViewModel : BindableBase
+    public class AddTestDialogViewModel : BindableBase, IRequirementSelector
     {
         private DelegateCommand<Window> _cancel, _confirm;
         private IEnumerable<ReportItemWrapper> _testList;
@@ -32,6 +33,11 @@ namespace Services.ViewModels
                 {
                     parent.DialogResult = true;
                 });
+        }
+
+        public void OnRequirementSelectionChanged()
+        {
+
         }
 
         public string BatchNumber
@@ -63,7 +69,7 @@ namespace Services.ViewModels
                 _reportInstance.SpecificationVersion.Load();
 
                 _testList = _reportInstance.SpecificationVersion.GenerateRequirementList()
-                                                                .Select(req => new ReportItemWrapper(req))
+                                                                .Select(req => new ReportItemWrapper(req, this))
                                                                 .ToList();
 
                 RaisePropertyChanged("BatchNumber");
@@ -92,8 +98,7 @@ namespace Services.ViewModels
                     return null;
 
                 return _reportInstance.SpecificationVersion.Specification.Standard.Name
-                    + " - " + _reportInstance.SpecificationVersion.Name
-                        + ((_reportInstance.SpecificationIssues == null) ? null : " : " + _reportInstance.SpecificationIssues.Issue);
+                    + " - " + _reportInstance.SpecificationVersion.Name;
             }
         }
 

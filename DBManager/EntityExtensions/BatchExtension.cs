@@ -67,6 +67,7 @@ namespace DBManager
 
                 return entities.Samples.Include(smp => smp.LogAuthor)
                                         .Where(smp => smp.BatchID == entry.ID)
+                                        .OrderBy(smp => smp.Date)
                                         .ToList();
             }
         }

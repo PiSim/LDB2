@@ -9,6 +9,7 @@ namespace Infrastructure.Wrappers
 {
     public interface ISelectableRequirement
     {
+        double Duration { get; }
         bool IsSelected { get; set; }
         Requirement RequirementInstance { get; }
     }

@@ -71,13 +71,13 @@ namespace DBManager.EntityExtensions
 
             else 
             {
-                DateTime lastCalibration = entry.GetLastCalibration().Date;
+                CalibrationReport lastCalibration = entry.GetLastCalibration();
 
-                if (lastCalibration == null)
+                if (lastCalibration == null || lastCalibration.Date == null)
                     entry.CalibrationDue = DateTime.Now.Date;
 
                 else
-                    entry.CalibrationDue = entry.GetCalibrationDueDateFrom(lastCalibration);
+                    entry.CalibrationDue = entry.GetCalibrationDueDateFrom(lastCalibration.Date);
             }
 
             return entry.CalibrationDue != oldvalue;

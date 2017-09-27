@@ -24,6 +24,29 @@ namespace DBManager.Services
             }
         }
 
+        public static int GetNextReportNumber()
+        {
+            // Returns the next available ReportNumber
+
+            using (DBEntities entities = new DBEntities())
+            {
+                return entities.Reports
+                                .Max(rep => rep.Number) + 1;
+            }
+        }
+
+        public static int GetNextExternalReportNumber(int year)
+        {
+            // Returns the next available ExternalReport number for a given year
+
+            using (DBEntities entities = new DBEntities())
+            {
+                return entities.ExternalReports
+                                .Where(erep => erep.Year == year)
+                                .Max(erep => erep.Number) + 1;
+            }
+        }
+
         public static Report GetReport(int ID)
         {
             using (DBEntities entities = new DBEntities())
@@ -61,7 +84,6 @@ namespace DBManager.Services
                                         .Include(rep => rep.Batch.Material.MaterialType)
                                         .Include(rep => rep.Batch.Material.Project.Oem)
                                         .Include(rep => rep.Batch.Material.Recipe.Colour)
-                                        .Include(rep => rep.SpecificationVersion.Specification.Standard.CurrentIssue)
                                         .Include(rep => rep.SpecificationVersion.Specification.Standard.Organization)
                                         .Where(rep => true)
                                         .OrderByDescending(rep => rep.Number)

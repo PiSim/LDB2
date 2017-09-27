@@ -14,9 +14,9 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace Reports.ViewModels
+namespace Services.ViewModels
 {
-    internal class ExternalReportCreationDialogViewModel : BindableBase
+    public class ExternalReportCreationDialogViewModel : BindableBase
     {
         private Batch _selectedBatch;
         private DelegateCommand _removeBatch;
@@ -58,7 +58,8 @@ namespace Reports.ViewModels
                 {
                     _externalReportInstance = new ExternalReport();
                     _externalReportInstance.Description = _testDescription;
-                    _externalReportInstance.InternalNumber = _number;
+                    _externalReportInstance.Year = DateTime.Now.Year - 2000;
+                    _externalReportInstance.Number = ReportService.GetNextExternalReportNumber(_externalReportInstance.Year);
                     _externalReportInstance.ExternalNumber = "";
                     _externalReportInstance.MaterialSent = false;
                     _externalReportInstance.RequestDone = false;
@@ -126,13 +127,7 @@ namespace Reports.ViewModels
         {
             get { return _removeBatch; }
         }
-        
-        public Int32 Number 
-        {
-            get { return _number; }
-            set { _number = value; }
-        }
-        
+
         public IEnumerable<Organization> LaboratoriesList 
         {
             get { return OrganizationService.GetOrganizations(OrganizationRoleNames.TestLab); }
