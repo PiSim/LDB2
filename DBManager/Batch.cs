@@ -33,11 +33,12 @@ namespace DBManager
         public Nullable<int> TrialAreaID { get; set; }
         public bool FirstSampleArrived { get; set; }
         public Nullable<int> FirstSampleID { get; set; }
-        public Nullable<bool> BasicReportDone { get; set; }
         public Nullable<int> BasicReportID { get; set; }
         public string TrialScopeText { get; set; }
         public int ArchiveStock { get; set; }
         public bool DoNotTest { get; set; }
+        public Nullable<int> LatestSampleID { get; set; }
+        public Nullable<int> LongTermStock { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<BatchFile> BatchFiles { get; set; }
@@ -55,5 +56,6 @@ namespace DBManager
         public virtual TrialArea TrialArea { get; set; }
         public virtual Report BasicReport { get; set; }
         public virtual Sample FirstSample { get; set; }
+        public virtual Sample LatestSample { get; set; }
     }
 }

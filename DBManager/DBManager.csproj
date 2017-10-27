@@ -146,9 +146,6 @@
     <Compile Include="ControlPlanItem.cs">
       <DependentUpon>LabDB.tt</DependentUpon>
     </Compile>
-    <Compile Include="Currency.cs">
-      <DependentUpon>LabDB.tt</DependentUpon>
-    </Compile>
     <Compile Include="EntityExtensions\AspectExtension.cs" />
     <Compile Include="EntityExtensions\BatchExtension.cs" />
     <Compile Include="EntityExtensions\CalibrationFileExtension.cs" />

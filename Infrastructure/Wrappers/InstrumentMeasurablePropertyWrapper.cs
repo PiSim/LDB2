@@ -1,4 +1,5 @@
 ﻿using DBManager;
+using DBManager.EntityExtensions;
 using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
@@ -11,13 +12,52 @@ namespace Infrastructure.Wrappers
 {
     public class InstrumentMeasurablePropertyWrapper : BindableBase
     {
-        private bool _isSelected;
+        private bool _isModified,
+                    _isSelected;
+        private IEnumerable<MeasurementUnit> _umList;
         private InstrumentMeasurableProperty _instance;
 
         public InstrumentMeasurablePropertyWrapper(InstrumentMeasurableProperty instance) : base()
         {
             _isSelected = false;
+            _isModified = false;
             _instance = instance;
+            _umList = _instance.GetMeasurementUnits();
+        }
+
+        public double CalibrationLowerRangeValue
+        {
+            get { return _instance.CalibrationRangeLowerLimit; }
+            set
+            {
+                _instance.CalibrationRangeLowerLimit = value;
+                _isModified = true;
+            }
+        }
+
+        public double CalibrationUpperRangeValue
+        {
+            get { return _instance.CalibrationRangeUpperLimit; }
+            set
+            {
+                _instance.CalibrationRangeUpperLimit = value;
+                _isModified = true;
+            }
+        }
+
+        public float Division
+        {
+            get { return _instance.Resolution; }
+            set
+            {
+                _instance.Resolution = value;
+                _isModified = true;
+            }
+        }
+
+        public bool IsModified
+        {
+            get { return _isModified; }
         }
 
         public bool IsSelected
@@ -26,21 +66,16 @@ namespace Infrastructure.Wrappers
             set { _isSelected = value; }
         }
 
-        public bool IsUnderControl
+        public double LowerRangeValue
         {
-            get { return _instance.IsUnderControl; }
-        }
-
-        public string CalibrationDueDate
-        {
-            get
+            get { return _instance.RangeLowerLimit; }
+            set
             {
-                if (!_instance.CalibrationDue.HasValue)
-                    return "Mai";
-
-                return _instance.CalibrationDue.Value.ToString("d");
+                _instance.RangeLowerLimit = value;
+                _isModified = true;
             }
         }
+
         public string Name
         {
             get { return _instance.MeasurableQuantity.Name; }
@@ -51,6 +86,39 @@ namespace Infrastructure.Wrappers
             get { return _instance; }
         }
 
+        public float TargetUncertainty
+        {
+            get { return _instance.TargetUncertainty; }
+            set
+            {
+                _instance.TargetUncertainty = value;
+                _isModified = true;
+            }
+        }
+        
+        public MeasurementUnit UM
+        {
+            get { return _umList.First(um => um.ID == _instance.UnitID); }
+            set
+            {
+                _instance.UnitID = value.ID;
+                _isModified = true;
+            }
+        }
 
+        public IEnumerable<MeasurementUnit> UMList
+        {
+            get { return _umList; }
+        }
+
+        public double UpperRangeValue
+        {
+            get { return _instance.RangeUpperLimit; }
+            set
+            {
+                _instance.RangeUpperLimit = value;
+                _isModified = true;
+            }
+        }
     }
 }

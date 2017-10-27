@@ -76,6 +76,8 @@ namespace Materials
                                                 typeof(Views.BatchList));
             _regionManager.RegisterViewWithRegion(RegionNames.SampleArchiveRegion,
                                                 typeof(Views.SampleArchive));
+            _regionManager.RegisterViewWithRegion(RegionNames.SampleLongTermStorageRegion,
+                                                typeof(Views.SampleLongTermStorage));
 
             _regionManager.RegisterViewWithRegion(RegionNames.MainNavigationRegion, 
                                                 typeof(Views.BatchesNavigationItem));

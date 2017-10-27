@@ -138,10 +138,11 @@ namespace Services.ViewModels
 
                     _batchInstance = new Batch()
                     {
-                        BasicReportDone = false,
                         DoNotTest = _doNotTest,
                         FirstSampleArrived = false,
                         MaterialID = tempMaterial.ID,
+                        ArchiveStock = 0,
+                        LongTermStock = 0,
                         Notes = _notes,
                         Number = _batchNumber
                     };

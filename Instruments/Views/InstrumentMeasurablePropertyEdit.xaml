@@ -26,7 +26,7 @@
                     Command="{Binding CancelEditCommand}"
                     Margin="5"/>
         </StackPanel>
-        
+
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
@@ -36,97 +36,31 @@
             </Grid.ColumnDefinitions>
 
             <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
+                <RowDefinition Height="1*"
+                               MaxHeight="40"/>
+                <RowDefinition Height="1*"
+                               MaxHeight="40"/>
+                <RowDefinition Height="1*"
+                               MaxHeight="40"/>
+                <RowDefinition />
             </Grid.RowDefinitions>
-
-            <TextBlock Text="Controllo Metrologico:"
-                       Grid.Column="0"
-                       Grid.Row="0"
-                       Margin="5"
-                       VerticalAlignment="Center"/>
-
-            <CheckBox IsChecked="{Binding IsUnderControl}"
-                      IsEnabled="{Binding EditMode}"
-                      Grid.Column="1"
-                      Grid.Row="0"
-                      HorizontalAlignment="Center"
-                      VerticalAlignment="Center"
-                      Margin="5"/>
-
-            <TextBlock Text="Frequenza controllo:"
-                       Grid.Column="2"
-                       Grid.Row="0"
-                       Margin="5"
-                       VerticalAlignment="Center"/>
-
-            <StackPanel Orientation="Horizontal"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        Grid.Column="3"
-                        Grid.Row="0">
-
-                <TextBox Text="{Binding ControlPeriod}"
-                         IsEnabled="{Binding EditMode}"
-                         HorizontalContentAlignment="Center"
-                         Width="30"
-                         Margin="5"/>
-
-                <TextBlock Text="mesi"
-                           Margin="5"/>
-            </StackPanel>
-
-
-
-            <TextBlock Text="Ultima taratura:"
-                       Grid.Column="0"
-                       Grid.Row="1"
-                       VerticalAlignment="Center"
-                       Margin="5"/>
-
-            <TextBlock Text="{Binding LastCalibration}"
-                       Grid.Column="1"
-                       Grid.Row="1"
-                       HorizontalAlignment="Center"
-                       VerticalAlignment="Center"
-                       Margin="5"/>
-
-            <TextBlock Text="Scadenza Taratura:"
-                       Grid.Column="2"
-                       Grid.Row="1"
-                       VerticalAlignment="Center"
-                       Margin="5"/>
-
-
-            <TextBlock Text="{Binding CalibrationDueDate}"
-                       Grid.Column="3"
-                       Grid.Row="1"
-                       HorizontalAlignment="Center"
-                       VerticalAlignment="Center"
-                       Margin="5"/>
 
             <TextBlock Text="Divisione:"
                        Grid.Column="0"
-                       Grid.Row="2"
                        VerticalAlignment="Center"
                        Margin="5"/>
 
             <TextBox Text="{Binding MeasurablePropertyInstance.Resolution}"
                      IsEnabled="{Binding EditMode}"
                      Grid.Column="1"
-                     Grid.Row="2"
                      Margin="5"
-                     HorizontalAlignment="Center"
+                     HorizontalAlignment="LEft"
                      HorizontalContentAlignment="Center"
                      VerticalAlignment="Center"
                      Width="50"/>
 
             <TextBlock Text="UM:"
                        Grid.Column="2"
-                       Grid.Row="2"
                        VerticalAlignment="Center"
                        Margin="5"/>
 
@@ -135,56 +69,55 @@
                       IsEnabled="{Binding EditMode}"
                       DisplayMemberPath="Symbol"
                       Grid.Column="3"
-                      Grid.Row="2"
-                      HorizontalAlignment="Center"
+                      HorizontalAlignment="Left"
                       VerticalAlignment="Center"
                       Width="50"
                       Margin="5"/>
 
             <TextBlock Text="Range, Lim. inferiore:"
                        Grid.Column="0"
-                       Grid.Row="3"
+                       Grid.Row="1"
                        VerticalAlignment="Center"
                        Margin="5"/>
 
             <TextBox Text="{Binding MeasurablePropertyInstance.RangeLowerLimit}"
                      IsEnabled="{Binding EditMode}"
                      Grid.Column="1"
-                     Grid.Row="3"
+                     Grid.Row="1"
                      Margin="5"
-                     HorizontalAlignment="Center"
+                     HorizontalAlignment="Left"
                      HorizontalContentAlignment="Center"
                      VerticalAlignment="Center"
                      Width="50"/>
 
             <TextBlock Text="Range, Lim. Superiore:"
                        Grid.Column="2"
-                       Grid.Row="3"
+                       Grid.Row="1"
                        VerticalAlignment="Center"
                        Margin="5"/>
 
             <TextBox Text="{Binding MeasurablePropertyInstance.RangeUpperLimit}"
                      IsEnabled="{Binding EditMode}"
                      Grid.Column="3"
-                     Grid.Row="3"
+                     Grid.Row="1"
                      Margin="5"
-                     HorizontalAlignment="Center"
+                     HorizontalAlignment="Left"
                      HorizontalContentAlignment="Center"
                      VerticalAlignment="Center"
                      Width="50"/>
 
             <TextBlock Text="Incertezza target:"
                        Grid.Column="0"
-                       Grid.Row="4"
+                       Grid.Row="2"
                        VerticalAlignment="Center"
                        Margin="5"/>
 
             <TextBox Text="{Binding MeasurablePropertyInstance.TargetUncertainty}"
                      IsEnabled="{Binding EditMode}"
                      Grid.Column="1"
-                     Grid.Row="4"
+                     Grid.Row="2"
                      Margin="5"
-                     HorizontalAlignment="Center"
+                     HorizontalAlignment="Left"
                      HorizontalContentAlignment="Center"
                      VerticalAlignment="Center"
                      Width="50"/>

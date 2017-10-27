@@ -1,4 +1,4 @@
-﻿<Window x:Class="Instruments.Views.InstrumentCreationDialog"
+﻿    <Window x:Class="Instruments.Views.InstrumentCreationDialog"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -7,7 +7,7 @@
         xmlns:prism="http://prismlibrary.com/"
         prism:ViewModelLocator.AutoWireViewModel="True"
         mc:Ignorable="d"
-        Title="Nuovo Strumento" Height="325" Width="500"
+        Title="Nuovo Strumento" Height="490" Width="500"
         ResizeMode="NoResize">
     <Grid>
         <Grid.ColumnDefinitions>
@@ -24,14 +24,20 @@
             <RowDefinition/>
             <RowDefinition/>
             <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition Height="2*"/>
+            <RowDefinition/>
         </Grid.RowDefinitions>
 
         <Label Content="Codice:"
                Grid.Column="0"
                Grid.Row="0"
+               VerticalAlignment="Center"
                Margin="5"/>
 
-        <TextBox Text="{Binding Code, Mode=TwoWay}"
+        <TextBox Text="{Binding Code, 
+                                Mode=TwoWay,
+                                UpdateSourceTrigger=PropertyChanged}"
                  Grid.Column="1"
                  Grid.ColumnSpan="3"
                  Grid.Row="0"
@@ -50,31 +56,10 @@
                   Grid.Row="1"
                   Margin="5"/>
 
-        <Label Content="Controllo metrologico:"
-               Grid.Column="0"
-               Grid.Row="2"
-               Margin="5"/>
-
-        <CheckBox IsChecked="{Binding IsUnderControl, Mode=TwoWay}"
-                  Grid.Column="1"
-                  Grid.Row="2"
-                  HorizontalAlignment="Center"
-                  VerticalAlignment="Center"/>
-
-        <Label Content="Periodo(mesi):"
-               Grid.Column="2"
-               Grid.Row="2"
-               Margin="5"/>
-
-        <TextBox Text="{Binding ControlPeriod, Mode=TwoWay}"
-                 IsEnabled="{Binding IsUnderControl}"
-                 Grid.Column="3"
-                 Grid.Row="2"
-                 Margin="5"/>
-
         <Label Content="Produttore:"
                Grid.Column="0"
-               Grid.Row="3"
+               Grid.Row="2"
+               VerticalAlignment="Center"
                Margin="5"/>
 
         <ComboBox ItemsSource="{Binding ManufacturerList}"
@@ -82,43 +67,113 @@
                   DisplayMemberPath="Name"
                   Grid.Column="1"
                   Grid.ColumnSpan="3"
+                  Grid.Row="2"
+                  Margin="5"/>
+
+        <Label Content="Area d'uso:"
+               Grid.Column="0"
+               Grid.Row="3"
+               VerticalAlignment="Center"
+               Margin="5"/>
+
+        <ComboBox ItemsSource="{Binding AreaList}"
+                  SelectedItem="{Binding SelectedArea}"
+                  DisplayMemberPath="Name"
+                  Grid.Column="1"
+                  Grid.ColumnSpan="3"
                   Grid.Row="3"
+                  Margin="5"/>
+
+        <Label Content="Controllo metrologico:"
+               Grid.Column="0"
+               Grid.Row="4"
+               Margin="5"/>
+
+        <CheckBox IsChecked="{Binding IsUnderControl, Mode=TwoWay}"
+                  Grid.Column="1"
+                  Grid.Row="4"
+                  HorizontalAlignment="Center"
+                  VerticalAlignment="Center"/>
+
+        <Label Content="Periodo(mesi):"
+               Grid.Column="2"
+               Grid.Row="4"
+               Margin="5"/>
+
+        <TextBox Text="{Binding ControlPeriod, 
+                                Mode=TwoWay,
+                                UpdateSourceTrigger=PropertyChanged}"
+                 IsEnabled="{Binding IsUnderControl}"
+                 Grid.Column="3"
+                 Grid.Row="4"
+                 Margin="5"/>
+
+        <Label Content="Responsabile Controllo:"
+               Grid.Column="0"
+               Grid.Row="5"
+               VerticalAlignment="Center"
+               Margin="5"/>
+
+        <ComboBox ItemsSource="{Binding CalibrationLabList}"
+                  SelectedItem="{Binding SelectedCalibrationLab}"
+                  IsEnabled="{Binding IsUnderControl}"
+                  DisplayMemberPath="Name"
+                  Grid.Column="1"
+                  Grid.ColumnSpan="3"
+                  Grid.Row="5"
                   Margin="5"/>
 
         <Label Content="Modello:"
                Grid.Column="0"
-               Grid.Row="4"
+               Grid.Row="6"
+               VerticalAlignment="Center"
                Margin="5"/>
 
         <TextBox Text="{Binding Model, Mode=TwoWay}"
                  Grid.Column="1"
                  Grid.ColumnSpan="3"
-                 Grid.Row="4"
+                 Grid.Row="6"
                  Margin="5"/>
 
         <Label Content="Numero di serie:"
                Grid.Column="0"
-               Grid.Row="5"
+               Grid.Row="7"
+               VerticalAlignment="Center"
                Margin="5"/>
 
         <TextBox Text="{Binding SerialNumber, Mode=TwoWay}"
                  Grid.Column="1"
                  Grid.ColumnSpan="3"
-                 Grid.Row="5"
+                 Grid.Row="7"
+                 Margin="5"/>
+
+        <Label Content="Note:"
+               Grid.Column="0"
+               Grid.Row="8"
+               Margin="5"/>
+
+        <TextBox Text="{Binding Notes,
+                                UpdateSourceTrigger=PropertyChanged}"
+                 MaxLength="100"
+                 AcceptsReturn="True"
+                 TextWrapping="Wrap"
+                 Grid.Column="1"
+                 Grid.ColumnSpan="3"
+                 Grid.Row="8"
                  Margin="5"/>
 
         <Button Content="Annulla"
                 Command="{Binding CancelCommand}"
                 CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
                 Grid.Column="2"
-                Grid.Row="6"
+                Grid.Row="9"
                 Margin="5"/>
 
         <Button Content="Ok"
                 Command="{Binding ConfirmCommand}"
                 CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
                 Grid.Column="3"
-                Grid.Row="6"
+                Grid.Row="9"
                 Margin="5"/>
     </Grid>
 </Window>

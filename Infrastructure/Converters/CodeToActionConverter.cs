@@ -15,8 +15,8 @@ namespace Infrastructure.Converters
                                                                     {"A", "Arrivato" },
                                                                     {"F", "Finito" },
                                                                     {"B", "Buttato" },
-                                                                    {"S", "Spedito" },
-                                                                    {"M", "Masterizzato" }
+                                                                    {"C", "Portato in Cotex" },
+                                                                    {"R", "Ritornato da Cotex" }
                                                                 };
 
         public CodeToActionConverter()

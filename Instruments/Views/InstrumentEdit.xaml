@@ -7,7 +7,7 @@
              xmlns:prism="http://prismlibrary.com/"
              prism:ViewModelLocator.AutoWireViewModel="True"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="600" d:DesignWidth="700">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="35"/>
@@ -354,7 +354,15 @@
             </TabItem>
             <TabItem Header="Caratteristiche">
                 <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition MaxWidth="300"/>
+                        <ColumnDefinition MaxWidth="300"/>
+                        <ColumnDefinition MaxWidth="400"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="35"/>
+                        <RowDefinition Height="35"/>
                         <RowDefinition Height="35"/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
@@ -366,8 +374,69 @@
                               HorizontalAlignment="Left"
                               Margin="5"/>
 
+                    <CheckBox IsChecked="{Binding IsUnderControl}"
+                              IsEnabled="{Binding EditMode}"
+                              Content="Sotto controllo metrologico"
+                              Grid.Row="1"
+                              VerticalAlignment="Center"
+                              HorizontalAlignment="Left"
+                              Margin="5"/>
+
+                    <StackPanel Orientation="Horizontal"
+                                Grid.Column="1"
+                                Grid.Row="1"
+                                VerticalAlignment="Center">
+                        <TextBlock Text="Intervallo di controllo:"
+                                   Margin="5"/>
+                        <TextBox Text="{Binding CalibrationInterval,
+                                                UpdateSourceTrigger=PropertyChanged}"
+                                 IsEnabled="{Binding EditMode}"
+                                 Width="30"
+                                 Margin="5"/>
+                        <TextBlock Text="mesi"
+                                   Margin="5"/>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal"
+                                Grid.Column="2"
+                                Grid.Row="1"
+                                VerticalAlignment="Center">
+                        <TextBlock Text="Responsabile controllo:"
+                                   Margin="5"/>
+                        <ComboBox ItemsSource="{Binding CalibrationLabList}"
+                                  SelectedItem="{Binding SelectedCalibrationLab}"
+                                  IsEnabled="{Binding EditMode}"
+                                  DisplayMemberPath="Name"
+                                  Width="150"
+                                  Margin="5"/>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal"
+                                Grid.Column="0"
+                                Grid.Row="2">
+                        <TextBlock Text="Ultimo controllo:"
+                                   Margin="5"/>
+                        <TextBlock Text="{Binding LastCalibrationDate,
+                                                  Mode=OneWay,
+                                                  StringFormat=d,
+                                                  ConverterCulture=it-IT}"
+                                   Margin="5"/>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal"
+                                Grid.Column="1"
+                                Grid.Row="2">
+                        <TextBlock Text="Prossimo controllo:"
+                                   Margin="5"/>
+                        <TextBlock Text="{Binding CalibrationDueDate,
+                                                  Mode=OneWay}"
+                                   Margin="5"/>
+                    </StackPanel>
+                    
                     <GroupBox Header="Grandezze Associate"
-                              Grid.Row="1">
+                              Grid.Column="0"
+                              Grid.ColumnSpan="4"
+                              Grid.Row="3">
                         <ContentControl prism:RegionManager.RegionName="{Binding InstrumentEditMetrologyRegionName}"
                                         Grid.Row="1"/>
                     </GroupBox>

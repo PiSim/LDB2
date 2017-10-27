@@ -264,6 +264,7 @@ namespace Reports.ViewModels
                 RaisePropertyChanged("Specification");
                 RaisePropertyChanged("SpecificationVersion");
                 RaisePropertyChanged("TestList");
+                RaisePropertyChanged("TotalDuration");
             }
         }
 
@@ -377,6 +378,14 @@ namespace Reports.ViewModels
             {
                 _testList = value;
                 RaisePropertyChanged("TestList");
+            }
+        }
+
+        public double TotalDuration
+        {
+            get
+            {
+                return (_instance == null) ? 0 : _instance.TotalDuration;
             }
         }
     }

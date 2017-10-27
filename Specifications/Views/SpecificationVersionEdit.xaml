@@ -55,140 +55,155 @@
                      Width="150"/>
         </Grid>
         
-        <TabControl Grid.Row="2">
-            <TabItem Header="Requisiti">
-                <DataGrid x:Name="RequirementGrid"
-                          ItemsSource="{Binding RequirementList}"
-                          AutoGenerateColumns="False">
-                    <DataGrid.Columns>
+        <DataGrid x:Name="RequirementGrid"
+                  ItemsSource="{Binding RequirementList}"
+                  AutoGenerateColumns="False"
+                  CanUserAddRows="False"
+                  CanUserDeleteRows="False"
+                  GridLinesVisibility="Horizontal"
+                  Grid.Row="2">
+            <DataGrid.Columns>
 
-                        <DataGridCheckBoxColumn Header="Override"
-                                                Binding="{Binding IsOverride, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                                Visibility="{Binding DataContext.IsOverrideVisibility, Source={x:Reference dummyElement}}"/>
+                <DataGridCheckBoxColumn Header="Override"
+                                    Binding="{Binding IsOverride, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                    Visibility="{Binding DataContext.IsOverrideVisibility, Source={x:Reference dummyElement}}"/>
 
-                        <DataGridTextColumn Header="Prova"
-                                            Binding="{Binding Property}"
-                                            IsReadOnly="True"
-                                            Width="150"/>
-                    
-                        <DataGridTemplateColumn Width="150">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <DataGrid ItemsSource="{Binding SubRequirements}"
-                                              AutoGenerateColumns="False"
-                                              HeadersVisibility="None"
-                                              CanUserAddRows="False"
-                                              CanUserDeleteRows="False"
-                                              GridLinesVisibility="Horizontal"
-                                              ClipToBounds="True"
-                                              HorizontalScrollBarVisibility="Hidden"
-                                              RowHeight="30">
-                                        <DataGrid.Columns>
-                                            <DataGridTextColumn Binding="{Binding SubMethod.Name}"
-                                                                IsReadOnly="True"
-                                                                Width="*">
-                                            </DataGridTextColumn>
-                                        </DataGrid.Columns>
-                                    </DataGrid>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                    
-                        <DataGridTemplateColumn Header="Requisito"
-                                                Width="100">
-                            <DataGridTemplateColumn.CellStyle>
-                                <Style TargetType="{x:Type DataGridCell}">
-                                    <Setter Property="IsEnabled"
-                                            Value="{Binding DataContext.EditMode, Source={x:Reference dummyElement}}"/>
-                                </Style>
-                            </DataGridTemplateColumn.CellStyle>
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <DataGrid ItemsSource="{Binding SubRequirements}"
-                                              IsEnabled="{Binding CanModify}"
-                                              Name="RequiredValuesGrid"
-                                              AutoGenerateColumns="False"
-                                              HeadersVisibility="None"
-                                              CanUserAddRows="False"
-                                              CanUserDeleteRows="False"
-                                              GridLinesVisibility="Horizontal"
-                                              ClipToBounds="True"
-                                              HorizontalScrollBarVisibility="Hidden"
-                                              RowHeight="30">
-                                        <DataGrid.Columns>
-                                            <DataGridTextColumn Binding="{Binding RequiredValue}"
-                                                                Width="*">
-                                                <DataGridTextColumn.EditingElementStyle>
-                                                    <Style TargetType="{x:Type TextBox}">
-                                                        <Setter Property="MaxLength"
-                                                                Value="45"/>
-                                                    </Style>
-                                                </DataGridTextColumn.EditingElementStyle>
-                                            </DataGridTextColumn>
-                                        </DataGrid.Columns>
-                                    </DataGrid>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
+                <DataGridTextColumn Header="Prova"
+                                Binding="{Binding Property}"
+                                IsReadOnly="True"
+                                Width="150"/>
 
-                        <DataGridTemplateColumn Header="UM"
-                                            Width="50">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <DataGrid ItemsSource="{Binding SubRequirements}"
-                                              AutoGenerateColumns="False"
-                                              HeadersVisibility="None"
-                                              CanUserAddRows="False"
-                                              CanUserDeleteRows="False"
-                                              GridLinesVisibility="Horizontal"
-                                              ClipToBounds="True"
-                                              HorizontalScrollBarVisibility="Hidden"
-                                              RowHeight="30">
-                                        <DataGrid.Columns>
-                                            <DataGridTextColumn Binding="{Binding SubMethod.UM}"
-                                                                IsReadOnly="True"
-                                                                Width="*"/>
-                                        </DataGrid.Columns>
-                                    </DataGrid>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="150">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <DataGrid ItemsSource="{Binding SubRequirements}"
+                                    AutoGenerateColumns="False"
+                                    HeadersVisibility="None"
+                                    CanUserAddRows="False"
+                                    CanUserDeleteRows="False"
+                                    GridLinesVisibility="Horizontal"
+                                    ClipToBounds="True"
+                                    HorizontalScrollBarVisibility="Hidden"
+                                    RowHeight="30"
+                                      Margin="-2">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Binding="{Binding SubMethod.Name}"
+                                                    IsReadOnly="True"
+                                                    Width="*">
+                                    </DataGridTextColumn>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
 
-                        <DataGridTextColumn Header="Note"
-                                            Binding="{Binding Notes}"
-                                            IsReadOnly="{Binding ReadOnly}"
-                                            Width="100">
-                            <DataGridTextColumn.CellStyle>
-                                <Style TargetType="{x:Type DataGridCell}">
-                                    <Setter Property="IsEnabled"
-                                            Value="{Binding DataContext.EditMode, 
-                                            Source={x:Reference dummyElement}}"/>
-                                </Style>
-                            </DataGridTextColumn.CellStyle>
-                            <DataGridTextColumn.EditingElementStyle>
-                                <Style TargetType="{x:Type TextBox}">
-                                    <Setter Property="MaxLength"
-                                            Value="100"/>
-                                </Style>
-                            </DataGridTextColumn.EditingElementStyle>
-                        </DataGridTextColumn>
+                <DataGridTemplateColumn Header="Requisito"
+                                    Width="100">
+                    <DataGridTemplateColumn.CellStyle>
+                        <Style TargetType="{x:Type DataGridCell}">
+                            <Setter Property="IsEnabled"
+                                Value="{Binding DataContext.EditMode, Source={x:Reference dummyElement}}"/>
+                        </Style>
+                    </DataGridTemplateColumn.CellStyle>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <DataGrid ItemsSource="{Binding SubRequirements}"
+                                    IsEnabled="{Binding CanModify}"
+                                    Name="RequiredValuesGrid"
+                                    AutoGenerateColumns="False"
+                                    HeadersVisibility="None"
+                                    CanUserAddRows="False"
+                                    CanUserDeleteRows="False"
+                                    GridLinesVisibility="Horizontal"
+                                    ClipToBounds="True"
+                                    HorizontalScrollBarVisibility="Hidden"
+                                    RowHeight="30"
+                                      Margin="-2">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Binding="{Binding RequiredValue}"
+                                                    Width="*">
+                                        <DataGridTextColumn.EditingElementStyle>
+                                            <Style TargetType="{x:Type TextBox}">
+                                                <Setter Property="MaxLength"
+                                                    Value="45"/>
+                                            </Style>
+                                        </DataGridTextColumn.EditingElementStyle>
+                                    </DataGridTextColumn>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
 
-                        <DataGridTextColumn Header="Metodo"
-                                            Binding="{Binding Method}"
-                                            IsReadOnly="True"
-                                            Width="Auto">
-                            <DataGridTextColumn.ElementStyle>
-                                <Style TargetType="{x:Type TextBlock}">
-                                    <Setter Property="VerticalAlignment"
-                                            Value="Center"/>
-                                </Style>
-                            </DataGridTextColumn.ElementStyle>
-                        </DataGridTextColumn>
+                <DataGridTemplateColumn Header="UM"
+                                Width="50">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <DataGrid ItemsSource="{Binding SubRequirements}"
+                                    AutoGenerateColumns="False"
+                                    HeadersVisibility="None"
+                                    CanUserAddRows="False"
+                                    CanUserDeleteRows="False"
+                                    GridLinesVisibility="Horizontal"
+                                    ClipToBounds="True"
+                                    HorizontalScrollBarVisibility="Hidden"
+                                    RowHeight="30"
+                                      Margin="-2">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Binding="{Binding SubMethod.UM}"
+                                                    IsReadOnly="True"
+                                                    Width="*"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
 
-                    </DataGrid.Columns>
-                </DataGrid>
-            </TabItem>
-        </TabControl>
-            
+                <DataGridTextColumn Header="Note"
+                                Binding="{Binding Notes}"
+                                IsReadOnly="{Binding ReadOnly}"
+                                Width="100">
+                    <DataGridTextColumn.CellStyle>
+                        <Style TargetType="{x:Type DataGridCell}">
+                            <Setter Property="IsEnabled"
+                                Value="{Binding DataContext.EditMode, 
+                                Source={x:Reference dummyElement}}"/>
+                        </Style>
+                    </DataGridTextColumn.CellStyle>
+                    <DataGridTextColumn.EditingElementStyle>
+                        <Style TargetType="{x:Type TextBox}">
+                            <Setter Property="MaxLength"
+                                Value="100"/>
+                        </Style>
+                    </DataGridTextColumn.EditingElementStyle>
+                </DataGridTextColumn>
+
+                <DataGridTextColumn Header="Metodo"
+                                Binding="{Binding Method}"
+                                IsReadOnly="True"
+                                Width="Auto">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="VerticalAlignment"
+                                Value="Center"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Content="Elimina"
+                                    Command="{Binding Source={x:Reference dummyElement},
+                                                      Path=DataContext.DeleteRequirementCommand}"
+                                    CommandParameter="{Binding RequirementInstance}"
+                                    Height="20"
+                                    Margin="5"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                
+            </DataGrid.Columns>
+        </DataGrid>
     </Grid>
 </UserControl>

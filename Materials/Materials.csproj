@@ -134,6 +134,7 @@
     <Compile Include="ViewModels\MaterialInfoMainViewModel.cs" />
     <Compile Include="ViewModels\SampleArchiveViewModel.cs" />
     <Compile Include="ViewModels\SampleLogViewModel.cs" />
+    <Compile Include="ViewModels\SampleLongTermStorageViewModel.cs" />
     <Compile Include="Views\AspectDetail.xaml.cs">
       <DependentUpon>AspectDetail.xaml</DependentUpon>
     </Compile>
@@ -187,6 +188,9 @@
     </Compile>
     <Compile Include="Views\SampleLog.xaml.cs">
       <DependentUpon>SampleLog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SampleLongTermStorage.xaml.cs">
+      <DependentUpon>SampleLongTermStorage.xaml</DependentUpon>
     </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -303,6 +307,10 @@
     <Page Include="Views\SampleLog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\SampleLongTermStorage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

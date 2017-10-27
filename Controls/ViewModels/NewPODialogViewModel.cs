@@ -13,11 +13,9 @@ namespace Controls.ViewModels
 {
     public class NewPODialogViewModel : BindableBase 
     {
-        private Currency _selectedCurrency;
         private DateTime _date;
         private DelegateCommand<Window> _cancel, _confirm;
         private float _total;
-        private IEnumerable<Currency> _currencyList;
         private IEnumerable<Organization> _organizationList;
         private Organization _selectedOrganization;
         private string _number;
@@ -25,8 +23,6 @@ namespace Controls.ViewModels
         public NewPODialogViewModel() : base()
         {
             _date = DateTime.Now;
-            _currencyList = DataService.GetCurrencies();
-            _selectedCurrency = _currencyList.First(cur => cur.Code == "EUR");
             _organizationList = OrganizationService.GetOrganizations(OrganizationRoleNames.TestLab);
 
             _cancel = new DelegateCommand<Window>(
@@ -52,12 +48,7 @@ namespace Controls.ViewModels
         {
             get { return _confirm; }
         }
-
-        public IEnumerable<Currency> CurrencyList
-        {
-            get { return _currencyList; }
-        }
-
+        
         public DateTime Date
         {
             get { return _date; }
@@ -80,15 +71,6 @@ namespace Controls.ViewModels
             get
             {
                 return _organizationList;
-            }
-        }
-
-        public Currency SelectedCurrency
-        {
-            get { return _selectedCurrency; }
-            set
-            {
-                _selectedCurrency = value;
             }
         }
 

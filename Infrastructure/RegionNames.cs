@@ -47,10 +47,13 @@ namespace Infrastructure
         public static string OrganizationRoleManagementRegion { get { return "OrganizationRoleManagementRegion"; } }
         public static string ProjectBatchListRegion { get { return "ProjectBatchListRegion"; } }
         public static string ProjectReportListRegion { get { return "ProjectReportListRegion"; } }
+        public static string ProjectStatRegion { get { return "ProjectStatRegion"; } }
         public static string SampleArchiveRegion { get { return "SampleArchiveRegion"; } }
+        public static string SampleLongTermStorageRegion { get { return "SampleLongTermStorageRegion"; } }
         public static string SpecificationEditFileRegion { get { return "SpecificationEditFileRegion"; } }
         public static string SpecificationReportListRegion { get { return "SpecificationReportListRegion"; } }
         public static string SpecificationVersionEditRegion { get { return "SpecificationVersionEditRegion"; } }
+        public static string SpecificationVersionTestListEditRegion { get { return "SpecificationVersionTestListEditRegion"; } }
         public static string StatusbarRegion { get { return "StatusBarRegion"; } }
         public static string TaskEditProjectDetailsRegion { get { return "TaskEditProjectDetailsRegion"; } }
         public static string TaskMainListRegion { get { return "TaskMainListRegion"; } }

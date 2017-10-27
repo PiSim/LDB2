@@ -19,6 +19,14 @@ namespace Admin.ViewModels
     {
         private DelegateCommand _newOrganizationRole, _newPersonRole, _newUserRole, _runMethod;
         private EventAggregator _eventAggregator;
+        private readonly Dictionary<string, int> _stockModifiers = new Dictionary<string, int>()
+                                                                {
+                                                                    {"A", 1 },
+                                                                    {"B", -1 },
+                                                                    {"F", -1 },
+                                                                    {"M", -1 },
+                                                                    {"S", -1 }
+                                                                };
         private string _name;
 
         public AdminMainViewModel(EventAggregator eventAggregator) : base()
@@ -49,15 +57,9 @@ namespace Admin.ViewModels
             _runMethod = new DelegateCommand(
                 () =>
                 {
-                    using (DBEntities entities = new DBEntities())
-                    {
-                        foreach (ExternalReport erep in entities.ExternalReports)
-                        {
-                            erep.Year = erep.InternalNumber / 1000;
-                            erep.Number = erep.InternalNumber % (erep.Year * 1000);
-                        }
-                        entities.SaveChanges();
-                    }
+                    _eventAggregator.GetEvent<ProjectCostUpdateRequested>()
+                                    .Publish();
+                        
                 } );
         }
 
@@ -123,6 +125,19 @@ namespace Admin.ViewModels
         public string UnitOfMeasurementManagementRegionName
         {
             get { return RegionNames.UnitOfMeasurementManagementRegion; }
+        }
+
+        private void mtd()
+        {
+            //IEnumerable<Batch> btcList = entities.Batches.ToList();
+
+            //foreach (Batch btc in btcList)
+            //{
+            //    Sample tmp = btc.Samples.Where(smp => smp.Code == "A").OrderByDescending(smp => smp.Date).FirstOrDefault();
+            //    btc.LatestSampleID = tmp?.ID;
+            //}
+
+            //entities.SaveChanges();
         }
     }
 }

@@ -23,16 +23,13 @@ namespace DBManager
     
         public int ID { get; set; }
         public string Number { get; set; }
-        public float Total { get; set; }
-        public System.DateTime OrderDate { get; set; }
         public int organizationID { get; set; }
-        public int CurrencyID { get; set; }
+        public double Total { get; set; }
     
         public virtual Organization Organization { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PurchaseOrderFile> PoFile { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ExternalReport> ExternalReports { get; set; }
-        public virtual Currency Currency { get; set; }
     }
 }

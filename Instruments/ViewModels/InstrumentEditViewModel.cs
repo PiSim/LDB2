@@ -3,11 +3,13 @@ using DBManager.EntityExtensions;
 using DBManager.Services;
 using Infrastructure;
 using Infrastructure.Events;
+using Infrastructure.Wrappers;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -32,11 +34,13 @@ namespace Instruments.ViewModels
                                 _save,
                                 _startEdit;
         private EventAggregator _eventAggregator;
+        private IEnumerable<InstrumentMeasurablePropertyWrapper> _propertyList;
         private IEnumerable<InstrumentType> _instrumentTypeList;
         private IEnumerable<InstrumentUtilizationArea> _areaList;
-        private IEnumerable<Organization> _manufacturerList;
+        private IEnumerable<Organization> _manufacturerList,
+                                        _calibrationLabList;
         private Instrument _instance;
-        private InstrumentMeasurableProperty _selectedMeasurableProperty;
+        private InstrumentMeasurablePropertyWrapper _selectedMeasurableProperty;
         private InstrumentUtilizationArea _selectedArea;
         private Method _selectedAssociated, _selectedUnassociated;
         private Property _filterProperty;
@@ -50,6 +54,7 @@ namespace Instruments.ViewModels
             _areaList = InstrumentService.GetUtilizationAreas();
             _instrumentTypeList = InstrumentService.GetInstrumentTypes();
             _manufacturerList = OrganizationService.GetOrganizations(OrganizationRoleNames.Manufacturer);
+            _calibrationLabList = OrganizationService.GetOrganizations(OrganizationRoleNames.CalibrationLab);
             
             _addCalibration = new DelegateCommand(
                 () =>
@@ -110,10 +115,8 @@ namespace Instruments.ViewModels
                         {
                             CalibrationRangeLowerLimit = 0,
                             CalibrationRangeUpperLimit = 0,
-                            ControlPeriod = 0,
                             Description = "",
                             InstrumentID = _instance.ID,
-                            IsUnderControl = false,
                             MeasurableQuantityID = propertyDialog.QuantityInstance.ID,
                             RangeLowerLimit = 0,
                             RangeUpperLimit = 0,
@@ -142,7 +145,12 @@ namespace Instruments.ViewModels
                 () =>
                 {
                     _instance.Update();
+                    foreach (InstrumentMeasurablePropertyWrapper impw in _propertyList.Where(imp => imp.IsModified))
+                        impw.PropertyInstance.Update();
+
                     EditMode = false;
+                    _eventAggregator.GetEvent<InstrumentListUpdateRequested>()
+                                    .Publish();
                 },
                 () => _editMode);
 
@@ -172,6 +180,7 @@ namespace Instruments.ViewModels
                             });
 
             #endregion
+
 
         }
 
@@ -205,6 +214,39 @@ namespace Instruments.ViewModels
             get { return _instance.GetAssociatedMethods(); }
         }
 
+        public string CalibrationDueDate
+        {
+            get
+            {
+                if (_instance == null || _instance.CalibrationDueDate == null)
+                    return "//";
+
+                return _instance?.CalibrationDueDate.Value.ToShortDateString();
+            }
+        }
+
+        public int CalibrationInterval
+        {
+            get
+            {
+                if (_instance == null)
+                    return 0;
+
+                return _instance.CalibrationInterval;
+            }
+            set
+            {
+                _instance.CalibrationInterval = value;
+                if (_instance.UpdateCalibrationDueDate())
+                    RaisePropertyChanged("CalibrationDueDate");
+            }
+        }
+
+        public IEnumerable<Organization> CalibrationLabList
+        {
+            get { return _calibrationLabList; }
+        }
+
         public IEnumerable<CalibrationReport> CalibrationReportList
         {
             get 
@@ -214,6 +256,20 @@ namespace Instruments.ViewModels
                     
                 return _instance.GetCalibrationReports(); 
             }
+        }
+
+
+        public bool CanEditCalibrationParam
+        {
+            get
+            {
+                return EditMode && IsUnderControl;
+            }
+        }
+
+        public bool CanModify
+        {
+            get { return !_editMode; }
         }
 
         public bool CanModifyInstrumentInfo
@@ -228,6 +284,7 @@ namespace Instruments.ViewModels
             {
                 _editMode = value;
                 RaisePropertyChanged("EditMode");
+                RaisePropertyChanged("CanModify");
 
                 _save.RaiseCanExecuteChanged();
                 _startEdit.RaiseCanExecuteChanged();
@@ -293,11 +350,6 @@ namespace Instruments.ViewModels
             get { return RegionNames.InstrumentEditCalibrationEditRegion; }
         }
 
-        public string InstrumentEditMeasurablePropertyEditRegionName
-        {
-            get { return RegionNames.InstrumentEditMeasurablePropertyEditRegion; }
-        }
-
         public string InstrumentEditMetrologyRegionName
         {
             get { return RegionNames.InstrumentEditMetrologyRegion; }
@@ -312,6 +364,9 @@ namespace Instruments.ViewModels
                 _instance.Load();
 
                 _selectedArea = _areaList.FirstOrDefault(iua => iua.ID == _instance.UtilizationAreaID);
+                _propertyList = _instance.GetMeasurableProperties()
+                                        .Select(imp => new InstrumentMeasurablePropertyWrapper(imp))
+                                        .ToList();
 
                 EditMode = false;
                 SelectedAssociatedMethod = null;
@@ -320,6 +375,8 @@ namespace Instruments.ViewModels
                 SelectedUnassociatedMethod = null;
 
                 RaisePropertyChanged("AssociatedMethods");
+                RaisePropertyChanged("CalibrationDueDate");
+                RaisePropertyChanged("CalibrationInterval");
                 RaisePropertyChanged("CalibrationReportList");
                 RaisePropertyChanged("CalibrationTabVisible");
                 RaisePropertyChanged("EventList");
@@ -331,6 +388,9 @@ namespace Instruments.ViewModels
                 RaisePropertyChanged("InstrumentSerialNumber");
                 RaisePropertyChanged("InstrumentType");
                 RaisePropertyChanged("IsInService");
+                RaisePropertyChanged("IsUnderControl");
+                RaisePropertyChanged("LastCalibrationDate");
+                RaisePropertyChanged("SelectedCalibrationLab");
                 RaisePropertyChanged("SelectedArea");
                 RaisePropertyChanged("UnassociatedMethods");
             }
@@ -344,7 +404,7 @@ namespace Instruments.ViewModels
                     return null;
 
                 else
-                    return _manufacturerList.First(manuf => manuf.ID == _instance.Manufacturer.ID);
+                    return _manufacturerList.FirstOrDefault(manuf => manuf.ID == _instance.manufacturerID);
             }
 
             set
@@ -353,13 +413,13 @@ namespace Instruments.ViewModels
                     return;
 
                 else
-                    _instance.Manufacturer = value;
+                    _instance.manufacturerID = value.ID;
             }
         }
 
-        public IEnumerable<InstrumentMeasurableProperty> InstrumentMeasurablePropertyList
+        public IEnumerable<InstrumentMeasurablePropertyWrapper> InstrumentMeasurablePropertyList
         {
-            get { return _instance.GetMeasurableProperties(); }
+            get { return _propertyList; }
         }
 
         public string InstrumentModel
@@ -410,7 +470,7 @@ namespace Instruments.ViewModels
                     return null;
 
                 else
-                    return _instrumentTypeList.First(itt => itt.ID == _instance.InstrumentType.ID);
+                    return _instrumentTypeList.First(itt => itt.ID == _instance.InstrumentTypeID);
             }
 
             set
@@ -418,7 +478,7 @@ namespace Instruments.ViewModels
                 if (_instance == null)
                     return;
                 else
-                    _instance.InstrumentType = value;
+                    _instance.InstrumentTypeID = value.ID;
             }
         }
 
@@ -441,17 +501,39 @@ namespace Instruments.ViewModels
             {
                 _instance.IsInService = value;
                 if (!value)
-                    foreach (InstrumentMeasurableProperty imp in InstrumentMeasurablePropertyList)
-                    {
-                        imp.IsUnderControl = false;
-                        imp.UpdateCalibrationDueDate();
-                    }
+                    IsUnderControl = false;
             }
         }
 
         private bool IsInstrumentAdmin
         {
             get { return _principal.IsInRole(UserRoleNames.InstrumentAdmin); }
+        }
+
+        public bool IsUnderControl
+        {
+            get
+            {
+                return _instance == null ? false : _instance.IsUnderControl;
+            }
+            set
+            {
+                _instance.IsUnderControl = value;
+                _instance.UpdateCalibrationDueDate();
+                RaisePropertyChanged("CalibrationDueDate");
+                RaisePropertyChanged("IsUnderControl");
+            }
+
+        }
+
+        public string LastCalibrationDate
+        {
+            get
+            {
+                DateTime? lastCal = _instance?.GetLastCalibration()?.Date;
+
+                return (lastCal != null) ? lastCal.Value.ToShortDateString() : "Mai";
+            }
         }
 
         public IEnumerable<InstrumentMaintenanceEvent> MaintenanceEventList
@@ -501,19 +583,12 @@ namespace Instruments.ViewModels
             }
         }
 
-        public InstrumentMeasurableProperty SelectedInstrumentMeasurableProperty
+        public InstrumentMeasurablePropertyWrapper SelectedInstrumentMeasurableProperty
         {
             get { return _selectedMeasurableProperty; }
             set
             {
                 _selectedMeasurableProperty = value;
-
-                NavigationToken token = new NavigationToken(InstrumentViewNames.InstrumentMeasurablePropertyEditView,
-                                                            _selectedMeasurableProperty,
-                                                            RegionNames.InstrumentEditMeasurablePropertyEditRegion);
-
-                _eventAggregator.GetEvent<NavigationRequested>()
-                                .Publish(token);
             }
         }
 
@@ -542,6 +617,28 @@ namespace Instruments.ViewModels
 
                 _eventAggregator.GetEvent<NavigationRequested>()
                                 .Publish(token);
+            }
+        }
+
+        public Organization SelectedCalibrationLab
+        {
+
+            get
+            {
+                if (_instance == null)
+                    return null;
+
+                else
+                    return _calibrationLabList.FirstOrDefault(clab => clab.ID == _instance.CalibrationResponsibleID);
+            }
+
+            set
+            {
+                if (_instance == null)
+                    return;
+
+                else
+                    _instance.CalibrationResponsibleID = value.ID;
             }
         }
 

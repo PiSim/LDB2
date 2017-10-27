@@ -28,7 +28,7 @@ namespace Specifications.Views
 
         public string ViewName
         {
-            get { return ViewNames.SpecificationsMainView; }
+            get { return SpecificationViewNames.SpecificationMain; }
         }
     }
 }

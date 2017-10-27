@@ -11,7 +11,7 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="70"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal"
@@ -26,182 +26,72 @@
                     Margin="5"/>
         </StackPanel>
 
-        <StackPanel Orientation="Horizontal"
-                    Grid.Row="1"
-                    Height="35">
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition MaxWidth="150"/>
+                <ColumnDefinition MaxWidth="200"/>
+                <ColumnDefinition MaxWidth="100"/>
+                <ColumnDefinition MaxWidth="200"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
 
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            
             <Label Content="Specifica:"
+                   Grid.Column="0"
+                   Grid.Row="0"
                    Margin="5"/>
+            
             <TextBox Text="{Binding Standard}"
                      IsEnabled="{Binding EditMode}"
-                     Width="150"
+                     Grid.Column="1"
+                     Grid.Row="0"
                      Margin="5"/>
-        </StackPanel>
+
+            <Label Content="Edizione corrente:"
+                   Grid.Column="0"
+                   Grid.Row="1"
+                   Margin="5"
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Center"/>
+
+            <TextBox Text="{Binding CurrentIssue}"
+                     IsEnabled="{Binding EditMode}"
+                     Grid.Column="1"
+                     Grid.Row="1"
+                     Margin="5"/>
+
+
+            <Label Content="Descrizione:" 
+                   HorizontalAlignment="Left" 
+                   VerticalAlignment="Top" 
+                   Grid.Column="2"
+                   Margin="5"/>
+            
+            <TextBox Text="{Binding Description, Mode=TwoWay}"
+                     IsEnabled="{Binding EditMode}"
+                     AcceptsReturn="True"
+                     TextWrapping="Wrap"
+                     Grid.Column="3"
+                     Grid.Row="0"
+                     Grid.RowSpan="2"
+                     Margin="5"/>
+        </Grid>
 
         <TabControl Grid.Row="2">
-            <TabItem Header="Dettagli">
+            
+            <TabItem Header="Metodi e requisiti">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-
-                    <Label Content="Descrizione:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,19,0,0"/>
-                    <TextBox Text="{Binding Description, Mode=TwoWay}"
-                             TextWrapping="Wrap"
-                             Height="50"
-                             Width="200"
-                             HorizontalAlignment="Left" VerticalAlignment="Top" Margin="100,25,0,0"/>
-                </Grid>
-            </TabItem>
-            <TabItem Header="Metodi">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-                    <GroupBox Header="Metodi disponibili"
-                              Grid.Column="0">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition/>
-                            </Grid.RowDefinitions>
-                            <Label Content="Filtra per proprietà:"
-                                   Grid.Column="0"
-                                   Grid.Row="0"
-                                   Height="Auto"/>
-                            <ComboBox ItemsSource="{Binding Path=Properties}" 
-                                      SelectedItem="{Binding Path=FilterProperty, Mode=TwoWay}"
-                                      DisplayMemberPath="Name"
-                                      Grid.Column="1"
-                                      Grid.Row="0"/>
-
-                            <ListView ItemsSource="{Binding Path=FilteredMethods}"
-                                      SelectedItem="{Binding Path=SelectedToAdd, Mode=TwoWay}"
-                                      Grid.Column="0"
-                                      Grid.ColumnSpan="2"
-                                      Grid.Row="1">
-                                <ListView.View>
-                                    <GridView>
-                                        <GridViewColumn Header="Proprietà"
-                                                        DisplayMemberBinding="{Binding Path=Property.Name}"/>
-                                        <GridViewColumn Header="OEM"
-                                                        DisplayMemberBinding="{Binding Path=Standard.Organization.Name}"/>
-                                        <GridViewColumn Header="Standard"
-                                                        DisplayMemberBinding="{Binding Path=Standard.Name}"/>
-                                        <GridViewColumn Header="Descrizione"
-                                                        DisplayMemberBinding="{Binding Path=Description}"/>
-                                    </GridView>
-                                </ListView.View>
-                            </ListView>
-                        </Grid>
-                    </GroupBox>
-
-                    <Grid Grid.Column="1">
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <Button Content="►"
-                                Command="{Binding Path=AddTestCommand}"
-                                Grid.Row="1"
-                                Height="30"
-                                Width="30" 
-                                FontSize="20" 
-                                Margin="5,0,5,0"/>
-                        <Button Content="◄"
-                                Command="{Binding Path=RemoveTestCommand}"
-                                Grid.Row="3"
-                                Height="30"
-                                Width="30" 
-                                FontSize="20"  
-                                Margin="5,0,5,0"/>
-                    </Grid>
-
-                    <GroupBox Header="Lista Prove"
-                              Grid.Column="2">
-                        <ListView ItemsSource="{Binding MainVersionRequirements}" 
-                                  SelectedItem="{Binding SelectedToRemove, Mode=TwoWay}">
-                            <ListView.View>
-                                <GridView>
-                                    <GridViewColumn Header="Proprietà"
-                                                    DisplayMemberBinding="{Binding Method.Property.Name}"/>
-                                    <GridViewColumn Header="OEM"
-                                                    DisplayMemberBinding="{Binding Method.Standard.Organization.Name}"/>
-                                    <GridViewColumn Header="Standard"
-                                                    DisplayMemberBinding="{Binding Method.Standard.Name}"/>
-                                </GridView>
-                            </ListView.View>
-                        </ListView>
-                    </GroupBox>
-                </Grid>
-            </TabItem>
-
-            <TabItem Header="Gestione Versioni">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
+                        <ColumnDefinition MaxWidth="200"/>
                         <ColumnDefinition Width="2*"/>
                     </Grid.ColumnDefinitions>
-                    <GroupBox Header="Versioni esistenti"
-                              Grid.Column="0">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                            </Grid.RowDefinitions>
-                            <ListView ItemsSource="{Binding Path=VersionList}"
-                                      SelectedItem="{Binding Path=SelectedVersion, Mode=TwoWay}"
-                                      Grid.Column="0"
-                                      Grid.Row="0">
-                                <ListView.View>
-                                    <GridView>
-                                        <GridViewColumn Header="Nome"
-                                                        DisplayMemberBinding="{Binding Name}"/>
-                                        <GridViewColumn Header="Principale">
-                                            <GridViewColumn.CellTemplate>
-                                                <DataTemplate>
-                                                    <CheckBox IsChecked="{Binding Path=IsMain, Mode=OneWay}"
-                                                              IsEnabled="False"/>
-                                                </DataTemplate>
-                                            </GridViewColumn.CellTemplate>
-                                        </GridViewColumn>
-                                    </GridView>
-                                </ListView.View>
-                            </ListView>
-                            <Grid Grid.Column="1"
-                                  Grid.Row="0">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition/>
-                                </Grid.ColumnDefinitions>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition/>
-                                    <RowDefinition/>
-                                    <RowDefinition/>
-                                </Grid.RowDefinitions>
-                                <Button Content="Crea Nuova"
-                                    Command="{Binding Path=AddVersionCommand}"
-                                    Grid.Row="0"
-                                    Margin="5,5,5,5"/>
-                            </Grid>
-                        </Grid>
-                    </GroupBox>
+
+                    <ContentControl prism:RegionManager.RegionName="{Binding SpecificationVersionTestListEditRegionName}"
+                                    Grid.Column="0"/>
 
                     <ContentControl prism:RegionManager.RegionName="{Binding SpecificationVersionEditRegionName}"
                                     Grid.Column="1"/>

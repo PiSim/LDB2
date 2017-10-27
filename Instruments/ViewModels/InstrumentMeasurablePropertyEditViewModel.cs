@@ -22,6 +22,7 @@ namespace Instruments.ViewModels
                                 _save,
                                 _startEdit;
         private IEnumerable<MeasurementUnit> _umList;
+        private IEnumerable<Organization> _organizationList;
         private InstrumentMeasurableProperty _measurablePropertyInstance;
         private MeasurementUnit _selectedUM;
 
@@ -29,6 +30,7 @@ namespace Instruments.ViewModels
         public InstrumentMeasurablePropertyEditViewModel()
         {
             _editMode = false;
+            _organizationList = OrganizationService.GetOrganizations(OrganizationRoleNames.CalibrationLab);
 
             _cancelEdit = new DelegateCommand(
                 () =>
@@ -52,34 +54,6 @@ namespace Instruments.ViewModels
                 () => !EditMode);
         }
 
-        public string CalibrationDueDate
-        {
-            get
-            {
-                if (_measurablePropertyInstance == null || _measurablePropertyInstance.CalibrationDue == null)
-                    return "//";
-
-                return _measurablePropertyInstance?.CalibrationDue.Value.ToShortDateString();
-            }
-        }
-
-        public int ControlPeriod
-        {
-            get
-            {
-                if (_measurablePropertyInstance == null)
-                    return 0;
-
-                return _measurablePropertyInstance.ControlPeriod;
-            }
-            set
-            {
-                _measurablePropertyInstance.ControlPeriod = value;
-                if (_measurablePropertyInstance.UpdateCalibrationDueDate())
-                    RaisePropertyChanged("CalibrationDueDate");
-            }
-        }
-
         public bool EditMode
         {
             get { return _editMode; }
@@ -87,26 +61,9 @@ namespace Instruments.ViewModels
             {
                 _editMode = value;
                 RaisePropertyChanged("EditMode");
+                RaisePropertyChanged("CanEditCalibrationParam");
                 _save.RaiseCanExecuteChanged();
                 _startEdit.RaiseCanExecuteChanged();
-            }
-        }
-
-        public bool IsUnderControl
-        {
-            get
-            {
-                if (_measurablePropertyInstance == null)
-                    return false;
-
-                return _measurablePropertyInstance.IsUnderControl;
-            }
-
-            set
-            {
-                _measurablePropertyInstance.IsUnderControl = value;
-                _measurablePropertyInstance.UpdateCalibrationDueDate();
-                RaisePropertyChanged("CalibrationDueDate");
             }
         }
 
@@ -145,13 +102,14 @@ namespace Instruments.ViewModels
                     _selectedUM = _umList.FirstOrDefault(um => um.ID == _measurablePropertyInstance?.UnitID);
                 else
                     _selectedUM = null;
-
+                
                 RaisePropertyChanged("CalibrationDueDate");
                 RaisePropertyChanged("ControlPeriod");
                 RaisePropertyChanged("IsUnderControl");
                 RaisePropertyChanged("LastCalibration");
                 RaisePropertyChanged("MeasurablePropertyInstance");
                 RaisePropertyChanged("PropertyViewVisibility");
+                RaisePropertyChanged("SelectedCalibrationLab");
                 RaisePropertyChanged("SelectedUM");
             }
         }
@@ -160,7 +118,8 @@ namespace Instruments.ViewModels
         {
             get
             {
-                return (_measurablePropertyInstance != null) ? Visibility.Visible : Visibility.Hidden; }
+                return (_measurablePropertyInstance != null) ? Visibility.Visible : Visibility.Hidden;
+            }
         }
 
         public DelegateCommand SaveCommand

@@ -122,6 +122,7 @@
     <Compile Include="ViewModels\ProjectCreationDialogViewModel.cs" />
     <Compile Include="ViewModels\ProjectInfoViewModel.cs" />
     <Compile Include="ViewModels\ProjectMainViewModel.cs" />
+    <Compile Include="ViewModels\ProjectStatsViewModel.cs" />
     <Compile Include="Views\ModifyProjectDetailsDialog.xaml.cs">
       <DependentUpon>ModifyProjectDetailsDialog.xaml</DependentUpon>
     </Compile>
@@ -139,6 +140,9 @@
     </Compile>
     <Compile Include="Views\ProjectsNavigationItem.xaml.cs">
       <DependentUpon>ProjectsNavigationItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ProjectStats.xaml.cs">
+      <DependentUpon>ProjectStats.xaml</DependentUpon>
     </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -197,6 +201,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ProjectsNavigationItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ProjectStats.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

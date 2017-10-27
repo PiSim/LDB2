@@ -42,8 +42,12 @@
                 <ContentControl prism:RegionManager.RegionName="{Binding BatchStatusListRegionName}"
                             Margin="5"/>
             </TabItem>
-            <TabItem Header="Archivio campioni">
+            <TabItem Header="Archivio Sala Macchine">
                 <ContentControl prism:RegionManager.RegionName="{Binding SampleArchiveRegionName}"
+                                Margin="5"/>
+            </TabItem>
+            <TabItem Header="Archivio Cotex">
+                <ContentControl prism:RegionManager.RegionName="{Binding SampleLongTermStorageRegionName}"
                                 Margin="5"/>
             </TabItem>
         </TabControl>

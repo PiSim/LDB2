@@ -160,16 +160,8 @@ namespace Services
             {
                 CalibrationReport output = calibrationDialog.ReportInstance;
 
-                DateTime tempNewDate = output.Date.AddMonths(target.ControlPeriod);
-                if (tempNewDate > target.CalibrationDueDate)
-                {
-                    target.CalibrationDueDate = tempNewDate;
-                    target.Update();
-                }
-
-                foreach (InstrumentMeasurableProperty imp in output.GetPropertyMappings().Select(impm => impm.InstrumentMeasurableProperty))
-                if (imp.UpdateCalibrationDueDate())
-                    imp.Update();
+                output.Instrument.UpdateCalibrationDueDate();
+                output.Instrument.Update();
 
                 return output;
             }
@@ -184,6 +176,21 @@ namespace Services
                 return creationDialog.ExternalReportInstance;
             else
                 return null;
+        }
+
+        internal static void UpdateProjectCosts()
+        {
+            IEnumerable<Project> _prjList = ProjectService.GetProjects();
+
+            foreach (Project prj in _prjList)
+            {
+                double oldvalue = prj.TotalExternalCost;
+
+                prj.UpdateExternalReportCost();
+
+                if (prj.TotalExternalCost != oldvalue)
+                    prj.Update();
+            }
         }
     }
 }

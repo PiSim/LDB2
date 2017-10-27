@@ -44,6 +44,8 @@ namespace Projects
                                                 typeof(Views.ProjectDetailsControl));
             _regionManager.RegisterViewWithRegion(RegionNames.ExternalReportProjectDetailsRegion,
                                                 typeof(Views.ProjectDetailsControl));
+            _regionManager.RegisterViewWithRegion(RegionNames.ProjectStatRegion,
+                                                typeof(Views.ProjectStats));
             _regionManager.RegisterViewWithRegion(RegionNames.TaskEditProjectDetailsRegion,
                                                 typeof(Views.ProjectDetailsControl));
 

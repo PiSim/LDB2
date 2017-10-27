@@ -170,6 +170,9 @@
                    VerticalAlignment="Center"/>
 
             <TextBox Text="{Binding Description}"
+                     MaxLength="200"
+                     AcceptsReturn="True"
+                     TextWrapping="Wrap"
                      Grid.Column="1"
                      Grid.Row="3"
                      Grid.RowSpan="2"
@@ -283,18 +286,9 @@
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
 
-                    <DataGridTemplateColumn Header="Durata"
-                                            SortMemberPath="Duration">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock VerticalAlignment="Center">
-                                    <Run Text="{Binding Duration,
-                                                        Mode=OneWay}"/>
-                                    <Run Text=" ore"/>
-                                </TextBlock>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Header="Ore lavoro"
+                                        Binding="{Binding Duration,
+                                                          Mode=OneWay}"/>
                     </DataGrid.Columns>
                 </DataGrid>
 
@@ -312,10 +306,9 @@
 
             <TextBlock VerticalAlignment="Center"
                        Margin="5">
-                <Run Text="Durata Totale: "/>
+                <Run Text="Totale ore lavoro: "/>
                 <Run Text="{Binding TotalDuration,
                                     Mode=OneWay}"/>
-                <Run Text=" ore"/>
             </TextBlock>
             
             <Button Content="Annulla"

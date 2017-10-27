@@ -44,7 +44,7 @@
                 <DataGridTextColumn Header="Versione"
                                     Binding="{Binding SpecificationVersion.Name}"/>
                 <DataGridTextColumn Header="Descrizione"
-                                    Binding="{Binding SpecificationVersion.Specification.Description}"/>
+                                    Binding="{Binding Description}"/>
                 <DataGridTextColumn Header="Autore"
                                     Binding="{Binding Author.Name}"/>
             </DataGrid.Columns>

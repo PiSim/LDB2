@@ -23,6 +23,7 @@ namespace DBManager.Services
                 return entities.People.Where(per => roleName == null || per.RoleMappings
                                         .FirstOrDefault(prm => prm.Role.Name == roleName)
                                         .IsSelected)
+                                        .OrderBy(per => per.Name)
                                         .ToList();
             }
         }

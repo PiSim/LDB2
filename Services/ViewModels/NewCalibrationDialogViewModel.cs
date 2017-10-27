@@ -29,7 +29,7 @@ namespace Services.ViewModels
         private DelegateCommand<string> _addReference;
         private DelegateCommand<Window> _cancel, _confirm;
         private EventAggregator _eventAggregator;
-        private IEnumerable<InstrumentMeasurablePropertyWrapper> _propertyList;
+        private IEnumerable<Organization> _labList;
         private Instrument _instumentInstance, _selectedReference;
         private Person _selectedTech;
         private string _calibrationNotes, _calibrationResult, _referenceCode;
@@ -43,6 +43,7 @@ namespace Services.ViewModels
             _entities = entities;
             _isVerificationOnly = false;
             _referenceList = new ObservableCollection<Instrument>();
+            _labList = OrganizationService.GetOrganizations(OrganizationRoleNames.CalibrationLab);
             _eventAggregator = eventAggregator;
             _principal = principal;
 
@@ -74,7 +75,7 @@ namespace Services.ViewModels
                     _reportInstance.Number = InstrumentService.GetNextCalibrationNumber(_reportInstance.Year);
                     _reportInstance.Instrument = _instumentInstance;
                     _reportInstance.IsVerification = _isVerificationOnly;
-                    _reportInstance.Laboratory = _selectedLab;
+                    _reportInstance.laboratoryID = _selectedLab.ID;
                     _reportInstance.Notes = "";
                     _reportInstance.ResultID = 1;
 
@@ -86,8 +87,7 @@ namespace Services.ViewModels
                             _reportInstance.ReferenceInstruments.Add(refInstrument);
                     }
                     
-                    foreach (InstrumentMeasurableProperty imp in _propertyList.Where(prp => prp.IsSelected)
-                                                                                .Select(prp => prp.PropertyInstance))
+                    foreach (InstrumentMeasurableProperty imp in _instumentInstance.GetMeasurableProperties())
                     {
                         CalibrationReportInstrumentPropertyMapping cripm = new CalibrationReportInstrumentPropertyMapping()
                         {
@@ -188,12 +188,10 @@ namespace Services.ViewModels
             set
             {
                 _instumentInstance = _entities.Instruments.First(ins => ins.ID == value.ID);
-                _propertyList = _instumentInstance.GetMeasurableProperties()
-                                                    .Where(imp => imp.IsUnderControl)
-                                                    .Select(imp => new InstrumentMeasurablePropertyWrapper(imp))
-                                                    .ToList();
+                SelectedLab = _labList.FirstOrDefault(lab => lab.ID == _instumentInstance.CalibrationResponsibleID);
                 RaisePropertyChanged("InstrumentCode");
                 RaisePropertyChanged("PropertyList");
+                RaisePropertyChanged("SelectedLab");
             }
         }
 
@@ -201,11 +199,6 @@ namespace Services.ViewModels
         {
             get { return _isVerificationOnly; }
             set { _isVerificationOnly = value; }
-        }
-
-        public IEnumerable<InstrumentMeasurablePropertyWrapper> PropertyList
-        {
-            get { return _propertyList; }
         }
             
 
@@ -220,14 +213,11 @@ namespace Services.ViewModels
             }
         }
 
-        public List<Organization> LabList
+        public IEnumerable<Organization> LabList
         {
             get
             {
-                OrganizationRole tempOr = _entities.OrganizationRoles.First(orr => orr.Name == DBManager.OrganizationRoleNames.CalibrationLab);
-                return new List<Organization>(tempOr.OrganizationMappings.Where(orm => orm.IsSelected)
-                                                .OrderBy(orm => orm.Organization.Name)
-                                                .Select(orm => orm.Organization));
+                return _labList;
             }
         }
 

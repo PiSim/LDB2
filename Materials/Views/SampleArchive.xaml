@@ -58,6 +58,8 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
+                <DataGridTextColumn Header="Note"
+                                    Binding="{Binding Notes}"/>
             </DataGrid.Columns>
         </DataGrid>
 

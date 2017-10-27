@@ -15,21 +15,6 @@ namespace Controls.Views
             InitializeComponent();
         }
 
-        public Currency Currency
-        {
-            get { return (DataContext as ViewModels.NewPODialogViewModel).SelectedCurrency; }
-            set
-            {
-                (DataContext as ViewModels.NewPODialogViewModel).SelectedCurrency = value;
-            }
-        }
-
-        public DateTime Date
-        {
-            get { return (DataContext as ViewModels.NewPODialogViewModel).Date; }
-            internal set { (DataContext as ViewModels.NewPODialogViewModel).Date = value; }
-        }
-
         public string Number
         {
             get { return (DataContext as ViewModels.NewPODialogViewModel).Number; }

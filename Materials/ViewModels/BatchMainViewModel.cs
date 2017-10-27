@@ -127,6 +127,11 @@ namespace Materials.ViewModels
             get { return RegionNames.SampleArchiveRegion; }
         }
 
+        public string SampleLongTermStorageRegionName
+        {
+            get { return RegionNames.SampleLongTermStorageRegion; }
+        }
+
         public Sample SelectedSampleArrival
         {
             get { return _selectedSampleArrival; }

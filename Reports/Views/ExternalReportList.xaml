@@ -21,17 +21,8 @@
                   GridLinesVisibility="None"
                   cmd:CommandBinder.DataGridDoubleClickCommand="{Binding OpenExternalReportCommand}">
             <DataGrid.Columns>
-                <DataGridTemplateColumn Header="Numero">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBlock>
-                                <Run Text="{Binding Year}"/>
-                                <Run Text="{Binding Number,
-                                                    StringFormat=d3}"/>
-                            </TextBlock>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
+                <DataGridTextColumn Header="Numero"
+                                    Binding="{Binding FormattedNumber}"/>
                 <DataGridTextColumn Header="Campioni"
                                     Binding="{Binding Samples}"/>
                 <DataGridTextColumn Header="Prove"
@@ -40,6 +31,9 @@
                                     Binding="{Binding ExternalLab.Name}"/>
                 <DataGridCheckBoxColumn Header="RDA"
                                         Binding="{Binding RequestDone}"/>
+                <DataGridCheckBoxColumn Header="ODA"
+                                        Binding="{Binding HasOrder,
+                                                          Mode=OneWay}"/>
                 <DataGridCheckBoxColumn Header="Invio"
                                         Binding="{Binding MaterialSent}"/>
                 <DataGridCheckBoxColumn Header="Ricevuto"

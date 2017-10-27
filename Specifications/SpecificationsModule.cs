@@ -24,11 +24,13 @@ namespace Specifications
             _container.RegisterType<SpecificationServiceProvider>(new ContainerControlledLifetimeManager());
             _container.Resolve<SpecificationServiceProvider>();
 
-            _container.RegisterType<Object, Views.MethodEdit>(ViewNames.MethodEditView);
-            _container.RegisterType<Object, Views.MethodMain>(ViewNames.MethodMainView);
-            _container.RegisterType<Object, Views.SpecificationEdit>(ViewNames.SpecificationsEditView);
-            _container.RegisterType<Object, Views.SpecificationMain>(ViewNames.SpecificationsMainView);
+            _container.RegisterType<Object, Views.MethodEdit>(SpecificationViewNames.MethodEdit);
+            _container.RegisterType<Object, Views.MethodMain>(SpecificationViewNames.MethodMain);
+            _container.RegisterType<Object, Views.SpecificationEdit>(SpecificationViewNames.SpecificationEdit);
+            _container.RegisterType<Object, Views.SpecificationMain>(SpecificationViewNames.SpecificationMain);
+            _container.RegisterType<Object, Views.SpecificationTestListEdit>(SpecificationViewNames.SpecificationTestListEdit);
             _container.RegisterType<Object, Views.SpecificationVersionEdit>(SpecificationViewNames.SpecificationVersionEdit);
+            _container.RegisterType<Object, Views.SpecificationVersionList>(SpecificationViewNames.SpecificationVersionList);
             _container.RegisterType<Object, Views.StandardIssueEdit>(SpecificationViewNames.StandardIssueEdit);
 
             _container.RegisterType<Views.MethodCreationDialog>();

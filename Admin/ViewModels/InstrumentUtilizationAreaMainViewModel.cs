@@ -31,7 +31,8 @@ namespace Admin.ViewModels
                     {
                         InstrumentUtilizationArea newArea = new InstrumentUtilizationArea()
                         {
-                            Name = inputDialog.InputString
+                            Name = inputDialog.InputString,
+                            Plant = "1"
                         };
 
                         newArea.Create();

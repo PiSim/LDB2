@@ -39,6 +39,8 @@
           <Property Name="trial_scope_text" Type="varchar" MaxLength="45" />
           <Property Name="archive_stock" Type="int" Nullable="false" />
           <Property Name="do_not_test" Type="bit" Nullable="false" />
+          <Property Name="latest_sampleID" Type="int" />
+          <Property Name="long_term_stock" Type="int" />
         </EntityType>
         <EntityType Name="calibration_files">
           <Key>
@@ -116,15 +118,6 @@
           <Property Name="specificationID" Type="int" Nullable="false" />
           <Property Name="is_default" Type="bit" Nullable="false" />
         </EntityType>
-        <EntityType Name="currencies">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="code" Type="char" MaxLength="3" Nullable="false" />
-          <Property Name="name" Type="varchar" MaxLength="45" Nullable="false" />
-          <Property Name="exchange_rate" Type="float" Nullable="false" />
-        </EntityType>
         <EntityType Name="external_constructions">
           <Key>
             <PropertyRef Name="ID" />
@@ -170,10 +163,7 @@
           <Property Name="external_labID" Type="int" Nullable="false" />
           <Property Name="material_sent" Type="bit" Nullable="false" />
           <Property Name="request_done" Type="bit" Nullable="false" />
-          <Property Name="purchase_order" Type="varchar" MaxLength="20" Nullable="false" />
-          <Property Name="price" Type="double" Nullable="false" />
           <Property Name="samples" Type="varchar" MaxLength="100" Nullable="false" />
-          <Property Name="currency" Type="char" MaxLength="3" Nullable="false" />
           <Property Name="report_received" Type="bit" />
           <Property Name="projectID" Type="int" />
           <Property Name="purchase_orderID" Type="int" />
@@ -208,7 +198,6 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="instrumentID" Type="int" Nullable="false" />
           <Property Name="description" Type="varchar" MaxLength="45" Nullable="false" />
-          <Property Name="is_under_control" Type="bit" Nullable="false" />
           <Property Name="target_uncertainty" Type="double" Nullable="false" />
           <Property Name="unitID" Type="int" />
           <Property Name="calibration_range_upper_limit" Type="double" Nullable="false" />
@@ -217,8 +206,6 @@
           <Property Name="measurable_quantityID" Type="int" Nullable="false" />
           <Property Name="range_upper_limit" Type="double" Nullable="false" />
           <Property Name="range_lower_limit" Type="double" Nullable="false" />
-          <Property Name="control_period" Type="int" Nullable="false" />
-          <Property Name="calibration_due" Type="datetime" Precision="0" />
         </EntityType>
         <EntityType Name="instrument_method_mappings">
           <Key>
@@ -249,6 +236,7 @@
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="name" Type="varchar" MaxLength="45" Nullable="false" />
+          <Property Name="plant" Type="char" MaxLength="2" Nullable="false" />
         </EntityType>
         <EntityType Name="instruments">
           <Key>
@@ -258,16 +246,16 @@
           <Property Name="code" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="description" Type="varchar" MaxLength="45" Nullable="false" />
           <Property Name="instrument_typeID" Type="int" Nullable="false" />
-          <Property Name="control_period" Type="tinyint" Nullable="false" />
-          <Property Name="is_under_control" Type="bit" Nullable="false" />
           <Property Name="supplierID" Type="int" />
           <Property Name="manufacturerID" Type="int" />
           <Property Name="serial_number" Type="varchar" MaxLength="45" />
           <Property Name="model" Type="varchar" MaxLength="45" />
-          <Property Name="calibration_due" Type="date" />
-          <Property Name="calibration_responsibleID" Type="int" />
           <Property Name="utilization_areaID" Type="int" />
           <Property Name="is_in_service" Type="bit" Nullable="false" />
+          <Property Name="is_under_control" Type="bit" Nullable="false" />
+          <Property Name="calibration_responsibleID" Type="int" />
+          <Property Name="calibration_due_date" Type="date" />
+          <Property Name="calibration_interval" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="masters">
           <Key>
@@ -330,7 +318,6 @@
           <Property Name="propertyID" Type="int" Nullable="false" />
           <Property Name="description" Type="text" Nullable="false" />
           <Property Name="um" Type="text" Nullable="false" />
-          <Property Name="cost_units" Type="int" Nullable="false" />
           <Property Name="duration" Type="double" Nullable="false" />
         </EntityType>
         <EntityType Name="organization_role_mappings">
@@ -415,10 +402,8 @@
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="number" Type="char" MaxLength="10" Nullable="false" />
-          <Property Name="total" Type="float" Nullable="false" />
-          <Property Name="currencyID" Type="int" Nullable="false" />
-          <Property Name="date" Type="date" Nullable="false" />
           <Property Name="organizationID" Type="int" Nullable="false" />
+          <Property Name="euro_total" Type="double" Nullable="false" />
         </EntityType>
         <EntityType Name="recipes">
           <Key>
@@ -453,7 +438,6 @@
           <Property Name="specification_versionID" Type="int" Nullable="false" />
           <Property Name="start_date" Type="text" Nullable="false" />
           <Property Name="is_complete" Type="bit" Nullable="false" />
-          <Property Name="specification_issueID" Type="int" />
           <Property Name="parent_taskID" Type="int" />
           <Property Name="total_duration" Type="double" Nullable="false" />
         </EntityType>
@@ -503,7 +487,6 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="issueID" Type="int" Nullable="false" />
           <Property Name="path" Type="varchar" MaxLength="100" Nullable="false" />
           <Property Name="description" Type="varchar" MaxLength="45" Nullable="false" />
           <Property Name="standardID" Type="int" Nullable="false" />
@@ -515,7 +498,6 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="name" Type="varchar" MaxLength="45" Nullable="false" />
           <Property Name="organizationID" Type="int" Nullable="false" />
-          <Property Name="current_issueID" Type="int" />
           <Property Name="current_issue" Type="varchar" MaxLength="45" Nullable="false" />
         </EntityType>
         <EntityType Name="sub_methods">
@@ -604,7 +586,6 @@
           <Property Name="date" Type="date" />
           <Property Name="is_complete" Type="bit" Nullable="false" />
           <Property Name="instrumentID" Type="int" />
-          <Property Name="method_issueID" Type="int" />
           <Property Name="requirementID" Type="int" />
           <Property Name="duration" Type="double" Nullable="false" />
         </EntityType>
@@ -858,18 +839,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="currency_to_purchase_order">
-          <End Role="currencies" Type="Self.currencies" Multiplicity="1" />
-          <End Role="purchase_orders" Type="Self.purchase_orders" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="currencies">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="purchase_orders">
-              <PropertyRef Name="currencyID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="default_spec_version_to_ex_construction">
           <End Role="specification_versions" Type="Self.specification_versions" Multiplicity="0..1" />
           <End Role="external_constructions" Type="Self.external_constructions" Multiplicity="*" />
@@ -1075,6 +1044,18 @@
             </Principal>
             <Dependent Role="calibration_reports">
               <PropertyRef Name="laboratoryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="latest_sample_to_batch">
+          <End Role="samples" Type="Self.samples" Multiplicity="0..1" />
+          <End Role="batches" Type="Self.batches" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="samples">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="batches">
+              <PropertyRef Name="latest_sampleID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1952,7 +1933,6 @@
           <EntitySet Name="colours" EntityType="Self.colours" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="control_plan_items" EntityType="Self.control_plan_items" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="control_plans" EntityType="Self.control_plans" Schema="labdb" store:Type="Tables" />
-          <EntitySet Name="currencies" EntityType="Self.currencies" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="external_constructions" EntityType="Self.external_constructions" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="external_report_batch_mapping" EntityType="Self.external_report_batch_mapping" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="external_report_files" EntityType="Self.external_report_files" Schema="labdb" store:Type="Tables" />
@@ -2071,10 +2051,6 @@
             <End Role="control_plans" EntitySet="control_plans" />
             <End Role="control_plan_items" EntitySet="control_plan_items" />
           </AssociationSet>
-          <AssociationSet Name="currency_to_purchase_order" Association="Self.currency_to_purchase_order">
-            <End Role="currencies" EntitySet="currencies" />
-            <End Role="purchase_orders" EntitySet="purchase_orders" />
-          </AssociationSet>
           <AssociationSet Name="default_spec_version_to_ex_construction" Association="Self.default_spec_version_to_ex_construction">
             <End Role="specification_versions" EntitySet="specification_versions" />
             <End Role="external_constructions" EntitySet="external_constructions" />
@@ -2138,6 +2114,10 @@
           <AssociationSet Name="laboratory_to_calibration_report" Association="Self.laboratory_to_calibration_report">
             <End Role="organizations" EntitySet="organizations" />
             <End Role="calibration_reports" EntitySet="calibration_reports" />
+          </AssociationSet>
+          <AssociationSet Name="latest_sample_to_batch" Association="Self.latest_sample_to_batch">
+            <End Role="samples" EntitySet="samples" />
+            <End Role="batches" EntitySet="batches" />
           </AssociationSet>
           <AssociationSet Name="leader" Association="Self.leader">
             <End Role="people" EntitySet="people" />
@@ -2454,13 +2434,15 @@
           <NavigationProperty Name="TrialArea" Relationship="labdbModel.trial_area_to_batch" FromRole="Batch" ToRole="TrialArea" />
           <Property Name="FirstSampleArrived" Type="Boolean" Nullable="false" />
           <Property Name="FirstSampleID" Type="Int32" />
-          <Property Name="BasicReportDone" Type="Boolean" />
           <Property Name="BasicReportID" Type="Int32" />
           <NavigationProperty Name="BasicReport" Relationship="labdbModel.basic_report_to_batch" FromRole="Batch" ToRole="Report" />
           <NavigationProperty Name="FirstSample" Relationship="labdbModel.first_sample_to_batch" FromRole="Batch" ToRole="Sample" />
           <Property Name="TrialScopeText" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
           <Property Name="ArchiveStock" Type="Int32" Nullable="false" />
           <Property Name="DoNotTest" Type="Boolean" Nullable="false" />
+          <Property Name="LatestSampleID" Type="Int32" />
+          <NavigationProperty Name="LatestSample" Relationship="labdbModel.latest_sample_to_batch" FromRole="Batch" ToRole="Sample" />
+          <Property Name="LongTermStock" Type="Int32" />
         </EntityType>
         <EntityType Name="Colour">
           <Key>
@@ -2504,10 +2486,7 @@
           <Property Name="ExternalLabID" Type="Int32" Nullable="false" a:SetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:GetterAccess="Public" />
           <Property Name="MaterialSent" Type="Boolean" Nullable="false" />
           <Property Name="RequestDone" Type="Boolean" Nullable="false" />
-          <Property Name="PurchaseOrder" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Price" Type="Double" Nullable="false" />
           <Property Name="Samples" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Currency" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="ReportReceived" Type="Boolean" Nullable="false" />
           <Property Name="ProjectID" Type="Int32" />
           <NavigationProperty Name="ExternalReportFiles" Relationship="Self.external_report" FromRole="external_reports" ToRole="external_report_files" />
@@ -2519,7 +2498,7 @@
           <NavigationProperty Name="Methods" Relationship="labdbModel.external_report_method_mappings" FromRole="ExternalReport" ToRole="Method" />
           <NavigationProperty Name="Batches" Relationship="labdbModel.external_report_batch_mapping" FromRole="ExternalReport" ToRole="Batch" />
           <Property Name="Year" Type="Int32" Nullable="false" />
-          <Property Name="Number" Type="Int32" Nullable="false" />
+          <Property Name="Number" Nullable="false" Type="Int32" />
         </EntityType>
         <EntityType Name="Master">
           <Key>
@@ -2569,7 +2548,6 @@
           <NavigationProperty Name="ExternalReports" Relationship="labdbModel.external_report_method_mappings" FromRole="Method" ToRole="ExternalReport" />
           <NavigationProperty Name="TaskItems" Relationship="labdbModel.method_to_task_item" FromRole="Method" ToRole="TaskItem" />
           <Property Name="Duration" Type="Double" Nullable="false" />
-          <Property Name="CostUnits_DEPRECATED" Type="Int32" Nullable="false" DefaultValue="0" />
         </EntityType>
         <EntityType Name="Organization">
           <Key>
@@ -2694,7 +2672,7 @@
           <NavigationProperty Name="TaskItems" Relationship="labdbModel.requirement_to_task_item" FromRole="Requirement" ToRole="task_items" />
           <NavigationProperty Name="ControlPlanItems" Relationship="labdbModel.requirement_to_control_plan" FromRole="Requirement" ToRole="ControlPlanItem" />
           <NavigationProperty Name="tests" Relationship="labdbModel.requirement_to_test1" FromRole="Requirement" ToRole="Test" />
-          <Property Name="skip_test" Type="Boolean" Nullable="false" />
+          <Property Name="SkipTest" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="Sample">
           <Key>
@@ -2741,7 +2719,6 @@
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Path" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Description" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="IssueID" Type="Int32" Nullable="false" a:SetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <Property Name="standardID" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Standard" Relationship="labdbModel.standard_to_file" FromRole="StandardFile" ToRole="Std" />
         </EntityType>
@@ -2755,10 +2732,9 @@
           <NavigationProperty Name="Methods" Relationship="Self.standard_to_method" FromRole="standards" ToRole="methods" />
           <NavigationProperty Name="Organization" Relationship="Self.organization_to_standard" FromRole="standards" ToRole="organizations" />
           <NavigationProperty Name="Specifications" Relationship="Self.standard_to_specification" FromRole="standards" ToRole="specifications" />
-          <Property Name="CurrentIssueID" Type="Int32" />
           <NavigationProperty Name="StandardFiles" Relationship="labdbModel.standard_to_file" FromRole="Std" ToRole="StandardFile" />
-          <Property Name="current_issue" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
-        </EntityType>
+          <Property Name="CurrentIssue" Type="String" Nullable="false" />
+          </EntityType>
         <EntityType Name="SubRequirement">
           <Key>
             <PropertyRef Name="ID" />
@@ -3493,11 +3469,6 @@
             <End Role="PurchaseOrder" EntitySet="PurchaseOrders" />
             <End Role="ExternalReport" EntitySet="ExternalReports" />
           </AssociationSet>
-          <EntitySet Name="Currencies" EntityType="labdbModel.Currency" />
-          <AssociationSet Name="currency_to_purchase_order" Association="labdbModel.currency_to_purchase_order">
-            <End Role="currency" EntitySet="Currencies" />
-            <End Role="PurchaseOrder" EntitySet="PurchaseOrders" />
-          </AssociationSet>
           <EntitySet Name="PersonRoleMappings" EntityType="labdbModel.PersonRoleMapping" />
           <EntitySet Name="PersonRoles" EntityType="labdbModel.PersonRole" />
           <AssociationSet Name="person_to_role_mapping" Association="labdbModel.person_to_role_mapping">
@@ -3511,10 +3482,6 @@
           <AssociationSet Name="requirement_to_control_plan" Association="labdbModel.requirement_to_control_plan">
             <End Role="Requirement" EntitySet="Requirements" />
             <End Role="ControlPlanItem" EntitySet="ControlPlanItems1" />
-          </AssociationSet>
-          <AssociationSet Name="calibration_responsible_to_instrument" Association="labdbModel.calibration_responsible_to_instrument">
-            <End Role="Organization" EntitySet="Organizations" />
-            <End Role="Instrument" EntitySet="Instruments" />
           </AssociationSet>
           <AssociationSet Name="task_to_report" Association="labdbModel.task_to_report">
             <End Role="Task" EntitySet="Tasks" />
@@ -3666,7 +3633,15 @@
             <End Role="Std" EntitySet="Stds" />
             <End Role="StandardFile" EntitySet="StandardFiles" />
           </AssociationSet>
-        </EntityContainer>
+          <AssociationSet Name="latest_sample_to_batch" Association="labdbModel.latest_sample_to_batch">
+            <End Role="Sample" EntitySet="Samples" />
+            <End Role="Batch" EntitySet="Batches" />
+          </AssociationSet>
+          <AssociationSet Name="calibration_responsible_to_instrument" Association="labdbModel.calibration_responsible_to_instrument">
+            <End Role="Organization" EntitySet="Organizations" />
+            <End Role="Instrument" EntitySet="Instruments" />
+          </AssociationSet>
+          </EntityContainer>
         <Association Name="overridden_to_requirement">
           <End Type="labdbModel.Requirement" Role="Requirement" Multiplicity="0..1">
             <OnDelete Action="Cascade" />
@@ -3917,12 +3892,10 @@
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Code" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="Description" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="InstrumentTypeID" Type="Int32" Nullable="false" />
-          <Property Name="ControlPeriod" Type="SByte" Nullable="false" />
           <NavigationProperty Name="CalibrationReports" Relationship="labdbModel.instrument_to_calibration_report" FromRole="instrument" ToRole="calibration_reports" />
           <NavigationProperty Name="InstrumentType" Relationship="labdbModel.type_to_instrument" FromRole="instrument" ToRole="instrument_types" />
-          <Property Name="IsUnderControl" Type="Boolean" Nullable="false" />
           <Property Name="supplierID" Type="Int32" />
           <Property Name="manufacturerID" Type="Int32" />
           <Property Name="SerialNumber" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
@@ -3931,9 +3904,6 @@
           <NavigationProperty Name="Manufacturer" Relationship="labdbModel.manufacturer_to_instrument" FromRole="instrument" ToRole="Organization" />
           <NavigationProperty Name="Supplier" Relationship="labdbModel.supplier_to_instrument" FromRole="instrument" ToRole="Organization" />
           <NavigationProperty Name="MaintenanceEvent" Relationship="labdbModel.instrument_to_maintenance_event" FromRole="Instrument" ToRole="instrument_maintenance_events" />
-          <Property Name="CalibrationDueDate" Type="DateTime" />
-          <Property Name="CalibrationResponsibleID" Type="Int32" />
-          <NavigationProperty Name="CalibrationResponsible" Relationship="labdbModel.calibration_responsible_to_instrument" FromRole="Instrument" ToRole="Organization" />
           <NavigationProperty Name="CalibrationReportAsReference" Relationship="labdbModel.calibration_reference_mappings" FromRole="Instrument" ToRole="CalibrationReport" />
           <NavigationProperty Name="AssociatedMethods" Relationship="labdbModel.instrument_method_mappings" FromRole="Instrument" ToRole="Method" />
           <Property Name="UtilizationAreaID" Type="Int32" />
@@ -3941,6 +3911,11 @@
           <NavigationProperty Name="InstrumentMeasurableProperties" Relationship="labdbModel.instrument_to_measurable_property" FromRole="Instrument" ToRole="instrument_measurable_property" />
           <Property Name="IsInService" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="InstrumentFiles" Relationship="labdbModel.instrument_to_file" FromRole="Instrument" ToRole="instrument_files" />
+          <Property Name="IsUnderControl" Type="Boolean" Nullable="false" />
+          <Property Name="CalibrationResponsibleID" Type="Int32" />
+          <Property Name="CalibrationDueDate" Type="DateTime" />
+          <Property Name="CalibrationInterval" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="CalibrationResponsible" Relationship="labdbModel.calibration_responsible_to_instrument" FromRole="Instrument" ToRole="Organization" />
         </EntityType>
         <Association Name="instrument_to_calibration_report">
           <End Type="labdbModel.Instrument" Role="instrument" Multiplicity="1" />
@@ -4067,14 +4042,11 @@
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" />
           <Property Name="Number" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="Total" Type="Single" Nullable="false" />
-          <Property Name="OrderDate" Type="DateTime" Nullable="false" />
           <Property Name="organizationID" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Organization" Relationship="labdbModel.organization_to_purchase_order" FromRole="purchase_orders" ToRole="Organization" />
           <NavigationProperty Name="PoFile" Relationship="labdbModel.purchase_order_to_file" FromRole="purchase_orders" ToRole="po_file" />
           <NavigationProperty Name="ExternalReports" Relationship="labdbModel.purchase_order_to_external_report" FromRole="PurchaseOrder" ToRole="ExternalReport" />
-          <Property Name="CurrencyID" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Currency" Relationship="labdbModel.currency_to_purchase_order" FromRole="PurchaseOrder" ToRole="currency" />
+          <Property Name="Total" Type="Double" Nullable="false" />
         </EntityType>
         <Association Name="organization_to_purchase_order">
           <End Type="labdbModel.Organization" Role="Organization" Multiplicity="1" />
@@ -4229,28 +4201,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="Currency">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Code" Type="String" Nullable="false" MaxLength="3" FixedLength="false" Unicode="false" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
-          <Property Name="ExchangeRate" Type="Single" Nullable="false" />
-          <NavigationProperty Name="PurchaseOrders" Relationship="labdbModel.currency_to_purchase_order" FromRole="currency" ToRole="PurchaseOrder" />
-        </EntityType>
-        <Association Name="currency_to_purchase_order">
-          <End Type="labdbModel.Currency" Role="currency" Multiplicity="1" />
-          <End Type="labdbModel.PurchaseOrder" Role="PurchaseOrder" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="currency">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="PurchaseOrder">
-              <PropertyRef Name="CurrencyID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityType Name="PersonRoleMapping">
           <Key>
             <PropertyRef Name="ID" />
@@ -4310,18 +4260,6 @@
             </Principal>
             <Dependent Role="ControlPlanItem">
               <PropertyRef Name="RequirementID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="calibration_responsible_to_instrument">
-          <End Type="labdbModel.Organization" Role="Organization" Multiplicity="0..1" />
-          <End Type="labdbModel.Instrument" Role="Instrument" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Organization">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="Instrument">
-              <PropertyRef Name="CalibrationResponsibleID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -4608,7 +4546,8 @@
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="instruments" Relationship="labdbModel.utilization_area_to_instrument" FromRole="instrument_utilization_areas" ToRole="Instrument" />
+          <NavigationProperty Name="Instruments" Relationship="labdbModel.utilization_area_to_instrument" FromRole="instrument_utilization_areas" ToRole="Instrument" />
+          <Property Name="Plant" Type="String" Nullable="false" MaxLength="2" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="MeasurementUnit">
           <Key>
@@ -4641,7 +4580,6 @@
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="InstrumentID" Type="Int32" Nullable="false" />
           <Property Name="Description" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" DefaultValue="" />
-          <Property Name="IsUnderControl" Type="Boolean" Nullable="false" />
           <Property Name="TargetUncertainty" Type="Single" Nullable="false" />
           <Property Name="UnitID" Type="Int32" Nullable="false" />
           <Property Name="Resolution" Type="Single" Nullable="false" />
@@ -4653,8 +4591,6 @@
           <Property Name="CalibrationRangeLowerLimit" Type="Double" Nullable="false" />
           <Property Name="RangeUpperLimit" Type="Double" Nullable="false" />
           <Property Name="RangeLowerLimit" Type="Double" Nullable="false" />
-          <Property Name="ControlPeriod" Type="Int32" Nullable="false" />
-          <Property Name="CalibrationDue" Type="DateTime" />
           <NavigationProperty Name="CalibrationReportMappings" Relationship="labdbModel.instrument_property_to_calibration_report_mapping" FromRole="InstrumentMeasurableProperty" ToRole="calibration_report_measurable_property_mappings" />
         </EntityType>
         <EntityType Name="MeasurableQuantity">
@@ -4832,7 +4768,31 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-      </Schema>
+        <Association Name="latest_sample_to_batch">
+          <End Type="labdbModel.Sample" Role="Sample" Multiplicity="0..1" />
+          <End Type="labdbModel.Batch" Role="Batch" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Sample">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Batch">
+              <PropertyRef Name="LatestSampleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="calibration_responsible_to_instrument">
+          <End Type="labdbModel.Organization" Role="Organization" Multiplicity="0..1" />
+          <End Type="labdbModel.Instrument" Role="Instrument" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Organization">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Instrument">
+              <PropertyRef Name="CalibrationResponsibleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
@@ -4860,11 +4820,12 @@
           <EntitySetMapping Name="Batches">
             <EntityTypeMapping TypeName="labdbModel.Batch">
               <MappingFragment StoreEntitySet="batches">
+                <ScalarProperty Name="LongTermStock" ColumnName="long_term_stock" />
+                <ScalarProperty Name="LatestSampleID" ColumnName="latest_sampleID" />
                 <ScalarProperty Name="DoNotTest" ColumnName="do_not_test" />
                 <ScalarProperty Name="ArchiveStock" ColumnName="archive_stock" />
                 <ScalarProperty Name="TrialScopeText" ColumnName="trial_scope_text" />
                 <ScalarProperty Name="BasicReportID" ColumnName="basic_reportID" />
-                <ScalarProperty Name="BasicReportDone" ColumnName="basic_report_done" />
                 <ScalarProperty Name="FirstSampleID" ColumnName="first_sampleID" />
                 <ScalarProperty Name="FirstSampleArrived" ColumnName="first_sample_arrived" />
                 <ScalarProperty Name="TrialAreaID" ColumnName="trial_areaID" />
@@ -4918,10 +4879,7 @@
                 <ScalarProperty Name="ExternalLabID" ColumnName="external_labID" />
                 <ScalarProperty Name="MaterialSent" ColumnName="material_sent" />
                 <ScalarProperty Name="RequestDone" ColumnName="request_done" />
-                <ScalarProperty Name="PurchaseOrder" ColumnName="purchase_order" />
-                <ScalarProperty Name="Price" ColumnName="price" />
                 <ScalarProperty Name="Samples" ColumnName="samples" />
-                <ScalarProperty Name="Currency" ColumnName="currency" />
                 <ScalarProperty Name="ReportReceived" ColumnName="report_received" />
                 <ScalarProperty Name="ProjectID" ColumnName="projectID" />
               </MappingFragment>
@@ -4940,7 +4898,6 @@
           <EntitySetMapping Name="Methods">
             <EntityTypeMapping TypeName="labdbModel.Method">
               <MappingFragment StoreEntitySet="methods">
-                <ScalarProperty Name="CostUnits_DEPRECATED" ColumnName="cost_units" />
                 <ScalarProperty Name="Duration" ColumnName="duration" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="StandardID" ColumnName="standardID" />
@@ -5029,7 +4986,7 @@
           <EntitySetMapping Name="Requirements">
             <EntityTypeMapping TypeName="labdbModel.Requirement">
               <MappingFragment StoreEntitySet="requirements">
-                <ScalarProperty Name="skip_test" ColumnName="skip_test" />
+                <ScalarProperty Name="SkipTest" ColumnName="skip_test" />
                 <ScalarProperty Name="OverriddenID" ColumnName="overriddenID" />
                 <ScalarProperty Name="IsOverride" ColumnName="is_override" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
@@ -5075,7 +5032,6 @@
             <EntityTypeMapping TypeName="labdbModel.StandardFile">
               <MappingFragment StoreEntitySet="standard_files">
                 <ScalarProperty Name="standardID" ColumnName="standardID" />
-                <ScalarProperty Name="IssueID" ColumnName="issueID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Path" ColumnName="path" />
                 <ScalarProperty Name="Description" ColumnName="description" />
@@ -5085,8 +5041,7 @@
           <EntitySetMapping Name="Stds">
             <EntityTypeMapping TypeName="labdbModel.Std">
               <MappingFragment StoreEntitySet="standards">
-                <ScalarProperty Name="current_issue" ColumnName="current_issue" />
-                <ScalarProperty Name="CurrentIssueID" ColumnName="current_issueID" />
+                <ScalarProperty Name="CurrentIssue" ColumnName="current_issue" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Name" ColumnName="name" />
                 <ScalarProperty Name="OrganizationID" ColumnName="organizationID" />
@@ -5261,16 +5216,16 @@
           <EntitySetMapping Name="Instruments">
             <EntityTypeMapping TypeName="labdbModel.Instrument">
               <MappingFragment StoreEntitySet="instruments">
+                <ScalarProperty Name="CalibrationInterval" ColumnName="calibration_interval" />
+                <ScalarProperty Name="CalibrationDueDate" ColumnName="calibration_due_date" />
+                <ScalarProperty Name="CalibrationResponsibleID" ColumnName="calibration_responsibleID" />
+                <ScalarProperty Name="IsUnderControl" ColumnName="is_under_control" />
                 <ScalarProperty Name="IsInService" ColumnName="is_in_service" />
                 <ScalarProperty Name="UtilizationAreaID" ColumnName="utilization_areaID" />
-                <ScalarProperty Name="CalibrationResponsibleID" ColumnName="calibration_responsibleID" />
-                <ScalarProperty Name="CalibrationDueDate" ColumnName="calibration_due" />
                 <ScalarProperty Name="Model" ColumnName="model" />
                 <ScalarProperty Name="SerialNumber" ColumnName="serial_number" />
                 <ScalarProperty Name="manufacturerID" ColumnName="manufacturerID" />
                 <ScalarProperty Name="supplierID" ColumnName="supplierID" />
-                <ScalarProperty Name="IsUnderControl" ColumnName="is_under_control" />
-                <ScalarProperty Name="ControlPeriod" ColumnName="control_period" />
                 <ScalarProperty Name="InstrumentTypeID" ColumnName="instrument_typeID" />
                 <ScalarProperty Name="Description" ColumnName="description" />
                 <ScalarProperty Name="Code" ColumnName="code" />
@@ -5309,10 +5264,8 @@
           <EntitySetMapping Name="PurchaseOrders">
             <EntityTypeMapping TypeName="labdbModel.PurchaseOrder">
               <MappingFragment StoreEntitySet="purchase_orders">
-                <ScalarProperty Name="CurrencyID" ColumnName="currencyID" />
+                <ScalarProperty Name="Total" ColumnName="euro_total" />
                 <ScalarProperty Name="organizationID" ColumnName="organizationID" />
-                <ScalarProperty Name="OrderDate" ColumnName="date" />
-                <ScalarProperty Name="Total" ColumnName="total" />
                 <ScalarProperty Name="Number" ColumnName="number" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
@@ -5336,16 +5289,6 @@
                 <ScalarProperty Name="UM" ColumnName="um" />
                 <ScalarProperty Name="Name" ColumnName="name" />
                 <ScalarProperty Name="MethodID" ColumnName="methodID" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Currencies">
-            <EntityTypeMapping TypeName="labdbModel.Currency">
-              <MappingFragment StoreEntitySet="currencies">
-                <ScalarProperty Name="ExchangeRate" ColumnName="exchange_rate" />
-                <ScalarProperty Name="Name" ColumnName="name" />
-                <ScalarProperty Name="Code" ColumnName="code" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -5446,6 +5389,7 @@
           <EntitySetMapping Name="InstrumentUtilizationAreas">
             <EntityTypeMapping TypeName="labdbModel.InstrumentUtilizationArea">
               <MappingFragment StoreEntitySet="instrument_utilization_areas">
+                <ScalarProperty Name="Plant" ColumnName="plant" />
                 <ScalarProperty Name="Name" ColumnName="name" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
@@ -5464,8 +5408,6 @@
           <EntitySetMapping Name="InstrumentMeasurableProperties">
             <EntityTypeMapping TypeName="labdbModel.InstrumentMeasurableProperty">
               <MappingFragment StoreEntitySet="instrument_measurable_property">
-                <ScalarProperty Name="CalibrationDue" ColumnName="calibration_due" />
-                <ScalarProperty Name="ControlPeriod" ColumnName="control_period" />
                 <ScalarProperty Name="RangeLowerLimit" ColumnName="range_lower_limit" />
                 <ScalarProperty Name="RangeUpperLimit" ColumnName="range_upper_limit" />
                 <ScalarProperty Name="CalibrationRangeLowerLimit" ColumnName="calibration_range_lower_limit" />
@@ -5474,7 +5416,6 @@
                 <ScalarProperty Name="Resolution" ColumnName="resolution" />
                 <ScalarProperty Name="UnitID" ColumnName="unitID" />
                 <ScalarProperty Name="TargetUncertainty" ColumnName="target_uncertainty" />
-                <ScalarProperty Name="IsUnderControl" ColumnName="is_under_control" />
                 <ScalarProperty Name="Description" ColumnName="description" />
                 <ScalarProperty Name="InstrumentID" ColumnName="instrumentID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />

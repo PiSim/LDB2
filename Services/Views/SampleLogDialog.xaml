@@ -60,9 +60,9 @@
             </TextBlock>
 
 
-            <ComboBox ItemsSource="{Binding Path=ActionList}"
-                      DisplayMemberPath="Item1"
-                      SelectedItem="{Binding Path=SelectedAction, Mode=TwoWay}"
+            <ComboBox ItemsSource="{Binding Path=ChoiceList}"
+                      DisplayMemberPath="LongText"
+                      SelectedItem="{Binding Path=SelectedChoice, Mode=TwoWay}"
                       VerticalAlignment="Center"
                       Grid.Column="1"
                       Grid.Row="1"

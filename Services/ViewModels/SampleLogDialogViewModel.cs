@@ -3,6 +3,7 @@ using DBManager.EntityExtensions;
 using DBManager.Services;
 using Infrastructure;
 using Infrastructure.Events;
+using Infrastructure.Wrappers;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
@@ -24,27 +25,35 @@ namespace Services.ViewModels
         private DelegateCommand _confirm, 
                                 _deleteLast;
         private DelegateCommand<Window> _end;
+
         private readonly Dictionary<string, ICollection<string>> _validationErrors = new Dictionary<string, ICollection<string>>();
-        private readonly Dictionary<string, int> _stockModifiers = new Dictionary<string, int>()
-                                                                {
-                                                                    {"A", 1 },
-                                                                    {"B", -1 },
-                                                                    {"F", -1 },
-                                                                    {"M", -1 },
-                                                                    {"S", -1 }
-                                                                };
         private EventAggregator _eventAggregator;
-        private readonly List<Tuple<string,string>> _actions = new List<Tuple<string, string>>()
-                                                                {
-                                                                    new Tuple<string, string>("Arrivato in laboratorio", "A"),
-                                                                    new Tuple<string, string>("Buttato", "B"),
-                                                                    new Tuple<string, string>("Finito", "F"),
-                                                                    new Tuple<string, string>("Masterizzato", "M"),
-                                                                    new Tuple<string, string>("Spedito", "S")
-                                                                };
+        private readonly IEnumerable<SampleLogChoiceWrapper> _choiceList = new List<SampleLogChoiceWrapper>()
+        {
+            new SampleLogChoiceWrapper("Arrivato in laboratorio",
+                                        "A",
+                                        1,
+                                        0),
+            new SampleLogChoiceWrapper("Buttato",
+                                        "B",
+                                        -1,
+                                        0),
+            new SampleLogChoiceWrapper("Finito",
+                                        "F",
+                                        -1,
+                                        0),
+            new SampleLogChoiceWrapper("Portato in Cotex",
+                                        "C",
+                                        -1,
+                                        1),
+            new SampleLogChoiceWrapper("Ripreso da Cotex",
+                                        "R",
+                                        1,
+                                        -1)                             
+        };
         private Sample _lastEntry;
         private string _batchNumber;
-        private Tuple<string, string> _selectedAction;
+        private SampleLogChoiceWrapper _selectedChoice;
 
         public SampleLogDialogViewModel(DBPrincipal principal,
                                         EventAggregator aggregator) : base()
@@ -52,14 +61,14 @@ namespace Services.ViewModels
             _principal = principal;
             _eventAggregator = aggregator;
 
-            _selectedAction = _actions.First(act => act.Item2 == "A");
+            _selectedChoice = _choiceList.First(cho => cho.Code == "A");
 
             _confirm = new DelegateCommand(
                 () =>
                 {
                     Sample newLog = new Sample();
                     newLog.BatchID = _batchInstance.ID;
-                    newLog.Code = _selectedAction.Item2;
+                    newLog.Code = _selectedChoice.Code;
                     newLog.Date = DateTime.Now.Date;
                     newLog.personID = _principal.CurrentPerson.ID;
 
@@ -71,7 +80,11 @@ namespace Services.ViewModels
                         _batchInstance.FirstSampleID = newLog.ID;
                     }
 
-                    _batchInstance.ArchiveStock += _stockModifiers[newLog.Code];
+                    if (newLog.Code == "A")
+                        _batchInstance.LatestSampleID = newLog.ID;
+
+                    _batchInstance.ArchiveStock += _selectedChoice.ArchiveModifier;
+                    _batchInstance.LongTermStock += _selectedChoice.LongTermModifier;
                     _batchInstance.Update();
 
                     BatchNumber = null;
@@ -125,9 +138,9 @@ namespace Services.ViewModels
         #endregion
 
 
-        public IEnumerable<Tuple<string, string>> ActionList
+        public IEnumerable<SampleLogChoiceWrapper> ChoiceList
         {
-            get { return _actions; }
+            get { return _choiceList; }
         }
 
         public Batch BatchInstance
@@ -197,12 +210,12 @@ namespace Services.ViewModels
             }
         }
 
-        public Tuple<string,string> SelectedAction
+        public SampleLogChoiceWrapper SelectedChoice
         {
-            get { return _selectedAction; }
+            get { return _selectedChoice; }
             set
             {
-                _selectedAction = value;
+                _selectedChoice = value;
             }
         }
     }

@@ -83,7 +83,7 @@ namespace Specifications.ViewModels
                 _deleteMethod.RaiseCanExecuteChanged();
                 RaisePropertyChanged("SelectedMethod");
 
-                NavigationToken token = new NavigationToken(ViewNames.MethodEditView,
+                NavigationToken token = new NavigationToken(SpecificationViewNames.MethodEdit,
                                                             _selectedMethod,
                                                             RegionNames.MethodEditRegion);
 

@@ -1,4 +1,10 @@
-﻿v 0.54 -- 27/9/2017
+﻿v 0.55 --
+
+-Spostata gestione tarature da proprietà a strumenti
+-Implementata gestione archivio lungo termine ("Cotex")
+-Iniziata implementazione gestione tempi di lavorazione test
+
+v 0.54 -- 27/9/2017
 
 -Implementato conteggio ore per report/durata metodi
 -Sostituite diverse listview con DataGrid

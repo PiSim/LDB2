@@ -144,6 +144,22 @@ namespace DBManager.EntityExtensions
             }
         }
 
+        public static void UpdateDuration(this Report entry)
+        {
+            // Updates the value of the field "TotalDuration" with the sum of the report's tests individual durations
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Reports
+                        .First(rep => rep.ID == entry.ID)
+                        .TotalDuration = entities.Tests
+                                                    .Where(tst => tst.ReportID == entry.ID)
+                                                    .Sum(tst => tst.Duration);
+
+                entities.SaveChanges();
+            }
+        }
+
         public static void UpdateTests(this Report entry)
         {
             // Updates all related Test and Subtest instances in a report

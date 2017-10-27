@@ -32,7 +32,9 @@ namespace Services.ViewModels
         public ExternalReportCreationDialogViewModel() : base()
         {
             _batchList = new ObservableCollection<Batch>();
-            
+            _sampleDescription = "";
+            _testDescription = "";
+
             _addBatch = new DelegateCommand<TextBox>(
                 batchBox => 
                 {
@@ -63,10 +65,7 @@ namespace Services.ViewModels
                     _externalReportInstance.ExternalNumber = "";
                     _externalReportInstance.MaterialSent = false;
                     _externalReportInstance.RequestDone = false;
-                    _externalReportInstance.PurchaseOrder = "";
-                    _externalReportInstance.Price = 0;
                     _externalReportInstance.Samples = _sampleDescription;
-                    _externalReportInstance.Currency = "";
                     _externalReportInstance.ReportReceived = false;
                     _externalReportInstance.ExternalLabID = _selectedLab.ID;
                     _externalReportInstance.ProjectID = _selectedProject.ID;

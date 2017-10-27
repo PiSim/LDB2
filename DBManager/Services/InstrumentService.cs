@@ -29,11 +29,12 @@ namespace DBManager.Services
             {
                 entities.Configuration.LazyLoadingEnabled = false;
 
-                return entities.Instruments.Include(inst => inst.CalibrationResponsible)
-                                            .Include(inst => inst.InstrumentType)
-                                            .Where(inst => inst.IsUnderControl)
-                                            .OrderBy(inst => inst.CalibrationDueDate)
-                                            .ToList();                                            
+                return entities.Instruments.Include(ins => ins.InstrumentType)
+                                            .Include(ins => ins.InstrumentUtilizationArea)
+                                            .Include(ins => ins.CalibrationResponsible)
+                                            .Where(ins => ins.IsUnderControl == true)
+                                            .OrderBy(ins => ins.CalibrationDueDate)
+                                            .ToList();                                        
             }
         }
 
@@ -46,6 +47,7 @@ namespace DBManager.Services
                 entities.Configuration.LazyLoadingEnabled = false;
 
                 return entities.InstrumentUtilizationAreas
+                                .OrderBy(iua => iua.Name)
                                 .ToList();
             }
         }
@@ -121,7 +123,8 @@ namespace DBManager.Services
 
                 return entities.Instruments.Include(inst => inst.InstrumentType)
                                             .Include(inst => inst.Manufacturer)
-                                            .Where(inst => true)
+                                            .Include(inst => inst.InstrumentUtilizationArea)
+                                            .OrderBy(inst => inst.Code)
                                             .ToList();
             }
         }

@@ -67,6 +67,11 @@ namespace Projects.ViewModels
         {
             get { return ProjectService.GetProjects(); } 
         }
+
+        public string ProjectStatRegionName
+        {
+            get { return RegionNames.ProjectStatRegion; }
+        }
         
         public Project SelectedProject
         {

@@ -45,10 +45,7 @@ namespace Reports
                     if (output == null)
                     {
                         output = new PurchaseOrder();
-                        output.Currency = entities.Currencies
-                             .First(crn => crn.ID == poDialog.Currency.ID);
                         output.Number = poDialog.Number;
-                        output.OrderDate = poDialog.Date;
                         output.Organization = entities.Organizations
                             .First(sup => sup.ID == poDialog.Supplier.ID);
                         output.Total = poDialog.Total;

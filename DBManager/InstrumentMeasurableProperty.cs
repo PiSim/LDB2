@@ -24,7 +24,6 @@ namespace DBManager
         public int ID { get; set; }
         public int InstrumentID { get; set; }
         public string Description { get; set; }
-        public bool IsUnderControl { get; set; }
         public float TargetUncertainty { get; set; }
         public int UnitID { get; set; }
         public float Resolution { get; set; }
@@ -33,8 +32,6 @@ namespace DBManager
         public double CalibrationRangeLowerLimit { get; set; }
         public double RangeUpperLimit { get; set; }
         public double RangeLowerLimit { get; set; }
-        public int ControlPeriod { get; set; }
-        public Nullable<System.DateTime> CalibrationDue { get; set; }
     
         public virtual Instrument Instrument { get; set; }
         public virtual MeasurableQuantity MeasurableQuantity { get; set; }

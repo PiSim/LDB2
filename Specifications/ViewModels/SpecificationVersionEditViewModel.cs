@@ -22,6 +22,7 @@ namespace Specifications.ViewModels
         private DBPrincipal _principal;
         private DelegateCommand _save,
                                 _startEdit;
+        private DelegateCommand<Requirement> _deleteRequirementCommand;
         private readonly Dictionary<string, ICollection<string>> _validationErrors = new Dictionary<string, ICollection<string>>();
         private List<RequirementWrapper> _requirementList;
         private SpecificationVersion _specificationVersionInstance;
@@ -30,6 +31,18 @@ namespace Specifications.ViewModels
         {
             _editMode = false;
             _principal = principal;
+
+            _deleteRequirementCommand = new DelegateCommand<Requirement>(
+                req =>
+                {
+                    req.Delete();
+
+                    _specificationVersionInstance.Load();
+
+                    GenerateRequirementList();
+
+                    RaisePropertyChanged("RequirementList");
+                });
 
             _save = new DelegateCommand(
                 () =>
@@ -88,6 +101,11 @@ namespace Specifications.ViewModels
         private bool CanEdit
         {
             get { return _principal.IsInRole(UserRoleNames.SpecificationEdit); }
+        }
+
+        public DelegateCommand<Requirement> DeleteRequirementCommand
+        {
+            get { return _deleteRequirementCommand; }
         }
 
         private void GenerateRequirementList()

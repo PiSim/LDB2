@@ -189,19 +189,7 @@ namespace Reports.ViewModels
                     return false;
             }
         }
-
-        public string Currency
-        {
-            get 
-            { 
-                if (_instance == null)
-                    return null;
-                    
-                return _instance.Currency; 
-            }
-            set { _instance.Currency = value; }
-        }
-        
+                
         public bool EditMode
         {
             get { return _editMode; }
@@ -245,7 +233,7 @@ namespace Reports.ViewModels
                 RaisePropertyChanged("Description");
                 RaisePropertyChanged("ReportFiles");
                 RaisePropertyChanged("ExternalLab");
-                RaisePropertyChanged("InternalNumber");
+                RaisePropertyChanged("FormattedNumber");
                 RaisePropertyChanged("SamplesSent");
                 RaisePropertyChanged("OrderCurrency");
                 RaisePropertyChanged("OrderDate");
@@ -258,16 +246,12 @@ namespace Reports.ViewModels
             }
         }
         
-        public int InternalNumber
+        public string FormattedNumber
         {
             get 
             { 
-                if (_instance == null)
-                    return 0;
-                    
-                return _instance.InternalNumber; 
+                return _instance?.FormattedNumber; 
             }
-            set { _instance.InternalNumber = value; }
         }
         
         public DelegateCommand OpenBatchCommand
@@ -278,28 +262,6 @@ namespace Reports.ViewModels
         public DelegateCommand OpenFileCommand
         {
             get { return _openFile; }
-        }
-
-        public string OrderCurrency
-        {
-            get
-            {
-                if (_instance == null || _instance.PO == null)
-                    return null;
-
-                return _instance.PO.Currency.Code;
-            }
-        }
-
-        public string OrderDate
-        {
-            get
-            {
-                if (_instance == null || _instance.PO == null)
-                    return null;
-
-                return _instance.PO.OrderDate.ToShortDateString();
-            }
         }
 
         public string OrderNumber
@@ -318,14 +280,7 @@ namespace Reports.ViewModels
         {
             get
             {
-                try
-                {
-                    return _instance.PO.Total.ToString();
-                }
-                catch
-                {
-                    return null;
-                }
+                return _instance?.PO?.Total.ToString();
             }
         }
 
@@ -405,20 +360,7 @@ namespace Reports.ViewModels
             }
         }
         
-
-        public double Price
-        {
-            get 
-            { 
-                if (_instance == null)
-                    return 0;
-                    
-                return _instance.Price; 
-            }
-
-            set { _instance.Price = value; }
-        }
-        
+                
         public Project Project
         {
             get 

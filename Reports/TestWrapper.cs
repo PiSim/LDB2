@@ -37,6 +37,14 @@ namespace Reports
             }
         }
 
+        public double Duration
+        {
+            get
+            {
+                return _testInstance.Duration;
+            }
+        }
+
         public bool IsComplete
         {
             get { return _testInstance.IsComplete; }

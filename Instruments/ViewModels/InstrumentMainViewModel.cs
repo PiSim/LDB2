@@ -19,9 +19,11 @@ namespace Instruments.ViewModels
     public class InstrumentMainViewModel : BindableBase
     {
         private DBPrincipal _principal;
-        private DelegateCommand _deleteInstrument, _newInstrument, _openInstrument;
+        private DelegateCommand _deleteInstrument, _newInstrument, _openInstrument,
+                                _openPending;
         private EventAggregator _eventAggregator;
-        private Instrument _selectedInstrument;
+        private Instrument _selectedInstrument,
+                            _selectedPending;
 
         public InstrumentMainViewModel(DBPrincipal principal,
                                         EventAggregator eventAggregator) : base()
@@ -53,6 +55,14 @@ namespace Instruments.ViewModels
                     _eventAggregator.GetEvent<NavigationRequested>().Publish(token);
                 },
                 () => SelectedInstrument != null);
+
+            _openPending = new DelegateCommand(
+                () =>
+                {
+                    NavigationToken token = new NavigationToken(InstrumentViewNames.InstrumentEditView,
+                                                                SelectedPending);
+                    _eventAggregator.GetEvent<NavigationRequested>().Publish(token);
+                });
 
             _eventAggregator.GetEvent<CalibrationIssued>().Subscribe(
                 calRep => 
@@ -100,6 +110,11 @@ namespace Instruments.ViewModels
             get { return _openInstrument; }
         }
 
+        public DelegateCommand OpenPendingCommand
+        {
+            get { return _openPending; }
+        }
+
         public IEnumerable<Instrument> PendingCalibrationsList
         {
             get
@@ -122,5 +137,15 @@ namespace Instruments.ViewModels
             }
         }
 
+
+        public Instrument SelectedPending
+        {
+            get { return _selectedPending; }
+            set
+            {
+                _selectedPending = value;
+                RaisePropertyChanged("SelectedPending");
+            }
+        }
     }
 }

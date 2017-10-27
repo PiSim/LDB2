@@ -28,34 +28,43 @@
                         Margin="5"/>
             </StackPanel>
 
-            <ListView ItemsSource="{Binding InstrumentMeasurablePropertyList}"
-                        SelectedItem="{Binding SelectedInstrumentMeasurableProperty,
+            <!-- Invisible FrameworkElement only used as reference to access DataContext-->
+            <FrameworkElement x:Name="dummyElement" Visibility="Collapsed"/>
+
+            <DataGrid ItemsSource="{Binding InstrumentMeasurablePropertyList}"
+                      SelectedItem="{Binding SelectedInstrumentMeasurableProperty,
                                                 Mode=TwoWay}"
-                        Grid.Row="1">
-                <ListView.View>
-                    <GridView>
-                        <GridViewColumn Header="Quantità"
-                                        DisplayMemberBinding="{Binding MeasurableQuantity.Name}"/>
-                        <GridViewColumn Header="Range, Lim. Inferiore"
-                                        DisplayMemberBinding="{Binding RangeLowerLimit}"/>
-                        <GridViewColumn Header="Range, Lim. Superiore"
-                                        DisplayMemberBinding="{Binding RangeUpperLimit}"/>
-                        <GridViewColumn Header="Divisione"
-                                        DisplayMemberBinding="{Binding Resolution}"/>
-                        <GridViewColumn Header="UM"
-                                        DisplayMemberBinding="{Binding UnitOfMeasurement.Symbol}"/>
-                        <GridViewColumn Header="Controllo metrologico">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <CheckBox IsChecked="{Binding IsUnderControl}"
-                                                IsEnabled="False"
-                                                HorizontalAlignment="Center"/>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                    </GridView>
-                </ListView.View>
-            </ListView>
+                      IsReadOnly="{Binding CanModify}"
+                      AutoGenerateColumns="False"
+                      CanUserAddRows="False"
+                      CanUserDeleteRows="False"
+                      Grid.Row="1">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Quantità"
+                                        Binding="{Binding Name}"
+                                        IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Range, Lim. Inferiore"
+                                        Binding="{Binding UpperRangeValue}"/>
+                    <DataGridTextColumn Header="Range, Lim. Superiore"
+                                        Binding="{Binding LowerRangeValue}"/>
+                    <DataGridTextColumn Header="Divisione"
+                                        Binding="{Binding Division}"/>
+                    <DataGridTemplateColumn Header="UM"
+                                            IsReadOnly="True">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <ComboBox ItemsSource="{Binding UMList}"
+                                          SelectedItem="{Binding UM}"
+                                          DisplayMemberPath="Symbol"
+                                          IsEnabled="{Binding Source={x:Reference Name=dummyElement},
+                                                              Path=DataContext.EditMode}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Header="Incertezza target"
+                                        Binding="{Binding TargetUncertainty}"/>
+                </DataGrid.Columns>
+            </DataGrid>
         </Grid>
 
         <ContentControl prism:RegionManager.RegionName="{Binding InstrumentEditMeasurablePropertyEditRegionName}"

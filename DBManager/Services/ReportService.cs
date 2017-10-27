@@ -19,7 +19,8 @@ namespace DBManager.Services
                 entities.Configuration.LazyLoadingEnabled = false;
 
                 return entities.ExternalReports.Include(exrep => exrep.ExternalLab)
-                                                .OrderBy(exrep => exrep.InternalNumber)
+                                                .OrderByDescending(exrep => exrep.Year)
+                                                .ThenByDescending(exrep => exrep.Number)
                                                 .ToList();
             }
         }

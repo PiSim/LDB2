@@ -19,7 +19,8 @@ namespace Specifications.ViewModels
 {
     public class SpecificationEditViewModel : BindableBase, INotifyDataErrorInfo
     {
-        private bool _editMode;
+        private bool _editMode,
+                    _testListEditMode;
         private ControlPlan _selectedControlPlan;
         private DBPrincipal _principal;
         private DelegateCommand _addControlPlan, 
@@ -31,9 +32,11 @@ namespace Specifications.ViewModels
                                 _removeControlPlan, 
                                 _removeFile,
                                 _removeTest, 
-                                _removeVersion, 
+                                _removeVersion,
+                                _returnToVersionList,
                                 _save,
-                                _startEdit;
+                                _startEdit,
+                                _startTestListEdit;
         private readonly Dictionary<string, ICollection<string>> _validationErrors = new Dictionary<string, ICollection<string>>();
         private EventAggregator _eventAggregator;
         private List<ControlPlanItemWrapper> _controlPlanItemsList;
@@ -171,6 +174,19 @@ namespace Specifications.ViewModels
                 () => _principal.IsInRole(UserRoleNames.Admin) 
                     && _selectedVersion != null);
 
+            _returnToVersionList = new DelegateCommand(
+                () =>
+                {
+                    _testListEditMode = false;
+
+                    NavigationToken token = new NavigationToken(SpecificationViewNames.SpecificationVersionList,
+                                                                null,
+                                                                RegionNames.SpecificationVersionTestListEditRegion);
+
+                    _eventAggregator.GetEvent<NavigationRequested>()
+                                    .Publish(token);
+                });
+
             _save = new DelegateCommand(
                 () =>
                 {
@@ -185,6 +201,19 @@ namespace Specifications.ViewModels
                     EditMode = true;
                 },
                 () => _principal.IsInRole(UserRoleNames.Admin) && !_editMode);
+
+            _startTestListEdit = new DelegateCommand(
+                () =>
+                {
+                    _testListEditMode = true;
+
+                    NavigationToken token = new NavigationToken(SpecificationViewNames.SpecificationTestListEdit,
+                                                                null,
+                                                                RegionNames.SpecificationVersionTestListEditRegion);
+
+                    _eventAggregator.GetEvent<NavigationRequested>()
+                                    .Publish(token);
+                });
 
             // Event Subscriptions
             
@@ -271,6 +300,15 @@ namespace Specifications.ViewModels
                     return null;
 
                 return _instance.ControlPlans;
+            }
+        }
+
+        public string CurrentIssue
+        {
+            get { return _instance?.Standard.CurrentIssue; }
+            set
+            {
+                _instance.Standard.CurrentIssue = value;
             }
         }
 
@@ -376,6 +414,11 @@ namespace Specifications.ViewModels
             }
         }
 
+        public DelegateCommand ReturnToVersionListCommand
+        {
+            get { return _returnToVersionList; }
+        }
+
         public DelegateCommand SaveCommand
         {
             get { return _save; }
@@ -442,6 +485,7 @@ namespace Specifications.ViewModels
 
                 _eventAggregator.GetEvent<NavigationRequested>()
                                 .Publish(token);
+                RaisePropertyChanged("SelectedVersion");
             }
         }
 
@@ -472,6 +516,7 @@ namespace Specifications.ViewModels
             set
             {
                 _instance = value;
+
                 if (_instance != null)
                 {
                     _instance.Load();
@@ -479,9 +524,19 @@ namespace Specifications.ViewModels
                 }
 
                 SelectedControlPlan = null;
-                SelectedVersion = null;
+                SelectedVersion = _instance.SpecificationVersions.FirstOrDefault(spcv => spcv.IsMain);
+
+                EditMode = false;
+                _testListEditMode = false;
+
+                NavigationToken token = new NavigationToken(SpecificationViewNames.SpecificationVersionList,
+                                                            null,
+                                                            RegionNames.SpecificationVersionTestListEditRegion);
+                _eventAggregator.GetEvent<NavigationRequested>()
+                                .Publish(token);
 
                 RaisePropertyChanged("ControlPlanList");
+                RaisePropertyChanged("CurrentIssue");
                 RaisePropertyChanged("MainVersion");
                 RaisePropertyChanged("MainVersionRequirements");
                 RaisePropertyChanged("ReportList");
@@ -493,6 +548,11 @@ namespace Specifications.ViewModels
         public string SpecificationVersionEditRegionName
         {
             get { return RegionNames.SpecificationVersionEditRegion; }
+        }
+
+        public string SpecificationVersionTestListEditRegionName
+        {
+            get { return RegionNames.SpecificationVersionTestListEditRegion; }
         }
 
         public string SpecificationEditFileRegionName
@@ -519,6 +579,11 @@ namespace Specifications.ViewModels
         public DelegateCommand StartEditCommand
         {
             get { return _startEdit; }
+        }
+
+        public DelegateCommand StartTestListEditCommand
+        {
+            get { return _startTestListEdit; }
         }
 
         public IEnumerable<SpecificationVersion> VersionList

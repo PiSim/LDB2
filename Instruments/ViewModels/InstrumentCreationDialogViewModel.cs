@@ -4,25 +4,39 @@ using DBManager.Services;
 using Prism.Commands;
 using Prism.Mvvm;
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 
 namespace Instruments.ViewModels
 {
 
-    internal class InstrumentCreationDialogViewModel : BindableBase
+    internal class InstrumentCreationDialogViewModel : BindableBase, INotifyDataErrorInfo
     {
         private bool _isUnderControl;
         private DelegateCommand<Window> _cancel, _confirm;
+        private readonly Dictionary<string, ICollection<string>> _validationErrors = new Dictionary<string, ICollection<string>>();
+        private IEnumerable<Organization> _calibrationLabList;
         private Instrument _instrumentInstance;
         private InstrumentType _selectedType;
+        private InstrumentUtilizationArea _selectedArea;
         private int _controlPeriod;
-        private Organization _manufacturer;
-        private string _code, _model, _serial;
+        private Organization _manufacturer,
+                            _selectedCalibrationLab;
+        private string _code, 
+                        _model,
+                        _notes,
+                        _serial;
 
         public InstrumentCreationDialogViewModel() : base()
         {
+            _controlPeriod = 12;
+            _notes = "";
+            _model = "";
+            _serial = "";
+            _calibrationLabList = OrganizationService.GetOrganizations(OrganizationRoleNames.CalibrationLab);
 
             _cancel = new DelegateCommand<Window>(
                 parent =>
@@ -35,15 +49,14 @@ namespace Instruments.ViewModels
                 {
                     _instrumentInstance = new Instrument();
                     _instrumentInstance.Code = _code;
-                    _instrumentInstance.Description = "";
-                    _instrumentInstance.ControlPeriod = (sbyte)_controlPeriod;
+                    _instrumentInstance.Description = _notes;
                     _instrumentInstance.InstrumentTypeID = _selectedType.ID;
-                    _instrumentInstance.IsUnderControl = IsUnderControl;
                     _instrumentInstance.IsInService = true;
-
-                    if (_isUnderControl)
-                        _instrumentInstance.CalibrationDueDate = DateTime.Now.Date;
-
+                    _instrumentInstance.IsUnderControl = _isUnderControl;
+                    _instrumentInstance.CalibrationInterval = _controlPeriod;
+                    _instrumentInstance.UtilizationAreaID = _selectedArea.ID;
+                    _instrumentInstance.CalibrationDueDate = (_isUnderControl) ? DateTime.Now : (DateTime?)null;
+                    _instrumentInstance.CalibrationResponsibleID = _selectedCalibrationLab?.ID;
                     _instrumentInstance.manufacturerID = SelectedManufacturer.ID;
                     _instrumentInstance.Model = Model;
                     _instrumentInstance.SerialNumber = _serial;
@@ -52,8 +65,6 @@ namespace Instruments.ViewModels
                     {
                         InstrumentMeasurableProperty tempIMP = new InstrumentMeasurableProperty()
                         {
-                            CalibrationDue = _instrumentInstance.CalibrationDueDate,
-                            IsUnderControl = _isUnderControl,
                             MeasurableQuantityID = meq.ID,
                             UnitID = meq.UnitsOfMeasurement.First().ID
                         };
@@ -66,18 +77,74 @@ namespace Instruments.ViewModels
 
                     parent.DialogResult = true;
                 },
-                parent => IsValidInput);
+                parent => !HasErrors);
+
+            SelectedCalibrationLab = null;
         }
+
+
+        #region INotifyDataErrorInfo interface elements
+
+        public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
+
+        public IEnumerable GetErrors(string propertyName)
+        {
+            if (string.IsNullOrEmpty(propertyName)
+                || !_validationErrors.ContainsKey(propertyName))
+                return null;
+
+            return _validationErrors[propertyName];
+        }
+
+        public bool HasErrors
+        {
+            get { return _validationErrors.Count > 0; }
+        }
+
+        private void RaiseErrorsChanged(string propertyName)
+        {
+            ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
+            _confirm.RaiseCanExecuteChanged();
+        }
+
+        #endregion
 
         public DelegateCommand<Window> CancelCommand
         {
             get { return _cancel; }
         }
 
+        public IEnumerable<Organization> CalibrationLabList
+        {
+            get { return _calibrationLabList; }
+        }
+
         public string Code
         {
             get { return _code; }
-            set { _code = value; }
+            set
+            {
+                _code = value;
+
+                if (string.IsNullOrEmpty(_code))
+                    InstrumentInstance = null;
+
+                else
+                    InstrumentInstance = InstrumentService.GetInstrument(_code);
+
+                if (InstrumentInstance == null &&
+                    _validationErrors.ContainsKey("Code"))
+                {
+                    _validationErrors.Remove("Code");
+                    RaiseErrorsChanged("Code");
+                }
+
+                else if (InstrumentInstance != null)
+                {
+                    _validationErrors["Code"] = new List<string>() { "Lo strumento " + _code + " esiste già" };
+                    RaiseErrorsChanged("Code");
+                }
+            }
         }
 
         public DelegateCommand<Window> ConfirmCommand
@@ -97,6 +164,10 @@ namespace Instruments.ViewModels
         public Instrument InstrumentInstance
         {
             get { return _instrumentInstance; }
+            private set
+            {
+                _instrumentInstance = value;
+            }
         }
 
         public bool IsUnderControl
@@ -106,6 +177,10 @@ namespace Instruments.ViewModels
             {
                 _isUnderControl = value;
                 RaisePropertyChanged("IsUnderControl");
+                if (value)
+                    SelectedCalibrationLab = _calibrationLabList.First(lab => lab.Name == "Vulcaflex");
+                else
+                    SelectedCalibrationLab = null;
             }
         }
 
@@ -131,6 +206,36 @@ namespace Instruments.ViewModels
             }
         }
 
+        public string Notes
+        {
+            get { return _notes; }
+            set
+            {
+                _notes = value;
+            }
+        }
+
+        public Organization SelectedCalibrationLab
+        {
+            get
+            {
+                return _selectedCalibrationLab;
+            }
+
+            set
+            {
+                _selectedCalibrationLab = value;
+                if (_selectedCalibrationLab == null && IsUnderControl)
+                    _validationErrors["SelectedCalibrationLab"] = new List<string>() { "Selezionare un laboratorio" };
+
+                else
+                    _validationErrors.Remove("SelectedCalibrationLab");
+
+                RaiseErrorsChanged("SelectedCalibrationLab");
+                RaisePropertyChanged("SelectedCalibrationLab");
+            }
+        }
+
         public Organization SelectedManufacturer
         {
             get { return _manufacturer;}
@@ -146,6 +251,15 @@ namespace Instruments.ViewModels
             set { _selectedType = value; }
         }
 
+        public InstrumentUtilizationArea SelectedArea
+        {
+            get { return _selectedArea; }
+            set
+            {
+                _selectedArea = value;
+            }
+        }
+
         public string SerialNumber
         {
             get { return _serial; }
@@ -159,5 +273,11 @@ namespace Instruments.ViewModels
         {
             get { return InstrumentService.GetInstrumentTypes(); }
         }
+
+        public IEnumerable<InstrumentUtilizationArea> AreaList
+        {
+            get { return InstrumentService.GetUtilizationAreas(); }
+        }
+
     }
 }

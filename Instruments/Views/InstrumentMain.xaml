@@ -63,6 +63,14 @@
                                                 Binding="{Binding Manufacturer.Name}"/>
                             <DataGridTextColumn Header="Modello"
                                                 Binding="{Binding Model}"/>
+                            <DataGridTextColumn Header="Area"
+                                                Binding="{Binding InstrumentUtilizationArea.Name}"/>
+                            <DataGridTextColumn Header="Stabilimento"
+                                                Binding="{Binding InstrumentUtilizationArea.Plant}"/>
+                            <DataGridCheckBoxColumn Header="In Servizio"
+                                                    Binding="{Binding IsInService}"/>
+                            <DataGridCheckBoxColumn Header="Sotto Controllo"
+                                                    Binding="{Binding IsUnderControl}"/>
                         </DataGrid.Columns>
                     </DataGrid>
                 </Grid>
@@ -164,9 +172,30 @@
                                                                   ConverterCulture=it-IT}"/>
                             <DataGridTextColumn Header="Codice"
                                                 Binding="{Binding Code}"/>
-                            
+
                             <DataGridTextColumn Header="Tipo"
                                                 Binding="{Binding InstrumentType.Name}"/>
+
+                            <DataGridTextColumn Header="Area"
+                                                Binding="{Binding InstrumentUtilizationArea.Name}"/>
+                            <DataGridTextColumn Header="Stabilimento"
+                                                Binding="{Binding InstrumentUtilizationArea.Plant}"/>
+                            <DataGridTemplateColumn Header="Periodo controllo"
+                                                    SortMemberPath="CalibrationInterval">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock>
+                                            <Run Text="{Binding CalibrationInterval,
+                                                                Mode=OneWay}"/>
+                                            <Run Text=" mesi"/>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <DataGridTextColumn Header="Responsabile controllo"
+                                                Binding="{Binding CalibrationResponsible.Name}"/>
+
                         </DataGrid.Columns>
                     </DataGrid>
                 </Grid>

@@ -29,10 +29,7 @@ namespace DBManager
         public int ExternalLabID { get; set; }
         public bool MaterialSent { get; set; }
         public bool RequestDone { get; set; }
-        public string PurchaseOrder { get; set; }
-        public double Price { get; set; }
         public string Samples { get; set; }
-        public string Currency { get; set; }
         public bool ReportReceived { get; set; }
         public Nullable<int> ProjectID { get; set; }
         public Nullable<int> PurchaseOrderID { get; set; }

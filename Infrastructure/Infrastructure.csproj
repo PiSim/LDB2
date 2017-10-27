@@ -129,6 +129,7 @@
     <Compile Include="Events\PeopleListUpdateRequested.cs" />
     <Compile Include="Events\PersonCreationRequested.cs" />
     <Compile Include="Events\PersonRoleCreationRequested.cs" />
+    <Compile Include="Events\ProjectCostUpdateRequested.cs" />
     <Compile Include="Events\ProjectCreationRequested.cs" />
     <Compile Include="Events\ReportCompleted.cs" />
     <Compile Include="Events\ReportDeleted.cs" />
@@ -195,10 +196,12 @@
     <Compile Include="Wrappers\ControlPlanItemWrapper.cs" />
     <Compile Include="Wrappers\InstrumentMeasurablePropertyWrapper.cs" />
     <Compile Include="Wrappers\ISelectableRequirement.cs" />
+    <Compile Include="Wrappers\ProjectStatsWrapper.cs" />
     <Compile Include="Wrappers\ReportItemWrapper.cs" />
     <Compile Include="Wrappers\RequirementWrapper.cs" />
     <Compile Include="UserViewNames.cs" />
     <Compile Include="InstrumentViewNames.cs" />
+    <Compile Include="Wrappers\SampleLogChoiceWrapper.cs" />
     <Compile Include="Wrappers\TaskItemWrapper.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

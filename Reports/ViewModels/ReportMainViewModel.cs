@@ -16,7 +16,7 @@ using DBManager.EntityExtensions;
 
 namespace Reports.ViewModels
 {
-    class ReportMainViewModel : BindableBase
+    public class ReportMainViewModel : BindableBase
     {
         private DBPrincipal _principal;
         private DelegateCommand _newReport, _openReport, _removeReport;
@@ -24,7 +24,7 @@ namespace Reports.ViewModels
         private Report _selectedReport;
 
         public ReportMainViewModel(DBPrincipal principal,
-                                    EventAggregator eventAggregator) : base()
+                                    EventAggregator eventAggregator)
         {
             _eventAggregator = eventAggregator;
             _principal = principal;

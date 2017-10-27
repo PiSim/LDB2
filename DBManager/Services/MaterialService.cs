@@ -121,6 +121,28 @@ namespace DBManager.Services
             }
         }
 
+        public static IEnumerable<Batch> GetLongTermStorage()
+        {
+            // Returns all the batches with a non-zero number of samples in long term storage
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.Batches.Include(btc => btc.BasicReport)
+                                        .Include(btc => btc.FirstSample)
+                                        .Include(btc => btc.Material.Aspect)
+                                        .Include(btc => btc.Material.MaterialLine)
+                                        .Include(btc => btc.Material.MaterialType)
+                                        .Include(btc => btc.Material.Recipe.Colour)
+                                        .Include(btc => btc.Material.ExternalConstruction.Oem)
+                                        .Include(btc => btc.TrialArea)
+                                        .Where(btc => btc.LongTermStock != 0)
+                                        .OrderByDescending(btc => btc.Number)
+                                        .ToList();
+            }
+        }
+
         public static IEnumerable<Organization> GetMaintenanceOrganizations()
         {
             // Returns all organizations with the MAINT role

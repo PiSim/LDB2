@@ -6,18 +6,33 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DBManager.EntityExtensions
+namespace DBManager
 {
-    public static class ExternalReportExtension
+    public partial class ExternalReport
     {
-        public static void AddBatch(this ExternalReport entry,
-                                    Batch batchEntity)
+        #region Proprietà
+
+        public string FormattedNumber
+        {
+            get { return Year.ToString() + Number.ToString("d3"); }
+        }
+
+        public bool HasOrder
+        {
+            get { return PurchaseOrderID != null; }
+        }
+
+        #endregion
+
+        #region Metodi
+
+        public void AddBatch(Batch batchEntity)
         {
             // Adds a Batch to an ExternalReport entry
 
             using (DBEntities entities = new DBEntities())
             {
-                entities.ExternalReports.First(ext => ext.ID == entry.ID)
+                entities.ExternalReports.First(ext => ext.ID == ID)
                                         .Batches
                                         .Add(entities.Batches
                                         .First(btc => btc.ID == batchEntity.ID));
@@ -26,14 +41,22 @@ namespace DBManager.EntityExtensions
             }
         }
 
-        public static void Create(this ExternalReport entry)
+        public void Create()
         {
+            // Inserts the report in the DB
+
             using (DBEntities entities = new DBEntities())
             {
-                entities.ExternalReports.Add(entry);
+                entities.ExternalReports.Add(this);
                 entities.SaveChanges();
             }
         }
+
+        #endregion
+    }
+
+    public static class ExternalReportExtension
+    {
 
         public static void Delete(this ExternalReport entry)
         {
@@ -120,7 +143,6 @@ namespace DBManager.EntityExtensions
                                                     .Select(mtd => mtd.Property))
                                                     .Include(exrep => exrep.Methods
                                                     .Select(mtd => mtd.Standard))
-                                                    .Include(exrep => exrep.PO.Currency)
                                                     .Include(exrep => exrep.PO.Organization)
                                                     .Include(exrep => exrep.PO.PoFile)
                                                     .Include(exrep => exrep.Project.Leader)
@@ -129,7 +151,6 @@ namespace DBManager.EntityExtensions
 
                 entry.ArrivalDate = tempEntry.ArrivalDate;
                 entry.Batches = tempEntry.Batches;
-                entry.Currency = tempEntry.Currency;
                 entry.Description = tempEntry.Description;
                 entry.ExternalLab = tempEntry.ExternalLab;
                 entry.ExternalLabID = tempEntry.ExternalLabID;
@@ -138,10 +159,8 @@ namespace DBManager.EntityExtensions
                 entry.MaterialSent = tempEntry.MaterialSent;
                 entry.Methods = tempEntry.Methods;
                 entry.PO = tempEntry.PO;
-                entry.Price = tempEntry.Price;
                 entry.Project = tempEntry.Project;
                 entry.ProjectID = tempEntry.ProjectID;
-                entry.PurchaseOrder = tempEntry.PurchaseOrder;
                 entry.PurchaseOrderID = tempEntry.PurchaseOrderID;
                 entry.ReportReceived = tempEntry.ReportReceived;
                 entry.RequestDone = tempEntry.RequestDone;

@@ -47,7 +47,7 @@ namespace Specifications.ViewModels
             _openSpecification = new DelegateCommand(
                 () => 
                 {
-                    NavigationToken token = new NavigationToken(ViewNames.SpecificationsEditView,
+                    NavigationToken token = new NavigationToken(SpecificationViewNames.SpecificationEdit,
                                                                 SelectedSpecification);
                     _eventAggregator.GetEvent<NavigationRequested>().Publish(token);
                 },

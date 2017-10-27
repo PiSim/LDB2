@@ -30,16 +30,16 @@ namespace DBManager
         public string Code { get; set; }
         public string Description { get; set; }
         public int InstrumentTypeID { get; set; }
-        public sbyte ControlPeriod { get; set; }
-        public bool IsUnderControl { get; set; }
         public Nullable<int> supplierID { get; set; }
         public Nullable<int> manufacturerID { get; set; }
         public string SerialNumber { get; set; }
         public string Model { get; set; }
-        public Nullable<System.DateTime> CalibrationDueDate { get; set; }
-        public Nullable<int> CalibrationResponsibleID { get; set; }
         public Nullable<int> UtilizationAreaID { get; set; }
         public bool IsInService { get; set; }
+        public bool IsUnderControl { get; set; }
+        public Nullable<int> CalibrationResponsibleID { get; set; }
+        public Nullable<System.DateTime> CalibrationDueDate { get; set; }
+        public int CalibrationInterval { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CalibrationReport> CalibrationReports { get; set; }
@@ -50,7 +50,6 @@ namespace DBManager
         public virtual Organization Supplier { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<InstrumentMaintenanceEvent> MaintenanceEvent { get; set; }
-        public virtual Organization CalibrationResponsible { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CalibrationReport> CalibrationReportAsReference { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -60,5 +59,6 @@ namespace DBManager
         public virtual ICollection<InstrumentMeasurableProperty> InstrumentMeasurableProperties { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<InstrumentFiles> InstrumentFiles { get; set; }
+        public virtual Organization CalibrationResponsible { get; set; }
     }
 }

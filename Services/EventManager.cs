@@ -117,6 +117,13 @@ namespace Services
                                                     .Publish();
                             });
 
+            _eventAggregator.GetEvent<ProjectCostUpdateRequested>()
+                            .Subscribe(
+                            () =>
+                            {
+                                ServiceProvider.UpdateProjectCosts();
+                            });
+
             _eventAggregator.GetEvent<UserRoleCreationRequested>()
                             .Subscribe(
                             () =>

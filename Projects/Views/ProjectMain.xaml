@@ -11,42 +11,56 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="35"/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
+        <TabControl>
+            <TabItem Header="Lista Progetti">
+                <Grid>
 
-        <StackPanel Orientation="Horizontal"
-                    Grid.Row="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="35"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Orientation="Horizontal"
+                                Grid.Row="0">
 
 
-            <Button Content="Apri"
-                    Command="{Binding OpenProjectCommand}"
-                    Margin="5"/>
+                        <Button Content="Apri"
+                                Command="{Binding OpenProjectCommand}"
+                                Margin="5"/>
 
-            <Button Content="Nuovo"
-                    Command="{Binding NewProjectCommand}"
-                    Margin="5"/>
-        </StackPanel>
-        
-        <ListView ItemsSource="{Binding ProjectList}"
-                  SelectedItem="{Binding SelectedProject, Mode=TwoWay}"
-                  Grid.Row="1">
-            <i:Interaction.Behaviors>
-                <sort:SortingBehavior/>
-            </i:Interaction.Behaviors>
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Header="Progetto"
-                                    DisplayMemberBinding="{Binding Name}"/>
-                    <GridViewColumn Header="OEM"
-                                    DisplayMemberBinding="{Binding Oem.Name}"/>
-                    <GridViewColumn Header="Descrizione"
-                                    DisplayMemberBinding="{Binding Description}"/>
-                    <GridViewColumn Header="Capo Progetto"
-                                    DisplayMemberBinding="{Binding Leader.Name}"/>
-                </GridView>
-            </ListView.View>
-        </ListView>
+                        <Button Content="Nuovo"
+                                Command="{Binding NewProjectCommand}"
+                                Margin="5"/>
+                    </StackPanel>
+
+                    <DataGrid ItemsSource="{Binding ProjectList}"
+                              SelectedItem="{Binding SelectedProject, Mode=TwoWay}"
+                              AutoGenerateColumns="False"
+                              CanUserAddRows="False"
+                              CanUserDeleteRows="False"
+                              IsReadOnly="True"
+                              GridLinesVisibility="None"
+                              SelectionMode="Single"
+                              SelectionUnit="FullRow"
+                              Grid.Row="1">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Progetto"
+                                                Binding="{Binding Name}"/>
+                            <DataGridTextColumn Header="OEM"
+                                                Binding="{Binding Oem.Name}"/>
+                            <DataGridTextColumn Header="Descrizione"
+                                                Binding="{Binding Description}"/>
+                            <DataGridTextColumn Header="Capo Progetto"
+                                                Binding="{Binding Leader.Name}"/>
+                            
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Statistiche">
+                <ContentControl prism:RegionManager.RegionName="{Binding ProjectStatRegionName}"/>
+            </TabItem>
+        </TabControl>
     </Grid>
 </UserControl>
