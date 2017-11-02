@@ -36,18 +36,22 @@ namespace Admin
 
         public void AddOrganizationRole(string name)
         {
-            OrganizationRole newRole = new OrganizationRole();
-            newRole.Name = name;
-            newRole.Description = "";
+            OrganizationRole newRole = new OrganizationRole
+            {
+                Name = name,
+                Description = ""
+            };
 
             _entities.OrganizationRoles.Add(newRole);
 
             foreach (Organization org in _entities.Organizations)
             {
-                OrganizationRoleMapping newMapping = new OrganizationRoleMapping();
-                newMapping.Role = newRole;
-                newMapping.Organization = org;
-                newMapping.IsSelected = false;
+                OrganizationRoleMapping newMapping = new OrganizationRoleMapping
+                {
+                    Role = newRole,
+                    Organization = org,
+                    IsSelected = false
+                };
                 _entities.OrganizationRoleMappings.Add(newMapping);
             }
 
@@ -63,17 +67,21 @@ namespace Admin
             if (addPersonRoleDialog.ShowDialog() != true)
                 return;
 
-            PersonRole newRole = new PersonRole();
-            newRole.Name = addPersonRoleDialog.InputString;
-            newRole.Description = "";
+            PersonRole newRole = new PersonRole
+            {
+                Name = addPersonRoleDialog.InputString,
+                Description = ""
+            };
 
             _entities.PersonRoles.Add(newRole);
 
             foreach (Person per in _entities.People)
             {
-                PersonRoleMapping newMapping = new PersonRoleMapping();
-                newMapping.Person = per;
-                newMapping.IsSelected = false;
+                PersonRoleMapping newMapping = new PersonRoleMapping
+                {
+                    Person = per,
+                    IsSelected = false
+                };
                 newRole.RoleMappings.Add(newMapping);
             }
 
@@ -88,9 +96,11 @@ namespace Admin
             {
                 foreach (OrganizationRole rol in tempRoles)
                 {
-                    OrganizationRoleMapping temp = new OrganizationRoleMapping();
-                    temp.Role = rol;
-                    temp.IsSelected = false;
+                    OrganizationRoleMapping temp = new OrganizationRoleMapping
+                    {
+                        Role = rol,
+                        IsSelected = false
+                    };
                     org.RoleMapping.Add(temp);
                 }
             }

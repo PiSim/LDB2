@@ -2,8 +2,10 @@
 using DBManager.EntityExtensions;
 using DBManager.Services;
 using Infrastructure;
+using Infrastructure.Events;
 using Infrastructure.Wrappers;
 using Prism.Commands;
+using Prism.Events;
 using Prism.Mvvm;
 using System;
 using System.Collections;
@@ -21,15 +23,19 @@ namespace Specifications.ViewModels
         private bool _editMode;
         private DBPrincipal _principal;
         private DelegateCommand _save,
-                                _startEdit;
+                                _startEdit,
+                                _startTestListEdit;
         private DelegateCommand<Requirement> _deleteRequirementCommand;
         private readonly Dictionary<string, ICollection<string>> _validationErrors = new Dictionary<string, ICollection<string>>();
+        private EventAggregator _eventAggregator;
         private List<RequirementWrapper> _requirementList;
         private SpecificationVersion _specificationVersionInstance;
         
-        public SpecificationVersionEditViewModel(DBPrincipal principal)
+        public SpecificationVersionEditViewModel(DBPrincipal principal,
+                                                EventAggregator eventAggregator)
         {
             _editMode = false;
+            _eventAggregator = eventAggregator;
             _principal = principal;
 
             _deleteRequirementCommand = new DelegateCommand<Requirement>(
@@ -70,6 +76,30 @@ namespace Specifications.ViewModels
                     EditMode = true;
                 },
                 () => CanEdit && !_editMode);
+            
+
+            _startTestListEdit = new DelegateCommand(
+                () =>
+                {
+                    NavigationToken token = new NavigationToken(SpecificationViewNames.SpecificationTestListEdit,
+                                                                null,
+                                                                RegionNames.SpecificationVersionTestListEditRegion);
+
+                    _eventAggregator.GetEvent<NavigationRequested>()
+                                    .Publish(token);
+                },
+                () => _principal.IsInRole(UserRoleNames.SpecificationEdit));
+
+            _eventAggregator.GetEvent<SpecificationMethodListChanged>()
+                            .Subscribe(
+                spc =>
+                {
+                    if (spc.ID == _specificationVersionInstance.SpecificationID)
+                    {
+                        GenerateRequirementList();
+                        RaisePropertyChanged("RequirementList");
+                    }
+                });
         }
 
         #region INotifyDataErrorInfo interface elements
@@ -176,7 +206,6 @@ namespace Specifications.ViewModels
                 EditMode = false;
 
                 _specificationVersionInstance = value;
-                _specificationVersionInstance.Load();
                 
                 GenerateRequirementList();
 
@@ -227,5 +256,11 @@ namespace Specifications.ViewModels
                 }
             }
         }
+
+        public DelegateCommand StartTestListEditCommand
+        {
+            get { return _startTestListEdit; }
+        }
+
     }
 }

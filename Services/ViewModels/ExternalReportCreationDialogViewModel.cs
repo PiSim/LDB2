@@ -23,7 +23,6 @@ namespace Services.ViewModels
         private DelegateCommand<TextBox> _addBatch;
         private DelegateCommand<Window> _cancel, _confirm;
         private ExternalReport _externalReportInstance;
-        private Int32 _number;
         private ObservableCollection<Batch> _batchList;
         private Organization _selectedLab;
         private Project _selectedProject;
@@ -41,8 +40,10 @@ namespace Services.ViewModels
                     Batch temp = MaterialService.GetBatch(batchBox.Text);
                     if (temp == null)
                     {
-                        temp = new Batch();
-                        temp.Number = batchBox.Text;
+                        temp = new Batch
+                        {
+                            Number = batchBox.Text
+                        };
                         temp.Create();
                     }
 
@@ -58,21 +59,23 @@ namespace Services.ViewModels
            _confirm = new DelegateCommand<Window>(
                 parent => 
                 {
-                    _externalReportInstance = new ExternalReport();
-                    _externalReportInstance.Description = _testDescription;
-                    _externalReportInstance.Year = DateTime.Now.Year - 2000;
-                    _externalReportInstance.Number = ReportService.GetNextExternalReportNumber(_externalReportInstance.Year);
-                    _externalReportInstance.ExternalNumber = "";
-                    _externalReportInstance.MaterialSent = false;
-                    _externalReportInstance.RequestDone = false;
-                    _externalReportInstance.Samples = _sampleDescription;
-                    _externalReportInstance.ReportReceived = false;
-                    _externalReportInstance.ExternalLabID = _selectedLab.ID;
-                    _externalReportInstance.ProjectID = _selectedProject.ID;
-                    _externalReportInstance.Create();
+                    _externalReportInstance = new ExternalReport
+                    {
+                        Description = _testDescription,
+                        Year = DateTime.Now.Year - 2000,
+                        Number = ReportService.GetNextExternalReportNumber(_externalReportInstance.Year),
+                        ExternalNumber = "",
+                        MaterialSent = false,
+                        RequestDone = false,
+                        Samples = _sampleDescription,
+                        ReportReceived = false,
+                        ExternalLabID = _selectedLab.ID,
+                        ProjectID = _selectedProject.ID
+                    };
 
+                    _externalReportInstance.Create();
                     foreach (Batch btc in _batchList)
-                        _externalReportInstance.AddBatch(btc);
+                            _externalReportInstance.AddBatch(btc);
 
                     parent.DialogResult = true;
                 });

@@ -19,11 +19,11 @@ using System.Windows.Shapes;
 namespace Specifications.Views
 {
     /// <summary>
-    /// Logica di interazione per StandardIssueEdit.xaml
+    /// Logica di interazione per ControlPlanEdit.xaml
     /// </summary>
-    public partial class StandardIssueEdit : UserControl, INavigationAware, IView
+    public partial class ControlPlanEdit : UserControl, IView, INavigationAware
     {
-        public StandardIssueEdit()
+        public ControlPlanEdit()
         {
             InitializeComponent();
         }
@@ -40,6 +40,8 @@ namespace Specifications.Views
 
         public void OnNavigatedTo(NavigationContext ncontext)
         {
+            (DataContext as ViewModels.ControlPlanEditViewModel).ControlPlanInstance
+                = ncontext.Parameters["ObjectInstance"] as ControlPlan;
         }
     }
 }

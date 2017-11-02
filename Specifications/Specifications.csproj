@@ -118,6 +118,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="ViewModels\ControlPlanEditViewModel.cs" />
     <Compile Include="ViewModels\MethodCreationDialogViewModel.cs" />
     <Compile Include="ViewModels\MethodEditViewModel.cs" />
     <Compile Include="ViewModels\MethodMainViewModel.cs" />
@@ -125,7 +126,9 @@
     <Compile Include="ViewModels\SpecificationEditViewModel.cs" />
     <Compile Include="ViewModels\SpecificationMainViewModel.cs" />
     <Compile Include="ViewModels\SpecificationVersionEditViewModel.cs" />
-    <Compile Include="ViewModels\StandardIssueEditViewModel.cs" />
+    <Compile Include="Views\ControlPlanEdit.xaml.cs">
+      <DependentUpon>ControlPlanEdit.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MethodCreationDialog.xaml.cs">
       <DependentUpon>MethodCreationDialog.xaml</DependentUpon>
     </Compile>
@@ -161,9 +164,6 @@
     </Compile>
     <Compile Include="Views\StandardIssueControl.xaml.cs">
       <DependentUpon>StandardIssueControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\StandardIssueEdit.xaml.cs">
-      <DependentUpon>StandardIssueEdit.xaml</DependentUpon>
     </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -205,6 +205,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Views\ControlPlanEdit.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\MethodCreationDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -250,10 +254,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\StandardIssueControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\StandardIssueEdit.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

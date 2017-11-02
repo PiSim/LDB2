@@ -1,8 +1,12 @@
 ﻿v 0.55 --
 
 -Spostata gestione tarature da proprietà a strumenti
+-Numerose correzioni all'interfaccia strumenti
 -Implementata gestione archivio lungo termine ("Cotex")
 -Iniziata implementazione gestione tempi di lavorazione test
+-Consolidata interfaccia specifiche
+-Numerose correzioni e migliorie al backend specifiche
+-Reimplementata entità ControlPlanItem e relativo metodo ApplyControlPlan
 
 v 0.54 -- 27/9/2017
 

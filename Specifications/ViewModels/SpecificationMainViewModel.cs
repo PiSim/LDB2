@@ -35,12 +35,7 @@ namespace Specifications.ViewModels
                     Views.SpecificationCreationDialog creationDialog = new Views.SpecificationCreationDialog();
                     
                     if (creationDialog.ShowDialog() == true)
-                    {
-                        Specification temp = creationDialog.SpecificationInstance;
-                        SelectedSpecification = temp;
-                        _openSpecification.Execute();
                         RaisePropertyChanged("SpecificationList");
-                    }                        
                 },
                 () => _principal.IsInRole(UserRoleNames.SpecificationEdit));
 

@@ -20,10 +20,14 @@ namespace Specifications.ViewModels
         private readonly Dictionary<string, ICollection<string>> _validationErrors = new Dictionary<string, ICollection<string>>();
         private Organization _oem;
         private Specification _specificationInstance;
-        private string _name;
+        private string _currentIssue,
+                        _description,
+                        _name;
 
         public SpecificationCreationDialogViewModel() : base()
         {
+            _currentIssue = "";
+            _description = "";
 
             _cancel = new DelegateCommand<Window>(
                 parent =>
@@ -40,6 +44,7 @@ namespace Specifications.ViewModels
                         tempStd = new Std();
                         tempStd.Name = Name;
                         tempStd.OrganizationID = _oem.ID;
+                        tempStd.CurrentIssue = _currentIssue;
                         
                         tempStd.Create();
                     }
@@ -53,7 +58,7 @@ namespace Specifications.ViewModels
                     tempControlPlan.IsDefault = true;
 
                     _specificationInstance = new Specification();
-                    _specificationInstance.Description = "";
+                    _specificationInstance.Description = _description;
                     _specificationInstance.StandardID = tempStd.ID;
 
                     _specificationInstance.ControlPlans.Add(tempControlPlan);
@@ -103,6 +108,24 @@ namespace Specifications.ViewModels
         public DelegateCommand<Window> ConfirmCommand
         {
             get { return _confirm; }
+        }
+
+        public string CurrentIssue
+        {
+            get { return _currentIssue; }
+            set
+            {
+                _currentIssue = value;
+            }
+        }
+
+        public string Description
+        {
+            get { return _description; }
+            set
+            {
+                _description = value;
+            }
         }
 
         public string Name

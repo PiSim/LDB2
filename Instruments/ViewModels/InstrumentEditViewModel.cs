@@ -28,8 +28,8 @@ namespace Instruments.ViewModels
                                 _addMaintenanceEvent, 
                                 _addMethodAssociation,
                                 _addProperty,
-                                _openFileCommand,
-                                _removeFileCommand,
+                                _openFile,
+                                _removeFile,
                                 _removeMethodAssociation, 
                                 _save,
                                 _startEdit;
@@ -40,6 +40,7 @@ namespace Instruments.ViewModels
         private IEnumerable<Organization> _manufacturerList,
                                         _calibrationLabList;
         private Instrument _instance;
+        private InstrumentFiles _selectedFile;
         private InstrumentMeasurablePropertyWrapper _selectedMeasurableProperty;
         private InstrumentUtilizationArea _selectedArea;
         private Method _selectedAssociated, _selectedUnassociated;
@@ -68,8 +69,10 @@ namespace Instruments.ViewModels
                 () =>
                 {
 
-                    OpenFileDialog fileDialog = new OpenFileDialog();
-                    fileDialog.Multiselect = true;
+                    OpenFileDialog fileDialog = new OpenFileDialog
+                    {
+                        Multiselect = true
+                    };
 
                     if (fileDialog.ShowDialog() == DialogResult.OK)
                     {
@@ -130,6 +133,20 @@ namespace Instruments.ViewModels
                     }
                 },
                 () => IsInstrumentAdmin);
+
+            _openFile = new DelegateCommand(
+                () =>
+                {
+
+                },
+                () => _selectedFile != null);
+
+            _removeFile = new DelegateCommand(
+                () =>
+                {
+
+                },
+                () => _selectedFile != null);
 
             _removeMethodAssociation = new DelegateCommand(
                 () =>

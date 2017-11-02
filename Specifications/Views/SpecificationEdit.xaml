@@ -86,7 +86,7 @@
             <TabItem Header="Metodi e requisiti">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition MaxWidth="200"/>
+                        <ColumnDefinition/>
                         <ColumnDefinition Width="2*"/>
                     </Grid.ColumnDefinitions>
 
@@ -116,74 +116,36 @@
                     <GroupBox Header="Piani di controllo esistenti"
                               Grid.Column="0">
                         <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
 
-                            <ListView ItemsSource="{Binding Path=ControlPlanList}"
-                                      SelectedItem="{Binding Path=SelectedControlPlan, Mode=TwoWay}"
-                                      Grid.Column="0"
-                                      Grid.Row="0"
-                                      Grid.RowSpan="5">
-                                <ListView.ItemTemplate>
-                                    <DataTemplate>
-                                        <TextBox Text="{Binding Path=Name, Mode=TwoWay}"
-                                                 IsEnabled="{Binding RelativeSource={RelativeSource AncestorType=ListView},
-                                                                     Path=DataContext.CanModifyControlPlan}"/>
-                                    </DataTemplate>
-                                </ListView.ItemTemplate>
-                            </ListView>
-
-                            <Button Content="Nuovo"
+                            <StackPanel Orientation="Horizontal"
+                                        Grid.Row="0">
+                                <Button Content="Nuovo"
                                     Command="{Binding Path=AddControlPlanCommand}"
                                     Grid.Column="1"
                                     Grid.Row="0"
-                                    Margin="5,5,5,5"/>
+                                    Margin="5"/>
 
-                            <Button Content="Rinomina"
-                                    Command="{Binding Path=RenameControlPlanCommand}"
-                                    Grid.Column="1"
-                                    Grid.Row="2"
-                                    Margin="5,5,5,5"/>
-
-                            <Button Content="Elimina"
+                                <Button Content="Elimina"
                                     Command="{Binding Path=RemoveControlPlanCommand}"
                                     Grid.Column="1"
                                     Grid.Row="3"
-                                    Margin="5,5,5,5"/>
+                                    Margin="5"/>
+                            </StackPanel>
+
+                            <ListView ItemsSource="{Binding Path=ControlPlanList}"
+                                      SelectedItem="{Binding Path=SelectedControlPlan, Mode=TwoWay}"
+                                      DisplayMemberPath="Name"
+                                      Grid.Row="1"
+                                      Margin="5"/>
                         </Grid>
                     </GroupBox>
 
-                    <GroupBox Header="Test da effettuare"
-                                Grid.Column="1">
-                        <ListView ItemsSource="{Binding Path=ControlPlanItemsList}">
-                            <ListView.View>
-                                <GridView>
-                                    <GridViewColumn>
-                                        <GridViewColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <CheckBox IsChecked="{Binding Path=IsSelected}"
-                                                          IsEnabled="{Binding RelativeSource={RelativeSource AncestorType=ListView},
-                                                                              Path=DataContext.CanModifyControlPlan}"/>
-                                            </DataTemplate>
-                                        </GridViewColumn.CellTemplate>
-                                    </GridViewColumn>
-                                    <GridViewColumn Header="Tipo Prova"
-                                                    DisplayMemberBinding="{Binding Path=Property}"/>
-                                    <GridViewColumn Header="Standard"
-                                                    DisplayMemberBinding="{Binding Path=Method}"/>
-                                </GridView>
-                            </ListView.View>
-                        </ListView>
-                    </GroupBox>
+                    <ContentControl prism:RegionManager.RegionName="{Binding ControlPlanEditRegionName}"
+                                    Grid.Column="1"/>
                 </Grid>
             </TabItem>
 

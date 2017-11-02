@@ -86,59 +86,6 @@ namespace DBManager.Services
             }
         }
 
-        public static void Create(this ControlPlan entry)
-        {
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.ControlPlans.Attach(entry);
-                entities.Entry(entry).State = System.Data.Entity.EntityState.Added;
-                entities.SaveChanges();
-            }
-        }
-
-        public static void Delete(this ControlPlan entry)
-        {
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.ControlPlans.Attach(entry);
-                entities.Entry(entry).State = System.Data.Entity.EntityState.Deleted;
-                entities.SaveChanges();
-            }
-        }
-
-        public static void Load(this ControlPlan entry)
-        {
-            if (entry == null)
-                return;
-
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.Configuration.LazyLoadingEnabled = false;
-
-                ControlPlan tempEntry = entities.ControlPlans.Include(cpl => cpl.Specification)
-                                                            .Include(cpl => cpl.ControlPlanItems)
-                                                            .Include(cpl => cpl.ControlPlanItems
-                                                            .Select(cpi => cpi.Requirement))
-                                                            .First(spec => spec.ID == entry.ID);
-
-                entry.ControlPlanItems = tempEntry.ControlPlanItems;
-                entry.IsDefault = tempEntry.IsDefault;
-                entry.Name = tempEntry.Name;
-                entry.Specification = tempEntry.Specification;
-                entry.SpecificationID = tempEntry.SpecificationID;
-            }
-        }
-
-        public static void Update(this ControlPlan entry)
-        {
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.ControlPlans.Attach(entry);
-                entities.Entry(entry).State = System.Data.Entity.EntityState.Modified;
-                entities.SaveChanges();
-            }
-        }
-
         #endregion
 
         #region Operations for Method items

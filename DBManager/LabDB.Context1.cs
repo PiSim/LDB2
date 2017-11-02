@@ -57,7 +57,6 @@ namespace DBManager
         public virtual DbSet<TaskItem> TaskItems { get; set; }
         public virtual DbSet<UserRoleMapping> UserRoleMappings { get; set; }
         public virtual DbSet<UserRole> UserRoles { get; set; }
-        public virtual DbSet<ControlPlanItem> ControlPlanItems1 { get; set; }
         public virtual DbSet<ControlPlan> ControlPlans { get; set; }
         public virtual DbSet<CalibrationFiles> CalibrationFiles { get; set; }
         public virtual DbSet<CalibrationReport> CalibrationReports { get; set; }
@@ -81,5 +80,6 @@ namespace DBManager
         public virtual DbSet<CalibrationReportInstrumentPropertyMapping> CalibrationReportInstrumentPropertyMappings { get; set; }
         public virtual DbSet<CalibrationResult> CalibrationResults { get; set; }
         public virtual DbSet<InstrumentFiles> InstrumentFiles { get; set; }
+        public virtual DbSet<ControlPlanItemB> ControlPlanItemBs { get; set; }
     }
 }

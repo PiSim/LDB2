@@ -143,7 +143,7 @@
     <Compile Include="ControlPlan.cs">
       <DependentUpon>LabDB.tt</DependentUpon>
     </Compile>
-    <Compile Include="ControlPlanItem.cs">
+    <Compile Include="ControlPlanItemB.cs">
       <DependentUpon>LabDB.tt</DependentUpon>
     </Compile>
     <Compile Include="EntityExtensions\AspectExtension.cs" />
@@ -152,6 +152,8 @@
     <Compile Include="EntityExtensions\CalibrationReportExtension.cs" />
     <Compile Include="EntityExtensions\CalibrationReportInstrumentPropertyMappingExtension.cs" />
     <Compile Include="EntityExtensions\ColourExtension.cs" />
+    <Compile Include="EntityExtensions\ControlPlanExtension.cs" />
+    <Compile Include="EntityExtensions\ControlPlanItemExtension.cs" />
     <Compile Include="EntityExtensions\ExternalConstructionExtension.cs" />
     <Compile Include="EntityExtensions\ExternalReportExtension.cs" />
     <Compile Include="EntityExtensions\ExternalReportFileExtension.cs" />

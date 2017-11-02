@@ -15,13 +15,6 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <StackPanel Orientation="Horizontal"
-                                        Grid.Row="0">
-                <Button Content="Aggiungi/Rimuovi prove"
-                                        Command="{Binding StartTestListEditCommand}"
-                                        Padding="5,1,5,3"
-                                        Margin="5"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal"
                                         Grid.Row="1">
                 <Button Content="Crea Nuova"
                                         Command="{Binding Path=AddVersionCommand}"

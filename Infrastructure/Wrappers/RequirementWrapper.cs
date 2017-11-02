@@ -100,19 +100,22 @@ namespace Infrastructure.Wrappers
 
         public void AddOverride()
         {
-            Requirement newOverride = new Requirement();
-            newOverride.Description = _requirementInstance.Description;
-            newOverride.IsOverride = true;
-            newOverride.MethodID = _requirementInstance.MethodID;
-            newOverride.OverriddenID = _requirementInstance.ID;
-            newOverride.SpecificationVersionID = _versionInstance.ID;
+            Requirement newOverride = new Requirement
+            {
+                Description = _requirementInstance.Description,
+                IsOverride = true,
+                MethodID = _requirementInstance.MethodID,
+                OverriddenID = _requirementInstance.ID,
+                SpecificationVersionID = _versionInstance.ID
+            };
 
             foreach (SubRequirement subReq in _requirementInstance.SubRequirements)
             {
-                SubRequirement tempSub = new SubRequirement();
-                
-                tempSub.SubMethodID = subReq.SubMethodID;
-                tempSub.RequiredValue = subReq.RequiredValue;
+                SubRequirement tempSub = new SubRequirement
+                {
+                    SubMethodID = subReq.SubMethodID,
+                    RequiredValue = subReq.RequiredValue
+                };
 
                 newOverride.SubRequirements.Add(tempSub);
             }

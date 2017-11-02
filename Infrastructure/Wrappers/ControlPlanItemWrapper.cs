@@ -1,4 +1,5 @@
 ﻿using DBManager;
+using Infrastructure.Wrappers;
 using Prism.Events;
 using Prism.Mvvm;
 using System;
@@ -10,40 +11,23 @@ using System.Threading.Tasks;
 namespace Infrastructure
 {
 
-    public class ControlPlanItemWrapper : BindableBase
+    public class ControlPlanItemWrapper : BindableBase, ISelectableRequirement
     {
         private bool _isSelected;
-        private ControlPlan _parent;
-        private ControlPlanItem _item;
         private Requirement _requirement;
 
-        public ControlPlanItemWrapper(ControlPlan parent,
-                                        Requirement requirement) : base()
+        public ControlPlanItemWrapper(Requirement requirement) : base()
         {
-            _parent = parent;
             _requirement = requirement;
-            _item = _parent.ControlPlanItems.FirstOrDefault(cpi => cpi.Requirement.ID == _requirement.ID);
-            _isSelected = (_parent.IsDefault) || (_item != null);
         }
+
+
 
         public bool IsSelected
         {
             get { return _isSelected; }
             set
             {
-                if (value)
-                {
-                    _item = new ControlPlanItem();
-                    _item.Requirement = _requirement;
-                    _parent.ControlPlanItems.Add(_item);
-                }
-
-                else
-                {
-                    _parent.ControlPlanItems.Remove(_item);
-                    _item = null;
-                }
-
                 _isSelected = value;
                 RaisePropertyChanged("IsSelected");
             }
@@ -57,6 +41,13 @@ namespace Infrastructure
         public string Property
         {
             get { return _requirement.Method.Property.Name; }
+        }
+
+        public double Duration => throw new NotImplementedException();
+
+        public Requirement RequirementInstance
+        {
+            get { return _requirement; }
         }
     }
 }

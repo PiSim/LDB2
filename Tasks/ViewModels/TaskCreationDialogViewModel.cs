@@ -205,15 +205,12 @@ namespace Tasks.ViewModels
             set
             {
                 _selectedControlPlan = value;
-                _selectedControlPlan.Load();
 
                 _notes = (_selectedControlPlan != null) ? _selectedControlPlan.Name : "";
 
                 RaisePropertyChanged("SelectedControlPlan");
                 if (value != null && _requirementList != null)
-                {
                     CommonProcedures.ApplyControlPlan(_requirementList, _selectedControlPlan);
-                }
             }
         }
 

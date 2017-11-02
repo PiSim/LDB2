@@ -36,6 +36,7 @@ namespace Organizations.ViewModels
                     _eventAggregator.GetEvent<OrganizationCreationRequested>()
                                     .Publish();
                 });
+
             _createNewOrganizationRole = new DelegateCommand(
                 () =>
                 {

@@ -18,7 +18,7 @@
         </Grid.RowDefinitions>
 
         <FrameworkElement x:Name="dummyElement" Visibility="Collapsed"/>
-        
+
         <StackPanel Orientation="Horizontal"
                     Grid.Row="0">
             <Button Content="Modifica"
@@ -26,6 +26,10 @@
                     Margin="5"/>
             <Button Content="Salva"
                     Command="{Binding SaveCommand}"
+                    Margin="5"/>
+            <Button Content="Aggiungi prove"
+                    Command="{Binding StartTestListEditCommand}"
+                    Padding="5,1,5,3"
                     Margin="5"/>
         </StackPanel>
 
@@ -60,6 +64,7 @@
                   AutoGenerateColumns="False"
                   CanUserAddRows="False"
                   CanUserDeleteRows="False"
+                  CanUserResizeRows="False"
                   GridLinesVisibility="Horizontal"
                   Grid.Row="2">
             <DataGrid.Columns>
@@ -99,33 +104,30 @@
 
                 <DataGridTemplateColumn Header="Requisito"
                                     Width="100">
-                    <DataGridTemplateColumn.CellStyle>
-                        <Style TargetType="{x:Type DataGridCell}">
-                            <Setter Property="IsEnabled"
-                                Value="{Binding DataContext.EditMode, Source={x:Reference dummyElement}}"/>
-                        </Style>
-                    </DataGridTemplateColumn.CellStyle>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <DataGrid ItemsSource="{Binding SubRequirements}"
-                                    IsEnabled="{Binding CanModify}"
-                                    Name="RequiredValuesGrid"
-                                    AutoGenerateColumns="False"
-                                    HeadersVisibility="None"
-                                    CanUserAddRows="False"
-                                    CanUserDeleteRows="False"
-                                    GridLinesVisibility="Horizontal"
-                                    ClipToBounds="True"
-                                    HorizontalScrollBarVisibility="Hidden"
-                                    RowHeight="30"
+                                      IsEnabled="{Binding DataContext.EditMode,
+                                                          Source={x:Reference Name=dummyElement}}"
+                                      Name="RequiredValuesGrid"
+                                      AutoGenerateColumns="False"
+                                      HeadersVisibility="None"
+                                      CanUserAddRows="False"
+                                      CanUserDeleteRows="False"
+                                      GridLinesVisibility="Horizontal"
+                                      ClipToBounds="True"
+                                      HorizontalScrollBarVisibility="Hidden"
+                                      RowHeight="30"
                                       Margin="-2">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Binding="{Binding RequiredValue}"
-                                                    Width="*">
+                                                        Width="*">
                                         <DataGridTextColumn.EditingElementStyle>
                                             <Style TargetType="{x:Type TextBox}">
                                                 <Setter Property="MaxLength"
                                                     Value="45"/>
+                                                <Setter Property="IsReadOnly"
+                                                        Value="{Binding CanModify}"/>
                                             </Style>
                                         </DataGridTextColumn.EditingElementStyle>
                                     </DataGridTextColumn>

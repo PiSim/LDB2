@@ -78,9 +78,7 @@
         <EntityTypeShape EntityType="labdbModel.UserRole" Width="1.5" PointX="7.75" PointY="18.5" />
         <AssociationConnector Association="labdbModel.role_to_role_mapping" />
         <AssociationConnector Association="labdbModel.user_to_role_mapping" />
-        <EntityTypeShape EntityType="labdbModel.ControlPlanItem" Width="1.5" PointX="14.5" PointY="0.5" />
         <EntityTypeShape EntityType="labdbModel.ControlPlan" Width="1.5" PointX="2.5" PointY="0.5" />
-        <AssociationConnector Association="labdbModel.control_plan_to_item" />
         <AssociationConnector Association="labdbModel.specification_to_control_plan" />
         <EntityTypeShape EntityType="labdbModel.CalibrationFiles" Width="1.5" PointX="15.75" PointY="33.375" />
         <EntityTypeShape EntityType="labdbModel.CalibrationReport" Width="1.5" PointX="13.125" PointY="32" />
@@ -113,7 +111,6 @@
         <EntityTypeShape EntityType="labdbModel.PersonRole" Width="1.5" PointX="17.5" PointY="15.125" />
         <AssociationConnector Association="labdbModel.person_to_role_mapping" />
         <AssociationConnector Association="labdbModel.person_role_to_role_mapping" />
-        <AssociationConnector Association="labdbModel.requirement_to_control_plan" />
         <AssociationConnector Association="labdbModel.task_to_report" />
         <AssociationConnector Association="labdbModel.calibration_reference_mappings" />
         <AssociationConnector Association="labdbModel.person_to_sample_log" />
@@ -162,6 +159,9 @@
         <AssociationConnector Association="labdbModel.standard_to_file" />
         <AssociationConnector Association="labdbModel.latest_sample_to_batch" />
         <AssociationConnector Association="labdbModel.calibration_responsible_to_instrument" />
+        <EntityTypeShape EntityType="labdbModel.ControlPlanItemB" Width="1.5" PointX="14.75" PointY="0.5" />
+        <AssociationConnector Association="labdbModel.control_plan_to_plan_item" />
+        <AssociationConnector Association="labdbModel.requirement_to_cplan_item" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

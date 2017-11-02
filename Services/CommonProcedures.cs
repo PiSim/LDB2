@@ -43,24 +43,11 @@ namespace Services
 
         public static void ApplyControlPlan(IEnumerable<ISelectableRequirement> reqList, ControlPlan conPlan)
         {
-            if (conPlan.IsDefault)
-                foreach (ISelectableRequirement riw in reqList)
-                    riw.IsSelected = true;
-            else
+            foreach (ISelectableRequirement isr in reqList)
             {
-                foreach (ISelectableRequirement riw in reqList)
-                    riw.IsSelected = false;
-
-                foreach (ControlPlanItem cpi in conPlan.ControlPlanItems)
-                {
-                    ISelectableRequirement tempRIW = reqList.FirstOrDefault(riw => riw.RequirementInstance.ID == cpi.RequirementID ||
-                                                    (riw.RequirementInstance.IsOverride && riw.RequirementInstance.OverriddenID == cpi.RequirementID));
-                    if (tempRIW != null)
-                        tempRIW.IsSelected = true;
-
-                    else
-                        throw new InvalidOperationException();
-                }
+                isr.IsSelected = conPlan.GetControlPlanItems()
+                                        .First(cpi => cpi.RequirementID == isr.RequirementInstance.ID)
+                                        .IsSelected;
             }
         }
 

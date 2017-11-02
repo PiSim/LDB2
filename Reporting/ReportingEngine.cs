@@ -78,8 +78,10 @@ namespace Reporting
 
             foreach (double colWidth in columnWidths)
             {
-                currentColumn = new TableColumn();
-                currentColumn.Width = new GridLength(colWidth, GridUnitType.Star);
+                currentColumn = new TableColumn
+                {
+                    Width = new GridLength(colWidth, GridUnitType.Star)
+                };
                 batchTable.Columns.Add(currentColumn);
             }
 

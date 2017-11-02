@@ -6,18 +6,87 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DBManager.EntityExtensions
+namespace DBManager
 {
+    public partial class Specification
+    {
+
+        public ControlPlan AddControlPlan(bool asDefault = false)
+        {
+            // Generates a new control plan for this specification
+
+            using (DBEntities entities = new DBEntities())
+            {
+                ControlPlan newEntry = new ControlPlan()
+                {
+                    IsDefault = asDefault,
+                    Name = (asDefault) ? "Completo" : "Nuovo Piano di Controllo",
+                    SpecificationID = ID
+                };
+
+                SpecificationVersion mainVersion = entities.SpecificationVersions
+                                                            .FirstOrDefault(spv => spv
+                                                            .SpecificationID == ID &&
+                                                            spv.IsMain);
+
+                if (mainVersion == null)
+                    throw new InvalidOperationException();
+
+                foreach (Requirement req in mainVersion.Requirements)
+                    newEntry.control_plan_items_b.Add(new ControlPlanItemB()
+                    {
+                        IsSelected = asDefault,
+                        RequirementID = req.ID
+                    });
+
+                entities.ControlPlans.Add(newEntry);
+
+                entities.SaveChanges();
+
+                return newEntry;
+            }
+        }
+
+        public void AddMethod(Requirement requirementEntry)
+        {
+            // Adds a requirement to a Specification
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.SpecificationVersions
+                        .First(spcv => spcv.SpecificationID == ID && spcv.IsMain)
+                        .Requirements
+                        .Add(requirementEntry);
+
+                foreach (ControlPlan cp in entities.ControlPlans.Where(cp => cp.SpecificationID == ID))
+                    requirementEntry.control_plan_items_b
+                                    .Add(new ControlPlanItemB()
+                    {
+                        ControlPlan = cp,
+                        IsSelected = cp.IsDefault
+                    });
+
+                entities.SaveChanges();
+            }            
+        }
+
+        public IEnumerable<ControlPlan> GetControlPlans()
+        {
+            // Returns all existing control plans for a specification
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.ControlPlans
+                                .Where(cp => cp.SpecificationID == ID)
+                                .ToList();
+            }
+        }
+    }
+
     public static class SpecificationExtension
     {
-        public static void AddMethod(this Specification entry,
-                                    Requirement requirementEntry)
-        {
-            // Adds a requirement generated to a Specification's Main Version
-            
-            entry.SpecificationVersions.FirstOrDefault(spcv => spcv.IsMain)
-                                        .AddRequirement(requirementEntry);
-        }
 
         public static void Create(this Specification entry)
         {
@@ -120,14 +189,9 @@ namespace DBManager.EntityExtensions
             {
                 entities.Configuration.LazyLoadingEnabled = false;
                 
-                Specification tempEntry = entities.Specifications.Include(spec => spec.SpecificationVersions)
-                                                                .Include(spec => spec.Standard.Organization)
-                                                                .Include(spec => spec.ControlPlans)
+                Specification tempEntry = entities.Specifications.Include(spec => spec.Standard.Organization)
                                                                 .First(spec => spec.ID == entry.ID);
-
-                entry.ControlPlans = tempEntry.ControlPlans;
-                entry.Description = tempEntry.Description;
-                entry.SpecificationVersions = tempEntry.SpecificationVersions;
+                
                 entry.Standard = tempEntry.Standard;
                 entry.StandardID = tempEntry.StandardID;
             }

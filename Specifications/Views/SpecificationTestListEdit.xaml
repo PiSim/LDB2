@@ -41,28 +41,31 @@
                           AutoGenerateColumns="False"
                           CanUserAddRows="False"
                           CanUserDeleteRows="False"
+                          CanUserResizeRows="False"
+                          GridLinesVisibility="None"
+                          IsReadOnly="True"
                           Grid.Column="0"
                           Grid.ColumnSpan="2"
                           Grid.Row="0">
                     <DataGrid.Columns>
+                        <DataGridTemplateColumn>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Content="+"
+                                            Command="{Binding DataContext.AddTestCommand,
+                                                              Source={x:Reference Name=dummyElement}}"
+                                            CommandParameter="{Binding }"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn Header="Standard"
+                                            Binding="{Binding Path=Standard.Name}"/>
                         <DataGridTextColumn Header="Proprietà"
                                             Binding="{Binding Path=Property.Name}"/>
                         <DataGridTextColumn Header="OEM"
                                             Binding="{Binding Path=Standard.Organization.Name}"/>
-                        <DataGridTextColumn Header="Standard"
-                                            Binding="{Binding Path=Standard.Name}"/>
                         <DataGridTextColumn Header="Descrizione"
                                             Binding="{Binding Path=Description}"/>
-                        <DataGridTemplateColumn>
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Button Content=">>"
-                                            Command="{Binding DataContext.AddTestCommand,
-                                                              Source={x:Reference Name=dummyElement}}"
-                                            CommandParameter="{Binding}"/>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
                     </DataGrid.Columns>
                 </DataGrid>
             </Grid>

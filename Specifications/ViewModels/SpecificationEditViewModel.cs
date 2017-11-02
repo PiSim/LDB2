@@ -19,30 +19,24 @@ namespace Specifications.ViewModels
 {
     public class SpecificationEditViewModel : BindableBase, INotifyDataErrorInfo
     {
-        private bool _editMode,
-                    _testListEditMode;
+        private bool _editMode;
         private ControlPlan _selectedControlPlan;
         private DBPrincipal _principal;
         private DelegateCommand _addControlPlan, 
                                 _addFile,
-                                _addTest, 
                                 _addVersion,  
                                 _openFile,
                                 _openReport, 
                                 _removeControlPlan, 
                                 _removeFile,
-                                _removeTest, 
                                 _removeVersion,
                                 _returnToVersionList,
                                 _save,
-                                _startEdit,
-                                _startTestListEdit;
+                                _startEdit;
+        private DelegateCommand<Method> _addTest;
         private readonly Dictionary<string, ICollection<string>> _validationErrors = new Dictionary<string, ICollection<string>>();
         private EventAggregator _eventAggregator;
-        private List<ControlPlanItemWrapper> _controlPlanItemsList;
-        private Method _selectedToAdd;
-        private Property _filterProperty;
-        private Requirement _selectedToRemove;
+        private IEnumerable<Method> _methodList;
         private Report _selectedReport;
         private Specification _instance;
         private SpecificationVersion _selectedVersion;
@@ -55,32 +49,34 @@ namespace Specifications.ViewModels
             _eventAggregator = aggregator;
             _principal = principal;
 
+            _methodList = SpecificationService.GetMethods();
+
             _addControlPlan = new DelegateCommand(
                 () =>
                 {
-                    ControlPlan temp = new ControlPlan();
-                    temp.Name = "Nuovo Piano di Controllo";
-                    temp.Specification = _instance;
-                    temp.Create();
+                    ControlPlan temp = _instance.AddControlPlan();
 
-                    SelectedControlPlan = temp;
                     RaisePropertyChanged("ControlPlanList");
                 });
             
             _addFile = new DelegateCommand(
                 () =>
                 {
-                    OpenFileDialog fileDialog = new OpenFileDialog();
-                    fileDialog.Multiselect = true;
+                    OpenFileDialog fileDialog = new OpenFileDialog
+                    {
+                        Multiselect = true
+                    };
 
                     if (fileDialog.ShowDialog() == DialogResult.OK)
                     {
                         foreach (string pth in fileDialog.FileNames)
                         {
-                            StandardFile temp = new StandardFile();
-                            temp.Path = pth;
-                            temp.Description = "";
-                            temp.standardID = _instance.StandardID;
+                            StandardFile temp = new StandardFile
+                            {
+                                Path = pth,
+                                Description = "",
+                                standardID = _instance.StandardID
+                            };
 
                             temp.Create();
                         }
@@ -90,26 +86,26 @@ namespace Specifications.ViewModels
                 },
                 () => _principal.IsInRole(UserRoleNames.SpecificationEdit));
 
-            _addTest = new DelegateCommand(
-                () =>
+            _addTest = new DelegateCommand<Method>(
+                mtd =>
                 {
-                    Requirement newReq = CommonProcedures.GenerateRequirement(_selectedToAdd);
+                    Requirement newReq = CommonProcedures.GenerateRequirement(mtd);
                     _instance.AddMethod(newReq);
-                    RaisePropertyChanged("MainVersionRequirements");
 
                     _eventAggregator.GetEvent<SpecificationMethodListChanged>()
                                     .Publish(_instance);
                 },
-                () => CanEdit
-                    && _selectedToAdd != null);
+                mtd => CanEdit);
 
             _addVersion = new DelegateCommand(
                 () =>
                 {
-                    SpecificationVersion temp = new SpecificationVersion();
-                    temp.IsMain = false;
-                    temp.Name = "Nuova versione";
-                    temp.SpecificationID = _instance.ID;
+                    SpecificationVersion temp = new SpecificationVersion
+                    {
+                        IsMain = false,
+                        Name = "Nuova versione",
+                        SpecificationID = _instance.ID
+                    };
 
                     temp.Create();
 
@@ -136,11 +132,13 @@ namespace Specifications.ViewModels
             _removeControlPlan = new DelegateCommand(
                 () =>
                 {
-                    _instance.ControlPlans.Remove(_selectedControlPlan);
+                    _selectedControlPlan.Delete();
+                    RaisePropertyChanged("ControlPlanList");
                     SelectedControlPlan = null;
                 }, 
                 () => CanEdit 
-                    && _selectedControlPlan != null);
+                    && _selectedControlPlan != null
+                    && !_selectedControlPlan.IsDefault);
             
             _removeFile = new DelegateCommand(
                 () =>
@@ -149,20 +147,7 @@ namespace Specifications.ViewModels
                     SelectedFile = null;
                 },
                 () => _principal.IsInRole(UserRoleNames.SpecificationEdit) && _selectedFile != null);
-
-            _removeTest = new DelegateCommand(
-                () =>
-                {
-                    _selectedToRemove.Delete();
-                    RaisePropertyChanged("MainVersionRequirements");
-
-                    _eventAggregator.GetEvent<SpecificationMethodListChanged>()
-                                    .Publish(_instance);
-                },
-
-                () => CanEdit 
-                    && _selectedToRemove != null);
-
+            
             _removeVersion = new DelegateCommand(
                 () =>
                 {
@@ -177,8 +162,6 @@ namespace Specifications.ViewModels
             _returnToVersionList = new DelegateCommand(
                 () =>
                 {
-                    _testListEditMode = false;
-
                     NavigationToken token = new NavigationToken(SpecificationViewNames.SpecificationVersionList,
                                                                 null,
                                                                 RegionNames.SpecificationVersionTestListEditRegion);
@@ -201,19 +184,6 @@ namespace Specifications.ViewModels
                     EditMode = true;
                 },
                 () => _principal.IsInRole(UserRoleNames.Admin) && !_editMode);
-
-            _startTestListEdit = new DelegateCommand(
-                () =>
-                {
-                    _testListEditMode = true;
-
-                    NavigationToken token = new NavigationToken(SpecificationViewNames.SpecificationTestListEdit,
-                                                                null,
-                                                                RegionNames.SpecificationVersionTestListEditRegion);
-
-                    _eventAggregator.GetEvent<NavigationRequested>()
-                                    .Publish(token);
-                });
 
             // Event Subscriptions
             
@@ -257,7 +227,7 @@ namespace Specifications.ViewModels
             get { return _addFile; }
         }
 
-        public DelegateCommand AddTestCommand
+        public DelegateCommand<Method> AddTestCommand
         {
             get { return _addTest; }
         }
@@ -272,24 +242,9 @@ namespace Specifications.ViewModels
             get { return _principal.IsInRole(UserRoleNames.SpecificationEdit); }
         }
 
-        public bool CanModifyControlPlan
+        public string ControlPlanEditRegionName
         {
-            get
-            {
-                if (!_principal.IsInRole(UserRoleNames.SpecificationEdit))
-                    return false;
-
-                else if (_selectedControlPlan == null || _selectedControlPlan.IsDefault)
-                    return false;
-
-                else
-                    return true;
-            }
-        }
-
-        public List<ControlPlanItemWrapper> ControlPlanItemsList
-        {
-            get { return _controlPlanItemsList; }
+            get { return RegionNames.ControlPlanEditRegion; }
         }
 
         public IEnumerable<ControlPlan> ControlPlanList
@@ -299,7 +254,7 @@ namespace Specifications.ViewModels
                 if (_instance == null)
                     return null;
 
-                return _instance.ControlPlans;
+                return _instance.GetControlPlans();
             }
         }
 
@@ -342,24 +297,6 @@ namespace Specifications.ViewModels
             get { return _instance.GetFiles(); }
         }
 
-        public Property FilterProperty
-        {
-            get { return _filterProperty; }
-            set
-            {
-                _filterProperty = value;
-                RaisePropertyChanged("FilteredMethods");
-            }
-        }
-
-        public IEnumerable<Method> FilteredMethods
-        {
-            get
-            {
-                return SpecificationService.GetMethods().Where(mtd => _filterProperty == null || mtd.Property.ID == _filterProperty.ID);
-            }
-        }
-
         public SpecificationVersion MainVersion
         {
             get
@@ -371,19 +308,19 @@ namespace Specifications.ViewModels
             }
         }
 
-        public IEnumerable<Requirement> MainVersionRequirements
+        public IEnumerable<Method> MethodList
         {
-            get
-            {
-                if (_instance == null)
-                    return null;
-                return _instance.GetMainVersionRequirements();
-            }
+            get { return _methodList; }
         }
 
         public DelegateCommand OpenFileCommand
         {
             get { return _openFile; }
+        }
+
+        public DelegateCommand OpenReportCommand
+        {
+            get { return _openReport; }
         }
 
         public IEnumerable<Property> Properties
@@ -400,12 +337,7 @@ namespace Specifications.ViewModels
         {
             get { return _removeFile; }
         }
-
-        public DelegateCommand  RemoveTestCommand
-        {
-            get { return _removeTest; }
-        }
-
+        
         public IEnumerable<Report> ReportList
         {
             get
@@ -431,18 +363,12 @@ namespace Specifications.ViewModels
             {
                 _selectedControlPlan = value;
 
-                if (value == null)
-                    _controlPlanItemsList = new List<ControlPlanItemWrapper>();
-                
-                else
-                {
+                NavigationToken token = new NavigationToken(SpecificationViewNames.ControlPlanEdit,
+                                                            _selectedControlPlan,
+                                                            RegionNames.ControlPlanEditRegion);
 
-                    _selectedControlPlan.Load();
-                    _controlPlanItemsList = new List<ControlPlanItemWrapper>(_instance.SpecificationVersions
-                                                                                        .First(sve => sve.IsMain)
-                                                                                        .Requirements
-                                                                                        .Select(req => new ControlPlanItemWrapper(_selectedControlPlan, req)));
-                }
+                _eventAggregator.GetEvent<NavigationRequested>()
+                                .Publish(token);
 
                 RaisePropertyChanged("SelectedControlPlan");
                 RaisePropertyChanged("ControlPlanItemsList");
@@ -489,45 +415,18 @@ namespace Specifications.ViewModels
             }
         }
 
-        public Method SelectedToAdd
-        {
-            get { return _selectedToAdd; }
-            set
-            {
-                _selectedToAdd = value;
-                _addTest.RaiseCanExecuteChanged();
-            }
-        }
-
-        public Requirement SelectedToRemove
-        {
-            get { return _selectedToRemove; }
-            set
-            {
-                _selectedToRemove = value;
-                _removeTest.RaiseCanExecuteChanged();
-                RaisePropertyChanged("SelectedToRemove");
-            }
-        }
-
         public Specification SpecificationInstance
         {
             get { return _instance; }
             set
             {
                 _instance = value;
-
-                if (_instance != null)
-                {
-                    _instance.Load();
-                    MainVersion.Load();
-                }
+                _instance.Load();
 
                 SelectedControlPlan = null;
                 SelectedVersion = _instance.SpecificationVersions.FirstOrDefault(spcv => spcv.IsMain);
 
                 EditMode = false;
-                _testListEditMode = false;
 
                 NavigationToken token = new NavigationToken(SpecificationViewNames.SpecificationVersionList,
                                                             null,
@@ -537,6 +436,8 @@ namespace Specifications.ViewModels
 
                 RaisePropertyChanged("ControlPlanList");
                 RaisePropertyChanged("CurrentIssue");
+                RaisePropertyChanged("Description");
+                RaisePropertyChanged("FileList");
                 RaisePropertyChanged("MainVersion");
                 RaisePropertyChanged("MainVersionRequirements");
                 RaisePropertyChanged("ReportList");
@@ -581,19 +482,11 @@ namespace Specifications.ViewModels
             get { return _startEdit; }
         }
 
-        public DelegateCommand StartTestListEditCommand
-        {
-            get { return _startTestListEdit; }
-        }
-
         public IEnumerable<SpecificationVersion> VersionList
         {
             get
             {
-                if (_instance == null)
-                    return null;
-
-                return _instance.SpecificationVersions;
+                return _instance.GetVersions();
             }
         }
     }

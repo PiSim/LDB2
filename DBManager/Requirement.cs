@@ -21,8 +21,8 @@ namespace DBManager
             this.SubRequirements = new HashSet<SubRequirement>();
             this.Overrides = new HashSet<Requirement>();
             this.TaskItems = new HashSet<TaskItem>();
-            this.ControlPlanItems = new HashSet<ControlPlanItem>();
             this.tests = new HashSet<Test>();
+            this.control_plan_items_b = new HashSet<ControlPlanItemB>();
         }
     
         public int ID { get; set; }
@@ -45,8 +45,8 @@ namespace DBManager
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<TaskItem> TaskItems { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ControlPlanItem> ControlPlanItems { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Test> tests { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ControlPlanItemB> control_plan_items_b { get; set; }
     }
 }

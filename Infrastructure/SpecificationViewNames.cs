@@ -8,6 +8,7 @@ namespace Infrastructure
 {
     public static class SpecificationViewNames
     {
+        public static string ControlPlanEdit { get { return "ControlPlanEdit"; } }
         public static string MethodEdit { get { return "MethodEdit"; } }
         public static string MethodMain { get { return "MethodMain"; } }
         public static string StandardIssueEdit { get { return "StandardIssueEdit"; } }

@@ -3,10 +3,12 @@ using DBManager.EntityExtensions;
 using DBManager.Services;
 using Infrastructure;
 using Infrastructure.Events;
+using Infrastructure.Wrappers;
 using Microsoft.Practices.Unity;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
+using Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -57,8 +59,7 @@ namespace Admin.ViewModels
             _runMethod = new DelegateCommand(
                 () =>
                 {
-                    _eventAggregator.GetEvent<ProjectCostUpdateRequested>()
-                                    .Publish();
+                    Mtd();
                         
                 } );
         }
@@ -127,17 +128,9 @@ namespace Admin.ViewModels
             get { return RegionNames.UnitOfMeasurementManagementRegion; }
         }
 
-        private void mtd()
+        private void Mtd()
         {
-            //IEnumerable<Batch> btcList = entities.Batches.ToList();
-
-            //foreach (Batch btc in btcList)
-            //{
-            //    Sample tmp = btc.Samples.Where(smp => smp.Code == "A").OrderByDescending(smp => smp.Date).FirstOrDefault();
-            //    btc.LatestSampleID = tmp?.ID;
-            //}
-
-            //entities.SaveChanges();
+           
         }
     }
 }

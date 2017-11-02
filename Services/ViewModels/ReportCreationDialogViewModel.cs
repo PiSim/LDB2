@@ -68,20 +68,19 @@ namespace Services.ViewModels
 
                         _selectedBatch.DoNotTest = false;
                         _selectedBatch.Update();
-                    }                                       
+                    }
 
-                    _reportInstance = new Report();
-                    _reportInstance.AuthorID = _author.ID;
-                    _reportInstance.BatchID = _selectedBatch.ID;
-                    _reportInstance.Category = "TR";
-                    if (_selectedControlPlan != null)
-                        _reportInstance.Description = _selectedControlPlan.Name;
-                    else
-                        _reportInstance.Description = _description;
-                    _reportInstance.IsComplete = false;
-                    _reportInstance.Number = _number;
-                    _reportInstance.SpecificationVersionID = _selectedVersion.ID;
-                    _reportInstance.StartDate = DateTime.Now.ToShortDateString();
+                    _reportInstance = new Report
+                    {
+                        AuthorID = _author.ID,
+                        BatchID = _selectedBatch.ID,
+                        Category = "TR",
+                        Description = (_selectedControlPlan != null) ? _selectedControlPlan.Name : _description,
+                        IsComplete = false,
+                        Number = _number,
+                        SpecificationVersionID = _selectedVersion.ID,
+                        StartDate = DateTime.Now.ToShortDateString()
+                    };
 
                     foreach (Test tst in CommonProcedures.GenerateTestList(_requirementList))
                         _reportInstance.Tests.Add(tst);
@@ -285,15 +284,12 @@ namespace Services.ViewModels
             set
             {
                 _selectedControlPlan = value;
-                _selectedControlPlan.Load();
 
                 Description = (_selectedControlPlan == null) ? "" : _selectedControlPlan.Name;
 
                 RaisePropertyChanged("SelectedControlPlan");
                 if (value != null)
-                {
                     CommonProcedures.ApplyControlPlan(_requirementList, _selectedControlPlan);
-                }
             }
         }
 

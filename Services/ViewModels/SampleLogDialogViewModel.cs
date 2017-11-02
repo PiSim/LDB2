@@ -66,11 +66,13 @@ namespace Services.ViewModels
             _confirm = new DelegateCommand(
                 () =>
                 {
-                    Sample newLog = new Sample();
-                    newLog.BatchID = _batchInstance.ID;
-                    newLog.Code = _selectedChoice.Code;
-                    newLog.Date = DateTime.Now.Date;
-                    newLog.personID = _principal.CurrentPerson.ID;
+                    Sample newLog = new Sample
+                    {
+                        BatchID = _batchInstance.ID,
+                        Code = _selectedChoice.Code,
+                        Date = DateTime.Now.Date,
+                        personID = _principal.CurrentPerson.ID
+                    };
 
                     newLog.Create();
 
