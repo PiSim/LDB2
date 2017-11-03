@@ -174,6 +174,7 @@ namespace Specifications.ViewModels
                 () =>
                 {
                     _instance.Update();
+                    _instance.Standard.Update();
                     EditMode = false;
                 },
                 () => _editMode && !HasErrors);
