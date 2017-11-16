@@ -18,7 +18,7 @@
     </NuGetPackageImportStamp>
     <TargetFrameworkProfile />
     <IsWebBootstrapper>false</IsWebBootstrapper>
-    <PublishUrl>L:\temp\Pietro\db\Publish\</PublishUrl>
+    <PublishUrl>\\v1-file\Laboratorio%24\temp\Pietro\db\Publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Unc</InstallFrom>
     <UpdateEnabled>true</UpdateEnabled>
@@ -28,10 +28,12 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <InstallUrl>\\v1-file\Laboratorio%24\temp\Pietro\db\Publish\</InstallUrl>
-    <ApplicationRevision>1</ApplicationRevision>
-    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <ProductName>LabDB2</ProductName>
+    <PublisherName>Pietro Simonini</PublisherName>
+    <ApplicationRevision>12</ApplicationRevision>
+    <ApplicationVersion>0.5.6.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
+    <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -218,7 +220,7 @@
     <None Include="LabDB2_TemporaryKey.pfx" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
+      <Generator>PublicSettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
@@ -259,14 +261,6 @@
     <ProjectReference Include="..\Navigation\Navigation.csproj">
       <Project>{31368a5f-9770-4198-bc3d-4996917b4139}</Project>
       <Name>Navigation</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Organizations\Organizations.csproj">
-      <Project>{8d1d2e26-45c1-421a-a2e0-0299ceaf1c42}</Project>
-      <Name>Organizations</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\People\People.csproj">
-      <Project>{133bcc97-79e7-4926-9852-2bb02e395189}</Project>
-      <Name>People</Name>
     </ProjectReference>
     <ProjectReference Include="..\Projects\Projects.csproj">
       <Project>{18b8efff-84ff-4652-b3e6-a35f59461247}</Project>

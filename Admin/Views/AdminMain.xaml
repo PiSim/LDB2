@@ -80,6 +80,10 @@
                 <ContentControl prism:RegionManager.RegionName="{Binding OrganizationRoleManagementRegionName}"/>
             </TabItem>
 
+            <TabItem Header="Gestione Persone">
+                <ContentControl prism:RegionManager.RegionName="{Binding PeopleManagementRegionName}"/>
+            </TabItem>
+            
             <TabItem Header="Grandezze Misurabili">
                 <ContentControl prism:RegionManager.RegionName="{Binding MeasurableQuantityManagementRegionName}"/>
             </TabItem>

@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Projects.Views"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-             xmlns:sort="clr-namespace:Infrastructure.Sorting;assembly=Infrastructure"
+             xmlns:cmd="clr-namespace:Infrastructure.Commands;assembly=Infrastructure"
              xmlns:prism="http://prismlibrary.com/"
              prism:ViewModelLocator.AutoWireViewModel="True"
              mc:Ignorable="d" 
@@ -28,7 +28,7 @@
                                 Command="{Binding OpenProjectCommand}"
                                 Margin="5"/>
 
-                        <Button Content="Nuovo"
+                        <Button Content="Crea Nuovo"
                                 Command="{Binding NewProjectCommand}"
                                 Margin="5"/>
                     </StackPanel>
@@ -42,7 +42,8 @@
                               GridLinesVisibility="None"
                               SelectionMode="Single"
                               SelectionUnit="FullRow"
-                              Grid.Row="1">
+                              Grid.Row="1"
+                              cmd:CommandBinder.DataGridDoubleClickCommand="{Binding OpenProjectCommand}">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Progetto"
                                                 Binding="{Binding Name}"/>

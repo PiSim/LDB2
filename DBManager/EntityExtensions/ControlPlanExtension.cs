@@ -36,7 +36,7 @@ namespace DBManager
             }
         }
 
-        public IEnumerable<ControlPlanItemB> GetControlPlanItems(bool includeRequirement = false)
+        public IEnumerable<ControlPlanItem> GetControlPlanItems(bool includeRequirement = false)
         {
             // Returns all the items in a Control Plan
 
@@ -45,14 +45,14 @@ namespace DBManager
                 entities.Configuration.LazyLoadingEnabled = false;
 
                 if (includeRequirement)
-                    return entities.ControlPlanItemBs
+                    return entities.ControlPlanItems
                                     .Include(cpi => cpi.Requirement.Method.Property)
                                     .Include(cpi => cpi.Requirement.Method.Standard)
                                     .Where(cpi => cpi.ControlPlanID == ID)
                                     .ToList();
 
                 else
-                    return entities.ControlPlanItemBs
+                    return entities.ControlPlanItems
                                     .Where(cpi => cpi.ControlPlanID == ID)
                                     .ToList();
             }
@@ -63,8 +63,8 @@ namespace DBManager
             using (DBEntities entities = new DBEntities())
             {
                 entities.ControlPlans.AddOrUpdate(this);
-                foreach (ControlPlanItemB cpi in control_plan_items_b)
-                    entities.ControlPlanItemBs.AddOrUpdate(cpi);
+                foreach (ControlPlanItem cpi in control_plan_items_b)
+                    entities.ControlPlanItems.AddOrUpdate(cpi);
 
                 entities.SaveChanges();
             }

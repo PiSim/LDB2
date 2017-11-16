@@ -94,6 +94,7 @@
                    Margin="5"/>
             <ComboBox ItemsSource="{Binding TechList}"
                       SelectedItem="{Binding Author, Mode=TwoWay}"
+                      IsReadOnly="{Binding IsNotAdmin}"
                       DisplayMemberPath="Name"
                       Grid.Column="1"
                       Grid.Row="4"
@@ -132,7 +133,7 @@
                                        Margin="0,0,5,0"/>
                             <TextBlock Text="{Binding Standard.Name}"
                                        Margin="0,0,5,0"/>
-                            <TextBlock Text="{Binding Standard.CurrentIssue.Issue}"/>
+                            <TextBlock Text="{Binding Standard.CurrentIssue}"/>
                         </StackPanel>
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
@@ -189,11 +190,24 @@
             
                 <DataGrid x:Name="RequirementGrid"
                           ItemsSource="{Binding RequirementList}"
-                          AutoGenerateColumns="False">
+                          AutoGenerateColumns="False"
+                          CanUserAddRows="False"
+                          CanUserDeleteRows="False"
+                          CanUserResizeRows="False"
+                          GridLinesVisibility="Horizontal">
                     <DataGrid.Columns>
 
-                        <DataGridCheckBoxColumn Binding="{Binding IsSelected,
-                                                                  UpdateSourceTrigger=PropertyChanged}"/>
+                    <DataGridCheckBoxColumn Binding="{Binding IsSelected,
+                                                              UpdateSourceTrigger=PropertyChanged}">
+                        <DataGridCheckBoxColumn.ElementStyle>
+                            <Style TargetType="CheckBox">
+                                <Setter Property="HorizontalAlignment"
+                                        Value="Center"/>
+                                <Setter Property="VerticalAlignment"
+                                        Value="Center"/>
+                            </Style>
+                        </DataGridCheckBoxColumn.ElementStyle>
+                    </DataGridCheckBoxColumn>
 
                         <DataGridTextColumn Header="Prova"
                                             Binding="{Binding Property}"
@@ -211,7 +225,8 @@
                                               GridLinesVisibility="Horizontal"
                                               ClipToBounds="True"
                                               HorizontalScrollBarVisibility="Hidden"
-                                              RowHeight="30">
+                                              RowHeight="30"
+                                              Margin="-2">
                                         <DataGrid.Columns>
                                             <DataGridTextColumn Binding="{Binding SubMethod.Name}"
                                                                 IsReadOnly="True"
@@ -235,7 +250,8 @@
                                               GridLinesVisibility="Horizontal"
                                               ClipToBounds="True"
                                               HorizontalScrollBarVisibility="Hidden"
-                                              RowHeight="30">
+                                              RowHeight="30"
+                                              Margin="-2">
                                         <DataGrid.Columns>
                                             <DataGridTextColumn Binding="{Binding RequiredValue}"
                                                                 IsReadOnly="True"
@@ -258,7 +274,8 @@
                                               GridLinesVisibility="Horizontal"
                                               ClipToBounds="True"
                                               HorizontalScrollBarVisibility="Hidden"
-                                              RowHeight="30">
+                                              RowHeight="30"
+                                              Margin="-2">
                                         <DataGrid.Columns>
                                             <DataGridTextColumn Binding="{Binding SubMethod.UM}"
                                                                 IsReadOnly="True"
@@ -288,7 +305,17 @@
 
                     <DataGridTextColumn Header="Ore lavoro"
                                         Binding="{Binding Duration,
-                                                          Mode=OneWay}"/>
+                                                          Mode=OneWay}">
+
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="HorizontalAlignment"
+                                        Value="Center"/>
+                                <Setter Property="VerticalAlignment"
+                                        Value="Center"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
                     </DataGrid.Columns>
                 </DataGrid>
 

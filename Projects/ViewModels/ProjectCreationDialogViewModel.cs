@@ -48,6 +48,7 @@ namespace Projects.ViewModels
                 },
                 parent => !HasErrors);
 
+            ProjectName = "";
             SelectedLeader = null;
             SelectedOem = null;
         }
@@ -121,7 +122,7 @@ namespace Projects.ViewModels
             set
             {
                 _name = value;
-                if (_name != null && ProjectService.GetProject(_name) == null)
+                if (!string.IsNullOrEmpty(_name) && ProjectService.GetProject(_name) == null)
                 {
                     if (_validationErrors.ContainsKey("ProjectName"))
                     {

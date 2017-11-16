@@ -5,8 +5,36 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DBManager.EntityExtensions
+namespace DBManager
 {
+    public partial class Aspect
+    {
+        private IEnumerable<Batch> _batches;
+
+        public IEnumerable<Batch> Batches => _batches;
+
+        public IEnumerable<Batch> GetBatches()
+        {
+            // Returns a list of the batches for an Aspect and stores it in the instance
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                _batches = entities.Batches
+                                    .Include(btc => btc.Material.Aspect)
+                                    .Include(btc => btc.Material.ExternalConstruction)
+                                    .Include(btc => btc.Material.MaterialLine)
+                                    .Include(btc => btc.Material.MaterialType)
+                                    .Include(btc => btc.Material.Recipe.Colour)
+                                    .Where(btc => btc.Material.AspectID == ID)
+                                    .ToList();
+
+                return _batches;
+            }
+        }
+    }
+
     public static class AspectExtension
     {
         public static void Create(this Aspect entry)

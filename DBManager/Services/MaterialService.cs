@@ -490,37 +490,5 @@ namespace DBManager.Services
 
         #endregion
         
-        
-        #region Operations for Sample entities
-
-        public static void Create(this Sample entry)
-        {
-            // Inserts a Sample entry in the DB
-
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.Samples.Add(entry);
-
-                entities.SaveChanges();
-            }
-        }
-
-        public static IEnumerable<Sample> GetRecentlyArrivedSamples(int number = 25)
-        {
-            using (DBEntities entities = new DBEntities())
-            {
-                return entities.Samples.Where(sle => sle.Code == "A")
-                                        .Include(samp => samp.Batch.Material.Aspect)
-                                        .Include(samp => samp.Batch.Material.MaterialLine)
-                                        .Include(samp => samp.Batch.Material.MaterialType)
-                                        .Include(samp => samp.Batch.Material.Project)
-                                        .Include(samp => samp.Batch.Material.Recipe.Colour)
-                                        .OrderByDescending(sle => sle.Date)
-                                        .Take(number)
-                                        .ToList();
-            }
-        }
-
-        #endregion
     }
 }

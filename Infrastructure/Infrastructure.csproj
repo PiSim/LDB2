@@ -107,11 +107,14 @@
     <Compile Include="Commands\CommandBinder.cs" />
     <Compile Include="Converters\CalibrationDueDateToStatusLightConverter.cs" />
     <Compile Include="Converters\CodeToActionConverter.cs" />
+    <Compile Include="Events\AspectChanged.cs" />
+    <Compile Include="Events\AspectCreationRequested.cs" />
     <Compile Include="Events\BatchCreated.cs" />
     <Compile Include="Events\BatchCreationRequested.cs" />
     <Compile Include="Events\BatchStatusListRefreshRequested.cs" />
     <Compile Include="Events\BatchVisualizationRequested.cs" />
-    <Compile Include="Events\ExternalConstructionModified.cs" />
+    <Compile Include="Events\EntityChangedToken.cs" />
+    <Compile Include="Events\ExternalConstructionChanged.cs" />
     <Compile Include="Events\ExternalReportCreationRequested.cs" />
     <Compile Include="Events\InstrumentCreationRequested.cs" />
     <Compile Include="Events\InstrumentTypeCreated.cs" />
@@ -123,10 +126,10 @@
     <Compile Include="Events\MethodListUpdateRequested.cs" />
     <Compile Include="Events\NewCalibrationRequested.cs" />
     <Compile Include="Events\MaintenanceEventCreationRequested.cs" />
+    <Compile Include="Events\OrganizationChanged.cs" />
     <Compile Include="Events\OrganizationCreationRequested.cs" />
-    <Compile Include="Events\OrganizationListRefreshRequested.cs" />
     <Compile Include="Events\OrganizationRoleCreationRequested.cs" />
-    <Compile Include="Events\PeopleListUpdateRequested.cs" />
+    <Compile Include="Events\PersonChanged.cs" />
     <Compile Include="Events\PersonCreationRequested.cs" />
     <Compile Include="Events\PersonRoleCreationRequested.cs" />
     <Compile Include="Events\ProjectCostUpdateRequested.cs" />
@@ -141,6 +144,7 @@
     <Compile Include="Events\TaskStatusCheckRequested.cs" />
     <Compile Include="Events\UserCreationRequested.cs" />
     <Compile Include="Events\UserRoleCreationRequested.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="IRequirementSelector.cs" />
     <Compile Include="Resources\CommonResourceDictionary.xaml.cs" />
     <Compile Include="DBIdentity.cs" />
@@ -182,6 +186,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="Resources\CommonResourceKeys.cs" />
+    <Compile Include="SampleLogActions.cs" />
     <Compile Include="Sorting\Sorting.cs" />
     <Compile Include="Sorting\SortingAdorner.cs" />
     <Compile Include="Sorting\SortingBehavior.cs" />
@@ -196,7 +201,6 @@
     <Compile Include="Wrappers\ControlPlanItemWrapper.cs" />
     <Compile Include="Wrappers\InstrumentMeasurablePropertyWrapper.cs" />
     <Compile Include="Wrappers\ISelectableRequirement.cs" />
-    <Compile Include="Wrappers\ProjectStatsWrapper.cs" />
     <Compile Include="Wrappers\ReportItemWrapper.cs" />
     <Compile Include="Wrappers\RequirementWrapper.cs" />
     <Compile Include="UserViewNames.cs" />

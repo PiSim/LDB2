@@ -18,7 +18,9 @@ namespace Organizations.ViewModels
     {
         private DelegateCommand _createNewOrganization,
                                 _createNewOrganizationRole,
+#pragma warning disable CS0169 // Il campo 'OrganizationsMainViewModel._deleteOrganization' non viene mai usato
                                 _deleteOrganization;
+#pragma warning restore CS0169 // Il campo 'OrganizationsMainViewModel._deleteOrganization' non viene mai usato
         private EventAggregator _eventAggregator;
         private Organization _selectedOrganization;
 

@@ -22,7 +22,7 @@ namespace Specifications.ViewModels
         private DBPrincipal _principal;
         private DelegateCommand _save,
                                 _startEdit;
-        private IEnumerable<ControlPlanItemB> _controlPlanItemsList;
+        private IEnumerable<ControlPlanItem> _controlPlanItemsList;
 
         public ControlPlanEditViewModel(DBPrincipal principal)
         {
@@ -32,7 +32,7 @@ namespace Specifications.ViewModels
             _save = new DelegateCommand(
                 () =>
                 {
-                    _controlPlanInstance.control_plan_items_b = _controlPlanItemsList as ICollection<ControlPlanItemB>;
+                    _controlPlanInstance.control_plan_items_b = _controlPlanItemsList as ICollection<ControlPlanItem>;
                     _controlPlanInstance.Update();
                     EditMode = false;
                 },
@@ -60,7 +60,7 @@ namespace Specifications.ViewModels
 
                 EditMode = false;
 
-                _controlPlanItemsList = (value == null) ? new List<ControlPlanItemB>() :
+                _controlPlanItemsList = (value == null) ? new List<ControlPlanItem>() :
                                                             _controlPlanInstance.GetControlPlanItems(true);
 
                 RaisePropertyChanged("Name");
@@ -68,7 +68,7 @@ namespace Specifications.ViewModels
             }
         }
         
-        public IEnumerable<ControlPlanItemB> ControlPlanItemsList
+        public IEnumerable<ControlPlanItem> ControlPlanItemsList
         {
             get { return _controlPlanItemsList; }
         }

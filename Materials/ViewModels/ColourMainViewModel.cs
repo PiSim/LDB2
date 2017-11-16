@@ -36,7 +36,7 @@ namespace Materials.ViewModels
                     if (newColourDialog.ShowDialog() == true)
                     {
 
-                        if (MaterialService.GetColour(newColourDialog.InputString) != null
+                        if (DBManager.Services.MaterialService.GetColour(newColourDialog.InputString) != null
                             || newColourDialog.InputString.Length > 45)
                             return;
 
@@ -69,7 +69,7 @@ namespace Materials.ViewModels
 
         public IEnumerable<Colour> ColourList
         {
-            get { return MaterialService.GetColours(); }
+            get { return DBManager.Services.MaterialService.GetColours(); }
         }
 
         public DelegateCommand CreateColourCommand

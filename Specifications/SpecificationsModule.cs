@@ -46,7 +46,10 @@ namespace Specifications
            
             _regionManager.RegisterViewWithRegion(RegionNames.MainNavigationRegion, 
                                                 typeof(Views.MethodNavigationItem));
-
+            _regionManager.RegisterViewWithRegion(RegionNames.MethodEditSpecificationListRegion,
+                                                typeof(Controls.Views.SpecificationList));
+            _regionManager.RegisterViewWithRegion(RegionNames.SpecificationMainListRegion,
+                                                typeof(Controls.Views.SpecificationList));
 
             // ADD Specification tag to navigation Menu if user is authorized
 

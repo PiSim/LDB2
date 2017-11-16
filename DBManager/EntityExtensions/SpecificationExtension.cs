@@ -33,7 +33,7 @@ namespace DBManager
                     throw new InvalidOperationException();
 
                 foreach (Requirement req in mainVersion.Requirements)
-                    newEntry.control_plan_items_b.Add(new ControlPlanItemB()
+                    newEntry.control_plan_items_b.Add(new ControlPlanItem()
                     {
                         IsSelected = asDefault,
                         RequirementID = req.ID
@@ -60,7 +60,7 @@ namespace DBManager
 
                 foreach (ControlPlan cp in entities.ControlPlans.Where(cp => cp.SpecificationID == ID))
                     requirementEntry.control_plan_items_b
-                                    .Add(new ControlPlanItemB()
+                                    .Add(new ControlPlanItem()
                     {
                         ControlPlan = cp,
                         IsSelected = cp.IsDefault
@@ -81,6 +81,19 @@ namespace DBManager
                 return entities.ControlPlans
                                 .Where(cp => cp.SpecificationID == ID)
                                 .ToList();
+            }
+        }
+
+        public IEnumerable<SpecificationVersion> GetVersions()
+        {
+            //Returns all version for a given specification entry
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.SpecificationVersions.Where(specv => specv.SpecificationID == ID)
+                                                    .ToList();
             }
         }
     }
@@ -159,22 +172,6 @@ namespace DBManager
                                         .Include(rep => rep.SpecificationVersion.Specification.Standard)
                                         .Where(rep => rep.SpecificationVersion.Specification.ID == entry.ID)
                                         .ToList();
-            }
-        }
-
-        public static IEnumerable<SpecificationVersion> GetVersions(this Specification entry)
-        {
-            //Returns all version for a given specification entry
-
-            if (entry == null)
-                return null;
-
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.Configuration.LazyLoadingEnabled = false;
-
-                return entities.SpecificationVersions.Where(specv => specv.SpecificationID == entry.ID)
-                                                    .ToList();
             }
         }
 

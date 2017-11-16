@@ -44,9 +44,12 @@ namespace Reports.ViewModels
             _addFile = new DelegateCommand(
                 () =>
                 {
-                    OpenFileDialog fileDialog = new OpenFileDialog();
-                    fileDialog.Multiselect = true;
-                    
+                    OpenFileDialog fileDialog = new OpenFileDialog
+                    {
+                        InitialDirectory = UserSettings.ReportPath,
+                        Multiselect = true
+                    };
+
                     if (fileDialog.ShowDialog() == DialogResult.OK)
                     {
                         foreach (string pth in fileDialog.FileNames)
@@ -242,6 +245,8 @@ namespace Reports.ViewModels
             get { return _instance; }
             set
             {
+                EditMode = false;
+
                 _instance = value;
                 _instance.Load();
 

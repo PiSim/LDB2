@@ -7,6 +7,7 @@ using Infrastructure.Wrappers;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
+using Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -58,11 +59,16 @@ namespace Instruments.ViewModels
             _addFile = new DelegateCommand(
                 () =>
                 {
-                    OpenFileDialog fileDialog = new OpenFileDialog();
-                    fileDialog.Multiselect = true;
+                    
+                    OpenFileDialog fileDialog = new OpenFileDialog
+                    {
+                        InitialDirectory = UserSettings.CalibrationReportPath,
+                        Multiselect = true
+                    };
 
                     if (fileDialog.ShowDialog() == DialogResult.OK)
                     {
+
 
                         IEnumerable<CalibrationFiles> fileList = fileDialog.FileNames
                                                                             .Select(file => new CalibrationFiles()

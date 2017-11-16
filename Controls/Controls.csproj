@@ -84,6 +84,7 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Prism.Wpf.6.3.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
@@ -125,6 +126,9 @@
     <Compile Include="ViewModels\StringInputDialogViewModel.cs" />
     <Compile Include="ViewModels\StatusBarViewModel.cs" />
     <Compile Include="ViewModels\ToolbarViewModel.cs" />
+    <Compile Include="Views\AboutDialog.xaml.cs">
+      <DependentUpon>AboutDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\BatchPickerDialog.xaml.cs">
       <DependentUpon>BatchPickerDialog.xaml</DependentUpon>
     </Compile>
@@ -151,6 +155,9 @@
     </Compile>
     <Compile Include="Views\RequirementGrid.xaml.cs">
       <DependentUpon>RequirementGrid.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SpecificationList.xaml.cs">
+      <DependentUpon>SpecificationList.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SpecificationSelector.xaml.cs">
       <DependentUpon>SpecificationSelector.xaml</DependentUpon>
@@ -191,6 +198,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Views\AboutDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\BatchPickerDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -224,6 +235,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\RequirementGrid.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SpecificationList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

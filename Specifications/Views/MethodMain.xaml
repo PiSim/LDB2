@@ -12,8 +12,8 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
+            <ColumnDefinition MinWidth="300"/>
+            <ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
 
         <Grid.RowDefinitions>
@@ -25,12 +25,8 @@
                     Grid.Column="0"
                     Grid.Row="0">
 
-            <Button Content="Nuovo"
+            <Button Content="Crea Nuovo"
                     Command="{Binding NewMethodCommand}"
-                    Margin="5"/>
-
-            <Button Content="Elimina"
-                    Command="{Binding DeleteMethodCommand}"
                     Margin="5"/>
         </StackPanel>
         

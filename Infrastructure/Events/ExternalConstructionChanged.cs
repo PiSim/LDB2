@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Events
 {
-    public class ExternalConstructionModified : PubSubEvent
+    public class ExternalConstructionChanged : PubSubEvent<EntityChangedToken>
     {
     }
 }

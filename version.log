@@ -1,5 +1,15 @@
-﻿v 0.55 --
+﻿v 0.5.6 --
 
+-Consolidata interfaccia Metodi
+-Consolidata interfaccia Progetti
+-Corretti errori nel dialogo creazione Report che impedivano la funzionalità
+-Reimplementata creazione Aspetti
+-Iniziata riorganizzazione dei servizi eliminando classi statiche e definendo meglio i ruoli
+
+
+v 0.5.5 -- 03/11/2017
+
+-Pubblicata come ClickOnce 
 -Spostata gestione tarature da proprietà a strumenti
 -Numerose correzioni all'interfaccia strumenti
 -Implementata gestione archivio lungo termine ("Cotex")
@@ -8,7 +18,7 @@
 -Numerose correzioni e migliorie al backend specifiche
 -Reimplementata entità ControlPlanItem e relativo metodo ApplyControlPlan
 
-v 0.54 -- 27/9/2017
+v 0.5.4 -- 27/9/2017
 
 -Implementato conteggio ore per report/durata metodi
 -Sostituite diverse listview con DataGrid
@@ -16,7 +26,7 @@ v 0.54 -- 27/9/2017
 -Impostato suggerimento automatico numero report
 -Aggiunto campo note alla creazione di un report
 
-v 0.53 -- 30/08/2017
+v 0.5.3 -- 30/08/2017
 
 -Aggiunti diversi campi di gestione all'interfaccia strumenti
 -Implementata vista per la gestione delle grandezze associate ad uno strumento
@@ -24,7 +34,7 @@ v 0.53 -- 30/08/2017
 -Implementate viste per la gestione tarature 
 -Svariate correzioni all'interfaccia
 
-v 0.52 -- 03/07/2017
+v 0.5.2 -- 03/07/2017
 
 -Implementata validazione input in diverse viste tramite INotifyDataErrorInfo
 -Reimplementato inserimento Sample con finestra di dialogo SampleCreationDialog
@@ -40,7 +50,7 @@ v 0.52 -- 03/07/2017
 -Implementate viste Admin per gestione enti, strumenti, quantità, UM ed Utenti
 -Impostate entità per la gestione di quantità misurabili multiple per strumento
 
-v 0.51 -- 29/6/2017
+v 0.5.1 -- 29/6/2017
 
 -Corretta funzione AutoWireViewModel di ExternalReportCreationDialog
 -ReportEditView: Sostituita ListView prove con DataGrid

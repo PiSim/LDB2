@@ -22,36 +22,13 @@ namespace Services.ViewModels
     {
         private Batch _batchInstance;
         private DBPrincipal _principal;
-        private DelegateCommand _confirm, 
-                                _deleteLast;
+        private DelegateCommand _confirm;
+        private DelegateCommand<Sample> _deleteSample;
         private DelegateCommand<Window> _end;
 
         private readonly Dictionary<string, ICollection<string>> _validationErrors = new Dictionary<string, ICollection<string>>();
         private EventAggregator _eventAggregator;
-        private readonly IEnumerable<SampleLogChoiceWrapper> _choiceList = new List<SampleLogChoiceWrapper>()
-        {
-            new SampleLogChoiceWrapper("Arrivato in laboratorio",
-                                        "A",
-                                        1,
-                                        0),
-            new SampleLogChoiceWrapper("Buttato",
-                                        "B",
-                                        -1,
-                                        0),
-            new SampleLogChoiceWrapper("Finito",
-                                        "F",
-                                        -1,
-                                        0),
-            new SampleLogChoiceWrapper("Portato in Cotex",
-                                        "C",
-                                        -1,
-                                        1),
-            new SampleLogChoiceWrapper("Ripreso da Cotex",
-                                        "R",
-                                        1,
-                                        -1)                             
-        };
-        private Sample _lastEntry;
+
         private string _batchNumber;
         private SampleLogChoiceWrapper _selectedChoice;
 
@@ -61,7 +38,7 @@ namespace Services.ViewModels
             _principal = principal;
             _eventAggregator = aggregator;
 
-            _selectedChoice = _choiceList.First(cho => cho.Code == "A");
+            _selectedChoice = SampleLogActions.ActionList.First(cho => cho.Code == "A");
 
             _confirm = new DelegateCommand(
                 () =>
@@ -98,10 +75,11 @@ namespace Services.ViewModels
                 },
                 () => !HasErrors);
 
-            _deleteLast = new DelegateCommand(
-                () =>
+            _deleteSample = new DelegateCommand<Sample>(
+                smp =>
                 {
-
+                    CommonProcedures.DeleteSample(smp);
+                    RaisePropertyChanged("LatestSampleList");
                 });
 
             _end = new DelegateCommand<Window>(
@@ -142,7 +120,7 @@ namespace Services.ViewModels
 
         public IEnumerable<SampleLogChoiceWrapper> ChoiceList
         {
-            get { return _choiceList; }
+            get { return SampleLogActions.ActionList; }
         }
 
         public Batch BatchInstance
@@ -183,9 +161,9 @@ namespace Services.ViewModels
             get { return _confirm; }
         }
 
-        public DelegateCommand DeleteLastCommand
+        public DelegateCommand<Sample> DeleteSampleCommand
         {
-            get { return _deleteLast; }
+            get { return _deleteSample; }
         }
 
         public DelegateCommand<Window> EndCommand

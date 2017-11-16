@@ -29,7 +29,7 @@ namespace Materials.ViewModels
             _createExternalConstruction = new DelegateCommand(
                 () =>
                 {
-                    if (MaterialServiceProvider.CreateNewExternalConstruction() != null)
+                    if (MaterialService.CreateNewExternalConstruction() != null)
                         RaisePropertyChanged("ExternalConstructionList");
                 },
                 () => _principal.IsInRole(UserRoleNames.MaterialEdit));
@@ -44,9 +44,12 @@ namespace Materials.ViewModels
                 () => _selectedExternalConstruction != null
                     && _principal.IsInRole(UserRoleNames.MaterialAdmin));
 
+            #region Event Subscriptions
 
-            _eventAggregator.GetEvent<ExternalConstructionModified>().Subscribe(
-                () => RaisePropertyChanged("ExternalConstructionList"));
+            _eventAggregator.GetEvent<ExternalConstructionChanged>()
+                            .Subscribe(ect => RaisePropertyChanged("ExternalConstructionList"));
+
+            #endregion
         }
 
         public DelegateCommand CreateExternalConstructionCommand
@@ -61,7 +64,7 @@ namespace Materials.ViewModels
 
         public IEnumerable<ExternalConstruction> ExternalConstructionList
         {
-            get { return MaterialService.GetExternalConstructions(); }
+            get { return DBManager.Services.MaterialService.GetExternalConstructions(); }
         }
 
         public DelegateCommand RemoveExternalConstructionCommand

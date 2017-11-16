@@ -30,7 +30,7 @@ namespace Materials.ViewModels
 
         public IEnumerable<Material> MaterialList
         {
-            get { return MaterialService.GetMaterials(); }
+            get { return DBManager.Services.MaterialService.GetMaterials(); }
         }
 
         public Material SelectedMaterial

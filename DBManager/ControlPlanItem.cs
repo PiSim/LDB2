@@ -12,7 +12,7 @@ namespace DBManager
     using System;
     using System.Collections.Generic;
     
-    public partial class ControlPlanItemB
+    public partial class ControlPlanItem
     {
         public int ControlPlanID { get; set; }
         public int RequirementID { get; set; }

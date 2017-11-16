@@ -17,17 +17,31 @@ namespace Materials.ViewModels
     public class AspectMainViewModel : BindableBase
     {
         private Aspect _selectedAspect;
+        private DBPrincipal _principal;
         private DelegateCommand _createAspect, _removeAspect;
         private EventAggregator _eventAggregator;
+        private IEnumerable<Aspect> _aspectList;
+        private readonly MaterialService _materialService;
 
-        public AspectMainViewModel(EventAggregator eventAggregator) : base()
+        public AspectMainViewModel(DBPrincipal principal,
+                                EventAggregator eventAggregator,
+                                MaterialService materialService) : base()
         {
+            _principal = principal;
             _eventAggregator = eventAggregator;
+            _materialService = materialService;
 
             _createAspect = new DelegateCommand(
                 () =>
                 {
-                    
+                    Aspect tempAspect = _materialService.CreateAspect();
+                    if (tempAspect != null)
+                        _eventAggregator.GetEvent<AspectChanged>()
+                                        .Publish(new EntityChangedToken(tempAspect,
+                                                                        EntityChangedToken.EntityChangedAction.Created));
+
+                    _aspectList = null;
+                    RaisePropertyChanged("AspectList");
                 },
                 () => CanModify);
 
@@ -38,7 +52,7 @@ namespace Materials.ViewModels
                     SelectedAspect = null;
                     RaisePropertyChanged("AspectList");
                 },
-                () => _selectedAspect != null && CanModify);
+                () => false);
         }
 
         public string AspectDetailRegionName
@@ -48,13 +62,21 @@ namespace Materials.ViewModels
 
         public IEnumerable<Aspect> AspectList
         {
-            get { return MaterialService.GetAspects(); }
+            get
+            {
+                if (_aspectList == null)
+                    _aspectList = DBManager.Services.MaterialService.GetAspects();
+
+                return _aspectList;
+            }
         }
 
         public bool CanModify
         {
-            get { return true; }
+            get { return _principal.IsInRole(UserRoleNames.MaterialEdit); }
         }
+
+        public DelegateCommand CreateAspectCommand => _createAspect;
 
         public DelegateCommand RemoveAspectCommand
         {

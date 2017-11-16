@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,6 +10,157 @@ namespace DBManager
 {
     public partial class Project
     {
+        IEnumerable<Report> _reportList;
+        IEnumerable<Task> _taskList;
+
+        public void Create()
+        {
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Projects.Add(this);
+                entities.SaveChanges();
+            }
+        }
+
+        public void Delete()
+        {
+            using (DBEntities entities = new DBEntities())
+            {
+                Project tempEntry = entities.Projects.FirstOrDefault(prj => prj.ID == ID);
+
+                if (tempEntry != null)
+                {
+                    entities.Entry(tempEntry)
+                            .State = EntityState.Deleted;
+
+                    entities.SaveChanges();
+                }
+
+                entities.SaveChanges();
+            }
+        }
+
+        public int ExternalReportCount => ExternalReports.Count;
+
+        public IEnumerable<Report> GetReports()
+        {
+            // Returns all Report entities for the Project and stores the updated collection in the instance
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                _reportList = entities.Reports.Where(rep => rep.Batch.Material.ProjectID == ID)
+                                                .Include(rep => rep.Author)
+                                                .Include(rep => rep.Batch.Material.Aspect)
+                                                .Include(rep => rep.Batch.Material.MaterialLine)
+                                                .Include(rep => rep.Batch.Material.MaterialType)
+                                                .Include(rep => rep.Batch.Material.Recipe.Colour)
+                                                .Include(rep => rep.SpecificationVersion.Specification.Standard)
+                                                .ToList();
+
+                return _reportList;
+            }
+        }
+
+        public IEnumerable<Task> GetTasks()
+        {
+            // Returns all Task entities for the Project and stores the updated collection in the instance
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.Tasks.Where(tsk => tsk.Batch.Material.ProjectID == ID)
+                                    .Include(tsk => tsk.Batch.Material.Aspect)
+                                    .Include(tsk => tsk.Batch.Material.MaterialLine)
+                                    .Include(tsk => tsk.Batch.Material.MaterialType)
+                                    .Include(tsk => tsk.Batch.Material.Recipe.Colour)
+                                    .Include(tsk => tsk.Requester)
+                                    .ToList();
+            }
+        }
+        
+        public int BatchCount
+        {
+            get
+            {
+                using (DBEntities entities = new DBEntities())
+                {
+                    return entities.Batches
+                                    .Where(btc => btc.Material.ProjectID == ID)
+                                    .Count();
+                }
+            }
+        }
+
+        public void Load()
+        {
+            // Explicitly loads a Project and all related entities
+            
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                Project tempEntry = entities.Projects.Include(prj => prj.ExternalReports
+                                                    .Select(extr => extr.ExternalLab))
+                                                    .Include(prj => prj.Leader)
+                                                    .Include(prj => prj.Oem)
+                                                    .First(prj => prj.ID == ID);
+
+                Description = tempEntry.Description;
+                ExternalReports = tempEntry.ExternalReports;
+                Leader = tempEntry.Leader;
+                Name = tempEntry.Name;
+                Oem = tempEntry.Oem;
+                OemID = tempEntry.OemID;
+                ProjectLeaderID = tempEntry.ProjectLeaderID;
+                TotalExternalCost = tempEntry.TotalExternalCost;
+                TotalInternalCost = tempEntry.TotalInternalCost;
+            }
+        }
+
+        public int MaterialCount
+        {
+            get
+            {
+                using (DBEntities entities = new DBEntities())
+                {
+                    return entities.Materials
+                                    .Where(mat => mat.ProjectID == ID)
+                                    .Count();
+                }
+            }
+        }
+
+        public IEnumerable<Report> Reports => _reportList;
+
+        public int ReportCount
+        {
+            get
+            {
+                using (DBEntities entities = new DBEntities())
+                {
+                    return entities.Reports
+                                    .Where(rep => rep.Batch.Material.ProjectID == ID)
+                                    .Count();
+                }
+            }
+        }
+        
+        public void Update()
+        {
+            // Updates the DBValues of the Project entry
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Projects
+                        .AddOrUpdate(this);
+
+                entities.SaveChanges();
+            }
+        }
+
         public void UpdateExternalReportCost()
         {
             using (DBEntities entities = new DBEntities())
@@ -18,9 +170,10 @@ namespace DBManager
                                                     .Any(exr => exr.ProjectID == this.ID));
 
                 TotalExternalCost = (_poList.Count() == 0) ? 0 : _poList.Sum(po => po.Total);
-
             }
         }
+
+        public IEnumerable<Task> Tasks => _taskList;
     }
 
     public static class ProjectExtension

@@ -21,6 +21,14 @@
                                     Binding="{Binding Name}"/>
                 <DataGridTextColumn Header="Descrizione"
                                     Binding="{Binding Description}"/>
+                <DataGridTextColumn Header="N. Materiali"
+                                    Binding="{Binding MaterialCount}"/>
+                <DataGridTextColumn Header="N. Batch"
+                                    Binding="{Binding BatchCount}"/>
+                <DataGridTextColumn Header="N. Report"
+                                    Binding="{Binding ReportCount}"/>
+                <DataGridTextColumn Header="N. Report Esterni"
+                                    Binding="{Binding ExternalReportCount}"/>
                 <DataGridTemplateColumn Header="Costo Test esterni"
                                         SortMemberPath="TotalExternalCost">
                     <DataGridTemplateColumn.CellTemplate>
@@ -35,7 +43,7 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <DataGridTextColumn Header="Ore lavoro"
-                                    Binding="{Binding TotalWorkHours}"/>
+                                    Binding="{Binding TotalInternalCost}"/>
             </DataGrid.Columns>
         </DataGrid>
                   

@@ -20,6 +20,8 @@
             <RowDefinition Height="35"/>
         </Grid.RowDefinitions>
 
+        <FrameworkElement x:Name="dummyElement" Visibility="Collapsed"/>
+
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
@@ -135,6 +137,16 @@
                                                                        ConverterCulture=it-IT}"/>
                         <GridViewColumn Header="Inserito da"
                                         DisplayMemberBinding="{Binding LogAuthor.Name}"/>
+                        <GridViewColumn>
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Content="Elimina"
+                                                        Command="{Binding DataContext.DeleteSampleCommand,
+                                                                          Source={x:Reference Name=dummyElement}}"
+                                                        CommandParameter="{Binding}"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
                     </GridView>
                 </ListView.View>
             </ListView>

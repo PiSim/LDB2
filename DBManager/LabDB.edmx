@@ -33,7 +33,6 @@
           <Property Name="trial_areaID" Type="int" />
           <Property Name="first_sample_arrived" Type="bit" Nullable="false" />
           <Property Name="first_sampleID" Type="int" />
-          <Property Name="basic_report_done" Type="bit" />
           <Property Name="basic_reportID" Type="int" />
           <Property Name="trial_scopeID" Type="int" />
           <Property Name="trial_scope_text" Type="varchar" MaxLength="45" />
@@ -3633,14 +3632,14 @@
             <End Role="Organization" EntitySet="Organizations" />
             <End Role="Instrument" EntitySet="Instruments" />
           </AssociationSet>
-          <EntitySet Name="ControlPlanItemBs" EntityType="labdbModel.ControlPlanItemB" />
+          <EntitySet Name="ControlPlanItems" EntityType="labdbModel.ControlPlanItem" />
           <AssociationSet Name="control_plan_to_plan_item" Association="labdbModel.control_plan_to_plan_item">
             <End Role="ControlPlan" EntitySet="ControlPlans" />
-            <End Role="control_plan_items_b" EntitySet="ControlPlanItemBs" />
+            <End Role="control_plan_items_b" EntitySet="ControlPlanItems" />
           </AssociationSet>
           <AssociationSet Name="requirement_to_cplan_item" Association="labdbModel.requirement_to_cplan_item">
             <End Role="Requirement" EntitySet="Requirements" />
-            <End Role="control_plan_items_b" EntitySet="ControlPlanItemBs" />
+            <End Role="control_plan_items_b" EntitySet="ControlPlanItems" />
           </AssociationSet>
           </EntityContainer>
         <Association Name="overridden_to_requirement">
@@ -4755,7 +4754,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="ControlPlanItemB">
+        <EntityType Name="ControlPlanItem">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
@@ -4770,7 +4769,7 @@
           <End Type="labdbModel.ControlPlan" Role="ControlPlan" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Type="labdbModel.ControlPlanItemB" Role="control_plan_items_b" Multiplicity="*" />
+          <End Type="labdbModel.ControlPlanItem" Role="control_plan_items_b" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="ControlPlan">
               <PropertyRef Name="ID" />
@@ -4784,7 +4783,7 @@
           <End Type="labdbModel.Requirement" Role="Requirement" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Type="labdbModel.ControlPlanItemB" Role="control_plan_items_b" Multiplicity="*" />
+          <End Type="labdbModel.ControlPlanItem" Role="control_plan_items_b" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Requirement">
               <PropertyRef Name="ID" />
@@ -5462,8 +5461,8 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="ControlPlanItemBs">
-            <EntityTypeMapping TypeName="labdbModel.ControlPlanItemB">
+          <EntitySetMapping Name="ControlPlanItems">
+            <EntityTypeMapping TypeName="labdbModel.ControlPlanItem">
               <MappingFragment StoreEntitySet="control_plan_items_b">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="IsSelected" ColumnName="is_selected" />

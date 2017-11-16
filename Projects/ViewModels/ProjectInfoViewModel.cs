@@ -19,16 +19,17 @@ namespace Projects.ViewModels
     public class ProjectInfoViewModel : BindableBase
     {
         private bool _editMode;
-        private Material _selectedAssigned, _selectedUnassigned;
         private Batch _selectedBatch;
         private DBPrincipal _principal;
-        private DelegateCommand _assignMaterial, 
-                                _openBatch, 
+        private DelegateCommand _openBatch, 
                                 _openExternalReport, 
                                 _openReport, 
                                 _save,
-                                _startEdit,
-                                _unassignMaterial;
+                                _startEdit;
+        private DelegateCommand<Material> _addMaterial,
+                                        _removeMaterial;
+        private IEnumerable<Person> _leaderList;
+        private IEnumerable<Organization> _oemList;
         private EventAggregator _eventAggregator;
         private ExternalReport _selectedExternal;
         private Project _projectInstance;
@@ -44,31 +45,47 @@ namespace Projects.ViewModels
 
             #region EventSubscriptions
             
+            // ReportList Update
+
             _eventAggregator.GetEvent<ReportCreated>().Subscribe(
                 report =>
                 {
                     SelectedReport = null;
                     RaisePropertyChanged("ReportList");
-                }); 
+                });
 
-            _eventAggregator.GetEvent<TaskListUpdateRequested>().Subscribe(() => RaisePropertyChanged("TaskList"));
+
+            // LeaderList Update
+
+            _eventAggregator.GetEvent<PersonChanged>()
+                            .Subscribe(ect => UpdateLeaderList());
+
+            // OEMList Update
+
+            _eventAggregator.GetEvent<OrganizationChanged>()
+                            .Subscribe(ect => UpdateOEMList());
+
+            // TaskList Update
+
+            _eventAggregator.GetEvent<TaskListUpdateRequested>()
+                            .Subscribe(() => RaisePropertyChanged("TaskList"));
 
             #endregion
 
             #region CommandDefinitions
 
-            _assignMaterial = new DelegateCommand(
-                () => 
+            _addMaterial = new DelegateCommand<Material>(
+                mat => 
                 {
-                    _selectedUnassigned.ProjectID = _projectInstance.ID;
-                    _selectedUnassigned.Update();
+                    if (mat != null)
+                    {
+                        mat.ProjectID = _projectInstance.ID;
+                        mat.Update();
 
-                    SelectedUnassigned = null;
-                    RaisePropertyChanged("AssignedMaterials");
-                    RaisePropertyChanged("UnassignedMaterials");
-                },
-                () => _selectedUnassigned != null
-            );
+                        RaisePropertyChanged("AssignedMaterials");
+                        RaisePropertyChanged("UnassignedMaterials");
+                    }
+                });
             
             _openBatch = new DelegateCommand(
                 () => 
@@ -96,6 +113,19 @@ namespace Projects.ViewModels
                     _eventAggregator.GetEvent<NavigationRequested>().Publish(token);
                 });
 
+            _removeMaterial = new DelegateCommand<Material>(
+                mat =>
+                {
+                    if (mat != null)
+                    {
+                        mat.ProjectID = null;
+                        mat.Update();
+
+                        RaisePropertyChanged("AssignedMaterials");
+                        RaisePropertyChanged("UnassignedMaterials");
+                    }
+                });
+
             _save = new DelegateCommand(
                 () =>
                 {
@@ -111,26 +141,28 @@ namespace Projects.ViewModels
                 },
                 () => !_editMode && _principal.IsInRole(UserRoleNames.ProjectAdmin));
 
-            _unassignMaterial = new DelegateCommand(
-                () => 
-                {
-                    _selectedAssigned.ProjectID = null;
-                    _selectedAssigned.Update();
-                    
-                    RaisePropertyChanged("AssignedMaterials");
-                    RaisePropertyChanged("UnassignedMaterials");
-                    SelectedAssigned = null;
-                },
-                () => _selectedAssigned != null
-            );
-
             #endregion
         }
 
-        public DelegateCommand AssignMaterialCommand
+        #region Methods
+        
+        private void UpdateLeaderList()
         {
-            get { return _assignMaterial; }
+            _leaderList = null;
+            RaisePropertyChanged("LeaderList");
+            RaisePropertyChanged("SelectedLeader");
         }
+
+        private void UpdateOEMList()
+        {
+            _oemList = null;
+            RaisePropertyChanged("OEMList");
+            RaisePropertyChanged("SelectedOEM");
+        }
+
+        #endregion
+
+        public DelegateCommand<Material> AddMaterialCommand => _addMaterial;
         
         public IEnumerable<Material> AssignedMaterials
         {
@@ -196,6 +228,18 @@ namespace Projects.ViewModels
             }
         }
 
+        public IEnumerable<Person> LeaderList
+        {
+            get
+            {
+                if (_leaderList == null)
+                    _leaderList = PeopleService.GetPeople(PersonRoleNames.ProjectLeader);
+
+                return _leaderList;
+            }
+        }
+
+
         public string Name
         {
             get
@@ -211,14 +255,14 @@ namespace Projects.ViewModels
             }
         }
 
-        public string OemName
+        public IEnumerable<Organization> OEMList
         {
             get
             {
-                if (_projectInstance == null)
-                    return null;
+                if (_oemList == null)
+                    _oemList = OrganizationService.GetOrganizations(OrganizationRoleNames.OEM);
 
-                return _projectInstance.Oem.Name;
+                return _oemList;
             }
         }
 
@@ -243,24 +287,24 @@ namespace Projects.ViewModels
             set
             {
                 _projectInstance = value;
-                _projectInstance.Load();
+                _projectInstance?.Load();
                 
                 SelectedBatch = null;
-                SelectedAssigned = null;
-                SelectedUnassigned = null;
 
                 RaisePropertyChanged("AssignedMaterials");
                 RaisePropertyChanged("BatchList");
                 RaisePropertyChanged("Description");
                 RaisePropertyChanged("ExternalReportList");
-                RaisePropertyChanged("LeaderName");
                 RaisePropertyChanged("Name");
-                RaisePropertyChanged("OemName");
                 RaisePropertyChanged("ReportList");
+                RaisePropertyChanged("SelectedLeader");
+                RaisePropertyChanged("SelectedOEM");
                 RaisePropertyChanged("TaskList");
                 RaisePropertyChanged("UnassignedMaterials");
             }
         }
+
+        public DelegateCommand<Material> RemoveMaterialCommand => _removeMaterial;
 
         public IEnumerable<Report> ReportList
         {
@@ -274,18 +318,7 @@ namespace Projects.ViewModels
         {
             get { return _save; }
         }
-
-        public Material SelectedAssigned
-        {
-            get { return _selectedAssigned; }
-            set 
-            { 
-                _selectedAssigned = value; 
-                RaisePropertyChanged("SelectedAssigned");
-                _unassignMaterial.RaiseCanExecuteChanged();
-            }
-        }
-
+        
         public Batch SelectedBatch
         {
             get { return _selectedBatch; }
@@ -300,10 +333,36 @@ namespace Projects.ViewModels
         public ExternalReport SelectedExternal
         {
             get { return _selectedExternal; }
-            set 
-            { 
-                _selectedExternal = value; 
+            set
+            {
+                _selectedExternal = value;
                 _openExternalReport.RaiseCanExecuteChanged();
+            }
+        }
+
+        public Person SelectedLeader
+        {
+            get
+            {
+                return _leaderList?.FirstOrDefault(pjl => pjl.ID == _projectInstance?.ProjectLeaderID);
+            }
+
+            set
+            {
+                _projectInstance.ProjectLeaderID = value.ID;
+            }
+        }
+
+        public Organization SelectedOEM
+        {
+            get
+            {
+                return _oemList?.FirstOrDefault(oem => oem.ID == _projectInstance?.OemID);
+            }
+
+            set
+            {
+                _projectInstance.OemID = value.ID;
             }
         }
 
@@ -316,18 +375,6 @@ namespace Projects.ViewModels
                 _openReport.RaiseCanExecuteChanged();
             }
         }
-        
-        public Material SelectedUnassigned
-        {
-            get { return _selectedUnassigned; }
-            set 
-            { 
-                _selectedUnassigned = value; 
-                RaisePropertyChanged("SelectedUnassigned");
-                _assignMaterial.RaiseCanExecuteChanged();
-            }
-        }
-
         public DelegateCommand StartEditCommand
         {
             get { return _startEdit; }
@@ -342,11 +389,6 @@ namespace Projects.ViewModels
 
                 return _projectInstance.GetTasks();
             }
-        }
-        
-        public DelegateCommand UnassignMaterialCommand
-        {
-            get { return _unassignMaterial; }
         }
         
         public IEnumerable<Material> UnassignedMaterials

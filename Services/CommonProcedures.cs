@@ -17,11 +17,8 @@ namespace Services
     {
         public static bool AddTestsToReport(Report entry)
         {
-            if (entry == null)
-                 throw new NullReferenceException();
-
-            Views.AddTestDialog testDialog = new Views.AddTestDialog();
-            testDialog.ReportInstance = entry;
+            AddTestDialog testDialog = new AddTestDialog();
+            testDialog.ReportInstance = entry ?? throw new NullReferenceException();
 
             if (testDialog.ShowDialog() == true)
             {
@@ -49,6 +46,17 @@ namespace Services
                                         .First(cpi => cpi.RequirementID == isr.RequirementInstance.ID)
                                         .IsSelected;
             }
+        }
+
+        public static void DeleteSample(Sample smp)
+        {
+            smp.Delete();
+            SampleLogChoiceWrapper tempChoice = SampleLogActions.ActionList.First(scc => scc.Code == smp.Code);
+            Batch tempBatch = MaterialService.GetBatch(smp.BatchID);
+
+            tempBatch.ArchiveStock -= tempChoice.ArchiveModifier;
+            tempBatch.LongTermStock -= tempChoice.LongTermModifier;
+            tempBatch.Update();
         }
 
         public static void CheckMaterialData(Material target)

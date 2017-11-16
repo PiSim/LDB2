@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Specifications.Views
+namespace Controls.Views
 {
     /// <summary>
-    /// Interaction logic for StandardIssueControl.xaml
+    /// Logica di interazione per SpecificationList.xaml
     /// </summary>
-    public partial class StandardIssueControl : UserControl
+    public partial class SpecificationList : UserControl
     {
-        public StandardIssueControl()
+        public SpecificationList()
         {
             InitializeComponent();
         }

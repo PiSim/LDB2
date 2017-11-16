@@ -28,9 +28,11 @@ namespace Services.ViewModels
         private DelegateCommand<Window> _cancel, _confirm;
         private readonly Dictionary<string, ICollection<string>> _validationErrors = new Dictionary<string, ICollection<string>>();
         private EventAggregator _eventAggregator;
+        private IEnumerable<ControlPlan> _controlPlanList;
         private IEnumerable<ISelectableRequirement> _requirementList;
         private IEnumerable<Person> _techList;
         private IEnumerable<Specification> _specificationList;
+        private IEnumerable<SpecificationVersion> _versionList;
         private Int32 _number;
         private Material _material;
         private Person _author;
@@ -176,10 +178,7 @@ namespace Services.ViewModels
         {
             get
             {
-                if (_selectedSpecification == null)
-                    return new List<ControlPlan>();
-                else
-                    return _selectedSpecification.ControlPlans;
+                return _controlPlanList;
             }
         }
 
@@ -204,16 +203,10 @@ namespace Services.ViewModels
             }
         }
 
-        public bool IsSpecificationSelected
-        {
-            get { return _selectedSpecification != null; }
-        }
+        public bool IsNotAdmin => !_principal.IsInRole(UserRoleNames.ReportAdmin);
 
-        public bool IsValidInput
-        {
-            get { return true; }
-        }
-        
+        public bool IsSpecificationSelected => _selectedSpecification != null;
+
         public Material Material
         {
             get
@@ -270,7 +263,7 @@ namespace Services.ViewModels
                 {
                     SpecificationVersion tempVersion = SpecificationService.GetSpecificationVersion((int)_material.ExternalConstruction.DefaultSpecVersionID);
                     SelectedSpecification = SpecificationList.FirstOrDefault(spec => spec.ID == tempVersion.SpecificationID);
-                    SelectedVersion = VersionList.First(vers => vers.ID == tempVersion.ID);
+                    SelectedVersion = VersionList.First(vers => vers.ID == _material.ExternalConstruction.DefaultSpecVersionID);
                 }
 
                 RaisePropertyChanged("ExternalConstruction");
@@ -288,7 +281,7 @@ namespace Services.ViewModels
                 Description = (_selectedControlPlan == null) ? "" : _selectedControlPlan.Name;
 
                 RaisePropertyChanged("SelectedControlPlan");
-                if (value != null)
+                if (_selectedControlPlan != null)
                     CommonProcedures.ApplyControlPlan(_requirementList, _selectedControlPlan);
             }
         }
@@ -299,13 +292,22 @@ namespace Services.ViewModels
             set
             {
                 _selectedSpecification = value;
-                _selectedSpecification.Load();
 
                 if (_selectedSpecification == null)
+                {
+                    _controlPlanList = new List<ControlPlan>();
+                    _versionList = new List<SpecificationVersion>();
                     _validationErrors["SelectedSpecification"] = new List<string>() { "Selezionare una specifica" };
+                }
 
-                else if (_validationErrors.ContainsKey("SelectedSpecification"))
-                    _validationErrors.Remove("SelectedSpecification");
+                else
+                {
+                    _controlPlanList = _selectedSpecification.GetControlPlans();
+                    _versionList = _selectedSpecification.GetVersions();
+                    
+                    if (_validationErrors.ContainsKey("SelectedSpecification"))
+                        _validationErrors.Remove("SelectedSpecification");
+                }
 
                 RaisePropertyChanged("IsSpecificationSelected");
                 RaisePropertyChanged("SelectedSpecification");
@@ -326,7 +328,6 @@ namespace Services.ViewModels
             set 
             { 
                 _selectedVersion = value;
-                _selectedVersion.Load();
 
                 if (_selectedVersion != null)
                 {
@@ -353,11 +354,7 @@ namespace Services.ViewModels
         {
             get
             {
-                if (_selectedSpecification == null)
-                    return new List<SpecificationVersion>();
-
-                else
-                    return _selectedSpecification.SpecificationVersions;
+                return _versionList;
             }
         }
 

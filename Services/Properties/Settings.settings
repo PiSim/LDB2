@@ -1,7 +1,15 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="uri:settings" CurrentProfile="(Default)">
-  <Profiles>
-    <Profile Name="(Default)" />
-  </Profiles>
-  <Settings />
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Services.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="CalibrationReportPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">L:\Documenti macchine e strumenti\_Report Tarature Laboratorio</Value>
+    </Setting>
+    <Setting Name="ExternalReportPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">L:\RAPPORTI_DI_PROVA\TEST ESTERNI</Value>
+    </Setting>
+    <Setting Name="ReportPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">L:\RAPPORTI_DI_PROVA\2017</Value>
+    </Setting>
+  </Settings>
 </SettingsFile>

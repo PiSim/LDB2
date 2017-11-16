@@ -44,9 +44,9 @@
                                         Binding="{Binding Name}"
                                         IsReadOnly="True"/>
                     <DataGridTextColumn Header="Range, Lim. Inferiore"
-                                        Binding="{Binding UpperRangeValue}"/>
-                    <DataGridTextColumn Header="Range, Lim. Superiore"
                                         Binding="{Binding LowerRangeValue}"/>
+                    <DataGridTextColumn Header="Range, Lim. Superiore"
+                                        Binding="{Binding UpperRangeValue}"/>
                     <DataGridTextColumn Header="Divisione"
                                         Binding="{Binding Division}"/>
                     <DataGridTemplateColumn Header="UM"

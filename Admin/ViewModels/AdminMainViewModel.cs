@@ -21,14 +21,6 @@ namespace Admin.ViewModels
     {
         private DelegateCommand _newOrganizationRole, _newPersonRole, _newUserRole, _runMethod;
         private EventAggregator _eventAggregator;
-        private readonly Dictionary<string, int> _stockModifiers = new Dictionary<string, int>()
-                                                                {
-                                                                    {"A", 1 },
-                                                                    {"B", -1 },
-                                                                    {"F", -1 },
-                                                                    {"M", -1 },
-                                                                    {"S", -1 }
-                                                                };
         private string _name;
 
         public AdminMainViewModel(EventAggregator eventAggregator) : base()
@@ -117,6 +109,8 @@ namespace Admin.ViewModels
         {
             get { return PeopleService.GetPersonRoles(); }
         }
+
+        public string PeopleManagementRegionName => RegionNames.PeopleManagementRegion;
 
         public DelegateCommand RunMethodCommand
         {

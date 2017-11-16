@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Events
 {
-    public class PeopleListUpdateRequested : PubSubEvent
+    public  class AspectChanged : PubSubEvent<EntityChangedToken>
     {
     }
 }

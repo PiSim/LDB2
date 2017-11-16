@@ -80,6 +80,6 @@ namespace DBManager
         public virtual DbSet<CalibrationReportInstrumentPropertyMapping> CalibrationReportInstrumentPropertyMappings { get; set; }
         public virtual DbSet<CalibrationResult> CalibrationResults { get; set; }
         public virtual DbSet<InstrumentFiles> InstrumentFiles { get; set; }
-        public virtual DbSet<ControlPlanItemB> ControlPlanItemBs { get; set; }
+        public virtual DbSet<ControlPlanItem> ControlPlanItems { get; set; }
     }
 }

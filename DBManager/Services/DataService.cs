@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DBManager
+namespace DBManager.Services
 {
     public static class DataService
     {

@@ -40,18 +40,21 @@ namespace Infrastructure
         public static string MeasurableQuantityManagementEditRegion { get { return "MeasurableQuantityManagementEditRegion"; } }
         public static string MeasurableQuantityManagementRegion { get { return "MeasurableQuantityManagementRegion"; } }
         public static string MethodEditRegion { get { return "MethodEditRegion"; } }
+        public static string MethodEditSpecificationListRegion { get { return "MethodEditSpecificationListRegion"; } }
         public static string MethodFileRegion { get { return "MethodFileRegion"; } }
         public static string MethodIssueEditRegion { get { return "MethodIssueEditRegion"; } }
         public static string MethodReportListRegion { get { return "MethodReportListRegion"; } }
         public static string NewCalibrationFileListRegion { get { return "NewCalibrationFileListRegion"; } }
         public static string OrganizationEditRegion { get { return "OrganizationEditRegion"; } }
         public static string OrganizationRoleManagementRegion { get { return "OrganizationRoleManagementRegion"; } }
+        public static string PeopleManagementRegion => "PeopleManagementRegionName";
         public static string ProjectBatchListRegion { get { return "ProjectBatchListRegion"; } }
         public static string ProjectReportListRegion { get { return "ProjectReportListRegion"; } }
         public static string ProjectStatRegion { get { return "ProjectStatRegion"; } }
         public static string SampleArchiveRegion { get { return "SampleArchiveRegion"; } }
         public static string SampleLongTermStorageRegion { get { return "SampleLongTermStorageRegion"; } }
         public static string SpecificationEditFileRegion { get { return "SpecificationEditFileRegion"; } }
+        public static string SpecificationMainListRegion { get { return "SpecificationMainListRegion"; } }
         public static string SpecificationReportListRegion { get { return "SpecificationReportListRegion"; } }
         public static string SpecificationVersionEditRegion { get { return "SpecificationVersionEditRegion"; } }
         public static string SpecificationVersionTestListEditRegion { get { return "SpecificationVersionTestListEditRegion"; } }

@@ -7,8 +7,8 @@
              xmlns:prism="http://prismlibrary.com/"
              prism:ViewModelLocator.AutoWireViewModel="True"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
+             d:DesignHeight="300" d:DesignWidth="600">
+    <Grid x:Name="ProjectInfoGrid">
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
             <ColumnDefinition/>
@@ -56,22 +56,28 @@
                    Grid.Column="0"
                    Grid.Row="1"
                    Height="Auto"/>
-            
-            <Label Content="{Binding Path=LeaderName}"
-                   Grid.Column="1"
-                   Grid.Row="1"
-                   Height="Auto"/>
-            
+
+            <ComboBox ItemsSource="{Binding LeaderList}"
+                      SelectedItem="{Binding SelectedLeader}"
+                      IsEnabled="{Binding EditMode}"
+                      DisplayMemberPath="Name"
+                      Grid.Column="1"
+                      Grid.Row="1"
+                      Margin="5"/>
+
             <Label Content="OEM:"
                    Grid.Column="0"
                    Grid.Row="2"
                    Height="Auto"/>
-            
-            <Label Content="{Binding Path=OemName}"
-                   Grid.Column="1"
-                   Grid.Row="2"
-                   Height="Auto"/>
-            
+
+            <ComboBox ItemsSource="{Binding OEMList}"
+                      SelectedItem="{Binding SelectedOEM}"
+                      IsEnabled="{Binding EditMode}"
+                      DisplayMemberPath="Name"
+                      Grid.Column="1"
+                      Grid.Row="2"
+                      Margin="5"/>
+
             <Label Content="Descrizione:"
                    Grid.Column="0"
                    Grid.Row="3"
@@ -168,68 +174,93 @@
                 <Grid Background="#FFE5E5E5">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
-                        <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
 
                     <GroupBox Header="Assegnati al progetto"
                               Grid.Column="0">
-                        <ListView ItemsSource="{Binding Path=AssignedMaterials}"
-                                  SelectedItem="{Binding Path=SelectedAssigned}">
-                            <ListView.View>
-                                <GridView>
-                                    <GridViewColumn Header="Tipo" DisplayMemberBinding="{Binding Path=MaterialType.Code}"/>
-                                    <GridViewColumn Header="Riga" DisplayMemberBinding="{Binding Path=MaterialLine.Code}"/>
-                                    <GridViewColumn Header="Aspetto" DisplayMemberBinding="{Binding Path=Aspect.Code}"/>
-                                    <GridViewColumn Header="Ricetta" DisplayMemberBinding="{Binding Path=Recipe.Code}"/>
-                                    <GridViewColumn Header="" DisplayMemberBinding="{Binding Path=Aspect.Name}"/>
-                                    <GridViewColumn Header="Colore" DisplayMemberBinding="{Binding Path=Recipe.Colour.Name}"/>
-                                </GridView>
-                            </ListView.View>
-                        </ListView>
+                        <DataGrid ItemsSource="{Binding Path=AssignedMaterials}"
+                                  AutoGenerateColumns="False"
+                                  IsReadOnly="True"
+                                  CanUserAddRows="False"
+                                  CanUserDeleteRows="False"
+                                  GridLinesVisibility="None"
+                                  SelectionMode="Single"
+                                  SelectionUnit="FullRow"
+                                  Background="White">
+
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Tipo" 
+                                                    Binding="{Binding MaterialType.Code}"/>
+                                <DataGridTextColumn Header="Linea" 
+                                                    Binding="{Binding Path=MaterialLine.Code}"/>
+                                <DataGridTextColumn Header="Aspetto" 
+                                                    Binding="{Binding Path=Aspect.Code}"/>
+                                <DataGridTextColumn Header="Cod.Colore" 
+                                                    Binding="{Binding Path=Recipe.Code}"/>
+                                <DataGridTextColumn Header="" 
+                                                    Binding="{Binding Path=Aspect.Name}"/>
+                                <DataGridTextColumn Header="Colore" 
+                                                    Binding="{Binding Path=Recipe.Colour.Name}"/>
+                                <DataGridTemplateColumn Width="35"
+                                                        CanUserResize="False">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Button Command="{Binding DataContext.RemoveMaterialCommand,
+                                                                      Source={x:Reference Name=ProjectInfoGrid}}"
+                                                    CommandParameter="{Binding}">
+                                                <Polygon Points="0,0 0,10 8,5"
+                                                            Stroke="Black"
+                                                            Fill="Black"
+                                                            Margin="1"/>
+                                            </Button>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
                     </GroupBox>
 
                     <GroupBox Header="Materiali non assegnati"
                               Grid.Column="2">
-                        <ListView ItemsSource="{Binding Path=UnassignedMaterials}"
-                                  SelectedItem="{Binding Path=SelectedUnassigned}">
-                            <ListView.View>
-                                <GridView>
-                                    <GridViewColumn Header="Tipo" DisplayMemberBinding="{Binding Path=MaterialType.Code}"/>
-                                    <GridViewColumn Header="Riga" DisplayMemberBinding="{Binding Path=MaterialLine.Code}"/>
-                                    <GridViewColumn Header="Aspetto" DisplayMemberBinding="{Binding Path=Aspect.Code}"/>
-                                    <GridViewColumn Header="Ricetta" DisplayMemberBinding="{Binding Path=Recipe.Code}"/>
-                                    <GridViewColumn Header="" DisplayMemberBinding="{Binding Path=Aspect.Name}"/>
-                                    <GridViewColumn Header="Colore" DisplayMemberBinding="{Binding Path=Recipe.Colour.Name}"/>
-                                </GridView>
-                            </ListView.View>
-                        </ListView>
+                        <DataGrid ItemsSource="{Binding Path=UnassignedMaterials}"
+                                  IsReadOnly="True"
+                                  AutoGenerateColumns="False"
+                                  CanUserAddRows="False"
+                                  CanUserDeleteRows="False"
+                                  GridLinesVisibility="None"
+                                  Background="White">
+                            <DataGrid.Columns>
+                                <DataGridTemplateColumn Width="35"
+                                                        CanUserResize="False">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Button Command="{Binding DataContext.AddMaterialCommand,
+                                                                        Source={x:Reference Name=ProjectInfoGrid}}" 
+                                                    CommandParameter="{Binding}">
+                                                <Polygon Points="8,0 0,5 8,10"
+                                                            Stroke="Black"
+                                                            Fill="Black"
+                                                            Margin="1"/>
+                                            </Button>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTextColumn Header="Tipo" 
+                                                    Binding="{Binding MaterialType.Code}"/>
+                                <DataGridTextColumn Header="Linea" 
+                                                    Binding="{Binding MaterialLine.Code}"/>
+                                <DataGridTextColumn Header="Aspetto" 
+                                                    Binding="{Binding Aspect.Code}"/>
+                                <DataGridTextColumn Header="Cod. Colore" 
+                                                    Binding="{Binding Recipe.Code}"/>
+                                <DataGridTextColumn Header="" 
+                                                    Binding="{Binding Aspect.Name}"/>
+                                <DataGridTextColumn Header="Colore" 
+                                                    Binding="{Binding Recipe.Colour.Name}"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
                     </GroupBox>
-
-                    <Grid Grid.Column="1">
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="100"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-
-                        <Button Content="◄"
-                                Command="{Binding Path=AssignMaterialCommand}"
-                                Grid.Row="1"
-                                Height="30"
-                                Width="30" 
-                                FontSize="20" 
-                                Margin="5,0,5,0"/>
-                        <Button Content="►"
-                                Command="{Binding Path=UnassignMaterialCommand}"
-                                Grid.Row="3"
-                                Height="30"
-                                Width="30" 
-                                FontSize="20"  
-                                Margin="5,0,5,0"/>
-                    </Grid>
                 </Grid>
             </TabItem>
             <TabItem Header="Commesse">

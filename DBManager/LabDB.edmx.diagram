@@ -159,7 +159,7 @@
         <AssociationConnector Association="labdbModel.standard_to_file" />
         <AssociationConnector Association="labdbModel.latest_sample_to_batch" />
         <AssociationConnector Association="labdbModel.calibration_responsible_to_instrument" />
-        <EntityTypeShape EntityType="labdbModel.ControlPlanItemB" Width="1.5" PointX="14.75" PointY="0.5" />
+        <EntityTypeShape EntityType="labdbModel.ControlPlanItem" Width="1.5" PointX="14.75" PointY="0.5" />
         <AssociationConnector Association="labdbModel.control_plan_to_plan_item" />
         <AssociationConnector Association="labdbModel.requirement_to_cplan_item" />
         </Diagram>

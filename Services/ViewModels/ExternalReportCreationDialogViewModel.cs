@@ -59,11 +59,13 @@ namespace Services.ViewModels
            _confirm = new DelegateCommand<Window>(
                 parent => 
                 {
+                    int year = DateTime.Now.Year - 2000;
+
                     _externalReportInstance = new ExternalReport
                     {
                         Description = _testDescription,
-                        Year = DateTime.Now.Year - 2000,
-                        Number = ReportService.GetNextExternalReportNumber(_externalReportInstance.Year),
+                        Year = year,
+                        Number = ReportService.GetNextExternalReportNumber(year),
                         ExternalNumber = "",
                         MaterialSent = false,
                         RequestDone = false,

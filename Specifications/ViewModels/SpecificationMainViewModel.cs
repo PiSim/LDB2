@@ -64,6 +64,11 @@ namespace Specifications.ViewModels
             get { return SpecificationService.GetSpecifications(); }
         }
 
+        public string SpecificationMainListRegionName
+        {
+            get { return RegionNames.SpecificationMainListRegion; }
+        }
+
         public Specification SelectedSpecification
         {
             get { return _selectedSpecification; }

@@ -127,6 +127,9 @@
     <Compile Include="ViewModels\MeasurementUnitEditViewModel.cs" />
     <Compile Include="ViewModels\MeasurementUnitMainViewModel.cs" />
     <Compile Include="ViewModels\NewUserDialogViewModel.cs" />
+    <Compile Include="ViewModels\OrganizationEditViewModel.cs" />
+    <Compile Include="ViewModels\OrganizationsMainViewModel.cs" />
+    <Compile Include="ViewModels\PeopleMainViewModel.cs" />
     <Compile Include="ViewModels\UserEditViewModel.cs" />
     <Compile Include="ViewModels\UserMainViewModel.cs" />
     <Compile Include="Views\AdminMain.xaml.cs">
@@ -161,6 +164,15 @@
     </Compile>
     <Compile Include="Views\NewUserDialog.xaml.cs">
       <DependentUpon>NewUserDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\OrganizationEdit.xaml.cs">
+      <DependentUpon>OrganizationEdit.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\OrganizationsMain.xaml.cs">
+      <DependentUpon>OrganizationsMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PeopleMain.xaml.cs">
+      <DependentUpon>PeopleMain.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\UserEdit.xaml.cs">
       <DependentUpon>UserEdit.xaml</DependentUpon>
@@ -251,6 +263,18 @@
     <Page Include="Views\NewUserDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\OrganizationEdit.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\OrganizationsMain.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\PeopleMain.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\UserEdit.xaml">
       <SubType>Designer</SubType>

@@ -95,10 +95,14 @@ namespace Services
             _eventAggregator.GetEvent<OrganizationCreationRequested>()
                         .Subscribe(() =>
                         {
-                            if (ServiceProvider.CreateNewOrganization() != null)
+                            Organization tempOrg = ServiceProvider.CreateNewOrganization();
+                            if (tempOrg != null)
                             {
-                                _eventAggregator.GetEvent<OrganizationListRefreshRequested>()
-                                            .Publish();
+                                EntityChangedToken entityChangedToken = new EntityChangedToken(tempOrg,
+                                                                                                EntityChangedToken.EntityChangedAction.Created);
+
+                                _eventAggregator.GetEvent<OrganizationChanged>()
+                                                .Publish(entityChangedToken);
                             }
                         });
 
@@ -112,9 +116,16 @@ namespace Services
                             .Subscribe(
                             () =>
                             {
-                                if (ServiceProvider.AddPerson() != null)
-                                    _eventAggregator.GetEvent<PeopleListUpdateRequested>()
-                                                    .Publish();
+                                Person tempPerson = ServiceProvider.AddPerson();
+
+                                if (tempPerson != null)
+                                {
+                                    EntityChangedToken entityChangedToken = new EntityChangedToken(tempPerson,
+                                                                                                    EntityChangedToken.EntityChangedAction.Created);
+
+                                    _eventAggregator.GetEvent<PersonChanged>()
+                                                    .Publish(entityChangedToken);
+                                }
                             });
 
             _eventAggregator.GetEvent<ProjectCostUpdateRequested>()

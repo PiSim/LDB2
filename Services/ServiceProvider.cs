@@ -16,9 +16,11 @@ namespace Services
 
         internal static Person AddPerson()
         {
-            StringInputDialog addPersonDialog = new StringInputDialog();
-            addPersonDialog.Title = "Creazione nuova Persona";
-            addPersonDialog.Message = "Nome:";
+            StringInputDialog addPersonDialog = new StringInputDialog
+            {
+                Title = "Creazione nuova Persona",
+                Message = "Nome:"
+            };
 
             if (addPersonDialog.ShowDialog() != true)
                 return null;

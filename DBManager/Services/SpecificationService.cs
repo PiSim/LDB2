@@ -46,8 +46,8 @@ namespace DBManager.Services
             {
                 entities.Configuration.LazyLoadingEnabled = false;
                 return entities.Specifications.Include(spec => spec.Standard.Organization)
-                                                .Where(spec => true)
-                                                .OrderBy(spec => spec.Standard.Name)
+                                                .OrderBy(spec => spec.Standard.Organization.Name)
+                                                .ThenBy(spec => spec.Standard.Name)
                                                 .ToList();
             }
         }

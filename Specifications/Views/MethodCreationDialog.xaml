@@ -22,11 +22,13 @@
             <RowDefinition/>
             <RowDefinition Height="35"/>
         </Grid.RowDefinitions>
-        <Label Content="Nome:"
+        <Label Content="Standard:"
                Grid.Column="0"
                Grid.Row="0"
                Margin="5"/>
-        <TextBox Text="{Binding Name, Mode=TwoWay}"
+        <TextBox Text="{Binding Name, 
+                                Mode=TwoWay,
+                                UpdateSourceTrigger=PropertyChanged}"
                  Grid.Column="1"
                  Grid.ColumnSpan="3"
                  Grid.Row="0"

@@ -71,7 +71,7 @@ namespace Materials.ViewModels
 
         public IEnumerable<Batch> BatchList
         {
-            get { return MaterialService.GetBatches(); }
+            get { return DBManager.Services.MaterialService.GetBatches(); }
         }
 
         public DelegateCommand<Window> CancelCommand

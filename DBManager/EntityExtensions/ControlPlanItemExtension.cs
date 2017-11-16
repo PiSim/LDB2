@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DBManager
 {
-    public partial class ControlPlanItemB
+    public partial class ControlPlanItem
     {
         public void Create()
         {
@@ -14,7 +14,7 @@ namespace DBManager
 
             using (DBEntities entities = new DBEntities())
             {
-                entities.ControlPlanItemBs.Add(this);
+                entities.ControlPlanItems.Add(this);
 
                 entities.SaveChanges();
             }

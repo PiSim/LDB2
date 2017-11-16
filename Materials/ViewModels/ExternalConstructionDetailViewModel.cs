@@ -227,9 +227,13 @@ namespace Materials.ViewModels
             }
         }
 
-        private void RaiseExternalConstructionModified()
+        private void RaiseExternalConstructionChanged()
         {
-            _eventAggregator.GetEvent<ExternalConstructionModified>().Publish();
+            EntityChangedToken entityChangedToken = new EntityChangedToken(_externalConstructionInstance,
+                                                                            EntityChangedToken.EntityChangedAction.Updated);
+
+            _eventAggregator.GetEvent<ExternalConstructionChanged>()
+                            .Publish(entityChangedToken);
         }
 
         public DelegateCommand SaveCommand

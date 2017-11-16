@@ -110,7 +110,7 @@ namespace Materials.ViewModels
         {
             get
             {
-                return MaterialService.GetRecentlyArrivedSamples();
+                return DBManager.Services.MaterialService.GetLatestSamples();
             }
         }
 

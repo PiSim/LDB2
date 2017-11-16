@@ -11,8 +11,7 @@ namespace DBManager
 {
     public partial class SpecificationVersion
     {
-
-
+        
         public IEnumerable<Requirement> GetMainVersionRequirements()
         {
             // Returns the requirement list of the Specification entry's main version

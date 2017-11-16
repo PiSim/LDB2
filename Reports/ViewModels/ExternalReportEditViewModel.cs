@@ -58,9 +58,12 @@ namespace Reports.ViewModels
             _addFile = new DelegateCommand(
                 () =>
                 {
-                    OpenFileDialog fileDialog = new OpenFileDialog();
-                    fileDialog.Multiselect = true;
-                    
+                    OpenFileDialog fileDialog = new OpenFileDialog
+                    {
+                        InitialDirectory = UserSettings.ExternalReportPath,
+                        Multiselect = true
+                    };
+
                     if (fileDialog.ShowDialog() == DialogResult.OK)
                     {
                         foreach (string pth in fileDialog.FileNames)

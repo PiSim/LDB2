@@ -1,4 +1,5 @@
 ﻿using DBManager;
+using DBManager.EntityExtensions;
 using Infrastructure;
 using Infrastructure.Events;
 using Prism.Commands;
@@ -17,16 +18,13 @@ namespace Materials.ViewModels
         private Aspect _aspectInstance;
         private Batch _selectedBatch;
         private bool _editMode;
-        private DBEntities _entities;
         private DelegateCommand _openBatch,
                                 _save,
                                 _startEdit;
         private EventAggregator _eventAggregator;
 
-        public AspectDetailViewModel(DBEntities entities,
-                                    EventAggregator eventAggregator) : base()
+        public AspectDetailViewModel(EventAggregator eventAggregator) : base()
         {
-            _entities = entities;
             _eventAggregator = eventAggregator;
             _editMode = false;
 
@@ -45,7 +43,7 @@ namespace Materials.ViewModels
                 () =>
                 {
                     EditMode = false;
-                    _entities.SaveChanges();
+                    _aspectInstance.Update();
                 },
                 () => _editMode);
 
@@ -102,7 +100,7 @@ namespace Materials.ViewModels
             get { return _aspectInstance; }
             set
             {
-                _aspectInstance = _entities.Aspects.First(asp => asp.ID == value.ID);
+                _aspectInstance = value;
                 RaisePropertyChanged("AspectInstance");
                 RaisePropertyChanged("AspectCode");
                 RaisePropertyChanged("AspectName");
@@ -110,17 +108,7 @@ namespace Materials.ViewModels
             }
         }
 
-        public List<Batch> BatchList
-        {
-            get
-            {
-                if (_aspectInstance == null)
-                    return new List<Batch>();
-
-                else
-                    return new List<Batch>(_entities.Batches.Where(btc => btc.Material.AspectID == _aspectInstance.ID));
-            }
-        }
+        public IEnumerable<Batch> BatchList => _aspectInstance?.GetBatches();
 
         public bool CanSetModify
         {

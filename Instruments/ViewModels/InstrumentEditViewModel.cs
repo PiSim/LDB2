@@ -24,7 +24,7 @@ namespace Instruments.ViewModels
         private CalibrationReport _selectedCalibration;
         private DBPrincipal _principal;
         private DelegateCommand _addCalibration,
-                                _addFileCommand,
+                                _addFile,
                                 _addMaintenanceEvent, 
                                 _addMethodAssociation,
                                 _addProperty,
@@ -43,6 +43,7 @@ namespace Instruments.ViewModels
         private InstrumentFiles _selectedFile;
         private InstrumentMeasurablePropertyWrapper _selectedMeasurableProperty;
         private InstrumentUtilizationArea _selectedArea;
+        private InstrumentMaintenanceEvent _selectedEvent;
         private Method _selectedAssociated, _selectedUnassociated;
         private Property _filterProperty;
 
@@ -65,7 +66,7 @@ namespace Instruments.ViewModels
                 },
                 () => IsInstrumentAdmin);
 
-            _addFileCommand = new DelegateCommand(
+            _addFile = new DelegateCommand(
                 () =>
                 {
 
@@ -137,14 +138,24 @@ namespace Instruments.ViewModels
             _openFile = new DelegateCommand(
                 () =>
                 {
-
+                    try
+                    {
+                        System.Diagnostics.Process.Start(_selectedFile.Path);
+                    }
+                    catch (Exception)
+                    {
+                        _eventAggregator.GetEvent<StatusNotificationIssued>().Publish("File non trovato");
+                    }
                 },
                 () => _selectedFile != null);
 
             _removeFile = new DelegateCommand(
                 () =>
                 {
+                    _selectedFile.Delete();
 
+                    RaisePropertyChanged("FileList");
+                    SelectedFile = null;
                 },
                 () => _selectedFile != null);
 
@@ -204,6 +215,11 @@ namespace Instruments.ViewModels
         public DelegateCommand AddCalibrationCommand
         {
             get { return _addCalibration; }
+        }
+
+        public DelegateCommand AddFileCommand
+        {
+            get { return _addFile; }
         }
 
         public DelegateCommand AddMaintenanceEventCommand
@@ -300,7 +316,7 @@ namespace Instruments.ViewModels
             set
             {
                 _editMode = value;
-                RaisePropertyChanged("EditMode");
+                RaisePropertyChanged();
                 RaisePropertyChanged("CanModify");
 
                 _save.RaiseCanExecuteChanged();
@@ -388,6 +404,8 @@ namespace Instruments.ViewModels
                 EditMode = false;
                 SelectedAssociatedMethod = null;
                 SelectedCalibration = null;
+                SelectedEvent = null;
+                SelectedFile = null;
                 SelectedInstrumentMeasurableProperty = null;
                 SelectedUnassociatedMethod = null;
 
@@ -563,9 +581,19 @@ namespace Instruments.ViewModels
             get { return _manufacturerList; }
         }
 
+        public DelegateCommand OpenFileCommand
+        {
+            get { return _openFile; }
+        }
+
         public IEnumerable<Property> PropertyList
         {
             get { return DataService.GetProperties(); }
+        }
+
+        public DelegateCommand RemoveFileCommand
+        {
+            get { return _removeFile; }
         }
 
         public DelegateCommand RemoveMethodAssociationCommand
@@ -597,6 +625,29 @@ namespace Instruments.ViewModels
                 _selectedAssociated = value;
                 RaisePropertyChanged("SelectedAssociatedMethod");
                 _removeMethodAssociation.RaiseCanExecuteChanged();
+            }
+        }
+
+        public InstrumentMaintenanceEvent SelectedEvent
+        {
+            get { return _selectedEvent; }
+            set
+            {
+                _selectedEvent = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public InstrumentFiles SelectedFile
+        {
+            get { return _selectedFile; }
+            set
+            {
+                _selectedFile = value;
+                RaisePropertyChanged("SelectedFile");
+
+                _openFile.RaiseCanExecuteChanged();
+                _removeFile.RaiseCanExecuteChanged();
             }
         }
 

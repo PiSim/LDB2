@@ -54,7 +54,7 @@ namespace Materials.ViewModels
 
         public IEnumerable<Batch> BatchList
         {
-            get { return MaterialService.GetArchive(); }
+            get { return DBManager.Services.MaterialService.GetArchive(); }
         }
 
         public DelegateCommand<DataGrid> OpenBatchCommand

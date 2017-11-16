@@ -23,6 +23,8 @@ namespace Specifications.ViewModels
         private DelegateCommand _addFile,
                                 _addMeasurement,
                                 _openFile,
+                                _openReport,
+                                _openSpecification,
                                 _removeFile,
                                 _removeMeasurement,
                                 _save,
@@ -34,8 +36,10 @@ namespace Specifications.ViewModels
         private Method _methodInstance;
         private Organization _selectedOrganization;
         private Property _selectedProperty;
+        private Specification _selectedSpecification;
         private SubMethod _selectedMeasurement;
         private StandardFile _selectedFile;
+        private Test _selectedTest;
 
         public MethodEditViewModel(DBPrincipal principal,
                                     EventAggregator aggregator) : base()
@@ -48,23 +52,25 @@ namespace Specifications.ViewModels
             _propertyList = DataService.GetProperties();
 
             _subMethodList = new List<SubMethod>();
-            
-
 
             _addFile = new DelegateCommand(
                 () =>
                 {
-                    OpenFileDialog fileDialog = new OpenFileDialog();
-                    fileDialog.Multiselect = true;
+                    OpenFileDialog fileDialog = new OpenFileDialog
+                    {
+                        Multiselect = true
+                    };
 
                     if (fileDialog.ShowDialog() == DialogResult.OK)
                     {
                         foreach (string pth in fileDialog.FileNames)
                         {
-                            StandardFile temp = new StandardFile();
-                            temp.Path = pth;
-                            temp.Description = "";
-                            temp.standardID = _methodInstance.StandardID;
+                            StandardFile temp = new StandardFile
+                            {
+                                Path = pth,
+                                Description = "",
+                                standardID = _methodInstance.StandardID
+                            };
 
                             temp.Create();
                         }
@@ -77,9 +83,11 @@ namespace Specifications.ViewModels
             _addMeasurement = new DelegateCommand(
                 () =>
                 {
-                    SubMethod tempMea = new SubMethod();
-                    tempMea.Name = "Nuova Prova";
-                    tempMea.UM = "";
+                    SubMethod tempMea = new SubMethod
+                    {
+                        Name = "Nuova Prova",
+                        UM = ""
+                    };
 
                     _methodInstance.AddSubMethod(tempMea);
 
@@ -94,6 +102,26 @@ namespace Specifications.ViewModels
                     System.Diagnostics.Process.Start(_selectedFile.Path);
                 },
                 () => _selectedFile != null);
+
+            _openReport = new DelegateCommand(
+                () =>
+                {
+                    NavigationToken token = new NavigationToken(ReportViewNames.ReportEditView,
+                                                                _selectedTest.Report);
+
+                    _eventAggregator.GetEvent<NavigationRequested>()
+                                    .Publish(token);
+                },
+                () => _selectedTest != null);
+            
+            _openSpecification = new DelegateCommand(
+                () =>
+                {
+                    NavigationToken token = new NavigationToken(SpecificationViewNames.SpecificationEdit,
+                                                                SelectedSpecification);
+                    _eventAggregator.GetEvent<NavigationRequested>().Publish(token);
+                },
+                () => SelectedSpecification != null);
 
             _removeFile = new DelegateCommand(
                 () =>
@@ -148,6 +176,11 @@ namespace Specifications.ViewModels
             get { return _addMeasurement; }
         }
 
+        public bool CanModifyTests
+        {
+            get { return !EditMode; }
+        }
+
         public double Duration
         {
             get
@@ -170,6 +203,7 @@ namespace Specifications.ViewModels
             set
             {
                 _editMode = value;
+                RaisePropertyChanged("CanModifyTests");
                 RaisePropertyChanged("EditMode");
                 _save.RaiseCanExecuteChanged();
                 _startEdit.RaiseCanExecuteChanged();
@@ -188,6 +222,12 @@ namespace Specifications.ViewModels
         {
             get { return _principal.IsInRole(UserRoleNames.SpecificationAdmin); }
         }
+
+        public string MethodEditSpecificationListRegionName
+        {
+            get { return RegionNames.MethodEditSpecificationListRegion; }
+        }
+
         public Method MethodInstance
         {
             get { return _methodInstance; }
@@ -231,15 +271,22 @@ namespace Specifications.ViewModels
 
         public string Name
         {
-            get
-            {
-                return (_methodInstance != null) ? _methodInstance.Standard.Name : null;
-            }
+            get => _methodInstance?.Standard.Name;
         }
 
         public DelegateCommand OpenFileCommand
         {
             get { return _openFile; }
+        }
+
+        public DelegateCommand OpenReportCommand
+        {
+            get { return _openReport; }
+        }
+
+        public DelegateCommand OpenSpecificationCommand
+        {
+            get { return _openSpecification; }
         }
 
         public IEnumerable<Organization> OrganizationList
@@ -324,6 +371,27 @@ namespace Specifications.ViewModels
                 _selectedProperty = value;
                 _methodInstance.PropertyID = _selectedProperty.ID;
                 RaisePropertyChanged("SelectedProeprty");
+            }
+        }
+
+        public Specification SelectedSpecification
+        {
+            get { return _selectedSpecification; }
+            set
+            {
+                _selectedSpecification = value;
+            }
+        }
+
+        public Test SelectedTest
+        {
+            get { return _selectedTest; }
+            set
+            {
+                _selectedTest = value;
+
+                RaisePropertyChanged("SelectedTest");
+                _openReport.RaiseCanExecuteChanged();
             }
         }
 

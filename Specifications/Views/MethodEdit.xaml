@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Specifications.Views"
+             xmlns:cmd="clr-namespace:Infrastructure.Commands;assembly=Infrastructure"
              xmlns:prism="http://prismlibrary.com/"
              prism:ViewModelLocator.AutoWireViewModel="True"
              mc:Ignorable="d" 
@@ -84,6 +85,7 @@
                      Grid.Column="1"
                      Grid.Row="3"
                      HorizontalAlignment="Left"
+                     HorizontalContentAlignment="Center"
                      Width="50"
                      Margin="5"/>
 
@@ -99,7 +101,7 @@
 
                     <DataGrid ItemsSource="{Binding Measurements}"
                               SelectedItem="{Binding SelectedMeasurement, Mode=TwoWay}"
-                              IsEnabled="{Binding EditMode}"
+                              IsReadOnly="{Binding CanModifyTests}"
                               AutoGenerateColumns="False"
                               CanUserAddRows="False"
                               CanUserDeleteRows="False"
@@ -128,77 +130,172 @@
                     </StackPanel>
                 </Grid>
             </TabItem>
-            <TabItem Header="Risultati">
-                <ListView ItemsSource="{Binding ResultList}"
-                          Margin="5">
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn Header="Odp"
-                                            DisplayMemberBinding="{Binding Report.Batch.Number}"/>
 
-                            <GridViewColumn Header="Prova" 
-                                            DisplayMemberBinding="{Binding Method.Property.Name}"/>
-
-                            <GridViewColumn Header="Risultati">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <ListView ItemsSource="{Binding SubTests}">
-                                            <ListView.ItemTemplate>
-                                                <DataTemplate>
-                                                    <StackPanel Orientation="Horizontal">
-                                                        <Label Content="{Binding Path=Name}"/>
-                                                        <TextBox Text="{Binding Path=Result, Mode=TwoWay}"
-                                                                 IsEnabled="False"/>
-                                                        <Label Content="{Binding Path=Requirement}"/>
-                                                        <Label Content="{Binding UM}"/>
-                                                    </StackPanel>
-                                                </DataTemplate>
-                                            </ListView.ItemTemplate>
-                                        </ListView>
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-
-                            <GridViewColumn Header="Note"
-                                            DisplayMemberBinding="{Binding Notes}"/>
-
-                            <GridViewColumn Header="Metodo"
-                                            DisplayMemberBinding="{Binding Method.Standard.Name}"/>
-
-                            <GridViewColumn Header="Completo">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <CheckBox IsChecked="{Binding IsComplete, Mode=TwoWay}"
-                                                  IsEnabled="False"/>
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-
-                            <GridViewColumn Header="Data Completamento" 
-                                            DisplayMemberBinding="{Binding CompletionDate}"/>
-                        </GridView>
-                    </ListView.View>
-                </ListView>
-            </TabItem>
-            
-            <TabItem Header="Specifiche">
-                <ListView ItemsSource="{Binding SpecificationList}"
-                          SelectedItem="{Binding SelectedSpecification, Mode=TwoWay}"
-                          Margin="5">
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn Header="Nome"
-                                            DisplayMemberBinding="{Binding Standard.Name}"/>
-                        </GridView>
-                    </ListView.View>
-                </ListView>
-            </TabItem>
-            
             <TabItem Header="File">
                 <Grid>
                     <ContentControl prism:RegionManager.RegionName="{Binding MethodFileRegionName}"
                                     Grid.Column="0"/>
                 </Grid>
+            </TabItem>
+            <TabItem Header="Risultati">
+                <DataGrid ItemsSource="{Binding ResultList}"
+                          SelectedItem="{Binding SelectedTest}"
+                          AutoGenerateColumns="False"
+                          GridLinesVisibility="Horizontal"
+                          IsReadOnly="True"
+                          HorizontalContentAlignment="Center"
+                          VerticalContentAlignment="Center"
+                          cmd:CommandBinder.DataGridDoubleClickCommand="{Binding OpenReportCommand}">
+                <DataGrid.Columns>
+                        <DataGridTextColumn Header="Batch"
+                                            Binding="{Binding Report.Batch.Number}"
+                                            IsReadOnly="True"
+                                            Width="100">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="VerticalAlignment"
+                                            Value="Center"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+
+                        <DataGridTemplateColumn Width="150">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <DataGrid ItemsSource="{Binding SubTests}"
+                                              IsReadOnly="True"
+                                              AutoGenerateColumns="False"
+                                              HeadersVisibility="None"
+                                              CanUserAddRows="False"
+                                              CanUserDeleteRows="False"
+                                              GridLinesVisibility="Horizontal"
+                                              ClipToBounds="True"
+                                              HorizontalScrollBarVisibility="Hidden"
+                                              RowHeight="30"
+                                              Margin="-2">
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn Binding="{Binding Name}"
+                                                                IsReadOnly="True"
+                                                                Width="*"/>
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                        <DataGridTemplateColumn Header="Risultato"
+                                                Width="100">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <DataGrid ItemsSource="{Binding SubTests}"
+                                                    AutoGenerateColumns="False"
+                                                    HeadersVisibility="None"
+                                                    CanUserAddRows="False"
+                                                    CanUserDeleteRows="False"
+                                                    GridLinesVisibility="Horizontal"
+                                                    ClipToBounds="True"
+                                                    HorizontalScrollBarVisibility="Hidden"
+                                                    RowHeight="30"
+                                              Margin="-2">
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn Binding="{Binding Result}"
+                                                                IsReadOnly="True"
+                                                                        Width="*"/>
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                        <DataGridTemplateColumn Header="Requisito"
+                                                        Width="100">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <DataGrid ItemsSource="{Binding SubTests}"
+                                            AutoGenerateColumns="False"
+                                            HeadersVisibility="None"
+                                            CanUserAddRows="False"
+                                            CanUserDeleteRows="False"
+                                            GridLinesVisibility="Horizontal"
+                                            ClipToBounds="True"
+                                            HorizontalScrollBarVisibility="Hidden"
+                                            RowHeight="30"
+                                              Margin="-2">
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn Binding="{Binding Requirement}"
+                                                                IsReadOnly="True"
+                                                                Width="*"/>
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                        <DataGridTemplateColumn Header="UM"
+                                                        Width="50">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <DataGrid ItemsSource="{Binding SubTests}"
+                                                      AutoGenerateColumns="False"
+                                                      HeadersVisibility="None"
+                                                      CanUserAddRows="False"
+                                                      CanUserDeleteRows="False"
+                                                      GridLinesVisibility="Horizontal"
+                                                      ClipToBounds="True"
+                                                      HorizontalScrollBarVisibility="Hidden"
+                                                      RowHeight="30"
+                                              Margin="-2">
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn Binding="{Binding UM}"
+                                                                        IsReadOnly="True"
+                                                                        Width="*"/>
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                        <DataGridTextColumn Header="Note"
+                                                    Binding="{Binding Notes}"
+                                                    IsReadOnly="True"
+                                                    Width="100"/>
+                        
+
+                        <DataGridCheckBoxColumn Header="Completo"
+                                                Binding="{Binding IsComplete, Mode=OneWay}"
+                                                IsReadOnly="True"
+                                                Width="70">
+                            <DataGridCheckBoxColumn.ElementStyle>
+                                <Style TargetType="{x:Type CheckBox}">
+                                    <Setter Property="HorizontalAlignment"
+                                                    Value="Center"/>
+                                    <Setter Property="VerticalAlignment"
+                                                    Value="Center"/>
+                                </Style>
+                            </DataGridCheckBoxColumn.ElementStyle>
+                        </DataGridCheckBoxColumn>
+
+                        <DataGridTextColumn Header="Report"
+                                            Binding="{Binding Report.Number}"
+                                            IsReadOnly="True"/>
+
+                        <DataGridTextColumn Header="Data Completamento" 
+                                                    Binding="{Binding Date}"
+                                                    IsReadOnly="True">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="VerticalAlignment"
+                                                    Value="Center"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </TabItem>
+            
+            <TabItem Header="Specifiche">
+                <ContentControl prism:RegionManager.RegionName="{Binding MethodEditSpecificationListRegionName}"
+                                Margin="5"/>
             </TabItem>
         </TabControl>
     </Grid>

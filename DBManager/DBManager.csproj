@@ -143,9 +143,10 @@
     <Compile Include="ControlPlan.cs">
       <DependentUpon>LabDB.tt</DependentUpon>
     </Compile>
-    <Compile Include="ControlPlanItemB.cs">
+    <Compile Include="ControlPlanItem.cs">
       <DependentUpon>LabDB.tt</DependentUpon>
     </Compile>
+    <Compile Include="DataService.cs" />
     <Compile Include="EntityExtensions\AspectExtension.cs" />
     <Compile Include="EntityExtensions\BatchExtension.cs" />
     <Compile Include="EntityExtensions\CalibrationFileExtension.cs" />
@@ -158,6 +159,7 @@
     <Compile Include="EntityExtensions\ExternalReportExtension.cs" />
     <Compile Include="EntityExtensions\ExternalReportFileExtension.cs" />
     <Compile Include="EntityExtensions\InstrumentExtension.cs" />
+    <Compile Include="EntityExtensions\InstrumentFileExtension.cs" />
     <Compile Include="EntityExtensions\InstrumentMaintenanceEventExtension.cs" />
     <Compile Include="EntityExtensions\InstrumentMeasurablePropertyExtension.cs" />
     <Compile Include="EntityExtensions\InstrumentTypeExtension.cs" />
@@ -176,6 +178,7 @@
     <Compile Include="EntityExtensions\ReportExtension.cs" />
     <Compile Include="EntityExtensions\ReportFileExtension.cs" />
     <Compile Include="EntityExtensions\RequirementExtension.cs" />
+    <Compile Include="EntityExtensions\SampleExtension.cs" />
     <Compile Include="EntityExtensions\SpecificationExtension.cs" />
     <Compile Include="EntityExtensions\SpecificationVersionExtension.cs" />
     <Compile Include="EntityExtensions\StandardExtension.cs" />
@@ -196,6 +199,7 @@
     <Compile Include="ExternalReportFile.cs">
       <DependentUpon>LabDB.tt</DependentUpon>
     </Compile>
+    <Compile Include="IDataService.cs" />
     <Compile Include="Instrument.cs">
       <DependentUpon>LabDB.tt</DependentUpon>
     </Compile>
@@ -373,7 +377,6 @@
     <None Include="app.config" />
     <EntityDeploy Include="LabDB.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>LabDB.Designer.cs</LastGenOutput>
     </EntityDeploy>
     <None Include="LabDB.edmx.diagram">
       <DependentUpon>LabDB.edmx</DependentUpon>

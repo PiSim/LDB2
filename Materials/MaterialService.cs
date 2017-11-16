@@ -1,5 +1,6 @@
 ﻿using Controls.Views;
 using DBManager;
+using DBManager.EntityExtensions;
 using DBManager.Services;
 using Infrastructure;
 using Infrastructure.Events;
@@ -15,17 +16,20 @@ using System.Threading.Tasks;
 
 namespace Materials
 {
-    public class MaterialServiceProvider
+    public class MaterialService
     {
+        // Service class for internal use of the Materials Module
+        // Performs various CRUD operations on Material-related entities
+
         private DBEntities _entities;
         private DBPrincipal _principal;
         private EventAggregator _eventAggregator;
         private IUnityContainer _container;
 
-        public MaterialServiceProvider(DBEntities entities,
-                                        DBPrincipal principal,
-                                        EventAggregator eventAggregator,
-                                        IUnityContainer container)
+        public MaterialService(DBEntities entities,
+                                DBPrincipal principal,
+                                EventAggregator eventAggregator,
+                                IUnityContainer container)
         {
             _container = container;
             _entities = entities;
@@ -68,10 +72,24 @@ namespace Materials
             return output;
         }
 
+        internal Aspect CreateAspect()
+        {
+            Views.AspectCreationDialog aspectCreationDialog = new Views.AspectCreationDialog();
+
+            if (aspectCreationDialog.ShowDialog() == true)
+            {
+                aspectCreationDialog.AspectInstance.Create();
+                return aspectCreationDialog.AspectInstance;
+            }
+
+            else
+                return null;
+        }
+
         public static ExternalConstruction CreateNewExternalConstruction()
         {
             ExternalConstruction newEntry = new ExternalConstruction();
-            IEnumerable<ExternalConstruction> tempList = MaterialService.GetExternalConstructions();
+            IEnumerable<ExternalConstruction> tempList = DBManager.Services.MaterialService.GetExternalConstructions();
 
             int nameCounter = 1;
             string curName = "Nuova Construction";
@@ -100,7 +118,7 @@ namespace Materials
         public void TryQuickBatchVisualize(string batchNumber)
         {
 
-            Batch temp = MaterialService.GetBatch(batchNumber);
+            Batch temp = DBManager.Services.MaterialService.GetBatch(batchNumber);
 
             if (temp != null)
             {

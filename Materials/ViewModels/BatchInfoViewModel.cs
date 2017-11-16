@@ -4,10 +4,12 @@ using DBManager.EntityExtensions;
 using DBManager.Services;
 using Infrastructure;
 using Infrastructure.Events;
+using Infrastructure.Wrappers;
 using Microsoft.Practices.Unity;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
+using Services;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -33,14 +35,15 @@ namespace Materials.ViewModels
                                 _refresh,
                                 _save,
                                 _startEdit;
+        private DelegateCommand<Sample> _deleteSample;
         private readonly Dictionary<string, ICollection<string>> _validationErrors = new Dictionary<string, ICollection<string>>();
         private EventAggregator _eventAggregator;
-        private ExternalConstruction _selectedExternalConstruction;
         private ExternalReport _selectedExternalReport;
+        private ExternalConstruction _selectedExternalConstruction;
         private IEnumerable<Colour> _colourList;
         private IEnumerable<ExternalConstruction> _externalConstructionList;
         private IEnumerable<TrialArea> _trialAreaList; 
-        private List<SamplesWrapper> _samplesList;
+        private IEnumerable<Sample> _samplesList;
         private Material _materialInstance;
         private MaterialLine _lineInstance;
         private Recipe _recipeInstance;
@@ -59,9 +62,13 @@ namespace Materials.ViewModels
             _principal = principal;
             _editMode = false;
 
-            _colourList = MaterialService.GetColours();
-            _externalConstructionList = MaterialService.GetExternalConstructions();
-            _trialAreaList = MaterialService.GetTrialAreas();
+            _colourList = DBManager.Services.MaterialService.GetColours();
+            _trialAreaList = DBManager.Services.MaterialService.GetTrialAreas();
+
+            #region EventSubscriptions
+
+            _eventAggregator.GetEvent<ExternalConstructionChanged>()
+                .Subscribe(ect => ExternalConstructionChangedHandler());
 
             _eventAggregator.GetEvent<ReportCreated>().Subscribe(
                 report =>
@@ -70,13 +77,16 @@ namespace Materials.ViewModels
                     RaisePropertyChanged("ReportList");
                 });
 
+            #endregion
+
+
             _cancelEdit = new DelegateCommand(
                 () =>
                 {
                     if (_instance == null)
                         BatchInstance = null;
                     else
-                        BatchInstance = MaterialService.GetBatch(_instance.ID);
+                        BatchInstance = DBManager.Services.MaterialService.GetBatch(_instance.ID);
                 },
                 () => EditMode);
 
@@ -93,6 +103,15 @@ namespace Materials.ViewModels
                                     .Publish(token);
                 },
                 () => _principal.IsInRole(UserRoleNames.BatchAdmin));
+
+            _deleteSample = new DelegateCommand<Sample>(
+                smp =>
+                {
+                    CommonProcedures.DeleteSample(smp);
+                    _samplesList = _instance.GetSamples();
+                    RaisePropertyChanged("Samples");
+                },
+                smp => _principal.IsInRole(UserRoleNames.BatchEdit));
 
             _openExternalReport = new DelegateCommand(
                 () => 
@@ -115,7 +134,7 @@ namespace Materials.ViewModels
             _refresh = new DelegateCommand(
                 () =>
                 {
-                    BatchInstance = MaterialService.GetBatch(_instance.ID);
+                    BatchInstance = DBManager.Services.MaterialService.GetBatch(_instance.ID);
                 },
                 () => !EditMode);
 
@@ -236,12 +255,20 @@ namespace Materials.ViewModels
                 _lineInstance != null &&
                 _aspectInstance != null &&
                 _recipeInstance != null)
-                MaterialInstance = MaterialService.GetMaterial(_typeInstance,
+                MaterialInstance = DBManager.Services.MaterialService.GetMaterial(_typeInstance,
                                                                 _lineInstance,
                                                                 _aspectInstance,
                                                                 _recipeInstance);
             else
                 MaterialInstance = null;
+        }
+
+        private void ExternalConstructionChangedHandler()
+        {
+            _externalConstructionList = null;
+            RaisePropertyChanged("ExternalConstructionList");
+
+            SelectedExternalConstruction = ExternalConstructionList.FirstOrDefault(exc => exc.ID == _instance?.Material?.ExternalConstructionID);
         }
 
         #endregion
@@ -282,7 +309,7 @@ namespace Materials.ViewModels
 
                 if (_aspectCode.Length == 3)
                 {
-                    AspectInstance = MaterialService.GetAspect(_aspectCode);
+                    AspectInstance = DBManager.Services.MaterialService.GetAspect(_aspectCode);
                     if (_validationErrors.ContainsKey("AspectCode"))
                     {
                         _validationErrors.Remove("AspectCode");
@@ -321,7 +348,7 @@ namespace Materials.ViewModels
                 if (_instance != null && _instance.ID != 0)
                     _instance.Load();
                 
-                _samplesList = _instance.GetSamples()?.Select(smp => new SamplesWrapper(smp)).ToList();
+                _samplesList = _instance.GetSamples();
 
                 _selectedTrialArea = _trialAreaList.FirstOrDefault(tra => tra.ID == _instance?.TrialAreaID);
                 
@@ -340,8 +367,8 @@ namespace Materials.ViewModels
 
                 _materialInstance = _instance?.Material;
 
-                SelectedExternalConstruction = _externalConstructionList.FirstOrDefault(excon => excon.ID == _materialInstance?.ExternalConstructionID);
-                SelectedColour = _colourList.FirstOrDefault(col => col.ID == _recipeInstance?.ColourID);
+                SelectedExternalConstruction = ExternalConstructionList.FirstOrDefault(excon => excon.ID == _materialInstance?.ExternalConstructionID);
+                SelectedColour = ColourList.FirstOrDefault(col => col.ID == _recipeInstance?.ColourID);
 
                 SelectedExternalReport = null;
                 SelectedReport = null;
@@ -379,6 +406,8 @@ namespace Materials.ViewModels
             get { return _deleteBatch; }
         }
 
+        public DelegateCommand<Sample> DeleteSampleCommand => _deleteSample;
+
         public bool DoNotTest
         {
             get { return (_instance == null) ? false : _instance.DoNotTest; }
@@ -408,7 +437,13 @@ namespace Materials.ViewModels
         
         public IEnumerable<ExternalConstruction> ExternalConstructionList
         {
-            get { return _externalConstructionList; }
+            get
+            {
+                if (_externalConstructionList == null)
+                    _externalConstructionList = DBManager.Services.MaterialService.GetExternalConstructions();
+
+                return _externalConstructionList;
+            }
         }
 
         public IEnumerable<ExternalReport> ExternalReportList 
@@ -428,7 +463,7 @@ namespace Materials.ViewModels
 
                 if (_lineCode.Length == 3)
                 {
-                    LineInstance = MaterialService.GetLine(_lineCode);
+                    LineInstance = DBManager.Services.MaterialService.GetLine(_lineCode);
                     if (_validationErrors.ContainsKey("LineCode"))
                     {
                         _validationErrors.Remove("LineCode");
@@ -502,7 +537,7 @@ namespace Materials.ViewModels
             }
         }
 
-        public List<SamplesWrapper> Samples
+        public IEnumerable<Sample> Samples
         {
             get { return _samplesList; }
         }
@@ -516,7 +551,7 @@ namespace Materials.ViewModels
 
                 if (_recipeCode.Length == 4)
                 {
-                    RecipeInstance = MaterialService.GetRecipe(_recipeCode);
+                    RecipeInstance = DBManager.Services.MaterialService.GetRecipe(_recipeCode);
                     if (_validationErrors.ContainsKey("RecipeCode"))
                     {
                         _validationErrors.Remove("RecipeCode");
@@ -572,7 +607,10 @@ namespace Materials.ViewModels
 
         public ExternalConstruction SelectedExternalConstruction
         {
-            get { return _selectedExternalConstruction; }
+            get
+            {
+                return _selectedExternalConstruction;
+            }
             set
             {
                 _selectedExternalConstruction = value;
@@ -629,7 +667,7 @@ namespace Materials.ViewModels
 
                 if (_typeCode.Length == 4)
                 {
-                    TypeInstance = MaterialService.GetMaterialType(_typeCode);
+                    TypeInstance = DBManager.Services.MaterialService.GetMaterialType(_typeCode);
                     if (_validationErrors.ContainsKey("TypeCode"))
                     {
                         _validationErrors.Remove("TypeCode");

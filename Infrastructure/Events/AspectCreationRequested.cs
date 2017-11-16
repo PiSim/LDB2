@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Events
 {
-    public class OrganizationListRefreshRequested : PubSubEvent
+    public class AspectCreationRequested : PubSubEvent
     {
     }
 }

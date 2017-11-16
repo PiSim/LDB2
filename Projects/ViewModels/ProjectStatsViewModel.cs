@@ -29,12 +29,11 @@ namespace Projects.ViewModels
                             });
         }
 
-        public IEnumerable<ProjectStatsWrapper> ProjectStatList
+        public IEnumerable<Project> ProjectStatList
         {
             get
             {
-                return ProjectService.GetProjects()
-                                    .Select(prj => new ProjectStatsWrapper(prj));
+                return ProjectService.GetProjects(true);
             }
         }
     }
