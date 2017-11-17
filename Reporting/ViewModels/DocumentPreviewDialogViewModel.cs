@@ -24,6 +24,7 @@ namespace Reporting.ViewModels
             set
             {
                 _documentInstance = value;
+                RaisePropertyChanged("DocumentInstance");
             }
         }
     }

@@ -9,7 +9,7 @@ namespace DBManager.Services
 {
     public static class DataService
     {
-        // Repository for Common DB-Access methods
+        // Repository for Common DB-Access methods -- DEPRECATED
 
         public static IEnumerable<Batch> GetBatchesForExternalConstruction(ExternalConstruction target,
                                                                     bool lazyLoadingEnabled = false)

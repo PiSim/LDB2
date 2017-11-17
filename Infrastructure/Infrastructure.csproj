@@ -146,6 +146,8 @@
     <Compile Include="Events\UserRoleCreationRequested.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="IRequirementSelector.cs" />
+    <Compile Include="OrganizationRoleNames.cs" />
+    <Compile Include="PersonRoleNames.cs" />
     <Compile Include="Resources\CommonResourceDictionary.xaml.cs" />
     <Compile Include="DBIdentity.cs" />
     <Compile Include="DBPrincipal.cs" />

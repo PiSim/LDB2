@@ -22,6 +22,7 @@ namespace Reporting
         {
             _container.RegisterType<ReportingEngine>(new ContainerControlledLifetimeManager());
             _container.Resolve<ReportingEngine>();
+            _container.RegisterType<IReportingService, ReportingService>();
         }
     }
 }

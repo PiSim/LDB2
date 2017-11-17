@@ -20,6 +20,7 @@ namespace DBManager
         public void Initialize()
         {
             _container.RegisterType<DBEntities>();
+            _container.RegisterType<IDataService, DataAccessService>();
         }
     }
 }

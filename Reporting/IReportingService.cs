@@ -4,6 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DBManager
+namespace Reporting
 {
+    public interface IReportingService
+    {
+        void PrintLatestBatchReport();
+    }
 }

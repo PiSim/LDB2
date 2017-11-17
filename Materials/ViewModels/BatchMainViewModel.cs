@@ -25,15 +25,18 @@ namespace Materials.ViewModels
                                 _printStatusList,
                                 _refresh;
         private IEventAggregator _eventAggregator;
+        private IReportingService _reportingService;
         private Sample _selectedSampleArrival;
         private string _batchNumber;
 
         public BatchMainViewModel(DBPrincipal principal,
-                                IEventAggregator eventAggregator) 
+                                IEventAggregator eventAggregator,
+                                IReportingService reportingService) 
             : base()
         {
             _eventAggregator = eventAggregator;
             _principal = principal;
+            _reportingService = reportingService;
 
             _createBatch = new DelegateCommand(
                 () =>
@@ -60,7 +63,7 @@ namespace Materials.ViewModels
             _printStatusList = new DelegateCommand(
                 () =>
                 {
-                    ReportingEngine.PrintBatchStatusList();
+                    _reportingService.PrintLatestBatchReport();
                 });
 
             _refresh = new DelegateCommand(

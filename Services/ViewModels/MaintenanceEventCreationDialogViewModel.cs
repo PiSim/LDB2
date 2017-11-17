@@ -30,7 +30,7 @@ namespace Services.ViewModels
             _date = DateTime.Now.Date;
             _principal = principal;
             _description = "";
-            _organizationList = MaterialService.GetMaintenanceOrganizations();
+            _organizationList = OrganizationService.GetOrganizations(OrganizationRoleNames.Maintenance);
 
             _cancel = new DelegateCommand<Window>(
                 parentDialog =>

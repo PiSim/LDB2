@@ -1,0 +1,30 @@
+﻿<UserControl x:Class="Reporting.Controls.MainPageGrid"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Reporting.Controls"
+             mc:Ignorable="d">
+    <Grid Margin="30,50,30,50">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="100"/>
+            <RowDefinition/>
+            <RowDefinition Height="100"/>
+        </Grid.RowDefinitions>
+
+        <Grid Name="HeaderGrid"
+              Grid.Row="0">
+
+        </Grid>
+
+        <Grid Name="BodyGrid"
+              Grid.Row="1">
+
+        </Grid>
+
+        <Grid Name="FooterGrid"
+              Grid.Row="2">
+
+        </Grid>
+    </Grid>
+</UserControl>

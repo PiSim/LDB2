@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,6 +23,15 @@ namespace Reporting.Views
         public DocumentPreviewDialog()
         {
             InitializeComponent();
+        }
+
+        public FixedDocument Document
+        {
+            get { return (DataContext as ViewModels.DocumentPreviewDialogViewModel).DocumentInstance; }
+            set
+            {
+                (DataContext as ViewModels.DocumentPreviewDialogViewModel).DocumentInstance = value;
+            }
         }
     }
 }

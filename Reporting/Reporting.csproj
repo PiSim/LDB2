@@ -116,12 +116,26 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\BatchList.xaml.cs">
+      <DependentUpon>BatchList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\MainPageGrid.xaml.cs">
+      <DependentUpon>MainPageGrid.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\StandardHeader.xaml.cs">
+      <DependentUpon>StandardHeader.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DocRenderer.cs" />
+    <Compile Include="Formats\BatchListReport.xaml.cs">
+      <DependentUpon>BatchListReport.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Formats\BatchStatusListReport.xaml.cs">
       <DependentUpon>BatchStatusListReport.xaml</DependentUpon>
     </Compile>
     <Compile Include="Formats\ReportRawDataSheet.xaml.cs">
       <DependentUpon>ReportRawDataSheet.xaml</DependentUpon>
     </Compile>
+    <Compile Include="IReportingService.cs" />
     <Compile Include="ReportingEngine.cs" />
     <Compile Include="ReportingModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -137,6 +151,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="ReportingService.cs" />
     <Compile Include="Resources.cs" />
     <Compile Include="ViewModels\DocumentPreviewDialogViewModel.cs" />
     <Compile Include="Views\DocumentPreviewDialog.xaml.cs">
@@ -167,8 +182,23 @@
       <Name>Infrastructure</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
+    <Page Include="Controls\BatchList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\MainPageGrid.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\StandardHeader.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Formats\BatchListReport.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Formats\BatchStatusListReport.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -185,6 +215,9 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\logopiccolo.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

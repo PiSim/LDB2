@@ -1,7 +1,11 @@
 ﻿
+using System.Collections.Generic;
+
 namespace DBManager
 {
-    interface IDataService
+    public interface IDataService
     {
+        IEnumerable<Batch> GetBatches();
+        IEnumerable<Batch> GetBatches(int numberOfEntries);
     }
 }

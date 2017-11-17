@@ -1,6 +1,4 @@
-﻿using DBManager;
-using Microsoft.Practices.Prism.Mvvm;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,20 +10,19 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Materials.Views
+namespace Reporting.Controls
 {
     /// <summary>
-    /// Logica di interazione per AspectCreationDialog.xaml
+    /// Logica di interazione per MainPageGrid.xaml
     /// </summary>
-    public partial class AspectCreationDialog : Window, IView
+    public partial class MainPageGrid : UserControl
     {
-        public AspectCreationDialog()
+        public MainPageGrid()
         {
             InitializeComponent();
         }
-
-        public Aspect AspectInstance => (DataContext as ViewModels.AspectCreationDialogViewModel).AspectInstance;
     }
 }

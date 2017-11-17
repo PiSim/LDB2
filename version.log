@@ -5,7 +5,11 @@
 -Corretti errori nel dialogo creazione Report che impedivano la funzionalità
 -Reimplementata creazione Aspetti
 -Iniziata riorganizzazione dei servizi eliminando classi statiche e definendo meglio i ruoli
-
+-Create Interfacce IDataService e IReportingService per ospitare i nuovi servizi centralizzati
+-Implementazione IDataService come DataAccessService
+-Implementazione IReportingService come ReportingService
+-Reimplementazione del Rendering Report come XpsDocument
+-Creata finestra di anteprima report
 
 v 0.5.5 -- 03/11/2017
 

@@ -20,9 +20,12 @@ namespace Materials.ViewModels
         private DelegateCommand<DataGrid> _openBatch;
         private DelegateCommand<Window> _cancel, _confirm;
         private EventAggregator _eventAggregator;
+        private IDataService _dataService;
 
-        public BatchStatusListViewModel(EventAggregator eventAggregator) : base()
+        public BatchStatusListViewModel(EventAggregator eventAggregator,
+                                        IDataService dataService) : base()
         {
+            _dataService = dataService;
             _eventAggregator = eventAggregator;
 
             _cancel = new DelegateCommand<Window>(
@@ -71,7 +74,7 @@ namespace Materials.ViewModels
 
         public IEnumerable<Batch> BatchList
         {
-            get { return DBManager.Services.MaterialService.GetBatches(); }
+            get { return _dataService.GetBatches(); }
         }
 
         public DelegateCommand<Window> CancelCommand

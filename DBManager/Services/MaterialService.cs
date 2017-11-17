@@ -31,51 +31,7 @@ namespace DBManager.Services
                                         .ToList();
             }
         }
-
-        public static IEnumerable<Batch> GetBatches()
-        {
-            // Returns all Batches
-
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.Configuration.LazyLoadingEnabled = false;
-
-                return entities.Batches.Include(btc => btc.BasicReport)
-                                        .Include(btc => btc.FirstSample)
-                                        .Include(btc => btc.Material.Aspect)
-                                        .Include(btc => btc.Material.ExternalConstruction.Oem)
-                                        .Include(btc => btc.Material.MaterialLine)
-                                        .Include(btc => btc.Material.MaterialType)
-                                        .Include(btc => btc.Material.Recipe.Colour)
-                                        .Include(btc => btc.TrialArea)
-                                        .Where(btc => true)
-                                        .OrderByDescending(btc => btc.Number)
-                                        .ToList();
-            }
-        }
-
-        public static IEnumerable<Batch> GetBatches(int entryN)
-        {
-            // Returns all Batches
-
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.Configuration.LazyLoadingEnabled = false;
-
-                return entities.Batches.Include(btc => btc.BasicReport)
-                                        .Include(btc => btc.FirstSample)
-                                        .Include(btc => btc.Material.Aspect)
-                                        .Include(btc => btc.Material.ExternalConstruction.Oem)
-                                        .Include(btc => btc.Material.MaterialLine)
-                                        .Include(btc => btc.Material.MaterialType)
-                                        .Include(btc => btc.Material.Recipe.Colour)
-                                        .Include(btc => btc.TrialArea)
-                                        .OrderByDescending(btc => btc.Number)
-                                        .Take(entryN)
-                                        .ToList();
-            }
-        }
-
+        
         public static Colour GetColour(string name)
         {
             // Returns a Colour instance with the given name, or null if none exists
@@ -140,23 +96,6 @@ namespace DBManager.Services
                                         .Where(btc => btc.LongTermStock != 0)
                                         .OrderByDescending(btc => btc.Number)
                                         .ToList();
-            }
-        }
-
-        public static IEnumerable<Organization> GetMaintenanceOrganizations()
-        {
-            // Returns all organizations with the MAINT role
-
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.Configuration.LazyLoadingEnabled = false;
-                OrganizationRole tempRole = entities.OrganizationRoles.First(rol => rol.Name == OrganizationRoleNames.Maintenance);
-
-                return entities.OrganizationRoleMappings.Include(orm => orm.Organization)
-                                                        .Where(orm => orm.RoleID == tempRole.ID
-                                                                    && orm.IsSelected)
-                                                        .Select(orm => orm.Organization)
-                                                        .ToList();
             }
         }
 
