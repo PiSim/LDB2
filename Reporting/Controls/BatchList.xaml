@@ -5,22 +5,150 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Reporting.Controls"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300"
+             d:DesignHeight="300" d:DesignWidth="600"
              Margin="10">
-    <ListView Name="MainList"
-              IsManipulationEnabled="False"
-              Margin="0">
-        <ListView.View>
-            <GridView>
-                <GridViewColumn Header="BATCH"
-                                DisplayMemberBinding="{Binding Number}"/>
-                <GridViewColumn Header="TIPO"
-                                DisplayMemberBinding="{Binding Material.MaterialType.Code}"/>
-                <GridViewColumn Header="LINEA"
-                                DisplayMemberBinding="{Binding Material.MaterialLine.Code}"/>
-                <GridViewColumn Header="COD.COLORE"
-                                DisplayMemberBinding="{Binding Material.Recipe.Code}"/>
-            </GridView>
-        </ListView.View>
-    </ListView>
+    <UserControl.Resources>
+        <DataTemplate x:Key="BatchTemplate">
+            <Grid Height="25">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="70"/>
+                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0"
+                           Text="{Binding Number}"
+                           HorizontalAlignment="Center"/>
+                <TextBlock Grid.Column="1"
+                           Text="{Binding Material.MaterialType.Code}"
+                           TextAlignment="Center"/>
+                <TextBlock Grid.Column="2"
+                           Text="{Binding Material.MaterialLine.Code}"
+                           TextAlignment="Center"/>
+                <TextBlock Grid.Column="3"
+                           Text="{Binding Material.Aspect.Code}"
+                           HorizontalAlignment="Center"/>
+                <TextBlock Grid.Column="4"
+                           Text="{Binding Material.Recipe.Code}"
+                           HorizontalAlignment="Center"/>
+                <TextBlock Grid.Column="5"
+                           Text="{Binding Material.Recipe.Colour.Name}"
+                           HorizontalAlignment="Center"/>
+                <TextBlock Grid.Column="6"
+                           Text="{Binding Material.ExternalContruction.OEM.Name}"
+                           HorizontalAlignment="Center"/>
+                <TextBlock Grid.Column="7"
+                           Text="{Binding Material.ExternalConstruction.Name}"
+                           HorizontalAlignment="Center"/>
+                <TextBlock Grid.Column="8"
+                           Text="{Binding TrialArea.Name}"
+                           HorizontalAlignment="Center"/>
+                <CheckBox  Grid.Column="9"
+                           IsChecked="{Binding FirstSampleArrived}"
+                           HorizontalAlignment="Center"
+                           IsEnabled="False"/>
+                <TextBlock Grid.Column="10"
+                           Text="{Binding FirstSample.Date}"
+                           HorizontalAlignment="Center"/>
+                <TextBlock Grid.Column="11"
+                           Text="{Binding Report.Number}"
+                           HorizontalAlignment="Center"/>
+            </Grid>
+        </DataTemplate>
+
+        <Style TargetType="{x:Type TextBlock}">
+            <Setter Property="TextWrapping"
+                    Value="Wrap"/>
+            <Setter Property="VerticalAlignment"
+                    Value="Center"/>
+        </Style>
+        
+        <Style TargetType="{x:Type ItemsControl}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ItemsControl}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="70"/>
+                                <ColumnDefinition Width="50"/>
+                                <ColumnDefinition Width="50"/>
+                                <ColumnDefinition Width="50"/>
+                                <ColumnDefinition Width="50"/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="50"/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            
+                            <TextBlock Grid.Column="0"
+                                       Text="Batch"
+                                       TextAlignment="Center"/>
+                            <TextBlock Grid.Column="1"
+                                       Text="Tipo"
+                                       TextAlignment="Center"/>
+                            <TextBlock Grid.Column="2"
+                                       Text="Riga"
+                                       TextAlignment="Center"/>
+                            <TextBlock Grid.Column="3"
+                                       Text="Aspetto"
+                                       TextAlignment="Center"/>
+                            <TextBlock Grid.Column="4"
+                                       TextAlignment="Center"
+                                       TextWrapping="Wrap">
+                                <Run Text="Cod."/>
+                                <Run Text="Colore"/>
+                            </TextBlock>
+                            <TextBlock Grid.Column="5"
+                                       Text="Colore"
+                                       TextAlignment="Center"/>
+                            <TextBlock Grid.Column="6"
+                                       Text="OEM"
+                                       TextAlignment="Center"/>
+                            <TextBlock Grid.Column="7"
+                                       Text="Construction"
+                                       TextAlignment="Center"/>
+                            <TextBlock Grid.Column="8"
+                                       Text="Tipo Batch"
+                                       TextAlignment="Center"/>
+                            <TextBlock Grid.Column="9"
+                                       Text="Ricevuto"
+                                       TextAlignment="Center"/>
+                            <TextBlock Grid.Column="10"
+                                       Text="Data arrivo"
+                                       TextAlignment="Center"/>
+                            <TextBlock Grid.Column="11"
+                                       Text="Basic"
+                                       TextAlignment="Center"/>
+
+                            <Grid Grid.Row="1"
+                                  Grid.ColumnSpan="12">
+                                <ItemsPresenter/>
+                            </Grid>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+
+    <ItemsControl Name="MainList"
+                  Margin="0"
+                  ItemTemplate="{DynamicResource BatchTemplate}"/>
 </UserControl>

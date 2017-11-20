@@ -5,12 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Documents;
+using System.Windows.Xps.Packaging;
 
 namespace Reporting.ViewModels
 {
     public class DocumentPreviewDialogViewModel : BindableBase
     {
-        private FixedDocument _documentInstance;
+        private IDocumentPaginatorSource _documentInstance;
 
         public DocumentPreviewDialogViewModel()
         {
@@ -18,7 +19,7 @@ namespace Reporting.ViewModels
         }
 
 
-        public FixedDocument DocumentInstance
+        public IDocumentPaginatorSource DocumentInstance
         {
             get { return _documentInstance; }
             set

@@ -3,12 +3,13 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:con="clr-namespace:Reporting.Controls"
         xmlns:local="clr-namespace:Reporting.Views"
         xmlns:prism="http://prismlibrary.com/"
         prism:ViewModelLocator.AutoWireViewModel="True"
         mc:Ignorable="d"
         Title="Anteprima di stampa" Height="300" Width="300">
     <Grid>
-        <DocumentViewer Document="{Binding DocumentInstance}"/>
+        <con:LDBDocumentViewer x:Name="MainViewer"/>
     </Grid>
 </Window>

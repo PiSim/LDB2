@@ -98,6 +98,7 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Printing" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Prism.Wpf.6.3.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
       <Private>True</Private>
@@ -119,6 +120,7 @@
     <Compile Include="Controls\BatchList.xaml.cs">
       <DependentUpon>BatchList.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\LDBDocumentViewer.cs" />
     <Compile Include="Controls\MainPageGrid.xaml.cs">
       <DependentUpon>MainPageGrid.xaml</DependentUpon>
     </Compile>
@@ -136,6 +138,7 @@
       <DependentUpon>ReportRawDataSheet.xaml</DependentUpon>
     </Compile>
     <Compile Include="IReportingService.cs" />
+    <Compile Include="PageSizes.cs" />
     <Compile Include="ReportingEngine.cs" />
     <Compile Include="ReportingModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">

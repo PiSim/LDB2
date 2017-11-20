@@ -12,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Windows.Xps.Packaging;
 
 namespace Reporting.Views
 {
@@ -25,12 +26,12 @@ namespace Reporting.Views
             InitializeComponent();
         }
 
-        public FixedDocument Document
+        public IDocumentPaginatorSource Document
         {
-            get { return (DataContext as ViewModels.DocumentPreviewDialogViewModel).DocumentInstance; }
+            get { return MainViewer.Document; }
             set
             {
-                (DataContext as ViewModels.DocumentPreviewDialogViewModel).DocumentInstance = value;
+                MainViewer.Document = value;
             }
         }
     }
