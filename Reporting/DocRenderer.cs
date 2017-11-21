@@ -1,5 +1,7 @@
-﻿using Reporting.Controls;
+﻿using DBManager;
+using Reporting.Controls;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -20,6 +22,41 @@ namespace Reporting
         internal DocRenderer()
         {
 
+        }
+
+        /// <summary>
+        /// Fills the page with a standard MainPageGrid to store content and returns a reference to it
+        /// </summary>
+        /// <param name="page">The page</param>
+        /// <returns>A reference to the MainPageGrid</returns>
+        internal MainPageGrid AddMainGrid(FixedPage page)
+        {
+            MainPageGrid mainGrid = new MainPageGrid()
+            {
+                Height = page.Height,
+                Width = page.Width
+            };
+            page.Children.Add(mainGrid);
+            return mainGrid;
+        }
+
+        /// <summary>
+        /// Adds a new Page to a FixedDocument and returns a reference to it
+        /// </summary>
+        /// <param name="doc">The document to which a page is added</param>
+        /// <returns>A reference to the new page</returns>
+        internal FixedPage AddPageToFixedDocument(FixedDocument doc)
+        {
+            PageContent content = new PageContent();
+            doc.Pages.Add(content);
+            FixedPage newPage = new FixedPage()
+            {
+                Height = doc.DocumentPaginator.PageSize.Height,
+                Width = doc.DocumentPaginator.PageSize.Width
+            };
+            content.Child = newPage;
+
+            return newPage;
         }
 
         internal void AddStandardHeader(Grid targetGrid)
@@ -46,15 +83,7 @@ namespace Reporting
 
             return output;
         }
-
-        internal void SetLandscape(FixedDocument doc)
-        {
-            doc.PrintTicket = new PrintTicket()
-            {
-                PageOrientation = PageOrientation.Landscape
-            };
-        }
-
+        
         /// <summary>
         /// Gets the first fixed page in a fixed document, or null.
         /// </summary>
@@ -113,6 +142,21 @@ namespace Reporting
             }
 
             return orientation;
+        }
+
+        /// <summary>
+        /// Divides a Batch IEnumerable in multiple ones with an appropriate number of elements for visualization in a single page
+        /// </summary>
+        /// <param name="batchList">The Batch IEnumerable to divide</param>
+        /// <returns>An IEnumerable containing the divided Ienumerables</returns>
+        internal IEnumerable<IEnumerable<Batch>> PaginateBatchList(IEnumerable<Batch> batchList)
+        {
+            int elementsPerPage = 25;
+
+            return batchList.Select((x, i) => new { Index = i, Value = x })
+                            .GroupBy(x => x.Index / elementsPerPage)
+                            .Select(x => x.Select(v => v.Value).ToList())
+                            .ToList();
         }
 
         /// <summary>

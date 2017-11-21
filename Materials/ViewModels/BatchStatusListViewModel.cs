@@ -5,7 +5,9 @@ using Infrastructure.Events;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
+using Reporting;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,15 +20,19 @@ namespace Materials.ViewModels
     public class BatchStatusListViewModel : BindableBase
     {
         private DelegateCommand<DataGrid> _openBatch;
+        private DelegateCommand<IList> _printSelected;
         private DelegateCommand<Window> _cancel, _confirm;
         private EventAggregator _eventAggregator;
         private IDataService _dataService;
+        private IReportingService _reportingService;
 
         public BatchStatusListViewModel(EventAggregator eventAggregator,
-                                        IDataService dataService) : base()
+                                        IDataService dataService,
+                                        IReportingService reportingService) : base()
         {
             _dataService = dataService;
             _eventAggregator = eventAggregator;
+            _reportingService = reportingService;
 
             _cancel = new DelegateCommand<Window>(
                 parentDialog =>
@@ -70,6 +76,13 @@ namespace Materials.ViewModels
                     _eventAggregator.GetEvent<NavigationRequested>()
                                     .Publish(token);
                 });
+
+            _printSelected = new DelegateCommand<IList>(
+                batchList =>
+                {
+                    Batch[] processList = new Batch[batchList.Count];
+                    _reportingService.PrintBatchReport(processList);
+                });
         }
 
         public IEnumerable<Batch> BatchList
@@ -91,5 +104,7 @@ namespace Materials.ViewModels
         {
             get { return _openBatch; }
         }
+
+        public DelegateCommand<IList> PrintSelectedCommand => _printSelected;
     }
 }

@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 
 namespace Materials.ViewModels
 {
@@ -24,6 +25,7 @@ namespace Materials.ViewModels
                                 _openSampleLogView,
                                 _printStatusList,
                                 _refresh;
+        private IDataService _dataService;
         private IEventAggregator _eventAggregator;
         private IReportingService _reportingService;
         private Sample _selectedSampleArrival;
@@ -31,9 +33,11 @@ namespace Materials.ViewModels
 
         public BatchMainViewModel(DBPrincipal principal,
                                 IEventAggregator eventAggregator,
+                                IDataService dataService,
                                 IReportingService reportingService) 
             : base()
         {
+            _dataService = dataService;
             _eventAggregator = eventAggregator;
             _principal = principal;
             _reportingService = reportingService;
@@ -63,7 +67,7 @@ namespace Materials.ViewModels
             _printStatusList = new DelegateCommand(
                 () =>
                 {
-                    _reportingService.PrintLatestBatchReport();
+                    _reportingService.PrintBatchReport(_dataService.GetBatches(50));
                 });
 
             _refresh = new DelegateCommand(

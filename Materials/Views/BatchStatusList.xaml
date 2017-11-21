@@ -11,10 +11,19 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
         <DataGrid ItemsSource="{Binding BatchList}"
+                  Name="ListSource"
                   AutoGenerateColumns="False"
                   SelectionUnit="FullRow"
                   IsReadOnly="True"
                   cmd:CommandBinder.DataGridDoubleClickCommand="{Binding OpenBatchCommand}">
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Stampa Selezionati"
+                              Command="{Binding PrintSelectedCommand}"
+                              CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}},
+                                                         Path=PlacementTarget.SelectedItems}"/>
+                </ContextMenu>
+            </DataGrid.ContextMenu>
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Batch"
                                     Binding="{Binding Number}"/>

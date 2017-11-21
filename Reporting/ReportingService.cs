@@ -18,42 +18,31 @@ namespace Reporting
     {
         private DocRenderer _docRenderer;
         private EventAggregator _eventAggregator;
-        private IDataService _dataService;
 
-        public ReportingService(IDataService dataService,
-                                EventAggregator eventAggregator)
+        public ReportingService(EventAggregator eventAggregator)
         {
-            _dataService = dataService;
             _docRenderer = new DocRenderer();
             _eventAggregator = eventAggregator;
         }
 
-        public void PrintLatestBatchReport()
+        /// <summary>
+        /// Renders a document detailing a list of batch items and shows it in a preview window for printing.
+        /// </summary>
+        /// <param name="batchesToPrint">The list of Batches to print</param>
+        public void PrintBatchReport(IEnumerable<Batch> batchesToPrint)
         {
-            IEnumerable<Batch> batchList = _dataService.GetBatches(25);
-
             FixedDocument batchReport = new FixedDocument();
-            _docRenderer.SetLandscape(batchReport);
             batchReport.DocumentPaginator.PageSize = PageSizes.A4Landscape;
-            
-            PageContent content = new PageContent();
-            batchReport.Pages.Add(content);
-            FixedPage newpage = new FixedPage()
-            {
-                Height = batchReport.DocumentPaginator.PageSize.Height,
-                Width = batchReport.DocumentPaginator.PageSize.Width
-            };
-            content.Child = newpage;
-            
-            MainPageGrid mainGrid = new MainPageGrid()
-            {
-                Height = batchReport.DocumentPaginator.PageSize.Height,
-                Width = batchReport.DocumentPaginator.PageSize.Width
-            };
 
-            _docRenderer.AddStandardHeader(mainGrid.HeaderGrid);
-            _docRenderer.AddBatchList(mainGrid.BodyGrid, batchList);
-            newpage.Children.Add(mainGrid);
+            IEnumerable<IEnumerable<Batch>> paginatedBatches = _docRenderer.PaginateBatchList(batchesToPrint);
+            
+            foreach(IEnumerable<Batch> batchListPage in paginatedBatches)
+            {
+                FixedPage currentPage = _docRenderer.AddPageToFixedDocument(batchReport);
+                MainPageGrid currentMainGrid = _docRenderer.AddMainGrid(currentPage);
+                _docRenderer.AddStandardHeader(currentMainGrid.HeaderGrid);
+                _docRenderer.AddBatchList(currentMainGrid.BodyGrid, batchListPage);
+            };
 
             ShowPreview(batchReport);
         }

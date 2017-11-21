@@ -9,7 +9,9 @@
              Margin="10">
     <UserControl.Resources>
         <DataTemplate x:Key="BatchTemplate">
-            <Grid Height="25">
+            
+            <Grid Height="23"
+                  Name="ItemGrid">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="70"/>
                     <ColumnDefinition Width="50"/>
@@ -19,10 +21,10 @@
                     <ColumnDefinition/>
                     <ColumnDefinition/>
                     <ColumnDefinition/>
-                    <ColumnDefinition/>
+                    <ColumnDefinition Width="100"/>
                     <ColumnDefinition Width="50"/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
+                    <ColumnDefinition Width="70"/>
+                    <ColumnDefinition Width="70"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Column="0"
                            Text="{Binding Number}"
@@ -43,7 +45,7 @@
                            Text="{Binding Material.Recipe.Colour.Name}"
                            HorizontalAlignment="Center"/>
                 <TextBlock Grid.Column="6"
-                           Text="{Binding Material.ExternalContruction.OEM.Name}"
+                           Text="{Binding Material.ExternalConstruction.Oem.Name}"
                            HorizontalAlignment="Center"/>
                 <TextBlock Grid.Column="7"
                            Text="{Binding Material.ExternalConstruction.Name}"
@@ -56,12 +58,37 @@
                            HorizontalAlignment="Center"
                            IsEnabled="False"/>
                 <TextBlock Grid.Column="10"
-                           Text="{Binding FirstSample.Date}"
+                           Text="{Binding FirstSample.Date,
+                                          StringFormat=d,
+                                          ConverterCulture=it-IT}"
                            HorizontalAlignment="Center"/>
                 <TextBlock Grid.Column="11"
-                           Text="{Binding Report.Number}"
-                           HorizontalAlignment="Center"/>
+                           HorizontalAlignment="Center">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding DoNotTest}"
+                                                         Value="True">
+                                    <Setter Property="Text"
+                                                        Value="NO REPORT"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding DoNotTest}"
+                                                         Value="False">
+                                    <Setter Property="Text"
+                                                        Value="{Binding BasicReport.Number}"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
             </Grid>
+            <DataTemplate.Triggers>
+                <Trigger Property="ItemsControl.AlternationIndex" Value="0">
+                    <Setter Property="Background" 
+                            Value="LightCyan" 
+                            TargetName="ItemGrid"/>
+                </Trigger>
+            </DataTemplate.Triggers>
         </DataTemplate>
 
         <Style TargetType="{x:Type TextBlock}">
@@ -85,10 +112,10 @@
                                 <ColumnDefinition/>
                                 <ColumnDefinition/>
                                 <ColumnDefinition/>
-                                <ColumnDefinition/>
+                                <ColumnDefinition Width="100"/>
                                 <ColumnDefinition Width="50"/>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
+                                <ColumnDefinition Width="70"/>
+                                <ColumnDefinition Width="70"/>
                             </Grid.ColumnDefinitions>
 
                             <Grid.RowDefinitions>
@@ -150,5 +177,6 @@
 
     <ItemsControl Name="MainList"
                   Margin="0"
-                  ItemTemplate="{DynamicResource BatchTemplate}"/>
+                  ItemTemplate="{DynamicResource BatchTemplate}"
+                  AlternationCount="2"/>
 </UserControl>

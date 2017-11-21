@@ -23,6 +23,7 @@ namespace Reporting.Controls
         public StandardHeader()
         {
             InitializeComponent();
+            DateField.Text = DateTime.Now.ToShortDateString();
         }
     }
 }

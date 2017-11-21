@@ -24,6 +24,7 @@ namespace Reporting.Controls
 
             // set the default page orientation based on the desired output.
             printDialog.PrintTicket.PageOrientation = DocRenderer.GetPageOrientationOfFirstPageOfFixedDocument(docSeq);
+            printDialog.PrintTicket.Duplexing = Duplexing.TwoSidedShortEdge;
 
             if (printDialog.ShowDialog() == true)
             {
