@@ -126,7 +126,6 @@
     <Compile Include="ViewModels\MaintenanceEventCreationDialogViewModel.cs" />
     <Compile Include="ViewModels\BatchCreationDialogViewModel.cs" />
     <Compile Include="ViewModels\NewCalibrationDialogViewModel.cs" />
-    <Compile Include="ViewModels\ReportCreationDialogViewModel.cs" />
     <Compile Include="ViewModels\SampleLogDialogViewModel.cs" />
     <Compile Include="Views\AddTestDialog.xaml.cs">
       <DependentUpon>AddTestDialog.xaml</DependentUpon>
@@ -142,9 +141,6 @@
     </Compile>
     <Compile Include="Views\NewCalibrationDialog.xaml.cs">
       <DependentUpon>NewCalibrationDialog.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\ReportCreationDialog.xaml.cs">
-      <DependentUpon>ReportCreationDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SampleLogDialog.xaml.cs">
       <DependentUpon>SampleLogDialog.xaml</DependentUpon>
@@ -179,10 +175,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\NewCalibrationDialog.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\ReportCreationDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

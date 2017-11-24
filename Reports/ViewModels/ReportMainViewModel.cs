@@ -21,13 +21,16 @@ namespace Reports.ViewModels
         private DBPrincipal _principal;
         private DelegateCommand _newReport, _openReport, _removeReport;
         private EventAggregator _eventAggregator;
+        private IReportService _reportService;
         private Report _selectedReport;
 
         public ReportMainViewModel(DBPrincipal principal,
-                                    EventAggregator eventAggregator)
+                                    EventAggregator eventAggregator,
+                                    IReportService reportService)
         {
             _eventAggregator = eventAggregator;
             _principal = principal;
+            _reportService = reportService;
 
             _openReport = new DelegateCommand(
                 () =>
@@ -38,10 +41,7 @@ namespace Reports.ViewModels
                 () => SelectedReport != null);
 
             _newReport = new DelegateCommand(
-                () =>
-                {
-                    _eventAggregator.GetEvent<ReportCreationRequested>().Publish(new NewReportToken());
-                },
+                () => _reportService.CreateReport(),
                 () => CanCreateReport);
 
             _removeReport = new DelegateCommand(
@@ -113,7 +113,7 @@ namespace Reports.ViewModels
 
         public IEnumerable<Report> ReportList
         {
-            get { return ReportService.GetReports(); }
+            get { return DBManager.Services.ReportService.GetReports(); }
         }
 
         public Report SelectedReport

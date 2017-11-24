@@ -49,8 +49,10 @@ namespace Reporting
 
         internal void ShowPreview(IDocumentPaginatorSource doc)
         {
-            Views.DocumentPreviewDialog previewDialog = new Views.DocumentPreviewDialog();
-            previewDialog.Document = doc;
+            Views.DocumentPreviewDialog previewDialog = new Views.DocumentPreviewDialog
+            {
+                Document = doc
+            };
 
             previewDialog.Show();
         }

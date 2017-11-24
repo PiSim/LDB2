@@ -7,7 +7,7 @@
         xmlns:prism="http://prismlibrary.com/"
         prism:ViewModelLocator.AutoWireViewModel="True"
         mc:Ignorable="d"
-        Title="Inserimento nuovo Batch" Height="400" Width="400">
+        Title="Inserimento nuovo Batch" Height="410" Width="400">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
@@ -61,11 +61,12 @@
                      HorizontalContentAlignment="Center"
                      Margin="5"/>
 
-            <Label Content="{Binding TypeInstance.Description}"
-                   Grid.Column="2"
-                   Grid.ColumnSpan="2"
-                   Grid.Row="1"
-                   Margin="5"/>
+            <TextBlock Text="{Binding TypeInstance.Description}"
+                       Grid.Column="2"
+                       Grid.ColumnSpan="2"
+                       Grid.Row="1"
+                       VerticalAlignment="Center"
+                       Margin="5"/>
 
             <TextBlock Text="Riga:"
                        Grid.Column="0"
@@ -95,12 +96,12 @@
                      HorizontalContentAlignment="Center"
                      Margin="5"/>
 
-            <Label Content="{Binding AspectInstance.Name}"
-                   Grid.Column="2"
-                   Grid.ColumnSpan="2"
-                   Grid.Row="3"
-                   Margin="5"
-                   VerticalAlignment="Center"/>
+            <TextBlock Text="{Binding AspectInstance.Name}"
+                       Grid.Column="2"
+                       Grid.ColumnSpan="2"
+                       Grid.Row="3"
+                       Margin="5"
+                       VerticalAlignment="Center"/>
 
             <TextBlock Text="Colore:"
                        Grid.Column="0"
@@ -239,13 +240,15 @@
                     Command="{Binding CancelCommand}"
                     CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, 
                                                                               AncestorType=Window}}"
-                    Margin="5"/>
+                    Margin="5"
+                    Width="50"/>
 
             <Button Content="Ok"
                     Command="{Binding ConfirmCommand}"
                     CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, 
                                                                               AncestorType=Window}}"
-                    Margin="5"/>
+                    Margin="5"
+                    Width="50"/>
         </StackPanel>
     </Grid>
 </Window>

@@ -5,17 +5,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
-namespace Services.Views
+namespace Reports.Views
 {
     /// <summary>
     /// Interaction logic for ReportCreationDialog.xaml
     /// </summary>
     public partial class ReportCreationDialog : Window, IView
     {
-
         public ReportCreationDialog()
         {
             InitializeComponent();
@@ -26,9 +24,12 @@ namespace Services.Views
             set { (DataContext as ViewModels.ReportCreationDialogViewModel).BatchNumber = value.Number; }
         }
 
-        public Report ReportInstance
+        public Report ReportInstance => (DataContext as ViewModels.ReportCreationDialogViewModel).ReportInstance; 
+
+        public Task TaskInstance
         {
-            get { return (DataContext as ViewModels.ReportCreationDialogViewModel).ReportInstance; }
+            get => (DataContext as ViewModels.ReportCreationDialogViewModel).TaskInstance;
+            set => (DataContext as ViewModels.ReportCreationDialogViewModel).TaskInstance = value;
         }
     }
 }

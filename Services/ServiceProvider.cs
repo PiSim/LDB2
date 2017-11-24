@@ -25,8 +25,10 @@ namespace Services
             if (addPersonDialog.ShowDialog() != true)
                 return null;
 
-            Person newPerson = new Person();
-            newPerson.Name = addPersonDialog.InputString;
+            Person newPerson = new Person
+            {
+                Name = addPersonDialog.InputString
+            };
 
             foreach (PersonRole prr in PeopleService.GetPersonRoles())
             {
@@ -43,18 +45,22 @@ namespace Services
 
         internal static void AddUserRole(string name)
         {
-            UserRole newRole = new UserRole();
-            newRole.Name = name;
-            newRole.Description = "";
+            UserRole newRole = new UserRole
+            {
+                Name = name,
+                Description = ""
+            };
 
             newRole.Create();
 
             foreach (User usr in DataService.GetUsers())
             {
-                UserRoleMapping newMap = new UserRoleMapping();
-                newMap.IsSelected = false;
-                newMap.RoleID = newRole.ID;
-                newMap.UserID = usr.ID;
+                UserRoleMapping newMap = new UserRoleMapping
+                {
+                    IsSelected = false,
+                    RoleID = newRole.ID,
+                    UserID = usr.ID
+                };
 
                 newMap.Create();
             }
@@ -75,8 +81,10 @@ namespace Services
 
         public static InstrumentType CreateNewInstrumentType()
         {
-            StringInputDialog creationDialog = new StringInputDialog();
-            creationDialog.Title = "Crea nuovo Tipo strumenti";
+            StringInputDialog creationDialog = new StringInputDialog
+            {
+                Title = "Crea nuovo Tipo strumenti"
+            };
 
             if (creationDialog.ShowDialog() == true)
             {
@@ -94,8 +102,10 @@ namespace Services
 
         public static MeasurableQuantity CreateNewMeasurableQuantity()
         {
-            StringInputDialog creationDialog = new StringInputDialog();
-            creationDialog.Title = "Crea nuova quantità misurabile";
+            StringInputDialog creationDialog = new StringInputDialog
+            {
+                Title = "Crea nuova quantità misurabile"
+            };
 
             if (creationDialog.ShowDialog() == true)
             {
@@ -113,19 +123,25 @@ namespace Services
 
         public static Organization CreateNewOrganization()
         {
-            StringInputDialog creationDialog = new StringInputDialog();
-            creationDialog.Title = "Crea nuovo Ente";
+            StringInputDialog creationDialog = new StringInputDialog
+            {
+                Title = "Crea nuovo Ente"
+            };
 
             if (creationDialog.ShowDialog() == true)
             {
-                Organization output = new Organization();
-                output.Category = "";
-                output.Name = creationDialog.InputString;
+                Organization output = new Organization
+                {
+                    Category = "",
+                    Name = creationDialog.InputString
+                };
                 foreach (OrganizationRole orr in DataService.GetOrganizationRoles())
                 {
-                    OrganizationRoleMapping tempORM = new OrganizationRoleMapping();
-                    tempORM.IsSelected = false;
-                    tempORM.RoleID = orr.ID;
+                    OrganizationRoleMapping tempORM = new OrganizationRoleMapping
+                    {
+                        IsSelected = false,
+                        RoleID = orr.ID
+                    };
 
                     output.RoleMapping.Add(tempORM);
                 }

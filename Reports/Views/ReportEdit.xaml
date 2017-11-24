@@ -298,16 +298,9 @@
                                                       RowHeight="30"
                                                   Margin="-2">
                                             <DataGrid.Columns>
-                                                <DataGridTextColumn Binding="{Binding Requirement}"
+                                                <DataGridTextColumn Binding="{Binding RequiredValue}"
                                                                         IsReadOnly="True"
-                                                                        Width="*">
-                                                    <DataGridTextColumn.EditingElementStyle>
-                                                        <Style TargetType="{x:Type TextBox}">
-                                                            <Setter Property="MaxLength"
-                                                                        Value="45"/>
-                                                        </Style>
-                                                    </DataGridTextColumn.EditingElementStyle>
-                                                </DataGridTextColumn>
+                                                                        Width="*"/>
                                             </DataGrid.Columns>
                                         </DataGrid>
                                     </DataTemplate>

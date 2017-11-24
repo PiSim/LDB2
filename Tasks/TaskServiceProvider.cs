@@ -25,10 +25,7 @@ namespace Tasks
 
             _eventAggregator.GetEvent<TaskCreationRequested>().Subscribe(
                 token => OnTaskCreationRequested(token));
-
-            _eventAggregator.GetEvent<TaskToReportConversionRequested>().Subscribe(
-                target => StartTaskToReportConversion(target));
-
+            
             _eventAggregator.GetEvent<TaskStatusCheckRequested>().Subscribe(
                 taskEntry => UpdateTaskStatus(taskEntry));
         }
@@ -57,25 +54,6 @@ namespace Tasks
             {
                 _eventAggregator.GetEvent<TaskListUpdateRequested>().Publish();
             }
-        }
-
-        public Report StartTaskToReportConversion(DBManager.Task target)
-        {
-            Views.ConversionReviewDialog conversionDialog = _container.Resolve<Views.ConversionReviewDialog>();
-            conversionDialog.TaskInstance = target;
-
-            if (conversionDialog.ShowDialog() == true)
-            {
-                _eventAggregator.GetEvent<ReportCreated>().Publish(conversionDialog.ReportInstance);
-
-                NavigationToken token = new NavigationToken(ReportViewNames.ReportEditView,
-                                                            conversionDialog.ReportInstance);
-                _eventAggregator.GetEvent<NavigationRequested>().Publish(token);
-                
-                return conversionDialog.ReportInstance;
-            }
-
-            return null;
         }
     }
 }

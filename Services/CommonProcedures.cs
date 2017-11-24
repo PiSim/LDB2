@@ -40,10 +40,12 @@ namespace Services
 
         public static void ApplyControlPlan(IEnumerable<ISelectableRequirement> reqList, ControlPlan conPlan)
         {
+            IEnumerable<ControlPlanItem> itemList = conPlan.GetControlPlanItems();
+
             foreach (ISelectableRequirement isr in reqList)
             {
-                isr.IsSelected = conPlan.GetControlPlanItems()
-                                        .First(cpi => cpi.RequirementID == isr.RequirementInstance.ID)
+                isr.IsSelected = itemList.First(cpi => cpi.RequirementID == isr.RequirementInstance.ID
+                                                        || cpi.RequirementID == isr.RequirementInstance.OverriddenID)
                                         .IsSelected;
             }
         }
@@ -98,7 +100,7 @@ namespace Services
 
             return tempReq;
         }
-
+        
         public static IEnumerable<TaskItem> GenerateTaskItemList(IEnumerable<Requirement> reqList)
         {
             List<TaskItem> output = new List<TaskItem>();
@@ -108,7 +110,6 @@ namespace Services
                 TaskItem tempItem = new TaskItem();
 
                 tempItem.Description = req.Description;
-                tempItem.IsAssignedToReport = false;
                 tempItem.MethodID = req.MethodID;
                 tempItem.Name = req.Name;
                 tempItem.Position = 0;
@@ -134,37 +135,7 @@ namespace Services
             return output;
         }
 
-        public static IEnumerable<Test> GenerateTestList(IEnumerable<TaskItemWrapper> reqList)
-        {
-            List<Test> output = new List<Test>();
-
-            foreach (TaskItemWrapper req in reqList.Where(isr => isr.IsSelected))
-            {
-                req.TaskItemInstance.Load();
-
-                Test tempTest = new Test();
-                tempTest.IsComplete = false;
-                tempTest.MethodID = req.TaskItemInstance.MethodID;
-                
-                tempTest.Notes = req.TaskItemInstance.Description;
-                tempTest.RequirementID = req.TaskItemInstance.RequirementID;
-
-                foreach (SubTaskItem subItem in req.TaskItemInstance.SubTaskItems)
-                {
-                    SubTest tempSubTest = new SubTest();
-                    tempSubTest.Name = subItem.Name;
-                    tempSubTest.Requirement = subItem.RequiredValue;
-                    tempSubTest.SubRequiremntID = subItem.SubRequirementID;
-                    tempSubTest.UM = subItem.UM;
-                    tempTest.SubTests.Add(tempSubTest);
-                }
-                output.Add(tempTest);
-            }
-
-            return output;
-        }
-
-        public static IEnumerable<Test> GenerateTestList(IEnumerable<ISelectableRequirement> reqList)
+        public static ICollection<Test> GenerateTestList(IEnumerable<ISelectableRequirement> reqList)
         {
             List<Test> output = new List<Test>();
 
@@ -177,14 +148,13 @@ namespace Services
                 tempTest.IsComplete = false;
                 tempTest.MethodID = req.RequirementInstance.Method.ID;
                 tempTest.RequirementID = req.RequirementInstance.ID;
-                
                 tempTest.Notes = req.RequirementInstance.Description;
 
                 foreach (SubRequirement subReq in req.RequirementInstance.SubRequirements)
                 {
                     SubTest tempSubTest = new SubTest();
                     tempSubTest.Name = subReq.SubMethod.Name;
-                    tempSubTest.Requirement = subReq.RequiredValue;
+                    tempSubTest.RequiredValue = subReq.RequiredValue;
                     tempSubTest.SubRequiremntID = subReq.ID;
                     tempSubTest.UM = subReq.SubMethod.UM;
                     tempTest.SubTests.Add(tempSubTest);
@@ -218,8 +188,7 @@ namespace Services
             {
                 Test tempTest = testList.First(tst => tst.RequirementID == tski.RequirementID
                                                 && !tst.TaskItems.Any());
-
-                tski.IsAssignedToReport = true;
+                
                 tski.TestID = tempTest.ID;
 
             }

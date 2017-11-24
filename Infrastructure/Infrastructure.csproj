@@ -145,6 +145,7 @@
     <Compile Include="Events\UserCreationRequested.cs" />
     <Compile Include="Events\UserRoleCreationRequested.cs" />
     <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="IReportService.cs" />
     <Compile Include="IRequirementSelector.cs" />
     <Compile Include="OrganizationRoleNames.cs" />
     <Compile Include="PersonRoleNames.cs" />
@@ -160,12 +161,10 @@
     <Compile Include="Events\NavigationRequested.cs" />
     <Compile Include="Events\ProjectListUpdateRequested.cs" />
     <Compile Include="Events\ReportCreated.cs" />
-    <Compile Include="Events\ReportCreationRequested.cs" />
     <Compile Include="Events\StatusNotificationIssued.cs" />
     <Compile Include="Events\TaskCompleted.cs" />
     <Compile Include="Events\TaskCreationRequested.cs" />
     <Compile Include="Events\TaskListUpdateRequested.cs" />
-    <Compile Include="Events\TaskToReportConversionRequested.cs" />
     <Compile Include="Events\UserAuthenticated.cs" />
     <Compile Include="IModuleNavigationTag.cs" />
     <Compile Include="InfrastructureModule.cs" />
@@ -192,7 +191,6 @@
     <Compile Include="Sorting\Sorting.cs" />
     <Compile Include="Sorting\SortingAdorner.cs" />
     <Compile Include="Sorting\SortingBehavior.cs" />
-    <Compile Include="Events\NewReportToken.cs" />
     <Compile Include="Events\NewTaskToken.cs" />
     <Compile Include="ReportViewNames.cs" />
     <Compile Include="SpecificationViewNames.cs" />
@@ -203,6 +201,7 @@
     <Compile Include="Wrappers\ControlPlanItemWrapper.cs" />
     <Compile Include="Wrappers\InstrumentMeasurablePropertyWrapper.cs" />
     <Compile Include="Wrappers\ISelectableRequirement.cs" />
+    <Compile Include="Wrappers\ITestItem.cs" />
     <Compile Include="Wrappers\ReportItemWrapper.cs" />
     <Compile Include="Wrappers\RequirementWrapper.cs" />
     <Compile Include="UserViewNames.cs" />

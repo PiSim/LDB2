@@ -36,7 +36,7 @@ namespace DBManager
             }
         }
 
-        public IEnumerable<ControlPlanItem> GetControlPlanItems(bool includeRequirement = false)
+        public IList<ControlPlanItem> GetControlPlanItems(bool includeRequirement = false)
         {
             // Returns all the items in a Control Plan
 

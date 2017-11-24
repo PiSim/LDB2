@@ -81,6 +81,7 @@ namespace Materials.ViewModels
                 batchList =>
                 {
                     Batch[] processList = new Batch[batchList.Count];
+                    batchList.CopyTo(processList, 0);
                     _reportingService.PrintBatchReport(processList);
                 });
         }

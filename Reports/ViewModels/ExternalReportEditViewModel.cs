@@ -83,7 +83,7 @@ namespace Reports.ViewModels
             _addPO = new DelegateCommand(
                 () =>
                 {
-                    ReportServiceProvider.AddPOToExternalReport(_instance);
+                    ReportService.AddPOToExternalReport(_instance);
 
                     RaisePropertyChanged("OrderCurrency");
                     RaisePropertyChanged("OrderDate");

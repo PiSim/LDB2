@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Collections;
 
 namespace Infrastructure
 {
@@ -49,5 +50,25 @@ namespace Infrastructure
         {
             get { return _requirement; }
         }
+
+        public double WorkHours => throw new NotImplementedException();
+
+        public string PropertyName => throw new NotImplementedException();
+
+        public string MethodName => throw new NotImplementedException();
+
+        public IEnumerable SubTests => throw new NotImplementedException();
+
+        bool ISelectableRequirement.IsSelected { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
+        Requirement ISelectableRequirement.RequirementInstance => throw new NotImplementedException();
+
+        string ITestItem.PropertyName => throw new NotImplementedException();
+
+        string ITestItem.MethodName => throw new NotImplementedException();
+
+        IEnumerable ITestItem.SubItems => throw new NotImplementedException();
+
+        double? ITestItem.WorkHours => throw new NotImplementedException();
     }
 }

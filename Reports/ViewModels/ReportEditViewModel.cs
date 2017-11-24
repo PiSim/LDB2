@@ -117,7 +117,6 @@ namespace Reports.ViewModels
                     if (tempTaskItem != null)
                     {
                         tempTaskItem = TaskService.GetTaskItem(tempTaskItem.ID);
-                        tempTaskItem.IsAssignedToReport = false;
                         tempTaskItem.Update();
                         _eventAggregator.GetEvent<TaskStatusCheckRequested>()
                                         .Publish(TaskService.GetTask(tempTaskItem.TaskID));

@@ -23,21 +23,20 @@ namespace Tasks.ViewModels
                                 _save,
                                 _startEdit;
         private EventAggregator _eventAggregator;
+        private IReportService _reportService;
         private DBManager.Task _instance;
 
         public TaskEditViewModel(DBPrincipal principal,
-                                EventAggregator aggregator) : base()
+                                EventAggregator aggregator,
+                                IReportService reportService) : base()
         {
             _editMode = false;
             _eventAggregator = aggregator;
             _principal = principal;
+            _reportService = reportService;
 
             _convertToReport = new DelegateCommand(
-                () =>
-                {
-                    _eventAggregator.GetEvent<TaskToReportConversionRequested>()
-                                    .Publish(_instance);
-                },
+                () =>_reportService.CreateReport(_instance),
                 () => CanCreateReport);
 
             _save = new DelegateCommand(
@@ -49,28 +48,15 @@ namespace Tasks.ViewModels
                 () => _editMode);
 
             _startEdit = new DelegateCommand(
-                () =>
-                {
-                    EditMode = true;
-                },
+                () => EditMode = true,
                 () => CanEdit && !_editMode);
         }
 
         public string BatchNumber
         {
-            get
-            {
-                if (_instance == null)
-                    return null;
+            get => _instance?.Batch?.Number;
 
-                else
-                    return _instance.Batch.Number;
-            }
-
-            set
-            {
-                _instance.Batch.Number = value;
-            }
+            set => _instance.Batch.Number = value;
         }
 
         public bool CanCreateReport
@@ -98,14 +84,11 @@ namespace Tasks.ViewModels
             }
         }
 
-        public DelegateCommand ConvertToReportCommand
-        {
-            get { return _convertToReport; }
-        }
+        public DelegateCommand ConvertToReportCommand => _convertToReport;
 
         public bool EditMode
         {
-            get { return _editMode; }
+            get => _editMode;
             set
             {
                 _editMode = value;

@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Security.Views"
         mc:Ignorable="d"
         Title="Login" Height="150" Width="300">
-    <Grid>
+    <Grid KeyDown="Grid_KeyDown">
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
             <ColumnDefinition/>

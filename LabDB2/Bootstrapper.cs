@@ -163,6 +163,11 @@ namespace LabDB2
         protected override void InitializeShell()
         {
             LoginDialog logger = Container.Resolve<LoginDialog>();
+            DBManager.DBEntities entities = new DBManager.DBEntities();
+            if (!entities.Database.Exists())
+            {
+                Application.Current.Shutdown();
+            }
 
             if (logger.ShowDialog() == true)
             {

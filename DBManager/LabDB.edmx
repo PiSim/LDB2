@@ -549,13 +549,13 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="taskID" Type="int" Nullable="false" />
           <Property Name="requirementID" Type="int" />
-          <Property Name="is_assigned_to_report" Type="bit" Nullable="false" />
           <Property Name="testID" Type="int" />
           <Property Name="specification_versionID" Type="int" Nullable="false" />
           <Property Name="methodID" Type="int" Nullable="false" />
           <Property Name="name" Type="text" />
           <Property Name="position" Type="int" Nullable="false" />
           <Property Name="description" Type="text" />
+          <Property Name="work_hours" Type="double" Nullable="false" />
         </EntityType>
         <EntityType Name="tasks">
           <Key>
@@ -573,6 +573,9 @@
           <Property Name="end_date" Type="date" />
           <Property Name="is_complete" Type="bit" Nullable="false" />
           <Property Name="all_items_assigned" Type="bit" Nullable="false" />
+          <Property Name="is_assigned" Type="bit" Nullable="false" />
+          <Property Name="reportID" Type="int" />
+          <Property Name="work_hours" Type="double" Nullable="false" />
         </EntityType>
         <EntityType Name="tests">
           <Key>
@@ -2699,7 +2702,7 @@
           <NavigationProperty Name="Specification" Relationship="Self.specification_to_specversion" FromRole="specification_versions" ToRole="specifications" />
           <NavigationProperty Name="Tasks" Relationship="Self.specversion_to_task" FromRole="specification_versions" ToRole="tasks" />
           <NavigationProperty Name="ExternalConstructions" Relationship="labdbModel.default_spec_version_to_ex_construction" FromRole="SpecificationVersion" ToRole="ExternalConstruction" />
-          <NavigationProperty Name="task_items" Relationship="labdbModel.specification_version_to_task_item" FromRole="SpecificationVersion" ToRole="TaskItem" />
+          <NavigationProperty Name="TaskItems" Relationship="labdbModel.specification_version_to_task_item" FromRole="SpecificationVersion" ToRole="TaskItem" />
         </EntityType>
         <EntityType Name="Specification">
           <Key>
@@ -2745,8 +2748,8 @@
           <NavigationProperty Name="Requirement" Relationship="Self.requirement_to_subreq" FromRole="sub_requirements" ToRole="requirements" />
           <Property Name="SubMethodID" Type="Int32" Nullable="false" />
           <NavigationProperty Name="SubMethod" Relationship="labdbModel.submethod_to_subreq1" FromRole="SubRequirement" ToRole="sub_methods" />
-          <NavigationProperty Name="sub_tests" Relationship="labdbModel.sub_requirement_to_sub_test" FromRole="SubRequirement" ToRole="SubTest" />
-          <NavigationProperty Name="sub_task_items" Relationship="labdbModel.sub_requirement_to_sub_task_item" FromRole="SubRequirement" ToRole="sub_task_items" />
+          <NavigationProperty Name="SubTests" Relationship="labdbModel.sub_requirement_to_sub_test" FromRole="SubRequirement" ToRole="SubTest" />
+          <NavigationProperty Name="SubTaskItems" Relationship="labdbModel.sub_requirement_to_sub_task_item" FromRole="SubRequirement" ToRole="sub_task_items" />
         </EntityType>
         <EntityType Name="SubTest">
           <Key>
@@ -2757,7 +2760,7 @@
           <Property Name="TestID" Type="Int32" Nullable="false" a:SetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="Test" Relationship="Self.test1" FromRole="sub_tests" ToRole="tests" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
-          <Property Name="Requirement" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="RequiredValue" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
           <Property Name="UM" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
           <Property Name="SubRequiremntID" Type="Int32" />
           <NavigationProperty Name="SubRequirement" Relationship="labdbModel.sub_requirement_to_sub_test" FromRole="SubTest" ToRole="SubRequirement" />
@@ -2769,7 +2772,7 @@
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="RequesterID" Type="Int32" Nullable="false" a:SetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <Property Name="SpecificationVersionID" Type="Int32" Nullable="false" />
-          <Property Name="batchID" Type="Int32" Nullable="false" />
+          <Property Name="BatchID" Type="Int32" Nullable="false" />
           <Property Name="Notes" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
           <Property Name="Progress" Type="Int32" />
           <Property Name="PriorityModifier" Type="Int32" />
@@ -2783,6 +2786,9 @@
           <NavigationProperty Name="Batch" Relationship="labdbModel.batch_to_task" FromRole="Task" ToRole="Batch" />
           <NavigationProperty Name="Reports" Relationship="labdbModel.task_to_report" FromRole="Task" ToRole="Report" />
           <Property Name="AllItemsAssigned" Type="Boolean" Nullable="false" />
+          <Property Name="IsAssigned" Type="Boolean" Nullable="false" />
+          <Property Name="ReportID" Type="Int32" />
+          <Property Name="WorkHours" Type="Double" Nullable="false" />
         </EntityType>
         <EntityType Name="Test">
           <Key>
@@ -3698,7 +3704,6 @@
           <Property Name="RequirementID" Type="Int32" Nullable="true" />
           <NavigationProperty Name="Requirement" Relationship="labdbModel.requirement_to_task_item" FromRole="task_items" ToRole="Requirement" />
           <NavigationProperty Name="Task" Relationship="labdbModel.task_to_item" FromRole="task_items" ToRole="Task" />
-          <Property Name="IsAssignedToReport" Type="Boolean" Nullable="false" />
           <Property Name="TestID" Type="Int32" />
           <NavigationProperty Name="Test" Relationship="labdbModel.test_to_task_item" FromRole="TaskItem" ToRole="Test" />
           <NavigationProperty Name="SubTaskItems" Relationship="labdbModel.task_item_to_sub" FromRole="TaskItem" ToRole="sub_task_items" />
@@ -3709,6 +3714,7 @@
           <Property Name="Description" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="SpecificationVersion" Relationship="labdbModel.specification_version_to_task_item" FromRole="TaskItem" ToRole="SpecificationVersion" />
           <NavigationProperty Name="Method" Relationship="labdbModel.method_to_task_item" FromRole="TaskItem" ToRole="Method" a:SetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+          <Property Name="WorkHours" Type="Double" Nullable="false" />
         </EntityType>
         <Association Name="requirement_to_task_item">
           <End Type="labdbModel.Requirement" Role="Requirement" Multiplicity="0..1" />
@@ -3744,7 +3750,7 @@
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="Task">
-              <PropertyRef Name="batchID" />
+              <PropertyRef Name="BatchID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -5064,7 +5070,7 @@
               <MappingFragment StoreEntitySet="sub_tests">
                 <ScalarProperty Name="SubRequiremntID" ColumnName="sub_requirementID" />
                 <ScalarProperty Name="UM" ColumnName="um" />
-                <ScalarProperty Name="Requirement" ColumnName="requirement" />
+                <ScalarProperty Name="RequiredValue" ColumnName="requirement" />
                 <ScalarProperty Name="Name" ColumnName="name" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Result" ColumnName="result" />
@@ -5075,6 +5081,9 @@
           <EntitySetMapping Name="Tasks">
             <EntityTypeMapping TypeName="labdbModel.Task">
               <MappingFragment StoreEntitySet="tasks">
+                <ScalarProperty Name="WorkHours" ColumnName="work_hours" />
+                <ScalarProperty Name="ReportID" ColumnName="reportID" />
+                <ScalarProperty Name="IsAssigned" ColumnName="is_assigned" />
                 <ScalarProperty Name="AllItemsAssigned" ColumnName="all_items_assigned" />
                 <ScalarProperty Name="IsComplete" ColumnName="is_complete" />
                 <ScalarProperty Name="EndDate" ColumnName="end_date" />
@@ -5082,7 +5091,7 @@
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="RequesterID" ColumnName="requesterID" />
                 <ScalarProperty Name="SpecificationVersionID" ColumnName="specification_versionID" />
-                <ScalarProperty Name="batchID" ColumnName="batchID" />
+                <ScalarProperty Name="BatchID" ColumnName="batchID" />
                 <ScalarProperty Name="Notes" ColumnName="notes" />
                 <ScalarProperty Name="Progress" ColumnName="progress" />
                 <ScalarProperty Name="PriorityModifier" ColumnName="priority_modifier" />
@@ -5129,13 +5138,13 @@
           <EntitySetMapping Name="TaskItems">
             <EntityTypeMapping TypeName="labdbModel.TaskItem">
               <MappingFragment StoreEntitySet="task_items">
+                <ScalarProperty Name="WorkHours" ColumnName="work_hours" />
                 <ScalarProperty Name="Description" ColumnName="description" />
                 <ScalarProperty Name="Position" ColumnName="position" />
                 <ScalarProperty Name="Name" ColumnName="name" />
                 <ScalarProperty Name="MethodID" ColumnName="methodID" />
                 <ScalarProperty Name="SpecificationVersionID" ColumnName="specification_versionID" />
                 <ScalarProperty Name="TestID" ColumnName="testID" />
-                <ScalarProperty Name="IsAssignedToReport" ColumnName="is_assigned_to_report" />
                 <ScalarProperty Name="RequirementID" ColumnName="requirementID" />
                 <ScalarProperty Name="TaskID" ColumnName="taskID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />

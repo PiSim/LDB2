@@ -1,56 +1,26 @@
 ﻿using DBManager;
 using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Infrastructure.Wrappers
 {
-    public class TaskItemWrapper
+    public class TaskItemWrapper : ITestItem
     {
-        private bool _isSelected;
-        private TaskItem _taskItemInstance;
 
-        public TaskItemWrapper(TaskItem taskItemInstance)
+        private TaskItem _instance;
+
+        public TaskItemWrapper(TaskItem instance)
         {
-            _taskItemInstance = taskItemInstance;
-            _isSelected = true;
+            _instance = instance;
         }
 
-        public bool IsSelected
-        {
-            get { return _isSelected; }
-            set { _isSelected = value; }
-        }
+        public string PropertyName => _instance?.Method?.Standard?.Name;
 
-        public string Method
-        {
-            get { return _taskItemInstance.Method.Standard.Name; }
-        }
+        public string MethodName => _instance?.Method?.Property?.Name;
 
-        public string Notes
-        {
-            get { return _taskItemInstance.Description; }
-        }
+        public IEnumerable SubItems => _instance?.SubTaskItems;
 
-        public string Property
-        {
-            get { return _taskItemInstance.Method.Property.Name; }
-        }
-
-        public IEnumerable<SubTaskItem> SubTaskItems
-        {
-            get
-            {
-                return _taskItemInstance.SubTaskItems
-                                        .ToList();
-            }
-        }
-
-        public TaskItem TaskItemInstance
-        {
-            get { return _taskItemInstance; }
-        }
+        public double? WorkHours => _instance?.WorkHours;
     }
 }

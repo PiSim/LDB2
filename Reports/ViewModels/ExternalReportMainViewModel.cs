@@ -77,7 +77,7 @@ namespace Reports.ViewModels
 
         public IEnumerable<ExternalReport> ExternalReportList
         {
-            get { return ReportService.GetExternalReports(); }
+            get { return DBManager.Services.ReportService.GetExternalReports(); }
         }
 
         public ExternalReport SelectedExternalReport

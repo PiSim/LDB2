@@ -70,7 +70,7 @@ namespace DBManager
             }            
         }
 
-        public IEnumerable<ControlPlan> GetControlPlans()
+        public IList<ControlPlan> GetControlPlans()
         {
             // Returns all existing control plans for a specification
 
@@ -84,7 +84,7 @@ namespace DBManager
             }
         }
 
-        public IEnumerable<SpecificationVersion> GetVersions()
+        public IList<SpecificationVersion> GetVersions()
         {
             //Returns all version for a given specification entry
 
@@ -202,6 +202,5 @@ namespace DBManager
                 entities.SaveChanges();
             }
         }
-
     }
 }

@@ -25,7 +25,6 @@ namespace Services
             _container.RegisterType<ViewModels.AddTestDialogViewModel>();
             _container.RegisterType<ViewModels.BatchCreationDialogViewModel>();
             _container.RegisterType<ViewModels.MaintenanceEventCreationDialogViewModel>();
-            _container.RegisterType<ViewModels.ReportCreationDialogViewModel>();
             _container.RegisterType<ViewModels.SampleLogDialogViewModel>();
         }
     }

@@ -7,21 +7,22 @@ using Infrastructure.Wrappers;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
+using Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Collections;
 using System.Windows.Forms;
 
-namespace Services.ViewModels
+namespace Reports.ViewModels
 {   
     public class ReportCreationDialogViewModel : BindableBase, INotifyDataErrorInfo, IRequirementSelector 
     {
+        private bool _isCreatingFromTask;
         private Batch _selectedBatch;
         private ControlPlan _selectedControlPlan;
         private DBPrincipal _principal;
@@ -33,6 +34,7 @@ namespace Services.ViewModels
         private IEnumerable<Person> _techList;
         private IEnumerable<Specification> _specificationList;
         private IEnumerable<SpecificationVersion> _versionList;
+        private IEnumerable<ITestItem> _taskItemList;
         private Int32 _number;
         private Material _material;
         private Person _author;
@@ -42,14 +44,16 @@ namespace Services.ViewModels
         private string _batchNumber, 
                         _category,
                         _description;
+        private Task _taskInstance;
         
         public ReportCreationDialogViewModel(DBPrincipal principal,
                                             EventAggregator aggregator) : base()
         {
             _eventAggregator = aggregator;
             _principal = principal;
+            _isCreatingFromTask = false;
 
-            _number = ReportService.GetNextReportNumber();
+            _number = DBManager.Services.ReportService.GetNextReportNumber();
             _techList = PeopleService.GetPeople(PersonRoleNames.MaterialTestingTech);
             _author = _techList.First(prs => prs.ID == _principal.CurrentPerson.ID);
             _requirementList = new List<ISelectableRequirement>();
@@ -90,6 +94,13 @@ namespace Services.ViewModels
                     _reportInstance.TotalDuration = _reportInstance.Tests.Sum(tst => tst.Duration);
 
                     _reportInstance.Create();
+
+                    if (_taskInstance != null)
+                    {
+                        _taskInstance.ReportID = _reportInstance.ID;
+                        _taskInstance.Update();
+                    }
+                    
                     parent.DialogResult = true;
                 },
                 parent => !HasErrors);
@@ -130,6 +141,7 @@ namespace Services.ViewModels
         {
             ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
             RaisePropertyChanged("HasErrors");
+            _confirm.RaiseCanExecuteChanged();
         }
 
         #endregion
@@ -182,6 +194,8 @@ namespace Services.ViewModels
             }
         }
 
+        public bool ControlPlanSelectionEnabled => !IsCreatingFromTask;
+
         public string Description
         {
             get { return _description; }
@@ -203,17 +217,25 @@ namespace Services.ViewModels
             }
         }
 
+        public bool IsCreatingFromTask
+        {
+            get => _isCreatingFromTask;
+            set
+            {
+                _isCreatingFromTask = value;
+                RaisePropertyChanged();
+                RaisePropertyChanged("ControlPlanSelectionEnabled");
+                RaisePropertyChanged("TestSelectionColumnVisibility");
+                RaisePropertyChanged("SpecificationSelectionEnabled");
+                RaisePropertyChanged("VersionSelectionEnabled");
+            }
+        }
+
         public bool IsNotAdmin => !_principal.IsInRole(UserRoleNames.ReportAdmin);
 
         public bool IsSpecificationSelected => _selectedSpecification != null;
 
-        public Material Material
-        {
-            get
-            {
-                return _material;
-            }
-        }
+        public Material Material => _material;
 
         public Int32 Number
         {
@@ -221,7 +243,7 @@ namespace Services.ViewModels
             set
             {
                 _number = value;
-                Report tempReport = ReportService.GetReportByNumber(_number);
+                Report tempReport = DBManager.Services.ReportService.GetReportByNumber(_number);
 
                 if (tempReport != null)
                     _validationErrors["Number"] = new List<string>() { "Il report " + value + " esiste già" };
@@ -234,15 +256,19 @@ namespace Services.ViewModels
             }
         }
 
-        public IEnumerable<ISelectableRequirement> RequirementList
+        public IEnumerable<ITestItem> RequirementList
         {
-            get { return _requirementList; }
+            get
+            {
+                if (!IsCreatingFromTask)
+                    return _requirementList;
+
+                else
+                    return _taskItemList;
+            }
         }
 
-        public Report ReportInstance
-        {
-            get { return _reportInstance; }
-        }
+        public Report ReportInstance => _reportInstance; 
 
         public Batch SelectedBatch
         {
@@ -251,13 +277,26 @@ namespace Services.ViewModels
             {
                 _selectedBatch = value;
 
+                // Updates Error Status of the Property
+
                 if (_selectedBatch == null)
                     _validationErrors["BatchNumber"] = new List<string>() { "Batch inserito non valido" };
 
                 else if (_validationErrors.ContainsKey("BatchNumber"))
                     _validationErrors.Remove("BatchNumber");
                 
+                // Attempts to Retrieve the BAtch Material
+
                 _material = _selectedBatch.GetMaterial();
+                RaisePropertyChanged("ExternalConstruction");
+                RaisePropertyChanged("Material");
+
+                // If Using a Task as Template no further action is required
+
+                if (IsCreatingFromTask)
+                    return;
+
+                // Otherwise sets the default selected values if the material and the external construction are not null
 
                 if (_material != null && _material.ExternalConstruction != null)
                 {
@@ -265,9 +304,6 @@ namespace Services.ViewModels
                     SelectedSpecification = SpecificationList.FirstOrDefault(spec => spec.ID == tempVersion.SpecificationID);
                     SelectedVersion = VersionList.First(vers => vers.ID == _material.ExternalConstruction.DefaultSpecVersionID);
                 }
-
-                RaisePropertyChanged("ExternalConstruction");
-                RaisePropertyChanged("Material");
             }
         }
 
@@ -277,12 +313,16 @@ namespace Services.ViewModels
             set
             {
                 _selectedControlPlan = value;
-
-                Description = (_selectedControlPlan == null) ? "" : _selectedControlPlan.Name;
-
                 RaisePropertyChanged("SelectedControlPlan");
+
+                // If new value is not null and a Task is not being used as template
+                // sets Report description and applies the control Plan
+                
                 if (_selectedControlPlan != null)
+                {
+                    Description = (_selectedControlPlan == null) ? "" : _selectedControlPlan.Name;
                     CommonProcedures.ApplyControlPlan(_requirementList, _selectedControlPlan);
+                }
             }
         }
 
@@ -293,32 +333,49 @@ namespace Services.ViewModels
             {
                 _selectedSpecification = value;
 
+                // Raises change of dependent properties
+
+                RaisePropertyChanged("ControlPlanSelectionEnabled");
+                RaisePropertyChanged("VersionSelectionEnabled");
+                RaisePropertyChanged("SelectedSpecification");
+
+                // Updates Error Status of the Property
+
+                if (_selectedSpecification == null)
+                    _validationErrors["SelectedSpecification"] = new List<string>() { "Selezionare una specifica" };
+                
+                else if (_validationErrors.ContainsKey("SelectedSpecification"))
+                        _validationErrors.Remove("SelectedSpecification");
+
+                RaiseErrorsChanged("SelectedSpecification");
+
+                // If instance is null sets empty children lists and null selected values
+
                 if (_selectedSpecification == null)
                 {
                     _controlPlanList = new List<ControlPlan>();
+                    RaisePropertyChanged("ControlPlanList");
+
                     _versionList = new List<SpecificationVersion>();
-                    _validationErrors["SelectedSpecification"] = new List<string>() { "Selezionare una specifica" };
+                    RaisePropertyChanged("VersionList");
+
+                    SelectedControlPlan = null;
+                    SelectedVersion = null;
                 }
+
+                // Otherwise retrieves children list and loads default selected values
 
                 else
                 {
                     _controlPlanList = _selectedSpecification.GetControlPlans();
-                    _versionList = _selectedSpecification.GetVersions();
-                    
-                    if (_validationErrors.ContainsKey("SelectedSpecification"))
-                        _validationErrors.Remove("SelectedSpecification");
+                    RaisePropertyChanged("ControlPlanList");
+
+                    _versionList = _selectedSpecification?.GetVersions();
+                    RaisePropertyChanged("VersionList");
+
+                    SelectedControlPlan = ControlPlanList.FirstOrDefault(cp => cp.IsDefault);
+                    SelectedVersion = VersionList.FirstOrDefault(sv => sv.IsMain);
                 }
-
-                RaisePropertyChanged("IsSpecificationSelected");
-                RaisePropertyChanged("SelectedSpecification");
-                RaisePropertyChanged("VersionList");
-                RaisePropertyChanged("ControlPlanList");
-                RaiseErrorsChanged("SelectedSpecification");
-
-                _confirm.RaiseCanExecuteChanged();
-
-                SelectedControlPlan = ControlPlanList.FirstOrDefault(cp => cp.IsDefault);
-                SelectedVersion = VersionList.FirstOrDefault(sv => sv.IsMain);
             }
         }
 
@@ -328,8 +385,21 @@ namespace Services.ViewModels
             set 
             { 
                 _selectedVersion = value;
+                RaisePropertyChanged("SelectedVersion");
+                
+                // If Using Task as template no further action is required
 
-                if (_selectedVersion != null)
+                if (IsCreatingFromTask)
+                    return;
+
+                // If new value is null sets empty requirementList
+
+                if (_selectedVersion == null)
+                    _requirementList = new List<ISelectableRequirement>();
+
+                // Otherwise Retrieves new requirementList 
+
+                else
                 {
                     _requirementList = _selectedVersion.GenerateRequirementList()
                                                         .Select(req => new ReportItemWrapper(req, this))
@@ -337,42 +407,53 @@ namespace Services.ViewModels
                     CommonProcedures.ApplyControlPlan(_requirementList, _selectedControlPlan);
                 }
 
-                else
-                    _requirementList = new List<ISelectableRequirement>();
-
                 RaisePropertyChanged("RequirementList");
+            }
+        }
+
+        public IEnumerable<Specification> SpecificationList => _specificationList;
+
+        public bool SpecificationSelectionEnabled => !IsCreatingFromTask;
+
+        public IEnumerable<SpecificationVersion> VersionList => _versionList;
+
+        public bool VersionSelectionEnabled => (SelectedSpecification != null) && !IsCreatingFromTask;
+
+        public IEnumerable<Person> TechList => _techList;
+
+        /// <summary>
+        /// Allows using a Task entity as basis for creating the report.
+        /// </summary>
+        public Task TaskInstance
+        {
+            get => _taskInstance;
+            set
+            {
+                // Sets value
+                _taskInstance = value;
+
+                // Sets bool value to lock GUI fields
+                IsCreatingFromTask = true;
+
+                // Selects correct specification 
+                SelectedSpecification = _specificationList.First(spc => spc.ID == _taskInstance.SpecificationVersion.SpecificationID);
+                RaisePropertyChanged("SelectedSpecification");
+
+                // Selects correct Version
+                _selectedVersion = _versionList.First(spv => spv.ID == _taskInstance.SpecificationVersionID);
                 RaisePropertyChanged("SelectedVersion");
-            }
-        }
-        
-        public IEnumerable<Specification> SpecificationList
-        {
-            get { return _specificationList; }
-        }
-        
-        public IEnumerable<SpecificationVersion> VersionList
-        {
-            get
-            {
-                return _versionList;
+
+                // Gets Test List from the task
+                _taskItemList = _taskInstance.GetTaskItems()
+                                            .Select(tski => new TaskItemWrapper(tski));
+                RaisePropertyChanged("RequirementList");
             }
         }
 
-        public IEnumerable<Person> TechList
-        {
-            get
-            {
-                return _techList;
-            }
-        }
+        public Visibility TestSelectionColumnVisibility => IsCreatingFromTask ? Visibility.Collapsed : Visibility.Visible;
 
-        public double TotalDuration
-        {
-            get
-            {
-                return _requirementList.Where(req => req.IsSelected)
-                                        .Sum(req => req.Duration);
-            }
-        }
+        public double? TotalDuration => _requirementList.Where(req => req.IsSelected)
+                                                        .Sum(req => req.WorkHours);        
+
     }
 }

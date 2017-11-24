@@ -6,8 +6,66 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DBManager.EntityExtensions
+namespace DBManager
 {
+    public partial class Task
+    {
+        /// <summary>
+        /// Generates a list of tests based on the taskItems loading all values from the DB
+        /// </summary>
+        /// <param name="includeMethods">If true the related Method entities are loaded</param>
+        /// <returns>An IList containing the generated test entitites</returns>
+        public IList<Test> GenerateTests(bool includeMethods = false)
+        {
+            List<Test> output = new List<Test>();
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                IEnumerable<TaskItem> _itemList;
+
+                if (includeMethods)
+                    _itemList = entities.TaskItems
+                                        .Include(tski => tski.Method.Property)
+                                        .Include(tski => tski.Method.Standard)
+                                        .Include(tski => tski.SubTaskItems)
+                                        .Where(tski => tski.TaskID == ID)
+                                        .ToList();
+
+                else
+                    _itemList = entities.TaskItems
+                                        .Include(tski => tski.SubTaskItems)
+                                        .Where(tski => tski.TaskID == ID)
+                                        .ToList();
+
+                foreach (TaskItem currentItem in _itemList)
+                    output.Add(currentItem.GetTest());
+
+                return output;
+            }
+        }
+
+        /// <summary>
+        /// Returns an IEnumerable containing all the TaskItem entries related to this Task,
+        /// including subtasks and the relevant Method entities
+        /// </summary>
+        public IEnumerable<TaskItem> GetTaskItems()
+        {
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.TaskItems
+                                .Include(tski => tski.Method.Property)
+                                .Include(tski => tski.Method.Standard)
+                                .Include(tski => tski.SubTaskItems)
+                                .Where(tski => tski.TaskID == ID)
+                                .ToList();
+            }
+        }
+    }
+
     public static class TaskExtension
     {
 
@@ -67,7 +125,7 @@ namespace DBManager.EntityExtensions
 
                 entry.AllItemsAssigned = tempEntry.AllItemsAssigned;
                 entry.Batch = tempEntry.Batch;
-                entry.batchID = tempEntry.batchID;
+                entry.BatchID = tempEntry.BatchID;
                 entry.EndDate = tempEntry.EndDate;
                 entry.IsComplete = tempEntry.IsComplete;
                 entry.Notes = tempEntry.Notes;

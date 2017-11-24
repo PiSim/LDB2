@@ -90,6 +90,12 @@ namespace Services.ViewModels
                         RecipeInstance.Create();
                     }
 
+                    else if (RecipeInstance.ColourID != _selectedColour.ID)
+                    {
+                        _recipeInstance.ColourID = _selectedColour.ID;
+                        _recipeInstance.Update();
+                    }
+
                     Material tempMaterial = MaterialService.GetMaterial(_typeInstance,
                                                                         _lineInstance,
                                                                         _aspectInstance,

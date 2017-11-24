@@ -24,7 +24,7 @@ namespace DBManager
         public int ID { get; set; }
         public int RequesterID { get; set; }
         public int SpecificationVersionID { get; set; }
-        public int batchID { get; set; }
+        public int BatchID { get; set; }
         public string Notes { get; set; }
         public Nullable<int> Progress { get; set; }
         public Nullable<int> PriorityModifier { get; set; }
@@ -33,6 +33,9 @@ namespace DBManager
         public Nullable<System.DateTime> EndDate { get; set; }
         public bool IsComplete { get; set; }
         public bool AllItemsAssigned { get; set; }
+        public bool IsAssigned { get; set; }
+        public Nullable<int> ReportID { get; set; }
+        public double WorkHours { get; set; }
     
         public virtual Person Requester { get; set; }
         public virtual SpecificationVersion SpecificationVersion { get; set; }

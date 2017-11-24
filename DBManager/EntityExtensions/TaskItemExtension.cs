@@ -6,8 +6,31 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DBManager.EntityExtensions
+namespace DBManager
 {
+    public partial class TaskItem
+    {
+        /// <summary>
+        /// Creates a new Test entry based on the values currently loaded in the Task instance
+        /// </summary>
+        /// <returns>The new Test entity</returns>
+        public Test GetTest()
+        {
+            Test output = new Test()
+            {
+                IsComplete = false,
+                MethodID = MethodID,
+                Notes = Description,
+                RequirementID = RequirementID
+            };
+
+            foreach (SubTaskItem subItem in SubTaskItems)
+                output.SubTests.Add(subItem.GetSubTest());
+
+            return output;
+        }
+    }
+    
     public static class TaskItemExtension
     {
 
@@ -28,7 +51,6 @@ namespace DBManager.EntityExtensions
                                                         .First(tskI => tskI.ID == entry.ID);
 
                 entry.Description = tempEntry.Description;
-                entry.IsAssignedToReport = tempEntry.IsAssignedToReport;
                 entry.Method = tempEntry.Method;
                 entry.MethodID = tempEntry.MethodID;
                 entry.Name = tempEntry.Name;

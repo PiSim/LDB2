@@ -21,12 +21,10 @@ namespace Tasks
         {
             _container.RegisterType<Object, Views.TaskEdit>(TaskViewNames.TaskEditView);
             _container.RegisterType<Object, Views.TaskMain>(TaskViewNames.TaskMainView);
-
-            _container.RegisterType<ViewModels.ConversionReviewDialogViewModel>();
+            
             _container.RegisterType<ViewModels.TaskEditViewModel>();
             _container.RegisterType<ViewModels.TaskMainViewModel>();
-
-            _container.RegisterType<Views.ConversionReviewDialog>();
+            
             _container.RegisterType<Views.TaskCreationDialog>();
 
             _container.RegisterType<TaskServiceProvider>(new ContainerControlledLifetimeManager());

@@ -184,6 +184,8 @@
     <Compile Include="EntityExtensions\StandardExtension.cs" />
     <Compile Include="EntityExtensions\StandardFileExtension.cs" />
     <Compile Include="EntityExtensions\SubMethodExtension.cs" />
+    <Compile Include="EntityExtensions\SubRequirementExtension.cs" />
+    <Compile Include="EntityExtensions\SubTaskItemExtension.cs" />
     <Compile Include="EntityExtensions\TaskExtension.cs" />
     <Compile Include="EntityExtensions\TaskItemExtension.cs" />
     <Compile Include="EntityExtensions\TestExtension.cs" />
@@ -222,6 +224,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>LabDB.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LabDB1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LabDB.edmx</DependentUpon>
     </Compile>
     <Compile Include="Master.cs">
       <DependentUpon>LabDB.tt</DependentUpon>
@@ -375,6 +382,7 @@
     <None Include="app.config" />
     <EntityDeploy Include="LabDB.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>LabDB1.Designer.cs</LastGenOutput>
     </EntityDeploy>
     <None Include="LabDB.edmx.diagram">
       <DependentUpon>LabDB.edmx</DependentUpon>

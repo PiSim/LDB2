@@ -8,8 +8,11 @@
 -Create Interfacce IDataService e IReportingService per ospitare i nuovi servizi centralizzati
 -Implementazione IDataService come DataAccessService
 -Implementazione IReportingService come ReportingService
--Reimplementazione del Rendering Report come XpsDocument
+-Reimplementazione del Rendering Report come FixedDocument
 -Creata finestra di anteprima report
+-Aggiunto ContextMenu alla griglia della videata principale batch per la stampa dei batch selezionati.
+-Piccole correzioni a logica e gui creazione Batch
+-Rivista struttura dati Task, rimossa assegnazione per prove singole, aggiunta gestione tempi di lavoro
 
 v 0.5.5 -- 03/11/2017
 

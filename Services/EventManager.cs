@@ -155,22 +155,7 @@ namespace Services
                         targetBatch.Update();
                     }
                 });
-
-            _eventAggregator.GetEvent<ReportCreationRequested>().Subscribe(
-                token =>
-                {
-                    Views.ReportCreationDialog creationDialog = new Views.ReportCreationDialog();
-
-                    if (token.TargetBatch != null)
-                        creationDialog.Batch = token.TargetBatch;
-
-                    if (creationDialog.ShowDialog() == true)
-                    {
-                        _eventAggregator.GetEvent<ReportCreated>()
-                                        .Publish(creationDialog.ReportInstance);
-                    }
-                });
-
+            
             _eventAggregator.GetEvent<ReportStatusCheckRequested>()
                             .Subscribe(
                 report =>

@@ -7,9 +7,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Collections;
 
 namespace Infrastructure.Wrappers
 {
+    /// <summary>
+    /// Mimics a Test Entity to Ease Listing, runs eventHandler in parent interface when IsSelection is changed
+    /// </summary>
     public class ReportItemWrapper : BindableBase, ISelectableRequirement
     {
         private bool _isSelected;
@@ -40,11 +44,7 @@ namespace Infrastructure.Wrappers
             }
         }
 
-        public string Method
-        {
-            get { return _instance.Method.Standard.Name; }
-        }
-
+        public string Method => _instance.Method.Standard.Name;
 
         public string Notes
         {
@@ -59,7 +59,8 @@ namespace Infrastructure.Wrappers
         {
             get { return _instance.Method.Property.Name; }
         }
-
+        
+        public Requirement Requirement => _instance;
 
         public Requirement RequirementInstance
         {
@@ -73,5 +74,15 @@ namespace Infrastructure.Wrappers
                 return _instance.SubRequirements.ToList();
             }
         }
+
+        public IEnumerable<SubRequirement> SubTests => _instance.SubRequirements.ToList();
+        
+        public double? WorkHours => _instance?.Method?.Duration;
+
+        public string PropertyName => _instance.Method.Property.Name;
+
+        public string MethodName => _instance.Method.Standard.Name;
+
+        public IEnumerable SubItems => _instance.SubRequirements.ToList();
     }
 }

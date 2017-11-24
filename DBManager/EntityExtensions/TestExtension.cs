@@ -6,8 +6,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DBManager.EntityExtensions
+namespace DBManager
 {
+    public partial class Test
+    {
+        public string MethodName => Method?.Standard?.Name;
+
+        public string PropertyName => Method?.Property?.Name;
+
+    }
+
     public static class TestExtension
     {
         public static void CreateTests(this IEnumerable<Test> testList)

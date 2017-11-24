@@ -23,13 +23,13 @@ namespace DBManager
         public int ID { get; set; }
         public int TaskID { get; set; }
         public Nullable<int> RequirementID { get; set; }
-        public bool IsAssignedToReport { get; set; }
         public Nullable<int> TestID { get; set; }
         public int SpecificationVersionID { get; set; }
         public int MethodID { get; set; }
         public string Name { get; set; }
         public int Position { get; set; }
         public string Description { get; set; }
+        public double WorkHours { get; set; }
     
         public virtual Requirement Requirement { get; set; }
         public virtual Task Task { get; set; }

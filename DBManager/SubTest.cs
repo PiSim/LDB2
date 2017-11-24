@@ -24,7 +24,7 @@ namespace DBManager
         public string Result { get; set; }
         public int TestID { get; private set; }
         public string Name { get; set; }
-        public string Requirement { get; set; }
+        public string RequiredValue { get; set; }
         public string UM { get; set; }
         public Nullable<int> SubRequiremntID { get; set; }
     

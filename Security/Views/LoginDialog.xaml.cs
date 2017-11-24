@@ -64,5 +64,11 @@ namespace Security.Views
         {
             get { return _authenticatedUser; }
         }
+
+        private void Grid_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+                Confirm_Click(sender, e);
+        }
     }
 }

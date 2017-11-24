@@ -24,6 +24,8 @@ namespace Tasks.ViewModels
         private IEnumerable<Person> _leaderList;
         private IEnumerable<Specification> _specificationList;
         private IEnumerable<ReportItemWrapper> _requirementList;
+        private IList<ControlPlan> _controlPlanList;
+        private IList<SpecificationVersion> _versionList;
         private Material _material;
         private Person _requester;
         private Specification _selectedSpecification;
@@ -37,6 +39,7 @@ namespace Tasks.ViewModels
 
             _leaderList = PeopleService.GetPeople(PersonRoleNames.ProjectLeader);
             _specificationList = SpecificationService.GetSpecifications();
+            _requirementList = new List<ReportItemWrapper>();
 
             _requester = _leaderList.FirstOrDefault(prs => prs.ID == _principal.CurrentPerson.ID);
 
@@ -47,21 +50,22 @@ namespace Tasks.ViewModels
                 } );
             
             _confirm = new DelegateCommand<Window>(
-                parent => 
+                parent =>
                 {
-                    _taskInstance = new Task();
                     Batch tempBatch = CommonProcedures.GetBatch(_batchNumber);
-
-                    _taskInstance.batchID = tempBatch.ID;
-                    _taskInstance.IsComplete = false;
-                    _taskInstance.Notes = _notes;
-                    _taskInstance.PipelineOrder = 0;
-                    _taskInstance.PriorityModifier = 0;
-                    _taskInstance.Progress = 0;
-                    _taskInstance.PriorityModifier = 0;
-                    _taskInstance.RequesterID = _requester.ID;
-                    _taskInstance.SpecificationVersionID = _selectedVersion.ID;
-                    _taskInstance.StartDate = DateTime.Now.Date;
+                    _taskInstance = new Task
+                    {
+                        BatchID = tempBatch.ID,
+                        IsComplete = false,
+                        Notes = _notes,
+                        PipelineOrder = 0,
+                        PriorityModifier = 0,
+                        Progress = 0,
+                        RequesterID = _requester.ID,
+                        SpecificationVersionID = _selectedVersion.ID,
+                        StartDate = DateTime.Now.Date,
+                        WorkHours = TotalDuration
+                    };
 
                     foreach (TaskItem tItem in CommonProcedures.GenerateTaskItemList(_requirementList
                                                                 .Where(req => req.IsSelected)
@@ -92,27 +96,11 @@ namespace Tasks.ViewModels
             }
         }
 
-        public DelegateCommand<Window> CancelCommand
-        {
-            get { return _cancel; }
-        }
+        public DelegateCommand<Window> CancelCommand => _cancel;
 
-        public DelegateCommand<Window> ConfirmCommand
-        {
-            get { return _confirm; }
-        }
+        public DelegateCommand<Window> ConfirmCommand => _confirm;
 
-        public IEnumerable<ControlPlan> ControlPlanList
-        {
-            get
-            {
-                if (_selectedSpecification == null)
-                    return new List<ControlPlan>();
-
-                else
-                    return _selectedSpecification.ControlPlans;
-            }
-        }
+        public IList<ControlPlan> ControlPlanList => _controlPlanList;
 
         public string ExternalConstruction
         {
@@ -147,13 +135,7 @@ namespace Tasks.ViewModels
             }
         }
 
-        public Material Material
-        {
-            get
-            {
-                return _material;
-            }
-        }
+        public Material Material => _material;
 
         public string Notes
         {
@@ -174,11 +156,8 @@ namespace Tasks.ViewModels
             }
         }
 
-        public IEnumerable<ReportItemWrapper> RequirementList
-        {
-            get { return _requirementList; }
-        }
-
+        public IEnumerable<ReportItemWrapper> RequirementList => _requirementList;
+        
         public Batch SelectedBatch
         {
             get { return _selectedBatch; }
@@ -206,7 +185,7 @@ namespace Tasks.ViewModels
             {
                 _selectedControlPlan = value;
 
-                _notes = (_selectedControlPlan != null) ? _selectedControlPlan.Name : "";
+                Notes = (_selectedControlPlan != null) ? _selectedControlPlan.Name : "";
 
                 RaisePropertyChanged("SelectedControlPlan");
                 if (value != null && _requirementList != null)
@@ -220,14 +199,15 @@ namespace Tasks.ViewModels
             set
             {
                 _selectedSpecification = value;
-                _selectedSpecification.Load();
-
+                _controlPlanList = _selectedSpecification.GetControlPlans();
+                _versionList = _selectedSpecification.GetVersions();
+                
                 RaisePropertyChanged("ControlPlanList");
                 RaisePropertyChanged("IsSpecificationSelected");
                 RaisePropertyChanged("SelectedSpecification");
                 RaisePropertyChanged("VersionList");
 
-                SelectedControlPlan = ControlPlanList.FirstOrDefault(cp => cp.IsDefault);
+                SelectedControlPlan = ControlPlanList.First(cp => cp.IsDefault);
                 SelectedVersion = VersionList.First(sv => sv.IsMain);             
             }
         }
@@ -257,31 +237,14 @@ namespace Tasks.ViewModels
             }
         }
 
-        public IEnumerable<Specification> SpecificationList
-        {
-            get { return _specificationList; }
-        }
+        public IEnumerable<Specification> SpecificationList => _specificationList;
 
-        public IEnumerable<SpecificationVersion> VersionList
-        {
-            get
-            {
-                if (_selectedSpecification == null)
-                    return new List<SpecificationVersion>();
+        public IList<SpecificationVersion> VersionList => _versionList;
 
-                else
-                    return _selectedSpecification.SpecificationVersions;
-            }
-        }
+        public Task TaskInstance => _taskInstance;
 
-        public Task TaskInstance
-        {
-            get { return _taskInstance; }
-        }
-
-        public double TotalDuration
-        {
-            get { return _requirementList.Sum(req => req.Duration); }
-        }
+        public double TotalDuration => (_requirementList != null) ? _requirementList.Where(req => req.IsSelected)
+                                                                                    .Sum(req => req.Duration) : 0;
+        
     }
 }
