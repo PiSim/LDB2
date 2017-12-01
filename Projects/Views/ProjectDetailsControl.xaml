@@ -11,7 +11,7 @@
                       Height="Auto">
         <Grid DataContext="{Binding Project}">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
+                <ColumnDefinition Width="110"/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>

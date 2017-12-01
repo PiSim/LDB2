@@ -11,6 +11,7 @@ namespace Infrastructure.Wrappers
     {
         string PropertyName { get; }
         string MethodName { get; }
+        string Notes { get; }
         IEnumerable SubItems { get; }
         double? WorkHours { get; }
     }

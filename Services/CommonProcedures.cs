@@ -15,28 +15,6 @@ namespace Services
 {
     public static class CommonProcedures
     {
-        public static bool AddTestsToReport(Report entry)
-        {
-            AddTestDialog testDialog = new AddTestDialog();
-            testDialog.ReportInstance = entry ?? throw new NullReferenceException();
-
-            if (testDialog.ShowDialog() == true)
-            {
-                if (testDialog.TestList.Count() == 0)
-                    return false;
-
-                IEnumerable<Test> testList = GenerateTestList(testDialog.TestList);
-
-                foreach (Test tst in testList)
-                    tst.ReportID = entry.ID;
-                testList.CreateTests();
-
-                return true;
-            }
-
-            else
-                return false;
-        }
 
         public static void ApplyControlPlan(IEnumerable<ISelectableRequirement> reqList, ControlPlan conPlan)
         {
@@ -130,36 +108,6 @@ namespace Services
                 }
 
                 output.Add(tempItem);
-            }
-
-            return output;
-        }
-
-        public static ICollection<Test> GenerateTestList(IEnumerable<ISelectableRequirement> reqList)
-        {
-            List<Test> output = new List<Test>();
-
-            foreach (ISelectableRequirement req in reqList.Where(isr => isr.IsSelected))
-            {
-                req.RequirementInstance.Load();
-
-                Test tempTest = new Test();
-                tempTest.Duration = req.RequirementInstance.Method.Duration;
-                tempTest.IsComplete = false;
-                tempTest.MethodID = req.RequirementInstance.Method.ID;
-                tempTest.RequirementID = req.RequirementInstance.ID;
-                tempTest.Notes = req.RequirementInstance.Description;
-
-                foreach (SubRequirement subReq in req.RequirementInstance.SubRequirements)
-                {
-                    SubTest tempSubTest = new SubTest();
-                    tempSubTest.Name = subReq.SubMethod.Name;
-                    tempSubTest.RequiredValue = subReq.RequiredValue;
-                    tempSubTest.SubRequiremntID = subReq.ID;
-                    tempSubTest.UM = subReq.SubMethod.UM;
-                    tempTest.SubTests.Add(tempSubTest);
-                }
-                output.Add(tempTest);
             }
 
             return output;

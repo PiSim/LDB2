@@ -22,9 +22,17 @@ namespace Reports.ViewModels
 {   
     public class ReportCreationDialogViewModel : BindableBase, INotifyDataErrorInfo, IRequirementSelector 
     {
+        public enum CreationModes
+        {
+            Report,
+            ReportFromTask,
+            Task
+        }
+        
         private bool _isCreatingFromTask;
         private Batch _selectedBatch;
         private ControlPlan _selectedControlPlan;
+        private CreationModes _creationMode;
         private DBPrincipal _principal;
         private DelegateCommand<Window> _cancel, _confirm;
         private readonly Dictionary<string, ICollection<string>> _validationErrors = new Dictionary<string, ICollection<string>>();
@@ -51,6 +59,7 @@ namespace Reports.ViewModels
         {
             _eventAggregator = aggregator;
             _principal = principal;
+            _creationMode = CreationModes.Report;
             _isCreatingFromTask = false;
 
             _number = DBManager.Services.ReportService.GetNextReportNumber();
@@ -61,6 +70,8 @@ namespace Reports.ViewModels
 
             _confirm = new DelegateCommand<Window>(
                 parent => {
+
+                    // Checks if DoNotTest flag is enabled and asks for user confirmation if it is
 
                     if (_selectedBatch.DoNotTest)
                     {
@@ -75,32 +86,6 @@ namespace Reports.ViewModels
                         _selectedBatch.DoNotTest = false;
                         _selectedBatch.Update();
                     }
-
-                    _reportInstance = new Report
-                    {
-                        AuthorID = _author.ID,
-                        BatchID = _selectedBatch.ID,
-                        Category = "TR",
-                        Description = (_selectedControlPlan != null) ? _selectedControlPlan.Name : _description,
-                        IsComplete = false,
-                        Number = _number,
-                        SpecificationVersionID = _selectedVersion.ID,
-                        StartDate = DateTime.Now.ToShortDateString()
-                    };
-
-                    foreach (Test tst in CommonProcedures.GenerateTestList(_requirementList))
-                        _reportInstance.Tests.Add(tst);
-
-                    _reportInstance.TotalDuration = _reportInstance.Tests.Sum(tst => tst.Duration);
-
-                    _reportInstance.Create();
-
-                    if (_taskInstance != null)
-                    {
-                        _taskInstance.ReportID = _reportInstance.ID;
-                        _taskInstance.Update();
-                    }
-                    
                     parent.DialogResult = true;
                 },
                 parent => !HasErrors);
@@ -193,8 +178,20 @@ namespace Reports.ViewModels
                 return _controlPlanList;
             }
         }
-
+        
         public bool ControlPlanSelectionEnabled => !IsCreatingFromTask;
+
+        public CreationModes CreationMode
+        {
+            get => _creationMode;
+            set
+            {
+                _creationMode = value;
+
+                IsCreatingFromTask = (_creationMode == CreationModes.Report);
+                
+            }
+        }
 
         public string Description
         {
@@ -220,7 +217,7 @@ namespace Reports.ViewModels
         public bool IsCreatingFromTask
         {
             get => _isCreatingFromTask;
-            set
+            private set
             {
                 _isCreatingFromTask = value;
                 RaisePropertyChanged();
@@ -325,6 +322,9 @@ namespace Reports.ViewModels
                 }
             }
         }
+
+        public IEnumerable<Requirement> SelectedRequirements => _requirementList.Where(req => req.IsSelected)
+                                                                                .Select(req => req.RequirementInstance);
 
         public Specification SelectedSpecification
         {
@@ -432,8 +432,8 @@ namespace Reports.ViewModels
                 // Sets value
                 _taskInstance = value;
 
-                // Sets bool value to lock GUI fields
-                IsCreatingFromTask = true;
+                // Sets the Batch instance
+                BatchNumber = _taskInstance.Batch.Number;
 
                 // Selects correct specification 
                 SelectedSpecification = _specificationList.First(spc => spc.ID == _taskInstance.SpecificationVersion.SpecificationID);

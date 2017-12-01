@@ -59,15 +59,27 @@ namespace Reporting
             return newPage;
         }
 
-        internal void AddStandardHeader(Grid targetGrid)
+        internal void AddStandardHeader(Grid targetGrid,
+                                        string title = "")
         {
-            targetGrid.Children.Add(new StandardHeader());
+            targetGrid.Children.Add(new StandardHeader()
+            {
+                Title = title
+            });
         }
 
-        internal void AddBatchList(Grid targetGrid, IEnumerable<DBManager.Batch> batchList)
+        internal void AddBatchList(Grid targetGrid, IEnumerable<object> batchList)
         {
             BatchList listElement = new BatchList();
             listElement.MainList.ItemsSource = batchList;
+
+            targetGrid.Children.Add(listElement);
+        }
+
+        internal void AddTaskList(Grid targetGrid, IEnumerable<object> taskList)
+        {
+            TaskList listElement = new TaskList();
+            listElement.MainList.ItemsSource = taskList;
 
             targetGrid.Children.Add(listElement);
         }
@@ -145,15 +157,15 @@ namespace Reporting
         }
 
         /// <summary>
-        /// Divides a Batch IEnumerable in multiple ones with an appropriate number of elements for visualization in a single page
+        /// Divides an IEnumerable in multiple ones with an appropriate number of elements for visualization in a single page
         /// </summary>
-        /// <param name="batchList">The Batch IEnumerable to divide</param>
+        /// <param name="entityList">The IEnumerable to divide</param>
         /// <returns>An IEnumerable containing the divided Ienumerables</returns>
-        internal IEnumerable<IEnumerable<Batch>> PaginateBatchList(IEnumerable<Batch> batchList)
+        internal IEnumerable<IEnumerable<object>> PaginateEntityList(IEnumerable<object> entityList)
         {
             int elementsPerPage = 25;
 
-            return batchList.Select((x, i) => new { Index = i, Value = x })
+            return entityList.Select((x, i) => new { Index = i, Value = x })
                             .GroupBy(x => x.Index / elementsPerPage)
                             .Select(x => x.Select(v => v.Value).ToList())
                             .ToList();

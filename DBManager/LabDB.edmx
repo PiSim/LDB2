@@ -1502,6 +1502,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="report_to_task">
+          <End Role="reports" Type="Self.reports" Multiplicity="0..1" />
+          <End Role="tasks" Type="Self.tasks" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="reports">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="tasks">
+              <PropertyRef Name="reportID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="report_to_test">
           <End Role="reports" Type="Self.reports" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -1809,18 +1821,6 @@
             </Principal>
             <Dependent Role="task_items">
               <PropertyRef Name="taskID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="task_to_report">
-          <End Role="tasks" Type="Self.tasks" Multiplicity="0..1" />
-          <End Role="reports" Type="Self.reports" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="tasks">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="reports">
-              <PropertyRef Name="parent_taskID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2262,6 +2262,10 @@
             <End Role="reports" EntitySet="reports" />
             <End Role="report_files" EntitySet="report_files" />
           </AssociationSet>
+          <AssociationSet Name="report_to_task" Association="Self.report_to_task">
+            <End Role="reports" EntitySet="reports" />
+            <End Role="tasks" EntitySet="tasks" />
+          </AssociationSet>
           <AssociationSet Name="report_to_test" Association="Self.report_to_test">
             <End Role="reports" EntitySet="reports" />
             <End Role="tests" EntitySet="tests" />
@@ -2357,10 +2361,6 @@
           <AssociationSet Name="task_to_item" Association="Self.task_to_item">
             <End Role="tasks" EntitySet="tasks" />
             <End Role="task_items" EntitySet="task_items" />
-          </AssociationSet>
-          <AssociationSet Name="task_to_report" Association="Self.task_to_report">
-            <End Role="tasks" EntitySet="tasks" />
-            <End Role="reports" EntitySet="reports" />
           </AssociationSet>
           <AssociationSet Name="test" Association="Self.test">
             <End Role="tests" EntitySet="tests" />
@@ -2651,9 +2651,8 @@
           <NavigationProperty Name="Tests" Relationship="Self.report_to_test" FromRole="reports" ToRole="tests" />
           <NavigationProperty Name="SpecificationVersion" Relationship="Self.specversion_to_report" FromRole="reports" ToRole="specification_versions" />
           <Property Name="IsComplete" Type="Boolean" Nullable="false" />
-          <Property Name="ParentTaskID" Type="Int32" />
-          <NavigationProperty Name="ParentTask" Relationship="labdbModel.task_to_report" FromRole="Report" ToRole="Task" />
           <Property Name="TotalDuration" Type="Double" Nullable="false" />
+          <NavigationProperty Name="ParentTasks" Relationship="labdbModel.report_to_task" FromRole="Report" ToRole="Task" />
         </EntityType>
         <EntityType Name="Requirement">
           <Key>
@@ -2781,14 +2780,14 @@
           <NavigationProperty Name="SpecificationVersion" Relationship="Self.specversion_to_task" FromRole="tasks" ToRole="specification_versions" />
           <Property Name="StartDate" Type="DateTime"  Nullable="false" />
           <Property Name="EndDate" Type="DateTime" />
-          <Property Name="IsComplete" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="TaskItems" Relationship="labdbModel.task_to_item" FromRole="Task" ToRole="task_items" />
           <NavigationProperty Name="Batch" Relationship="labdbModel.batch_to_task" FromRole="Task" ToRole="Batch" />
-          <NavigationProperty Name="Reports" Relationship="labdbModel.task_to_report" FromRole="Task" ToRole="Report" />
-          <Property Name="AllItemsAssigned" Type="Boolean" Nullable="false" />
-          <Property Name="IsAssigned" Type="Boolean" Nullable="false" />
           <Property Name="ReportID" Type="Int32" />
           <Property Name="WorkHours" Type="Double" Nullable="false" />
+          <NavigationProperty Name="Report" Relationship="labdbModel.report_to_task" FromRole="Task" ToRole="Report" />
+          <Property Name="TP1_NONUSARE" Type="Boolean" Nullable="false" />
+          <Property Name="TP2_NONUSARE" Type="Boolean" Nullable="false" />
+          <Property Name="TP3_NONUSARE" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="Test">
           <Key>
@@ -3480,10 +3479,6 @@
             <End Role="person_roles" EntitySet="PersonRoles" />
             <End Role="person_role_mappings" EntitySet="PersonRoleMappings" />
           </AssociationSet>
-          <AssociationSet Name="task_to_report" Association="labdbModel.task_to_report">
-            <End Role="Task" EntitySet="Tasks" />
-            <End Role="Report" EntitySet="Reports" />
-          </AssociationSet>
           <AssociationSet Name="calibration_reference_mappings" Association="labdbModel.calibration_reference_mappings">
             <End Role="CalibrationReport" EntitySet="CalibrationReports" />
             <End Role="Instrument" EntitySet="Instruments" />
@@ -3646,6 +3641,10 @@
           <AssociationSet Name="requirement_to_cplan_item" Association="labdbModel.requirement_to_cplan_item">
             <End Role="Requirement" EntitySet="Requirements" />
             <End Role="control_plan_items_b" EntitySet="ControlPlanItems" />
+          </AssociationSet>
+          <AssociationSet Name="report_to_task" Association="labdbModel.report_to_task">
+            <End Role="Report" EntitySet="Reports" />
+            <End Role="Task" EntitySet="Tasks" />
           </AssociationSet>
           </EntityContainer>
         <Association Name="overridden_to_requirement">
@@ -4231,18 +4230,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="task_to_report">
-          <End Type="labdbModel.Task" Role="Task" Multiplicity="0..1" />
-          <End Type="labdbModel.Report" Role="Report" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Task">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="Report">
-              <PropertyRef Name="ParentTaskID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="calibration_reference_mappings">
           <End Type="labdbModel.CalibrationReport" Role="CalibrationReport" Multiplicity="*" />
           <End Type="labdbModel.Instrument" Role="Instrument" Multiplicity="*" />
@@ -4799,6 +4786,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="report_to_task">
+          <End Type="labdbModel.Report" Role="Report" Multiplicity="0..1" />
+          <End Type="labdbModel.Task" Role="Task" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Report">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Task">
+              <PropertyRef Name="ReportID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -4976,7 +4975,6 @@
             <EntityTypeMapping TypeName="labdbModel.Report">
               <MappingFragment StoreEntitySet="reports">
                 <ScalarProperty Name="TotalDuration" ColumnName="total_duration" />
-                <ScalarProperty Name="ParentTaskID" ColumnName="parent_taskID" />
                 <ScalarProperty Name="IsComplete" ColumnName="is_complete" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="AuthorID" ColumnName="authorID" />
@@ -5081,11 +5079,11 @@
           <EntitySetMapping Name="Tasks">
             <EntityTypeMapping TypeName="labdbModel.Task">
               <MappingFragment StoreEntitySet="tasks">
+                <ScalarProperty Name="TP3_NONUSARE" ColumnName="is_assigned" />
+                <ScalarProperty Name="TP2_NONUSARE" ColumnName="all_items_assigned" />
+                <ScalarProperty Name="TP1_NONUSARE" ColumnName="is_complete" />
                 <ScalarProperty Name="WorkHours" ColumnName="work_hours" />
                 <ScalarProperty Name="ReportID" ColumnName="reportID" />
-                <ScalarProperty Name="IsAssigned" ColumnName="is_assigned" />
-                <ScalarProperty Name="AllItemsAssigned" ColumnName="all_items_assigned" />
-                <ScalarProperty Name="IsComplete" ColumnName="is_complete" />
                 <ScalarProperty Name="EndDate" ColumnName="end_date" />
                 <ScalarProperty Name="StartDate" ColumnName="start_date" />
                 <ScalarProperty Name="ID" ColumnName="ID" />

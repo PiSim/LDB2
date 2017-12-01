@@ -10,6 +10,8 @@ namespace DBManager
 {
     public partial class Task
     {
+        public string BatchNumber => Batch?.Number;
+
         /// <summary>
         /// Generates a list of tests based on the taskItems loading all values from the DB
         /// </summary>
@@ -64,6 +66,72 @@ namespace DBManager
                                 .ToList();
             }
         }
+
+        public bool? HasBatchArrived => Batch?.FirstSampleArrived;
+
+        public bool IsAssigned => ReportID != null;
+
+        public bool? IsComplete => Report?.IsComplete;
+
+        /// <summary>
+        /// Reads and stores the entity property values from the DB
+        /// Children collections are not loaded
+        /// </summary>
+        public void Load()
+        {
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                Task tempEntry = entities.Tasks.Include(tsk => tsk.Batch.Material.Aspect)
+                                                .Include(tsk => tsk.Batch.Material.ExternalConstruction)
+                                                .Include(tsk => tsk.Batch.Material.MaterialLine)
+                                                .Include(tsk => tsk.Batch.Material.MaterialType)
+                                                .Include(tsk => tsk.Batch.Material.Project.Oem)
+                                                .Include(tsk => tsk.Batch.Material.Recipe.Colour)
+                                                .Include(tsk => tsk.Batch.Material.Recipe.Master)
+                                                .Include(tsk => tsk.Report)
+                                                .Include(tsk => tsk.Requester)
+                                                .Include(tsk => tsk.SpecificationVersion.Specification.Standard.Organization)
+                                                .First(tsk => tsk.ID == ID);
+                
+                Batch = tempEntry.Batch;
+                BatchID = tempEntry.BatchID;
+                EndDate = tempEntry.EndDate;
+                Notes = tempEntry.Notes;
+                PipelineOrder = tempEntry.PipelineOrder;
+                PriorityModifier = tempEntry.PriorityModifier;
+                Progress = tempEntry.Progress;
+                Report = tempEntry.Report;
+                Requester = tempEntry.Requester;
+                RequesterID = tempEntry.RequesterID;
+                SpecificationVersion = tempEntry.SpecificationVersion;
+                SpecificationVersionID = tempEntry.SpecificationVersionID;
+                StartDate = tempEntry.StartDate;
+            }
+        }
+
+        public string ProjectName => Batch?.Material?.Project?.Name;
+
+        public string RequesterName => Requester.Name;
+
+        public string SpecificationName => SpecificationVersion?.Specification?.Standard?.Name;
+
+        public string SpecificationVersionName => SpecificationVersion?.Name;
+
+        public string TaskStatus
+        {
+            get
+            {
+                if (IsComplete == true)
+                    return "Completo";
+                else if (IsAssigned)
+                    return "In Corso";
+                else
+                    return "Nuovo";
+            }
+        }
+        
     }
 
     public static class TaskExtension
@@ -90,80 +158,6 @@ namespace DBManager
                         .First(tsk => tsk.ID == entry.ID))
                         .State = EntityState.Deleted;
 
-                entities.SaveChanges();
-            }
-        }
-
-        public static void Load(this Task entry)
-        {
-            // Loads all relevant Related Entities for given task instance
-
-            if (entry == null)
-                return;
-
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.Configuration.LazyLoadingEnabled = false;
-                
-                Task tempEntry = entities.Tasks.Include(tsk => tsk.Batch.Material.Aspect)
-                                                .Include(tsk => tsk.Batch.Material.MaterialLine)
-                                                .Include(tsk => tsk.Batch.Material.MaterialType)
-                                                .Include(tsk => tsk.Batch.Material.Project.Oem)
-                                                .Include(tsk => tsk.Batch.Material.Recipe.Colour)
-                                                .Include(tsk => tsk.Batch.Material.Recipe.Master)
-                                                .Include(tsk => tsk.Requester)
-                                                .Include(tsk => tsk.SpecificationVersion.Specification.Standard.Organization)
-                                                .Include(tsk => tsk.TaskItems
-                                                .Select(tski => tski.SubTaskItems))
-                                                .Include(tsk => tsk.TaskItems
-                                                .Select(tski => tski.Test.Report))
-                                                .Include(tsk => tsk.TaskItems
-                                                .Select(tski => tski.Requirement.Method.Standard))
-                                                .Include(tsk => tsk.TaskItems
-                                                .Select(tski => tski.Requirement.Method.Property))
-                                                .First(tsk => tsk.ID == entry.ID);
-
-                entry.AllItemsAssigned = tempEntry.AllItemsAssigned;
-                entry.Batch = tempEntry.Batch;
-                entry.BatchID = tempEntry.BatchID;
-                entry.EndDate = tempEntry.EndDate;
-                entry.IsComplete = tempEntry.IsComplete;
-                entry.Notes = tempEntry.Notes;
-                entry.PipelineOrder = tempEntry.PipelineOrder;
-                entry.PriorityModifier = tempEntry.PriorityModifier;
-                entry.Progress = tempEntry.Progress;
-                entry.Reports = tempEntry.Reports;
-                entry.Requester = tempEntry.Requester;
-                entry.RequesterID = tempEntry.RequesterID;
-                entry.SpecificationVersion = tempEntry.SpecificationVersion;
-                entry.SpecificationVersionID = tempEntry.SpecificationVersionID;
-                entry.StartDate = tempEntry.StartDate;
-                entry.TaskItems = tempEntry.TaskItems;
-            }
-        }
-
-        public static void SetAssigned(this Task entry,
-                                        bool isAssigned)
-        {
-            // Sets the Assignment flag of a Task entry
-
-            using (DBEntities entities = new DBEntities())
-            {
-                entry.AllItemsAssigned = isAssigned;
-                entities.Tasks.AddOrUpdate(entry);
-                entities.SaveChanges();
-            }
-        }
-        
-        public static void SetComplete(this Task entry,
-                                        bool isComplete)
-        {
-            // Sets the Assignment flag of a Task entry
-
-            using (DBEntities entities = new DBEntities())
-            {
-                entry.IsComplete = isComplete;
-                entities.Tasks.AddOrUpdate(entry);
                 entities.SaveChanges();
             }
         }

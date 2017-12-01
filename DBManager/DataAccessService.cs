@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
@@ -9,6 +10,7 @@ namespace DBManager
 {
     public class DataAccessService : IDataService
     {
+
         public DataAccessService()
         {
 
@@ -55,6 +57,17 @@ namespace DBManager
                                         .OrderByDescending(btc => btc.Number)
                                         .Take(numberOfEntries)
                                         .ToList();
+            }
+        }
+        
+        public IList<T> GetQueryResults<T>(IQuery<T> query)
+        {
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return query.RunQuery(entities)
+                            .ToList();
             }
         }
     }

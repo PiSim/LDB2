@@ -19,6 +19,8 @@ namespace Tasks
 
         public void Initialize()
         {
+            _container.RegisterType<ITaskService, TaskService>();
+
             _container.RegisterType<Object, Views.TaskEdit>(TaskViewNames.TaskEditView);
             _container.RegisterType<Object, Views.TaskMain>(TaskViewNames.TaskMainView);
             
@@ -27,11 +29,9 @@ namespace Tasks
             
             _container.RegisterType<Views.TaskCreationDialog>();
 
-            _container.RegisterType<TaskServiceProvider>(new ContainerControlledLifetimeManager());
-            _container.Resolve<TaskServiceProvider>();
-
-            _regionManager.RegisterViewWithRegion(RegionNames.TaskMainListRegion,
-                                                typeof(Views.TaskList));
+            _container.RegisterType<TaskService>(new ContainerControlledLifetimeManager());
+            _container.Resolve<TaskService>();
+            
             _regionManager.RegisterViewWithRegion(RegionNames.MainNavigationRegion
                                                 , typeof(Views.TaskNavigationItem));
         }

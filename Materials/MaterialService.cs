@@ -4,6 +4,7 @@ using DBManager.EntityExtensions;
 using DBManager.Services;
 using Infrastructure;
 using Infrastructure.Events;
+using Infrastructure.Queries.Presentation;
 using Microsoft.Practices.Unity;
 using Prism.Events;
 using Services;
@@ -16,23 +17,26 @@ using System.Threading.Tasks;
 
 namespace Materials
 {
-    public class MaterialService
+    public class MaterialService : IMaterialService
     {
         // Service class for internal use of the Materials Module
         // Performs various CRUD operations on Material-related entities
-
-        private DBEntities _entities;
+        
         private DBPrincipal _principal;
         private EventAggregator _eventAggregator;
+        private readonly IEnumerable<IQueryPresenter<Batch>> _batchQueries = new List<IQueryPresenter<Batch>>
+        {
+            new ArrivedUntestedBatchesQueryPresenter(),
+            new BatchesNotArrivedQueryPresenter(),
+            new Latest25BatchesQueryPresenter()
+        };
         private IUnityContainer _container;
 
-        public MaterialService(DBEntities entities,
-                                DBPrincipal principal,
+        public MaterialService(DBPrincipal principal,
                                 EventAggregator eventAggregator,
                                 IUnityContainer container)
         {
             _container = container;
-            _entities = entities;
             _eventAggregator = eventAggregator;
             _principal = principal;
 
@@ -72,7 +76,7 @@ namespace Materials
             return output;
         }
 
-        internal Aspect CreateAspect()
+        public Aspect CreateAspect()
         {
             Views.AspectCreationDialog aspectCreationDialog = new Views.AspectCreationDialog();
 
@@ -108,6 +112,8 @@ namespace Materials
 
             return newEntry;
         }
+
+        public IEnumerable<IQueryPresenter<Batch>> GetBatchQueries() => _batchQueries;
 
         private void OnColorCreationRequested()
         {

@@ -48,7 +48,7 @@ namespace Infrastructure.Wrappers
 
         public string Notes
         {
-            get { return _instance.Description; }
+            get { return _instance?.Description; }
             set
             {
                 _instance.Description = value;

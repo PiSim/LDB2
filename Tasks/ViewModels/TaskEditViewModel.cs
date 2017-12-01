@@ -75,7 +75,7 @@ namespace Tasks.ViewModels
                 if (_instance == null)
                     return false;
 
-                else if (_instance.IsComplete)
+                else if ((_instance.IsComplete == true) || _instance.IsAssigned)
                     return false;
 
                 else
@@ -99,6 +99,13 @@ namespace Tasks.ViewModels
             }
         }
 
+        public string MaterialConstruction => _instance?.Batch?.Material?.ExternalConstruction?.Name;
+
+        public string MaterialString => _instance?.Batch.Material?.MaterialType.Code
+                                        + _instance?.Batch.Material?.MaterialLine.Code
+                                        + _instance?.Batch.Material?.Aspect.Code
+                                        + _instance?.Batch.Material?.Recipe.Code;
+
         public string Notes
         {
             get
@@ -114,101 +121,39 @@ namespace Tasks.ViewModels
             }
         }
 
-        public Project Project
-        {
-            get
-            {
-                if (_instance == null)
-                    return null;
-                else
-                    return _instance.Batch.Material.Project;
-            }
-        }
+        public Project Project => _instance?.Batch?.Material?.Project;
 
-        public string Requester
-        {
-            get
-            {
-                if (_instance == null)
-                    return null;
+        public string RequesterName => _instance?.Requester?.Name;
 
-                else
-                    return _instance.Requester.Name;
-            }
-        }
+        public IEnumerable<TaskItem> RequiredTestList => (_instance != null) ? _instance.GetTaskItems() : new List<TaskItem>();
 
-        public List<TaskItem> RequiredTestList
-        {
-            get
-            {
-                if (_instance == null)
-                    return new List<TaskItem>();
-                else
-                    return new List<TaskItem>(_instance.TaskItems);
-            }
-        }
+        public DelegateCommand SaveCommand => _save;
 
-        public DelegateCommand SaveCommand
-        {
-            get { return _save; }
-        }
+        public string SpecificationVersionString => _instance?.SpecificationName + " " + _instance?.SpecificationVersionName;
 
-        public string Specification
-        {
-            get
-            {
-                if (_instance == null)
-                    return null;
+        public DateTime? StartDate => _instance?.StartDate;
 
-                else
-                    return _instance.SpecificationVersion.Specification.Standard.Name;
-            }
-        }
-
-        public string SpecificationVersion
-        {
-            get
-            {
-                if (_instance == null)
-                    return null;
-
-                else
-                    return _instance.SpecificationVersion.Name;
-            }
-        }
-
-        public DateTime StartDate
-        {
-            get
-            {
-                if (_instance == null)
-                    return DateTime.Now;
-                else
-                    return _instance.StartDate;
-            }
-        }
-
-        public DelegateCommand StartEditCommand
-        {
-            get { return _startEdit; }
-        }
+        public DelegateCommand StartEditCommand => _startEdit;
 
         public DBManager.Task TaskInstance
         {
             get { return _instance; }
             set
             {
+                EditMode = false;
+
                 _instance = value;
-                _instance.Load();
+                if (_instance != null)
+                    _instance.Load();
 
                 RaisePropertyChanged("BatchNumber");
-                RaisePropertyChanged("CanEdit");
+                RaisePropertyChanged("MaterialConstruction");
+                RaisePropertyChanged("MaterialString");
                 RaisePropertyChanged("Notes");
                 RaisePropertyChanged("Project");
-                RaisePropertyChanged("Requester");
+                RaisePropertyChanged("RequesterName");
                 RaisePropertyChanged("RequiredTestList");
-                RaisePropertyChanged("Specification");
-                RaisePropertyChanged("SpecificationVersion");
+                RaisePropertyChanged("SpecificationVersionString");
                 RaisePropertyChanged("StartDate");
             }
         }

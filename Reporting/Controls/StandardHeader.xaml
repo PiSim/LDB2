@@ -17,6 +17,14 @@
         <Image Source="{StaticResource ResourceKey=VulcaLogo}"
                Height="35"/>
 
+        <TextBlock Name="TitleBox"
+                   VerticalAlignment="Center"
+                   FontSize="20"
+                   FontFamily="Calibri"
+                   FontWeight="Bold"
+                   
+                   Grid.Column="1"/>
+
         <TextBlock Grid.Column="2"
                    VerticalAlignment="Center">
             Data:

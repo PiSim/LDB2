@@ -45,15 +45,23 @@ namespace DBManager.Services
             {
                 entities.Configuration.LazyLoadingEnabled = false;
 
-                return entities.Tasks.Include(tsk => tsk.Batch.Material.Aspect)
-                                    .Include(tsk => tsk.Batch.Material.Project)
-                                    .Include(tsk => tsk.Batch.Material.MaterialLine)
-                                    .Include(tsk => tsk.Batch.Material.MaterialType)
-                                    .Include(tsk => tsk.Batch.Material.Recipe.Colour)
-                                    .Include(tsk => tsk.Requester)
-                                    .Include(tsk => tsk.SpecificationVersion.Specification.Standard)
-                                    .Where(tsk => tsk.IsComplete == false || tsk.IsComplete == includeComplete)
-                                    .Where(tsk => tsk.AllItemsAssigned == false || tsk.AllItemsAssigned == includeAssigned)
+                IQueryable<Task> queryBase = entities.Tasks.Include(tsk => tsk.Batch.Material.Aspect)
+                                                            .Include(tsk => tsk.Batch.Material.Project)
+                                                            .Include(tsk => tsk.Batch.Material.MaterialLine)
+                                                            .Include(tsk => tsk.Batch.Material.MaterialType)
+                                                            .Include(tsk => tsk.Batch.Material.Recipe.Colour)
+                                                            .Include(tsk => tsk.Requester)
+                                                            .Include(tsk => tsk.SpecificationVersion.Specification.Standard);
+
+                if (includeComplete)
+                    return queryBase.ToList();
+
+                if (includeAssigned)
+                    return queryBase.Where(tsk => tsk.Report == null || !tsk.Report.IsComplete )
+                                    .ToList();
+
+                else
+                    return queryBase.Where(tsk => tsk.Report == null)
                                     .ToList();
             }
 

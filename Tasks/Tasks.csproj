@@ -102,7 +102,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="TaskServiceProvider.cs" />
+    <Compile Include="TaskService.cs" />
     <Compile Include="TasksModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -125,9 +125,6 @@
     </Compile>
     <Compile Include="Views\TaskEdit.xaml.cs">
       <DependentUpon>TaskEdit.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\TaskList.xaml.cs">
-      <DependentUpon>TaskList.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\TaskMain.xaml.cs">
       <DependentUpon>TaskMain.xaml</DependentUpon>
@@ -165,6 +162,10 @@
       <Project>{31368a5f-9770-4198-bc3d-4996917b4139}</Project>
       <Name>Navigation</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Reporting\Reporting.csproj">
+      <Project>{E6E57B0F-0C23-4EDD-BEE7-D24A3D2413C5}</Project>
+      <Name>Reporting</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Services\Services.csproj">
       <Project>{715CB64A-55D7-4CA2-ABE9-1BAC70680A02}</Project>
       <Name>Services</Name>
@@ -176,10 +177,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\TaskEdit.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\TaskList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

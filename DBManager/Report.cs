@@ -19,6 +19,7 @@ namespace DBManager
         {
             this.ReportFiles = new HashSet<ReportFile>();
             this.Tests = new HashSet<Test>();
+            this.ParentTasks = new HashSet<Task>();
         }
     
         public int ID { get; set; }
@@ -31,7 +32,6 @@ namespace DBManager
         public int SpecificationVersionID { get; set; }
         public string StartDate { get; set; }
         public bool IsComplete { get; set; }
-        public Nullable<int> ParentTaskID { get; set; }
         public double TotalDuration { get; set; }
     
         public virtual Batch Batch { get; set; }
@@ -41,6 +41,7 @@ namespace DBManager
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Test> Tests { get; set; }
         public virtual SpecificationVersion SpecificationVersion { get; set; }
-        public virtual Task ParentTask { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Task> ParentTasks { get; set; }
     }
 }

@@ -11,7 +11,7 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
-            <ColumnDefinition/>
+            <ColumnDefinition MaxWidth="400"/>
         </Grid.ColumnDefinitions>
         
         <GroupBox Header="Report Richiesti"
@@ -23,44 +23,85 @@
                 </Grid.RowDefinitions>
 
                 <Grid Grid.Row="0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition/>
                         <RowDefinition/>
+                        <RowDefinition/>
                     </Grid.RowDefinitions>
-                    <Button Content="Nuovo"
+                    <StackPanel Orientation="Horizontal">
+
+                        <Button Content="Nuovo"
                             Command="{Binding NewTaskCommand}"
                             Grid.Column="0"
                             Grid.Row="0"
                             Margin="5"
                             Padding="5,2"/>
 
-                    <Button Content="Elimina"
+                        <Button Content="Elimina"
                             Command="{Binding RemoveTaskCommand}"
                             Grid.Column="0"
                             Grid.Row="1"
                             Margin="5"
                             Padding="5,2"/>
 
+                        <Button Content="Stampa"
+                                Command="{Binding PrintTaskListCommand}"
+                                CommandParameter="{Binding Source={x:Reference Name=TaskList}}"
+                                Margin="5"
+                                Padding="5,2"/>
+                    </StackPanel>
+
                     <CheckBox IsChecked="{Binding ShowAssigned, Mode=TwoWay}"
-                              Content="Mostra Assegnati"
+                              Content="Mostra lavori in corso"
                               VerticalAlignment="Center"
-                              Grid.Column="1"
-                              Grid.Row="0"/>
+                              Grid.Row="1"
+                              Margin="5"/>
                     
                     <CheckBox IsChecked="{Binding ShowComplete, Mode=TwoWay}"
-                              Content="Mostra Completi"
+                              Content="Mostra lavori Completi"
                               VerticalAlignment="Center"
-                              Grid.Column="1"
-                              Grid.Row="1"/>
+                              Grid.Row="2"
+                              Margin="5"/>
                 </Grid>
-                
-                <ContentControl prism:RegionManager.RegionName="{Binding MainTaskListRegionName}"
-                                Grid.Row="1"/>
-                
+
+                <DataGrid ItemsSource="{Binding TaskList}"
+                          SelectedItem="{Binding SelectedTask, Mode=TwoWay}"
+                          x:Name="TaskList"
+                          IsReadOnly="True"
+                          AutoGenerateColumns="False"
+                          CanUserAddRows="False"
+                          CanUserDeleteRows="False"
+                          Background="White"
+                          GridLinesVisibility="Horizontal"
+                          SelectionMode="Single"
+                          SelectionUnit="FullRow"
+                          Grid.Row="1">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Commessa" 
+                                            Binding="{Binding Batch.Number}"/>
+                        <DataGridTextColumn Header="Stato"
+                                            Binding="{Binding TaskStatus}"/>
+                        <DataGridTextColumn Header="Progetto" 
+                                            Binding="{Binding Batch.Material.Project.Name}"/>
+                        <DataGridTextColumn Header="Materiale" 
+                                            Binding="{Binding Batch.Material.MaterialType.Code}"/>
+                        <DataGridTextColumn Header="Riga" 
+                                            Binding="{Binding Batch.Material.MaterialLine.Code}"/>
+                        <DataGridTextColumn Header="Aspetto" 
+                                            Binding="{Binding Batch.Material.Aspect.Code}"/>
+                        <DataGridTextColumn Header="Ricetta" 
+                                            Binding="{Binding Batch.Material.Recipe.Code}"/>
+                        <DataGridTextColumn Header="Specifica" 
+                                            Binding="{Binding SpecificationVersion.Specification.Standard.Name}"/>
+                        <DataGridTextColumn Header="Versione" 
+                                            Binding="{Binding SpecificationVersion.Name}"/>
+                        <DataGridTextColumn Header="Descrizione" 
+                                            Binding="{Binding Notes}"/>
+                        <DataGridTextColumn Header="Richiedente" 
+                                            Binding="{Binding Requester.Name}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+
             </Grid>
         </GroupBox>
 

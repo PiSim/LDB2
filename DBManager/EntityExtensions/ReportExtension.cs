@@ -29,7 +29,7 @@ namespace DBManager
                                             .Include(rep => rep.Batch.Material.Project.Leader)
                                             .Include(rep => rep.Batch.Material.MaterialType)
                                             .Include(rep => rep.Batch.Material.Recipe.Colour)
-                                            .Include(rep => rep.ParentTask)
+                                            .Include(rep => rep.ParentTasks)
                                             .Include(rep => rep.SpecificationVersion.Specification.Standard.Organization)
                                             .First(rep => rep.ID == ID);
 
@@ -42,8 +42,7 @@ namespace DBManager
                 EndDate = tempEntry.EndDate;
                 IsComplete = tempEntry.IsComplete;
                 Number = tempEntry.Number;
-                ParentTask = tempEntry.ParentTask;
-                ParentTaskID = tempEntry.ParentTaskID;
+                ParentTasks = tempEntry.ParentTasks;
                 SpecificationVersion = tempEntry.SpecificationVersion;
                 SpecificationVersionID = tempEntry.SpecificationVersionID;
                 StartDate = tempEntry.StartDate;

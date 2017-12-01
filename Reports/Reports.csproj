@@ -104,7 +104,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ReportService.cs" />
+    <Compile Include="ViewModels\AddTestDialogViewModel.cs" />
     <Compile Include="ViewModels\ReportCreationDialogViewModel.cs" />
+    <Compile Include="Views\AddTestDialog.xaml.cs">
+      <DependentUpon>AddTestDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ExternalReportList.xaml.cs">
       <DependentUpon>ExternalReportList.xaml</DependentUpon>
     </Compile>
@@ -187,6 +191,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Views\AddTestDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\ExternalReportList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

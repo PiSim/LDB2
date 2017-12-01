@@ -25,5 +25,12 @@ namespace Reporting.Controls
             InitializeComponent();
             DateField.Text = DateTime.Now.ToShortDateString();
         }
+
+        public string Title
+        {
+            get => TitleBox.Text;
+            set => TitleBox.Text = value;
+        }
+
     }
 }

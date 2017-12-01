@@ -49,8 +49,7 @@ namespace Materials
             _container.RegisterType<ViewModels.SampleArchiveViewModel>();
             _container.RegisterType<ViewModels.SampleLogViewModel>();
 
-            _container.RegisterType<MaterialService>(new ContainerControlledLifetimeManager());
-            _container.Resolve<MaterialService>();
+            _container.RegisterType<IMaterialService, MaterialService>();
 
             _regionManager.RegisterViewWithRegion(RegionNames.AspectDetailBatchListRegion,
                                                 typeof(Views.BatchList));

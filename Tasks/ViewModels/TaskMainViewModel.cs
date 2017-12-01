@@ -7,11 +7,12 @@ using Microsoft.Practices.Unity;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
+using Reporting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Windows.Controls;
 
 namespace Tasks.ViewModels
 {
@@ -19,18 +20,26 @@ namespace Tasks.ViewModels
     {
         private bool _showAssigned, _showComplete;
         private DBPrincipal _principal;
-        private DelegateCommand _newTask, _removeTask;
+        private DelegateCommand _newTask, 
+                                _removeTask;
+        private DelegateCommand<DataGrid> _printTaskList;
         private EventAggregator _eventAggregator;
         private DBManager.Task _selectedTask;
+        private IReportingService _reportingService;
+        private ITaskService _taskService;
 
         public TaskMainViewModel(DBPrincipal principal,
-                                EventAggregator eventAggregator) 
+                                EventAggregator eventAggregator,
+                                IReportingService reportingService,
+                                ITaskService taskService) 
             : base()
         {
             _eventAggregator = eventAggregator;
             _principal = principal;
+            _reportingService = reportingService;
             _showAssigned = false;
             _showComplete = false;
+            _taskService = taskService;
 
             _eventAggregator.GetEvent<TaskListUpdateRequested>().Subscribe(() => RaisePropertyChanged("TaskList"));
 
@@ -43,11 +52,15 @@ namespace Tasks.ViewModels
             _newTask = new DelegateCommand(
                 () =>
                 {
-                    NewTaskToken token = new NewTaskToken();
-                    _eventAggregator.GetEvent<TaskCreationRequested>().
-                        Publish(token);
+                    _taskService.CreateNewTask();
                 },
                 () => CanCreateTask );
+
+            _printTaskList = new DelegateCommand<DataGrid>(
+                grid =>
+                {
+                    _reportingService.PrintTaskList(grid.ItemsSource as IEnumerable<Task>);
+                });
 
             _removeTask = new DelegateCommand(
                 () =>
@@ -56,7 +69,7 @@ namespace Tasks.ViewModels
                     SelectedTask = null;
                     RaisePropertyChanged("TaskList");
                 },
-                () => CanDeleteTask );
+                () => CanDeleteTask);
         }
 
         public bool CanCreateTask
@@ -74,7 +87,10 @@ namespace Tasks.ViewModels
             {
                 if (_selectedTask == null)
                     return false;
-                
+
+                else if (_selectedTask.IsAssigned || (_selectedTask.IsComplete == true))
+                    return false;
+
                 else if (_selectedTask.Requester.ID == _principal.CurrentPerson.ID && _principal.IsInRole(UserRoleNames.TaskEdit))
                     return true;
 
@@ -105,7 +121,10 @@ namespace Tasks.ViewModels
         {
             get { return _removeTask; }
         }
-        
+
+        public DelegateCommand<DataGrid> PrintTaskListCommand => _printTaskList;
+
+
         public DBManager.Task SelectedTask 
         {
             get { return _selectedTask; }
@@ -157,7 +176,7 @@ namespace Tasks.ViewModels
         {
             get
             {
-                return TaskService.GetTasks(_showComplete,
+                return DBManager.Services.TaskService.GetTasks(_showComplete,
                                             _showAssigned);
             }
         }

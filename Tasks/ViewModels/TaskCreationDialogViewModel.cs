@@ -56,7 +56,6 @@ namespace Tasks.ViewModels
                     _taskInstance = new Task
                     {
                         BatchID = tempBatch.ID,
-                        IsComplete = false,
                         Notes = _notes,
                         PipelineOrder = 0,
                         PriorityModifier = 0,

@@ -7,7 +7,6 @@ namespace Infrastructure.Wrappers
 {
     public class TaskItemWrapper : ITestItem
     {
-
         private TaskItem _instance;
 
         public TaskItemWrapper(TaskItem instance)
@@ -15,9 +14,11 @@ namespace Infrastructure.Wrappers
             _instance = instance;
         }
 
-        public string PropertyName => _instance?.Method?.Standard?.Name;
+        public string PropertyName => _instance?.Method?.Property?.Name;
 
-        public string MethodName => _instance?.Method?.Property?.Name;
+        public string MethodName => _instance?.Method?.Standard?.Name;
+
+        public string Notes => _instance?.Description;
 
         public IEnumerable SubItems => _instance?.SubTaskItems;
 

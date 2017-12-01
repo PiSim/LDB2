@@ -2,6 +2,8 @@
 using DBManager.Services;
 using Infrastructure;
 using Infrastructure.Events;
+using Infrastructure.Queries;
+using Infrastructure.Queries.Presentation;
 using Navigation;
 using Prism.Commands;
 using Prism.Events;
@@ -19,14 +21,18 @@ namespace Materials.ViewModels
 {
     class BatchMainViewModel : BindableBase
     {
+        private bool _isPrintMenuOpen;
         private DBPrincipal _principal;
         private DelegateCommand _createBatch, 
                                 _quickOpen, 
+                                _openPrintMenu,
                                 _openSampleLogView,
                                 _printStatusList,
                                 _refresh;
+        private DelegateCommand<IQueryPresenter<Batch>> _printBatchQuery;
         private IDataService _dataService;
         private IEventAggregator _eventAggregator;
+        private IMaterialService _materialService;
         private IReportingService _reportingService;
         private Sample _selectedSampleArrival;
         private string _batchNumber;
@@ -34,11 +40,14 @@ namespace Materials.ViewModels
         public BatchMainViewModel(DBPrincipal principal,
                                 IEventAggregator eventAggregator,
                                 IDataService dataService,
+                                IMaterialService materialService,
                                 IReportingService reportingService) 
             : base()
         {
             _dataService = dataService;
             _eventAggregator = eventAggregator;
+            _isPrintMenuOpen = false;
+            _materialService = materialService;
             _principal = principal;
             _reportingService = reportingService;
 
@@ -49,6 +58,12 @@ namespace Materials.ViewModels
                                     .Publish();
                 },
                 () => _principal.IsInRole(UserRoleNames.BatchEdit));
+
+            _openPrintMenu = new DelegateCommand(
+                () =>
+                {
+                    IsPrintMenuOpen = true;
+                });
 
             _openSampleLogView = new DelegateCommand(
                 () =>
@@ -62,6 +77,13 @@ namespace Materials.ViewModels
                 {
                     _eventAggregator.GetEvent<BatchVisualizationRequested>()
                                     .Publish(_batchNumber);
+                });
+
+            _printBatchQuery = new DelegateCommand<IQueryPresenter<Batch>>(
+                query =>
+                {
+                    IEnumerable<Batch> tempQuery = _dataService.GetQueryResults(query.Query);
+                    _reportingService.PrintBatchReport(tempQuery);
                 });
 
             _printStatusList = new DelegateCommand(
@@ -88,6 +110,8 @@ namespace Materials.ViewModels
             }
         }
 
+        public IEnumerable<IQueryPresenter<Batch>> QueryList => _materialService.GetBatchQueries();
+
         public string BatchStatusListRegionName
         {
             get { return RegionNames.BatchStatusListRegion; }
@@ -98,6 +122,18 @@ namespace Materials.ViewModels
             get { return _createBatch; }
         }
 
+        public bool IsPrintMenuOpen
+        {
+            get => _isPrintMenuOpen;
+            set
+            {
+                _isPrintMenuOpen = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public DelegateCommand OpenPrintMenuCommand => _openPrintMenu;
+
         public DelegateCommand OpenSampleLogViewCommand
         {
             get { return _openSampleLogView; }
@@ -107,6 +143,8 @@ namespace Materials.ViewModels
         {
             get { return _quickOpen; }
         }
+
+        public DelegateCommand<IQueryPresenter<Batch>> PrintBatchQueryCommand => _printBatchQuery;
 
         public DelegateCommand PrintStatusListCommand
         {

@@ -13,10 +13,10 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Tasks.Views
+namespace Reporting.Controls
 {
     /// <summary>
-    /// Interaction logic for TaskList.xaml
+    /// Logica di interazione per BatchList.xaml
     /// </summary>
     public partial class TaskList : UserControl
     {

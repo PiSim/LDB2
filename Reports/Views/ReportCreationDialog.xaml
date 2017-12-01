@@ -220,7 +220,7 @@
                         <DataGridTemplateColumn Width="150">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                <DataGrid ItemsSource="{Binding SubTests}"
+                                <DataGrid ItemsSource="{Binding SubItems}"
                                               IsReadOnly="True"
                                               AutoGenerateColumns="False"
                                               HeadersVisibility="None"
@@ -245,7 +245,7 @@
                                                 Width="100">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <DataGrid ItemsSource="{Binding SubTests}"
+                                    <DataGrid ItemsSource="{Binding SubItems}"
                                               IsReadOnly="True"
                                               Name="RequiredValuesGrid"
                                               AutoGenerateColumns="False"
@@ -271,7 +271,7 @@
                                             Width="50">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <DataGrid ItemsSource="{Binding SubTests}"
+                                    <DataGrid ItemsSource="{Binding SubItems}"
                                               IsReadOnly="True"
                                               AutoGenerateColumns="False"
                                               HeadersVisibility="None"
@@ -308,7 +308,7 @@
                         </DataGridTextColumn>
 
                         <DataGridTextColumn Header="Ore lavoro"
-                                            Binding="{Binding Duration,
+                                            Binding="{Binding WorkHours,
                                                               Mode=OneWay}">
 
                             <DataGridTextColumn.ElementStyle>
@@ -338,7 +338,7 @@
             <TextBlock VerticalAlignment="Center"
                        Margin="5">
                 <Run Text="Totale ore lavoro: "/>
-                <Run Text="{Binding WorkHours,
+                <Run Text="{Binding TotalDuration,
                                     Mode=OneWay}"/>
             </TextBlock>
             

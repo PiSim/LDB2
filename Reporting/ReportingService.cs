@@ -6,8 +6,6 @@ using System.Collections.Generic;
 using System.Drawing.Printing;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Xps.Packaging;
@@ -34,9 +32,9 @@ namespace Reporting
             FixedDocument batchReport = new FixedDocument();
             batchReport.DocumentPaginator.PageSize = PageSizes.A4Landscape;
 
-            IEnumerable<IEnumerable<Batch>> paginatedBatches = _docRenderer.PaginateBatchList(batchesToPrint);
+            IEnumerable<IEnumerable<object>> paginatedBatches = _docRenderer.PaginateEntityList(batchesToPrint);
             
-            foreach(IEnumerable<Batch> batchListPage in paginatedBatches)
+            foreach(IEnumerable<object> batchListPage in paginatedBatches)
             {
                 FixedPage currentPage = _docRenderer.AddPageToFixedDocument(batchReport);
                 MainPageGrid currentMainGrid = _docRenderer.AddMainGrid(currentPage);
@@ -45,6 +43,29 @@ namespace Reporting
             };
 
             ShowPreview(batchReport);
+        }
+
+        /// <summary>
+        /// Renders a document detailing a list of Task items and shows it in a preview window for printing.
+        /// </summary>
+        /// <param name="batchesToPrint">The list of Tasks to print</param>
+        public void PrintTaskList(IEnumerable<Task> taskList)
+        {
+            FixedDocument taskReport = new FixedDocument();
+            taskReport.DocumentPaginator.PageSize = PageSizes.A4Landscape;
+
+            IEnumerable<IEnumerable<object>> paginatedTasks = _docRenderer.PaginateEntityList(taskList);
+
+            foreach (IEnumerable<object> taskListPage in paginatedTasks)
+            {
+                FixedPage currentPage = _docRenderer.AddPageToFixedDocument(taskReport);
+                MainPageGrid currentMainGrid = _docRenderer.AddMainGrid(currentPage);
+                _docRenderer.AddStandardHeader(currentMainGrid.HeaderGrid,
+                                                "Lista Lavori");
+                _docRenderer.AddTaskList(currentMainGrid.BodyGrid, taskListPage);
+            };
+
+            ShowPreview(taskReport);
         }
 
         internal void ShowPreview(IDocumentPaginatorSource doc)

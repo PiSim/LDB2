@@ -57,6 +57,8 @@ namespace Infrastructure
 
         public string MethodName => throw new NotImplementedException();
 
+        public string Notes => _requirement.Description;
+
         public IEnumerable SubTests => throw new NotImplementedException();
 
         bool ISelectableRequirement.IsSelected { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }

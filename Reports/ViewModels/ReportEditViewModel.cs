@@ -32,14 +32,17 @@ namespace Reports.ViewModels
         private EventAggregator _eventAggregator;
         private Report _instance;
         private IEnumerable<TestWrapper> _testList;
+        private IReportService _reportService;
         private ReportFile _selectedFile;
         
         public ReportEditViewModel(DBPrincipal principal,
-                                    EventAggregator aggregator) : base()
+                                    EventAggregator aggregator,
+                                    IReportService reportService) : base()
         {
             _editMode = false;
             _eventAggregator = aggregator;
             _principal = principal;
+            _reportService = reportService;
 
             _addFile = new DelegateCommand(
                 () =>
@@ -69,7 +72,7 @@ namespace Reports.ViewModels
             _addTests = new DelegateCommand(
                 () =>
                 {
-                    if (CommonProcedures.AddTestsToReport(_instance))
+                    if (_reportService.AddTestsToReport(_instance))
                     {
                         TestList = new List<TestWrapper>(_instance.GetTests().Select(tst => new TestWrapper(tst)));
                         _eventAggregator.GetEvent<ReportStatusCheckRequested>()
@@ -118,8 +121,6 @@ namespace Reports.ViewModels
                     {
                         tempTaskItem = TaskService.GetTaskItem(tempTaskItem.ID);
                         tempTaskItem.Update();
-                        _eventAggregator.GetEvent<TaskStatusCheckRequested>()
-                                        .Publish(TaskService.GetTask(tempTaskItem.TaskID));
                     }
 
                     _eventAggregator.GetEvent<ReportStatusCheckRequested>()

@@ -21,11 +21,11 @@ namespace Materials.ViewModels
         private DelegateCommand _createAspect, _removeAspect;
         private EventAggregator _eventAggregator;
         private IEnumerable<Aspect> _aspectList;
-        private readonly MaterialService _materialService;
+        private readonly IMaterialService _materialService;
 
         public AspectMainViewModel(DBPrincipal principal,
                                 EventAggregator eventAggregator,
-                                MaterialService materialService) : base()
+                                IMaterialService materialService) : base()
         {
             _principal = principal;
             _eventAggregator = eventAggregator;

@@ -3,18 +3,21 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Materials.Views"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:con="clr-namespace:Controls.Behaviours;assembly=Controls"
              xmlns:prism="http://prismlibrary.com/"
              prism:ViewModelLocator.AutoWireViewModel="True"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" d:DesignWidth="400">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="35"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
 
-        
+        <FrameworkElement Name="dummyElement"
+                          Visibility="Collapsed"/>
+
         <StackPanel Orientation="Horizontal"
                     Grid.Column="0"
                     Grid.Row="0">
@@ -32,8 +35,29 @@
                     Margin="5"/>
 
             <Button Content="Stampa"
-                    Command="{Binding PrintStatusListCommand}"
-                    Margin="5"/>
+                    ContextMenuService.IsEnabled="False"
+                    Margin="5">
+                <i:Interaction.Behaviors>
+                    <con:DropDownButtonBehaviour/>
+                </i:Interaction.Behaviors>
+                <Button.ContextMenu>
+
+                    <ContextMenu ItemsSource="{Binding QueryList}">
+                        <ContextMenu.ItemContainerStyle>
+                            <Style TargetType="MenuItem">
+                                <Setter Property="Header"
+                                        Value="{Binding Name}"/>
+                                <Setter Property="Command"
+                                        Value="{Binding DataContext.PrintBatchQueryCommand, 
+                                                        RelativeSource={RelativeSource Mode=FindAncestor,
+                                                                                       AncestorType=Button}}"/>
+                                <Setter Property="CommandParameter"
+                                        Value="{Binding }"/>
+                            </Style>
+                        </ContextMenu.ItemContainerStyle>
+                    </ContextMenu>
+                </Button.ContextMenu>
+            </Button>
         </StackPanel>
 
         <TabControl Grid.Column="0"

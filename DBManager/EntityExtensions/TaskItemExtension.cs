@@ -29,6 +29,10 @@ namespace DBManager
 
             return output;
         }
+
+        public string MethodName => Method?.Standard?.Name;
+
+        public string PropertyName => Method?.Property?.Name;
     }
     
     public static class TaskItemExtension

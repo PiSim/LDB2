@@ -220,6 +220,7 @@
     <Compile Include="InstrumentUtilizationArea.cs">
       <DependentUpon>LabDB.tt</DependentUpon>
     </Compile>
+    <Compile Include="IQuery.cs" />
     <Compile Include="LabDB.Context1.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

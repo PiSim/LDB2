@@ -21,15 +21,22 @@ namespace Reports.Views
 
         public Batch Batch
         {
-            set { (DataContext as ViewModels.ReportCreationDialogViewModel).BatchNumber = value.Number; }
+            get => ViewModel.SelectedBatch;
+            set { ViewModel.BatchNumber = value.Number; }
         }
-
-        public Report ReportInstance => (DataContext as ViewModels.ReportCreationDialogViewModel).ReportInstance; 
 
         public Task TaskInstance
         {
-            get => (DataContext as ViewModels.ReportCreationDialogViewModel).TaskInstance;
-            set => (DataContext as ViewModels.ReportCreationDialogViewModel).TaskInstance = value;
+            get => ViewModel.TaskInstance;
+            set => ViewModel.TaskInstance = value;
+        }
+
+        public ViewModels.ReportCreationDialogViewModel ViewModel => DataContext as ViewModels.ReportCreationDialogViewModel;
+
+        public ViewModels.ReportCreationDialogViewModel.CreationModes CreationMode
+        {
+            get => ViewModel.CreationMode;
+            set => ViewModel.CreationMode = value;
         }
     }
 }

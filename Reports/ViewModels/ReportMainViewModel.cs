@@ -47,12 +47,8 @@ namespace Reports.ViewModels
             _removeReport = new DelegateCommand(
                 () =>
                 {
-                    DBManager.Task tempTask = _selectedReport.ParentTask;
                     _selectedReport.Delete();
                     _eventAggregator.GetEvent<ReportDeleted>().Publish(_selectedReport);
-
-                    if (tempTask != null)
-                        _eventAggregator.GetEvent<TaskStatusCheckRequested>().Publish(tempTask);
                 },
                 () => CanRemoveReport && SelectedReport != null);
 

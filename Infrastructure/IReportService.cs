@@ -8,6 +8,7 @@ namespace Infrastructure
 {
     public interface IReportService
     {
+        bool AddTestsToReport(Report entry);
         ExternalReport CreateExternalReport();
         Report CreateReport();
         Report CreateReport(Task parentTask);

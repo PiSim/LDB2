@@ -18,6 +18,7 @@ namespace Services
         public EventManager(EventAggregator eventAggregator)
         {
             _eventAggregator = eventAggregator;
+            
 
             _eventAggregator.GetEvent<BatchCreationRequested>()
                             .Subscribe(
@@ -172,10 +173,6 @@ namespace Services
 
                         _eventAggregator.GetEvent<ReportCompleted>()
                                         .Publish(report);
-
-                        if (report.ParentTask != null)
-                            _eventAggregator.GetEvent<TaskStatusCheckRequested>()
-                                            .Publish(report.ParentTask);
                     }
 
                 });
