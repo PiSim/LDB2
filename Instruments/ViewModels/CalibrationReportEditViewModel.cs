@@ -53,7 +53,7 @@ namespace Instruments.ViewModels
             _eventAggregator = eventAggregator;
 
             _labList = OrganizationService.GetOrganizations(OrganizationRoleNames.CalibrationLab);
-            _resultList = InstrumentService.GetCalibrationResults();
+            _resultList = DBManager.Services.InstrumentService.GetCalibrationResults();
             _techList = PeopleService.GetPeople(PersonRoleNames.CalibrationTech);
 
             _addFile = new DelegateCommand(
@@ -78,7 +78,7 @@ namespace Instruments.ViewModels
                                                                                 Description = ""
                                                                             });
 
-                        InstrumentService.AddCalibrationFiles(fileList);
+                        DBManager.Services.InstrumentService.AddCalibrationFiles(fileList);
                         RaisePropertyChanged("FileList");
                     }
                 });
@@ -86,7 +86,7 @@ namespace Instruments.ViewModels
             _addReference = new DelegateCommand<string>(
                 code =>
                 {
-                    Instrument tempRef = InstrumentService.GetInstrument(code);
+                    Instrument tempRef = DBManager.Services.InstrumentService.GetInstrument(code);
                     if (tempRef != null)
                     {
                         _calibrationInstance.AddReference(tempRef);
@@ -98,7 +98,7 @@ namespace Instruments.ViewModels
             _cancelEdit = new DelegateCommand(
                 () =>
                 {
-                    CalibrationInstance = InstrumentService.GetCalibrationReport(_calibrationInstance.ID);
+                    CalibrationInstance = DBManager.Services.InstrumentService.GetCalibrationReport(_calibrationInstance.ID);
                 },
                 () => EditMode);
 

@@ -121,6 +121,7 @@
     <Compile Include="ViewModels\AspectCreationDialogViewModel.cs" />
     <Compile Include="ViewModels\AspectDetailViewModel.cs" />
     <Compile Include="ViewModels\AspectMainViewModel.cs" />
+    <Compile Include="ViewModels\BatchCreationDialogViewModel.cs" />
     <Compile Include="ViewModels\BatchesNavigationItemViewModel.cs" />
     <Compile Include="ViewModels\BatchInfoViewModel.cs" />
     <Compile Include="ViewModels\BatchMainViewModel.cs" />
@@ -134,6 +135,7 @@
     <Compile Include="ViewModels\ExternalConstructionMainViewModel.cs" />
     <Compile Include="ViewModels\MaterialInfoMainViewModel.cs" />
     <Compile Include="ViewModels\SampleArchiveViewModel.cs" />
+    <Compile Include="ViewModels\SampleLogDialogViewModel.cs" />
     <Compile Include="ViewModels\SampleLogViewModel.cs" />
     <Compile Include="ViewModels\SampleLongTermStorageViewModel.cs" />
     <Compile Include="Views\AspectCreationDialog.xaml.cs">
@@ -144,6 +146,9 @@
     </Compile>
     <Compile Include="Views\AspectMain.xaml.cs">
       <DependentUpon>AspectMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\BatchCreationDialog.xaml.cs">
+      <DependentUpon>BatchCreationDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\BatchesNavigationItem.xaml.cs">
       <DependentUpon>BatchesNavigationItem.xaml</DependentUpon>
@@ -193,6 +198,9 @@
     <Compile Include="Views\SampleLog.xaml.cs">
       <DependentUpon>SampleLog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\SampleLogDialog.xaml.cs">
+      <DependentUpon>SampleLogDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\SampleLongTermStorage.xaml.cs">
       <DependentUpon>SampleLongTermStorage.xaml</DependentUpon>
     </Compile>
@@ -234,10 +242,6 @@
       <Project>{ec7f180a-b306-4d9c-84c8-632bb2e4ae5c}</Project>
       <Name>Security</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Services\Services.csproj">
-      <Project>{715CB64A-55D7-4CA2-ABE9-1BAC70680A02}</Project>
-      <Name>Services</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Page Include="Views\AspectCreationDialog.xaml">
@@ -251,6 +255,10 @@
     <Page Include="Views\AspectMain.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\BatchCreationDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\BatchesNavigationItem.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -313,6 +321,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\SampleLog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\SampleLogDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

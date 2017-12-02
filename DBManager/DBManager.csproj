@@ -323,14 +323,11 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="Services\InstrumentService.cs" />
     <Compile Include="Services\MaterialService.cs" />
     <Compile Include="Services\OrganizationService.cs" />
-    <Compile Include="Services\PeopleService.cs" />
     <Compile Include="Services\ProjectService.cs" />
     <Compile Include="Services\ReportService.cs" />
     <Compile Include="Services\SpecificationService.cs" />
-    <Compile Include="Services\TaskService.cs" />
     <Compile Include="Specification.cs">
       <DependentUpon>LabDB.tt</DependentUpon>
     </Compile>

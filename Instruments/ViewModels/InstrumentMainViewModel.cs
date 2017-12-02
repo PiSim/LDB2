@@ -82,7 +82,7 @@ namespace Instruments.ViewModels
 
         public IEnumerable<CalibrationReport> CalibrationsList
         {
-            get { return InstrumentService.GetCalibrationReports(); }
+            get { return DBManager.Services.InstrumentService.GetCalibrationReports(); }
         }
 
         public DelegateCommand DeleteInstrumentCommand
@@ -92,7 +92,7 @@ namespace Instruments.ViewModels
 
         public IEnumerable<Instrument> InstrumentList
         {
-            get { return InstrumentService.GetInstruments(); }
+            get { return DBManager.Services.InstrumentService.GetInstruments(); }
         }
 
         private bool IsInstrumentAdmin
@@ -119,7 +119,7 @@ namespace Instruments.ViewModels
         {
             get
             {
-                return InstrumentService.GetCalibrationCalendar();
+                return DBManager.Services.InstrumentService.GetCalibrationCalendar();
             }
         }
 

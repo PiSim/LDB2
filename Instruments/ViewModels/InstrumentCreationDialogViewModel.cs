@@ -130,7 +130,7 @@ namespace Instruments.ViewModels
                     InstrumentInstance = null;
 
                 else
-                    InstrumentInstance = InstrumentService.GetInstrument(_code);
+                    InstrumentInstance = DBManager.Services.InstrumentService.GetInstrument(_code);
 
                 if (InstrumentInstance == null &&
                     _validationErrors.ContainsKey("Code"))
@@ -271,12 +271,12 @@ namespace Instruments.ViewModels
 
         public IEnumerable<InstrumentType> TypeList
         {
-            get { return InstrumentService.GetInstrumentTypes(); }
+            get { return DBManager.Services.InstrumentService.GetInstrumentTypes(); }
         }
 
         public IEnumerable<InstrumentUtilizationArea> AreaList
         {
-            get { return InstrumentService.GetUtilizationAreas(); }
+            get { return DBManager.Services.InstrumentService.GetUtilizationAreas(); }
         }
 
     }

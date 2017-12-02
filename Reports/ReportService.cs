@@ -24,6 +24,27 @@ namespace Reports
         {
             _container = container;
             _eventAggregator = aggregator;
+
+
+            _eventAggregator.GetEvent<ReportStatusCheckRequested>()
+                            .Subscribe(
+                report =>
+                {
+                    // areTestsComplete is true if all tests are marked as complete
+
+                    bool areTestsComplete = report.AreTestsComplete();
+
+                    if ((report.IsComplete && !areTestsComplete)
+                        || (!report.IsComplete && areTestsComplete))
+                    {
+                        report.IsComplete = !report.IsComplete;
+                        report.Update();
+
+                        _eventAggregator.GetEvent<ReportCompleted>()
+                                        .Publish(report);
+                    }
+
+                });
         }
 
         [Obsolete]
@@ -61,6 +82,41 @@ namespace Reports
             }
         }
 
+
+
+        public void ApplyControlPlan(IEnumerable<ISelectableRequirement> reqList, ControlPlan conPlan)
+        {
+            IEnumerable<ControlPlanItem> itemList = conPlan.GetControlPlanItems();
+
+            foreach (ISelectableRequirement isr in reqList)
+            {
+                isr.IsSelected = itemList.First(cpi => cpi.RequirementID == isr.RequirementInstance.ID
+                                                        || cpi.RequirementID == isr.RequirementInstance.OverriddenID)
+                                        .IsSelected;
+            }
+        }
+
+
+        public Requirement GenerateRequirement(Method method)
+        {
+            method.LoadSubMethods();
+
+            Requirement tempReq = new Requirement();
+            tempReq.MethodID = method.ID;
+            tempReq.IsOverride = false;
+            tempReq.Name = "";
+            tempReq.Description = "";
+            tempReq.Position = 0;
+
+            foreach (SubMethod measure in method.SubMethods)
+            {
+                SubRequirement tempSub = new SubRequirement();
+                tempSub.SubMethodID = measure.ID;
+                tempReq.SubRequirements.Add(tempSub);
+            }
+
+            return tempReq;
+        }
         // Interface members
 
         public bool AddTestsToReport(Report entry)
@@ -123,6 +179,18 @@ namespace Reports
             }
 
             return null;
+        }
+
+
+
+        internal static ExternalReport StartExternalReportCreation()
+        {
+            Views.ExternalReportCreationDialog creationDialog = new Views.ExternalReportCreationDialog();
+
+            if (creationDialog.ShowDialog() == true)
+                return creationDialog.ExternalReportInstance;
+            else
+                return null;
         }
 
 

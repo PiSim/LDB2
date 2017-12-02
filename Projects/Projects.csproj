@@ -102,7 +102,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ProjectServiceProvider.cs" />
+    <Compile Include="ProjectService.cs" />
     <Compile Include="ProjectsModule.cs" />
     <Compile Include="ProjectsViewNames.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">

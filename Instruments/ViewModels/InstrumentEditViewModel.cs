@@ -53,8 +53,8 @@ namespace Instruments.ViewModels
             _editMode = false;
             _eventAggregator = aggregator;
             _principal = principal;
-            _areaList = InstrumentService.GetUtilizationAreas();
-            _instrumentTypeList = InstrumentService.GetInstrumentTypes();
+            _areaList = DBManager.Services.InstrumentService.GetUtilizationAreas();
+            _instrumentTypeList = DBManager.Services.InstrumentService.GetInstrumentTypes();
             _manufacturerList = OrganizationService.GetOrganizations(OrganizationRoleNames.Manufacturer);
             _calibrationLabList = OrganizationService.GetOrganizations(OrganizationRoleNames.CalibrationLab);
             
@@ -86,7 +86,7 @@ namespace Instruments.ViewModels
                                                                                 Description = ""
                                                                             });
 
-                        InstrumentService.AddInstrumentFiles(fileList);
+                        DBManager.Services.InstrumentService.AddInstrumentFiles(fileList);
                         RaisePropertyChanged("FileList");
                     }
                 });

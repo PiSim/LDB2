@@ -22,41 +22,6 @@ namespace Services.Properties {
                 return defaultInstance;
             }
         }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("L:\\Documenti macchine e strumenti\\_Report Tarature Laboratorio")]
-        public string CalibrationReportPath {
-            get {
-                return ((string)(this["CalibrationReportPath"]));
-            }
-            set {
-                this["CalibrationReportPath"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("L:\\RAPPORTI_DI_PROVA\\TEST ESTERNI")]
-        public string ExternalReportPath {
-            get {
-                return ((string)(this["ExternalReportPath"]));
-            }
-            set {
-                this["ExternalReportPath"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("L:\\RAPPORTI_DI_PROVA\\2017")]
-        public string ReportPath {
-            get {
-                return ((string)(this["ReportPath"]));
-            }
-            set {
-                this["ReportPath"] = value;
-            }
-        }
+        -
     }
 }

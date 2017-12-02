@@ -122,7 +122,7 @@ namespace Projects.ViewModels
             set
             {
                 _name = value;
-                if (!string.IsNullOrEmpty(_name) && ProjectService.GetProject(_name) == null)
+                if (!string.IsNullOrEmpty(_name) && DBManager.Services.ProjectService.GetProject(_name) == null)
                 {
                     if (_validationErrors.ContainsKey("ProjectName"))
                     {

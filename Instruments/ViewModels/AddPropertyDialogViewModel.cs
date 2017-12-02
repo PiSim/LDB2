@@ -46,7 +46,7 @@ namespace Instruments.ViewModels
 
         public IEnumerable<MeasurableQuantity> QuantityList
         {
-            get { return InstrumentService.GetMeasurableQuantities(); }
+            get { return DBManager.Services.InstrumentService.GetMeasurableQuantities(); }
         }
 
         public MeasurableQuantity SelectedQuantity

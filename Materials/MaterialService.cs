@@ -5,6 +5,7 @@ using DBManager.Services;
 using Infrastructure;
 using Infrastructure.Events;
 using Infrastructure.Queries.Presentation;
+using Infrastructure.Wrappers;
 using Microsoft.Practices.Unity;
 using Prism.Events;
 using Services;
@@ -51,6 +52,19 @@ namespace Materials
                             {
                                 AddSampleLog(tuple.Item1, tuple.Item2);
                             });
+
+
+            _eventAggregator.GetEvent<ReportCreated>().Subscribe(
+                report =>
+                {
+                    Batch targetBatch = MaterialService.GetBatch(report.BatchID);
+
+                    if (targetBatch.BasicReportID == null)
+                    {
+                        targetBatch.BasicReportID = report.ID;
+                        targetBatch.Update();
+                    }
+                });
         }
 
         public Sample AddSampleLog(string batchNumber, string actionCode)
@@ -90,7 +104,22 @@ namespace Materials
                 return null;
         }
 
-        public static ExternalConstruction CreateNewExternalConstruction()
+
+        internal static Batch CreateBatch()
+        {
+            Views.BatchCreationDialog batchCreator = new Views.BatchCreationDialog();
+
+            if (batchCreator.ShowDialog() == true)
+            {
+                return batchCreator.BatchInstance;
+            }
+
+            else
+                return null;
+        }
+
+
+        public ExternalConstruction CreateNewExternalConstruction()
         {
             ExternalConstruction newEntry = new ExternalConstruction();
             IEnumerable<ExternalConstruction> tempList = DBManager.Services.MaterialService.GetExternalConstructions();
@@ -113,12 +142,62 @@ namespace Materials
             return newEntry;
         }
 
+
+        public void DeleteSample(Sample smp)
+        {
+            smp.Delete();
+            SampleLogChoiceWrapper tempChoice = SampleLogActions.ActionList.First(scc => scc.Code == smp.Code);
+            Batch tempBatch = MaterialService.GetBatch(smp.BatchID);
+
+            tempBatch.ArchiveStock -= tempChoice.ArchiveModifier;
+            tempBatch.LongTermStock -= tempChoice.LongTermModifier;
+            tempBatch.Update();
+        }
+
+        public Batch GetBatch(string batchNumber)
+        {
+            Batch temp = MaterialService.GetBatch(batchNumber);
+
+            if (temp == null)
+            {
+                temp = new Batch()
+                {
+                    Number = batchNumber
+                };
+
+                temp.Create();
+            }
+
+            return temp;
+        }
+
         public IEnumerable<IQueryPresenter<Batch>> GetBatchQueries() => _batchQueries;
 
         private void OnColorCreationRequested()
         {
             Views.ColorCreationDialog colorCreator =  _container.Resolve<Views.ColorCreationDialog>();
             colorCreator.ShowDialog();
+        }
+
+
+        public static Batch StartBatchSelection()
+        {
+            BatchPickerDialog batchPicker = new BatchPickerDialog();
+            if (batchPicker.ShowDialog() == true)
+            {
+                Batch output = GetBatch(batchPicker.BatchNumber);
+                return output;
+            }
+
+            else
+                return null;
+        }
+
+        public static void StartSampleLog()
+        {
+            SampleLogDialog logger = new SampleLogDialog();
+
+            logger.Show();
         }
 
         public void TryQuickBatchVisualize(string batchNumber)

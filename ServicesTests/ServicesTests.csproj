@@ -83,10 +83,6 @@
       <Project>{ab8b448c-dd74-4d60-a041-3e5d03a32180}</Project>
       <Name>DBManager</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Services\Services.csproj">
-      <Project>{715CB64A-55D7-4CA2-ABE9-1BAC70680A02}</Project>
-      <Name>Services</Name>
-    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

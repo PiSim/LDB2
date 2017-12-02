@@ -166,10 +166,6 @@
       <Project>{E6E57B0F-0C23-4EDD-BEE7-D24A3D2413C5}</Project>
       <Name>Reporting</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Services\Services.csproj">
-      <Project>{715CB64A-55D7-4CA2-ABE9-1BAC70680A02}</Project>
-      <Name>Services</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Page Include="Views\TaskCreationDialog.xaml">

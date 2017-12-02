@@ -1,13 +1,13 @@
-﻿using Prism.Events;
+﻿using DBManager;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Infrastructure.Events
+namespace Infrastructure
 {
-    public class BatchCreationRequested : PubSubEvent
+    public class IInstrumentService
     {
     }
 }

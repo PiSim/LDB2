@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Events
 {
+    [Obsolete]
     public class ReportStatusCheckRequested : PubSubEvent<Report>
     {
     }

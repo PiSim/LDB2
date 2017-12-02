@@ -13,6 +13,11 @@
 -Aggiunto ContextMenu alla griglia della videata principale batch per la stampa dei batch selezionati.
 -Piccole correzioni a logica e gui creazione Batch
 -Rivista struttura dati Task, rimossa assegnazione per prove singole, aggiunta gestione tempi di lavoro
+-Consolidati i dialog TaskCreation, ReportCreation e Task Conversion in uno unico
+-Migliorata GUI Task, reimplementata gestione Task tramite IReportService
+-Implementato nuovo framework di query tramite IQuery
+-Interfaccia IQueryPresenter per facilitare la visualizzazione/selezione di oggetti IQuery
+-Pulizia del vecchio codice, eliminazione del modulo Services
 
 v 0.5.5 -- 03/11/2017
 

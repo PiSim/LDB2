@@ -65,7 +65,7 @@ namespace Projects.ViewModels
         
         public IEnumerable<Project> ProjectList
         {
-            get { return ProjectService.GetProjects(); } 
+            get { return DBManager.Services.ProjectService.GetProjects(); } 
         }
 
         public string ProjectStatRegionName

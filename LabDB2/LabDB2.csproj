@@ -278,10 +278,6 @@
       <Project>{ec7f180a-b306-4d9c-84c8-632bb2e4ae5c}</Project>
       <Name>Security</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Services\Services.csproj">
-      <Project>{715cb64a-55d7-4ca2-abe9-1bac70680a02}</Project>
-      <Name>Services</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Specifications\Specifications.csproj">
       <Project>{4ad99f97-c930-447d-93df-225eb347255e}</Project>
       <Name>Specifications</Name>

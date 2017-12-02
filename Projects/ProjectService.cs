@@ -11,13 +11,13 @@ using System.Threading.Tasks;
 
 namespace Projects
 {
-    public class ProjectServiceProvider
+    public class ProjectService
     {
         private DBEntities _entities;
         private EventAggregator _eventAggregator;
         private IUnityContainer _container;
 
-        public ProjectServiceProvider(DBEntities entities,
+        public ProjectService(DBEntities entities,
                                         EventAggregator eventAggregator,
                                         IUnityContainer container)
         {
@@ -35,6 +35,23 @@ namespace Projects
             modificationDialog.ProjectInstance = target;
 
             return (bool)modificationDialog.ShowDialog();
+        }
+
+
+
+        internal static void UpdateProjectCosts()
+        {
+            IEnumerable<Project> _prjList = ProjectService.GetProjects();
+
+            foreach (Project prj in _prjList)
+            {
+                double oldvalue = prj.TotalExternalCost;
+
+                prj.UpdateExternalReportCost();
+
+                if (prj.TotalExternalCost != oldvalue)
+                    prj.Update();
+            }
         }
 
         private Project CreateNewProject(Person leader = null)

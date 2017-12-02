@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Events
 {
+    [Obsolete]
     public class ProjectCostUpdateRequested : PubSubEvent
     {
     }

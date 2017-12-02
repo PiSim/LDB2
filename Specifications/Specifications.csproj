@@ -196,10 +196,6 @@
       <Project>{dd1a1429-e1ac-4611-9971-f99988c4edba}</Project>
       <Name>Reports</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Services\Services.csproj">
-      <Project>{715CB64A-55D7-4CA2-ABE9-1BAC70680A02}</Project>
-      <Name>Services</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Page Include="Views\ControlPlanEdit.xaml">

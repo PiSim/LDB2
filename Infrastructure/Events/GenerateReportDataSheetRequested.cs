@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Events
 {
+    [Obsolete]
     public class GenerateReportDataSheetRequested : PubSubEvent<Report>
     {
     }

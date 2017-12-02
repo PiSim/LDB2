@@ -33,7 +33,7 @@ namespace Projects.ViewModels
         {
             get
             {
-                return ProjectService.GetProjects(true);
+                return DBManager.Services.ProjectService.GetProjects(true);
             }
         }
     }

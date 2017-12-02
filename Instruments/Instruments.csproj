@@ -106,7 +106,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="InstrumentServiceProvider.cs" />
+    <Compile Include="InstrumentService.cs" />
     <Compile Include="InstrumentsModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -127,6 +127,8 @@
     <Compile Include="ViewModels\InstrumentEditViewModel.cs" />
     <Compile Include="ViewModels\InstrumentMainViewModel.cs" />
     <Compile Include="ViewModels\InstrumentMeasurablePropertyEditViewModel.cs" />
+    <Compile Include="ViewModels\MaintenanceEventCreationDialogViewModel.cs" />
+    <Compile Include="ViewModels\NewCalibrationDialogViewModel.cs" />
     <Compile Include="Views\AddPropertyDialog.xaml.cs">
       <DependentUpon>AddPropertyDialog.xaml</DependentUpon>
     </Compile>
@@ -148,8 +150,14 @@
     <Compile Include="Views\InstrumentsNavigationItem.xaml.cs">
       <DependentUpon>InstrumentsNavigationItem.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\MaintenanceEventCreationDialog.xaml.cs">
+      <DependentUpon>MaintenanceEventCreationDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Metrology.xaml.cs">
       <DependentUpon>Metrology.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\NewCalibrationDialog.xaml.cs">
+      <DependentUpon>NewCalibrationDialog.xaml</DependentUpon>
     </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -181,10 +189,6 @@
       <Project>{31368a5f-9770-4198-bc3d-4996917b4139}</Project>
       <Name>Navigation</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Services\Services.csproj">
-      <Project>{715CB64A-55D7-4CA2-ABE9-1BAC70680A02}</Project>
-      <Name>Services</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Page Include="Views\AddPropertyDialog.xaml">
@@ -215,9 +219,17 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\MaintenanceEventCreationDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\Metrology.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\NewCalibrationDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
