@@ -39,6 +39,7 @@ namespace Materials.ViewModels
                                         IMaterialService materialService) : base()
         {
             _principal = principal;
+            _dataService = dataService;
             _eventAggregator = aggregator;
             _materialService = materialService;
 
