@@ -15,14 +15,16 @@ namespace Admin.ViewModels
     {
         private bool _editMode;
         private DelegateCommand _save, _startEdit;
+        private IDataService _dataService;
         private IEnumerable<Person> _peopleList;
         private IEnumerable<UserRoleMapping> _roleList;
         private User _userInstance;
 
-        public UserEditViewModel() : base()
+        public UserEditViewModel(IDataService dataService) : base()
         {
+            _dataService = dataService;
             _editMode = false;
-            _peopleList = PeopleService.GetPeople();
+            _peopleList = _dataService.GetPeople();
 
             _save = new DelegateCommand(
                 () =>

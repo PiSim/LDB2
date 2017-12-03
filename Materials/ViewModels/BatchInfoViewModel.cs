@@ -9,7 +9,6 @@ using Microsoft.Practices.Unity;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
-using Services;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -40,10 +39,12 @@ namespace Materials.ViewModels
         private EventAggregator _eventAggregator;
         private ExternalReport _selectedExternalReport;
         private ExternalConstruction _selectedExternalConstruction;
+        private IDataService _dataService;
         private IEnumerable<Colour> _colourList;
         private IEnumerable<ExternalConstruction> _externalConstructionList;
         private IEnumerable<TrialArea> _trialAreaList; 
         private IEnumerable<Sample> _samplesList;
+        private IMaterialService _materialService;
         private Material _materialInstance;
         private MaterialLine _lineInstance;
         private Recipe _recipeInstance;
@@ -56,14 +57,18 @@ namespace Materials.ViewModels
         private TrialArea _selectedTrialArea;
 
         public BatchInfoViewModel(DBPrincipal principal,
-                                EventAggregator aggregator) : base()
+                                EventAggregator aggregator,
+                                IDataService dataService,
+                                IMaterialService materialService) : base()
         {
+            _dataService = dataService;
+            _materialService = materialService;
             _eventAggregator = aggregator;
             _principal = principal;
             _editMode = false;
 
-            _colourList = DBManager.Services.MaterialService.GetColours();
-            _trialAreaList = DBManager.Services.MaterialService.GetTrialAreas();
+            _colourList = _dataService.GetColours();
+            _trialAreaList = _dataService.GetTrialAreas();
 
             #region EventSubscriptions
 
@@ -86,7 +91,7 @@ namespace Materials.ViewModels
                     if (_instance == null)
                         BatchInstance = null;
                     else
-                        BatchInstance = DBManager.Services.MaterialService.GetBatch(_instance.ID);
+                        BatchInstance = _dataService.GetBatch(_instance.ID);
                 },
                 () => EditMode);
 
@@ -107,7 +112,7 @@ namespace Materials.ViewModels
             _deleteSample = new DelegateCommand<Sample>(
                 smp =>
                 {
-                    CommonProcedures.DeleteSample(smp);
+                    _materialService.DeleteSample(smp);
                     _samplesList = _instance.GetSamples();
                     RaisePropertyChanged("Samples");
                 },
@@ -134,7 +139,7 @@ namespace Materials.ViewModels
             _refresh = new DelegateCommand(
                 () =>
                 {
-                    BatchInstance = DBManager.Services.MaterialService.GetBatch(_instance.ID);
+                    BatchInstance = _dataService.GetBatch(_instance.ID);
                 },
                 () => !EditMode);
 
@@ -255,10 +260,10 @@ namespace Materials.ViewModels
                 _lineInstance != null &&
                 _aspectInstance != null &&
                 _recipeInstance != null)
-                MaterialInstance = DBManager.Services.MaterialService.GetMaterial(_typeInstance,
-                                                                _lineInstance,
-                                                                _aspectInstance,
-                                                                _recipeInstance);
+                MaterialInstance = _dataService.GetMaterial(_typeInstance,
+                                                            _lineInstance,
+                                                            _aspectInstance,
+                                                            _recipeInstance);
             else
                 MaterialInstance = null;
         }
@@ -309,7 +314,7 @@ namespace Materials.ViewModels
 
                 if (_aspectCode.Length == 3)
                 {
-                    AspectInstance = DBManager.Services.MaterialService.GetAspect(_aspectCode);
+                    AspectInstance = _dataService.GetAspect(_aspectCode);
                     if (_validationErrors.ContainsKey("AspectCode"))
                     {
                         _validationErrors.Remove("AspectCode");
@@ -440,7 +445,7 @@ namespace Materials.ViewModels
             get
             {
                 if (_externalConstructionList == null)
-                    _externalConstructionList = DBManager.Services.MaterialService.GetExternalConstructions();
+                    _externalConstructionList = _dataService.GetExternalConstructions();
 
                 return _externalConstructionList;
             }
@@ -463,7 +468,7 @@ namespace Materials.ViewModels
 
                 if (_lineCode.Length == 3)
                 {
-                    LineInstance = DBManager.Services.MaterialService.GetLine(_lineCode);
+                    LineInstance = _dataService.GetMaterialLine(_lineCode);
                     if (_validationErrors.ContainsKey("LineCode"))
                     {
                         _validationErrors.Remove("LineCode");
@@ -551,7 +556,7 @@ namespace Materials.ViewModels
 
                 if (_recipeCode.Length == 4)
                 {
-                    RecipeInstance = DBManager.Services.MaterialService.GetRecipe(_recipeCode);
+                    RecipeInstance = _dataService.GetRecipe(_recipeCode);
                     if (_validationErrors.ContainsKey("RecipeCode"))
                     {
                         _validationErrors.Remove("RecipeCode");
@@ -667,7 +672,7 @@ namespace Materials.ViewModels
 
                 if (_typeCode.Length == 4)
                 {
-                    TypeInstance = DBManager.Services.MaterialService.GetMaterialType(_typeCode);
+                    TypeInstance = _dataService.GetMaterialType(_typeCode);
                     if (_validationErrors.ContainsKey("TypeCode"))
                     {
                         _validationErrors.Remove("TypeCode");

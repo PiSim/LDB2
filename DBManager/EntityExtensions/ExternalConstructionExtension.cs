@@ -6,10 +6,29 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DBManager.EntityExtensions
+namespace DBManager
 {
+    public partial class ExternalConstruction
+    {
+        public IEnumerable<Batch> GetBatches()
+        {
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.Batches.Include(btc => btc.Material.Aspect)
+                                        .Include(btc => btc.Material.MaterialLine)
+                                        .Include(btc => btc.Material.MaterialType)
+                                        .Include(btc => btc.Material.Recipe.Colour)
+                                        .Where(btc => btc.Material.ExternalConstructionID == ID)
+                                        .ToList();
+            }
+        }
+    }
+
     public static class ExternalConstructionExtension
     {
+
         public static IEnumerable<Material> GetMaterials(this ExternalConstruction entry)
         {
             // Returns all materials for an external construction

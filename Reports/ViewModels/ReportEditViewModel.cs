@@ -6,7 +6,6 @@ using Infrastructure.Events;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
-using Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -31,14 +30,17 @@ namespace Reports.ViewModels
         private DelegateCommand<Test> _removeTest;
         private EventAggregator _eventAggregator;
         private Report _instance;
+        private IDataService _dataService;
         private IEnumerable<TestWrapper> _testList;
         private IReportService _reportService;
         private ReportFile _selectedFile;
         
         public ReportEditViewModel(DBPrincipal principal,
                                     EventAggregator aggregator,
+                                    IDataService dataService,
                                     IReportService reportService) : base()
         {
+            _dataService = dataService;
             _editMode = false;
             _eventAggregator = aggregator;
             _principal = principal;
@@ -119,7 +121,7 @@ namespace Reports.ViewModels
 
                     if (tempTaskItem != null)
                     {
-                        tempTaskItem = TaskService.GetTaskItem(tempTaskItem.ID);
+                        tempTaskItem = _dataService.GetTaskItem(tempTaskItem.ID);
                         tempTaskItem.Update();
                     }
 

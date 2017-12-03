@@ -1,12 +1,10 @@
-﻿<Window x:Class="Services.Views.SampleLogDialog"
+﻿<Window x:Class="Materials.Views.SampleLogDialog"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:con="clr-namespace:Infrastructure.Converters;assembly=Infrastructure"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Services.Views"
         xmlns:prism="http://prismlibrary.com/"
-        xmlns:val="clr-namespace:Infrastructure.Validation;assembly=Infrastructure"
         prism:ViewModelLocator.AutoWireViewModel="True"
         mc:Ignorable="d"
         Title="SampleLogDialog" Height="575" Width="500">

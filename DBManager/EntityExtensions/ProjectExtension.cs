@@ -11,7 +11,7 @@ namespace DBManager
     public partial class Project
     {
         IEnumerable<Report> _reportList;
-        IEnumerable<Task> _taskList;
+        private IEnumerable<Task> _taskList;
 
         public void Create()
         {
@@ -41,6 +41,26 @@ namespace DBManager
         }
 
         public int ExternalReportCount => ExternalReports.Count;
+
+
+        public IEnumerable<Batch> GetBatches()
+        {
+            // Gets all batches for a given Project entity, 
+            // returns empty list if instance is null
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.Batches.Where(btc => btc.Material.ProjectID == ID)
+                                        .Include(btc => btc.Material.Aspect)
+                                        .Include(btc => btc.Material.ExternalConstruction)
+                                        .Include(btc => btc.Material.MaterialLine)
+                                        .Include(btc => btc.Material.MaterialType)
+                                        .Include(btc => btc.Material.Recipe.Colour)
+                                        .ToList();
+            }
+        }
 
         public IEnumerable<Report> GetReports()
         {

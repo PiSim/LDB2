@@ -26,20 +26,26 @@ namespace Materials.ViewModels
                                 _unassignMaterialToExternal;
         private EventAggregator _eventAggregator;
         private ExternalConstruction _externalConstructionInstance;
+        private IDataService _dataService;
         private IEnumerable<Organization> _oemList;
         private IEnumerable<Specification> _specificationList;
         private IEnumerable<SpecificationVersion> _specificationVersionList;
+        private IReportService _reportService;
         private Specification _selectedSpecification;
 
         public ExternalConstructionDetailViewModel(DBPrincipal principal,
-                                                    EventAggregator eventAggregator) : base()
+                                                    EventAggregator eventAggregator,
+                                                    IDataService dataService,
+                                                    IReportService reportService) : base()
         {
+            _dataService = dataService;
+            _reportService = reportService;
             _eventAggregator = eventAggregator;
             _principal = principal;
             _editMode = false;
 
-            _oemList = new List<Organization>(OrganizationService.GetOrganizations(OrganizationRoleNames.OEM));
-            _specificationList = new List<Specification>(SpecificationService.GetSpecifications());
+            _oemList = _dataService.GetOrganizations(OrganizationRoleNames.OEM);
+            _specificationList = _dataService.GetSpecifications();
 
             _assignMaterialToExternal = new DelegateCommand(
                 () =>
@@ -109,7 +115,7 @@ namespace Materials.ViewModels
                     return new List<Batch>();
 
                 else
-                    return new List<Batch>(DataService.GetBatchesForExternalConstruction(_externalConstructionInstance));
+                    return _externalConstructionInstance.GetBatches();
             }
         }
 

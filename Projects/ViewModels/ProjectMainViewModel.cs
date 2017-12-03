@@ -18,12 +18,18 @@ namespace Projects.ViewModels
         private DBPrincipal _principal;
         private DelegateCommand _newProject, _openProject;
         private EventAggregator _eventAggregator;
+        private IDataService _dataService;
+        private IProjectService _projectService;
         private Project _selectedProject;
 
         public ProjectMainViewModel(DBPrincipal principal,
-                                    EventAggregator aggregator) 
+                                    EventAggregator aggregator,
+                                    IDataService dataService,
+                                    IProjectService projectService) 
             : base()
         {
+            _dataService = dataService;
+            _projectService = projectService;
             _eventAggregator = aggregator;
             _principal = principal;
 
@@ -33,7 +39,7 @@ namespace Projects.ViewModels
             _newProject = new DelegateCommand(
                 () =>
                 {
-                    _eventAggregator.GetEvent<ProjectCreationRequested>().Publish();
+                    _projectService.CreateProject();
                 },
                 () => IsProjectEdit);
 
@@ -65,7 +71,7 @@ namespace Projects.ViewModels
         
         public IEnumerable<Project> ProjectList
         {
-            get { return DBManager.Services.ProjectService.GetProjects(); } 
+            get { return _dataService.GetProjects(); } 
         }
 
         public string ProjectStatRegionName

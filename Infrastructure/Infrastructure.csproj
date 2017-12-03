@@ -115,7 +115,6 @@
     <Compile Include="Events\BatchVisualizationRequested.cs" />
     <Compile Include="Events\EntityChangedToken.cs" />
     <Compile Include="Events\ExternalConstructionChanged.cs" />
-    <Compile Include="Events\InstrumentCreationRequested.cs" />
     <Compile Include="Events\InstrumentTypeCreated.cs" />
     <Compile Include="Events\MaintenanceEventCreated.cs" />
     <Compile Include="Events\MeasurableQuantityCreated.cs" />
@@ -124,7 +123,6 @@
     <Compile Include="Events\PersonChanged.cs" />
     <Compile Include="Events\PersonRoleCreationRequested.cs" />
     <Compile Include="Events\ProjectCostUpdateRequested.cs" />
-    <Compile Include="Events\ProjectCreationRequested.cs" />
     <Compile Include="Events\ReportCompleted.cs" />
     <Compile Include="Events\ReportDeleted.cs" />
     <Compile Include="Events\ReportStatusCheckRequested.cs" />
@@ -132,8 +130,11 @@
     <Compile Include="Events\SampleLogCreated.cs" />
     <Compile Include="Events\SpecificationMethodListChanged.cs" />
     <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="IAdminService.cs" />
     <Compile Include="IInstrumentService.cs" />
     <Compile Include="IMaterialService.cs" />
+    <Compile Include="IProjectService.cs" />
+    <Compile Include="ISpecificationService.cs" />
     <Compile Include="Queries\ArrivedUntestedBatchesQuery.cs" />
     <Compile Include="Queries\BatchesNotArrivedQuery.cs" />
     <Compile Include="Queries\LatestNBatchesQuery.cs" />

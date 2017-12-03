@@ -7,7 +7,6 @@ using Infrastructure.Wrappers;
 using Microsoft.Practices.Unity;
 using Prism.Events;
 using Reports.Views;
-using Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -117,6 +116,43 @@ namespace Reports
 
             return tempReq;
         }
+
+
+
+        public IEnumerable<TaskItem> GenerateTaskItemList(IEnumerable<Requirement> reqList)
+        {
+            List<TaskItem> output = new List<TaskItem>();
+
+            foreach (Requirement req in reqList)
+            {
+                TaskItem tempItem = new TaskItem();
+
+                tempItem.Description = req.Description;
+                tempItem.MethodID = req.MethodID;
+                tempItem.Name = req.Name;
+                tempItem.Position = 0;
+                tempItem.RequirementID = req.ID;
+                tempItem.SpecificationVersionID = req.SpecificationVersionID;
+
+                foreach (SubRequirement sreq in req.SubRequirements)
+                {
+                    SubTaskItem tempSubItem = new SubTaskItem();
+
+                    tempSubItem.Name = sreq.SubMethod.Name;
+                    tempSubItem.RequiredValue = sreq.RequiredValue;
+                    tempSubItem.SubMethodID = sreq.SubMethodID;
+                    tempSubItem.SubRequirementID = sreq.ID;
+                    tempSubItem.UM = sreq.SubMethod.UM;
+
+                    tempItem.SubTaskItems.Add(tempSubItem);
+                }
+
+                output.Add(tempItem);
+            }
+
+            return output;
+        }
+
         // Interface members
 
         public bool AddTestsToReport(Report entry)
@@ -183,7 +219,30 @@ namespace Reports
 
 
 
-        internal static ExternalReport StartExternalReportCreation()
+        public int GetNextReportNumber()
+        {
+            // Returns the next available ReportNumber
+
+            using (DBEntities entities = new DBEntities())
+            {
+                return entities.Reports
+                                .Max(rep => rep.Number) + 1;
+            }
+        }
+
+        public int GetNextExternalReportNumber(int year)
+        {
+            // Returns the next available ExternalReport number for a given year
+
+            using (DBEntities entities = new DBEntities())
+            {
+                return entities.ExternalReports
+                                .Where(erep => erep.Year == year)
+                                .Max(erep => erep.Number) + 1;
+            }
+        }
+
+        internal ExternalReport StartExternalReportCreation()
         {
             Views.ExternalReportCreationDialog creationDialog = new Views.ExternalReportCreationDialog();
 

@@ -18,15 +18,17 @@ namespace Specifications.ViewModels
     {
         private DelegateCommand<Window> _cancel, _confirm;
         private readonly Dictionary<string, ICollection<string>> _validationErrors = new Dictionary<string, ICollection<string>>();
+        private IDataService _dataService;
         private Organization _oem;
         private Specification _specificationInstance;
         private string _currentIssue,
                         _description,
                         _name;
 
-        public SpecificationCreationDialogViewModel() : base()
+        public SpecificationCreationDialogViewModel(IDataService dataService) : base()
         {
             _currentIssue = "";
+            _dataService = dataService;
             _description = "";
 
             _cancel = new DelegateCommand<Window>(
@@ -38,7 +40,7 @@ namespace Specifications.ViewModels
             _confirm = new DelegateCommand<Window>(
                 parent =>
                 {
-                    Std tempStd = SpecificationService.GetStandard(_name);
+                    Std tempStd = _dataService.GetStandard(_name);
                     if (tempStd == null)
                     {
                         tempStd = new Std();
@@ -136,7 +138,7 @@ namespace Specifications.ViewModels
                 _name = value;
 
                 if (!string.IsNullOrEmpty(_name)
-                    && SpecificationService.GetSpecification(_name) == null)
+                    && _dataService.GetSpecification(_name) == null)
                 {
                     if (_validationErrors.ContainsKey("Name"))
                     {
@@ -177,13 +179,7 @@ namespace Specifications.ViewModels
             }
         }
 
-        public IEnumerable<Organization> OemList
-        {
-            get
-            {
-                return OrganizationService.GetOrganizations(OrganizationRoleNames.StandardPublisher);
-            }
-        }
+        public IEnumerable<Organization> OemList => _dataService.GetOrganizations(OrganizationRoleNames.StandardPublisher);
 
         public Specification SpecificationInstance
         {

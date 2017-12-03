@@ -16,7 +16,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace Services.Views
+namespace Instruments.Views
 {
     /// <summary>
     /// Interaction logic for NewCalibrationDialog.xaml

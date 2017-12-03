@@ -8,7 +8,6 @@ using Microsoft.Practices.Unity;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
-using Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,31 +20,34 @@ namespace Admin.ViewModels
     {
         private DelegateCommand _newOrganizationRole, _newPersonRole, _newUserRole, _runMethod;
         private EventAggregator _eventAggregator;
+        private IAdminService _adminService;
+        private IDataService _dataService;
         private string _name;
 
-        public AdminMainViewModel(EventAggregator eventAggregator) : base()
+        public AdminMainViewModel(EventAggregator eventAggregator,
+                                    IAdminService adminService,
+                                    IDataService dataService) : base()
         {
+            _adminService = adminService;
+            _dataService = dataService;
             _eventAggregator = eventAggregator;
 
             _newOrganizationRole = new DelegateCommand(
                 () =>
                 {
-                    _eventAggregator.GetEvent<OrganizationRoleCreationRequested>()
-                                    .Publish();
+                    _adminService.CreateNewOrganization();
                 });
 
             _newPersonRole = new DelegateCommand(
                 () =>
                 {
-                    _eventAggregator.GetEvent<PersonRoleCreationRequested>()
-                                    .Publish();
+                    _adminService.CreateNewPersonRole();
                 });
 
             _newUserRole = new DelegateCommand(
                 () =>
                 {
-                    _eventAggregator.GetEvent<UserRoleCreationRequested>()
-                                    .Publish();
+                    _adminService.CreateNewUserRole();
                 });
 
             _runMethod = new DelegateCommand(
@@ -107,7 +109,7 @@ namespace Admin.ViewModels
 
         public IEnumerable<PersonRole> PersonRoleList
         {
-            get { return PeopleService.GetPersonRoles(); }
+            get { return _dataService.GetPersonRoles(); }
         }
 
         public string PeopleManagementRegionName => RegionNames.PeopleManagementRegion;

@@ -17,17 +17,22 @@ namespace Admin.ViewModels
     {
         private DelegateCommand _newInstrumentType;
         private EventAggregator _eventAggregator;
+        private IAdminService _adminService;
+        private IDataService _dataService;
         private InstrumentType _selectedInstrumentType;
 
-        public InstrumentTypeMainViewModel(EventAggregator eventAggregator)
+        public InstrumentTypeMainViewModel(EventAggregator eventAggregator,
+                                            IAdminService adminService,
+                                            IDataService dataService)
         {
+            _adminService = adminService;
+            _dataService = dataService;
             _eventAggregator = eventAggregator;
 
             _newInstrumentType = new DelegateCommand(
                 () =>
                 {
-                    _eventAggregator.GetEvent<InstrumentTypeCreationRequested>()
-                                    .Publish();
+                    _adminService.CreateNewInstrumentType();
                 });
 
             _eventAggregator.GetEvent<InstrumentTypeCreated>()
@@ -38,10 +43,7 @@ namespace Admin.ViewModels
                             });
         }
 
-        public IEnumerable<InstrumentType> InstrumentTypeList
-        {
-            get { return InstrumentService.GetInstrumentTypes(); }
-        }
+        public IEnumerable<InstrumentType> InstrumentTypeList => _dataService.GetInstrumentTypes();
 
         public string InstrumentTypeManagementEditRegionName
         {

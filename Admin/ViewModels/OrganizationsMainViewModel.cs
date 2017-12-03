@@ -22,10 +22,16 @@ namespace Admin.ViewModels
                                 _deleteOrganization;
 #pragma warning restore CS0169 // Il campo 'OrganizationsMainViewModel._deleteOrganization' non viene mai usato
         private EventAggregator _eventAggregator;
+        private IAdminService _adminService;
+        private IDataService _dataService;
         private Organization _selectedOrganization;
 
-        public OrganizationsMainViewModel(EventAggregator aggregator) : base()
+        public OrganizationsMainViewModel(EventAggregator aggregator,
+                                            IAdminService adminService,
+                                            IDataService dataService) : base()
         {
+            _adminService = adminService;
+            _dataService = dataService;
             _eventAggregator = aggregator;
 
             #region EventSubscriptions
@@ -38,15 +44,13 @@ namespace Admin.ViewModels
             _createNewOrganization = new DelegateCommand(
                 () =>
                 {
-                    _eventAggregator.GetEvent<OrganizationCreationRequested>()
-                                    .Publish();
+                    _adminService.CreateNewOrganization();
                 });
 
             _createNewOrganizationRole = new DelegateCommand(
                 () =>
                 {
-                    _eventAggregator.GetEvent<OrganizationRoleCreationRequested>()
-                                    .Publish();
+                    _adminService.CreateNewOrganizationRole();
                 });
         }
 
@@ -81,13 +85,7 @@ namespace Admin.ViewModels
             get { return RegionNames.OrganizationEditRegion; }
         }
 
-        public IEnumerable<Organization> OrganizationList
-        {
-            get
-            {
-                return OrganizationService.GetOrganizations();
-            }
-        }
+        public IEnumerable<Organization> OrganizationList => _dataService.GetOrganizations();
 
         public IEnumerable<OrganizationRoleMapping> RoleList
         {

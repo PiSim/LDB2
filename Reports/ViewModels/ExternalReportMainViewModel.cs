@@ -19,19 +19,21 @@ namespace Reports.ViewModels
         private DBPrincipal _principal;
         private DelegateCommand _newReport, _openReport;
         private EventAggregator _eventAggregator;
-        private ExternalReport _selectedReport; 
+        private ExternalReport _selectedReport;
+        private IReportService _reportService;
 
         public ExternalReportMainViewModel(DBPrincipal principal,
-                                            EventAggregator aggregator)
+                                            EventAggregator aggregator,
+                                            IReportService reportService)
         {
             _eventAggregator = aggregator;
+            _reportService = reportService;
             _principal = principal;
             
             _newReport = new DelegateCommand(
                 () => 
                 {
-                    _eventAggregator.GetEvent<ExternalReportCreationRequested>()
-                                    .Publish();
+                    _reportService.CreateExternalReport();
                 }, 
                 () => _principal.IsInRole(UserRoleNames.ReportAdmin));
 

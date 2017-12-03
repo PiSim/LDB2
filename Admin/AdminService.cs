@@ -1,5 +1,6 @@
 using Controls.Views;
 using DBManager;
+using DBManager.EntityExtensions;
 using Infrastructure;
 using Infrastructure.Events;
 using Microsoft.Practices.Unity;
@@ -14,45 +15,45 @@ namespace Admin
     {
         private DBPrincipal _principal;
         private EventAggregator _eventAggregator;
+        private IDataService _dataService;
         private IUnityContainer _container;
 
         public AdminService(DBPrincipal principal,
                                     EventAggregator aggregator,
+                                    IDataService dataService,
                                     IUnityContainer container)
         {
             _eventAggregator = aggregator;
             _container = container;
+            _dataService = dataService;
             _principal = principal;
-
-            _eventAggregator.GetEvent<UserCreationRequested>()
-                            .Subscribe(() =>
-                            {
-                                NewUserRegistration();
-                            });
         }
 
         public void AddOrganizationRole(string name)
         {
-            OrganizationRole newRole = new OrganizationRole
+            using (DBEntities entities = new DBEntities())
             {
-                Name = name,
-                Description = ""
-            };
-
-            _entities.OrganizationRoles.Add(newRole);
-
-            foreach (Organization org in _entities.Organizations)
-            {
-                OrganizationRoleMapping newMapping = new OrganizationRoleMapping
+                OrganizationRole newRole = new OrganizationRole
                 {
-                    Role = newRole,
-                    Organization = org,
-                    IsSelected = false
+                    Name = name,
+                    Description = ""
                 };
-                _entities.OrganizationRoleMappings.Add(newMapping);
-            }
 
-            _entities.SaveChanges();
+                entities.OrganizationRoles.Add(newRole);
+
+                foreach (Organization org in entities.Organizations)
+                {
+                    OrganizationRoleMapping newMapping = new OrganizationRoleMapping
+                    {
+                        Role = newRole,
+                        Organization = org,
+                        IsSelected = false
+                    };
+                    entities.OrganizationRoleMappings.Add(newMapping);
+                }
+
+                entities.SaveChanges();
+            }
         }
 
 
@@ -73,7 +74,7 @@ namespace Admin
                 Name = addPersonDialog.InputString
             };
 
-            foreach (PersonRole prr in PeopleService.GetPersonRoles())
+            foreach (PersonRole prr in _dataService.GetPersonRoles())
             {
                 PersonRoleMapping tempPRM = new PersonRoleMapping();
                 tempPRM.roleID = prr.ID;
@@ -96,7 +97,7 @@ namespace Admin
 
             newRole.Create();
 
-            foreach (User usr in DataService.GetUsers())
+            foreach (User usr in _dataService.GetUsers())
             {
                 UserRoleMapping newMap = new UserRoleMapping
                 {
@@ -124,19 +125,22 @@ namespace Admin
                 Description = ""
             };
 
-            _entities.PersonRoles.Add(newRole);
-
-            foreach (Person per in _entities.People)
+            using (DBEntities entities = new DBEntities())
             {
-                PersonRoleMapping newMapping = new PersonRoleMapping
-                {
-                    Person = per,
-                    IsSelected = false
-                };
-                newRole.RoleMappings.Add(newMapping);
-            }
+                entities.PersonRoles.Add(newRole);
 
-            _entities.SaveChanges();
+                foreach (Person per in entities.People)
+                {
+                    PersonRoleMapping newMapping = new PersonRoleMapping
+                    {
+                        Person = per,
+                        IsSelected = false
+                    };
+                    newRole.RoleMappings.Add(newMapping);
+                }
+
+                entities.SaveChanges();
+            }
         }
         
         public User NewUserRegistration()
@@ -193,7 +197,7 @@ namespace Admin
             return null;
         }
 
-        public static Organization CreateNewOrganization()
+        public Organization CreateNewOrganization()
         {
             StringInputDialog creationDialog = new StringInputDialog
             {
@@ -207,7 +211,7 @@ namespace Admin
                     Category = "",
                     Name = creationDialog.InputString
                 };
-                foreach (OrganizationRole orr in DataService.GetOrganizationRoles())
+                foreach (OrganizationRole orr in _dataService.GetOrganizationRoles())
                 {
                     OrganizationRoleMapping tempORM = new OrganizationRoleMapping
                     {
@@ -225,7 +229,34 @@ namespace Admin
             else return null;
         }
 
-        public static void CreateNewOrganizationRole()
+
+        /// <summary>
+        /// Creates and inserts in the DB the mappings between a new OrganizationRole
+        /// and all the existing organization
+        /// </summary>
+        /// <param name="newRole">The role for which will be built the mappings</param>
+        internal void CreateMappingsForNewRole(OrganizationRole newRole)
+        {
+            using (DBEntities entities = new DBEntities())
+            {
+                IEnumerable<Organization> _orgList = entities.Organizations.ToList();
+
+                foreach (Organization org in _orgList)
+                {
+                    OrganizationRoleMapping tempMap = new OrganizationRoleMapping()
+                    {
+                        IsSelected = false,
+                        RoleID = newRole.ID
+                    };
+
+                    org.RoleMapping.Add(tempMap);
+                }
+
+                entities.SaveChanges();
+            }
+        }
+
+        public void CreateNewOrganizationRole()
         {
             StringInputDialog creationDialog = new StringInputDialog();
             creationDialog.Title = "Crea nuovo Ruolo Organizzazione";
@@ -237,7 +268,7 @@ namespace Admin
                 output.Name = creationDialog.InputString;
                 output.Create();
 
-                OrganizationService.CreateMappingsForNewRole(output);
+                CreateMappingsForNewRole(output);
             }
 
         }

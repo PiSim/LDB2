@@ -28,6 +28,7 @@ namespace Projects.ViewModels
                                 _startEdit;
         private DelegateCommand<Material> _addMaterial,
                                         _removeMaterial;
+        private IDataService _dataService;
         private IEnumerable<Person> _leaderList;
         private IEnumerable<Organization> _oemList;
         private EventAggregator _eventAggregator;
@@ -36,9 +37,11 @@ namespace Projects.ViewModels
         private Report _selectedReport;
 
         public ProjectInfoViewModel(DBPrincipal principal,
-                                    EventAggregator aggregator)
+                                    EventAggregator aggregator,
+                                    IDataService dataService)
             : base()
         {
+            _dataService = dataService;
             _editMode = false;
             _eventAggregator = aggregator;
             _principal = principal;
@@ -233,7 +236,7 @@ namespace Projects.ViewModels
             get
             {
                 if (_leaderList == null)
-                    _leaderList = PeopleService.GetPeople(PersonRoleNames.ProjectLeader);
+                    _leaderList = _dataService.GetPeople(PersonRoleNames.ProjectLeader);
 
                 return _leaderList;
             }
@@ -260,7 +263,7 @@ namespace Projects.ViewModels
             get
             {
                 if (_oemList == null)
-                    _oemList = OrganizationService.GetOrganizations(OrganizationRoleNames.OEM);
+                    _oemList = _dataService.GetOrganizations(OrganizationRoleNames.OEM);
 
                 return _oemList;
             }

@@ -16,9 +16,12 @@ namespace Projects.ViewModels
     public class ProjectStatsViewModel : BindableBase
     {
         private EventAggregator _eventAggregator;
+        private readonly IDataService _dataService;
 
-        public ProjectStatsViewModel(EventAggregator eventAggregator)
+        public ProjectStatsViewModel(EventAggregator eventAggregator,
+                                    IDataService dataService)
         {
+            _dataService = dataService;
             _eventAggregator = eventAggregator;
 
             _eventAggregator.GetEvent<ProjectListUpdateRequested>()
@@ -29,12 +32,6 @@ namespace Projects.ViewModels
                             });
         }
 
-        public IEnumerable<Project> ProjectStatList
-        {
-            get
-            {
-                return DBManager.Services.ProjectService.GetProjects(true);
-            }
-        }
+        public IEnumerable<Project> ProjectStatList => _dataService.GetProjects(true);
     }
 }

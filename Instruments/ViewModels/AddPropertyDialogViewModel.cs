@@ -16,10 +16,13 @@ namespace Instruments.ViewModels
     {
         private DelegateCommand<Window> _cancel,
                                         _confirm;
+        private IDataService _dataService;
         private MeasurableQuantity _selectedQuantity;
 
-        public AddPropertyDialogViewModel()
+        public AddPropertyDialogViewModel(IDataService dataService)
         {
+            _dataService = dataService;
+
             _cancel = new DelegateCommand<Window>(
                 dialog =>
                 {
@@ -46,7 +49,7 @@ namespace Instruments.ViewModels
 
         public IEnumerable<MeasurableQuantity> QuantityList
         {
-            get { return DBManager.Services.InstrumentService.GetMeasurableQuantities(); }
+            get { return _dataService.GetMeasurableQuantities(); }
         }
 
         public MeasurableQuantity SelectedQuantity

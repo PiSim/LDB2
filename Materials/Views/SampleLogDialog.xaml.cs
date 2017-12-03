@@ -12,7 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace Services.Views
+namespace Materials.Views
 {
     /// <summary>
     /// Logica di interazione per SampleLogDialog.xaml

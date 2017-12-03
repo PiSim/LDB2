@@ -24,9 +24,11 @@ namespace Controls.Views
     public partial class BatchSelector : UserControl
     {
         private string _batchNumber;
+        private IDataService _dataService;
 
-        public BatchSelector()
+        public BatchSelector(IDataService dataService)
         {
+            _dataService = dataService;
             DataContext = this;
             InitializeComponent();
         }
@@ -37,7 +39,7 @@ namespace Controls.Views
             set
             {
                 _batchNumber = value;
-                SelectedBatch = MaterialService.GetBatch(_batchNumber);
+                SelectedBatch = _dataService.GetBatch(_batchNumber);
             }
         }
 

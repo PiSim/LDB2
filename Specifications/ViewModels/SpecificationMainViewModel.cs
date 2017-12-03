@@ -20,12 +20,15 @@ namespace Specifications.ViewModels
         private DBPrincipal _principal;
         private DelegateCommand _newSpecification, _openSpecification;
         private EventAggregator _eventAggregator;
+        private readonly IDataService _dataService;
         private Specification _selectedSpecification;
 
         public SpecificationMainViewModel(DBPrincipal principal,
-                                            EventAggregator aggregator) 
+                                            EventAggregator aggregator,
+                                            IDataService dataService) 
             : base()
         {
+            _dataService = dataService;
             _eventAggregator = aggregator;
             _principal = principal;
 
@@ -59,10 +62,7 @@ namespace Specifications.ViewModels
             get { return _openSpecification; }
         }
 
-        public IEnumerable<Specification> SpecificationList
-        {
-            get { return SpecificationService.GetSpecifications(); }
-        }
+        public IEnumerable<Specification> SpecificationList => _dataService.GetSpecifications();
 
         public string SpecificationMainListRegionName
         {

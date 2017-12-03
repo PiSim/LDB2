@@ -14,11 +14,13 @@ namespace Controls.ViewModels
     public class ProjectPickerDialogViewModel : BindableBase
     {
         private DelegateCommand<Window> _cancel, _confirm;
+        private readonly IDataService _dataService;
         private Project _selectedProject;
         
-        public ProjectPickerDialogViewModel() : base()
+        public ProjectPickerDialogViewModel(IDataService dataService) : base()
         {
-            
+            _dataService = dataService;
+
             _cancel = new DelegateCommand<Window>(
                 parent =>
                 {
@@ -42,10 +44,7 @@ namespace Controls.ViewModels
             get { return _confirm; }
         }
 
-        public IEnumerable<Project> ProjectList
-        {
-            get { return ProjectService.GetProjects(); }
-        }
+        public IEnumerable<Project> ProjectList => _dataService.GetProjects();
 
         public Project SelectedProject
         {

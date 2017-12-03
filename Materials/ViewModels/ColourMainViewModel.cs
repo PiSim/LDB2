@@ -21,10 +21,13 @@ namespace Materials.ViewModels
         private DelegateCommand _createColour,
                                 _deleteColour;
         private EventAggregator _eventAggregator;
+        private IDataService _dataService;
 
         public ColourMainViewModel(DBPrincipal principal,
-                                    EventAggregator eventAggregator) : base()
+                                    EventAggregator eventAggregator,
+                                    IDataService dataService) : base()
         {
+            _dataService = dataService;
             _eventAggregator = eventAggregator;
             _principal = principal;
 
@@ -67,10 +70,7 @@ namespace Materials.ViewModels
             get { return RegionNames.ColourEditRegion; }
         }
 
-        public IEnumerable<Colour> ColourList
-        {
-            get { return DBManager.Services.MaterialService.GetColours(); }
-        }
+        public IEnumerable<Colour> ColourList => _dataService.GetColours();
 
         public DelegateCommand CreateColourCommand
         {

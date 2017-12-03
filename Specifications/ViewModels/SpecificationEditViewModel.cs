@@ -7,7 +7,6 @@ using Infrastructure.Wrappers;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
-using Services;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -36,20 +35,26 @@ namespace Specifications.ViewModels
         private DelegateCommand<Method> _addTest;
         private readonly Dictionary<string, ICollection<string>> _validationErrors = new Dictionary<string, ICollection<string>>();
         private EventAggregator _eventAggregator;
+        private readonly IDataService _dataService;
         private IEnumerable<Method> _methodList;
+        private IReportService _reportService;
         private Report _selectedReport;
         private Specification _instance;
         private SpecificationVersion _selectedVersion;
         private StandardFile _selectedFile;
 
         public SpecificationEditViewModel(DBPrincipal principal,
-                                            EventAggregator aggregator) 
+                                            EventAggregator aggregator,
+                                            IDataService dataService,
+                                            IReportService reportService) 
             : base()
         {
+            _dataService = dataService;
             _eventAggregator = aggregator;
             _principal = principal;
+            _reportService = reportService;
 
-            _methodList = SpecificationService.GetMethods();
+            _methodList = _dataService.GetMethods();
 
             _addControlPlan = new DelegateCommand(
                 () =>
@@ -89,7 +94,7 @@ namespace Specifications.ViewModels
             _addTest = new DelegateCommand<Method>(
                 mtd =>
                 {
-                    Requirement newReq = CommonProcedures.GenerateRequirement(mtd);
+                    Requirement newReq = _reportService.GenerateRequirement(mtd);
                     _instance.AddMethod(newReq);
 
                     _eventAggregator.GetEvent<SpecificationMethodListChanged>()
@@ -331,10 +336,7 @@ namespace Specifications.ViewModels
             get { return _openReport; }
         }
 
-        public IEnumerable<Property> Properties
-        {
-            get { return SpecificationService.GetProperties(); }
-        }
+        public IEnumerable<Property> Properties => _dataService.GetProperties();
 
         public DelegateCommand RemoveControlPlanCommand
         {

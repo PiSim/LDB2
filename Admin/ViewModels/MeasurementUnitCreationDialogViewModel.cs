@@ -22,16 +22,18 @@ namespace Admin.ViewModels
 
         private readonly Dictionary<string, ICollection<string>> _validationErrors = new Dictionary<string, ICollection<string>>();
         private IEnumerable<MeasurableQuantity> _measurableQuantityList;
+        private IDataService _dataService;
         private MeasurableQuantity _selectedMeasurableQuantity;
         private MeasurementUnit _measurementUnitInstance;
         private string _name,
                         _symbol;
 
 
-        public MeasurementUnitCreationDialogViewModel()
+        public MeasurementUnitCreationDialogViewModel(IDataService dataService)
         {
+            _dataService = dataService;
             _canModifyQuantity = false;
-            _measurableQuantityList = InstrumentService.GetMeasurableQuantities();
+            _measurableQuantityList = _dataService.GetMeasurableQuantities();
 
             _cancel = new DelegateCommand<Window>(
                 parentDialog =>

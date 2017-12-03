@@ -76,7 +76,6 @@
     <Compile Include="EntityExtensions\MaterialExtensionTests.cs" />
     <Compile Include="EntityExtensions\StandardExtensionTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\MaterialServiceTests.cs" />
     <Compile Include="Services\OrganizationServiceTests.cs" />
     <Compile Include="Services\PeopleServiceTests.cs" />
     <Compile Include="Services\SpecificationServiceTests.cs" />

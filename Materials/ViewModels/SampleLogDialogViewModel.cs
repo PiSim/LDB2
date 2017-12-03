@@ -16,7 +16,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace Services.ViewModels
+namespace Materials.ViewModels
 {
     public class SampleLogDialogViewModel : BindableBase, INotifyDataErrorInfo
     {
@@ -28,15 +28,19 @@ namespace Services.ViewModels
 
         private readonly Dictionary<string, ICollection<string>> _validationErrors = new Dictionary<string, ICollection<string>>();
         private EventAggregator _eventAggregator;
-
+        private IDataService _dataService;
+        private IMaterialService _materialService;
         private string _batchNumber;
         private SampleLogChoiceWrapper _selectedChoice;
 
         public SampleLogDialogViewModel(DBPrincipal principal,
-                                        EventAggregator aggregator) : base()
+                                        EventAggregator aggregator,
+                                        IDataService dataService,
+                                        IMaterialService materialService) : base()
         {
             _principal = principal;
             _eventAggregator = aggregator;
+            _materialService = materialService;
 
             _selectedChoice = SampleLogActions.ActionList.First(cho => cho.Code == "A");
 
@@ -78,7 +82,7 @@ namespace Services.ViewModels
             _deleteSample = new DelegateCommand<Sample>(
                 smp =>
                 {
-                    CommonProcedures.DeleteSample(smp);
+                    _materialService.DeleteSample(smp);
                     RaisePropertyChanged("LatestSampleList");
                 });
 
@@ -149,7 +153,7 @@ namespace Services.ViewModels
             set
             {
                 _batchNumber = value;
-                BatchInstance = MaterialService.GetBatch(_batchNumber);
+                BatchInstance = _dataService.GetBatch(_batchNumber);
 
                 RaiseErrorsChanged("BatchNumber");
                 RaisePropertyChanged("BatchNumber");
@@ -171,10 +175,7 @@ namespace Services.ViewModels
             get { return _end; }
         }
 
-        public IEnumerable<Sample> LatestSampleList
-        {
-            get { return MaterialService.GetLatestSamples(15); }
-        }
+        public IEnumerable<Sample> LatestSampleList => _dataService.GetSamples(15);
 
         public string MaterialCode
         {

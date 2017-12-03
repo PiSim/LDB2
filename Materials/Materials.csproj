@@ -136,7 +136,6 @@
     <Compile Include="ViewModels\MaterialInfoMainViewModel.cs" />
     <Compile Include="ViewModels\SampleArchiveViewModel.cs" />
     <Compile Include="ViewModels\SampleLogDialogViewModel.cs" />
-    <Compile Include="ViewModels\SampleLogViewModel.cs" />
     <Compile Include="ViewModels\SampleLongTermStorageViewModel.cs" />
     <Compile Include="Views\AspectCreationDialog.xaml.cs">
       <DependentUpon>AspectCreationDialog.xaml</DependentUpon>
@@ -194,9 +193,6 @@
     </Compile>
     <Compile Include="Views\SampleArchive.xaml.cs">
       <DependentUpon>SampleArchive.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\SampleLog.xaml.cs">
-      <DependentUpon>SampleLog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SampleLogDialog.xaml.cs">
       <DependentUpon>SampleLogDialog.xaml</DependentUpon>
@@ -319,10 +315,6 @@
     <Page Include="Views\SampleArchive.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\SampleLog.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\SampleLogDialog.xaml">
       <Generator>MSBuild:Compile</Generator>

@@ -22,14 +22,20 @@ namespace Instruments.ViewModels
         private DelegateCommand _deleteInstrument, _newInstrument, _openInstrument,
                                 _openPending;
         private EventAggregator _eventAggregator;
+        private IDataService _dataService;
+        private IInstrumentService _instrumentService;
         private Instrument _selectedInstrument,
                             _selectedPending;
 
         public InstrumentMainViewModel(DBPrincipal principal,
-                                        EventAggregator eventAggregator) : base()
+                                        EventAggregator eventAggregator,
+                                        IDataService dataService,
+                                        IInstrumentService instrumentService) : base()
         {
             _principal = principal;
             _eventAggregator = eventAggregator;
+            _dataService = dataService;
+            _instrumentService = instrumentService;
 
             _deleteInstrument = new DelegateCommand(
                 () =>
@@ -42,8 +48,7 @@ namespace Instruments.ViewModels
             _newInstrument = new DelegateCommand(
                 () =>
                 {
-                    _eventAggregator.GetEvent<InstrumentCreationRequested>()
-                                    .Publish();
+                    _instrumentService.CreateInstrument();
                 },
                 () => IsInstrumentAdmin);
 
@@ -80,20 +85,14 @@ namespace Instruments.ViewModels
 
         }
 
-        public IEnumerable<CalibrationReport> CalibrationsList
-        {
-            get { return DBManager.Services.InstrumentService.GetCalibrationReports(); }
-        }
+        public IEnumerable<CalibrationReport> CalibrationsList => _dataService.GetCalibrationReports();
 
         public DelegateCommand DeleteInstrumentCommand
         {
             get { return _deleteInstrument; }
         }
 
-        public IEnumerable<Instrument> InstrumentList
-        {
-            get { return DBManager.Services.InstrumentService.GetInstruments(); }
-        }
+        public IEnumerable<Instrument> InstrumentList => _dataService.GetInstruments();
 
         private bool IsInstrumentAdmin
         {
@@ -115,13 +114,7 @@ namespace Instruments.ViewModels
             get { return _openPending; }
         }
 
-        public IEnumerable<Instrument> PendingCalibrationsList
-        {
-            get
-            {
-                return DBManager.Services.InstrumentService.GetCalibrationCalendar();
-            }
-        }
+        public IEnumerable<Instrument> PendingCalibrationsList => _instrumentService.GetCalibrationCalendar();
 
         public Instrument SelectedInstrument
         {

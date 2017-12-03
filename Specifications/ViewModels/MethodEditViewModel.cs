@@ -30,9 +30,11 @@ namespace Specifications.ViewModels
                                 _save,
                                 _startEdit;
         private EventAggregator _eventAggregator;
+        private IDataService _dataService;
         private IEnumerable<Organization> _organizationList;
         private IEnumerable<Property> _propertyList;
         private IEnumerable<SubMethod> _subMethodList;
+        private ISpecificationService _specificationService;
         private Method _methodInstance;
         private Organization _selectedOrganization;
         private Property _selectedProperty;
@@ -42,14 +44,18 @@ namespace Specifications.ViewModels
         private Test _selectedTest;
 
         public MethodEditViewModel(DBPrincipal principal,
-                                    EventAggregator aggregator) : base()
+                                    EventAggregator aggregator,
+                                    IDataService dataService,
+                                    ISpecificationService specificationService) : base()
         {
+            _dataService = dataService;
             _editMode = false;
             _eventAggregator = aggregator;
             _principal = principal;
+            _specificationService = specificationService;
 
-            _organizationList = OrganizationService.GetOrganizations(OrganizationRoleNames.StandardPublisher);
-            _propertyList = DataService.GetProperties();
+            _organizationList = _dataService.GetOrganizations(OrganizationRoleNames.StandardPublisher);
+            _propertyList = _dataService.GetProperties();
 
             _subMethodList = new List<SubMethod>();
 
@@ -146,7 +152,7 @@ namespace Specifications.ViewModels
                 () =>
                 {
                     _methodInstance.Update();
-                    SpecificationService.UpdateSubMethods(_subMethodList);
+                    _specificationService.UpdateSubMethods(_subMethodList);
 
                     if (_selectedOrganization.ID != _methodInstance.Standard.OrganizationID)
                     {

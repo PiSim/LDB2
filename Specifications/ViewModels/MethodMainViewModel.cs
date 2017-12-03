@@ -20,13 +20,19 @@ namespace Specifications.ViewModels
         private DBPrincipal _principal;
         private DelegateCommand _deleteMethod, _newMethod;
         private EventAggregator _eventAggregator;
+        private readonly IDataService _dataService;
+        private ISpecificationService _specificationService;
         private Method _selectedMethod;
 
         public MethodMainViewModel(DBPrincipal principal,
-                                    EventAggregator aggregator) : base()
+                                    EventAggregator aggregator,
+                                    IDataService dataService,
+                                    ISpecificationService specificationService) : base()
         {
+            _dataService = dataService;
             _eventAggregator = aggregator;
             _principal = principal;
+            _specificationService = specificationService;
 
             _deleteMethod = new DelegateCommand(
                 () =>
@@ -38,7 +44,7 @@ namespace Specifications.ViewModels
             _newMethod = new DelegateCommand(
                 () =>
                 {
-                    _eventAggregator.GetEvent<MethodCreationRequested>().Publish();
+                    _specificationService.CreateMethod();
                 },
                 () => IsSpecAdmin);
 
@@ -56,15 +62,8 @@ namespace Specifications.ViewModels
             get { return _principal.IsInRole(UserRoleNames.SpecificationAdmin); }
         }
 
-        public IEnumerable<Method> MethodList
-        {
-            get
-            {
-                return SpecificationService.GetMethods();
-            }
-        }
-
-
+        public IEnumerable<Method> MethodList => _dataService.GetMethods();
+        
         public DelegateCommand NewMethodCommand
         {
             get { return _newMethod; }

@@ -18,6 +18,7 @@ namespace Specifications.ViewModels
     {
         private DelegateCommand<Window> _cancel, _confirm;
         private readonly Dictionary<string, ICollection<string>> _validationErrors = new Dictionary<string, ICollection<string>>();
+        private IDataService _dataService;
         private IEnumerable<Organization> _oemList;
         private Method _methodInstance;
         private Organization _selectedOem;
@@ -25,9 +26,10 @@ namespace Specifications.ViewModels
         private Std _standardInstance;
         private string _name;
 
-        public MethodCreationDialogViewModel() : base()
+        public MethodCreationDialogViewModel(IDataService dataService) : base()
         {
-            _oemList = OrganizationService.GetOrganizations(OrganizationRoleNames.StandardPublisher);
+            _dataService = dataService;
+            _oemList = _dataService.GetOrganizations(OrganizationRoleNames.StandardPublisher);
 
             _cancel = new DelegateCommand<Window>(
                 parent =>
@@ -121,7 +123,7 @@ namespace Specifications.ViewModels
             {
                 _name = value;
 
-                _standardInstance = SpecificationService.GetStandard(_name);
+                _standardInstance = _dataService.GetStandard(_name);
 
                 if (_standardInstance != null)
                     SelectedOem = OemList.FirstOrDefault(oem => oem.ID == _standardInstance.OrganizationID);
@@ -147,10 +149,7 @@ namespace Specifications.ViewModels
             }
         }
 
-        public IEnumerable<Property> PropertiesList
-        {
-            get { return DataService.GetProperties(); }
-        }
+        public IEnumerable<Property> PropertiesList => _dataService.GetProperties();
 
         public Organization SelectedOem
         {

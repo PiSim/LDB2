@@ -7,7 +7,6 @@ using Infrastructure.Wrappers;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
-using Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -37,12 +36,14 @@ namespace Reports.ViewModels
         private DelegateCommand<Window> _cancel, _confirm;
         private readonly Dictionary<string, ICollection<string>> _validationErrors = new Dictionary<string, ICollection<string>>();
         private EventAggregator _eventAggregator;
+        private IDataService _dataService;
         private IEnumerable<ControlPlan> _controlPlanList;
         private IEnumerable<ISelectableRequirement> _requirementList;
         private IEnumerable<Person> _techList;
         private IEnumerable<Specification> _specificationList;
         private IEnumerable<SpecificationVersion> _versionList;
         private IEnumerable<ITestItem> _taskItemList;
+        private IReportService _reportService;
         private Int32 _number;
         private Material _material;
         private Person _author;
@@ -55,18 +56,22 @@ namespace Reports.ViewModels
         private Task _taskInstance;
         
         public ReportCreationDialogViewModel(DBPrincipal principal,
-                                            EventAggregator aggregator) : base()
+                                            EventAggregator aggregator,
+                                            IDataService dataService,
+                                            IReportService reportService) : base()
         {
+            _dataService = dataService;
             _eventAggregator = aggregator;
+            _reportService = reportService;
             _principal = principal;
             _creationMode = CreationModes.Report;
             _isCreatingFromTask = false;
 
-            _number = DBManager.Services.ReportService.GetNextReportNumber();
-            _techList = PeopleService.GetPeople(PersonRoleNames.MaterialTestingTech);
+            _number = _reportService.GetNextReportNumber();
+            _techList = _dataService.GetPeople(PersonRoleNames.MaterialTestingTech);
             _author = _techList.First(prs => prs.ID == _principal.CurrentPerson.ID);
             _requirementList = new List<ISelectableRequirement>();
-            _specificationList = SpecificationService.GetSpecifications();
+            _specificationList = _dataService.GetSpecifications();
 
             _confirm = new DelegateCommand<Window>(
                 parent => {
@@ -148,7 +153,7 @@ namespace Reports.ViewModels
             {
                 _batchNumber = value;
 
-                SelectedBatch = MaterialService.GetBatch(_batchNumber);
+                SelectedBatch = _dataService.GetBatch(_batchNumber);
                 RaisePropertyChanged("BatchNumber");
 
                 RaiseErrorsChanged("BatchNumber");
@@ -297,7 +302,7 @@ namespace Reports.ViewModels
 
                 if (_material != null && _material.ExternalConstruction != null)
                 {
-                    SpecificationVersion tempVersion = SpecificationService.GetSpecificationVersion((int)_material.ExternalConstruction.DefaultSpecVersionID);
+                    SpecificationVersion tempVersion = _dataService.GetSpecificationVersion((int)_material.ExternalConstruction.DefaultSpecVersionID);
                     SelectedSpecification = SpecificationList.FirstOrDefault(spec => spec.ID == tempVersion.SpecificationID);
                     SelectedVersion = VersionList.First(vers => vers.ID == _material.ExternalConstruction.DefaultSpecVersionID);
                 }
@@ -318,7 +323,7 @@ namespace Reports.ViewModels
                 if (_selectedControlPlan != null)
                 {
                     Description = (_selectedControlPlan == null) ? "" : _selectedControlPlan.Name;
-                    CommonProcedures.ApplyControlPlan(_requirementList, _selectedControlPlan);
+                    _reportService.ApplyControlPlan(_requirementList, _selectedControlPlan);
                 }
             }
         }
@@ -404,7 +409,7 @@ namespace Reports.ViewModels
                     _requirementList = _selectedVersion.GenerateRequirementList()
                                                         .Select(req => new ReportItemWrapper(req, this))
                                                         .ToList();
-                    CommonProcedures.ApplyControlPlan(_requirementList, _selectedControlPlan);
+                    _reportService.ApplyControlPlan(_requirementList, _selectedControlPlan);
                 }
 
                 RaisePropertyChanged("RequirementList");

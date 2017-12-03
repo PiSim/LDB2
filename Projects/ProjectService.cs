@@ -11,22 +11,23 @@ using System.Threading.Tasks;
 
 namespace Projects
 {
-    public class ProjectService
+    public class ProjectService : IProjectService
     {
         private DBEntities _entities;
         private EventAggregator _eventAggregator;
+        private IDataService _dataService;
         private IUnityContainer _container;
 
         public ProjectService(DBEntities entities,
-                                        EventAggregator eventAggregator,
-                                        IUnityContainer container)
+                                EventAggregator eventAggregator,
+                                IDataService dataService,
+                                IUnityContainer container)
         {
             _container = container;
+            _dataService = dataService;
             _entities = entities;
             _eventAggregator = eventAggregator;
-
-            _eventAggregator.GetEvent<ProjectCreationRequested>().Subscribe(
-                () => CreateNewProject());
+            
         }
 
         public bool AlterProjectInfo(Project target)
@@ -39,22 +40,7 @@ namespace Projects
 
 
 
-        internal static void UpdateProjectCosts()
-        {
-            IEnumerable<Project> _prjList = ProjectService.GetProjects();
-
-            foreach (Project prj in _prjList)
-            {
-                double oldvalue = prj.TotalExternalCost;
-
-                prj.UpdateExternalReportCost();
-
-                if (prj.TotalExternalCost != oldvalue)
-                    prj.Update();
-            }
-        }
-
-        private Project CreateNewProject(Person leader = null)
+        public Project CreateProject()
         {
             Views.ProjectCreationDialog creationDialog = new Views.ProjectCreationDialog();
 
@@ -66,6 +52,21 @@ namespace Projects
 
             else
                 return null;
+        }
+
+        internal void UpdateProjectCosts()
+        {
+            IEnumerable<Project> _prjList = _dataService.GetProjects();
+
+            foreach (Project prj in _prjList)
+            {
+                double oldvalue = prj.TotalExternalCost;
+
+                prj.UpdateExternalReportCost();
+
+                if (prj.TotalExternalCost != oldvalue)
+                    prj.Update();
+            }
         }
     }
 }

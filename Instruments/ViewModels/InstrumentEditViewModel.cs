@@ -34,11 +34,13 @@ namespace Instruments.ViewModels
                                 _save,
                                 _startEdit;
         private EventAggregator _eventAggregator;
+        private IDataService _dataService;
         private IEnumerable<InstrumentMeasurablePropertyWrapper> _propertyList;
         private IEnumerable<InstrumentType> _instrumentTypeList;
         private IEnumerable<InstrumentUtilizationArea> _areaList;
         private IEnumerable<Organization> _manufacturerList,
                                         _calibrationLabList;
+        private IInstrumentService _instrumentService;
         private Instrument _instance;
         private InstrumentFiles _selectedFile;
         private InstrumentMeasurablePropertyWrapper _selectedMeasurableProperty;
@@ -48,21 +50,24 @@ namespace Instruments.ViewModels
         private Property _filterProperty;
 
         public InstrumentEditViewModel(DBPrincipal principal,
-                                        EventAggregator aggregator) : base()
+                                        EventAggregator aggregator,
+                                        IDataService dataService,
+                                        IInstrumentService instrumentService) : base()
         {
+            _dataService = dataService;
             _editMode = false;
             _eventAggregator = aggregator;
+            _instrumentService = instrumentService;
             _principal = principal;
-            _areaList = DBManager.Services.InstrumentService.GetUtilizationAreas();
-            _instrumentTypeList = DBManager.Services.InstrumentService.GetInstrumentTypes();
-            _manufacturerList = OrganizationService.GetOrganizations(OrganizationRoleNames.Manufacturer);
-            _calibrationLabList = OrganizationService.GetOrganizations(OrganizationRoleNames.CalibrationLab);
+            _areaList = _dataService.GetInstrumentUtilizationAreas();
+            _instrumentTypeList = _dataService.GetInstrumentTypes();
+            _manufacturerList = _dataService.GetOrganizations(OrganizationRoleNames.Manufacturer);
+            _calibrationLabList = _dataService.GetOrganizations(OrganizationRoleNames.CalibrationLab);
             
             _addCalibration = new DelegateCommand(
                 () =>
                 {
-                    _eventAggregator.GetEvent<NewCalibrationRequested>()
-                                    .Publish(_instance);
+                    _instrumentService.ShowNewCalibrationDialog(_instance);
                 },
                 () => IsInstrumentAdmin);
 
@@ -86,7 +91,7 @@ namespace Instruments.ViewModels
                                                                                 Description = ""
                                                                             });
 
-                        DBManager.Services.InstrumentService.AddInstrumentFiles(fileList);
+                        _instrumentService.AddInstrumentFiles(fileList);
                         RaisePropertyChanged("FileList");
                     }
                 });
@@ -94,8 +99,7 @@ namespace Instruments.ViewModels
             _addMaintenanceEvent = new DelegateCommand(
                 () =>
                 {
-                    _eventAggregator.GetEvent<MaintenanceEventCreationRequested>()
-                                    .Publish(_instance);
+                    _instrumentService.ShowNewMaintenanceDialog(_instance);
                 },
                 () => IsInstrumentAdmin);
 
@@ -586,10 +590,7 @@ namespace Instruments.ViewModels
             get { return _openFile; }
         }
 
-        public IEnumerable<Property> PropertyList
-        {
-            get { return DataService.GetProperties(); }
-        }
+        public IEnumerable<Property> PropertyList => _dataService.GetProperties();
 
         public DelegateCommand RemoveFileCommand
         {

@@ -21,8 +21,8 @@ namespace Specifications
         {
             DBPrincipal principal = _container.Resolve<DBPrincipal>();
 
-            _container.RegisterType<SpecificationServiceProvider>(new ContainerControlledLifetimeManager());
-            _container.Resolve<SpecificationServiceProvider>();
+            _container.RegisterType<ISpecificationService, SpecificationService>(new ContainerControlledLifetimeManager());
+            _container.Resolve<SpecificationService>();
 
             _container.RegisterType<Object, Views.ControlPlanEdit>(SpecificationViewNames.ControlPlanEdit);
             _container.RegisterType<Object, Views.MethodEdit>(SpecificationViewNames.MethodEdit);

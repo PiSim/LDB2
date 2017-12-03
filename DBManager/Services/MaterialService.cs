@@ -47,36 +47,6 @@ namespace DBManager.Services
             }
         }
 
-        public static IEnumerable<Colour> GetColours()
-        {
-            // Returns all Colour entities
-
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.Configuration.LazyLoadingEnabled = false;
-
-                return entities.Colours.Where(clr => true)
-                                        .OrderBy(clr => clr.Name)
-                                        .ToList();
-            }
-        }
-
-        public static IEnumerable<Sample> GetLatestSamples(int number = 25)
-        {
-            // Returns a given number of the most recently inserted samples
-
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.Configuration.LazyLoadingEnabled = false;
-
-                return entities.Samples.Include(smp => smp.Batch)
-                                        .Include(smp => smp.LogAuthor)
-                                        .OrderByDescending(smp => smp.ID)
-                                        .Take(number)
-                                        .ToList();
-            }
-        }
-
         public static IEnumerable<Batch> GetLongTermStorage()
         {
             // Returns all the batches with a non-zero number of samples in long term storage
@@ -119,17 +89,6 @@ namespace DBManager.Services
             }
         }
 
-        public static MaterialLine GetLine(string lineCode)
-        {
-            // Returns a MaterialLine entry with the given code, or null if none exists
-
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.Configuration.LazyLoadingEnabled = false;
-
-                return entities.MaterialLines.FirstOrDefault(matl => matl.Code == lineCode);
-            }
-        }
 
         public static IEnumerable<Material> GetMaterialsWithoutProject()
         {
@@ -148,94 +107,10 @@ namespace DBManager.Services
             }
         }
 
-        public static Recipe GetRecipe(string code)
-        {
-            // Returns the recipe with the given code
-            // if none is found, null is returned
-
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.Configuration.LazyLoadingEnabled = false;
-
-                return entities.Recipes.FirstOrDefault(rec => rec.Code == code);
-            }
-        }
-
-        public static IEnumerable<TrialArea> GetTrialAreas()
-        {
-            // Returns all TrialArea entries
-
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.Configuration.LazyLoadingEnabled = false;
-
-                return entities.TrialAreas.Where(tra => true)
-                                            .ToList();
-            }
-        }
-
         #region Operations for Aspect entities
 
-        public static Aspect GetAspect(string code)
-        {
-            // Returns an Aspect entity with the given code
-            // if none is found null is returned
-
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.Configuration.LazyLoadingEnabled = false;
-
-                return entities.Aspects.FirstOrDefault(asp => asp.Code == code);
-            }
-        }
-
-        public static IEnumerable<Aspect> GetAspects()
-        {
-            // Returns all Aspect entities
-
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.Configuration.LazyLoadingEnabled = false;
-
-                return entities.Aspects.Where(asp => true)
-                                        .ToList();
-            }
-        }
 
         #endregion
-
-        #region Operations for Batch entities
-
-        public static Batch GetBatch(int ID)
-        {
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.Configuration.LazyLoadingEnabled = false;
-
-                return entities.Batches.Include(btc => btc.Material.Aspect)
-                                        .Include(btc => btc.Material.MaterialType)
-                                        .Include(btc => btc.Material.MaterialLine)
-                                        .Include(btc => btc.Material.Recipe.Colour)
-                                        .FirstOrDefault(entry => entry.ID == ID);
-            }
-        }
-
-        public static Batch GetBatch(string batchNumber)
-        {
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.Configuration.LazyLoadingEnabled = false;
-
-                return entities.Batches.Include(btc => btc.Material.Aspect)
-                                        .Include(btc => btc.Material.MaterialType)
-                                        .Include(btc => btc.Material.MaterialLine)
-                                        .Include(btc => btc.Material.Recipe.Colour)
-                                        .FirstOrDefault(entry => entry.Number == batchNumber);
-            }
-        }
-
-        #endregion
-
         
 
         #region Operations for ExternalConstruction entities
@@ -257,19 +132,6 @@ namespace DBManager.Services
             using (DBEntities entities = new DBEntities())
             {
                 return entities.ExternalConstructions.First(entry => entry.ID == ID);
-            }
-        }
-
-        public static IEnumerable<ExternalConstruction> GetExternalConstructions()
-        {
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.Configuration.LazyLoadingEnabled = false;
-
-                return entities.ExternalConstructions.Include(exc => exc.Oem)
-                                                    .OrderBy(exc => exc.Oem.Name)
-                                                    .ThenBy(exc => exc.Name)
-                                                    .ToList();
             }
         }
 
@@ -340,90 +202,6 @@ namespace DBManager.Services
             {
                 entities.ExternalConstructions.AddOrUpdate(entry);
                 entities.SaveChanges();
-            }
-        }
-
-        #endregion
-
-        #region Operations for Material entities
-
-        public static Material GetMaterial(int ID)
-        {
-            // Returns a Material entities with the given ID
-            // if none is found null is returned
-
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.Configuration.LazyLoadingEnabled = false;
-
-                return entities.Materials.Include(mat => mat.Aspect)
-                                        .Include(mat => mat.MaterialLine)
-                                        .Include(mat => mat.MaterialType)
-                                        .Include(mat => mat.Recipe)
-                                        .FirstOrDefault(mat => mat.ID == ID);
-            }
-        }
-
-        public static Material GetMaterial(string type,
-                                            string line,
-                                            string aspect,
-                                            string recipe)
-        {
-            // Returns a Material entities with the type, line, aspect and recipe
-            // if none is found null is returned
-
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.Configuration.LazyLoadingEnabled = false;
-
-                return entities.Materials.Include(mat => mat.Aspect)
-                                        .Include(mat => mat.MaterialLine)
-                                        .Include(mat => mat.MaterialType)
-                                        .Include(mat => mat.Recipe)
-                                        .FirstOrDefault(mat => mat.Aspect.Code == aspect
-                                                            && mat.MaterialLine.Code == line
-                                                            && mat.Recipe.Code == recipe
-                                                            && mat.MaterialType.Code == type);
-            }
-        }
-
-        public static Material GetMaterial(MaterialType type,
-                                            MaterialLine line,
-                                            Aspect aspect,
-                                            Recipe recipe)
-        {
-            // Returns a Material entities with the given construction and recipe
-            // if none is found null is returned
-
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.Configuration.LazyLoadingEnabled = false;
-
-                return entities.Materials.Include(mat => mat.Aspect)
-                                        .Include(mat => mat.MaterialLine)
-                                        .Include(mat => mat.MaterialType)
-                                        .Include(mat => mat.Recipe)
-                                        .FirstOrDefault(mat => mat.AspectID == aspect.ID
-                                                            && mat.LineID == line.ID
-                                                            && mat.RecipeID == recipe.ID
-                                                            && mat.TypeID == type.ID);
-            }
-        }
-
-        #endregion
-
-        #region Operations for MaterialType entities
-
-        public static MaterialType GetMaterialType(string code)
-        {
-            // Returns a MaterialType entity with the given code
-            // if none is found null is returned
-
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.Configuration.LazyLoadingEnabled = false;
-
-                return entities.MaterialTypes.FirstOrDefault(mty => mty.Code == code);
             }
         }
 

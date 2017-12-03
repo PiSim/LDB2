@@ -18,13 +18,15 @@ namespace Projects.ViewModels
     {
         private DelegateCommand<Window> _cancel, _confirm;
         private readonly Dictionary<string, ICollection<string>> _validationErrors = new Dictionary<string, ICollection<string>>();
+        private IDataService _dataService;
         private Organization _selectedOem;
         private Person _selectedLeader;
         private Project _projectInstance;
         private string _description, _name;
         
-        public ProjectCreationDialogViewModel(DBEntities entities) : base()
+        public ProjectCreationDialogViewModel(IDataService dataService) : base()
         {
+            _dataService = dataService;
             _description = "";
 
             _cancel = new DelegateCommand<Window>(
@@ -89,18 +91,9 @@ namespace Projects.ViewModels
             get { return _confirm; }
         }
 
-        public IEnumerable<Person> LeaderList
-        {
-            get
-            {
-                return PeopleService.GetPeople(PersonRoleNames.ProjectLeader);
-            }
-        }
+        public IEnumerable<Person> LeaderList => _dataService.GetPeople(PersonRoleNames.ProjectLeader);
 
-        public IEnumerable<Organization> OemList
-        {
-            get { return OrganizationService.GetOrganizations(OrganizationRoleNames.OEM); }
-        }
+        public IEnumerable<Organization> OemList => _dataService.GetOrganizations(OrganizationRoleNames.OEM);
 
         public string ProjectDescription
         {

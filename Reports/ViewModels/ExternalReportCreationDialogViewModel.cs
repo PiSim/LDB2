@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace Services.ViewModels
+namespace Reports.ViewModels
 {
     public class ExternalReportCreationDialogViewModel : BindableBase
     {
@@ -23,21 +23,26 @@ namespace Services.ViewModels
         private DelegateCommand<TextBox> _addBatch;
         private DelegateCommand<Window> _cancel, _confirm;
         private ExternalReport _externalReportInstance;
+        private IDataService _dataService;
+        private IReportService _reportService;
         private ObservableCollection<Batch> _batchList;
         private Organization _selectedLab;
         private Project _selectedProject;
         private string _batchNumber, _sampleDescription, _testDescription;
         
-        public ExternalReportCreationDialogViewModel() : base()
+        public ExternalReportCreationDialogViewModel(IDataService dataService,
+                                                    IReportService reportService) : base()
         {
             _batchList = new ObservableCollection<Batch>();
+            _dataService = dataService;
+            _reportService = reportService;
             _sampleDescription = "";
             _testDescription = "";
 
             _addBatch = new DelegateCommand<TextBox>(
                 batchBox => 
                 {
-                    Batch temp = MaterialService.GetBatch(batchBox.Text);
+                    Batch temp = _dataService.GetBatch(batchBox.Text);
                     if (temp == null)
                     {
                         temp = new Batch
@@ -65,7 +70,7 @@ namespace Services.ViewModels
                     {
                         Description = _testDescription,
                         Year = year,
-                        Number = ReportService.GetNextExternalReportNumber(year),
+                        Number = _reportService.GetNextExternalReportNumber(year),
                         ExternalNumber = "",
                         MaterialSent = false,
                         RequestDone = false,
@@ -122,20 +127,14 @@ namespace Services.ViewModels
             get { return _cancel; }
         }
         
-        public DelegateCommand<Window> ConfirmCommand
-        {
-            get { return _confirm; }
-        }
+        public DelegateCommand<Window> ConfirmCommand => _confirm;
         
         public DelegateCommand RemoveBatchCommand
         {
             get { return _removeBatch; }
         }
 
-        public IEnumerable<Organization> LaboratoriesList 
-        {
-            get { return OrganizationService.GetOrganizations(OrganizationRoleNames.TestLab); }
-        }
+        public IEnumerable<Organization> LaboratoriesList => _dataService.GetOrganizations(OrganizationRoleNames.TestLab);
         
         public string SampleDescription
         {
@@ -157,10 +156,7 @@ namespace Services.ViewModels
             }
         }
         
-        public IEnumerable<Project> ProjectList
-        {
-            get { return ProjectService.GetProjects(); }
-        }
+        public IEnumerable<Project> ProjectList => _dataService.GetProjects();
         
         public Organization SelectedLab
         {

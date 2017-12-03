@@ -1,4 +1,5 @@
 ﻿using DBManager;
+using DBManager.EntityExtensions;
 using Infrastructure;
 using Infrastructure.Events;
 using Microsoft.Practices.Unity;
@@ -22,13 +23,7 @@ namespace Instruments
         {
             _eventAggregator = aggregator;
             _container = container;
-
-            _eventAggregator.GetEvent<InstrumentCreationRequested>()
-                            .Subscribe(
-                            () =>
-                            {
-                                RegisterNewInstrument();
-                            });
+            
         }
 
 
@@ -41,40 +36,6 @@ namespace Instruments
                 entities.CalibrationFiles.AddRange(fileList);
                 entities.SaveChanges();
             }
-        }
-
-        public IEnumerable<TaskItem> GenerateTaskItemList(IEnumerable<Requirement> reqList)
-        {
-            List<TaskItem> output = new List<TaskItem>();
-
-            foreach (Requirement req in reqList)
-            {
-                TaskItem tempItem = new TaskItem();
-
-                tempItem.Description = req.Description;
-                tempItem.MethodID = req.MethodID;
-                tempItem.Name = req.Name;
-                tempItem.Position = 0;
-                tempItem.RequirementID = req.ID;
-                tempItem.SpecificationVersionID = req.SpecificationVersionID;
-
-                foreach (SubRequirement sreq in req.SubRequirements)
-                {
-                    SubTaskItem tempSubItem = new SubTaskItem();
-
-                    tempSubItem.Name = sreq.SubMethod.Name;
-                    tempSubItem.RequiredValue = sreq.RequiredValue;
-                    tempSubItem.SubMethodID = sreq.SubMethodID;
-                    tempSubItem.SubRequirementID = sreq.ID;
-                    tempSubItem.UM = sreq.SubMethod.UM;
-
-                    tempItem.SubTaskItems.Add(tempSubItem);
-                }
-
-                output.Add(tempItem);
-            }
-
-            return output;
         }
 
         public IEnumerable<Instrument> GetCalibrationCalendar()

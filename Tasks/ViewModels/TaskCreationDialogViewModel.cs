@@ -5,7 +5,6 @@ using Infrastructure;
 using Infrastructure.Wrappers;
 using Prism.Commands;
 using Prism.Mvvm;
-using Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -21,11 +20,13 @@ namespace Tasks.ViewModels
         private ControlPlan _selectedControlPlan;
         private DBPrincipal _principal;
         private DelegateCommand<Window> _cancel, _confirm;
+        private IDataService _dataService;
         private IEnumerable<Person> _leaderList;
         private IEnumerable<Specification> _specificationList;
         private IEnumerable<ReportItemWrapper> _requirementList;
         private IList<ControlPlan> _controlPlanList;
         private IList<SpecificationVersion> _versionList;
+        private IReportService _reportService;
         private Material _material;
         private Person _requester;
         private Specification _selectedSpecification;
@@ -33,12 +34,16 @@ namespace Tasks.ViewModels
         private string _batchNumber, _notes;
         private Task _taskInstance;
 
-        public TaskCreationDialogViewModel(DBPrincipal principal) : base()
+        public TaskCreationDialogViewModel(DBPrincipal principal,
+                                            IDataService dataService,
+                                            IReportService reportService) : base()
         {
             _principal = principal;
+            _dataService = dataService;
+            _reportService = reportService;
 
-            _leaderList = PeopleService.GetPeople(PersonRoleNames.ProjectLeader);
-            _specificationList = SpecificationService.GetSpecifications();
+            _leaderList = _dataService.GetPeople(PersonRoleNames.ProjectLeader);
+            _specificationList = _dataService.GetSpecifications();
             _requirementList = new List<ReportItemWrapper>();
 
             _requester = _leaderList.FirstOrDefault(prs => prs.ID == _principal.CurrentPerson.ID);
@@ -52,7 +57,7 @@ namespace Tasks.ViewModels
             _confirm = new DelegateCommand<Window>(
                 parent =>
                 {
-                    Batch tempBatch = CommonProcedures.GetBatch(_batchNumber);
+                    Batch tempBatch = _dataService.GetBatch(_batchNumber);
                     _taskInstance = new Task
                     {
                         BatchID = tempBatch.ID,
@@ -66,7 +71,7 @@ namespace Tasks.ViewModels
                         WorkHours = TotalDuration
                     };
 
-                    foreach (TaskItem tItem in CommonProcedures.GenerateTaskItemList(_requirementList
+                    foreach (TaskItem tItem in _reportService.GenerateTaskItemList(_requirementList
                                                                 .Where(req => req.IsSelected)
                                                                 .Select(req => req.RequirementInstance)))
                         _taskInstance.TaskItems.Add(tItem);
@@ -91,7 +96,7 @@ namespace Tasks.ViewModels
             set
             {
                 _batchNumber = value;
-                SelectedBatch = MaterialService.GetBatch(_batchNumber);
+                SelectedBatch = _dataService.GetBatch(_batchNumber);
             }
         }
 
@@ -167,7 +172,7 @@ namespace Tasks.ViewModels
 
                 if (_material != null && _material.ExternalConstruction != null)
                 {
-                    SpecificationVersion tempVersion = SpecificationService.GetSpecificationVersion((int)_material.ExternalConstruction.DefaultSpecVersionID);
+                    SpecificationVersion tempVersion = _dataService.GetSpecificationVersion((int)_material.ExternalConstruction.DefaultSpecVersionID);
                     SelectedSpecification = SpecificationList.FirstOrDefault(spec => spec.ID == tempVersion.SpecificationID);
                     SelectedVersion = VersionList.First(vers => vers.ID == tempVersion.ID);
                 }
@@ -188,7 +193,7 @@ namespace Tasks.ViewModels
 
                 RaisePropertyChanged("SelectedControlPlan");
                 if (value != null && _requirementList != null)
-                    CommonProcedures.ApplyControlPlan(_requirementList, _selectedControlPlan);
+                    _reportService.ApplyControlPlan(_requirementList, _selectedControlPlan);
             }
         }
 
@@ -225,7 +230,7 @@ namespace Tasks.ViewModels
                     _requirementList = _selectedVersion.GenerateRequirementList()
                                                         .Select(req => new ReportItemWrapper(req, this))
                                                         .ToList();
-                    CommonProcedures.ApplyControlPlan(_requirementList, _selectedControlPlan);
+                    _reportService.ApplyControlPlan(_requirementList, _selectedControlPlan);
                 }
 
                 else

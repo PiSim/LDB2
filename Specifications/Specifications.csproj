@@ -103,7 +103,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="SpecificationServiceProvider.cs" />
+    <Compile Include="SpecificationService.cs" />
     <Compile Include="SpecificationsModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

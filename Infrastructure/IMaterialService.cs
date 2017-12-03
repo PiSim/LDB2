@@ -12,5 +12,10 @@ namespace Infrastructure
     {
         Aspect CreateAspect();
         IEnumerable<IQueryPresenter<Batch>> GetBatchQueries();
+        void DeleteSample(Sample smp);
+        Batch StartBatchSelection();
+        ExternalConstruction CreateNewExternalConstruction();
+        void ShowSampleLogDialog();
+        Batch CreateBatch();
     }
 }

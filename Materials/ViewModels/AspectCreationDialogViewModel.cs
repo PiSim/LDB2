@@ -19,10 +19,12 @@ namespace Materials.ViewModels
         private readonly DelegateCommand<Window> _cancel,
                                                 _confirm;
         private readonly Dictionary<string, ICollection<string>> _validationErrors = new Dictionary<string, ICollection<string>>();
+        private readonly IDataService _dataService;
 
-        public AspectCreationDialogViewModel()
+        public AspectCreationDialogViewModel(IDataService dataService)
         {
             _aspectInstance = new Aspect();
+            _dataService = dataService;
 
             _cancel = new DelegateCommand<Window>(
                 parent =>
@@ -80,7 +82,7 @@ namespace Materials.ViewModels
             {
                 _aspectInstance.Code = value;
 
-                if (value.Length == 3 && DBManager.Services.MaterialService.GetAspect(value) == null)
+                if (value.Length == 3 && _dataService.GetAspect(value) == null)
                 {
                     if (_validationErrors.ContainsKey("AspectCode"))
                     {

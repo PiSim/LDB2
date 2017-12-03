@@ -18,22 +18,27 @@ namespace Admin.ViewModels
     {
         private DelegateCommand _createNewUser, _deleteUser;
         private EventAggregator _eventAggregator;
+        private IAdminService _adminService;
+        private IDataService _dataService;
         private IEnumerable<User> _userList;
         private User _selectedUser;
 
-        public UserMainViewModel(EventAggregator eventAggregator) : base()
+        public UserMainViewModel(EventAggregator eventAggregator,
+                                IAdminService adminService,
+                                IDataService dataService) : base()
         {
+            _adminService = adminService;
             _eventAggregator = eventAggregator;
+            _dataService = dataService;
 
-            _userList = DataService.GetUsers();
+            _userList = _dataService.GetUsers();
 
             _createNewUser = new DelegateCommand(
                 () =>
                 {
-                    _eventAggregator.GetEvent<UserCreationRequested>()
-                                    .Publish();
+                    _adminService.CreateNewUser();
 
-                    UserList = DataService.GetUsers();
+                    UserList = _dataService.GetUsers();
                 });
 
             _deleteUser = new DelegateCommand(
@@ -41,7 +46,7 @@ namespace Admin.ViewModels
                 {
                     _selectedUser.Delete();
 
-                    UserList = DataService.GetUsers();
+                    UserList = _dataService.GetUsers();
                 },
                 () => _selectedUser != null);
         }

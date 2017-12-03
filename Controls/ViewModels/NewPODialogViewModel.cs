@@ -16,14 +16,16 @@ namespace Controls.ViewModels
         private DateTime _date;
         private DelegateCommand<Window> _cancel, _confirm;
         private float _total;
+        private IDataService _dataService;
         private IEnumerable<Organization> _organizationList;
         private Organization _selectedOrganization;
         private string _number;
 
-        public NewPODialogViewModel() : base()
+        public NewPODialogViewModel(IDataService dataService) : base()
         {
+            _dataService = dataService;
             _date = DateTime.Now;
-            _organizationList = OrganizationService.GetOrganizations(OrganizationRoleNames.TestLab);
+            _organizationList = _dataService.GetOrganizations(OrganizationRoleNames.TestLab);
 
             _cancel = new DelegateCommand<Window>(
                 parent =>

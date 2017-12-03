@@ -19,10 +19,16 @@ namespace Admin.ViewModels
         private DelegateCommand _deleteQuantity,
                                 _newQuantity;
         private EventAggregator _eventAggregator;
+        private IAdminService _adminService;
+        private IDataService _dataService;
         private MeasurableQuantity _selectedMeasurableQuantity;
 
-        public MeasurableQuantityMainViewModel(EventAggregator eventAggregator) : base()
+        public MeasurableQuantityMainViewModel(EventAggregator eventAggregator,
+                                                IAdminService adminService,
+                                                IDataService dataService) : base()
         {
+            _adminService = adminService;
+            _dataService = dataService;
             _eventAggregator = eventAggregator;
 
             _deleteQuantity = new DelegateCommand(
@@ -34,8 +40,7 @@ namespace Admin.ViewModels
             _newQuantity = new DelegateCommand(
                 () =>
                 {
-                    _eventAggregator.GetEvent<MeasurableQuantityCreationRequested>()
-                                    .Publish();
+                    _adminService.CreateNewMeasurableQuantity();
                 });
 
             _eventAggregator.GetEvent<MeasurableQuantityCreated>()
@@ -53,7 +58,7 @@ namespace Admin.ViewModels
 
         public IEnumerable<MeasurableQuantity> MeasurableQuantityList
         {
-            get { return InstrumentService.GetMeasurableQuantities(); }
+            get { return _dataService.GetMeasurableQuantities(); }
         }
 
         public DelegateCommand DeleteQuantityCommand

@@ -32,7 +32,6 @@ namespace Instruments
 
             _container.RegisterType<Object, Views.CalibrationReportEdit>(InstrumentViewNames.CalibrationReportEditView);
             _container.RegisterType<Object, Views.InstrumentEdit>(InstrumentViewNames.InstrumentEditView);
-            _container.RegisterType<Object, Views.InstrumentMeasurablePropertyEdit>(InstrumentViewNames.InstrumentMeasurablePropertyEditView);
             _container.RegisterType<Object, Views.InstrumentMain>(InstrumentViewNames.InstrumentsMainView);
 
             _regionManager.RegisterViewWithRegion(RegionNames.InstrumentEditMetrologyRegion,

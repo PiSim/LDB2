@@ -20,11 +20,7 @@ namespace DBManager.EntityExtensions.Tests
             tempStd.Name = "PROVA";
             tempStd.OrganizationID = 1;
             tempStd.Create();
-
-            Std readEntry = SpecificationService.GetStandard("PROVA");
-
-            Assert.IsNotNull(readEntry);
-
+            
             tempStd.Delete();
         }
     }

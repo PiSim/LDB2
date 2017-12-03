@@ -16,10 +16,12 @@ namespace Admin.ViewModels
     {
         private DelegateCommand _createArea,
                                 _deleteArea;
+        private IDataService _dataService;
         private InstrumentUtilizationArea _selectedArea;
 
-        public InstrumentUtilizationAreaMainViewModel()
+        public InstrumentUtilizationAreaMainViewModel(IDataService dataService)
         {
+            _dataService = dataService;
 
             _createArea = new DelegateCommand(
                 () =>
@@ -71,9 +73,6 @@ namespace Admin.ViewModels
             }
         }
 
-        public IEnumerable<InstrumentUtilizationArea> UtilizationAreaList
-        {
-            get { return InstrumentService.GetUtilizationAreas(); }
-        }
+        public IEnumerable<InstrumentUtilizationArea> UtilizationAreaList => _dataService.GetInstrumentUtilizationAreas();
     }
 }

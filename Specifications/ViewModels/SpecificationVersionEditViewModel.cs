@@ -28,12 +28,18 @@ namespace Specifications.ViewModels
         private DelegateCommand<Requirement> _deleteRequirementCommand;
         private readonly Dictionary<string, ICollection<string>> _validationErrors = new Dictionary<string, ICollection<string>>();
         private EventAggregator _eventAggregator;
+        private readonly IDataService _dataService;
+        private readonly ISpecificationService _specificationService;
         private List<RequirementWrapper> _requirementList;
         private SpecificationVersion _specificationVersionInstance;
-        
+
         public SpecificationVersionEditViewModel(DBPrincipal principal,
-                                                EventAggregator eventAggregator)
+                                                EventAggregator eventAggregator,
+                                                IDataService dataService,
+                                                ISpecificationService specificationService)
         {
+            _dataService = dataService;
+            _specificationService = specificationService;
             _editMode = false;
             _eventAggregator = eventAggregator;
             _principal = principal;
@@ -59,10 +65,10 @@ namespace Specifications.ViewModels
                         return;
 
                     if (_specificationVersionInstance.IsMain)
-                        SpecificationService.UpdateRequirements(_requirementList.Select(req => req.RequirementInstance));
+                        _specificationService.UpdateRequirements(_requirementList.Select(req => req.RequirementInstance));
 
                     else
-                        SpecificationService.UpdateRequirements(_requirementList.Where(req => req.IsOverride)
+                        _specificationService.UpdateRequirements(_requirementList.Where(req => req.IsOverride)
                                                                                 .Select(req => req.RequirementInstance));
 
                     EditMode = false;
@@ -145,7 +151,7 @@ namespace Specifications.ViewModels
 
             else
                 _requirementList = new List<RequirementWrapper>(_specificationVersionInstance.GenerateRequirementList()
-                                                                                            .Select(req => new RequirementWrapper(req, _specificationVersionInstance))
+                                                                                            .Select(req => new RequirementWrapper(req, _specificationVersionInstance, _dataService))
                                                                                             .ToList());
         }
 

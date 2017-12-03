@@ -9,7 +9,6 @@ using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
 using Reporting;
-using Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -54,8 +53,7 @@ namespace Materials.ViewModels
             _createBatch = new DelegateCommand(
                 () =>
                 {
-                    _eventAggregator.GetEvent<BatchCreationRequested>()
-                                    .Publish();
+                    _materialService.CreateBatch();
                 },
                 () => _principal.IsInRole(UserRoleNames.BatchEdit));
 
@@ -68,7 +66,7 @@ namespace Materials.ViewModels
             _openSampleLogView = new DelegateCommand(
                 () =>
                 {
-                    CommonProcedures.StartSampleLog();
+                    _materialService.ShowSampleLogDialog();
                 },
                 () => _principal.IsInRole(UserRoleNames.SampleEdit));
             
@@ -151,13 +149,7 @@ namespace Materials.ViewModels
             get { return _printStatusList; }
         }
 
-        public IEnumerable<Sample> RecentArrivalsList
-        {
-            get
-            {
-                return DBManager.Services.MaterialService.GetLatestSamples();
-            }
-        }
+        public IEnumerable<Sample> RecentArrivalsList => _dataService.GetSamples(25);
 
         public DelegateCommand RefreshCommand
         {

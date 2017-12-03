@@ -25,15 +25,18 @@ namespace Tasks.ViewModels
         private DelegateCommand<DataGrid> _printTaskList;
         private EventAggregator _eventAggregator;
         private DBManager.Task _selectedTask;
+        private IDataService _dataService;
         private IReportingService _reportingService;
         private ITaskService _taskService;
 
         public TaskMainViewModel(DBPrincipal principal,
                                 EventAggregator eventAggregator,
+                                IDataService dataService,
                                 IReportingService reportingService,
                                 ITaskService taskService) 
             : base()
         {
+            _dataService = dataService;
             _eventAggregator = eventAggregator;
             _principal = principal;
             _reportingService = reportingService;
@@ -176,8 +179,8 @@ namespace Tasks.ViewModels
         {
             get
             {
-                return DBManager.Services.TaskService.GetTasks(_showComplete,
-                                            _showAssigned);
+                return _dataService.GetTasks(_showComplete,
+                                                _showAssigned);
             }
         }
     }

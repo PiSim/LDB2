@@ -15,11 +15,14 @@ namespace Admin.ViewModels
     {
         private DelegateCommand _newUnit;
         private EventAggregator _eventAggregator;
+        private IDataService _dataService;
         private MeasurementUnit _selectedUnit;
 
-        public MeasurementUnitMainViewModel(EventAggregator eventAggregator)
+        public MeasurementUnitMainViewModel(EventAggregator eventAggregator,
+                                            IDataService dataService)
         {
             _eventAggregator = eventAggregator;
+            _dataService = dataService;
 
             _newUnit = new DelegateCommand(
                 () =>
@@ -45,9 +48,6 @@ namespace Admin.ViewModels
             }
         }
 
-        public IEnumerable<MeasurementUnit> UnitOfMeasurementList
-        {
-            get { return InstrumentService.GetMeasurementUnits(); }
-        }
+        public IEnumerable<MeasurementUnit> UnitOfMeasurementList => _dataService.GetMeasurementUnits();
     }
 }

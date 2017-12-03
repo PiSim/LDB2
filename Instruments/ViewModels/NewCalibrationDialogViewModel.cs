@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
 
-namespace Services.ViewModels
+namespace Instruments.ViewModels
 {
     public class NewCalibrationDialogViewModel : BindableBase
     {
@@ -29,6 +29,7 @@ namespace Services.ViewModels
         private DelegateCommand<string> _addReference;
         private DelegateCommand<Window> _cancel, _confirm;
         private EventAggregator _eventAggregator;
+        private IDataService _dataService;
         private IEnumerable<Organization> _labList;
         private Instrument _instumentInstance, _selectedReference;
         private Person _selectedTech;
@@ -38,12 +39,14 @@ namespace Services.ViewModels
 
         public NewCalibrationDialogViewModel(DBEntities entities,
                                             DBPrincipal principal,
-                                            EventAggregator eventAggregator) : base()
+                                            EventAggregator eventAggregator,
+                                            IDataService dataService) : base()
         {
+            _dataService = dataService;
             _entities = entities;
             _isVerificationOnly = false;
             _referenceList = new ObservableCollection<Instrument>();
-            _labList = OrganizationService.GetOrganizations(OrganizationRoleNames.CalibrationLab);
+            _labList = _dataService.GetOrganizations(OrganizationRoleNames.CalibrationLab);
             _eventAggregator = eventAggregator;
             _principal = principal;
 

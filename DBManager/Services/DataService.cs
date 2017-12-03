@@ -10,21 +10,7 @@ namespace DBManager.Services
     public static class DataService
     {
         // Repository for Common DB-Access methods -- DEPRECATED
-
-        public static IEnumerable<Batch> GetBatchesForExternalConstruction(ExternalConstruction target,
-                                                                    bool lazyLoadingEnabled = false)
-        {
-            using (var entities = new DBEntities())
-            {
-                entities.Configuration.LazyLoadingEnabled = lazyLoadingEnabled;
-                return entities.Batches.Where(btc => btc.Material.ExternalConstruction.ID == target.ID)
-                                        .Include(btc => btc.Material.Aspect)
-                                        .Include(btc => btc.Material.MaterialLine)
-                                        .Include(btc => btc.Material.MaterialType)
-                                        .Include(btc => btc.Material.Recipe.Colour)
-                                        .ToList();
-            }
-        }
+        
 
         public static IEnumerable<Material> GetMaterialsWithoutConstruction()
         {
@@ -52,44 +38,6 @@ namespace DBManager.Services
                                             .Include(mat => mat.MaterialType)
                                             .Include(mat => mat.Recipe)
                                             .ToList();
-            }
-        }
-
-        public static IEnumerable<OrganizationRole> GetOrganizationRoles()
-        {
-            //Returns all organization roles
-
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.Configuration.LazyLoadingEnabled = false;
-
-                return entities.OrganizationRoles
-                                .ToList();
-            }
-        }
-
-        public static IEnumerable<Property> GetProperties()
-        {
-            // Returns all Property entities
-
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.Configuration.LazyLoadingEnabled = false;
-
-                return entities.Properties.Where(prp => true)
-                                            .ToList();
-            }
-        }
-
-        public static IEnumerable<User> GetUsers()
-        {
-            // Returns all User entities
-
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.Configuration.LazyLoadingEnabled = false;
-
-                return entities.Users.ToList();
             }
         }
     }

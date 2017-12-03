@@ -18,6 +18,7 @@ namespace Instruments.ViewModels
         private bool _isUnderControl;
         private DelegateCommand<Window> _cancel, _confirm;
         private readonly Dictionary<string, ICollection<string>> _validationErrors = new Dictionary<string, ICollection<string>>();
+        private IDataService _dataService;
         private IEnumerable<Organization> _calibrationLabList;
         private Instrument _instrumentInstance;
         private InstrumentType _selectedType;
@@ -30,13 +31,14 @@ namespace Instruments.ViewModels
                         _notes,
                         _serial;
 
-        public InstrumentCreationDialogViewModel() : base()
+        public InstrumentCreationDialogViewModel(IDataService dataService) : base()
         {
+            _dataService = dataService;
             _controlPeriod = 12;
             _notes = "";
             _model = "";
             _serial = "";
-            _calibrationLabList = OrganizationService.GetOrganizations(OrganizationRoleNames.CalibrationLab);
+            _calibrationLabList = _dataService.GetOrganizations(OrganizationRoleNames.CalibrationLab);
 
             _cancel = new DelegateCommand<Window>(
                 parent =>
@@ -130,7 +132,7 @@ namespace Instruments.ViewModels
                     InstrumentInstance = null;
 
                 else
-                    InstrumentInstance = DBManager.Services.InstrumentService.GetInstrument(_code);
+                    InstrumentInstance = _dataService.GetInstrument(_code);
 
                 if (InstrumentInstance == null &&
                     _validationErrors.ContainsKey("Code"))
@@ -193,7 +195,7 @@ namespace Instruments.ViewModels
         {
             get 
             {
-                return OrganizationService.GetOrganizations(OrganizationRoleNames.Manufacturer);                
+                return _dataService.GetOrganizations(OrganizationRoleNames.Manufacturer);                
             }
         }
 
@@ -269,15 +271,9 @@ namespace Instruments.ViewModels
             }
         }
 
-        public IEnumerable<InstrumentType> TypeList
-        {
-            get { return DBManager.Services.InstrumentService.GetInstrumentTypes(); }
-        }
+        public IEnumerable<InstrumentType> TypeList => _dataService.GetInstrumentTypes();
 
-        public IEnumerable<InstrumentUtilizationArea> AreaList
-        {
-            get { return DBManager.Services.InstrumentService.GetUtilizationAreas(); }
-        }
+        public IEnumerable<InstrumentUtilizationArea> AreaList => _dataService.GetInstrumentUtilizationAreas();
 
     }
 }

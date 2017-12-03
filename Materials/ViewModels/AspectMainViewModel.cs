@@ -20,13 +20,16 @@ namespace Materials.ViewModels
         private DBPrincipal _principal;
         private DelegateCommand _createAspect, _removeAspect;
         private EventAggregator _eventAggregator;
+        private readonly IDataService _dataService;
         private IEnumerable<Aspect> _aspectList;
         private readonly IMaterialService _materialService;
 
         public AspectMainViewModel(DBPrincipal principal,
                                 EventAggregator eventAggregator,
+                                IDataService dataService,
                                 IMaterialService materialService) : base()
         {
+            _dataService = dataService;
             _principal = principal;
             _eventAggregator = eventAggregator;
             _materialService = materialService;
@@ -65,7 +68,7 @@ namespace Materials.ViewModels
             get
             {
                 if (_aspectList == null)
-                    _aspectList = DBManager.Services.MaterialService.GetAspects();
+                    _aspectList = _dataService.GetAspects();
 
                 return _aspectList;
             }

@@ -17,13 +17,16 @@ namespace Admin.ViewModels
     {
         AuthenticationService _authenticator; 
         private DelegateCommand<Window> _cancel, _confirm;
+        private IDataService _dataService;
         private Person _selectedPerson;
         private string _userName;
         private User _userInstance;
 
-        public NewUserDialogViewModel(AuthenticationService authenticator) : base()
+        public NewUserDialogViewModel(AuthenticationService authenticator,
+                                        IDataService dataService) : base()
         {
             _authenticator = authenticator;
+            _dataService = dataService;
 
             _cancel = new DelegateCommand<Window>(
                 parentDialog =>
@@ -72,10 +75,7 @@ namespace Admin.ViewModels
             }
         }
 
-        public IEnumerable<Person> PeopleList
-        {
-            get { return PeopleService.GetPeople(); }
-        }
+        public IEnumerable<Person> PeopleList => _dataService.GetPeople();
 
         public Person SelectedPerson
         {

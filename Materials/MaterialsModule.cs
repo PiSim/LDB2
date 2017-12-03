@@ -29,7 +29,6 @@ namespace Materials
             _container.RegisterType<Object, Views.MaterialDetail>(MaterialViewNames.MaterialDetail);
             _container.RegisterType<Object, Views.ExternalConstructionDetail>(MaterialViewNames.ExternalConstructionDetail);
             _container.RegisterType<Object, Views.MaterialInfoMain>(MaterialViewNames.MaterialView);
-            _container.RegisterType<Object, Views.SampleLog>(MaterialViewNames.SampleLogView);
             
             _container.RegisterType<Views.ColorCreationDialog>();
 
@@ -47,7 +46,6 @@ namespace Materials
             _container.RegisterType<ViewModels.ExternalConstructionMainViewModel>();
             _container.RegisterType<ViewModels.MaterialInfoMainViewModel>();
             _container.RegisterType<ViewModels.SampleArchiveViewModel>();
-            _container.RegisterType<ViewModels.SampleLogViewModel>();
 
             _container.RegisterType<IMaterialService, MaterialService>();
 

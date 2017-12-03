@@ -18,11 +18,17 @@ namespace Admin.ViewModels
     {
         private DelegateCommand _newPerson,
                                 _save;
+        private IAdminService _adminService;
+        private IDataService _dataService;
         private EventAggregator _eventAggregator;
         private Person _selectedPerson;
 
-        public PeopleMainViewModel(EventAggregator eventAggregator) : base()
+        public PeopleMainViewModel(EventAggregator eventAggregator,
+                                    IAdminService adminService,
+                                    IDataService dataService) : base()
         {
+            _adminService = adminService;
+            _dataService = dataService;
             _eventAggregator = eventAggregator;
 
             _eventAggregator.GetEvent<PersonChanged>()
@@ -31,8 +37,7 @@ namespace Admin.ViewModels
             _newPerson = new DelegateCommand(
                 () =>
                 {
-                    _eventAggregator.GetEvent<PersonCreationRequested>()
-                                    .Publish();
+                    _adminService.CreateNewPerson();
                 });
 
             _save = new DelegateCommand(
@@ -60,13 +65,7 @@ namespace Admin.ViewModels
             }
         }
 
-        public IEnumerable<Person> PeopleList
-        {
-            get
-            {
-                return PeopleService.GetPeople();
-            }
-        }
+        public IEnumerable<Person> PeopleList => _dataService.GetPeople();
 
         public IEnumerable<PersonRoleMapping> PersonRoleMappingList
         {

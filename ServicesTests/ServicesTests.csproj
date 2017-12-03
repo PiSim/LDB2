@@ -71,7 +71,6 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
-    <Compile Include="CommonProceduresTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -1,14 +1,14 @@
-﻿using Prism.Events;
+﻿using DBManager;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Infrastructure.Events
+namespace Infrastructure
 {
-    [Obsolete]
-    public class ProjectCreationRequested : PubSubEvent
+    public interface IProjectService
     {
+        Project CreateProject();
     }
 }

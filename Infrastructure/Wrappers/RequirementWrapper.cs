@@ -12,12 +12,15 @@ namespace Infrastructure.Wrappers
 {
     public class RequirementWrapper : BindableBase
     {
+        private IDataService _dataService;
         private Requirement _requirementInstance;
         private SpecificationVersion _versionInstance;
 
         public RequirementWrapper(Requirement instance,
-                                    SpecificationVersion version) : base()
+                                    SpecificationVersion version,
+                                    IDataService dataService) : base()
         {
+            _dataService = dataService;
             _requirementInstance = instance;
             _versionInstance = version;
         }
@@ -128,7 +131,7 @@ namespace Infrastructure.Wrappers
         {
             int overrID = (int)_requirementInstance.OverriddenID;
             _requirementInstance.Delete();
-            _requirementInstance = SpecificationService.GetRequirement(overrID);
+            _requirementInstance = _dataService.GetRequirement(overrID);
         }
     }
 

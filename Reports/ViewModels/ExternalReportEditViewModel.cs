@@ -6,7 +6,6 @@ using Infrastructure.Events;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
-using Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -34,19 +33,22 @@ namespace Reports.ViewModels
         private EventAggregator _eventAggregator;
         private ExternalReport _instance;
         private ExternalReportFile _selectedFile;
+        private IMaterialService _materialService;
         private string _batchNumber;
 
         public ExternalReportEditViewModel(DBPrincipal principal,
-                                            EventAggregator aggregator) : base()
+                                            EventAggregator aggregator,
+                                            IMaterialService materialService) : base()
         {
             _editMode = false;
             _eventAggregator = aggregator;
+            _materialService = materialService;
             _principal = principal;
             
             _addBatch = new DelegateCommand(
                 () => 
                 {
-                    Batch tempBatch = CommonProcedures.StartBatchSelection();
+                    Batch tempBatch = _materialService.StartBatchSelection();
                     if (tempBatch != null)
                     {
                         _instance.AddBatch(tempBatch);

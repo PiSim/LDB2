@@ -12,7 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace Services.ViewModels
+namespace Materials.ViewModels
 {
     public class BatchCreationDialogViewModel : BindableBase, INotifyDataErrorInfo
     {
@@ -23,6 +23,7 @@ namespace Services.ViewModels
         private DelegateCommand<Window> _cancel, _confirm;
         private readonly Dictionary<string, ICollection<string>> _validationErrors = new Dictionary<string, ICollection<string>>();
         private ExternalConstruction _selectedConstruction;
+        private IDataService _dataService;
         private IEnumerable<Colour> _colourList;
         private IEnumerable<ExternalConstruction> _constructionList;
         private IEnumerable<Project> _projectList;
@@ -39,12 +40,13 @@ namespace Services.ViewModels
                         _typeCode;
         private TrialArea _selectedTrialArea;
 
-        public BatchCreationDialogViewModel() : base()
+        public BatchCreationDialogViewModel(IDataService dataService) : base()
         {
-            _colourList = MaterialService.GetColours();
-            _constructionList = MaterialService.GetExternalConstructions();
+            _dataService = dataService;
+            _colourList = _dataService.GetColours();
+            _constructionList = _dataService.GetExternalConstructions();
             _doNotTest = false;
-            _projectList = ProjectService.GetProjects();
+            _projectList = _dataService.GetProjects();
 
             _notes = "";
 
@@ -96,7 +98,7 @@ namespace Services.ViewModels
                         _recipeInstance.Update();
                     }
 
-                    Material tempMaterial = MaterialService.GetMaterial(_typeInstance,
+                    Material tempMaterial = _dataService.GetMaterial(_typeInstance,
                                                                         _lineInstance,
                                                                         _aspectInstance,
                                                                         _recipeInstance);
@@ -207,7 +209,7 @@ namespace Services.ViewModels
 
             else
             {
-                MaterialInstance = MaterialService.GetMaterial(TypeInstance,
+                MaterialInstance = _dataService.GetMaterial(TypeInstance,
                                                                 LineInstance,
                                                                 AspectInstance,
                                                                 RecipeInstance);
@@ -223,7 +225,7 @@ namespace Services.ViewModels
 
                 if (_aspectCode.Length == 3)
                 {
-                    AspectInstance = MaterialService.GetAspect(_aspectCode);
+                    AspectInstance = _dataService.GetAspect(_aspectCode);
                     if (_validationErrors.ContainsKey("AspectCode"))
                     {
                         _validationErrors.Remove("AspectCode");
@@ -270,7 +272,7 @@ namespace Services.ViewModels
                     BatchInstance = null;
 
                 else
-                    BatchInstance = MaterialService.GetBatch(_batchNumber);
+                    BatchInstance = _dataService.GetBatch(_batchNumber);
                 
                 if (_batchInstance == null && 
                     _validationErrors.ContainsKey("BatchNumber"))
@@ -322,7 +324,7 @@ namespace Services.ViewModels
 
                 if (_lineCode.Length == 3)
                 {
-                    LineInstance = MaterialService.GetLine(_lineCode);
+                    LineInstance = _dataService.GetMaterialLine(_lineCode);
                     if (_validationErrors.ContainsKey("LineCode"))
                     {
                         _validationErrors.Remove("LineCode");
@@ -372,10 +374,7 @@ namespace Services.ViewModels
             }
         }
 
-        public IEnumerable<Project> ProjectList
-        {
-            get { return ProjectService.GetProjects(); }
-        }
+        public IEnumerable<Project> ProjectList => _projectList;
 
         public string RecipeCode
         {
@@ -386,7 +385,7 @@ namespace Services.ViewModels
 
                 if (_recipeCode.Length == 4)
                 {
-                    RecipeInstance = MaterialService.GetRecipe(_recipeCode);
+                    RecipeInstance = _dataService.GetRecipe(_recipeCode);
                     if (_validationErrors.ContainsKey("RecipeCode"))
                     {
                         _validationErrors.Remove("RecipeCode");
@@ -453,10 +452,7 @@ namespace Services.ViewModels
             }
         }
 
-        public IEnumerable<TrialArea> TrialAreaList
-        {
-            get { return MaterialService.GetTrialAreas(); }
-        }
+        public IEnumerable<TrialArea> TrialAreaList => _dataService.GetTrialAreas(); 
 
         public string TypeCode
         {
@@ -467,7 +463,7 @@ namespace Services.ViewModels
 
                 if (_typeCode.Length == 4)
                 {
-                    TypeInstance = MaterialService.GetMaterialType(_typeCode);
+                    TypeInstance = _dataService.GetMaterialType(_typeCode);
                     if (_validationErrors.ContainsKey("TypeCode"))
                     {
                         _validationErrors.Remove("TypeCode");

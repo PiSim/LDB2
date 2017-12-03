@@ -15,9 +15,11 @@ namespace Controls.ViewModels
     {
         private Colour _selectedColour;
         private DelegateCommand<Window> _cancel, _confirm;
+        private IDataService _dataService;
         
-        public ColorPickerDialogViewModel() : base()
+        public ColorPickerDialogViewModel(IDataService dataService) : base()
         {
+            _dataService = dataService;
 
             _cancel = new DelegateCommand<Window>(
                 parent =>
@@ -37,10 +39,7 @@ namespace Controls.ViewModels
             get { return _cancel; }
         }
 
-        public IEnumerable<Colour> ColourList
-        {
-            get { return MaterialService.GetColours(); }
-        }
+        public IEnumerable<Colour> ColourList => _dataService.GetColours();
 
         public DelegateCommand<Window> ConfirmCommand
         {

@@ -19,9 +19,13 @@ namespace Materials.ViewModels
         private DelegateCommand _createExternalConstruction, _removeExternalConstruction;
         private EventAggregator _eventAggregator;
         private ExternalConstruction _selectedExternalConstruction;
+        private IDataService _dataService;
+        private IMaterialService _materialService;
 
         public ExternalConstructionMainViewModel(DBPrincipal principal,
-                                                EventAggregator eventAggregator) : base()
+                                                EventAggregator eventAggregator,
+                                                IDataService dataService,
+                                                IMaterialService materialService) : base()
         {
             _eventAggregator = eventAggregator;
             _principal = principal;
@@ -29,7 +33,7 @@ namespace Materials.ViewModels
             _createExternalConstruction = new DelegateCommand(
                 () =>
                 {
-                    if (MaterialService.CreateNewExternalConstruction() != null)
+                    if (_materialService.CreateNewExternalConstruction() != null)
                         RaisePropertyChanged("ExternalConstructionList");
                 },
                 () => _principal.IsInRole(UserRoleNames.MaterialEdit));
@@ -62,10 +66,7 @@ namespace Materials.ViewModels
             get { return RegionNames.ExternalConstructionDetailRegion; }
         }
 
-        public IEnumerable<ExternalConstruction> ExternalConstructionList
-        {
-            get { return DBManager.Services.MaterialService.GetExternalConstructions(); }
-        }
+        public IEnumerable<ExternalConstruction> ExternalConstructionList => _dataService.GetExternalConstructions();
 
         public DelegateCommand RemoveExternalConstructionCommand
         {

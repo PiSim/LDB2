@@ -15,7 +15,34 @@ namespace DBManager
         {
 
         }
-        
+
+
+        public Aspect GetAspect(string code)
+        {
+            // Returns an Aspect entity with the given code
+            // if none is found null is returned
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.Aspects.FirstOrDefault(asp => asp.Code == code);
+            }
+        }
+
+        public IEnumerable<Aspect> GetAspects()
+        {
+            // Returns all Aspect entities
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.Aspects.Where(asp => true)
+                                        .ToList();
+            }
+        }
+
         public IEnumerable<Batch> GetBatches()
         {
             // Returns all Batches
@@ -35,6 +62,34 @@ namespace DBManager
                                         .Where(btc => true)
                                         .OrderByDescending(btc => btc.Number)
                                         .ToList();
+            }
+        }
+
+        public Batch GetBatch(int ID)
+        {
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.Batches.Include(btc => btc.Material.Aspect)
+                                        .Include(btc => btc.Material.MaterialType)
+                                        .Include(btc => btc.Material.MaterialLine)
+                                        .Include(btc => btc.Material.Recipe.Colour)
+                                        .FirstOrDefault(entry => entry.ID == ID);
+            }
+        }
+
+        public Batch GetBatch(string batchNumber)
+        {
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.Batches.Include(btc => btc.Material.Aspect)
+                                        .Include(btc => btc.Material.MaterialType)
+                                        .Include(btc => btc.Material.MaterialLine)
+                                        .Include(btc => btc.Material.Recipe.Colour)
+                                        .FirstOrDefault(entry => entry.Number == batchNumber);
             }
         }
 
@@ -105,8 +160,57 @@ namespace DBManager
                                 .ToList();
             }
         }
-        
-        public static Instrument GetInstrument(string code)
+
+
+
+        public IEnumerable<Colour> GetColours()
+        {
+            // Returns all Colour entities
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.Colours.Where(clr => true)
+                                        .OrderBy(clr => clr.Name)
+                                        .ToList();
+            }
+        }
+
+
+        public ControlPlan GetControlPlan(int ID)
+        {
+            using (DBEntities entities = new DBEntities())
+            {
+                return entities.ControlPlans.First(entry => entry.ID == ID);
+            }
+        }
+
+        public IEnumerable<ControlPlan> GetControlPlans()
+        {
+            using (var entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+                return entities.ControlPlans.Include(cpl => cpl.Specification)
+                                            .OrderBy(cpl => cpl.Specification.Standard.Name)
+                                            .ToList();
+            }
+        }
+
+        public IEnumerable<ExternalConstruction> GetExternalConstructions()
+        {
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.ExternalConstructions.Include(exc => exc.Oem)
+                                                    .OrderBy(exc => exc.Oem.Name)
+                                                    .ThenBy(exc => exc.Name)
+                                                    .ToList();
+            }
+        }
+
+        public Instrument GetInstrument(string code)
         {
             // Returns the instrument entry with the given code, or null if none is found
 
@@ -135,6 +239,18 @@ namespace DBManager
         }
 
 
+        public MaterialLine GetMaterialLine(string lineCode)
+        {
+            // Returns a MaterialLine entry with the given code, or null if none exists
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.MaterialLines.FirstOrDefault(matl => matl.Code == lineCode);
+            }
+        }
+
         public IEnumerable<InstrumentType> GetInstrumentTypes()
         {
             // Returns all InstrumentType entities
@@ -150,6 +266,82 @@ namespace DBManager
         }
 
 
+        public Material GetMaterial(int ID)
+        {
+            // Returns a Material entities with the given ID
+            // if none is found null is returned
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.Materials.Include(mat => mat.Aspect)
+                                        .Include(mat => mat.MaterialLine)
+                                        .Include(mat => mat.MaterialType)
+                                        .Include(mat => mat.Recipe)
+                                        .FirstOrDefault(mat => mat.ID == ID);
+            }
+        }
+
+        public Material GetMaterial(string type,
+                                    string line,
+                                    string aspect,
+                                    string recipe)
+        {
+            // Returns a Material entities with the type, line, aspect and recipe
+            // if none is found null is returned
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.Materials.Include(mat => mat.Aspect)
+                                        .Include(mat => mat.MaterialLine)
+                                        .Include(mat => mat.MaterialType)
+                                        .Include(mat => mat.Recipe)
+                                        .FirstOrDefault(mat => mat.Aspect.Code == aspect
+                                                            && mat.MaterialLine.Code == line
+                                                            && mat.Recipe.Code == recipe
+                                                            && mat.MaterialType.Code == type);
+            }
+        }
+
+        public  Material GetMaterial(MaterialType type,
+                                    MaterialLine line,
+                                    Aspect aspect,
+                                    Recipe recipe)
+        {
+            // Returns a Material entities with the given construction and recipe
+            // if none is found null is returned
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.Materials.Include(mat => mat.Aspect)
+                                        .Include(mat => mat.MaterialLine)
+                                        .Include(mat => mat.MaterialType)
+                                        .Include(mat => mat.Recipe)
+                                        .FirstOrDefault(mat => mat.AspectID == aspect.ID
+                                                            && mat.LineID == line.ID
+                                                            && mat.RecipeID == recipe.ID
+                                                            && mat.TypeID == type.ID);
+            }
+        }
+
+        public MaterialType GetMaterialType(string code)
+        {
+            // Returns a MaterialType entity with the given code
+            // if none is found null is returned
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.MaterialTypes.FirstOrDefault(mty => mty.Code == code);
+            }
+        }
+
         public IEnumerable<MeasurableQuantity> GetMeasurableQuantities()
         {
             // Returns all Measurable Quantities
@@ -161,7 +353,7 @@ namespace DBManager
                 return entities.MeasurableQuantities.ToList();
             }
         }
-        public static IEnumerable<MeasurementUnit> GetMeasurementUnits()
+        public IEnumerable<MeasurementUnit> GetMeasurementUnits()
         {
             // Returns all measurement units
 
@@ -170,6 +362,63 @@ namespace DBManager
                 entities.Configuration.LazyLoadingEnabled = false;
 
                 return entities.MeasurementUnits.ToList();
+            }
+        }
+
+        public Method GetMethod(int ID)
+        {
+            using (DBEntities entities = new DBEntities())
+            {
+                return entities.Methods.First(entry => entry.ID == ID);
+            }
+        }
+
+        public IEnumerable<Method> GetMethods()
+        {
+            // Returns all Method entities.
+
+            using (var entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.Methods.Include(mtd => mtd.Standard.Organization)
+                                        .Include(mtd => mtd.Property)
+                                        .Where(mtd => true)
+                                        .OrderBy(mtd => mtd.Standard.Name)
+                                        .ToList();
+            }
+        }
+
+        public IEnumerable<Organization> GetOrganizations(string roleName = null)
+        {
+            // Returns all Organization entities, filtering by role if one is provided
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.Organizations.Include(org => org.RoleMapping
+                                                .Select(orm => orm.Role))
+                                                .Where(org => (roleName == null) ? true : org.RoleMapping
+                                                .FirstOrDefault(orm => orm.Role.Name == roleName)
+                                                .IsSelected)
+                                                .OrderBy(org => org.Name)
+                                                .ToList();
+            }
+        }
+
+        /// <summary>
+        /// Returns all OrganizationRoles
+        /// </summary>
+        /// <returns>An IEnumerable containing all the OrganizationRole entities</returns>
+        public IEnumerable<OrganizationRole> GetOrganizationRoles()
+        {
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.OrganizationRoles
+                                .ToList();
             }
         }
 
@@ -203,6 +452,48 @@ namespace DBManager
             }
         }
 
+
+
+        public IEnumerable<Project> GetProjects(bool includeCollections = false)
+        {
+            // Returns all Project entities
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                if (includeCollections)
+                    return entities.Projects.Include(prj => prj.Leader)
+                                            .Include(prj => prj.Oem)
+                                            .Include(prj => prj.ExternalReports)
+                                            .Include(prj => prj.Materials
+                                            .Select(mat => mat.Batches
+                                            .Select(btc => btc.Reports)))
+                                            .OrderByDescending(prj => prj.Name)
+                                            .ToList();
+
+
+                else
+                    return entities.Projects.Include(prj => prj.Leader)
+                                            .Include(prj => prj.Oem)
+                                            .OrderByDescending(prj => prj.Name)
+                                            .ToList();
+            }
+        }
+
+        public IEnumerable<Property> GetProperties()
+        {
+            // Returns all Property entities
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.Properties.Where(prp => true)
+                                            .ToList();
+            }
+        }
+
         public IList<T> GetQueryResults<T>(IQuery<T> query)
         {
             using (DBEntities entities = new DBEntities())
@@ -211,6 +502,115 @@ namespace DBManager
 
                 return query.RunQuery(entities)
                             .ToList();
+            }
+        }
+
+        /// <summary>
+        /// Returns an ordered list of inserted samples. If an int is provided the last *int* samples 
+        /// are returned. 
+        /// </summary>
+        /// <param name="numberOfEntries">The number of entries that will be returned. If 0 or none is 
+        /// provided, all entries will be returned</param>
+        /// <returns>An IEnumerable with the found samples</returns>
+        public IEnumerable<Sample> GetSamples(int numberOfEntries = 0)
+        {
+            // Returns a given number of the most recently inserted samples
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                IQueryable<Sample> query = entities.Samples.Include(smp => smp.Batch)
+                                                            .Include(smp => smp.LogAuthor)
+                                                            .OrderByDescending(smp => smp.ID);
+
+                if (numberOfEntries == 0)
+                    return query.ToList();
+
+                else
+                    return query.Take(numberOfEntries)
+                                .ToList();
+            }
+        }
+
+
+
+        public Recipe GetRecipe(string code)
+        {
+            // Returns the recipe with the given code
+            // if none is found, null is returned
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.Recipes.FirstOrDefault(rec => rec.Code == code);
+            }
+        }
+
+        public Requirement GetRequirement(int ID)
+        {
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.Requirements.First(req => req.ID == ID);
+            }
+        }
+
+        public Specification GetSpecification(int ID)
+        {
+            using (DBEntities entities = new DBEntities())
+            {
+                return entities.Specifications.First(entry => entry.ID == ID);
+            }
+        }
+
+        public Specification GetSpecification(string name)
+        {
+            // returns a specification with the given Standard name, or null if none is found
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.Specifications.FirstOrDefault(spec => spec.Standard.Name == name);
+            }
+        }
+
+        public IEnumerable<Specification> GetSpecifications()
+        {
+            using (var entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+                return entities.Specifications.Include(spec => spec.Standard.Organization)
+                                                .OrderBy(spec => spec.Standard.Organization.Name)
+                                                .ThenBy(spec => spec.Standard.Name)
+                                                .ToList();
+            }
+        }
+
+        public SpecificationVersion GetSpecificationVersion(int ID)
+        {
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.SpecificationVersions.FirstOrDefault(specv => specv.ID == ID);
+            }
+
+        }
+
+        public Std GetStandard(string name)
+        {
+            // returns Standard entity with the provided name or null if none is found
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.Stds.Include(std => std.Organization)
+                                    .FirstOrDefault(std => std.Name == name);
             }
         }
 
@@ -279,8 +679,30 @@ namespace DBManager
 
         }
 
+        public IEnumerable<TrialArea> GetTrialAreas()
+        {
+            // Returns all TrialArea entries
 
-        public IEnumerable<InstrumentUtilizationArea> GetUtilizationAreas()
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.TrialAreas.Where(tra => true)
+                                            .ToList();
+            }
+        }
+
+        public IEnumerable<User> GetUsers()
+        {
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.Users.ToList();
+            }
+        }
+
+        public IEnumerable<InstrumentUtilizationArea> GetInstrumentUtilizationAreas()
         {
 
             using (DBEntities entities = new DBEntities())
