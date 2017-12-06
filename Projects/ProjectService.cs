@@ -29,17 +29,7 @@ namespace Projects
             _eventAggregator = eventAggregator;
             
         }
-
-        public bool AlterProjectInfo(Project target)
-        {
-            Views.ModifyProjectDetailsDialog modificationDialog = _container.Resolve<Views.ModifyProjectDetailsDialog>();
-            modificationDialog.ProjectInstance = target;
-
-            return (bool)modificationDialog.ShowDialog();
-        }
-
-
-
+        
         public Project CreateProject()
         {
             Views.ProjectCreationDialog creationDialog = new Views.ProjectCreationDialog();

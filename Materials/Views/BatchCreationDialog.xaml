@@ -39,10 +39,12 @@
                        Margin="5"
                        VerticalAlignment="Center"/>
 
-            <TextBox Text="{Binding BatchNumber, Mode=TwoWay}"
+            <TextBox Text="{Binding BatchNumber, 
+                                    UpdateSourceTrigger=PropertyChanged}"
                      MaxLength="10"
                      Grid.Column="1"
                      Grid.ColumnSpan="2"
+                     CharacterCasing="Upper"
                      Margin="5"
                      HorizontalContentAlignment="Center"/>
 
@@ -55,6 +57,7 @@
             <TextBox Text="{Binding TypeCode, 
                                     UpdateSourceTrigger=PropertyChanged}"
                      MaxLength="4"
+                     CharacterCasing="Upper"
                      Grid.Column="1"
                      Grid.Row="1"
                      HorizontalContentAlignment="Center"
@@ -76,6 +79,7 @@
             <TextBox Text="{Binding LineCode,
                                     UpdateSourceTrigger=PropertyChanged}"
                      MaxLength="3"
+                     CharacterCasing="Upper"
                      Grid.Column="1"
                      Grid.Row="2"
                      HorizontalContentAlignment="Center"
@@ -90,6 +94,7 @@
             <TextBox Text="{Binding AspectCode,
                                     UpdateSourceTrigger=PropertyChanged}"
                      MaxLength="3"
+                     CharacterCasing="Upper"
                      Grid.Column="1"
                      Grid.Row="3"
                      HorizontalContentAlignment="Center"
@@ -111,6 +116,7 @@
             <TextBox Text="{Binding RecipeCode,
                                     UpdateSourceTrigger=PropertyChanged}"
                      MaxLength="4"
+                     CharacterCasing="Upper"
                      Grid.Column="1"
                      Grid.Row="4"
                      HorizontalContentAlignment="Center"
@@ -208,7 +214,7 @@
                                     Mode=TwoWay}"
                      AcceptsReturn="True"
                      TextWrapping="Wrap"
-                     MaxLength="45"
+                     MaxLength="100"
                      Grid.Column="1"
                      Grid.ColumnSpan="3"
                      Grid.Row="8"

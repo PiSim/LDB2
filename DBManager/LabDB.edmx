@@ -46,7 +46,7 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="path" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="path" Type="text" Nullable="false" />
           <Property Name="description" Type="varchar" MaxLength="45" Nullable="false" />
           <Property Name="reportID" Type="int" Nullable="false" />
         </EntityType>

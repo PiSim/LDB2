@@ -19,8 +19,8 @@ namespace Admin
 
         public void Initialize()
         {
-            _container.RegisterType<AdminService>(new ContainerControlledLifetimeManager());
-            _container.Resolve<AdminService>();
+            _container.RegisterType<IAdminService, AdminService>(new ContainerControlledLifetimeManager());
+            _container.Resolve<IAdminService>();
 
             _container.RegisterType<Object, Views.AdminMain>(AdminViewNames.AdminMainView);
             _container.RegisterType<Object, Views.InstrumentTypeEdit>(AdminViewNames.InstrumentTypeEditView);

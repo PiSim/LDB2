@@ -41,9 +41,9 @@ namespace Instruments
                 _regionManager.RegisterViewWithRegion(RegionNames.MainNavigationRegion, 
                                                     typeof(Views.InstrumentsNavigationItem));
 
-            _container.RegisterType<InstrumentService>
+            _container.RegisterType<IInstrumentService, InstrumentService>
                 (new ContainerControlledLifetimeManager());
-            _container.Resolve<InstrumentService>();
+            _container.Resolve<IInstrumentService>();
 
         }
     }

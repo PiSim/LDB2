@@ -92,7 +92,7 @@ namespace Materials.ViewModels
                         RecipeInstance.Create();
                     }
 
-                    else if (RecipeInstance.ColourID != _selectedColour.ID)
+                    else if (_selectedColour != null && RecipeInstance.ColourID != _selectedColour.ID)
                     {
                         _recipeInstance.ColourID = _selectedColour.ID;
                         _recipeInstance.Update();

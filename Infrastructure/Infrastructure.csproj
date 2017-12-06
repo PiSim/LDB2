@@ -110,6 +110,7 @@
     <Compile Include="Converters\SingleLineTextConverter.cs" />
     <Compile Include="Events\AspectChanged.cs" />
     <Compile Include="Events\AspectCreationRequested.cs" />
+    <Compile Include="Events\BatchChanged.cs" />
     <Compile Include="Events\BatchCreated.cs" />
     <Compile Include="Events\BatchStatusListRefreshRequested.cs" />
     <Compile Include="Events\BatchVisualizationRequested.cs" />

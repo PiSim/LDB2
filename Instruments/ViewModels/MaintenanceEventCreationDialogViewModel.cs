@@ -11,7 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace Services.ViewModels
+namespace Instruments.ViewModels
 {
     public class MaintenanceEventCreationDialogViewModel : BindableBase
     {

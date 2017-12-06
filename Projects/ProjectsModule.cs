@@ -23,13 +23,12 @@ namespace Projects
 
         public void Initialize()
         {
-            _container.RegisterType<ProjectService>
+            _container.RegisterType<IProjectService, ProjectService>
                 (new ContainerControlledLifetimeManager());
 
-            _container.Resolve<ProjectService>();
+            _container.Resolve<IProjectService>();
 
             _container.RegisterType<Views.ProjectCreationDialog>();
-            _container.RegisterType<Views.ModifyProjectDetailsDialog>();
 
             _container.RegisterType<Object, Views.ProjectMain>
                 (ProjectsViewNames.ProjectMainView);

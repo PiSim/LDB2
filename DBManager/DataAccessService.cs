@@ -17,6 +17,28 @@ namespace DBManager
         }
 
 
+        public IEnumerable<Batch> GetArchive()
+        {
+            // Returns all the batches with a non-zero number of samples in stock
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.Batches.Include(btc => btc.BasicReport)
+                                        .Include(btc => btc.FirstSample)
+                                        .Include(btc => btc.Material.Aspect)
+                                        .Include(btc => btc.Material.MaterialLine)
+                                        .Include(btc => btc.Material.MaterialType)
+                                        .Include(btc => btc.Material.Recipe.Colour)
+                                        .Include(btc => btc.Material.ExternalConstruction.Oem)
+                                        .Include(btc => btc.TrialArea)
+                                        .Where(btc => btc.ArchiveStock > 0)
+                                        .OrderByDescending(btc => btc.Number)
+                                        .ToList();
+            }
+        }
+
         public Aspect GetAspect(string code)
         {
             // Returns an Aspect entity with the given code
@@ -112,20 +134,6 @@ namespace DBManager
                                         .OrderByDescending(btc => btc.Number)
                                         .Take(numberOfEntries)
                                         .ToList();
-            }
-        }
-
-
-        public IEnumerable<CalibrationResult> GetCalibrationResults()
-        {
-            // Returns all CalibrationResult entities
-
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.Configuration.LazyLoadingEnabled = false;
-
-                return entities.CalibrationResults
-                                .ToList();
             }
         }
 
@@ -326,6 +334,35 @@ namespace DBManager
                                                             && mat.LineID == line.ID
                                                             && mat.RecipeID == recipe.ID
                                                             && mat.TypeID == type.ID);
+            }
+        }
+
+        public IEnumerable<Material> GetMaterialsWithoutConstruction()
+        {
+            using (var entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+                return entities.Materials.Where(mat => mat.ExternalConstruction == null)
+                                            .Include(mat => mat.Aspect)
+                                            .Include(mat => mat.MaterialLine)
+                                            .Include(mat => mat.MaterialType)
+                                            .Include(mat => mat.Recipe)
+                                            .ToList();
+            }
+        }
+
+        public IEnumerable<Material> GetMaterialsWithoutProject()
+        {
+            using (var entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+                return entities.Materials.Where(mat => mat.Project == null)
+                                            .Include(mat => mat.Aspect)
+                                            .Include(mat => mat.ExternalConstruction)
+                                            .Include(mat => mat.MaterialLine)
+                                            .Include(mat => mat.MaterialType)
+                                            .Include(mat => mat.Recipe)
+                                            .ToList();
             }
         }
 

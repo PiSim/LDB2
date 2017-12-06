@@ -7,6 +7,7 @@ namespace DBManager
 {
     public interface IDataService
     {
+        IEnumerable<Batch> GetArchive();
         Batch GetBatch(int ID);
         Batch GetBatch(string batchNumber);
         IEnumerable<Batch> GetBatches();
@@ -45,5 +46,6 @@ namespace DBManager
         Std GetStandard(string name);
         SpecificationVersion GetSpecificationVersion(int ID);
         IEnumerable<Method> GetMethods();
+        IEnumerable<Material> GetMaterialsWithoutConstruction();
     }
 }

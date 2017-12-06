@@ -6,9 +6,9 @@ namespace Security
 {
     public class SecurityModule : IModule
     {
-        UnityContainer _container;
+        IUnityContainer _container;
 
-        public SecurityModule(UnityContainer container)
+        public SecurityModule(IUnityContainer container)
         {
             _container = container;
         }

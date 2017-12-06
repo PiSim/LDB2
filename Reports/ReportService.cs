@@ -96,6 +96,7 @@ namespace Reports
         }
 
 
+
         public Requirement GenerateRequirement(Method method)
         {
             method.LoadSubMethods();
@@ -178,14 +179,7 @@ namespace Reports
                 return false;
         }
 
-        ExternalReport IReportService.CreateExternalReport() => CreateExternalReport();
-
         public Report CreateReport() => CreateReport(null);
-        
-        ExternalReport CreateExternalReport()
-        {
-            throw new NotImplementedException();
-        }
 
         /// <summary>
         /// Starts the process of creating a new Report instance via the ReportCreationDialog
@@ -242,12 +236,16 @@ namespace Reports
             }
         }
 
-        internal ExternalReport StartExternalReportCreation()
+        public ExternalReport CreateExternalReport()
         {
             Views.ExternalReportCreationDialog creationDialog = new Views.ExternalReportCreationDialog();
 
             if (creationDialog.ShowDialog() == true)
+            {
+                _eventAggregator.GetEvent<ExternalReportCreated>()
+                                .Publish(creationDialog.ExternalReportInstance);
                 return creationDialog.ExternalReportInstance;
+            }
             else
                 return null;
         }

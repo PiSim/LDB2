@@ -10,27 +10,6 @@ namespace DBManager.Services
 {
     public static class MaterialService
     {
-        public static IEnumerable<Batch> GetArchive()
-        {
-            // Returns all the batches with a non-zero number of samples in stock
-
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.Configuration.LazyLoadingEnabled = false;
-
-                return entities.Batches.Include(btc => btc.BasicReport)
-                                        .Include(btc => btc.FirstSample)
-                                        .Include(btc => btc.Material.Aspect)
-                                        .Include(btc => btc.Material.MaterialLine)
-                                        .Include(btc => btc.Material.MaterialType)
-                                        .Include(btc => btc.Material.Recipe.Colour)
-                                        .Include(btc => btc.Material.ExternalConstruction.Oem)
-                                        .Include(btc => btc.TrialArea)
-                                        .Where(btc => btc.ArchiveStock != 0)
-                                        .OrderByDescending(btc => btc.Number)
-                                        .ToList();
-            }
-        }
         
         public static Colour GetColour(string name)
         {

@@ -2,8 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Infrastructure
 {
@@ -11,10 +9,9 @@ namespace Infrastructure
     {
         void AddCalibrationFiles(IEnumerable<CalibrationFiles> fileList);
         IEnumerable<CalibrationResult> GetCalibrationResults();
-        void ShowNewCalibrationDialog(Instrument instance);
-        void AddInstrumentFiles(IEnumerable<InstrumentFiles> fileList);
-        void ShowNewMaintenanceDialog(Instrument instance);
+        CalibrationReport ShowNewCalibrationDialog(Instrument instance);
+        InstrumentMaintenanceEvent ShowNewMaintenanceDialog(Instrument instance);
         IEnumerable<Instrument> GetCalibrationCalendar();
-        void CreateInstrument();
+        Instrument CreateInstrument();
     }
 }

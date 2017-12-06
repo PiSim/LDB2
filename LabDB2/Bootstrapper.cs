@@ -29,7 +29,8 @@ namespace LabDB2
                 new Prism.Modularity.ModuleInfo()
                 {
                     ModuleName = DBManagerModuleType.Name,
-                    ModuleType = DBManagerModuleType.AssemblyQualifiedName
+                    ModuleType = DBManagerModuleType.AssemblyQualifiedName,
+                    InitializationMode = Prism.Modularity.InitializationMode.OnDemand
                 });
 
             Type InfrastructureModuleType = typeof(Infrastructure.InfrastructureModule);
@@ -70,14 +71,6 @@ namespace LabDB2
                 {
                     ModuleName = SecurityModuleType.Name,
                     ModuleType = SecurityModuleType.AssemblyQualifiedName
-                });
-
-            Type ServicesModuleType = typeof(Services.ServicesModule);
-            ModuleCatalog.AddModule(
-                new ModuleInfo()
-                {
-                    ModuleName = ServicesModuleType.Name,
-                    ModuleType = ServicesModuleType.AssemblyQualifiedName
                 });
 
             // Initializing modules to be loaded on demand
@@ -184,6 +177,8 @@ namespace LabDB2
             IModuleManager moduleManager = Container.Resolve<IModuleManager>();
 
             DBPrincipal _currentPrincipal = Container.Resolve<DBPrincipal>();
+
+            moduleManager.LoadModule(typeof(DBManager.DBManagerModule).Name);
 
             if (_currentPrincipal.IsInRole(RoleNames.Admin))
                 moduleManager.LoadModule(typeof(Admin.AdminModule).Name);

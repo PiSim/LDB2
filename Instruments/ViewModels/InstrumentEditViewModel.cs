@@ -83,15 +83,9 @@ namespace Instruments.ViewModels
                     if (fileDialog.ShowDialog() == DialogResult.OK)
                     {
 
-                        IEnumerable<InstrumentFiles> fileList = fileDialog.FileNames
-                                                                            .Select(file => new InstrumentFiles()
-                                                                            {
-                                                                                InstrumentID = _instance.ID,
-                                                                                Path = file,
-                                                                                Description = ""
-                                                                            });
+                        IEnumerable<string> fileList = fileDialog.FileNames;
 
-                        _instrumentService.AddInstrumentFiles(fileList);
+                        _instance.AddFiles(fileList);
                         RaisePropertyChanged("FileList");
                     }
                 });

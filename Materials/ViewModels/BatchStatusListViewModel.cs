@@ -46,8 +46,8 @@ namespace Materials.ViewModels
                     parentDialog.DialogResult = true;
                 });
 
-            _eventAggregator.GetEvent<BatchCreated>().Subscribe(
-                batch =>
+            _eventAggregator.GetEvent<BatchChanged>().Subscribe(
+                token =>
                 {
                     RaisePropertyChanged("BatchList");
                 });

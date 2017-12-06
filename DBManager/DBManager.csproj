@@ -297,7 +297,6 @@
     <Compile Include="Sample.cs">
       <DependentUpon>LabDB.tt</DependentUpon>
     </Compile>
-    <Compile Include="Services\DataService.cs" />
     <Compile Include="DBManagerModule.cs" />
     <Compile Include="LabDB.cs">
       <AutoGen>True</AutoGen>

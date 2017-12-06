@@ -11,7 +11,7 @@ using System.Linq;
 
 namespace Admin
 {
-    public class AdminService
+    public class AdminService : IAdminService
     {
         private DBPrincipal _principal;
         private EventAggregator _eventAggregator;
@@ -58,7 +58,7 @@ namespace Admin
 
 
 
-        internal Person AddPerson()
+        public Person CreateNewPerson()
         {
             StringInputDialog addPersonDialog = new StringInputDialog
             {
@@ -87,11 +87,20 @@ namespace Admin
             return newPerson;
         }
 
-        internal void AddUserRole(string name)
+        public UserRole CreateNewUserRole()
         {
+            StringInputDialog addPersonDialog = new StringInputDialog
+            {
+                Title = "Creazione nuovo Ruolo Utente",
+                Message = "Nome:"
+            };
+
+            if (addPersonDialog.ShowDialog() != true)
+                return null;
+
             UserRole newRole = new UserRole
             {
-                Name = name,
+                Name = addPersonDialog.InputString,
                 Description = ""
             };
 
@@ -108,16 +117,18 @@ namespace Admin
 
                 newMap.Create();
             }
+
+            return newRole;
         }
 
-        public void AddPersonRole()
+        public PersonRole CreateNewPersonRole()
         {
             StringInputDialog addPersonRoleDialog = _container.Resolve<StringInputDialog>();
             addPersonRoleDialog.Title = "Creazione nuovo Ruolo Persona";
             addPersonRoleDialog.Message = "Nome:";
 
             if (addPersonRoleDialog.ShowDialog() != true)
-                return;
+                return null;
 
             PersonRole newRole = new PersonRole
             {
@@ -141,9 +152,11 @@ namespace Admin
 
                 entities.SaveChanges();
             }
+
+            return newRole;
         }
         
-        public User NewUserRegistration()
+        public User CreateNewUser()
         {
             Views.NewUserDialog newUserDialog = _container.Resolve<Views.NewUserDialog>();
 
@@ -155,7 +168,7 @@ namespace Admin
         }
 
 
-        public static InstrumentType CreateNewInstrumentType()
+        public InstrumentType CreateNewInstrumentType()
         {
             StringInputDialog creationDialog = new StringInputDialog
             {
@@ -176,7 +189,7 @@ namespace Admin
             return null;
         }
 
-        public static MeasurableQuantity CreateNewMeasurableQuantity()
+        public MeasurableQuantity CreateNewMeasurableQuantity()
         {
             StringInputDialog creationDialog = new StringInputDialog
             {
@@ -256,7 +269,7 @@ namespace Admin
             }
         }
 
-        public void CreateNewOrganizationRole()
+        public OrganizationRole CreateNewOrganizationRole()
         {
             StringInputDialog creationDialog = new StringInputDialog();
             creationDialog.Title = "Crea nuovo Ruolo Organizzazione";
@@ -269,8 +282,10 @@ namespace Admin
                 output.Create();
 
                 CreateMappingsForNewRole(output);
+                return output;
             }
 
+            return null;
         }
     }
 

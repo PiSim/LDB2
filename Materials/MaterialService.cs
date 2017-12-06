@@ -106,6 +106,10 @@ namespace Materials
 
             if (batchCreator.ShowDialog() == true)
             {
+                EntityChangedToken token = new EntityChangedToken(batchCreator.BatchInstance,
+                                                                    EntityChangedToken.EntityChangedAction.Created);
+                _eventAggregator.GetEvent<BatchChanged>()
+                                .Publish(token);
                 return batchCreator.BatchInstance;
             }
 

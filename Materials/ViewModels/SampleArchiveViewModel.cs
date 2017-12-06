@@ -19,9 +19,12 @@ namespace Materials.ViewModels
     {
         private DelegateCommand<DataGrid> _openBatch;
         private EventAggregator _eventAggregator;
+        private IDataService _dataService;
 
-        public SampleArchiveViewModel(EventAggregator eventAggregator) : base()
+        public SampleArchiveViewModel(EventAggregator eventAggregator,
+                                        IDataService dataService) : base()
         {
+            _dataService = dataService;
             _eventAggregator = eventAggregator;
 
             _openBatch = new DelegateCommand<DataGrid>(
@@ -50,12 +53,9 @@ namespace Materials.ViewModels
                                 RaisePropertyChanged("BatchList");
                             });
         }
-            
 
-        public IEnumerable<Batch> BatchList
-        {
-            get { return DBManager.Services.MaterialService.GetArchive(); }
-        }
+
+        public IEnumerable<Batch> BatchList => _dataService.GetArchive();
 
         public DelegateCommand<DataGrid> OpenBatchCommand
         {

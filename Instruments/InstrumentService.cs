@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace Instruments
 {
-    public class InstrumentService
+    public class InstrumentService : IInstrumentService
     {
         private EventAggregator _eventAggregator;
         private IUnityContainer _container;
@@ -23,7 +23,7 @@ namespace Instruments
         {
             _eventAggregator = aggregator;
             _container = container;
-            
+
         }
 
 
@@ -54,7 +54,21 @@ namespace Instruments
                                             .ToList();
             }
         }
-        
+
+
+        public IEnumerable<CalibrationResult> GetCalibrationResults()
+        {
+            // Returns all CalibrationResult entities
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.CalibrationResults
+                                .ToList();
+            }
+        }
+
         public static int GetNextCalibrationNumber(int year)
         {
             // Returns the next available calibration number for a given year
@@ -68,10 +82,13 @@ namespace Instruments
         }
 
 
-        public CalibrationReport RegisterNewCalibration(Instrument target)
+        public CalibrationReport ShowNewCalibrationDialog(Instrument target)
         {
-            Views.NewCalibrationDialog calibrationDialog = new Views.NewCalibrationDialog();
-            calibrationDialog.InstrumentInstance = target;
+            Views.NewCalibrationDialog calibrationDialog = new Views.NewCalibrationDialog
+            {
+                InstrumentInstance = target
+            };
+
             if (calibrationDialog.ShowDialog() == true)
             {
                 CalibrationReport output = calibrationDialog.ReportInstance;
@@ -79,12 +96,31 @@ namespace Instruments
                 output.Instrument.UpdateCalibrationDueDate();
                 output.Instrument.Update();
 
+                _eventAggregator.GetEvent<CalibrationIssued>()
+                                .Publish(output);
+
                 return output;
             }
             else return null;
         }
 
-        public Instrument RegisterNewInstrument()
+        public InstrumentMaintenanceEvent ShowNewMaintenanceDialog(Instrument entry)
+        {
+            Views.MaintenanceEventCreationDialog maintenanceEventCreationDialog = new Views.MaintenanceEventCreationDialog
+            {
+                InstrumentInstance = entry
+            };
+
+            if (maintenanceEventCreationDialog.ShowDialog() == true)
+            {
+                return maintenanceEventCreationDialog.InstrumentEventInstance;
+            }
+
+            else
+                return null;
+        }
+
+        public Instrument CreateInstrument()
         {
             Views.InstrumentCreationDialog creationDialog = _container.Resolve<Views.InstrumentCreationDialog>();
             if (creationDialog.ShowDialog() == true)

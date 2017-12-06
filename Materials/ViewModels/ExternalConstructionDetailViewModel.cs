@@ -332,12 +332,6 @@ namespace Materials.ViewModels
             get { return _unassignMaterialToExternal; }
         }
 
-        public List<Material> UnassignedMaterials
-        {
-            get
-            {
-                return new List<Material>(DataService.GetMaterialsWithoutConstruction());
-            }
-        }
+        public IEnumerable<Material> UnassignedMaterials => _dataService.GetMaterialsWithoutConstruction();
     }
 }
