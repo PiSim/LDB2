@@ -426,7 +426,9 @@ namespace DBManager
             }
         }
 
-        public IEnumerable<Organization> GetOrganizations(string roleName = null)
+
+
+        public IEnumerable<Organization> GetOrganizations()
         {
             // Returns all Organization entities, filtering by role if one is provided
 
@@ -436,7 +438,22 @@ namespace DBManager
 
                 return entities.Organizations.Include(org => org.RoleMapping
                                                 .Select(orm => orm.Role))
-                                                .Where(org => (roleName == null) ? true : org.RoleMapping
+                                                .OrderBy(org => org.Name)
+                                                .ToList();
+            }
+        }
+
+        public IEnumerable<Organization> GetOrganizations(string roleName)
+        {
+            // Returns all Organization entities, filtering by role if one is provided
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.Organizations.Include(org => org.RoleMapping
+                                                .Select(orm => orm.Role))
+                                                .Where(org => org.RoleMapping
                                                 .FirstOrDefault(orm => orm.Role.Name == roleName)
                                                 .IsSelected)
                                                 .OrderBy(org => org.Name)

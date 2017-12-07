@@ -18,9 +18,10 @@ namespace DBManager
         IEnumerable<InstrumentType> GetInstrumentTypes();
         IEnumerable<InstrumentUtilizationArea> GetInstrumentUtilizationAreas();
         IEnumerable<MeasurableQuantity> GetMeasurableQuantities();
-        IEnumerable<Organization> GetOrganizations(string role = "");
+        IEnumerable<Organization> GetOrganizations();
+        IEnumerable<Organization> GetOrganizations(string role);
         IEnumerable<OrganizationRole> GetOrganizationRoles();
-        IEnumerable<Person> GetPeople(string role = "");
+        IEnumerable<Person> GetPeople(string role = null);
         IEnumerable<PersonRole> GetPersonRoles();
         IList<T> GetQueryResults<T>(IQuery<T> query);
         IEnumerable<Task> GetTasks(bool showComplete, bool showAssigned);

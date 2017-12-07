@@ -153,6 +153,8 @@ namespace DBManager
             }
         }
 
+        public string ProjectString => Name + " " + Description;
+
         public IEnumerable<Report> Reports => _reportList;
 
         public int ReportCount

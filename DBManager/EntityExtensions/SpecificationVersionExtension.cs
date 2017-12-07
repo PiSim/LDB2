@@ -29,6 +29,8 @@ namespace DBManager
                                             .ToList();
             }
         }
+
+        public string VersionString => Specification?.Standard?.Name +" " + Name;
     }    
 
     public static class SpecificationVersionExtension

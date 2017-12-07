@@ -8,6 +8,17 @@ using System.Threading.Tasks;
 
 namespace DBManager
 {
+    public partial class Batch
+    {
+        public string MaterialFullCode => Material?.MaterialType?.Code
+                                        + Material?.MaterialLine?.Code
+                                        + Material?.Aspect?.Code
+                                        + Material?.Recipe?.Code;
+
+
+
+    }
+
     public static class BatchExtension
     {
         public static Material GetMaterial(this Batch entry)

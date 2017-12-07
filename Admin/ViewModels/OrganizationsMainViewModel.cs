@@ -37,7 +37,10 @@ namespace Admin.ViewModels
             #region EventSubscriptions
 
             _eventAggregator.GetEvent<OrganizationChanged>()
-                            .Subscribe(ect => RaisePropertyChanged("OrganizationList"));
+                            .Subscribe(ect => RaisePropertyChanged("OrganizationList"),
+                            ThreadOption.PublisherThread,
+                            false,
+                            ect => ect.Action != EntityChangedToken.EntityChangedAction.Updated);
 
             #endregion
             

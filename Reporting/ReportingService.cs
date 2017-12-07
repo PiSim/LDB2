@@ -46,6 +46,21 @@ namespace Reporting
         }
 
         /// <summary>
+        /// Renders a datasheet to collect test data for a report, and shows it in a preview window for printing
+        /// </summary>
+        /// <param name="entry">The Report entry</param>
+        public void PrintReportDataSheet(Report entry)
+        {
+            FixedDocument dataSheet = new FixedDocument();
+            dataSheet.DocumentPaginator.PageSize = PageSizes.A4;
+
+            FixedPage currentPage = _docRenderer.AddPageToFixedDocument(dataSheet);
+            ReportDataSheetMainGrid mainGrid = _docRenderer.AddReportDataSheetGrid(currentPage);
+            mainGrid.ReportInstance = entry;
+            ShowPreview(dataSheet);
+        }
+
+        /// <summary>
         /// Renders a document detailing a list of Task items and shows it in a preview window for printing.
         /// </summary>
         /// <param name="batchesToPrint">The list of Tasks to print</param>

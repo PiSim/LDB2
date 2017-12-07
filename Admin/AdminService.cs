@@ -237,6 +237,11 @@ namespace Admin
 
                 output.Create();
 
+                EntityChangedToken token = new EntityChangedToken(output,
+                                                                    EntityChangedToken.EntityChangedAction.Created);
+                _eventAggregator.GetEvent<OrganizationChanged>()
+                                .Publish(token);
+
                 return output;
             }
             else return null;

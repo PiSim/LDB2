@@ -67,7 +67,7 @@ namespace Reporting
                 Title = title
             });
         }
-
+        
         internal void AddBatchList(Grid targetGrid, IEnumerable<object> batchList)
         {
             BatchList listElement = new BatchList();
@@ -82,6 +82,24 @@ namespace Reporting
             listElement.MainList.ItemsSource = taskList;
 
             targetGrid.Children.Add(listElement);
+        }
+
+        /// <summary>
+        /// Adds a new ReportDataSheetMainGrid to the page, and returns the instance
+        /// </summary>
+        /// <param name="page">The page to which the grid will be added</param>
+        /// <returns>A reference to the main grid</returns>
+        internal ReportDataSheetMainGrid AddReportDataSheetGrid(FixedPage page)
+        {
+            ReportDataSheetMainGrid mainGrid = new ReportDataSheetMainGrid()
+            {
+                Height = page.Height,
+                Width = page.Width
+            };
+
+            page.Children.Add(mainGrid);
+
+            return mainGrid;
         }
 
         internal FixedPage GetNewPage()

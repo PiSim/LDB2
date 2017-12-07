@@ -6,6 +6,7 @@ using Infrastructure.Events;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
+using Reporting;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -33,18 +34,21 @@ namespace Reports.ViewModels
         private IDataService _dataService;
         private IEnumerable<TestWrapper> _testList;
         private IReportService _reportService;
+        private IReportingService _reportingService;
         private ReportFile _selectedFile;
         
         public ReportEditViewModel(DBPrincipal principal,
                                     EventAggregator aggregator,
                                     IDataService dataService,
-                                    IReportService reportService) : base()
+                                    IReportService reportService,
+                                    IReportingService reportingService) : base()
         {
             _dataService = dataService;
             _editMode = false;
             _eventAggregator = aggregator;
             _principal = principal;
             _reportService = reportService;
+            _reportingService = reportingService;
 
             _addFile = new DelegateCommand(
                 () =>
@@ -86,7 +90,7 @@ namespace Reports.ViewModels
             _generateRawDataSheet = new DelegateCommand(
                 () =>
                 {
-                    _eventAggregator.GetEvent<GenerateReportDataSheetRequested>().Publish(_instance);
+                    _reportingService.PrintReportDataSheet(_instance);
                 });
 
             _openFile = new DelegateCommand(
