@@ -46,6 +46,7 @@
                    VerticalAlignment="Center"/>
             <TextBox Text="{Binding AspectCode, Mode=OneWay}"
                      IsEnabled="false"
+                     CharacterCasing="Upper"
                      HorizontalContentAlignment="Center"
                      Grid.Column="1"
                      Grid.Row="0"
