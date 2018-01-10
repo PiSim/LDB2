@@ -230,9 +230,16 @@ namespace Reports
 
             using (DBEntities entities = new DBEntities())
             {
-                return entities.ExternalReports
-                                .Where(erep => erep.Year == year)
-                                .Max(erep => erep.Number) + 1;
+                try
+                {
+                    return entities.ExternalReports
+                                    .Where(erep => erep.Year == year)
+                                    .Max(erep => erep.Number) + 1;
+                }
+                catch
+                {
+                    return 1;
+                }
             }
         }
 

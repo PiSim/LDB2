@@ -69,15 +69,25 @@ namespace Instruments
             }
         }
 
+        /// <summary>
+        /// Retrieves and returns the next available CalibrationReport number for a given year
+        /// </summary>
+        /// <param name="year">The year on which the query is performed</param>
+        /// <returns>The first unused calibration number</returns>
         public static int GetNextCalibrationNumber(int year)
         {
-            // Returns the next available calibration number for a given year
-
             using (DBEntities entities = new DBEntities())
             {
-                return entities.CalibrationReports
-                                .Where(crep => crep.Year == year)
-                                .Max(crep => crep.Number) + 1;
+                try
+                {
+                    return entities.CalibrationReports
+                                    .Where(crep => crep.Year == year)
+                                    .Max(crep => crep.Number) + 1;
+                }
+                catch
+                {
+                    return 1;
+                }
             }
         }
 

@@ -47,7 +47,8 @@ namespace Specifications.ViewModels
                         _standardInstance = new Std
                         {
                             Name = Name,
-                            OrganizationID = _selectedOem.ID
+                            OrganizationID = _selectedOem.ID,
+                            CurrentIssue = ""
                         };
 
                         _methodInstance.Standard = _standardInstance;

@@ -43,16 +43,8 @@ namespace Reports.ViewModels
                 batchBox => 
                 {
                     Batch temp = _dataService.GetBatch(batchBox.Text);
-                    if (temp == null)
-                    {
-                        temp = new Batch
-                        {
-                            Number = batchBox.Text
-                        };
-                        temp.Create();
-                    }
-
-                    _batchList.Add(temp);                 
+                    if (temp != null)
+                        _batchList.Add(temp);                 
                 });
             
             _cancel = new DelegateCommand<Window>(
