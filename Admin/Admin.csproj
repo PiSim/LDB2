@@ -118,7 +118,9 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="ViewModels\AdminMainViewModel.cs" />
+    <Compile Include="ViewModels\PropertyEditViewModel.cs" />
     <Compile Include="ViewModels\InstrumentTypeEditViewModel.cs" />
+    <Compile Include="ViewModels\PropertiesMainViewModel.cs" />
     <Compile Include="ViewModels\InstrumentTypeMainViewModel.cs" />
     <Compile Include="ViewModels\InstrumentUtilizationAreaMainViewModel.cs" />
     <Compile Include="ViewModels\MeasurableQuantityEditViewModel.cs" />
@@ -138,8 +140,14 @@
     <Compile Include="Views\AdminNavigationItem.xaml.cs">
       <DependentUpon>AdminNavigationItem.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\PropertyEdit.xaml.cs">
+      <DependentUpon>PropertyEdit.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\InstrumentTypeEdit.xaml.cs">
       <DependentUpon>InstrumentTypeEdit.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PropertyMain.xaml.cs">
+      <DependentUpon>PropertyMain.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\InstrumentTypeMain.xaml.cs">
       <DependentUpon>InstrumentTypeMain.xaml</DependentUpon>
@@ -224,9 +232,17 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\PropertyEdit.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\InstrumentTypeEdit.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\PropertyMain.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\InstrumentTypeMain.xaml">
       <SubType>Designer</SubType>

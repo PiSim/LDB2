@@ -34,17 +34,20 @@ namespace Reports.ViewModels
         private ExternalReport _instance;
         private ExternalReportFile _selectedFile;
         private IMaterialService _materialService;
+        private IReportService _reportService;
         private string _batchNumber;
 
         public ExternalReportEditViewModel(DBPrincipal principal,
                                             EventAggregator aggregator,
-                                            IMaterialService materialService) : base()
+                                            IMaterialService materialService,
+                                            IReportService reportService) : base()
         {
             _editMode = false;
             _eventAggregator = aggregator;
             _materialService = materialService;
             _principal = principal;
-            
+            _reportService = reportService;
+
             _addBatch = new DelegateCommand(
                 () => 
                 {
@@ -85,7 +88,7 @@ namespace Reports.ViewModels
             _addPO = new DelegateCommand(
                 () =>
                 {
-                    ReportService.AddPOToExternalReport(_instance);
+                    _reportService.AddPOToExternalReport(_instance);
 
                     RaisePropertyChanged("OrderCurrency");
                     RaisePropertyChanged("OrderDate");

@@ -10,5 +10,6 @@ namespace Infrastructure
     public interface IProjectService
     {
         Project CreateProject();
+        void UpdateAllCosts();
     }
 }

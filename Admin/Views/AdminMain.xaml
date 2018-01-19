@@ -98,6 +98,9 @@
             <TabItem Header="Aree Utilizzo strumenti">
                 <ContentControl prism:RegionManager.RegionName="{Binding InstrumentUtilizationAreasRegionName}"/>
             </TabItem>
+            <TabItem Header="Gestione Proprietà materiali">
+                <ContentControl prism:RegionManager.RegionName="{Binding PropertyRegionName}"/>
+            </TabItem>
         </TabControl>
     </Grid>
 </UserControl>

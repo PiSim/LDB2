@@ -369,14 +369,6 @@
           <Property Name="name" Type="varchar" MaxLength="45" Nullable="false" />
           <Property Name="description" Type="varchar" MaxLength="45" />
         </EntityType>
-        <EntityType Name="po_file">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="path" Type="varchar" MaxLength="100" Nullable="false" />
-          <Property Name="poID" Type="int" Nullable="false" />
-        </EntityType>
         <EntityType Name="projects">
           <Key>
             <PropertyRef Name="ID" />
@@ -1438,20 +1430,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="purchase_order_to_file">
-          <End Role="purchase_orders" Type="Self.purchase_orders" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="po_file" Type="Self.po_file" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="purchase_orders">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="po_file">
-              <PropertyRef Name="poID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="quantity_to_instrument_measurable_property">
           <End Role="measurable_quantities" Type="Self.measurable_quantities" Multiplicity="1" />
           <End Role="instrument_measurable_property" Type="Self.instrument_measurable_property" Multiplicity="*" />
@@ -1962,7 +1940,6 @@
           <EntitySet Name="people" EntityType="Self.people" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="person_role_mappings" EntityType="Self.person_role_mappings" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="person_roles" EntityType="Self.person_roles" Schema="labdb" store:Type="Tables" />
-          <EntitySet Name="po_file" EntityType="Self.po_file" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="projects" EntityType="Self.projects" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="properties" EntityType="Self.properties" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="purchase_orders" EntityType="Self.purchase_orders" Schema="labdb" store:Type="Tables" />
@@ -2241,10 +2218,6 @@
           <AssociationSet Name="property_to_method" Association="Self.property_to_method">
             <End Role="properties" EntitySet="properties" />
             <End Role="methods" EntitySet="methods" />
-          </AssociationSet>
-          <AssociationSet Name="purchase_order_to_file" Association="Self.purchase_order_to_file">
-            <End Role="purchase_orders" EntitySet="purchase_orders" />
-            <End Role="po_file" EntitySet="po_file" />
           </AssociationSet>
           <AssociationSet Name="quantity_to_instrument_measurable_property" Association="Self.quantity_to_instrument_measurable_property">
             <End Role="measurable_quantities" EntitySet="measurable_quantities" />
@@ -3425,15 +3398,10 @@
             <End Role="organization_roles" EntitySet="OrganizationRoles" />
             <End Role="organization_role_mappings" EntitySet="OrganizationRoleMappings" />
           </AssociationSet>
-          <EntitySet Name="PurchaseOrderFiles" EntityType="labdbModel.PurchaseOrderFile" />
           <EntitySet Name="PurchaseOrders" EntityType="labdbModel.PurchaseOrder" />
           <AssociationSet Name="organization_to_purchase_order" Association="labdbModel.organization_to_purchase_order">
             <End Role="Organization" EntitySet="Organizations" />
             <End Role="purchase_orders" EntitySet="PurchaseOrders" />
-          </AssociationSet>
-          <AssociationSet Name="purchase_order_to_file" Association="labdbModel.purchase_order_to_file">
-            <End Role="purchase_orders" EntitySet="PurchaseOrders" />
-            <End Role="po_file" EntitySet="PurchaseOrderFiles" />
           </AssociationSet>
           <AssociationSet Name="instrument_to_test" Association="labdbModel.instrument_to_test">
             <End Role="instrument" EntitySet="Instruments" />
@@ -4008,15 +3976,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="PurchaseOrderFile">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" />
-          <Property Name="Path" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="poID" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="purchase_orders" Relationship="labdbModel.purchase_order_to_file" FromRole="po_file" ToRole="purchase_orders" />
-        </EntityType>
         <EntityType Name="PurchaseOrder">
           <Key>
             <PropertyRef Name="ID" />
@@ -4025,7 +3984,6 @@
           <Property Name="Number" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="organizationID" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Organization" Relationship="labdbModel.organization_to_purchase_order" FromRole="purchase_orders" ToRole="Organization" />
-          <NavigationProperty Name="PoFile" Relationship="labdbModel.purchase_order_to_file" FromRole="purchase_orders" ToRole="po_file" />
           <NavigationProperty Name="ExternalReports" Relationship="labdbModel.purchase_order_to_external_report" FromRole="PurchaseOrder" ToRole="ExternalReport" />
           <Property Name="Total" Type="Double" Nullable="false" />
         </EntityType>
@@ -4038,20 +3996,6 @@
             </Principal>
             <Dependent Role="purchase_orders">
               <PropertyRef Name="organizationID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="purchase_order_to_file">
-          <End Type="labdbModel.PurchaseOrder" Role="purchase_orders" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Type="labdbModel.PurchaseOrderFile" Role="po_file" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="purchase_orders">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="po_file">
-              <PropertyRef Name="poID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -5247,15 +5191,6 @@
               <MappingFragment StoreEntitySet="organization_roles">
                 <ScalarProperty Name="Description" ColumnName="description" />
                 <ScalarProperty Name="Name" ColumnName="name" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="PurchaseOrderFiles">
-            <EntityTypeMapping TypeName="labdbModel.PurchaseOrderFile">
-              <MappingFragment StoreEntitySet="po_file">
-                <ScalarProperty Name="poID" ColumnName="poID" />
-                <ScalarProperty Name="Path" ColumnName="path" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

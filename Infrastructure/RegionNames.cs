@@ -51,6 +51,8 @@ namespace Infrastructure
         public static string ProjectBatchListRegion { get { return "ProjectBatchListRegion"; } }
         public static string ProjectReportListRegion { get { return "ProjectReportListRegion"; } }
         public static string ProjectStatRegion { get { return "ProjectStatRegion"; } }
+        public static string PropertyManagementRegion => "PropertyManagementRegion";
+        public static string PropertyManagementEditRegion => "PropertyManagementEditRegion";
         public static string SampleArchiveRegion { get { return "SampleArchiveRegion"; } }
         public static string SampleLongTermStorageRegion { get { return "SampleLongTermStorageRegion"; } }
         public static string SpecificationEditFileRegion { get { return "SpecificationEditFileRegion"; } }

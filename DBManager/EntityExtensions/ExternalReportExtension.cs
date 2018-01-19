@@ -144,7 +144,6 @@ namespace DBManager
                                                     .Include(exrep => exrep.Methods
                                                     .Select(mtd => mtd.Standard))
                                                     .Include(exrep => exrep.PO.Organization)
-                                                    .Include(exrep => exrep.PO.PoFile)
                                                     .Include(exrep => exrep.Project.Leader)
                                                     .Include(exrep => exrep.Project.Oem)
                                                     .First(rep => rep.ID == entry.ID);

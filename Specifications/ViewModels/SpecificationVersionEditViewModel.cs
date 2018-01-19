@@ -95,7 +95,7 @@ namespace Specifications.ViewModels
                                     .Publish(token);
                 },
                 () => _principal.IsInRole(UserRoleNames.SpecificationEdit));
-
+            
             _eventAggregator.GetEvent<SpecificationMethodListChanged>()
                             .Subscribe(
                 spc =>

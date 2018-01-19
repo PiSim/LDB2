@@ -32,7 +32,9 @@ namespace Specifications
                         _container.Resolve<Views.MethodCreationDialog>();
 
             if (creationDialog.ShowDialog() == true)
-                _eventAggregator.GetEvent<MethodListUpdateRequested>().Publish();
+                _eventAggregator.GetEvent<MethodChanged>()
+                                .Publish(new EntityChangedToken(creationDialog.MethodInstance,
+                                                                EntityChangedToken.EntityChangedAction.Created));
         }
 
 

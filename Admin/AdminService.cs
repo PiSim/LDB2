@@ -292,6 +292,23 @@ namespace Admin
 
             return null;
         }
+
+        public Property CreateNewProperty()
+        {
+            StringInputDialog creationDialog = new StringInputDialog();
+            creationDialog.Title = "Crea nuova Proprietà";
+
+            if (creationDialog.ShowDialog() == true)
+            {
+                Property output = new Property();
+                output.Name = creationDialog.InputString;
+                output.Create();
+                
+                return output;
+            }
+
+            return null;
+        }
     }
 
 }

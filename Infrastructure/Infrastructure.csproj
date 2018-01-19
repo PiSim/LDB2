@@ -119,7 +119,7 @@
     <Compile Include="Events\InstrumentTypeCreated.cs" />
     <Compile Include="Events\MaintenanceEventCreated.cs" />
     <Compile Include="Events\MeasurableQuantityCreated.cs" />
-    <Compile Include="Events\MethodListUpdateRequested.cs" />
+    <Compile Include="Events\MethodChanged.cs" />
     <Compile Include="Events\OrganizationChanged.cs" />
     <Compile Include="Events\PersonChanged.cs" />
     <Compile Include="Events\PersonRoleCreationRequested.cs" />

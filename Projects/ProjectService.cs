@@ -43,18 +43,25 @@ namespace Projects
             else
                 return null;
         }
-
-        internal void UpdateProjectCosts()
+        
+        /// <summary>
+        /// Updates the ExternalCost of every project.
+        /// TBD: Updates the internal cost too
+        /// </summary>
+        public void UpdateAllCosts()
         {
             IEnumerable<Project> _prjList = _dataService.GetProjects();
 
             foreach (Project prj in _prjList)
             {
-                double oldvalue = prj.TotalExternalCost;
+                double oldExternalValue = prj.TotalExternalCost;
+                double oldInternalValue = prj.TotalInternalCost;
 
-                prj.UpdateExternalReportCost();
+                prj.GetExternalReportCost();
+                prj.GetInternalReportCost();
 
-                if (prj.TotalExternalCost != oldvalue)
+                if (prj.TotalExternalCost != oldExternalValue
+                    || prj.TotalInternalCost != oldInternalValue )
                     prj.Update();
             }
         }

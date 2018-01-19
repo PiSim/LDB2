@@ -9,13 +9,26 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="35"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <Button Content="Ricalcola"
+                Command="{Binding UpdateProjectStats}"
+                Visibility="{Binding UpdateButtonVisibility}"
+                Grid.Row="0"
+                Margin="5"
+                HorizontalAlignment="Left"/>
+
         <DataGrid ItemsSource="{Binding ProjectStatList}"
                   Margin="5"
                   AutoGenerateColumns="False"
                   CanUserAddRows="False"
                   CanUserDeleteRows="False"
                   GridLinesVisibility="None"
-                  IsReadOnly="True">
+                  IsReadOnly="True"
+                  Grid.Row="1">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Progetto"
                                     Binding="{Binding Name}"/>

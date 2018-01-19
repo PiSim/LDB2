@@ -29,6 +29,8 @@
                                     Binding="{Binding Standard.CurrentIssue}"/>
                 <DataGridTextColumn Header="Descrizione"
                                     Binding="{Binding Description}"/>
+                <DataGridTextColumn Header="Ore di Lavoro"
+                                    Binding="{Binding TotalWorkHours}"/>
             </DataGrid.Columns>
         </DataGrid>
             

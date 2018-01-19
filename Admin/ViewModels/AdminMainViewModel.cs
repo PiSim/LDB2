@@ -114,6 +114,8 @@ namespace Admin.ViewModels
 
         public string PeopleManagementRegionName => RegionNames.PeopleManagementRegion;
 
+        public string PropertyRegionName => RegionNames.PropertyManagementRegion;
+
         public DelegateCommand RunMethodCommand
         {
             get { return _runMethod; }

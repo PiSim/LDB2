@@ -129,10 +129,13 @@
                         <StackPanel Orientation="Horizontal"
                                     Height="Auto">
                             <TextBlock Text="{Binding Standard.Organization.Name}"
+                                       Width="100"
                                        Margin="0,0,5,0"/>
                             <TextBlock Text="{Binding Standard.Name}"
                                        Margin="0,0,5,0"/>
-                            <TextBlock Text="{Binding Standard.CurrentIssue}"/>
+                            <TextBlock Text="{Binding Standard.CurrentIssue}"
+                                       Margin="0,0,5,0"/>
+                            <TextBlock Text="{Binding Description}"/>
                         </StackPanel>
                     </DataTemplate>
                 </ComboBox.ItemTemplate>

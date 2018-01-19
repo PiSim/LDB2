@@ -46,8 +46,12 @@ namespace Reports
                 });
         }
 
-        [Obsolete]
-        public static PurchaseOrder AddPOToExternalReport(ExternalReport target)
+        /// <summary>
+        /// Shows PO Creation Dialog and adds a PO entry using the entered info
+        /// </summary>
+        /// <param name="target">The Report to which the PO will be added</param>
+        /// <returns>The new PO</returns>
+        public PurchaseOrder AddPOToExternalReport(ExternalReport target)
         {
 
             using (DBEntities entities = new DBEntities())
@@ -73,6 +77,9 @@ namespace Reports
                     targetReport.PO = output;
                     entities.SaveChanges();
 
+                    AddToProjectExternalCost(targetReport.ProjectID,
+                                            output.Total);
+
                     return output;
                 }
 
@@ -81,6 +88,25 @@ namespace Reports
             }
         }
 
+        /// <summary>
+        /// Adds a sum to a project's ExternalCost field
+        /// The addition is optimistic and assumes noone is altering the project entry
+        /// </summary>
+        /// <param name="projectID">The ID of the project to Update</param>
+        /// <param name="sumToAdd">The amount that will be added.</param>
+        public void AddToProjectExternalCost(int? projectID,
+                                            double sumToAdd)
+        {
+            using (DBEntities entities = new DBEntities())
+            {
+                Project connectedEntry = entities.Projects
+                                                 .First(prj => prj.ID == projectID);
+
+                connectedEntry.TotalExternalCost += sumToAdd;
+
+                entities.SaveChanges();
+            }
+        }
 
 
         public void ApplyControlPlan(IEnumerable<ISelectableRequirement> reqList, ControlPlan conPlan)
@@ -301,6 +327,20 @@ namespace Reports
             //Inserts new entry in the DB
 
             output.Create();
+
+            // If the tested Batch does not have a "basic" report, add reference to current instance
+
+            if (dialogViewModelInstance.SelectedBatch.BasicReportID == null)
+            {
+                using (DBEntities entities = new DBEntities())
+                {
+                    entities.Batches
+                            .First(btc => btc.ID == dialogViewModelInstance.SelectedBatch.ID)
+                            .BasicReportID = output.ID;
+
+                    entities.SaveChanges();
+                }
+            }
 
             // If using Task as template, the parent is updated with the child Report ID
 

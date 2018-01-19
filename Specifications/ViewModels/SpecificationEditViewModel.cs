@@ -54,7 +54,6 @@ namespace Specifications.ViewModels
             _principal = principal;
             _reportService = reportService;
 
-            _methodList = _dataService.GetMethods();
 
             _addControlPlan = new DelegateCommand(
                 () =>
@@ -199,7 +198,16 @@ namespace Specifications.ViewModels
                 () => _principal.IsInRole(UserRoleNames.Admin) && !_editMode);
 
             // Event Subscriptions
-            
+
+
+            _eventAggregator.GetEvent<MethodChanged>()
+                            .Subscribe(
+                tkn =>
+                {
+                    _methodList = null;
+                    RaisePropertyChanged("MethodList");
+                });
+
             _eventAggregator.GetEvent<ReportCreated>().Subscribe(
                 report => RaisePropertyChanged("ReportList"));
 
@@ -323,7 +331,12 @@ namespace Specifications.ViewModels
 
         public IEnumerable<Method> MethodList
         {
-            get { return _methodList; }
+            get
+            {
+                if (_methodList == null)
+                    _methodList = _dataService.GetMethods();
+                return _methodList;
+            }
         }
 
         public DelegateCommand OpenFileCommand

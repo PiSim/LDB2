@@ -12,7 +12,7 @@ namespace DBManager
     {
         IEnumerable<Report> _reportList;
         private IEnumerable<Task> _taskList;
-
+        
         public void Create()
         {
             using (DBEntities entities = new DBEntities())
@@ -60,6 +60,43 @@ namespace DBManager
                                         .Include(btc => btc.Material.Recipe.Colour)
                                         .ToList();
             }
+        }
+
+        /// <summary>
+        /// Calculates the total external cost of the project and stores the result in the
+        /// TotalExternalCost field
+        /// </summary>
+        /// <returns>The calculated value</returns>
+        public double GetExternalReportCost()
+        {
+            using (DBEntities entities = new DBEntities())
+            {
+                IEnumerable<PurchaseOrder> _poList = entities.PurchaseOrders
+                                                    .Where(po => po.ExternalReports
+                                                    .Any(exr => exr.ProjectID == this.ID));
+
+                TotalExternalCost = (_poList.Count() == 0) ? 0 : _poList.Sum(po => po.Total);
+            }
+
+            return TotalExternalCost;
+        }
+
+        /// <summary>
+        /// CAlculates the internal cost of the project and stores the result in the
+        /// TotalInternalCost field
+        /// </summary>
+        /// <returns>The calculated value</returns>
+        public double GetInternalReportCost()
+        {
+            using (DBEntities entities = new DBEntities())
+            {
+                IQueryable<Test> testList = entities.Tests
+                                                    .Where(tst => tst.Report.Batch.Material.ProjectID == ID);
+
+                TotalInternalCost = (int)((testList.Count() == 0) ? 0 : testList.Sum(tst => tst.Duration));
+            }
+
+            return TotalInternalCost;
         }
 
         public IEnumerable<Report> GetReports()
@@ -154,7 +191,7 @@ namespace DBManager
         }
 
         public string ProjectString => Name + " " + Description;
-
+        
         public IEnumerable<Report> Reports => _reportList;
 
         public int ReportCount
@@ -183,17 +220,6 @@ namespace DBManager
             }
         }
 
-        public void UpdateExternalReportCost()
-        {
-            using (DBEntities entities = new DBEntities())
-            {
-                IEnumerable<PurchaseOrder> _poList = entities.PurchaseOrders
-                                                    .Where(po => po.ExternalReports
-                                                    .Any(exr => exr.ProjectID == this.ID));
-
-                TotalExternalCost = (_poList.Count() == 0) ? 0 : _poList.Sum(po => po.Total);
-            }
-        }
 
         public IEnumerable<Task> Tasks => _taskList;
     }

@@ -17,7 +17,6 @@ namespace DBManager
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public PurchaseOrder()
         {
-            this.PoFile = new HashSet<PurchaseOrderFile>();
             this.ExternalReports = new HashSet<ExternalReport>();
         }
     
@@ -27,8 +26,6 @@ namespace DBManager
         public double Total { get; set; }
     
         public virtual Organization Organization { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PurchaseOrderFile> PoFile { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ExternalReport> ExternalReports { get; set; }
     }

@@ -17,5 +17,6 @@ namespace Infrastructure
         MeasurableQuantity CreateNewMeasurableQuantity();
         Person CreateNewPerson();
         InstrumentType CreateNewInstrumentType();
+        Property CreateNewProperty();
     }
 }

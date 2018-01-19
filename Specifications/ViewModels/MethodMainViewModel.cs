@@ -48,8 +48,8 @@ namespace Specifications.ViewModels
                 },
                 () => IsSpecAdmin);
 
-            _eventAggregator.GetEvent<MethodListUpdateRequested>().Subscribe(
-                () => RaisePropertyChanged("MethodList"));
+            _eventAggregator.GetEvent<MethodChanged>().Subscribe(
+                tkn => RaisePropertyChanged("MethodList"));
         }
 
         private DelegateCommand DeleteMethodCommand

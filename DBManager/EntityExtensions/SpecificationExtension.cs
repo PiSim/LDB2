@@ -96,6 +96,20 @@ namespace DBManager
                                                     .ToList();
             }
         }
+
+        public double TotalWorkHours
+        {
+            get
+            {
+                using (DBEntities entities = new DBEntities())
+                {
+                    return entities.SpecificationVersions
+                                    .First(spcv => spcv.SpecificationID == ID && spcv.IsMain)
+                                    .Requirements
+                                    .Sum(req => req.Method.Duration);
+                }
+            }
+        }
     }
 
     public static class SpecificationExtension

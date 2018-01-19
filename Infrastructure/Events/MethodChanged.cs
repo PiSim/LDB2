@@ -7,8 +7,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Events
 {
-    [Obsolete]
-    public class MethodListUpdateRequested : PubSubEvent
+    public class MethodChanged : PubSubEvent<EntityChangedToken>
     {
     }
 }

@@ -18,5 +18,6 @@ namespace Infrastructure
         int GetNextExternalReportNumber(int year);
         int GetNextReportNumber();
         Requirement GenerateRequirement(Method mtd);
+        PurchaseOrder AddPOToExternalReport(ExternalReport instance);
     }
 }

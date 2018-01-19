@@ -57,6 +57,8 @@ namespace Admin
                                                 typeof(Views.OrganizationsMain));
             _regionManager.RegisterViewWithRegion(RegionNames.PeopleManagementRegion,
                                                     typeof(Views.PeopleMain));
+            _regionManager.RegisterViewWithRegion(RegionNames.PropertyManagementRegion,
+                                                    typeof(Views.PropertyMain));
         }
     }
 }

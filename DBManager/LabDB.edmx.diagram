@@ -93,10 +93,8 @@
         <EntityTypeShape EntityType="labdbModel.OrganizationRole" Width="1.5" PointX="8" PointY="21" />
         <AssociationConnector Association="labdbModel.organization_to_role_mapping" />
         <AssociationConnector Association="labdbModel.role_to_organization_mapping" />
-        <EntityTypeShape EntityType="labdbModel.PurchaseOrderFile" Width="1.5" PointX="26.75" PointY="24" />
         <EntityTypeShape EntityType="labdbModel.PurchaseOrder" Width="1.5" PointX="24.5" PointY="25.375" />
         <AssociationConnector Association="labdbModel.organization_to_purchase_order" />
-        <AssociationConnector Association="labdbModel.purchase_order_to_file" />
         <AssociationConnector Association="labdbModel.instrument_to_test" />
         <AssociationConnector Association="labdbModel.manufacturer_to_instrument" />
         <AssociationConnector Association="labdbModel.supplier_to_instrument" />

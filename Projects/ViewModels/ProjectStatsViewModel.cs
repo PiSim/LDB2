@@ -3,6 +3,7 @@ using DBManager.Services;
 using Infrastructure;
 using Infrastructure.Events;
 using Infrastructure.Wrappers;
+using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
 using System;
@@ -15,15 +16,28 @@ namespace Projects.ViewModels
 {
     public class ProjectStatsViewModel : BindableBase
     {
+        private DBPrincipal _principal;
+        private DelegateCommand _updateStats;
         private EventAggregator _eventAggregator;
         private readonly IDataService _dataService;
+        private readonly IProjectService _projectService;
 
-        public ProjectStatsViewModel(EventAggregator eventAggregator,
-                                    IDataService dataService)
+        public ProjectStatsViewModel(DBPrincipal principal,
+                                    EventAggregator eventAggregator,
+                                    IDataService dataService,
+                                    IProjectService projectService)
         {
             _dataService = dataService;
             _eventAggregator = eventAggregator;
+            _projectService = projectService;
 
+            _updateStats = new DelegateCommand(
+                () =>
+                {
+                    _projectService.UpdateAllCosts();
+                    RaisePropertyChanged("ProjectStatList");
+                });
+                
             _eventAggregator.GetEvent<ProjectListUpdateRequested>()
                             .Subscribe(
                             () =>
@@ -32,6 +46,10 @@ namespace Projects.ViewModels
                             });
         }
 
+        public bool IsAdmin => _principal.IsInRole(UserRoleNames.Admin);
+
         public IEnumerable<Project> ProjectStatList => _dataService.GetProjects(true);
+
+        public DelegateCommand UpdateProjectStats => _updateStats;
     }
 }

@@ -50,7 +50,9 @@
                Grid.Row="2"
                Margin="5"/>
         <ComboBox ItemsSource="{Binding PropertiesList}"
-                  SelectedItem="{Binding SelectedProperty, Mode=TwoWay}"
+                  SelectedItem="{Binding SelectedProperty, 
+                                         Mode=TwoWay,
+                                         UpdateSourceTrigger=PropertyChanged}"
                   DisplayMemberPath="Name"
                   Grid.Column="1"
                   Grid.ColumnSpan="3"
