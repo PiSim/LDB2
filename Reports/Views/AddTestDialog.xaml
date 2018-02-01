@@ -6,8 +6,8 @@
         xmlns:prism="http://prismlibrary.com/"
         prism:ViewModelLocator.AutoWireViewModel="True"
         mc:Ignorable="d"
-        Title="Aggiungi test" Height="350" Width="300"
-        ResizeMode="NoResize">
+        Title="Aggiungi test" Height="600" Width="300"
+        ResizeMode="CanResize">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -16,8 +16,8 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
+            <RowDefinition Height="90"/>
             <RowDefinition/>
-            <RowDefinition Height="2*"/>
             <RowDefinition Height="20"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>

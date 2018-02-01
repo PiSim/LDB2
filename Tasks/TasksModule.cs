@@ -3,6 +3,8 @@ using Microsoft.Practices.Unity;
 using Prism.Modularity;
 using Prism.Regions;
 using System;
+using Unity;
+using Unity.Lifetime;
 
 namespace Tasks
 {

@@ -10,6 +10,7 @@ using Reports.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Unity;
 
 namespace Reports
 {
@@ -192,7 +193,7 @@ namespace Reports
                 if (testDialog.TestList.Count() == 0)
                     return false;
 
-                IEnumerable<Test> testList = GenerateTestList(testDialog.TestList.Select(riw => riw.RequirementInstance));
+                IEnumerable<Test> testList = GenerateTestList(testDialog.SelectedRequirements);
 
                 foreach (Test tst in testList)
                     tst.ReportID = entry.ID;
@@ -225,12 +226,20 @@ namespace Reports
                 creationDialog.TaskInstance = parentTask;
             }
 
-            // If creation is succesful raise event and return the instance, otherwise return null
+            // Opens creation dialog and checks for success
             if (creationDialog.ShowDialog() == true)
             {
+                // Reference to newly created instance
                 Report output = CreateReportFromCreationDialog(creationDialog.ViewModel);
+
+                // Sets the report as basic if none exists
+                output.SetAsBasicIfNoReport();
+
+                // Raise creation event
                 _eventAggregator.GetEvent<ReportCreated>()
                                 .Publish(output);
+
+                // Return new instance
                 return output;
             }
 
@@ -382,6 +391,20 @@ namespace Reports
             }
 
             return output;
+        }
+
+        /// <summary>
+        /// Recalculates the duration of every report, then updates the DB with the new values
+        /// </summary>
+        public void UpdateAllWorkHours()
+        {
+            using (DBEntities entities = new DBEntities())
+            {
+                foreach (Report rpt in entities.Reports)
+                    rpt.GetDuration();
+
+                entities.SaveChanges();
+            }
         }
     }
 }

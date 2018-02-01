@@ -4,6 +4,8 @@ using Prism.Events;
 using Prism.Modularity;
 using Prism.Regions;
 using System;
+using Unity;
+using Unity.Lifetime;
 
 namespace Reports
 {

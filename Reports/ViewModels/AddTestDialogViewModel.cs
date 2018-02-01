@@ -17,6 +17,7 @@ namespace Reports.ViewModels
     {
         private DelegateCommand<Window> _cancel, _confirm;
         private IEnumerable<ReportItemWrapper> _testList;
+        private IEnumerable<Test> _selectedTest;
         private Report _reportInstance;
 
         public AddTestDialogViewModel() : base()
@@ -89,6 +90,8 @@ namespace Reports.ViewModels
                 return _reportInstance.Number.ToString();
             }
         }
+
+        public IEnumerable<Requirement> SelectedRequirements => _testList.Where(req => req.IsSelected).Select(req => req.RequirementInstance);
 
         public string SpecificationName
         {

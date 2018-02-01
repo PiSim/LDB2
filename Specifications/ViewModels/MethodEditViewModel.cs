@@ -245,7 +245,7 @@ namespace Specifications.ViewModels
                 _methodInstance.Load();
 
                 SelectedOrganization = _organizationList.FirstOrDefault(org => org.ID == _methodInstance?.Standard.OrganizationID);
-                SelectedProperty = _propertyList.FirstOrDefault(prp => prp.ID == _methodInstance?.PropertyID);
+                _selectedProperty = _propertyList.FirstOrDefault(prp => prp.ID == _methodInstance?.PropertyID);
                 _subMethodList = _methodInstance.GetSubMethods();
 
                 RaisePropertyChanged("Duration");

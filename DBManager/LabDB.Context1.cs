@@ -15,10 +15,6 @@ namespace DBManager
     
     public partial class LabDBEntities : DbContext
     {
-        public LabDBEntities()
-            : base("name=LabDBEntities")
-        {
-        }
     
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

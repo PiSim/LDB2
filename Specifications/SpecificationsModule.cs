@@ -3,6 +3,8 @@ using Infrastructure;
 using Prism.Modularity;
 using Prism.Regions;
 using System;
+using Unity;
+using Unity.Lifetime;
 
 namespace Specifications
 {

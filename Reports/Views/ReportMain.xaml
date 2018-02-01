@@ -25,6 +25,10 @@
             <Button Content="Elimina"
                     Command="{Binding RemoveReportCommand}"
                     Margin="5"/>
+            <Button Content="Ricalcola Ore di Lavoro"
+                    Command="{Binding RecalculateWorkHoursCommand}"
+                    Visibility="{Binding AdminElementsVisibility}"
+                    Margin="5"/>
         </StackPanel>
 
         <ContentControl prism:RegionManager.RegionName="MainReportListRegion"

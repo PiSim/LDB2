@@ -3,11 +3,11 @@ using DBManager;
 using DBManager.EntityExtensions;
 using Infrastructure;
 using Infrastructure.Events;
-using Microsoft.Practices.Unity;
 using Prism.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Unity;
 
 namespace Admin
 {
