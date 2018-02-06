@@ -6,5 +6,5 @@
              xmlns:local="clr-namespace:Specifications.Views"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <Label Content="Specifiche"/>
+    <Label Content="Metodi e Specifiche"/>
 </UserControl>

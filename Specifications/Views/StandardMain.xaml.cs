@@ -1,5 +1,4 @@
-﻿using Infrastructure;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,18 +16,13 @@ using System.Windows.Shapes;
 namespace Specifications.Views
 {
     /// <summary>
-    /// Interaction logic for MethodNavigationItem.xaml
+    /// Logica di interazione per StandardMain.xaml
     /// </summary>
-    public partial class MethodNavigationItem : UserControl, IModuleNavigationTag
+    public partial class StandardMain : UserControl
     {
-        public MethodNavigationItem()
+        public StandardMain()
         {
             InitializeComponent();
-        }
-
-        public string ViewName
-        {
-            get { return SpecificationViewNames.MethodMain; }
         }
     }
 }

@@ -10,8 +10,11 @@ namespace Infrastructure
 {
     public interface ISpecificationService
     {
+        void ConsolidateStandard(IEnumerable<Std> standardList,
+                                Std mainEntry);
         void CreateMethod();
         void UpdateRequirements(IEnumerable<Requirement> enumerable);
         void UpdateSubMethods(IEnumerable<SubMethod> subMethodList);
+        void DeleteStandard(Std standardInstance);
     }
 }

@@ -15,6 +15,7 @@ namespace DBManager
         CalibrationReport GetCalibrationReport(int id);
         IEnumerable<CalibrationReport> GetCalibrationReports();
         Instrument GetInstrument(string code);
+        IEnumerable<Std> GetStandards();
         IEnumerable<InstrumentType> GetInstrumentTypes();
         IEnumerable<InstrumentUtilizationArea> GetInstrumentUtilizationAreas();
         IEnumerable<MeasurableQuantity> GetMeasurableQuantities();

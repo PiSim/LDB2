@@ -1,0 +1,74 @@
+﻿<Window x:Class="Specifications.Views.ConsolidateStandardDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Specifications.Views"
+        xmlns:prism="http://prismlibrary.com/"
+        prism:ViewModelLocator.AutoWireViewModel="True"
+        mc:Ignorable="d"
+        Title="Consolida Standard" Height="300" Width="300">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="35"/>
+            <RowDefinition/>
+            <RowDefinition Height="35"/>
+        </Grid.RowDefinitions>
+        <Label Content="Standard:"
+               Grid.Column="0"
+               Grid.Row="0"
+               Margin="5"/>
+        <TextBlock Text="{Binding ParentName}"
+                 Grid.Column="1"
+                 Grid.ColumnSpan="3"
+                 Grid.Row="0"
+                 Margin="5"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Center"/>
+
+        <GroupBox Header="Standard da incorporare"
+                  Grid.Row="1"
+                  Grid.ColumnSpan="4">
+            <Grid>
+                <DataGrid ItemsSource="{Binding StandardList}"
+                          AutoGenerateColumns="False"
+                          CanUserAddRows="False"
+                          CanUserDeleteRows="False"
+                          CanUserResizeRows="False"
+                          Background="White">
+                    <DataGrid.Columns>
+                         
+                        <DataGridCheckBoxColumn Binding="{Binding IsSelected, Mode=TwoWay}"/>
+                        <DataGridTextColumn Header="Nome"
+                                            Binding="{Binding Item.Name}" 
+                                            IsReadOnly="True"/>
+                        <DataGridTextColumn Header="OEM"
+                                            Binding="{Binding Item.OEM.Name}"
+                                            IsReadOnly="True"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+                          
+            </Grid>
+        </GroupBox>
+
+        <Button Content="Annulla"
+                Command="{Binding CancelCommand}"
+                CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
+                Grid.Column="2"
+                Grid.Row="2"
+                Margin="5"/>
+
+        <Button Content="Ok"
+                Command="{Binding ConfirmCommand}"
+                CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
+                Grid.Column="3"
+                Grid.Row="2"
+                Margin="5"/>
+    </Grid>
+</Window>

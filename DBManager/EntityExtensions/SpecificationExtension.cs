@@ -146,7 +146,7 @@ namespace DBManager
                 entities.Configuration.LazyLoadingEnabled = false;
 
                 return entities.StandardFiles
-                                .Where(stdf => stdf.standardID == entry.StandardID)
+                                .Where(stdf => stdf.StandardID == entry.StandardID)
                                 .ToList();
             }
         }

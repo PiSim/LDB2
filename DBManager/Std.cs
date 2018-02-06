@@ -26,6 +26,8 @@ namespace DBManager
         public string Name { get; set; }
         public int OrganizationID { get; set; }
         public string CurrentIssue { get; set; }
+        public bool IsOutOfDate { get; set; }
+        public Nullable<System.DateTime> LastIssueCheck { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Method> Methods { get; set; }

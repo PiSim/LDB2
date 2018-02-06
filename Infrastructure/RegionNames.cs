@@ -42,7 +42,7 @@ namespace Infrastructure
         public static string MethodEditRegion { get { return "MethodEditRegion"; } }
         public static string MethodEditSpecificationListRegion { get { return "MethodEditSpecificationListRegion"; } }
         public static string MethodFileRegion { get { return "MethodFileRegion"; } }
-        public static string MethodIssueEditRegion { get { return "MethodIssueEditRegion"; } }
+        public static string MethodMainRegion => "MethodIssueEditRegion";
         public static string MethodReportListRegion { get { return "MethodReportListRegion"; } }
         public static string NewCalibrationFileListRegion { get { return "NewCalibrationFileListRegion"; } }
         public static string OrganizationEditRegion { get { return "OrganizationEditRegion"; } }
@@ -56,10 +56,14 @@ namespace Infrastructure
         public static string SampleArchiveRegion { get { return "SampleArchiveRegion"; } }
         public static string SampleLongTermStorageRegion { get { return "SampleLongTermStorageRegion"; } }
         public static string SpecificationEditFileRegion { get { return "SpecificationEditFileRegion"; } }
+        public static string SpecificationMainRegion => "SpecificationMainRegion";
         public static string SpecificationMainListRegion { get { return "SpecificationMainListRegion"; } }
         public static string SpecificationReportListRegion { get { return "SpecificationReportListRegion"; } }
         public static string SpecificationVersionEditRegion { get { return "SpecificationVersionEditRegion"; } }
         public static string SpecificationVersionTestListEditRegion { get { return "SpecificationVersionTestListEditRegion"; } }
+        public static string StandardEditRegion => "StandardEditRegion";
+        public static string StandardFileListRegion => "StandardFileListRegion";
+        public static string StandardMainRegion => "StandardMainRegion";
         public static string StatusbarRegion { get { return "StatusBarRegion"; } }
         public static string TaskEditProjectDetailsRegion { get { return "TaskEditProjectDetailsRegion"; } }
         public static string TaskMainListRegion { get { return "TaskMainListRegion"; } }

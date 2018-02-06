@@ -669,6 +669,21 @@ namespace DBManager
         }
 
         /// <summary>
+        /// Returns all the Std entities existing in the DB
+        /// </summary>
+        /// <returns>An IEnumerable of Std entities</returns>
+        public IEnumerable<Std> GetStandards()
+        {
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.Stds
+                                .ToList();
+            }
+        }
+
+        /// <summary>
         /// Returns the TaskItem with the given ID
         /// </summary>
         /// <param name="ID">The ID to look up</param>

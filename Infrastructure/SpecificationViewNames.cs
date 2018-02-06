@@ -17,5 +17,7 @@ namespace Infrastructure
         public static string SpecificationTestListEdit { get { return "SpecificationTestListEdit"; } }
         public static string SpecificationVersionEdit { get { return "SpecificationVersionEdit"; } }
         public static string SpecificationVersionList { get { return "SpecificationVersionList"; } }
+        public static string StandardEdit => "StandardEdit";
+        public static string StandardMain => "StandardMain";
     }
 }

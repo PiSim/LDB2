@@ -79,7 +79,7 @@ namespace Specifications.ViewModels
                             {
                                 Path = pth,
                                 Description = "",
-                                standardID = _instance.StandardID
+                                StandardID = _instance.StandardID
                             };
 
                             temp.Create();

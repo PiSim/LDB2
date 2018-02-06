@@ -319,6 +319,7 @@
           <Property Name="description" Type="text" Nullable="false" />
           <Property Name="um" Type="text" Nullable="false" />
           <Property Name="duration" Type="double" Nullable="false" />
+          <Property Name="name" Type="text" />
         </EntityType>
         <EntityType Name="organization_role_mappings">
           <Key>
@@ -473,6 +474,7 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="standardID" Type="int" Nullable="false" />
           <Property Name="description" Type="text" Nullable="false" />
+          <Property Name="name" Type="text" />
         </EntityType>
         <EntityType Name="standard_files">
           <Key>
@@ -491,6 +493,8 @@
           <Property Name="name" Type="varchar" MaxLength="45" Nullable="false" />
           <Property Name="organizationID" Type="int" Nullable="false" />
           <Property Name="current_issue" Type="varchar" MaxLength="45" Nullable="false" />
+          <Property Name="is_out_of_date" Type="bit" Nullable="false" />
+          <Property Name="last_issue_check" Type="date" />
         </EntityType>
         <EntityType Name="sub_methods">
           <Key>
@@ -2524,6 +2528,7 @@
           <NavigationProperty Name="ExternalReports" Relationship="labdbModel.external_report_method_mappings" FromRole="Method" ToRole="ExternalReport" />
           <NavigationProperty Name="TaskItems" Relationship="labdbModel.method_to_task_item" FromRole="Method" ToRole="TaskItem" />
           <Property Name="Duration" Type="Double" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="Organization">
           <Key>
@@ -2686,6 +2691,7 @@
           <NavigationProperty Name="SpecificationVersions" Relationship="Self.specification_to_specversion" FromRole="specifications" ToRole="specification_versions" />
           <NavigationProperty Name="Standard" Relationship="Self.standard_to_specification" FromRole="specifications" ToRole="standards" />
           <NavigationProperty Name="ControlPlans" Relationship="labdbModel.specification_to_control_plan" FromRole="Specification" ToRole="control_plans" />
+          <Property Name="Name" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="StandardFile">
           <Key>
@@ -2694,7 +2700,7 @@
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Path" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Description" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="standardID" Type="Int32" Nullable="false" />
+          <Property Name="StandardID" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Standard" Relationship="labdbModel.standard_to_file" FromRole="StandardFile" ToRole="Std" />
         </EntityType>
         <EntityType Name="Std">
@@ -2709,6 +2715,8 @@
           <NavigationProperty Name="Specifications" Relationship="Self.standard_to_specification" FromRole="standards" ToRole="specifications" />
           <NavigationProperty Name="StandardFiles" Relationship="labdbModel.standard_to_file" FromRole="Std" ToRole="StandardFile" />
           <Property Name="CurrentIssue" Type="String" Nullable="false" />
+          <Property Name="IsOutOfDate" Type="Boolean" Nullable="false" />
+          <Property Name="LastIssueCheck" Type="DateTime" />
           </EntityType>
         <EntityType Name="SubRequirement">
           <Key>
@@ -4663,7 +4671,7 @@
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="StandardFile">
-              <PropertyRef Name="standardID" />
+              <PropertyRef Name="StandardID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -4848,6 +4856,7 @@
           <EntitySetMapping Name="Methods">
             <EntityTypeMapping TypeName="labdbModel.Method">
               <MappingFragment StoreEntitySet="methods">
+                <ScalarProperty Name="Name" ColumnName="name" />
                 <ScalarProperty Name="Duration" ColumnName="duration" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="StandardID" ColumnName="standardID" />
@@ -4971,6 +4980,7 @@
           <EntitySetMapping Name="Specifications">
             <EntityTypeMapping TypeName="labdbModel.Specification">
               <MappingFragment StoreEntitySet="specifications">
+                <ScalarProperty Name="Name" ColumnName="name" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="StandardID" ColumnName="standardID" />
                 <ScalarProperty Name="Description" ColumnName="description" />
@@ -4980,7 +4990,7 @@
           <EntitySetMapping Name="StandardFiles">
             <EntityTypeMapping TypeName="labdbModel.StandardFile">
               <MappingFragment StoreEntitySet="standard_files">
-                <ScalarProperty Name="standardID" ColumnName="standardID" />
+                <ScalarProperty Name="StandardID" ColumnName="standardID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Path" ColumnName="path" />
                 <ScalarProperty Name="Description" ColumnName="description" />
@@ -4990,6 +5000,8 @@
           <EntitySetMapping Name="Stds">
             <EntityTypeMapping TypeName="labdbModel.Std">
               <MappingFragment StoreEntitySet="standards">
+                <ScalarProperty Name="LastIssueCheck" ColumnName="last_issue_check" />
+                <ScalarProperty Name="IsOutOfDate" ColumnName="is_out_of_date" />
                 <ScalarProperty Name="CurrentIssue" ColumnName="current_issue" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Name" ColumnName="name" />

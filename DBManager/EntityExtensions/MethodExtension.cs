@@ -6,8 +6,26 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DBManager.EntityExtensions
+namespace DBManager
 {
+    public partial class Method
+    {
+
+
+        public void Update()
+        {
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Methods.AddOrUpdate(this);
+
+                foreach (SubMethod smtd in SubMethods)
+                    entities.SubMethods.AddOrUpdate(smtd);
+
+                entities.SaveChanges();
+            }
+        }
+    }
+
     public static class MethodExtension
     {
 
@@ -71,7 +89,7 @@ namespace DBManager.EntityExtensions
                 entities.Configuration.LazyLoadingEnabled = false;
 
                 return entities.StandardFiles
-                                .Where(stdf => stdf.standardID == entry.StandardID)
+                                .Where(stdf => stdf.StandardID == entry.StandardID)
                                 .ToList();
             }
         }
@@ -195,19 +213,6 @@ namespace DBManager.EntityExtensions
                                                     .First(mtd => mtd.ID == entry.ID);
 
                 entry.SubMethods = tempEntry.SubMethods;
-            }
-        }
-
-        public static void Update(this Method entry)
-        {
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.Methods.AddOrUpdate(entry);
-
-                foreach (SubMethod smtd in entry.SubMethods)
-                    entities.SubMethods.AddOrUpdate(smtd);
-                
-                entities.SaveChanges();
             }
         }
     }

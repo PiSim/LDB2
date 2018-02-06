@@ -31,6 +31,7 @@ namespace DBManager
         public string Description { get; set; }
         public string UM { get; set; }
         public double Duration { get; set; }
+        public string Name { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Requirement> Requirements { get; set; }

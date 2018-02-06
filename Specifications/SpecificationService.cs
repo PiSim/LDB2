@@ -37,6 +37,55 @@ namespace Specifications
                                                                 EntityChangedToken.EntityChangedAction.Created));
         }
 
+        /// <summary>
+        /// Consolidates a list of Std entries into a single one, redirecting all references
+        /// All the entries that are left unused are deleted
+        /// </summary>
+        /// <param name="standardList">The list of standards to consolidate</param>
+        /// <param name="mainEntry">The entry that will incorporate all the others</param>
+        public void ConsolidateStandard(IEnumerable<Std> standardList,
+                                        Std mainEntry)
+        {
+            foreach (Std currentStd in standardList)
+            {
+                // if currentStd is mainentry, skip
+
+                if (currentStd.ID == mainEntry.ID)
+                    continue;
+
+                // Retrieve method list, set new reference and update
+
+                foreach (Method mtd in currentStd.GetMethods())
+                {
+                    mtd.StandardID = mainEntry.ID;
+                    mtd.Update();
+                }
+
+                // Retrieve specification list, set new reference and update
+
+                foreach (Specification spc in currentStd.GetSpecifications())
+                {
+                    spc.StandardID = mainEntry.ID;
+                    spc.Update();
+                }
+
+                // Call method to delete currentStd
+
+                DeleteStandard(currentStd);
+            }
+        }
+
+        /// <summary>
+        /// Deletes a Standard instance and raises the appropriate StandardChanged Event
+        /// </summary>
+        /// <param name="standardInstance">The Instance to delete</param>
+        public void DeleteStandard(Std standardInstance)
+        {
+            standardInstance.Delete();
+            _eventAggregator.GetEvent<StandardChanged>()
+                            .Publish(new EntityChangedToken(standardInstance,
+                                                            EntityChangedToken.EntityChangedAction.Deleted));
+        }
 
         public void UpdateRequirements(IEnumerable<Requirement> requirementEntries)
         {

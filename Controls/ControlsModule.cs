@@ -36,6 +36,8 @@ namespace Controls
                                                 typeof(Views.FileListControl));
             _regionManager.RegisterViewWithRegion(RegionNames.SpecificationEditFileRegion,
                                                 typeof(Views.FileListControl));
+            _regionManager.RegisterViewWithRegion(RegionNames.StandardFileListRegion,
+                                                typeof(Views.FileListControl));
             _regionManager.RegisterViewWithRegion(RegionNames.ToolbarRegion, 
                                                 typeof(Views.Toolbar));
             _regionManager.RegisterViewWithRegion(RegionNames.StatusbarRegion,
