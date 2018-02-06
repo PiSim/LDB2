@@ -6,7 +6,6 @@ using Infrastructure;
 using Infrastructure.Events;
 using Infrastructure.Queries.Presentation;
 using Infrastructure.Wrappers;
-using Microsoft.Practices.Unity;
 using Prism.Events;
 using System;
 using System.Collections.Generic;
@@ -14,6 +13,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Unity;
 
 namespace Materials
 {
@@ -48,18 +48,7 @@ namespace Materials
                             {
                                 TryQuickBatchVisualize(batchNumber);
                             });
-
-            _eventAggregator.GetEvent<ReportCreated>().Subscribe(
-                report =>
-                {
-                    Batch targetBatch = _dataService.GetBatch(report.BatchID);
-
-                    if (targetBatch.BasicReportID == null)
-                    {
-                        targetBatch.BasicReportID = report.ID;
-                        targetBatch.Update();
-                    }
-                });
+            
         }
 
         public Sample AddSampleLog(string batchNumber, string actionCode)

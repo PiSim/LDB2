@@ -3,6 +3,7 @@ using Prism.Events;
 using Prism.Modularity;
 using Prism.Regions;
 using System;
+using Unity;
 
 namespace DBManager
 {

@@ -40,5 +40,7 @@ namespace Reports.Views
         {
             get { return (DataContext as ViewModels.AddTestDialogViewModel).TestList; }
         }
+
+        public IEnumerable<Requirement> SelectedRequirements => (DataContext as ViewModels.AddTestDialogViewModel).SelectedRequirements;
     }
 }

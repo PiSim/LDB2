@@ -19,5 +19,6 @@ namespace Infrastructure
         int GetNextReportNumber();
         Requirement GenerateRequirement(Method mtd);
         PurchaseOrder AddPOToExternalReport(ExternalReport instance);
+        void UpdateAllWorkHours();
     }
 }

@@ -10,6 +10,22 @@ namespace DBManager
 {
     public partial class Report
     {
+
+        /// <summary>
+        /// Calculates the total Duration of the tests associated with this report and stores the result
+        /// in the corresponding field
+        /// </summary>
+        public void GetDuration()
+        {
+            using (DBEntities entities = new DBEntities())
+            {
+                IQueryable<Test> testList = entities.Tests
+                                                    .Where(tst => tst.ReportID == ID);
+
+                TotalDuration = (testList.Count() == 0) ? 0 : testList.Sum(tst => tst.Duration);
+            }
+        }
+
         public void Load()
         {
             // Retrieves Header information for the Report
@@ -46,6 +62,23 @@ namespace DBManager
                 SpecificationVersion = tempEntry.SpecificationVersion;
                 SpecificationVersionID = tempEntry.SpecificationVersionID;
                 StartDate = tempEntry.StartDate;
+            }
+        }
+
+        /// <summary>
+        /// Checks if the corresponding batch references a basic report
+        /// If not, sets reference to this instance
+        /// </summary>
+        public void SetAsBasicIfNoReport()
+        {
+            using (DBEntities entities = new DBEntities())
+            {
+                Batch batchInstance = entities.Batches.First(btc => btc.ID == BatchID);
+                if (batchInstance.BasicReportID == null)
+                {
+                    batchInstance.BasicReportID = ID;
+                    entities.SaveChanges();
+                }
             }
         }
     }
@@ -142,22 +175,6 @@ namespace DBManager
             using (DBEntities entities = new DBEntities())
             {
                 entities.Reports.AddOrUpdate(entry);
-                entities.SaveChanges();
-            }
-        }
-
-        public static void UpdateDuration(this Report entry)
-        {
-            // Updates the value of the field "TotalDuration" with the sum of the report's tests individual durations
-
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.Reports
-                        .First(rep => rep.ID == entry.ID)
-                        .TotalDuration = entities.Tests
-                                                    .Where(tst => tst.ReportID == entry.ID)
-                                                    .Sum(tst => tst.Duration);
-
                 entities.SaveChanges();
             }
         }

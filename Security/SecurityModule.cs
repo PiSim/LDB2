@@ -1,6 +1,6 @@
-﻿using Microsoft.Practices.Unity;
-using Prism.Modularity;
+﻿using Prism.Modularity;
 using System;
+using Unity;
 
 namespace Security
 {

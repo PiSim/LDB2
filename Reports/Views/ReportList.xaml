@@ -47,6 +47,8 @@
                                     Binding="{Binding Description}"/>
                 <DataGridTextColumn Header="Autore"
                                     Binding="{Binding Author.Name}"/>
+                <DataGridTextColumn Header="Ore di Lavoro"
+                                    Binding="{Binding TotalDuration}"/>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

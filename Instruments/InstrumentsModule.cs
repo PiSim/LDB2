@@ -1,8 +1,9 @@
-﻿using Microsoft.Practices.Unity;
-using Infrastructure;
+﻿using Infrastructure;
 using Prism.Modularity;
 using Prism.Regions;
 using System;
+using Unity;
+using Unity.Lifetime;
 
 namespace Instruments
 {

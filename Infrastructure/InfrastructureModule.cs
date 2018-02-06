@@ -4,6 +4,7 @@ using Prism.Modularity;
 using Prism.Regions;
 using Infrastructure.Queries;
 using System;
+using Unity;
 
 namespace Infrastructure
 {

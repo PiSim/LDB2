@@ -13,13 +13,17 @@ using System.Text;
 using System.Threading.Tasks;
 using DBManager.Services;
 using DBManager.EntityExtensions;
+using System.Windows;
 
 namespace Reports.ViewModels
 {
     public class ReportMainViewModel : BindableBase
     {
         private DBPrincipal _principal;
-        private DelegateCommand _newReport, _openReport, _removeReport;
+        private DelegateCommand _newReport, 
+                                _openReport, 
+                                _recalculateWorkHours,
+                                _removeReport;
         private EventAggregator _eventAggregator;
         private IReportService _reportService;
         private Report _selectedReport;
@@ -43,6 +47,14 @@ namespace Reports.ViewModels
             _newReport = new DelegateCommand(
                 () => _reportService.CreateReport(),
                 () => CanCreateReport);
+
+            _recalculateWorkHours = new DelegateCommand(
+                () =>
+                {
+                    _reportService.UpdateAllWorkHours();
+                    RaisePropertyChanged("ReportList");
+                    SelectedReport = null;
+                });
 
             _removeReport = new DelegateCommand(
                 () =>
@@ -68,13 +80,11 @@ namespace Reports.ViewModels
 
         }
 
-        public bool CanCreateReport
-        {
-            get
-            {
-                return _principal.IsInRole(UserRoleNames.ReportEdit);
-            }
-        }
+        public Visibility AdminElementsVisibility => 
+            (_principal.IsInRole(UserRoleNames.Admin) ? Visibility.Visible : 
+                                                        Visibility.Collapsed);
+
+        public bool CanCreateReport => _principal.IsInRole(UserRoleNames.ReportEdit);
 
         public bool CanRemoveReport
         {
@@ -101,6 +111,8 @@ namespace Reports.ViewModels
         {
             get { return _openReport; }
         }
+
+        public DelegateCommand RecalculateWorkHoursCommand => _recalculateWorkHours;
 
         public DelegateCommand RemoveReportCommand
         {
