@@ -117,6 +117,98 @@ namespace Materials
                 return null;
         }
 
+        public Material CreateMaterial(MaterialType typeInstance,
+                                        MaterialLine lineInstance,
+                                        Aspect aspectInstance,
+                                        Recipe recipeInstance)
+        {
+            if (typeInstance.ID == 0 ||
+                lineInstance.ID == 0 ||
+                aspectInstance.ID == 0 ||
+                recipeInstance.ID == 0)
+                throw new InvalidOperationException();
+
+            Material output = new Material();
+
+            output.TypeID = typeInstance.ID;
+            output.LineID = lineInstance.ID;
+            output.AspectID = aspectInstance.ID;
+            output.RecipeID = recipeInstance.ID;
+
+            output.Create();
+
+            return output;
+        }
+        
+        public Material CreateMaterial(string typeCode,
+                                        string lineCode,
+                                        string aspectCode,
+                                        string colorRecipeCode)
+        {
+
+            // Check if a MaterialType instance with the given code exists
+            // If not, throw exception
+
+            MaterialType typeInstance = _dataService.GetMaterialType(typeCode);
+
+            if (typeInstance == null)
+                throw new InvalidOperationException();
+
+            // Check if a MaterialLine instance with the given code exists
+            // If not, create it
+
+            MaterialLine lineInstance = _dataService.GetMaterialLine(lineCode);
+
+            if (lineInstance == null)
+            {
+                lineInstance = new MaterialLine()
+                {
+                    Code = lineCode
+                };
+
+                lineInstance.Create();
+            }
+
+            // Check if an Aspect instance with the given code exists
+            // If not, create it
+
+            Aspect aspectInstance = _dataService.GetAspect(aspectCode);
+
+            if (aspectInstance == null)
+            {
+                aspectInstance = new Aspect()
+                {
+                    Code = aspectCode
+                };
+
+                aspectInstance.Create();
+            }
+
+
+            // Check if a Recipe instance with the given code exists
+            // If not, create it
+
+            Recipe recipeInstance = _dataService.GetRecipe(colorRecipeCode);
+
+            if (recipeInstance == null)
+            {
+                recipeInstance = new Recipe()
+                {
+                    Code = colorRecipeCode
+                };
+
+                recipeInstance.Create();
+            }
+
+            // Call method to create Material instance with the gathered subEntities
+
+            Material output = CreateMaterial(typeInstance,
+                                            lineInstance,
+                                            aspectInstance,
+                                            recipeInstance);
+
+            return output;
+        }
 
         public ExternalConstruction CreateNewExternalConstruction()
         {
@@ -154,14 +246,7 @@ namespace Materials
         }
 
         public IEnumerable<IQueryPresenter<Batch>> GetBatchQueries() => _batchQueries;
-
-        private void OnColorCreationRequested()
-        {
-            Views.ColorCreationDialog colorCreator =  _container.Resolve<Views.ColorCreationDialog>();
-            colorCreator.ShowDialog();
-        }
-
-
+        
         public Batch StartBatchSelection()
         {
             BatchPickerDialog batchPicker = new BatchPickerDialog();

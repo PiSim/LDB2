@@ -36,7 +36,9 @@ namespace Projects
 
             if (creationDialog.ShowDialog() == true)
             {
-                _eventAggregator.GetEvent<ProjectListUpdateRequested>().Publish();
+                _eventAggregator.GetEvent<ProjectChanged>()
+                                .Publish(new EntityChangedToken(creationDialog.ProjectInstance,
+                                                                EntityChangedToken.EntityChangedAction.Created));
                 return creationDialog.ProjectInstance;
             }
 

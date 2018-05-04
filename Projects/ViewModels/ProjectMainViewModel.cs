@@ -33,8 +33,8 @@ namespace Projects.ViewModels
             _eventAggregator = aggregator;
             _principal = principal;
 
-            _eventAggregator.GetEvent<ProjectListUpdateRequested>().Subscribe(
-                () => RaisePropertyChanged("ProjectList"));
+            _eventAggregator.GetEvent<ProjectChanged>()
+                            .Subscribe(ect => RaisePropertyChanged("ProjectList"));
 
             _newProject = new DelegateCommand(
                 () =>

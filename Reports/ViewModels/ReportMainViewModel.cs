@@ -21,13 +21,16 @@ namespace Reports.ViewModels
         private DBPrincipal _principal;
         private DelegateCommand _newReport, _openReport, _removeReport;
         private EventAggregator _eventAggregator;
+        private IDataService _dataService;
         private IReportService _reportService;
         private Report _selectedReport;
 
         public ReportMainViewModel(DBPrincipal principal,
                                     EventAggregator eventAggregator,
+                                    IDataService dataService,
                                     IReportService reportService)
         {
+            _dataService = dataService;
             _eventAggregator = eventAggregator;
             _principal = principal;
             _reportService = reportService;
@@ -107,10 +110,7 @@ namespace Reports.ViewModels
             get { return _removeReport; }
         }
 
-        public IEnumerable<Report> ReportList
-        {
-            get { return DBManager.Services.ReportService.GetReports(); }
-        }
+        public IEnumerable<Report> ReportList => _dataService.GetReports();
 
         public Report SelectedReport
         {

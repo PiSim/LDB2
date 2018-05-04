@@ -18,34 +18,21 @@ namespace Reports.ViewModels
 {
     public class ExternalReportCreationDialogViewModel : BindableBase
     {
-        private Batch _selectedBatch;
-        private DelegateCommand _removeBatch;
-        private DelegateCommand<TextBox> _addBatch;
         private DelegateCommand<Window> _cancel, _confirm;
         private ExternalReport _externalReportInstance;
         private IDataService _dataService;
         private IReportService _reportService;
-        private ObservableCollection<Batch> _batchList;
         private Organization _selectedLab;
         private Project _selectedProject;
-        private string _batchNumber, _sampleDescription, _testDescription;
+        private string _sampleDescription, _testDescription;
         
         public ExternalReportCreationDialogViewModel(IDataService dataService,
                                                     IReportService reportService) : base()
         {
-            _batchList = new ObservableCollection<Batch>();
             _dataService = dataService;
             _reportService = reportService;
             _sampleDescription = "";
             _testDescription = "";
-
-            _addBatch = new DelegateCommand<TextBox>(
-                batchBox => 
-                {
-                    Batch temp = _dataService.GetBatch(batchBox.Text);
-                    if (temp != null)
-                        _batchList.Add(temp);                 
-                });
             
             _cancel = new DelegateCommand<Window>(
                 parent => 
@@ -73,47 +60,16 @@ namespace Reports.ViewModels
                     };
 
                     _externalReportInstance.Create();
-                    foreach (Batch btc in _batchList)
-                            _externalReportInstance.AddBatch(btc);
 
                     parent.DialogResult = true;
                 });
-                
-            _removeBatch = new DelegateCommand(
-                () => 
-                {
-                    _batchList.Remove(_selectedBatch);
-                    SelectedBatch = null;
-                },
-                () => _selectedBatch != null);
-        }
-        
-        
-        public DelegateCommand<TextBox> AddBatchCommand
-        {
-            get { return _addBatch; }
         }
 
         public ExternalReport ExternalReportInstance
         {
             get { return _externalReportInstance; }
         }
-
-        public ObservableCollection<Batch> BatchList
-        {
-            get { return _batchList; }
-        }
-
-        public string BatchNumber
-        {
-            get { return _batchNumber; }
-            set
-            {
-                _batchNumber = value;
-                RaisePropertyChanged("BatchNumber");
-            }
-        }
-
+        
         public DelegateCommand<Window> CancelCommand
         {
             get { return _cancel; }
@@ -121,11 +77,6 @@ namespace Reports.ViewModels
         
         public DelegateCommand<Window> ConfirmCommand => _confirm;
         
-        public DelegateCommand RemoveBatchCommand
-        {
-            get { return _removeBatch; }
-        }
-
         public IEnumerable<Organization> LaboratoriesList => _dataService.GetOrganizations(OrganizationRoleNames.TestLab);
         
         public string SampleDescription
@@ -134,17 +85,6 @@ namespace Reports.ViewModels
             set 
             {
                 _sampleDescription = value;
-            }
-        }
-        
-        public Batch SelectedBatch
-        {
-            get { return _selectedBatch; }
-            set
-            {
-                _selectedBatch = value;
-                RemoveBatchCommand.RaiseCanExecuteChanged();
-                RaisePropertyChanged("SelectedBatch");
             }
         }
         

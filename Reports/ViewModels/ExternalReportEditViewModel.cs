@@ -21,27 +21,30 @@ namespace Reports.ViewModels
         private bool _editMode;
         private Batch _selectedBatch;
         private DBPrincipal _principal;
-        private DelegateCommand _addBatch, 
-                                _addFile, 
-                                _addPO, 
-                                _openBatch, 
-                                _openFile, 
-                                _removeBatch, 
+        private DelegateCommand _addBatch,
+                                _addFile,
+                                _openBatch,
+                                _openFile,
+                                _removeBatch,
                                 _removeFile,
                                 _save,
                                 _startEdit;
         private EventAggregator _eventAggregator;
         private ExternalReport _instance;
         private ExternalReportFile _selectedFile;
+        private IDataService _dataService;
+        private IEnumerable<Project> _projectList;
         private IMaterialService _materialService;
         private IReportService _reportService;
         private string _batchNumber;
 
         public ExternalReportEditViewModel(DBPrincipal principal,
                                             EventAggregator aggregator,
+                                            IDataService dataService,
                                             IMaterialService materialService,
                                             IReportService reportService) : base()
         {
+            _dataService = dataService;
             _editMode = false;
             _eventAggregator = aggregator;
             _materialService = materialService;
@@ -49,7 +52,7 @@ namespace Reports.ViewModels
             _reportService = reportService;
 
             _addBatch = new DelegateCommand(
-                () => 
+                () =>
                 {
                     Batch tempBatch = _materialService.StartBatchSelection();
                     if (tempBatch != null)
@@ -85,17 +88,6 @@ namespace Reports.ViewModels
                     }
                 });
 
-            _addPO = new DelegateCommand(
-                () =>
-                {
-                    _reportService.AddPOToExternalReport(_instance);
-
-                    RaisePropertyChanged("OrderCurrency");
-                    RaisePropertyChanged("OrderDate");
-                    RaisePropertyChanged("OrderNumber");
-                    RaisePropertyChanged("OrderPrice");
-                });
-            
             _openBatch = new DelegateCommand(
                 () =>
                 {
@@ -133,6 +125,12 @@ namespace Reports.ViewModels
                 {
                     _instance.Update();
                     EditMode = false;
+
+                    EntityChangedToken token = new EntityChangedToken(_instance,
+                                                                    EntityChangedToken.EntityChangedAction.Updated);
+
+                    _eventAggregator.GetEvent<ExternalReportChanged>()
+                                    .Publish(token);
                 },
                 () => _editMode);
 
@@ -146,7 +144,7 @@ namespace Reports.ViewModels
 
         public DelegateCommand AddBatchCommand
         {
-            get { return _addBatch;}
+            get { return _addBatch; }
         }
 
         public DelegateCommand AddFileCommand
@@ -154,11 +152,6 @@ namespace Reports.ViewModels
             get { return _addFile; }
         }
 
-        public DelegateCommand AddPOCommand
-        {
-            get { return _addPO; }
-        }
-        
         public IEnumerable<Batch> BatchList
         {
             get { return _instance.GetBatches(); }
@@ -176,28 +169,28 @@ namespace Reports.ViewModels
 
         public string Description
         {
-            get 
-            { 
+            get
+            {
                 if (_instance == null)
                     return null;
-                    
-                return _instance.Description; 
+
+                return _instance.Description;
             }
             set { _instance.Description = value; }
         }
 
         public bool CanModify
         {
-            get 
+            get
             {
                 if (_principal.IsInRole(UserRoleNames.ExternalReportAdmin))
                     return true;
-                
-                else 
+
+                else
                     return false;
             }
         }
-                
+
         public bool EditMode
         {
             get { return _editMode; }
@@ -223,13 +216,13 @@ namespace Reports.ViewModels
         public ExternalReport ExternalReportInstance
         {
             get { return _instance; }
-            set 
+            set
             {
                 EditMode = false;
 
                 _instance = value;
                 _instance.Load();
-                
+
                 SelectedBatch = null;
                 SelectedFile = null;
 
@@ -237,31 +230,28 @@ namespace Reports.ViewModels
                 _removeBatch.RaiseCanExecuteChanged();
 
                 RaisePropertyChanged("BatchList");
-                RaisePropertyChanged("Currency");
                 RaisePropertyChanged("Description");
                 RaisePropertyChanged("ReportFiles");
                 RaisePropertyChanged("ExternalLab");
                 RaisePropertyChanged("FormattedNumber");
                 RaisePropertyChanged("SamplesSent");
-                RaisePropertyChanged("OrderCurrency");
-                RaisePropertyChanged("OrderDate");
                 RaisePropertyChanged("OrderNumber");
                 RaisePropertyChanged("OrderPrice");
-                RaisePropertyChanged("Project");
+                RaisePropertyChanged("SelectedProject");
                 RaisePropertyChanged("ReportReceived");
                 RaisePropertyChanged("RequestDone");
                 RaisePropertyChanged("Samples");
             }
         }
-        
+
         public string FormattedNumber
         {
-            get 
-            { 
-                return _instance?.FormattedNumber; 
+            get
+            {
+                return _instance?.FormattedNumber;
             }
         }
-        
+
         public DelegateCommand OpenBatchCommand
         {
             get { return _openBatch; }
@@ -274,21 +264,24 @@ namespace Reports.ViewModels
 
         public string OrderNumber
         {
-
-            get
-            {
-                if (_instance == null || _instance.PO == null)
-                    return null;
-
-                return _instance.PO.Number;
-            }
+            get => _instance?.OrderNumber;
+            set => _instance.OrderNumber = value;
         }
 
-        public string OrderPrice
+        public double OrderPrice
+        {
+            get => (_instance == null) ? 0 : _instance.OrderTotal;
+            set => _instance.OrderTotal = value;
+        }
+
+        public IEnumerable<Project> ProjectList
         {
             get
             {
-                return _instance?.PO?.Total.ToString();
+                if (_projectList == null)
+                    _projectList = _dataService.GetProjects();
+
+                return _projectList;
             }
         }
 
@@ -358,7 +351,7 @@ namespace Reports.ViewModels
 
         public Batch SelectedBatch
         {
-            get { return _selectedBatch;  }
+            get { return _selectedBatch; }
             set
             {
                 _selectedBatch = value;
@@ -367,47 +360,33 @@ namespace Reports.ViewModels
                 _removeBatch.RaiseCanExecuteChanged();
             }
         }
-        
-                
+
+
         public Project Project
         {
-            get 
-            { 
+            get
+            {
                 if (_instance == null)
                     return null;
-                    
-                return _instance.Project; 
-            }
-        }
 
-        public PurchaseOrder PO
-        {
-            get 
-            { 
-                if (_instance == null)
-                    return null;
-                    
-                return _instance.PO; 
+                return _instance.Project;
             }
         }
 
         public string Samples
         {
-            get 
-            { 
+            get
+            {
                 if (_instance == null)
                     return null;
 
-                return _instance.Samples; 
+                return _instance.Samples;
             }
-            
+
             set { _instance.Samples = value; }
         }
 
-        public DelegateCommand SaveCommand
-        {
-            get { return _save; }
-        }
+        public DelegateCommand SaveCommand => _save;
 
         public ExternalReportFile SelectedFile
         {
@@ -420,10 +399,16 @@ namespace Reports.ViewModels
             }
         }
 
-        public DelegateCommand StartEditCommand
+        public Project SelectedProject
         {
-            get { return _startEdit; }
-        }
+            get => _projectList.FirstOrDefault(prj => prj.ID == _instance?.ProjectID);
+            set
+            {
+                if (_instance != null) _instance.ProjectID = value.ID;
+            }
+        } 
+
+        public DelegateCommand StartEditCommand => _startEdit;
     }
 }
 

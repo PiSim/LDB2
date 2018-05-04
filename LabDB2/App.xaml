@@ -1,12 +1,13 @@
 ﻿<Application x:Class="LabDB2.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:res="clr-namespace:Infrastructure.Resources;assembly=Infrastructure"
+             xmlns:resd="clr-namespace:Infrastructure.Resources;assembly=Infrastructure"
              xmlns:local="clr-namespace:LabDB2">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <x:Static Member="res:CommonResourceDictionary.Instance"/>
+                <ResourceDictionary Source="pack://application:,,,/Infrastructure;component/Resources/CommonResourceDictionary.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/Controls;component/Resources/ComboItemTemplatesDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

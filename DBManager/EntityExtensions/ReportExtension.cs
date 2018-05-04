@@ -10,6 +10,20 @@ namespace DBManager
 {
     public partial class Report
     {
+        public Project GetProject()
+        {
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.Reports.Include(rpt => rpt.Batch.Material.Project)
+                                        .FirstOrDefault(rpt => rpt.ID == ID)?
+                                        .Batch?
+                                        .Material?
+                                        .Project;
+            }
+        }
+
         public void Load()
         {
             // Retrieves Header information for the Report
@@ -25,8 +39,6 @@ namespace DBManager
                                             .Include(rep => rep.Batch.Material.ExternalConstruction)
                                             .Include(rep => rep.Batch.Material.MaterialLine)
                                             .Include(rep => rep.Batch.Material.MaterialType)
-                                            .Include(rep => rep.Batch.Material.Project.Oem)
-                                            .Include(rep => rep.Batch.Material.Project.Leader)
                                             .Include(rep => rep.Batch.Material.MaterialType)
                                             .Include(rep => rep.Batch.Material.Recipe.Colour)
                                             .Include(rep => rep.ParentTasks)
@@ -48,6 +60,27 @@ namespace DBManager
                 StartDate = tempEntry.StartDate;
             }
         }
+
+        /// <summary>
+        /// Sets the project for the material of this report to the one specified
+        /// as argument
+        /// </summary>
+        /// <param name="projectInstance">The project instance that will be set</param>
+        public void SetProject(Project projectInstance)
+        {
+            using (DBEntities entities = new DBEntities())
+            {
+                Material target = entities.Reports
+                                            .FirstOrDefault(rpt => rpt.ID == ID)?
+                                            .Batch
+                                            .Material;
+                
+                target.ProjectID = projectInstance.ID;
+
+                entities.SaveChanges();
+            }
+        }
+
     }
 
     public static class ReportExtension
@@ -158,22 +191,6 @@ namespace DBManager
                                                     .Where(tst => tst.ReportID == entry.ID)
                                                     .Sum(tst => tst.Duration);
 
-                entities.SaveChanges();
-            }
-        }
-
-        public static void UpdateTests(this Report entry)
-        {
-            // Updates all related Test and Subtest instances in a report
-
-            using (DBEntities entities = new DBEntities())
-            {
-                foreach (Test tst in entry.Tests)
-                {
-                    entities.Tests.AddOrUpdate(tst);
-                    foreach (SubTest sts in tst.SubTests)
-                        entities.SubTests.AddOrUpdate(sts);
-                }
                 entities.SaveChanges();
             }
         }

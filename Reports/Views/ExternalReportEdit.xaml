@@ -88,68 +88,139 @@
             <TabItem Header="Dettagli">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="3*"/>
+                        <ColumnDefinition/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition/>
-                    </Grid.RowDefinitions>
 
-                    <ContentControl prism:RegionManager.RegionName="ExternalReportProjectDetailsRegion"
-                                    Grid.Column="0"
-                                    Grid.Row="0"/>
+                    <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="40"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
 
-                    <GroupBox Header="Stato"
-                              Grid.Column="1"
+                        <TextBlock Text="Progetto:"
+                                   Grid.Column="0"
+                                   Grid.Row="0"
+                                   Margin="5"
+                                   VerticalAlignment="Center"/>
+
+                        <ComboBox ItemsSource="{Binding ProjectList}"
+                                  SelectedItem="{Binding SelectedProject, 
+                                                         Mode=TwoWay}"
+                                  ItemTemplate="{StaticResource ProjectComboTemplate}"
+                                  IsEnabled="{Binding EditMode}"
+                                  Grid.Column="1"
+                                  Grid.Row="0"
+                                  Margin="5"/>
+                        
+                        <GroupBox Header="Ordine di Acquisto"
+                              Grid.Row="2"
+                                  Grid.ColumnSpan="2">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+
+                                <TextBlock Text="Numero:"
+                                       Grid.Column="0"
+                                       Grid.Row="0"
+                                       Margin="5"
+                                       VerticalAlignment="Center"/>
+
+                                <TextBox Text="{Binding OrderNumber}"
+                                     IsEnabled="{Binding EditMode}"
+                                     Grid.Column="1"
+                                     Grid.Row="0"
+                                     VerticalAlignment="Center"
+                                         Margin="5"/>
+
+                                <TextBlock Text="Totale:"
+                                       Grid.Column="0"
+                                       Grid.Row="1"
+                                       Margin="5"
+                                       VerticalAlignment="Center"/>
+
+                                <Grid Grid.Column="1"
+                                        Grid.Row="1"
+                                        VerticalAlignment="Center">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBox Text="{Binding OrderPrice}"
+                                         IsEnabled="{Binding EditMode}"
+                                         Margin="5"/>
+                                    <TextBlock Text="EUR"
+                                           Grid.Column="1"
+                                           Margin="0,5,5,5"/>
+                                </Grid>
+                            </Grid>
+                        </GroupBox>
+                        
+                        <GroupBox Header="Stato"
+                              Grid.ColumnSpan="2"
+                                  Grid.Row="1"
                               IsEnabled="{Binding CanModify}">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                            </Grid.RowDefinitions>
-                            <Label Content="RDA fatta:"
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Label Content="RDA fatta:"
                                    Grid.Column="0"
                                    Grid.Row="0"
                                    Margin="5"/>
-                            <CheckBox IsChecked="{Binding RequestDone, Mode=TwoWay}"
+                                <CheckBox IsChecked="{Binding RequestDone, Mode=TwoWay}"
                                       IsEnabled="{Binding EditMode}"
                                       Grid.Column="1"
                                       Grid.Row="0"
                                       Margin="5"/>
 
-                            <Label Content="Campioni inviati:"
+                                <Label Content="Campioni inviati:"
                                    Grid.Column="0"
                                    Grid.Row="1"
                                    Margin="5"/>
 
-                            <CheckBox IsChecked="{Binding SamplesSent, Mode=TwoWay}"
+                                <CheckBox IsChecked="{Binding SamplesSent, Mode=TwoWay}"
                                       IsEnabled="{Binding EditMode}"
                                       Grid.Column="1"
                                       Grid.Row="1"
                                       Margin="5"/>
 
-                            <Label Content="Report ricevuto:"
+                                <Label Content="Report ricevuto:"
                                    Grid.Column="0"
                                    Grid.Row="2"
                                    Margin="5"/>
 
-                            <CheckBox IsChecked="{Binding ReportReceived, Mode=TwoWay}"
+                                <CheckBox IsChecked="{Binding ReportReceived, Mode=TwoWay}"
                                       IsEnabled="{Binding EditMode}"
                                       Grid.Column="1"
                                       Grid.Row="2"
                                       Margin="5"/>
-                        </Grid>
-                    </GroupBox>
+                            </Grid>
+                        </GroupBox>
+                    </Grid>
+
+                    
 
                     <GroupBox Header="Batch Inviati"
-                              Grid.Column="0"
-                              Grid.Row="1">
+                              Grid.Column="1">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition/>
@@ -185,50 +256,7 @@
                         </Grid>
                     </GroupBox>
 
-                    <GroupBox Header="Ordine di Acquisto"
-                              Grid.Column="1"
-                              Grid.Row="1">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition/>
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition Height="Auto"/>
-                            </Grid.RowDefinitions>
-
-                            <Label Content="Numero:"
-                                   Grid.Column="0"
-                                   Grid.Row="0"
-                                   Margin="05"/>
-
-                            <Label Content="{Binding OrderNumber}"
-                                   Grid.Column="1"
-                                   Grid.Row="0"
-                                   Margin="5"/>
-
-                            <Label Content="Totale:"
-                                   Grid.Column="0"
-                                   Grid.Row="1"
-                                   Margin="5"/>
-
-                            <StackPanel Grid.Column="1"
-                                        Grid.Row="1"
-                                        Orientation="Horizontal"
-                                        Margin="5">
-                                <Label Content="{Binding OrderPrice}"/>
-                                <Label Content="EUR"/>
-                            </StackPanel>
-
-                            <Button Command="{Binding AddPOCommand}"
-                                    Content="Aggiungi"
-                                    Grid.Column="1"
-                                    Grid.Row="2"
-                                    Margin="5"/>
-                        </Grid>
-                    </GroupBox>
+                    
 
                 </Grid>
             </TabItem>

@@ -1,4 +1,4 @@
-using Prism.Events;
+﻿using Prism.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Events
 {
-    [Obsolete]
-    public class ProjectListUpdateRequested : PubSubEvent
+    public class ProjectChanged : PubSubEvent<EntityChangedToken>
     {
+
     }
 }

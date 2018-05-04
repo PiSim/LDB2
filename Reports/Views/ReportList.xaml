@@ -40,13 +40,15 @@
                 <DataGridTextColumn Header="Ricetta"
                                     Binding="{Binding Batch.Material.Recipe.Code}"/>
                 <DataGridTextColumn Header="Specifica"
-                                    Binding="{Binding SpecificationVersion.Specification.Standard.Name}"/>
+                                    Binding="{Binding SpecificationVersion.Specification.Name}"/>
                 <DataGridTextColumn Header="Versione"
                                     Binding="{Binding SpecificationVersion.Name}"/>
                 <DataGridTextColumn Header="Descrizione"
                                     Binding="{Binding Description}"/>
                 <DataGridTextColumn Header="Autore"
                                     Binding="{Binding Author.Name}"/>
+                <DataGridTextColumn Header="Ore di Lavoro"
+                                    Binding="{Binding TotalDuration}"/>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

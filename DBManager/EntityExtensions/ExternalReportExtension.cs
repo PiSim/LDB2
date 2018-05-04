@@ -143,7 +143,6 @@ namespace DBManager
                                                     .Select(mtd => mtd.Property))
                                                     .Include(exrep => exrep.Methods
                                                     .Select(mtd => mtd.Standard))
-                                                    .Include(exrep => exrep.PO.Organization)
                                                     .Include(exrep => exrep.Project.Leader)
                                                     .Include(exrep => exrep.Project.Oem)
                                                     .First(rep => rep.ID == entry.ID);
@@ -157,7 +156,6 @@ namespace DBManager
                 entry.InternalNumber = tempEntry.InternalNumber;
                 entry.MaterialSent = tempEntry.MaterialSent;
                 entry.Methods = tempEntry.Methods;
-                entry.PO = tempEntry.PO;
                 entry.Project = tempEntry.Project;
                 entry.ProjectID = tempEntry.ProjectID;
                 entry.PurchaseOrderID = tempEntry.PurchaseOrderID;

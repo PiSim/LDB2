@@ -14,7 +14,9 @@
                   AutoGenerateColumns="False"
                   SelectionUnit="FullRow"
                   IsReadOnly="True"
-                  cmd:CommandBinder.DataGridDoubleClickCommand="{Binding OpenBatchCommand}">
+                  cmd:CommandBinder.DataGridDoubleClickCommand="{Binding OpenBatchCommand}"
+                  VerticalGridLinesBrush="Transparent"
+                  HorizontalGridLinesBrush="LightGray">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Batch"
                                     Binding="{Binding Number}"/>

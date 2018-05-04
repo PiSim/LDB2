@@ -93,8 +93,6 @@
         <EntityTypeShape EntityType="labdbModel.OrganizationRole" Width="1.5" PointX="8" PointY="21" />
         <AssociationConnector Association="labdbModel.organization_to_role_mapping" />
         <AssociationConnector Association="labdbModel.role_to_organization_mapping" />
-        <EntityTypeShape EntityType="labdbModel.PurchaseOrder" Width="1.5" PointX="24.5" PointY="25.375" />
-        <AssociationConnector Association="labdbModel.organization_to_purchase_order" />
         <AssociationConnector Association="labdbModel.instrument_to_test" />
         <AssociationConnector Association="labdbModel.manufacturer_to_instrument" />
         <AssociationConnector Association="labdbModel.supplier_to_instrument" />
@@ -104,7 +102,6 @@
         <EntityTypeShape EntityType="labdbModel.SubMethod" Width="1.5" PointX="6.75" PointY="2.625" />
         <AssociationConnector Association="labdbModel.method_to_measurement1" />
         <AssociationConnector Association="labdbModel.submethod_to_subreq1" />
-        <AssociationConnector Association="labdbModel.purchase_order_to_external_report" />
         <EntityTypeShape EntityType="labdbModel.PersonRoleMapping" Width="1.5" PointX="15.625" PointY="14.75" />
         <EntityTypeShape EntityType="labdbModel.PersonRole" Width="1.5" PointX="17.5" PointY="15.125" />
         <AssociationConnector Association="labdbModel.person_to_role_mapping" />

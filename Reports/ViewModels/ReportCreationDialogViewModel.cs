@@ -245,7 +245,7 @@ namespace Reports.ViewModels
             set
             {
                 _number = value;
-                Report tempReport = DBManager.Services.ReportService.GetReportByNumber(_number);
+                Report tempReport = _dataService.GetReportByNumber(_number);
 
                 if (tempReport != null)
                     _validationErrors["Number"] = new List<string>() { "Il report " + value + " esiste già" };

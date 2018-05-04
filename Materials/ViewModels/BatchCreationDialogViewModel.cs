@@ -269,23 +269,26 @@ namespace Materials.ViewModels
                 _batchNumber = value;
 
                 if (string.IsNullOrEmpty(_batchNumber))
+                {
                     BatchInstance = null;
+                    _validationErrors["BatchNumber"] = new List<string>() { "'" + _batchNumber + "' non è un batch valido" };
+                }
 
                 else
+                {
                     BatchInstance = _dataService.GetBatch(_batchNumber);
-                
-                if (_batchInstance == null && 
-                    _validationErrors.ContainsKey("BatchNumber"))
-                {
-                    _validationErrors.Remove("BatchNumber");
-                    RaiseErrorsChanged("BatchNumber");
+
+                    if (_batchInstance == null)
+                    {
+                        if (_validationErrors.ContainsKey("BatchNumber"))
+                            _validationErrors.Remove("BatchNumber");
+                    }
+
+                    else
+                        _validationErrors["BatchNumber"] = new List<string>() { "Il batch " + _batchNumber + "  esiste già" };
                 }
 
-                else
-                {
-                    _validationErrors["BatchNumber"] = new List<string>() { "Il batch " + _batchNumber + "  esiste già" };
-                    RaiseErrorsChanged("BatchNumber");
-                }
+                RaiseErrorsChanged("BatchNumber");
             }
         }
 
@@ -440,6 +443,7 @@ namespace Materials.ViewModels
             set
             {
                 _selectedProject = value;
+                RaisePropertyChanged("SelectedProject");
             }
         }
 

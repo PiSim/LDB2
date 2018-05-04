@@ -45,7 +45,7 @@
                    Grid.Row="0"
                    Margin="5"/>
             
-            <TextBox Text="{Binding Standard}"
+            <TextBox Text="{Binding SpecificationName}"
                      IsEnabled="{Binding EditMode}"
                      Grid.Column="1"
                      Grid.Row="0"

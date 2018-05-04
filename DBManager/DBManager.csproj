@@ -271,9 +271,6 @@
     <Compile Include="Property.cs">
       <DependentUpon>LabDB.tt</DependentUpon>
     </Compile>
-    <Compile Include="PurchaseOrder.cs">
-      <DependentUpon>LabDB.tt</DependentUpon>
-    </Compile>
     <Compile Include="Recipe.cs">
       <DependentUpon>LabDB.tt</DependentUpon>
     </Compile>
@@ -316,7 +313,6 @@
     </Compile>
     <Compile Include="Services\MaterialService.cs" />
     <Compile Include="Services\ProjectService.cs" />
-    <Compile Include="Services\ReportService.cs" />
     <Compile Include="Specification.cs">
       <DependentUpon>LabDB.tt</DependentUpon>
     </Compile>

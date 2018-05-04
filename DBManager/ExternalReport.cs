@@ -36,12 +36,13 @@ namespace DBManager
         public Nullable<System.DateTime> ArrivalDate { get; set; }
         public int Year { get; set; }
         public int Number { get; set; }
+        public string OrderNumber { get; set; }
+        public double OrderTotal { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ExternalReportFile> ExternalReportFiles { get; set; }
         public virtual Organization ExternalLab { get; set; }
         public virtual Project Project { get; set; }
-        public virtual PurchaseOrder PO { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Method> Methods { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

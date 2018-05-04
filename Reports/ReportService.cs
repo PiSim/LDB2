@@ -16,13 +16,16 @@ namespace Reports
     public class ReportService : IReportService
     {
         private EventAggregator _eventAggregator;
+        private IDataService _dataService;
         private IUnityContainer _container;
 
         public ReportService(EventAggregator aggregator,
+                            IDataService dataService,
                             IUnityContainer container)
         {
             _container = container;
             _eventAggregator = aggregator;
+            _dataService = dataService;
 
 
             _eventAggregator.GetEvent<ReportStatusCheckRequested>()
@@ -44,48 +47,6 @@ namespace Reports
                     }
 
                 });
-        }
-
-        /// <summary>
-        /// Shows PO Creation Dialog and adds a PO entry using the entered info
-        /// </summary>
-        /// <param name="target">The Report to which the PO will be added</param>
-        /// <returns>The new PO</returns>
-        public PurchaseOrder AddPOToExternalReport(ExternalReport target)
-        {
-
-            using (DBEntities entities = new DBEntities())
-            {
-                ExternalReport targetReport = entities.ExternalReports.First(xtr => xtr.ID == target.ID);
-
-                NewPODialog poDialog = new NewPODialog();
-                poDialog.SetSupplier(targetReport.ExternalLab);
-
-                if (poDialog.ShowDialog() == true)
-                {
-                    PurchaseOrder output = entities.PurchaseOrders.FirstOrDefault(po => po.Number == poDialog.Number);
-
-                    if (output == null)
-                    {
-                        output = new PurchaseOrder();
-                        output.Number = poDialog.Number;
-                        output.Organization = entities.Organizations
-                            .First(sup => sup.ID == poDialog.Supplier.ID);
-                        output.Total = poDialog.Total;
-                    }
-
-                    targetReport.PO = output;
-                    entities.SaveChanges();
-
-                    AddToProjectExternalCost(targetReport.ProjectID,
-                                            output.Total);
-
-                    return output;
-                }
-
-                else
-                    return null;
-            }
         }
 
         /// <summary>
@@ -179,9 +140,13 @@ namespace Reports
 
             return output;
         }
-
-        // Interface members
-
+        
+        /// <summary>
+        /// Opens AddTestDialog and adds the selected Tests #
+        /// to an existing report if selection is succesfull
+        /// </summary>
+        /// <param name="entry">The report to which the tests will be added</param>
+        /// <returns>A bool indicating whether the procedure was successfull</returns>
         public bool AddTestsToReport(Report entry)
         {
             AddTestDialog testDialog = new AddTestDialog();
@@ -192,7 +157,12 @@ namespace Reports
                 if (testDialog.TestList.Count() == 0)
                     return false;
 
-                IEnumerable<Test> testList = GenerateTestList(testDialog.TestList.Select(riw => riw.RequirementInstance));
+                // Calls the method for generating a test list from the selected 
+                // Requirement instances
+
+                IEnumerable<Test> testList = GenerateTestList(
+                    testDialog.TestList.Where(riw => riw.IsSelected)
+                                        .Select(riw => riw.RequirementInstance));
 
                 foreach (Test tst in testList)
                     tst.ReportID = entry.ID;
@@ -275,8 +245,10 @@ namespace Reports
 
             if (creationDialog.ShowDialog() == true)
             {
-                _eventAggregator.GetEvent<ExternalReportCreated>()
-                                .Publish(creationDialog.ExternalReportInstance);
+                EntityChangedToken token = new EntityChangedToken(creationDialog.ExternalReportInstance,
+                                                                EntityChangedToken.EntityChangedAction.Created);
+                _eventAggregator.GetEvent<ExternalReportChanged>()
+                                .Publish(token);
                 return creationDialog.ExternalReportInstance;
             }
             else
@@ -382,6 +354,20 @@ namespace Reports
             }
 
             return output;
+        }
+
+        /// <summary>
+        /// Iterates through all the Report instances and recalculates all the durations,
+        /// committing the result to the DB
+        /// </summary>
+        public void RecalculateAllWorkHours()
+        {
+            IEnumerable<Report> reportList = _dataService.GetReports();
+
+            foreach (Report currentReport in reportList)
+            {
+                currentReport.UpdateDuration();
+            }
         }
     }
 }

@@ -20,12 +20,15 @@ namespace Reports.ViewModels
         private DelegateCommand _newReport, _openReport;
         private EventAggregator _eventAggregator;
         private ExternalReport _selectedReport;
+        private IDataService _dataService;
         private IReportService _reportService;
 
         public ExternalReportMainViewModel(DBPrincipal principal,
                                             EventAggregator aggregator,
+                                            IDataService dataService,
                                             IReportService reportService)
         {
+            _dataService = dataService;
             _eventAggregator = aggregator;
             _reportService = reportService;
             _principal = principal;
@@ -47,10 +50,11 @@ namespace Reports.ViewModels
                 },
                 () => _selectedReport != null);
 
-            _eventAggregator.GetEvent<ExternalReportCreated>()
+            _eventAggregator.GetEvent<ExternalReportChanged>()
                             .Subscribe(
                             extr =>
                             {
+                                SelectedExternalReport = null;
                                 RaisePropertyChanged("ExternalReportList");
                             });
         } 
@@ -77,10 +81,7 @@ namespace Reports.ViewModels
             get { return _openReport; }
         }
 
-        public IEnumerable<ExternalReport> ExternalReportList
-        {
-            get { return DBManager.Services.ReportService.GetExternalReports(); }
-        }
+        public IEnumerable<ExternalReport> ExternalReportList => _dataService.GetExternalReports();
 
         public ExternalReport SelectedExternalReport
         {

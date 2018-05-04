@@ -50,7 +50,10 @@ namespace Materials.ViewModels
                         };
 
                         newColour.Create();
-                        RaisePropertyChanged("ColourList");
+
+                        _eventAggregator.GetEvent<ColorChanged>()
+                                        .Publish(new EntityChangedToken(newColour,
+                                                                        EntityChangedToken.EntityChangedAction.Created));
                     }
                 },
                 () => _principal.IsInRole(UserRoleNames.MaterialEdit));
@@ -58,12 +61,28 @@ namespace Materials.ViewModels
             _deleteColour = new DelegateCommand(
                 () =>
                 {
-                    _selectedColour.Delete();
-                    RaisePropertyChanged("ColourList");
+                    _selectedColour.Delete(); _eventAggregator.GetEvent<ColorChanged>()
+                                         .Publish(new EntityChangedToken(_selectedColour,
+                                                                         EntityChangedToken.EntityChangedAction.Deleted));
+
+                    SelectedColour = null;
                 },
                 () => _selectedColour != null 
                     && _principal.IsInRole(UserRoleNames.MaterialAdmin));
-        }   
+
+            #region Event Subscriptions
+
+            _eventAggregator.GetEvent<ColorChanged>()
+                            .Subscribe(ect =>
+                            {
+                                RaisePropertyChanged("ColourList");
+                            });
+
+            #endregion
+
+
+
+        }
 
         public string ColourEditRegionName
         {

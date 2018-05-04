@@ -464,9 +464,16 @@ namespace Specifications.ViewModels
                 RaisePropertyChanged("MainVersion");
                 RaisePropertyChanged("MainVersionRequirements");
                 RaisePropertyChanged("ReportList");
+                RaisePropertyChanged("SpecificationName");
                 RaisePropertyChanged("Standard");
                 RaisePropertyChanged("VersionList");
             }
+        }
+
+        public string SpecificationName
+        {
+            get => _instance?.Name;
+            set => _instance.Name = value;
         }
 
         public string SpecificationVersionEditRegionName

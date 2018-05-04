@@ -19,7 +19,8 @@ namespace Reports.ViewModels
 {
     public class ReportEditViewModel : BindableBase
     {
-        private bool _editMode;
+        private bool _projectChanged,
+                     _editMode;
         private DBPrincipal _principal;
         private DelegateCommand _addFile, 
                                 _addTests, 
@@ -32,9 +33,11 @@ namespace Reports.ViewModels
         private EventAggregator _eventAggregator;
         private Report _instance;
         private IDataService _dataService;
+        private IEnumerable<Project> _projectList;
         private IEnumerable<TestWrapper> _testList;
         private IReportService _reportService;
         private IReportingService _reportingService;
+        private Project _selectedProject;
         private ReportFile _selectedFile;
         
         public ReportEditViewModel(DBPrincipal principal,
@@ -47,6 +50,7 @@ namespace Reports.ViewModels
             _editMode = false;
             _eventAggregator = aggregator;
             _principal = principal;
+            _projectChanged = false;
             _reportService = reportService;
             _reportingService = reportingService;
 
@@ -140,10 +144,21 @@ namespace Reports.ViewModels
             _save = new DelegateCommand(
                 () =>
                 {
+                    // Update the tests
                     _testList.Select(tiw => tiw.TestInstance)
                             .Update();
 
+                    // Update the report instance
+
+                    _instance.Update();
+
+                    // If the project was modified, update the material
+
+                    if (_projectChanged)
+                        _instance.SetProject(_selectedProject);
+
                     EditMode = false;
+                    
 
                     _eventAggregator.GetEvent<ReportStatusCheckRequested>().Publish(_instance);
                 },
@@ -155,6 +170,17 @@ namespace Reports.ViewModels
                     EditMode = true;
                 },
                 () => !_editMode && CanModify);
+
+            #region EventSubscriptions
+
+            _eventAggregator.GetEvent<ProjectChanged>()
+                            .Subscribe(ect =>
+                            {
+                                _projectList = null;
+                                RaisePropertyChanged("ProjectList");
+                            });
+
+            #endregion
         }
 
         public DelegateCommand AddFileCommand
@@ -252,11 +278,13 @@ namespace Reports.ViewModels
             set
             {
                 EditMode = false;
+                _projectChanged = false;
 
                 _instance = value;
                 _instance.Load();
 
                 _testList = new List<TestWrapper>(_instance.GetTests().Select(tst => new TestWrapper(tst)));
+                _selectedProject = _instance?.GetProject();
 
                 _addFile.RaiseCanExecuteChanged();
                 _addTests.RaiseCanExecuteChanged();
@@ -271,8 +299,8 @@ namespace Reports.ViewModels
                 RaisePropertyChanged("FileList");
                 RaisePropertyChanged("Material");
                 RaisePropertyChanged("Number");
-                RaisePropertyChanged("Project");
-                RaisePropertyChanged("Specification");
+                RaisePropertyChanged("SelectedProject");
+                RaisePropertyChanged("SpecificationName");
                 RaisePropertyChanged("SpecificationVersion");
                 RaisePropertyChanged("TestList");
                 RaisePropertyChanged("TotalDuration");
@@ -306,18 +334,28 @@ namespace Reports.ViewModels
             get { return _openFile; }
         }
 
-        public string Project
+        public IEnumerable<Project> ProjectList
         {
             get
             {
-                try
-                {
-                    return _instance.Batch.Material.Project.Name;
-                }
-                catch (NullReferenceException)
-                {
-                    return null;
-                }
+                if (_projectList == null)
+                    _projectList = _dataService.GetProjects();
+
+                return _projectList;
+            }
+        }
+
+        public Project SelectedProject
+        {
+            get
+            {
+                return _projectList.FirstOrDefault(prj => prj.ID == _selectedProject?.ID);
+            }
+
+            set
+            {
+                _selectedProject = value;
+                _projectChanged = true;
             }
         }
 
@@ -340,18 +378,8 @@ namespace Reports.ViewModels
         {
             get { return _save; }
         }
-
-        public string Specification
-        {
-            get 
-            { 
-                if (_instance == null)
-                    return null;
-                else
-                     return _instance.SpecificationVersion.Specification.Standard.Organization.Name + " " + 
-                            _instance.SpecificationVersion.Specification.Standard.Name; 
-            }
-        }
+        
+        public string SpecificationName => _instance?.SpecificationVersion?.Specification.Name;
 
         public string SpecificationVersion
         {

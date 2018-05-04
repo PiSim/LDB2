@@ -11,7 +11,6 @@ namespace DBManager
     public partial class Project
     {
         IEnumerable<Report> _reportList;
-        private IEnumerable<Task> _taskList;
         
         public void Create()
         {
@@ -71,14 +70,12 @@ namespace DBManager
         {
             using (DBEntities entities = new DBEntities())
             {
-                IEnumerable<PurchaseOrder> _poList = entities.PurchaseOrders
-                                                    .Where(po => po.ExternalReports
-                                                    .Any(exr => exr.ProjectID == this.ID));
+                IQueryable<ExternalReport> externalReportList =  entities.ExternalReports
+                                                                            .Where(extr => extr.ProjectID == ID);
 
-                TotalExternalCost = (_poList.Count() == 0) ? 0 : _poList.Sum(po => po.Total);
+                
+                return (externalReportList.Count() == 0) ? 0 : externalReportList.Sum(extr => extr.OrderTotal);
             }
-
-            return TotalExternalCost;
         }
 
         /// <summary>
@@ -219,9 +216,6 @@ namespace DBManager
                 entities.SaveChanges();
             }
         }
-
-
-        public IEnumerable<Task> Tasks => _taskList;
     }
 
     public static class ProjectExtension
@@ -258,25 +252,7 @@ namespace DBManager
                                 .ProjectID == entry.ID);
             }
         }
-
-        public static IEnumerable<PurchaseOrder> GetPurchaseOrders(this Project entry)
-        {
-
-            // Returns all Purchase orders for a project
-
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.Configuration.LazyLoadingEnabled = false;
-
-                return entities.PurchaseOrders
-                                .Where(po => po
-                                .ExternalReports
-                                .Any(exr => exr
-                                .ProjectID == entry.ID))
-                                .ToList();
-            }
-        }
-
+        
         public static IEnumerable<Test> GetTests(this Project entry)
         {
             // Returns all the tests for a project

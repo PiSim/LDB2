@@ -24,13 +24,15 @@
                 <DataGridTextColumn Header="OEM"
                                     Binding="{Binding Standard.Organization.Name}"/>
                 <DataGridTextColumn Header="Nome"
-                                    Binding="{Binding Standard.Name}"/>
-                <DataGridTextColumn Header="Edizione"
-                                    Binding="{Binding Standard.CurrentIssue}"/>
+                                    Binding="{Binding Name}"/>
                 <DataGridTextColumn Header="Descrizione"
                                     Binding="{Binding Description}"/>
                 <DataGridTextColumn Header="Ore di Lavoro"
                                     Binding="{Binding TotalWorkHours}"/>
+                <DataGridTextColumn Header="Standard"
+                                    Binding="{Binding Standard.Name}"/>
+                <DataGridTextColumn Header="Edizione"
+                                    Binding="{Binding Standard.CurrentIssue}"/>
             </DataGrid.Columns>
         </DataGrid>
             

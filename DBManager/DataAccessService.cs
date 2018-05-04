@@ -218,6 +218,22 @@ namespace DBManager
             }
         }
 
+
+        public IEnumerable<ExternalReport> GetExternalReports()
+        {
+            // Returns all external report instances
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.ExternalReports.Include(exrep => exrep.ExternalLab)
+                                                .OrderByDescending(exrep => exrep.Year)
+                                                .ThenByDescending(exrep => exrep.Number)
+                                                .ToList();
+            }
+        }
+
         public Instrument GetInstrument(string code)
         {
             // Returns the instrument entry with the given code, or null if none is found
@@ -290,7 +306,7 @@ namespace DBManager
                                         .FirstOrDefault(mat => mat.ID == ID);
             }
         }
-
+        
         public Material GetMaterial(string type,
                                     string line,
                                     string aspect,
@@ -314,13 +330,12 @@ namespace DBManager
             }
         }
 
-        public  Material GetMaterial(MaterialType type,
+        
+        public Material GetMaterial(MaterialType type,
                                     MaterialLine line,
                                     Aspect aspect,
                                     Recipe recipe)
         {
-            // Returns a Material entities with the given construction and recipe
-            // if none is found null is returned
 
             using (DBEntities entities = new DBEntities())
             {
@@ -559,6 +574,52 @@ namespace DBManager
             }
         }
 
+        public Report GetReport(int ID)
+        {
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.Reports.First(entry => entry.ID == ID);
+            }
+        }
+
+        public Report GetReportByNumber(int number)
+        {
+            // Returns a report instance with the given number, or null if none exists
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.Reports.FirstOrDefault(rep => rep.Number == number);
+            }
+        }
+
+        /// <summary>
+        /// Returns All Report Entities in the DB
+        /// Including Batch and Material Data
+        /// </summary>
+        /// <returns>An IEnumerable containing the Report Entries</returns>
+        public IEnumerable<Report> GetReports()
+        {
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.Reports.AsNoTracking()
+                                        .Include(rep => rep.Author)
+                                        .Include(rep => rep.Batch.Material.Aspect)
+                                        .Include(rep => rep.Batch.Material.MaterialLine)
+                                        .Include(rep => rep.Batch.Material.MaterialType)
+                                        .Include(rep => rep.Batch.Material.Project.Oem)
+                                        .Include(rep => rep.Batch.Material.Recipe.Colour)
+                                        .Include(rep => rep.SpecificationVersion.Specification.Standard.Organization)
+                                        .OrderByDescending(rep => rep.Number)
+                                        .ToList();
+            }
+        }
+
         /// <summary>
         /// Returns an ordered list of inserted samples. If an int is provided the last *int* samples 
         /// are returned. 
@@ -587,7 +648,19 @@ namespace DBManager
             }
         }
 
+        
+        public Recipe GetRecipe(int ID)
+        {
+            // Returns the recipe with the given ID
+            // if none is found, null is returned
 
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.Recipes.FirstOrDefault(rec => rec.ID == ID);
+            }
+        }
 
         public Recipe GetRecipe(string code)
         {

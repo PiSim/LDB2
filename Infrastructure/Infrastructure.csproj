@@ -112,8 +112,10 @@
     <Compile Include="Events\BatchCreated.cs" />
     <Compile Include="Events\BatchStatusListRefreshRequested.cs" />
     <Compile Include="Events\BatchVisualizationRequested.cs" />
+    <Compile Include="Events\ColorChanged.cs" />
     <Compile Include="Events\EntityChangedToken.cs" />
     <Compile Include="Events\ExternalConstructionChanged.cs" />
+    <Compile Include="Events\ExternalReportChanged.cs" />
     <Compile Include="Events\InstrumentTypeCreated.cs" />
     <Compile Include="Events\MaintenanceEventCreated.cs" />
     <Compile Include="Events\MeasurableQuantityCreated.cs" />
@@ -121,6 +123,7 @@
     <Compile Include="Events\OrganizationChanged.cs" />
     <Compile Include="Events\PersonChanged.cs" />
     <Compile Include="Events\PersonRoleCreationRequested.cs" />
+    <Compile Include="Events\ProjectChanged.cs" />
     <Compile Include="Events\ProjectCostUpdateRequested.cs" />
     <Compile Include="Events\ReportCompleted.cs" />
     <Compile Include="Events\ReportDeleted.cs" />
@@ -148,17 +151,14 @@
     <Compile Include="Queries\Presentation\ArrivedUntestedBatchesQueryPresenter.cs" />
     <Compile Include="Queries\Presentation\Latest25BatchesQueryPresenter.cs" />
     <Compile Include="Queries\QueryPresenter.cs" />
-    <Compile Include="Resources\CommonResourceDictionary.xaml.cs" />
     <Compile Include="DBIdentity.cs" />
     <Compile Include="DBPrincipal.cs" />
     <Compile Include="Events\CalibrationIssued.cs" />
-    <Compile Include="Events\ExternalReportCreated.cs" />
     <Compile Include="Events\GenerateReportDataSheetRequested.cs" />
     <Compile Include="Events\InstrumentListUpdateRequested.cs" />
     <Compile Include="Events\NavigateBackRequested.cs" />
     <Compile Include="Events\NavigateForwardRequested.cs" />
     <Compile Include="Events\NavigationRequested.cs" />
-    <Compile Include="Events\ProjectListUpdateRequested.cs" />
     <Compile Include="Events\ReportCreated.cs" />
     <Compile Include="Events\StatusNotificationIssued.cs" />
     <Compile Include="Events\TaskCompleted.cs" />

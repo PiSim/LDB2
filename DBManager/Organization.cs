@@ -23,7 +23,6 @@ namespace DBManager
             this.Standards = new HashSet<Std>();
             this.CalibrationReports = new HashSet<CalibrationReport>();
             this.RoleMapping = new HashSet<OrganizationRoleMapping>();
-            this.PurchaseOrders = new HashSet<PurchaseOrder>();
             this.ManufacturedInstruments = new HashSet<Instrument>();
             this.SuppliedInstruments = new HashSet<Instrument>();
             this.InstrumentMaintenanceEvents = new HashSet<InstrumentMaintenanceEvent>();
@@ -46,8 +45,6 @@ namespace DBManager
         public virtual ICollection<CalibrationReport> CalibrationReports { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OrganizationRoleMapping> RoleMapping { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PurchaseOrder> PurchaseOrders { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Instrument> ManufacturedInstruments { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

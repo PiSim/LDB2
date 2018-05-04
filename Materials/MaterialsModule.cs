@@ -30,14 +30,12 @@ namespace Materials
             _container.RegisterType<Object, Views.ExternalConstructionDetail>(MaterialViewNames.ExternalConstructionDetail);
             _container.RegisterType<Object, Views.MaterialInfoMain>(MaterialViewNames.MaterialView);
             
-            _container.RegisterType<Views.ColorCreationDialog>();
 
             _container.RegisterType<ViewModels.AspectDetailViewModel>();
             _container.RegisterType<ViewModels.AspectMainViewModel>();
             _container.RegisterType<ViewModels.BatchInfoViewModel>();
             _container.RegisterType<ViewModels.BatchMainViewModel>();
             _container.RegisterType<ViewModels.BatchStatusListViewModel>();
-            _container.RegisterType<ViewModels.ColorCreationDialogViewModel>();
             _container.RegisterType<ViewModels.ColourEditViewModel>();
             _container.RegisterType<ViewModels.ColourMainViewModel>();
             _container.RegisterType<ViewModels.MaterialDetailViewModel>();

@@ -38,9 +38,9 @@ namespace Projects.ViewModels
                     RaisePropertyChanged("ProjectStatList");
                 });
                 
-            _eventAggregator.GetEvent<ProjectListUpdateRequested>()
+            _eventAggregator.GetEvent<ProjectChanged>()
                             .Subscribe(
-                            () =>
+                            ect =>
                             {
                                 RaisePropertyChanged("ProjectStatList");
                             });

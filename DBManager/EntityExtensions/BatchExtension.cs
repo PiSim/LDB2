@@ -15,8 +15,23 @@ namespace DBManager
                                         + Material?.Aspect?.Code
                                         + Material?.Recipe?.Code;
 
+        /// <summary>
+        /// Returns all the ExternalReport instances that refer to this batch
+        /// </summary>
+        /// <returns>An IEnumerable of Extenalreport entities</returns>
+        public IEnumerable<ExternalReport> GetExternalReports()
+        {
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
 
-
+                return entities.ExternalReports
+                                .Include(exr => exr.ExternalLab)
+                                .Where(exr => exr.Batches
+                                .Any(btc => btc.ID == ID))
+                                .ToList();                                
+            }
+        }
     }
 
     public static class BatchExtension
