@@ -55,38 +55,6 @@ namespace DBManager
             }
         }
 
-        public static void Load(this Test entry)
-        {
-            if (entry == null)
-                return;
-
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.Configuration.LazyLoadingEnabled = false;
-
-                Test tempEntry = entities.Tests.Include(tst => tst.Instrument)
-                                                .Include(tst => tst.Method.Property)
-                                                .Include(tst => tst.Method.Standard.Organization)
-                                                .Include(tst => tst.Person)
-                                                .Include(tst => tst.Report)
-                                                .Include(tst => tst.SubTests)
-                                                .First(tst => tst.ID == entry.ID);
-
-                entry.Date = tempEntry.Date;
-                entry.Instrument = tempEntry.Instrument;
-                entry.instrumentID = tempEntry.instrumentID;
-                entry.IsComplete = tempEntry.IsComplete;
-                entry.Method = tempEntry.Method;
-                entry.MethodID = tempEntry.MethodID;
-                entry.Notes = tempEntry.Notes;
-                entry.operatorID = tempEntry.operatorID;
-                entry.Person = tempEntry.Person;
-                entry.Report = tempEntry.Report;
-                entry.ReportID = tempEntry.ReportID;
-                entry.SubTests = tempEntry.SubTests;
-            }
-        }
-
         public static void SetMethod(this Test entry,
                                     Method methodEntity)
         {

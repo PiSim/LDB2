@@ -57,8 +57,6 @@ namespace Materials
                                                 typeof(Views.BatchList));
             _regionManager.RegisterViewWithRegion(RegionNames.ExternalConstructionBatchListRegion,
                                                 typeof(Views.BatchList));
-            _regionManager.RegisterViewWithRegion(RegionNames.ExternalReportBatchListRegion,
-                                                typeof(Views.BatchList));
             _regionManager.RegisterViewWithRegion(RegionNames.MaterialInfoAspectRegion,
                                                 typeof(Views.AspectMain));
             _regionManager.RegisterViewWithRegion(RegionNames.MaterialInfoColourRegion,

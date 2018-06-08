@@ -15,12 +15,9 @@ using System.Windows.Shapes;
 
 namespace Specifications.Views
 {
-    /// <summary>
-    /// Logica di interazione per SpecificationTestListEdit.xaml
-    /// </summary>
-    public partial class SpecificationTestListEdit : UserControl
+    public partial class AddMethod : UserControl
     {
-        public SpecificationTestListEdit()
+        public AddMethod()
         {
             InitializeComponent();
         }

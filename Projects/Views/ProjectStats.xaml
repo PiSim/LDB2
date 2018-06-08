@@ -56,7 +56,7 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <DataGridTextColumn Header="Ore lavoro"
-                                    Binding="{Binding TotalInternalCost}"/>
+                                    Binding="{Binding TotalReportDuration}"/>
             </DataGrid.Columns>
         </DataGrid>
                   

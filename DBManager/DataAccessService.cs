@@ -108,6 +108,7 @@ namespace DBManager
                 entities.Configuration.LazyLoadingEnabled = false;
 
                 return entities.Batches.Include(btc => btc.Material.Aspect)
+                                        .Include(btc => btc.Material.ExternalConstruction)
                                         .Include(btc => btc.Material.MaterialType)
                                         .Include(btc => btc.Material.MaterialLine)
                                         .Include(btc => btc.Material.Recipe.Colour)

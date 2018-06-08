@@ -211,10 +211,7 @@ namespace Reports.ViewModels
                 if (_instance == null)
                     return false;
 
-                else if (_instance.Author.ID == _principal.CurrentPerson.ID && _principal.IsInRole(UserRoleNames.ReportEdit))
-                    return true;
-                
-                else if (_principal.IsInRole(UserRoleNames.ReportAdmin))
+                else if (_principal.IsInRole(UserRoleNames.ReportEdit))
                     return true;
                 
                 else 

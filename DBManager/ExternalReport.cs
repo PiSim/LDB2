@@ -19,25 +19,28 @@ namespace DBManager
         {
             this.ExternalReportFiles = new HashSet<ExternalReportFile>();
             this.Methods = new HashSet<Method>();
-            this.Batches = new HashSet<Batch>();
+            this.TestRecords = new HashSet<TestRecord>();
         }
     
         public int ID { get; set; }
         public string Description { get; set; }
-        public string ExternalNumber { get; set; }
-        public int InternalNumber { get; set; }
         public int ExternalLabID { get; set; }
         public bool MaterialSent { get; set; }
         public bool RequestDone { get; set; }
         public string Samples { get; set; }
         public bool ReportReceived { get; set; }
         public Nullable<int> ProjectID { get; set; }
-        public Nullable<int> PurchaseOrderID { get; set; }
         public Nullable<System.DateTime> ArrivalDate { get; set; }
         public int Year { get; set; }
         public int Number { get; set; }
         public string OrderNumber { get; set; }
         public double OrderTotal { get; set; }
+        public Nullable<System.DateTime> MaterialSentDate { get; set; }
+        public Nullable<System.DateTime> RequestDoneDate { get; set; }
+        public Nullable<System.DateTime> ReportReceivedDate { get; set; }
+        public bool HasOrder { get; set; }
+        public string TBDel { get; set; }
+        public Nullable<int> TBDel2 { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ExternalReportFile> ExternalReportFiles { get; set; }
@@ -46,6 +49,6 @@ namespace DBManager
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Method> Methods { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Batch> Batches { get; set; }
+        public virtual ICollection<TestRecord> TestRecords { get; set; }
     }
 }

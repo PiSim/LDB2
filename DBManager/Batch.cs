@@ -23,7 +23,7 @@ namespace DBManager
             this.Reports = new HashSet<Report>();
             this.Samples = new HashSet<Sample>();
             this.Tasks = new HashSet<Task>();
-            this.ExternalReports = new HashSet<ExternalReport>();
+            this.TestRecords = new HashSet<TestRecord>();
         }
     
         public int ID { get; set; }
@@ -34,7 +34,6 @@ namespace DBManager
         public bool FirstSampleArrived { get; set; }
         public Nullable<int> FirstSampleID { get; set; }
         public Nullable<int> BasicReportID { get; set; }
-        public string TrialScopeText { get; set; }
         public int ArchiveStock { get; set; }
         public bool DoNotTest { get; set; }
         public Nullable<int> LatestSampleID { get; set; }
@@ -51,11 +50,11 @@ namespace DBManager
         public virtual ICollection<Sample> Samples { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Task> Tasks { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ExternalReport> ExternalReports { get; set; }
         public virtual TrialArea TrialArea { get; set; }
         public virtual Report BasicReport { get; set; }
         public virtual Sample FirstSample { get; set; }
         public virtual Sample LatestSample { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<TestRecord> TestRecords { get; set; }
     }
 }

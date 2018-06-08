@@ -99,20 +99,38 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="Xceed.Wpf.AvalonDock, Version=3.3.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.3.3.0\lib\net40\Xceed.Wpf.AvalonDock.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Aero, Version=3.3.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.3.3.0\lib\net40\Xceed.Wpf.AvalonDock.Themes.Aero.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Metro, Version=3.3.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.3.3.0\lib\net40\Xceed.Wpf.AvalonDock.Themes.Metro.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.VS2010, Version=3.3.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.3.3.0\lib\net40\Xceed.Wpf.AvalonDock.Themes.VS2010.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.DataGrid, Version=3.3.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.3.3.0\lib\net40\Xceed.Wpf.DataGrid.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.Toolkit, Version=3.3.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.3.3.0\lib\net40\Xceed.Wpf.Toolkit.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ExternalResultPresenter.cs" />
     <Compile Include="ReportService.cs" />
     <Compile Include="ViewModels\AddTestDialogViewModel.cs" />
     <Compile Include="ViewModels\ExternalReportCreationDialogViewModel.cs" />
+    <Compile Include="ViewModels\ExternalReportExtension.cs" />
     <Compile Include="ViewModels\ReportCreationDialogViewModel.cs" />
+    <Compile Include="ViewModels\TestSearchMainViewModel.cs" />
     <Compile Include="Views\AddTestDialog.xaml.cs">
       <DependentUpon>AddTestDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ExternalReportCreationDialog.xaml.cs">
       <DependentUpon>ExternalReportCreationDialog.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\ExternalReportList.xaml.cs">
-      <DependentUpon>ExternalReportList.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ReportCreationDialog.xaml.cs">
       <DependentUpon>ReportCreationDialog.xaml</DependentUpon>
@@ -155,8 +173,14 @@
     <Compile Include="Views\ReportMain.xaml.cs">
       <DependentUpon>ReportMain.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\TestSearchNavigationItem.xaml.cs">
+      <DependentUpon>TestSearchNavigationItem.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ReportsNavigationItem.xaml.cs">
       <DependentUpon>ReportsNavigationItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TestSearchMainView.xaml.cs">
+      <DependentUpon>TestSearchMainView.xaml</DependentUpon>
     </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -193,6 +217,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Resources\ResultPresentationGridDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\AddTestDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -200,10 +228,6 @@
     <Page Include="Views\ExternalReportCreationDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\ExternalReportList.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ReportCreationDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -233,7 +257,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\TestSearchNavigationItem.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\ReportsNavigationItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\TestSearchMainView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

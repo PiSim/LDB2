@@ -50,6 +50,20 @@ namespace Reports
         }
 
         /// <summary>
+        /// Creates a new ExternalReport-Method association and adds a new 
+        /// test entry to each TestRecord associated to the report
+        /// </summary>
+        /// <param name="externalReportEntry">The ExternalReport entity to target</param>
+        /// <param name="methodEntry">The Method that will be added</param>
+        public void AddMethodToExternalReport(ExternalReport externalReportEntry,
+                                            Method methodEntry)
+        {
+            // Creates the new association
+            externalReportEntry.AddTestMethod(methodEntry);
+            
+        }
+
+        /// <summary>
         /// Adds a sum to a project's ExternalCost field
         /// The addition is optimistic and assumes noone is altering the project entry
         /// </summary>
@@ -81,7 +95,7 @@ namespace Reports
                                         .IsSelected;
             }
         }
-
+        
 
 
         public Requirement GenerateRequirement(Method method)
@@ -146,7 +160,7 @@ namespace Reports
         /// to an existing report if selection is succesfull
         /// </summary>
         /// <param name="entry">The report to which the tests will be added</param>
-        /// <returns>A bool indicating whether the procedure was successfull</returns>
+        /// <returns>A bool indicating whether the procedure was successful</returns>
         public bool AddTestsToReport(Report entry)
         {
             AddTestDialog testDialog = new AddTestDialog();
@@ -165,7 +179,7 @@ namespace Reports
                                         .Select(riw => riw.RequirementInstance));
 
                 foreach (Test tst in testList)
-                    tst.ReportID = entry.ID;
+                    tst.TestRecordID = entry.TestRecordID;
                 testList.CreateTests();
 
                 return true;
@@ -205,6 +219,80 @@ namespace Reports
             }
 
             return null;
+        }
+
+
+        /// <summary>
+        /// Process the Data input of a Report creation dialog to create a new Report instance and proceeds to insert it in the database
+        /// </summary>
+        /// <param name="dialogViewModelInstance">The ViewModel of the dialog used to collect data</param>
+        /// <returns>The new report instance</returns>
+        private Report CreateReportFromCreationDialog(ViewModels.ReportCreationDialogViewModel dialogViewModelInstance)
+        {
+            Report output;
+
+            // Creates new  report instance
+
+            output = new Report
+            {
+                AuthorID = dialogViewModelInstance.Author.ID,
+                BatchID = dialogViewModelInstance.SelectedBatch.ID,
+                Category = "TR",
+                Description = (dialogViewModelInstance.SelectedControlPlan != null) ? dialogViewModelInstance.SelectedControlPlan.Name : dialogViewModelInstance.Description,
+                IsComplete = false,
+                Number = dialogViewModelInstance.Number,
+                SpecificationVersionID = dialogViewModelInstance.SelectedVersion.ID,
+                StartDate = DateTime.Now.ToShortDateString()
+            };
+
+            // Test Record is created from parent task or from the selected requirements
+
+            output.TestRecord = new TestRecord()
+            {
+                BatchID = output.BatchID,
+                RecordTypeID = 1
+                
+            };
+
+            if (dialogViewModelInstance.IsCreatingFromTask)
+                foreach (Test tst in dialogViewModelInstance.TaskInstance.GenerateTests())
+                    output.TestRecord.Tests.Add(tst);
+
+            else
+                foreach (Test tst in GenerateTestList(dialogViewModelInstance.SelectedRequirements))
+                    output.TestRecord.Tests.Add(tst);
+
+            // Calculates total test duration
+
+            output.TotalDuration = output.TestRecord.Tests.Sum(tst => tst.Duration);
+
+            //Inserts new entry in the DB
+
+            output.Create();
+
+            // If the tested Batch does not have a "basic" report, add reference to current instance
+
+            if (dialogViewModelInstance.SelectedBatch.BasicReportID == null)
+            {
+                using (DBEntities entities = new DBEntities())
+                {
+                    entities.Batches
+                            .First(btc => btc.ID == dialogViewModelInstance.SelectedBatch.ID)
+                            .BasicReportID = output.ID;
+
+                    entities.SaveChanges();
+                }
+            }
+
+            // If using Task as template, the parent is updated with the child Report ID
+
+            if (dialogViewModelInstance.CreationMode == ViewModels.ReportCreationDialogViewModel.CreationModes.ReportFromTask)
+            {
+                dialogViewModelInstance.TaskInstance.ReportID = output.ID;
+                dialogViewModelInstance.TaskInstance.Update();
+            }
+
+            return output;
         }
 
 
@@ -254,79 +342,9 @@ namespace Reports
             else
                 return null;
         }
-
-
-        /// <summary>
-        /// Process the Data input of a Report creation dialog to create a new Report instance and proceeds to insert it in the database
-        /// </summary>
-        /// <param name="dialogViewModelInstance">The ViewModel of the dialog used to collect data</param>
-        /// <returns>The new report instance</returns>
-        private Report CreateReportFromCreationDialog(ViewModels.ReportCreationDialogViewModel dialogViewModelInstance)
-        {
-            Report output;
-
-            // Creates new  report instance
-
-            output = new Report
-            {
-                AuthorID = dialogViewModelInstance.Author.ID,
-                BatchID = dialogViewModelInstance.SelectedBatch.ID,
-                Category = "TR",
-                Description = (dialogViewModelInstance.SelectedControlPlan != null) ? dialogViewModelInstance.SelectedControlPlan.Name : dialogViewModelInstance.Description,
-                IsComplete = false,
-                Number = dialogViewModelInstance.Number,
-                SpecificationVersionID = dialogViewModelInstance.SelectedVersion.ID,
-                StartDate = DateTime.Now.ToShortDateString()
-            };
-
-            // Test list is created from parent task or from the selected requirements
-
-            if (dialogViewModelInstance.IsCreatingFromTask)
-            {
-                output.Tests = dialogViewModelInstance.TaskInstance.GenerateTests();
-            }
-
-            else
-            {
-                foreach (Test tst in GenerateTestList(dialogViewModelInstance.SelectedRequirements))
-                    output.Tests.Add(tst);
-            }
-
-            // Calculates total test duration
-
-            output.TotalDuration = output.Tests.Sum(tst => tst.Duration);
-
-            //Inserts new entry in the DB
-
-            output.Create();
-
-            // If the tested Batch does not have a "basic" report, add reference to current instance
-
-            if (dialogViewModelInstance.SelectedBatch.BasicReportID == null)
-            {
-                using (DBEntities entities = new DBEntities())
-                {
-                    entities.Batches
-                            .First(btc => btc.ID == dialogViewModelInstance.SelectedBatch.ID)
-                            .BasicReportID = output.ID;
-
-                    entities.SaveChanges();
-                }
-            }
-
-            // If using Task as template, the parent is updated with the child Report ID
-
-            if (dialogViewModelInstance.CreationMode == ViewModels.ReportCreationDialogViewModel.CreationModes.ReportFromTask)
-            {
-                dialogViewModelInstance.TaskInstance.ReportID = output.ID;
-                dialogViewModelInstance.TaskInstance.Update();
-            }
-
-            return output;
-        }
         
 
-        private ICollection<Test> GenerateTestList(IEnumerable<Requirement> reqList)
+        public ICollection<Test> GenerateTestList(IEnumerable<Requirement> reqList)
         {
             List<Test> output = new List<Test>();
 
@@ -355,7 +373,7 @@ namespace Reports
 
             return output;
         }
-
+        
         /// <summary>
         /// Iterates through all the Report instances and recalculates all the durations,
         /// committing the result to the DB

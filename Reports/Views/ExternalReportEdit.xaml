@@ -3,11 +3,15 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Reports.Views"
              xmlns:prism="http://prismlibrary.com/"
+             xmlns:bhvr="clr-namespace:Controls.Behaviours;assembly=Controls"
+             xmlns:local="clr-namespace:Reports"
              prism:ViewModelLocator.AutoWireViewModel="True"
              mc:Ignorable="d" 
              d:DesignHeight="500" d:DesignWidth="600">
+    <UserControl.Resources>
+        <local:ExternalResultPresenterTestExtractor x:Key="TestExtractor"/>
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="35"/>
@@ -17,6 +21,9 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
+
+        <FrameworkElement x:Name="dummyElement"
+                          Visibility="Collapsed"/>
 
         <StackPanel Orientation="Horizontal">
             <Button Content="Modifica"
@@ -91,6 +98,10 @@
                         <ColumnDefinition/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
 
                     <Grid Grid.Row="0">
                         <Grid.ColumnDefinitions>
@@ -119,100 +130,127 @@
                                   Grid.Row="0"
                                   Margin="5"/>
                         
-                        <GroupBox Header="Ordine di Acquisto"
-                              Grid.Row="2"
+                        
+                        <GroupBox Header="Stato"
+                                  Grid.Row="1"
                                   Grid.ColumnSpan="2">
                             <Grid>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition/>
+                                    <ColumnDefinition MaxWidth="100"/>
                                 </Grid.ColumnDefinitions>
                                 <Grid.RowDefinitions>
                                     <RowDefinition/>
                                     <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
                                 </Grid.RowDefinitions>
+                                
+                                <CheckBox IsChecked="{Binding RequestDone, Mode=TwoWay}"
+                                          IsEnabled="{Binding EditMode}"
+                                          Content="RDA fatta"
+                                          Padding="15,0"
+                                          Grid.Row="0"
+                                          VerticalContentAlignment="Center"
+                                          Margin="5"/>
 
-                                <TextBlock Text="Numero:"
+                                <TextBlock Text="{Binding RequestDate,
+                                                          StringFormat=d,
+                                                          ConverterCulture=it-IT}"
+                                           Grid.Column="1"
+                                           Grid.Row="0"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           Margin="5"/>
+
+                                <CheckBox IsChecked="{Binding HasOrder, Mode=TwoWay}"
+                                          IsEnabled="{Binding EditMode}"
+                                          Content="Ordine di Acquisto"
+                                          Padding="15,0"
+                                          Grid.Row="1"
+                                          Margin="5"/>
+
+                                <Grid Grid.ColumnSpan="2"
+                                      Grid.Row="2"
+                                      Margin="31,0,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+
+                                    <TextBlock Text="Numero:"
                                        Grid.Column="0"
                                        Grid.Row="0"
                                        Margin="5"
                                        VerticalAlignment="Center"/>
 
-                                <TextBox Text="{Binding OrderNumber}"
+                                    <TextBox Text="{Binding OrderNumber}"
                                      IsEnabled="{Binding EditMode}"
                                      Grid.Column="1"
                                      Grid.Row="0"
                                      VerticalAlignment="Center"
                                          Margin="5"/>
 
-                                <TextBlock Text="Totale:"
+                                    <TextBlock Text="Totale:"
                                        Grid.Column="0"
                                        Grid.Row="1"
                                        Margin="5"
                                        VerticalAlignment="Center"/>
 
-                                <Grid Grid.Column="1"
+                                    <Grid Grid.Column="1"
                                         Grid.Row="1"
                                         VerticalAlignment="Center">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition/>
-                                        <ColumnDefinition Width="Auto"/>
-                                    </Grid.ColumnDefinitions>
-                                    <TextBox Text="{Binding OrderPrice}"
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBox Text="{Binding OrderPrice}"
                                          IsEnabled="{Binding EditMode}"
                                          Margin="5"/>
-                                    <TextBlock Text="EUR"
+                                        <TextBlock Text="EUR"
                                            Grid.Column="1"
                                            Margin="0,5,5,5"/>
+                                    </Grid>
                                 </Grid>
-                            </Grid>
-                        </GroupBox>
-                        
-                        <GroupBox Header="Stato"
-                              Grid.ColumnSpan="2"
-                                  Grid.Row="1"
-                              IsEnabled="{Binding CanModify}">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition Width="Auto"/>
-                                </Grid.ColumnDefinitions>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition/>
-                                    <RowDefinition/>
-                                    <RowDefinition/>
-                                </Grid.RowDefinitions>
-                                <Label Content="RDA fatta:"
-                                   Grid.Column="0"
-                                   Grid.Row="0"
-                                   Margin="5"/>
-                                <CheckBox IsChecked="{Binding RequestDone, Mode=TwoWay}"
-                                      IsEnabled="{Binding EditMode}"
-                                      Grid.Column="1"
-                                      Grid.Row="0"
-                                      Margin="5"/>
-
-                                <Label Content="Campioni inviati:"
-                                   Grid.Column="0"
-                                   Grid.Row="1"
-                                   Margin="5"/>
 
                                 <CheckBox IsChecked="{Binding SamplesSent, Mode=TwoWay}"
-                                      IsEnabled="{Binding EditMode}"
-                                      Grid.Column="1"
-                                      Grid.Row="1"
-                                      Margin="5"/>
+                                          IsEnabled="{Binding EditMode}"
+                                          Content="Campioni inviati"
+                                          Padding="15,0"
+                                          VerticalContentAlignment="Center"
+                                          Grid.Row="3"
+                                          Margin="5"/>
 
-                                <Label Content="Report ricevuto:"
-                                   Grid.Column="0"
-                                   Grid.Row="2"
-                                   Margin="5"/>
+                                <TextBlock Text="{Binding SamplesSentDate,
+                                                          StringFormat=d,
+                                                          ConverterCulture=it-IT}"
+                                           Grid.Column="1"
+                                           Grid.Row="3"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           Margin="5"/>
 
                                 <CheckBox IsChecked="{Binding ReportReceived, Mode=TwoWay}"
-                                      IsEnabled="{Binding EditMode}"
-                                      Grid.Column="1"
-                                      Grid.Row="2"
-                                      Margin="5"/>
+                                          IsEnabled="{Binding EditMode}"
+                                          Content="Risultati ricevuti"
+                                          Padding="15,0"
+                                          VerticalContentAlignment="Center"
+                                          Grid.Row="4"
+                                          Margin="5"/>
+
+                                <TextBlock Text="{Binding ReportReceivedDate, 
+                                    StringFormat=d,
+                                                          ConverterCulture=it-IT}"
+                                           Grid.Column="1"
+                                           Grid.Row="4"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           Margin="5"/>
                             </Grid>
                         </GroupBox>
                     </Grid>
@@ -233,10 +271,27 @@
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
 
-                            <ContentControl prism:RegionManager.RegionName="ExternalReportBatchListRegion"
-                                            Grid.Column="0"
-                                            Grid.Row="0"
-                                            Grid.RowSpan="4"/>
+                            <Grid Grid.RowSpan="4">
+                                <ListView ItemsSource="{Binding RecordList}"
+                                          SelectedItem="{Binding SelectedRecord}">
+                                    <ListView.View>
+                                        <GridView>
+                                            <GridViewColumn Header="Odp" 
+                                                            DisplayMemberBinding="{Binding Batch.Number}"/>
+                                            <GridViewColumn Header="Tipo"
+                                                            DisplayMemberBinding="{Binding Batch.Material.MaterialType.Code}"/>
+                                            <GridViewColumn Header="Riga"
+                                                            DisplayMemberBinding="{Binding Batch.Material.MaterialLine.Code}"/>
+                                            <GridViewColumn Header="Aspetto"
+                                                            DisplayMemberBinding="{Binding Batch.Material.Aspect.Code}"/>
+                                            <GridViewColumn Header="Mescola"
+                                                            DisplayMemberBinding="{Binding Batch.Material.Recipe.Code}"/>
+                                            <GridViewColumn Header="Colore"
+                                                            DisplayMemberBinding="{Binding Batch.Material.Recipe.Colour.Name}"/>
+                                        </GridView>
+                                    </ListView.View>
+                                </ListView>
+                            </Grid>
 
                             <Button Content="Apri" 
                                     Command="{Binding Path=OpenBatchCommand}" 
@@ -256,51 +311,141 @@
                         </Grid>
                     </GroupBox>
 
-                    
+                    <GroupBox Header="Metodi"
+                              Grid.Column="0"
+                              Grid.ColumnSpan="2"
+                              Grid.Row="2">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+
+                            <DataGrid ItemsSource="{Binding AvailableMethodList}"
+                                        AutoGenerateColumns="False"
+                                        CanUserAddRows="False"
+                                        CanUserDeleteRows="False"
+                                        CanUserResizeRows="False"
+                                        GridLinesVisibility="None"
+                                        IsReadOnly="True"
+                                        Grid.Column="0"
+                                        Grid.Row="1"
+                                        Margin="5"
+                                        Style="{StaticResource OnlyVisibleInEditMode}">
+                                <DataGrid.Columns>
+                                    <DataGridTemplateColumn>
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Button Content="+"
+                                                        Command="{Binding DataContext.AddMethodCommand,
+                                                        Source={x:Reference Name=dummyElement}}"
+                                                        CommandParameter="{Binding }"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTextColumn Header="Standard"
+                                        Binding="{Binding Path=Standard.Name}"/>
+                                    <DataGridTextColumn Header="Proprietà"
+                                        Binding="{Binding Path=Property.Name}"/>
+                                    <DataGridTextColumn Header="OEM"
+                                        Binding="{Binding Path=Standard.Organization.Name}"/>
+                                    <DataGridTextColumn Header="Descrizione"
+                                        Binding="{Binding Path=Description}"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            
+                            <DataGrid ItemsSource="{Binding MethodList}"
+                                        AutoGenerateColumns="False"
+                                        CanUserAddRows="False"
+                                        CanUserDeleteRows="False"
+                                        CanUserResizeRows="False"
+                                        GridLinesVisibility="None"
+                                        IsReadOnly="True"
+                                        Grid.Column="1"
+                                        Grid.Row="1"
+                                        Margin="5">
+                                <DataGrid.Columns>
+                                    <DataGridTemplateColumn CellStyle="{StaticResource DataGridCellOnlyVisibleInEditMode}"
+                                                            HeaderStyle="{StaticResource OnlyVisibleInEditMode}">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Button Content="-"
+                                                        Command="{Binding DataContext.RemoveMethodCommand,
+                                                        Source={x:Reference Name=dummyElement}}"
+                                                        CommandParameter="{Binding }"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTextColumn Header="Standard"
+                                                        Binding="{Binding Path=Standard.Name}"/>
+                                    <DataGridTextColumn Header="Proprietà"
+                                                        Binding="{Binding Path=Property.Name}"/>
+                                    <DataGridTextColumn Header="OEM"
+                                                        Binding="{Binding Path=Standard.Organization.Name}"/>
+                                    <DataGridTextColumn Header="Descrizione"
+                                                        Binding="{Binding Path=Description}"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Grid>                        
+                    </GroupBox>
 
                 </Grid>
             </TabItem>
 
-            <TabItem Header="File">
-                <GroupBox Header="File"
-                          Grid.ColumnSpan="2"
-                          Grid.Column="0"
-                          Grid.Row="3">
-                    <Grid>
-                        <ListView ItemsSource="{Binding Path=ReportFiles}" 
+            <TabItem Header="Risultati">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                    <DataGrid ItemsSource="{Binding ResultCollection}"
+                              AutoGenerateColumns="False"
+                              CanUserAddRows="False"
+                              CanUserDeleteRows="False"
+                              CanUserResizeRows="False"
+                              GridLinesVisibility="Horizontal"
+                              bhvr:DataGridBindableColumnsBehaviour.BindableColumns="{Binding ResultColumnCollection}"/>
+
+
+                    <GroupBox Header="File"
+                              Grid.Row="1">
+                        <Grid>
+                            <ListView ItemsSource="{Binding Path=ReportFiles}" 
                                   SelectedItem="{Binding Path=SelectedFile, Mode=TwoWay}"
                                   Margin="0,0,60,0">
-                            <ListView.View>
-                                <GridView>
-                                    <GridViewColumn Header="Percorso" 
+                                <ListView.View>
+                                    <GridView>
+                                        <GridViewColumn Header="Percorso" 
                                                     DisplayMemberBinding="{Binding Path}"/>
-                                    <GridViewColumn Header="Descrizione">
-                                        <GridViewColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <TextBox Text="{Binding Path=Description, Mode=TwoWay}"/>
-                                            </DataTemplate>
-                                        </GridViewColumn.CellTemplate>
-                                    </GridViewColumn>
-                                </GridView>
-                            </ListView.View>
-                        </ListView>
-                        <Button Content="Apri" 
+                                        <GridViewColumn Header="Descrizione">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBox Text="{Binding Path=Description, Mode=TwoWay}"/>
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
+                            <Button Content="Apri" 
                                 Command="{Binding Path=OpenFileCommand}" 
                                 HorizontalAlignment="Right"
                                 VerticalAlignment="Top" 
                                 Margin="0,0,0,0"/>
-                        <Button Content="Aggiungi" 
+                            <Button Content="Aggiungi" 
                                 Command="{Binding Path=AddFileCommand}" 
                                 HorizontalAlignment="Right"
                                 VerticalAlignment="Top" 
                                 Margin="0,25,0,0"/>
-                        <Button Content="Rimuovi" 
+                            <Button Content="Rimuovi" 
                                 Command="{Binding Path=RemoveFileCommand}"
                                 HorizontalAlignment="Right"
                                 VerticalAlignment="Top" 
                                 Margin="0,50,0,0"/>
-                    </Grid>
-                </GroupBox>
+                        </Grid>                        
+                    </GroupBox>
+                </Grid>
             </TabItem>
         </TabControl>
     </Grid>

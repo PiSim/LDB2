@@ -25,7 +25,6 @@ namespace DBManager
             this.RoleMapping = new HashSet<OrganizationRoleMapping>();
             this.ManufacturedInstruments = new HashSet<Instrument>();
             this.SuppliedInstruments = new HashSet<Instrument>();
-            this.InstrumentMaintenanceEvents = new HashSet<InstrumentMaintenanceEvent>();
             this.instruments = new HashSet<Instrument>();
         }
     
@@ -49,8 +48,6 @@ namespace DBManager
         public virtual ICollection<Instrument> ManufacturedInstruments { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Instrument> SuppliedInstruments { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<InstrumentMaintenanceEvent> InstrumentMaintenanceEvents { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Instrument> instruments { get; set; }
     }

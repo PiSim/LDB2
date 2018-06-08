@@ -19,6 +19,7 @@ namespace Controls
 
         public void Initialize()
         {
+
             _container.RegisterType<Views.StringInputDialog>();
 
             _container.RegisterType<ViewModels.BatchPickerDialogViewModel>();
@@ -27,7 +28,7 @@ namespace Controls
             _container.RegisterType<ViewModels.ProjectPickerDialogViewModel>();
             _container.RegisterType<ViewModels.StatusBarViewModel>();
             _container.RegisterType<ViewModels.ToolbarViewModel>();
-
+            
             _regionManager.RegisterViewWithRegion(RegionNames.CalibrationEditFileListRegion,
                                                 typeof(Views.FileListControl));
             _regionManager.RegisterViewWithRegion(RegionNames.MethodFileRegion,

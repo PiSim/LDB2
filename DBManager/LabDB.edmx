@@ -34,8 +34,6 @@
           <Property Name="first_sample_arrived" Type="bit" Nullable="false" />
           <Property Name="first_sampleID" Type="int" />
           <Property Name="basic_reportID" Type="int" />
-          <Property Name="trial_scopeID" Type="int" />
-          <Property Name="trial_scope_text" Type="varchar" MaxLength="45" />
           <Property Name="archive_stock" Type="int" Nullable="false" />
           <Property Name="do_not_test" Type="bit" Nullable="false" />
           <Property Name="latest_sampleID" Type="int" />
@@ -127,14 +125,6 @@
           <Property Name="oemID" Type="int" />
           <Property Name="default_spec_versionID" Type="int" />
         </EntityType>
-        <EntityType Name="external_report_batch_mapping">
-          <Key>
-            <PropertyRef Name="external_reportID" />
-            <PropertyRef Name="batchID" />
-          </Key>
-          <Property Name="external_reportID" Type="int" Nullable="false" />
-          <Property Name="batchID" Type="int" Nullable="false" />
-        </EntityType>
         <EntityType Name="external_report_files">
           <Key>
             <PropertyRef Name="ID" />
@@ -152,26 +142,37 @@
           <Property Name="external_reportID" Type="int" Nullable="false" />
           <Property Name="methodID" Type="int" Nullable="false" />
         </EntityType>
+        <EntityType Name="external_report_test_record_mappings">
+          <Key>
+            <PropertyRef Name="external_reportID" />
+            <PropertyRef Name="test_recordID" />
+          </Key>
+          <Property Name="external_reportID" Type="int" Nullable="false" />
+          <Property Name="test_recordID" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="external_reports">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="description" Type="text" Nullable="false" />
-          <Property Name="external_number" Type="text" Nullable="false" />
-          <Property Name="internal_number" Type="int" Nullable="false" />
+          <Property Name="external_number" Type="text" />
+          <Property Name="internal_number" Type="int" />
           <Property Name="external_labID" Type="int" Nullable="false" />
           <Property Name="material_sent" Type="bit" Nullable="false" />
           <Property Name="request_done" Type="bit" Nullable="false" />
           <Property Name="samples" Type="varchar" MaxLength="100" Nullable="false" />
-          <Property Name="report_received" Type="bit" />
+          <Property Name="report_received" Type="bit" Nullable="false" />
           <Property Name="projectID" Type="int" />
-          <Property Name="purchase_orderID" Type="int" />
           <Property Name="arrival_date" Type="date" />
           <Property Name="year" Type="int" Nullable="false" />
           <Property Name="number" Type="int" Nullable="false" />
           <Property Name="order_number" Type="varchar" MaxLength="10" />
           <Property Name="order_total" Type="double" Nullable="false" />
+          <Property Name="material_sent_date" Type="datetime" Precision="0" />
+          <Property Name="request_done_date" Type="datetime" Precision="0" />
+          <Property Name="report_received_date" Type="datetime" Precision="0" />
+          <Property Name="has_order" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="instrument_files">
           <Key>
@@ -189,7 +190,6 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="date" Type="date" Nullable="false" />
           <Property Name="description" Type="varchar" MaxLength="200" Nullable="false" />
-          <Property Name="organizationID" Type="int" Nullable="false" />
           <Property Name="instrumentID" Type="int" Nullable="false" />
           <Property Name="techID" Type="int" />
         </EntityType>
@@ -383,6 +383,7 @@
           <Property Name="oemID" Type="int" />
           <Property Name="total_internal_cost" Type="int" Nullable="false" />
           <Property Name="total_external_cost" Type="double" Nullable="false" />
+          <Property Name="total_report_duration" Type="double" Nullable="false" />
         </EntityType>
         <EntityType Name="properties">
           <Key>
@@ -426,6 +427,7 @@
           <Property Name="is_complete" Type="bit" Nullable="false" />
           <Property Name="parent_taskID" Type="int" />
           <Property Name="total_duration" Type="double" Nullable="false" />
+          <Property Name="test_recordID" Type="int" />
         </EntityType>
         <EntityType Name="requirements">
           <Key>
@@ -566,13 +568,30 @@
           <Property Name="reportID" Type="int" />
           <Property Name="work_hours" Type="double" Nullable="false" />
         </EntityType>
+        <EntityType Name="test_record_types">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="long_name" Type="text" Nullable="false" />
+          <Property Name="short_name" Type="char" MaxLength="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="test_records">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="batchID" Type="int" Nullable="false" />
+          <Property Name="typeID" Type="int" Nullable="false" />
+          <Property Name="notes" Type="varchar" MaxLength="200" Nullable="false" />
+        </EntityType>
         <EntityType Name="tests">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="methodID" Type="int" Nullable="false" />
-          <Property Name="reportID" Type="int" Nullable="false" />
+          <Property Name="reportID" Type="int" />
           <Property Name="notes" Type="text" />
           <Property Name="operatorID" Type="int" />
           <Property Name="date" Type="date" />
@@ -580,6 +599,7 @@
           <Property Name="instrumentID" Type="int" />
           <Property Name="requirementID" Type="int" />
           <Property Name="duration" Type="double" Nullable="false" />
+          <Property Name="test_recordID" Type="int" />
         </EntityType>
         <EntityType Name="trial_areas">
           <Key>
@@ -677,18 +697,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="batch_to_external_report_mapping">
-          <End Role="batches" Type="Self.batches" Multiplicity="1" />
-          <End Role="external_report_batch_mapping" Type="Self.external_report_batch_mapping" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="batches">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="external_report_batch_mapping">
-              <PropertyRef Name="batchID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="batch_to_master">
           <End Role="batches" Type="Self.batches" Multiplicity="0..1" />
           <End Role="masters" Type="Self.masters" Multiplicity="*" />
@@ -735,6 +743,18 @@
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="tasks">
+              <PropertyRef Name="batchID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="batch_to_test_record">
+          <End Role="batches" Type="Self.batches" Multiplicity="1" />
+          <End Role="test_records" Type="Self.test_records" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="batches">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="test_records">
               <PropertyRef Name="batchID" />
             </Dependent>
           </ReferentialConstraint>
@@ -867,20 +887,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="external_report_to_batch_mapping">
-          <End Role="external_reports" Type="Self.external_reports" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="external_report_batch_mapping" Type="Self.external_report_batch_mapping" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="external_reports">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="external_report_batch_mapping">
-              <PropertyRef Name="external_reportID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="external_report_to_file">
           <End Role="external_reports" Type="Self.external_reports" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -905,6 +911,20 @@
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="external_report_method_mappings">
+              <PropertyRef Name="external_reportID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="external_report_to_record_mapping">
+          <End Role="external_reports" Type="Self.external_reports" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="external_report_test_record_mappings" Type="Self.external_report_test_record_mappings" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="external_reports">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="external_report_test_record_mappings">
               <PropertyRef Name="external_reportID" />
             </Dependent>
           </ReferentialConstraint>
@@ -1263,18 +1283,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="organization_to_maintenance_event">
-          <End Role="organizations" Type="Self.organizations" Multiplicity="1" />
-          <End Role="instrument_maintenance_events" Type="Self.instrument_maintenance_events" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="organizations">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="instrument_maintenance_events">
-              <PropertyRef Name="organizationID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="organization_to_role_mapping">
           <End Role="organizations" Type="Self.organizations" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -1326,6 +1334,18 @@
             </Principal>
             <Dependent Role="person_role_mappings">
               <PropertyRef Name="roleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="person_to_maintenance_event">
+          <End Role="people" Type="Self.people" Multiplicity="0..1" />
+          <End Role="instrument_maintenance_events" Type="Self.instrument_maintenance_events" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="people">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="instrument_maintenance_events">
+              <PropertyRef Name="techID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1466,7 +1486,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="report_to_test">
-          <End Role="reports" Type="Self.reports" Multiplicity="1">
+          <End Role="reports" Type="Self.reports" Multiplicity="0..1">
             <OnDelete Action="Cascade" />
           </End>
           <End Role="tests" Type="Self.tests" Multiplicity="*" />
@@ -1789,6 +1809,46 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="test_record_to_external_record">
+          <End Role="test_records" Type="Self.test_records" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="external_report_test_record_mappings" Type="Self.external_report_test_record_mappings" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="test_records">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="external_report_test_record_mappings">
+              <PropertyRef Name="test_recordID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="test_record_to_report">
+          <End Role="test_records" Type="Self.test_records" Multiplicity="0..1" />
+          <End Role="reports" Type="Self.reports" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="test_records">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="reports">
+              <PropertyRef Name="test_recordID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="test_record_to_tests">
+          <End Role="test_records" Type="Self.test_records" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="tests" Type="Self.tests" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="test_records">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="tests">
+              <PropertyRef Name="test_recordID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="test_to_task_item">
           <End Role="tests" Type="Self.tests" Multiplicity="0..1" />
           <End Role="task_items" Type="Self.task_items" Multiplicity="*" />
@@ -1833,6 +1893,18 @@
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="materials">
+              <PropertyRef Name="typeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="type_to_test_record">
+          <End Role="test_record_types" Type="Self.test_record_types" Multiplicity="1" />
+          <End Role="test_records" Type="Self.test_records" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="test_record_types">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="test_records">
               <PropertyRef Name="typeID" />
             </Dependent>
           </ReferentialConstraint>
@@ -1888,9 +1960,9 @@
           <EntitySet Name="control_plan_items_b" EntityType="Self.control_plan_items_b" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="control_plans" EntityType="Self.control_plans" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="external_constructions" EntityType="Self.external_constructions" Schema="labdb" store:Type="Tables" />
-          <EntitySet Name="external_report_batch_mapping" EntityType="Self.external_report_batch_mapping" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="external_report_files" EntityType="Self.external_report_files" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="external_report_method_mappings" EntityType="Self.external_report_method_mappings" Schema="labdb" store:Type="Tables" />
+          <EntitySet Name="external_report_test_record_mappings" EntityType="Self.external_report_test_record_mappings" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="external_reports" EntityType="Self.external_reports" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="instrument_files" EntityType="Self.instrument_files" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="instrument_maintenance_events" EntityType="Self.instrument_maintenance_events" Schema="labdb" store:Type="Tables" />
@@ -1930,6 +2002,8 @@
           <EntitySet Name="sub_tests" EntityType="Self.sub_tests" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="task_items" EntityType="Self.task_items" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="tasks" EntityType="Self.tasks" Schema="labdb" store:Type="Tables" />
+          <EntitySet Name="test_record_types" EntityType="Self.test_record_types" Schema="labdb" store:Type="Tables" />
+          <EntitySet Name="test_records" EntityType="Self.test_records" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="tests" EntityType="Self.tests" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="trial_areas" EntityType="Self.trial_areas" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="user_role_mappings" EntityType="Self.user_role_mappings" Schema="labdb" store:Type="Tables" />
@@ -1955,10 +2029,6 @@
             <End Role="materials" EntitySet="materials" />
             <End Role="batches" EntitySet="batches" />
           </AssociationSet>
-          <AssociationSet Name="batch_to_external_report_mapping" Association="Self.batch_to_external_report_mapping">
-            <End Role="batches" EntitySet="batches" />
-            <End Role="external_report_batch_mapping" EntitySet="external_report_batch_mapping" />
-          </AssociationSet>
           <AssociationSet Name="batch_to_master" Association="Self.batch_to_master">
             <End Role="batches" EntitySet="batches" />
             <End Role="masters" EntitySet="masters" />
@@ -1974,6 +2044,10 @@
           <AssociationSet Name="batch_to_task" Association="Self.batch_to_task">
             <End Role="batches" EntitySet="batches" />
             <End Role="tasks" EntitySet="tasks" />
+          </AssociationSet>
+          <AssociationSet Name="batch_to_test_record" Association="Self.batch_to_test_record">
+            <End Role="batches" EntitySet="batches" />
+            <End Role="test_records" EntitySet="test_records" />
           </AssociationSet>
           <AssociationSet Name="calibration_report_to_files" Association="Self.calibration_report_to_files">
             <End Role="calibration_reports" EntitySet="calibration_reports" />
@@ -2015,10 +2089,6 @@
             <End Role="organizations" EntitySet="organizations" />
             <End Role="external_reports" EntitySet="external_reports" />
           </AssociationSet>
-          <AssociationSet Name="external_report_to_batch_mapping" Association="Self.external_report_to_batch_mapping">
-            <End Role="external_reports" EntitySet="external_reports" />
-            <End Role="external_report_batch_mapping" EntitySet="external_report_batch_mapping" />
-          </AssociationSet>
           <AssociationSet Name="external_report_to_file" Association="Self.external_report_to_file">
             <End Role="external_reports" EntitySet="external_reports" />
             <End Role="external_report_files" EntitySet="external_report_files" />
@@ -2026,6 +2096,10 @@
           <AssociationSet Name="external_report_to_method_mapping" Association="Self.external_report_to_method_mapping">
             <End Role="external_reports" EntitySet="external_reports" />
             <End Role="external_report_method_mappings" EntitySet="external_report_method_mappings" />
+          </AssociationSet>
+          <AssociationSet Name="external_report_to_record_mapping" Association="Self.external_report_to_record_mapping">
+            <End Role="external_reports" EntitySet="external_reports" />
+            <End Role="external_report_test_record_mappings" EntitySet="external_report_test_record_mappings" />
           </AssociationSet>
           <AssociationSet Name="first_sample_to_batch" Association="Self.first_sample_to_batch">
             <End Role="samples" EntitySet="samples" />
@@ -2139,10 +2213,6 @@
             <End Role="people" EntitySet="people" />
             <End Role="tests" EntitySet="tests" />
           </AssociationSet>
-          <AssociationSet Name="organization_to_maintenance_event" Association="Self.organization_to_maintenance_event">
-            <End Role="organizations" EntitySet="organizations" />
-            <End Role="instrument_maintenance_events" EntitySet="instrument_maintenance_events" />
-          </AssociationSet>
           <AssociationSet Name="organization_to_role_mapping" Association="Self.organization_to_role_mapping">
             <End Role="organizations" EntitySet="organizations" />
             <End Role="organization_role_mappings" EntitySet="organization_role_mappings" />
@@ -2158,6 +2228,10 @@
           <AssociationSet Name="person_role_to_role_mapping" Association="Self.person_role_to_role_mapping">
             <End Role="person_roles" EntitySet="person_roles" />
             <End Role="person_role_mappings" EntitySet="person_role_mappings" />
+          </AssociationSet>
+          <AssociationSet Name="person_to_maintenance_event" Association="Self.person_to_maintenance_event">
+            <End Role="people" EntitySet="people" />
+            <End Role="instrument_maintenance_events" EntitySet="instrument_maintenance_events" />
           </AssociationSet>
           <AssociationSet Name="person_to_role_mapping" Association="Self.person_to_role_mapping">
             <End Role="people" EntitySet="people" />
@@ -2303,6 +2377,18 @@
             <End Role="tests" EntitySet="tests" />
             <End Role="sub_tests" EntitySet="sub_tests" />
           </AssociationSet>
+          <AssociationSet Name="test_record_to_external_record" Association="Self.test_record_to_external_record">
+            <End Role="test_records" EntitySet="test_records" />
+            <End Role="external_report_test_record_mappings" EntitySet="external_report_test_record_mappings" />
+          </AssociationSet>
+          <AssociationSet Name="test_record_to_report" Association="Self.test_record_to_report">
+            <End Role="test_records" EntitySet="test_records" />
+            <End Role="reports" EntitySet="reports" />
+          </AssociationSet>
+          <AssociationSet Name="test_record_to_tests" Association="Self.test_record_to_tests">
+            <End Role="test_records" EntitySet="test_records" />
+            <End Role="tests" EntitySet="tests" />
+          </AssociationSet>
           <AssociationSet Name="test_to_task_item" Association="Self.test_to_task_item">
             <End Role="tests" EntitySet="tests" />
             <End Role="task_items" EntitySet="task_items" />
@@ -2318,6 +2404,10 @@
           <AssociationSet Name="type_to_material" Association="Self.type_to_material">
             <End Role="material_types" EntitySet="material_types" />
             <End Role="materials" EntitySet="materials" />
+          </AssociationSet>
+          <AssociationSet Name="type_to_test_record" Association="Self.type_to_test_record">
+            <End Role="test_record_types" EntitySet="test_record_types" />
+            <End Role="test_records" EntitySet="test_records" />
           </AssociationSet>
           <AssociationSet Name="unit_to_measurable_property" Association="Self.unit_to_measurable_property">
             <End Role="measure_units" EntitySet="measure_units" />
@@ -2369,7 +2459,6 @@
           <NavigationProperty Name="Reports" Relationship="Self.batch_to_report" FromRole="batches" ToRole="reports" />
           <NavigationProperty Name="Samples" Relationship="Self.batch_to_sample" FromRole="batches" ToRole="samples" />
           <NavigationProperty Name="Tasks" Relationship="labdbModel.batch_to_task" FromRole="Batch" ToRole="Task" />
-          <NavigationProperty Name="ExternalReports" Relationship="labdbModel.external_report_batch_mapping" FromRole="Batch" ToRole="ExternalReport" />
           <Property Name="TrialAreaID" Type="Int32" />
           <NavigationProperty Name="TrialArea" Relationship="labdbModel.trial_area_to_batch" FromRole="Batch" ToRole="TrialArea" />
           <Property Name="FirstSampleArrived" Type="Boolean" Nullable="false" />
@@ -2377,12 +2466,12 @@
           <Property Name="BasicReportID" Type="Int32" />
           <NavigationProperty Name="BasicReport" Relationship="labdbModel.basic_report_to_batch" FromRole="Batch" ToRole="Report" />
           <NavigationProperty Name="FirstSample" Relationship="labdbModel.first_sample_to_batch" FromRole="Batch" ToRole="Sample" />
-          <Property Name="TrialScopeText" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
           <Property Name="ArchiveStock" Type="Int32" Nullable="false" />
           <Property Name="DoNotTest" Type="Boolean" Nullable="false" />
           <Property Name="LatestSampleID" Type="Int32" />
           <NavigationProperty Name="LatestSample" Relationship="labdbModel.latest_sample_to_batch" FromRole="Batch" ToRole="Sample" />
           <Property Name="LongTermStock" Type="Int32" />
+          <NavigationProperty Name="TestRecords" Relationship="labdbModel.batch_to_test_record" FromRole="Batch" ToRole="TestRecord" />
         </EntityType>
         <EntityType Name="Colour">
           <Key>
@@ -2421,8 +2510,6 @@
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" a:SetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <Property Name="Description" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="ExternalNumber" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="InternalNumber" Type="Int32" Nullable="false" />
           <Property Name="ExternalLabID" Type="Int32" Nullable="false" a:SetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:GetterAccess="Public" />
           <Property Name="MaterialSent" Type="Boolean" Nullable="false" />
           <Property Name="RequestDone" Type="Boolean" Nullable="false" />
@@ -2432,14 +2519,19 @@
           <NavigationProperty Name="ExternalReportFiles" Relationship="Self.external_report" FromRole="external_reports" ToRole="external_report_files" />
           <NavigationProperty Name="ExternalLab" Relationship="Self.external_lab" FromRole="external_reports" ToRole="organizations" />
           <NavigationProperty Name="Project" Relationship="Self.project_to_report" FromRole="external_reports" ToRole="projects" />
-          <Property Name="PurchaseOrderID" Type="Int32" />
           <Property Name="ArrivalDate" Type="DateTime" />
           <NavigationProperty Name="Methods" Relationship="labdbModel.external_report_method_mappings" FromRole="ExternalReport" ToRole="Method" />
-          <NavigationProperty Name="Batches" Relationship="labdbModel.external_report_batch_mapping" FromRole="ExternalReport" ToRole="Batch" />
           <Property Name="Year" Type="Int32" Nullable="false" />
           <Property Name="Number" Nullable="false" Type="Int32" />
           <Property Name="OrderNumber" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="OrderTotal" Type="Double" Nullable="false" />
+          <Property Name="MaterialSentDate" Type="DateTime" />
+          <Property Name="RequestDoneDate" Type="DateTime" />
+          <Property Name="ReportReceivedDate" Type="DateTime" />
+          <Property Name="HasOrder" Type="Boolean" Nullable="false" />
+          <Property Name="TBDel" Type="String" Nullable="true" />
+          <Property Name="TBDel2" Type="Int32" Nullable="true" />
+          <NavigationProperty Name="TestRecords" Relationship="labdbModel.external_report_test_record_mappings" FromRole="ExternalReport" ToRole="TestRecord" />
         </EntityType>
         <EntityType Name="Master">
           <Key>
@@ -2506,7 +2598,6 @@
           <NavigationProperty Name="RoleMapping" Relationship="labdbModel.organization_to_role_mapping" FromRole="Organization" ToRole="organization_role_mappings" />
           <NavigationProperty Name="ManufacturedInstruments" Relationship="labdbModel.manufacturer_to_instrument" FromRole="Organization" ToRole="instrument" />
           <NavigationProperty Name="SuppliedInstruments" Relationship="labdbModel.supplier_to_instrument" FromRole="Organization" ToRole="instrument" />
-          <NavigationProperty Name="InstrumentMaintenanceEvents" Relationship="labdbModel.organization_to_maintenance_event" FromRole="Organization" ToRole="instrument_maintenance_events" />
           <NavigationProperty Name="instruments" Relationship="labdbModel.calibration_responsible_to_instrument" FromRole="Organization" ToRole="Instrument" />
         </EntityType>
         <EntityType Name="Person">
@@ -2523,6 +2614,7 @@
           <NavigationProperty Name="CalibrationReports" Relationship="labdbModel.operator_to_calibration_report" FromRole="Person" ToRole="calibration_reports" />
           <NavigationProperty Name="RoleMappings" Relationship="labdbModel.person_to_role_mapping" FromRole="Person" ToRole="person_role_mappings" />
           <NavigationProperty Name="SamplesLogged" Relationship="labdbModel.person_to_sample_log" FromRole="Person" ToRole="Sample" />
+          <NavigationProperty Name="instrument_maintenance_events" Relationship="labdbModel.person_to_maintenance_event" FromRole="Person" ToRole="InstrumentMaintenanceEvent" />
         </EntityType>
         <EntityType Name="Project">
           <Key>
@@ -2533,12 +2625,13 @@
           <Property Name="Description" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" a:GetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:SetterAccess="Public" />
           <Property Name="ProjectLeaderID" Type="Int32" a:GetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:SetterAccess="Public" />
           <Property Name="OemID" Type="Int32" a:SetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:GetterAccess="Public" />
-          <Property Name="TotalInternalCost" Type="Int32" Nullable="false" />
           <Property Name="TotalExternalCost" Type="Double" Nullable="false" />
           <NavigationProperty Name="ExternalReports" Relationship="Self.project_to_report" FromRole="projects" ToRole="external_reports" />
           <NavigationProperty Name="Oem" Relationship="Self.oem1" FromRole="projects" ToRole="organizations" />
           <NavigationProperty Name="Leader" Relationship="Self.leader" FromRole="projects" ToRole="people" />
           <NavigationProperty Name="Materials" Relationship="labdbModel.project_to_material" FromRole="Project" ToRole="Material" />
+          <Property Name="TotalReportDuration" Type="Double" Nullable="false" />
+          <Property Name="TBD_non_usare" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="Property">
           <Key>
@@ -2586,11 +2679,15 @@
           <NavigationProperty Name="Batch" Relationship="Self.batch_to_report" FromRole="reports" ToRole="batches" />
           <NavigationProperty Name="Author" Relationship="Self.author_to_report" FromRole="reports" ToRole="people" />
           <NavigationProperty Name="ReportFiles" Relationship="Self.report_to_reportfile" FromRole="reports" ToRole="report_files" />
-          <NavigationProperty Name="Tests" Relationship="Self.report_to_test" FromRole="reports" ToRole="tests" />
+          <NavigationProperty Name="TBD" Relationship="Self.report_to_test" FromRole="reports" ToRole="tests" />
           <NavigationProperty Name="SpecificationVersion" Relationship="Self.specversion_to_report" FromRole="reports" ToRole="specification_versions" />
           <Property Name="IsComplete" Type="Boolean" Nullable="false" />
           <Property Name="TotalDuration" Type="Double" Nullable="false" />
           <NavigationProperty Name="ParentTasks" Relationship="labdbModel.report_to_task" FromRole="Report" ToRole="Task" />
+          <Property Name="TestRecordID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="TestRecord" Relationship="labdbModel.test_record_to_report" FromRole="Report" ToRole="test_records" />
+          <Property Name="ProjectID" Type="Int32" Nullable="true" />
+          <Property Name="ParentTaskID" Type="Int32" Nullable="true" />
         </EntityType>
         <EntityType Name="Requirement">
           <Key>
@@ -2612,7 +2709,7 @@
           <NavigationProperty Name="TaskItems" Relationship="labdbModel.requirement_to_task_item" FromRole="Requirement" ToRole="task_items" />
           <NavigationProperty Name="tests" Relationship="labdbModel.requirement_to_test1" FromRole="Requirement" ToRole="Test" />
           <Property Name="SkipTest" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="control_plan_items_b" Relationship="labdbModel.requirement_to_cplan_item" FromRole="Requirement" ToRole="control_plan_items_b" />
+          <NavigationProperty Name="ControlPlanItems" Relationship="labdbModel.requirement_to_cplan_item" FromRole="Requirement" ToRole="control_plan_items_b" />
         </EntityType>
         <EntityType Name="Sample">
           <Key>
@@ -2736,12 +2833,12 @@
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="MethodID" Type="Int32" Nullable="false" />
-          <Property Name="ReportID" Type="Int32" Nullable="false" />
+          <Property Name="TBD" Type="Int32" Nullable="true" />
           <Property Name="Notes" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
           <Property Name="operatorID" Type="Int32" Nullable="true" />
           <Property Name="Date" Type="DateTime" />
           <NavigationProperty Name="Person" Relationship="labdbModel.operatorID" FromRole="tests" ToRole="people" />
-          <NavigationProperty Name="Report" Relationship="Self.report_to_test" FromRole="tests" ToRole="reports" />
+          <NavigationProperty Name="TBD2" Relationship="Self.report_to_test" FromRole="tests" ToRole="reports" />
           <NavigationProperty Name="SubTests" Relationship="Self.test1" FromRole="tests" ToRole="sub_tests" />
           <NavigationProperty Name="Method" Relationship="labdbModel.method_to_test" FromRole="Test" ToRole="Method" />
           <Property Name="IsComplete" Type="Boolean" Nullable="false" />
@@ -2751,6 +2848,8 @@
           <NavigationProperty Name="Requirement" Relationship="labdbModel.requirement_to_test1" FromRole="Test" ToRole="Requirement" />
           <NavigationProperty Name="TaskItems" Relationship="labdbModel.test_to_task_item" FromRole="Test" ToRole="TaskItem" />
           <Property Name="Duration" Type="Double" Nullable="false" />
+          <Property Name="TestRecordID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="TestRecord" Relationship="labdbModel.test_record_to_tests" FromRole="Test" ToRole="test_records" />
         </EntityType>
         <EntityType Name="User">
           <Key>
@@ -3039,7 +3138,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="report_to_test">
-          <End Role="reports" Type="labdbModel.Report" Multiplicity="1">
+          <End Role="reports" Type="labdbModel.Report" Multiplicity="0..1">
             <OnDelete Action="Cascade" />
           </End>
           <End Role="tests" Type="labdbModel.Test" Multiplicity="*" />
@@ -3048,7 +3147,7 @@
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="tests">
-              <PropertyRef Name="ReportID" />
+              <PropertyRef Name="TBD" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -3383,10 +3482,6 @@
             <End Role="Instrument" EntitySet="Instruments" />
             <End Role="instrument_maintenance_events" EntitySet="InstrumentMaintenanceEvents" />
           </AssociationSet>
-          <AssociationSet Name="organization_to_maintenance_event" Association="labdbModel.organization_to_maintenance_event">
-            <End Role="Organization" EntitySet="Organizations" />
-            <End Role="instrument_maintenance_events" EntitySet="InstrumentMaintenanceEvents" />
-          </AssociationSet>
           <EntitySet Name="SubMethods" EntityType="labdbModel.SubMethod" />
           <AssociationSet Name="method_to_measurement1" Association="labdbModel.method_to_measurement1">
             <End Role="Method" EntitySet="Methods" />
@@ -3425,10 +3520,6 @@
           <AssociationSet Name="external_report_method_mappings" Association="labdbModel.external_report_method_mappings">
             <End Role="ExternalReport" EntitySet="ExternalReports" />
             <End Role="Method" EntitySet="Methods" />
-          </AssociationSet>
-          <AssociationSet Name="external_report_batch_mapping" Association="labdbModel.external_report_batch_mapping">
-            <End Role="Batch" EntitySet="Batches" />
-            <End Role="ExternalReport" EntitySet="ExternalReports" />
           </AssociationSet>
           <AssociationSet Name="requirement_to_test1" Association="labdbModel.requirement_to_test1">
             <End Role="Requirement" EntitySet="Requirements" />
@@ -3572,6 +3663,32 @@
           <AssociationSet Name="report_to_task" Association="labdbModel.report_to_task">
             <End Role="Report" EntitySet="Reports" />
             <End Role="Task" EntitySet="Tasks" />
+          </AssociationSet>
+          <AssociationSet Name="person_to_maintenance_event" Association="labdbModel.person_to_maintenance_event">
+            <End Role="Person" EntitySet="People" />
+            <End Role="InstrumentMaintenanceEvent" EntitySet="InstrumentMaintenanceEvents" />
+          </AssociationSet>
+          <EntitySet Name="TestRecords" EntityType="labdbModel.TestRecord" />
+          <AssociationSet Name="test_record_to_tests" Association="labdbModel.test_record_to_tests">
+            <End Role="test_records" EntitySet="TestRecords" />
+            <End Role="Test" EntitySet="Tests" />
+          </AssociationSet>
+          <AssociationSet Name="test_record_to_report" Association="labdbModel.test_record_to_report">
+            <End Role="test_records" EntitySet="TestRecords" />
+            <End Role="Report" EntitySet="Reports" />
+          </AssociationSet>
+          <AssociationSet Name="batch_to_test_record" Association="labdbModel.batch_to_test_record">
+            <End Role="Batch" EntitySet="Batches" />
+            <End Role="TestRecord" EntitySet="TestRecords" />
+          </AssociationSet>
+          <EntitySet Name="TestRecordTypes" EntityType="labdbModel.TestRecordType" />
+          <AssociationSet Name="type_to_test_record" Association="labdbModel.type_to_test_record">
+            <End Role="test_record_types" EntitySet="TestRecordTypes" />
+            <End Role="TestRecord" EntitySet="TestRecords" />
+          </AssociationSet>
+          <AssociationSet Name="external_report_test_record_mappings" Association="labdbModel.external_report_test_record_mappings">
+            <End Role="ExternalReport" EntitySet="ExternalReports" />
+            <End Role="TestRecord" EntitySet="TestRecords" />
           </AssociationSet>
           </EntityContainer>
         <Association Name="overridden_to_requirement">
@@ -3978,11 +4095,10 @@
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Date" Type="DateTime" Nullable="false" />
           <Property Name="Description" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
-          <Property Name="OrganizationID" Type="Int32" Nullable="false" />
           <Property Name="InstrumentID" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Instrument" Relationship="labdbModel.instrument_to_maintenance_event" FromRole="instrument_maintenance_events" ToRole="Instrument" />
-          <NavigationProperty Name="Organization" Relationship="labdbModel.organization_to_maintenance_event" FromRole="instrument_maintenance_events" ToRole="Organization" />
-          <Property Name="techID" Type="Int32" />
+          <Property Name="PersonID" Type="Int32" />
+          <NavigationProperty Name="Person" Relationship="labdbModel.person_to_maintenance_event" FromRole="InstrumentMaintenanceEvent" ToRole="Person" />
         </EntityType>
         <Association Name="instrument_to_maintenance_event">
           <End Type="labdbModel.Instrument" Role="Instrument" Multiplicity="1">
@@ -3995,18 +4111,6 @@
             </Principal>
             <Dependent Role="instrument_maintenance_events">
               <PropertyRef Name="InstrumentID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="organization_to_maintenance_event">
-          <End Type="labdbModel.Organization" Role="Organization" Multiplicity="1" />
-          <End Type="labdbModel.InstrumentMaintenanceEvent" Role="instrument_maintenance_events" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Organization">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="instrument_maintenance_events">
-              <PropertyRef Name="OrganizationID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -4133,10 +4237,6 @@
         <Association Name="external_report_method_mappings">
           <End Type="labdbModel.ExternalReport" Role="ExternalReport" Multiplicity="*" />
           <End Type="labdbModel.Method" Role="Method" Multiplicity="*" />
-        </Association>
-        <Association Name="external_report_batch_mapping">
-          <End Type="labdbModel.Batch" Role="Batch" Multiplicity="*" />
-          <End Type="labdbModel.ExternalReport" Role="ExternalReport" Multiplicity="*" />
         </Association>
         <Association Name="requirement_to_test1">
           <End Type="labdbModel.Requirement" Role="Requirement" Multiplicity="0..1" />
@@ -4666,6 +4766,95 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="person_to_maintenance_event">
+          <End Type="labdbModel.Person" Role="Person" Multiplicity="0..1" />
+          <End Type="labdbModel.InstrumentMaintenanceEvent" Role="InstrumentMaintenanceEvent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Person">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="InstrumentMaintenanceEvent">
+              <PropertyRef Name="PersonID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="TestRecord">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="Tests" Relationship="labdbModel.test_record_to_tests" FromRole="test_records" ToRole="Test" />
+          <NavigationProperty Name="Reports" Relationship="labdbModel.test_record_to_report" FromRole="test_records" ToRole="Report" />
+          <Property Name="BatchID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Batch" Relationship="labdbModel.batch_to_test_record" FromRole="TestRecord" ToRole="Batch" />
+          <Property Name="RecordTypeID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="RecordType" Relationship="labdbModel.type_to_test_record" FromRole="TestRecord" ToRole="test_record_types" />
+          <Property Name="Notes" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" DefaultValue="''" />
+          <NavigationProperty Name="ExternalReports" Relationship="labdbModel.external_report_test_record_mappings" FromRole="TestRecord" ToRole="ExternalReport" />
+        </EntityType>
+        <Association Name="test_record_to_tests">
+          <End Type="labdbModel.TestRecord" Role="test_records" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="labdbModel.Test" Role="Test" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="test_records">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Test">
+              <PropertyRef Name="TestRecordID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="test_record_to_report">
+          <End Type="labdbModel.TestRecord" Role="test_records" Multiplicity="1" />
+          <End Type="labdbModel.Report" Role="Report" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="test_records">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Report">
+              <PropertyRef Name="TestRecordID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="batch_to_test_record">
+          <End Type="labdbModel.Batch" Role="Batch" Multiplicity="1" />
+          <End Type="labdbModel.TestRecord" Role="TestRecord" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Batch">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="TestRecord">
+              <PropertyRef Name="BatchID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="TestRecordType">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LongName" Type="String" Nullable="false" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="ShortName" Type="String" Nullable="false" MaxLength="2" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="TestRecords" Relationship="labdbModel.type_to_test_record" FromRole="test_record_types" ToRole="TestRecord" />
+        </EntityType>
+        <Association Name="type_to_test_record">
+          <End Type="labdbModel.TestRecordType" Role="test_record_types" Multiplicity="1" />
+          <End Type="labdbModel.TestRecord" Role="TestRecord" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="test_record_types">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="TestRecord">
+              <PropertyRef Name="RecordTypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="external_report_test_record_mappings">
+          <End Type="labdbModel.ExternalReport" Role="ExternalReport" Multiplicity="*" />
+          <End Type="labdbModel.TestRecord" Role="TestRecord" Multiplicity="*" />
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -4698,7 +4887,6 @@
                 <ScalarProperty Name="LatestSampleID" ColumnName="latest_sampleID" />
                 <ScalarProperty Name="DoNotTest" ColumnName="do_not_test" />
                 <ScalarProperty Name="ArchiveStock" ColumnName="archive_stock" />
-                <ScalarProperty Name="TrialScopeText" ColumnName="trial_scope_text" />
                 <ScalarProperty Name="BasicReportID" ColumnName="basic_reportID" />
                 <ScalarProperty Name="FirstSampleID" ColumnName="first_sampleID" />
                 <ScalarProperty Name="FirstSampleArrived" ColumnName="first_sample_arrived" />
@@ -4742,16 +4930,19 @@
           <EntitySetMapping Name="ExternalReports">
             <EntityTypeMapping TypeName="labdbModel.ExternalReport">
               <MappingFragment StoreEntitySet="external_reports">
+                <ScalarProperty Name="TBDel2" ColumnName="internal_number" />
+                <ScalarProperty Name="TBDel" ColumnName="external_number" />
+                <ScalarProperty Name="HasOrder" ColumnName="has_order" />
+                <ScalarProperty Name="ReportReceivedDate" ColumnName="report_received_date" />
+                <ScalarProperty Name="RequestDoneDate" ColumnName="request_done_date" />
+                <ScalarProperty Name="MaterialSentDate" ColumnName="material_sent_date" />
                 <ScalarProperty Name="OrderTotal" ColumnName="order_total" />
                 <ScalarProperty Name="OrderNumber" ColumnName="order_number" />
                 <ScalarProperty Name="Number" ColumnName="number" />
                 <ScalarProperty Name="Year" ColumnName="year" />
                 <ScalarProperty Name="ArrivalDate" ColumnName="arrival_date" />
-                <ScalarProperty Name="PurchaseOrderID" ColumnName="purchase_orderID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Description" ColumnName="description" />
-                <ScalarProperty Name="ExternalNumber" ColumnName="external_number" />
-                <ScalarProperty Name="InternalNumber" ColumnName="internal_number" />
                 <ScalarProperty Name="ExternalLabID" ColumnName="external_labID" />
                 <ScalarProperty Name="MaterialSent" ColumnName="material_sent" />
                 <ScalarProperty Name="RequestDone" ColumnName="request_done" />
@@ -4804,13 +4995,14 @@
           <EntitySetMapping Name="Projects">
             <EntityTypeMapping TypeName="labdbModel.Project">
               <MappingFragment StoreEntitySet="projects">
+                <ScalarProperty Name="TBD_non_usare" ColumnName="total_internal_cost" />
+                <ScalarProperty Name="TotalExternalCost" ColumnName="total_external_cost" />
+                <ScalarProperty Name="TotalReportDuration" ColumnName="total_report_duration" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Name" ColumnName="name" />
                 <ScalarProperty Name="Description" ColumnName="description" />
                 <ScalarProperty Name="ProjectLeaderID" ColumnName="project_leaderID" />
                 <ScalarProperty Name="OemID" ColumnName="oemID" />
-                <ScalarProperty Name="TotalInternalCost" ColumnName="total_internal_cost" />
-                <ScalarProperty Name="TotalExternalCost" ColumnName="total_external_cost" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -4845,6 +5037,9 @@
           <EntitySetMapping Name="Reports">
             <EntityTypeMapping TypeName="labdbModel.Report">
               <MappingFragment StoreEntitySet="reports">
+                <ScalarProperty Name="ParentTaskID" ColumnName="parent_taskID" />
+                <ScalarProperty Name="ProjectID" ColumnName="projectID" />
+                <ScalarProperty Name="TestRecordID" ColumnName="test_recordID" />
                 <ScalarProperty Name="TotalDuration" ColumnName="total_duration" />
                 <ScalarProperty Name="IsComplete" ColumnName="is_complete" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
@@ -4974,13 +5169,14 @@
           <EntitySetMapping Name="Tests">
             <EntityTypeMapping TypeName="labdbModel.Test">
               <MappingFragment StoreEntitySet="tests">
+                <ScalarProperty Name="TestRecordID" ColumnName="test_recordID" />
                 <ScalarProperty Name="Duration" ColumnName="duration" />
                 <ScalarProperty Name="RequirementID" ColumnName="requirementID" />
                 <ScalarProperty Name="instrumentID" ColumnName="instrumentID" />
                 <ScalarProperty Name="IsComplete" ColumnName="is_complete" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="MethodID" ColumnName="methodID" />
-                <ScalarProperty Name="ReportID" ColumnName="reportID" />
+                <ScalarProperty Name="TBD" ColumnName="reportID" />
                 <ScalarProperty Name="Notes" ColumnName="notes" />
                 <ScalarProperty Name="operatorID" ColumnName="operatorID" />
                 <ScalarProperty Name="Date" ColumnName="date" />
@@ -5128,9 +5324,8 @@
           <EntitySetMapping Name="InstrumentMaintenanceEvents">
             <EntityTypeMapping TypeName="labdbModel.InstrumentMaintenanceEvent">
               <MappingFragment StoreEntitySet="instrument_maintenance_events">
-                <ScalarProperty Name="techID" ColumnName="techID" />
+                <ScalarProperty Name="PersonID" ColumnName="techID" />
                 <ScalarProperty Name="InstrumentID" ColumnName="instrumentID" />
-                <ScalarProperty Name="OrganizationID" ColumnName="organizationID" />
                 <ScalarProperty Name="Description" ColumnName="description" />
                 <ScalarProperty Name="Date" ColumnName="date" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
@@ -5203,14 +5398,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <AssociationSetMapping Name="external_report_batch_mapping" TypeName="labdbModel.external_report_batch_mapping" StoreEntitySet="external_report_batch_mapping">
-            <EndProperty Name="ExternalReport">
-              <ScalarProperty Name="ID" ColumnName="external_reportID" />
-            </EndProperty>
-            <EndProperty Name="Batch">
-              <ScalarProperty Name="ID" ColumnName="batchID" />
-            </EndProperty>
-          </AssociationSetMapping>
           <EntitySetMapping Name="SubTaskItems">
             <EntityTypeMapping TypeName="labdbModel.SubTaskItem">
               <MappingFragment StoreEntitySet="sub_task_items">
@@ -5333,6 +5520,33 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="TestRecords">
+            <EntityTypeMapping TypeName="labdbModel.TestRecord">
+              <MappingFragment StoreEntitySet="test_records">
+                <ScalarProperty Name="Notes" ColumnName="notes" />
+                <ScalarProperty Name="RecordTypeID" ColumnName="typeID" />
+                <ScalarProperty Name="BatchID" ColumnName="batchID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TestRecordTypes">
+            <EntityTypeMapping TypeName="labdbModel.TestRecordType">
+              <MappingFragment StoreEntitySet="test_record_types">
+                <ScalarProperty Name="ShortName" ColumnName="short_name" />
+                <ScalarProperty Name="LongName" ColumnName="long_name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="external_report_test_record_mappings" TypeName="labdbModel.external_report_test_record_mappings" StoreEntitySet="external_report_test_record_mappings">
+            <EndProperty Name="TestRecord">
+              <ScalarProperty Name="ID" ColumnName="test_recordID" />
+            </EndProperty>
+            <EndProperty Name="ExternalReport">
+              <ScalarProperty Name="ID" ColumnName="external_reportID" />
+            </EndProperty>
+          </AssociationSetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

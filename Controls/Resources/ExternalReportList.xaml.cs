@@ -14,7 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Reports.Views
+namespace Controls.Resources
 {
     /// <summary>
     /// Interaction logic for ExternalReportList.xaml

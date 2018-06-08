@@ -17,7 +17,7 @@ namespace Infrastructure
         public static string CurrentUserMainReportListRegion { get { return "CurrentUserMainReportListRegion"; } }
         public static string ExternalConstructionDetailRegion { get { return "ExternalConstructionDetailRegion"; } }
         public static string ExternalConstructionBatchListRegion { get { return "ExternalConstructionBatchListRegion"; } }
-        public static string ExternalReportBatchListRegion { get { return "ExternalReportBatchListRegion"; } }
+        public static string ExternalReportAddMethodRegion => "ExternalReportAddMethodRegion";
         public static string ExternalReportProjectDetailsRegion { get { return "ExternalReportProjectDetailsRegion"; } }
         public static string InstrumentEditCalibrationEditRegion { get { return "InstrumentEditCalibrationEditRegion"; } }
         public static string InstrumentEditMeasurablePropertyEditRegion { get { return "InstrumentEditMeasurablePropertyEditRegion"; } }
@@ -30,7 +30,6 @@ namespace Infrastructure
         public static string MainExternalReportListRegion { get { return "MainExternalReportListRegion"; } }
         public static string MainReportListRegion { get { return "MainReportListRegion"; } }
         public static string MainTaskListRegion { get { return "MainTaskListRegion"; } }
-        public static string MainUserReportListRegion { get { return "MainUserReportListRegion"; } }
         public static string MaterialDetailBatchListRegion { get { return "MaterialDetailBatchListRegionName"; } }
         public static string MaterialDetailRegion { get { return "MaterialDetailRegion"; } }
         public static string MaterialInfoAspectRegion { get { return "MaterialInfoAspectRegion"; } }
@@ -49,6 +48,7 @@ namespace Infrastructure
         public static string OrganizationRoleManagementRegion { get { return "OrganizationRoleManagementRegion"; } }
         public static string PeopleManagementRegion => "PeopleManagementRegionName";
         public static string ProjectBatchListRegion { get { return "ProjectBatchListRegion"; } }
+        public static string ProjectExternalReportListRegion => "ProjectExternalReportListRegion";
         public static string ProjectReportListRegion { get { return "ProjectReportListRegion"; } }
         public static string ProjectStatRegion { get { return "ProjectStatRegion"; } }
         public static string PropertyManagementRegion => "PropertyManagementRegion";

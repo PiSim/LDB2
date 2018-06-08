@@ -103,9 +103,11 @@
   <ItemGroup>
     <Compile Include="AdminViewNames.cs" />
     <Compile Include="Commands\CommandBinder.cs" />
+    <Compile Include="Converters\BooleanNegationConverter.cs" />
     <Compile Include="Converters\CalibrationDueDateToStatusLightConverter.cs" />
     <Compile Include="Converters\CodeToActionConverter.cs" />
     <Compile Include="Converters\SingleLineTextConverter.cs" />
+    <Compile Include="DataGridColumnTagExtension.cs" />
     <Compile Include="Events\AspectChanged.cs" />
     <Compile Include="Events\AspectCreationRequested.cs" />
     <Compile Include="Events\BatchChanged.cs" />
@@ -170,6 +172,7 @@
     <Compile Include="Events\NavigationToken.cs" />
     <Compile Include="OrganizationViewNames.cs" />
     <Compile Include="PeopleViewNames.cs" />
+    <Compile Include="Queries\TestQuery.cs" />
     <Compile Include="RegionNames.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -184,6 +187,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="ResourceKeys.cs" />
     <Compile Include="Resources\CommonResourceKeys.cs" />
     <Compile Include="SampleLogActions.cs" />
     <Compile Include="Sorting\Sorting.cs" />

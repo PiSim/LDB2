@@ -88,12 +88,12 @@ namespace DBManager
             using (DBEntities entities = new DBEntities())
             {
                 IQueryable<Test> testList = entities.Tests
-                                                    .Where(tst => tst.Report.Batch.Material.ProjectID == ID);
+                                                    .Where(tst => tst.TestRecord.Batch.Material.ProjectID == ID);
 
-                TotalInternalCost = (int)((testList.Count() == 0) ? 0 : testList.Sum(tst => tst.Duration));
+                TotalReportDuration = (int)((testList.Count() == 0) ? 0 : testList.Sum(tst => tst.Duration));
             }
 
-            return TotalInternalCost;
+            return TotalReportDuration;
         }
 
         public IEnumerable<Report> GetReports()
@@ -170,7 +170,7 @@ namespace DBManager
                 OemID = tempEntry.OemID;
                 ProjectLeaderID = tempEntry.ProjectLeaderID;
                 TotalExternalCost = tempEntry.TotalExternalCost;
-                TotalInternalCost = tempEntry.TotalInternalCost;
+                TotalReportDuration = tempEntry.TotalReportDuration;
             }
         }
 
@@ -263,7 +263,7 @@ namespace DBManager
 
                 return entities.Tests
                                 .Where(tst => tst
-                                .Report
+                                .TestRecord
                                 .Batch
                                 .Material
                                 .ProjectID == entry.ID)

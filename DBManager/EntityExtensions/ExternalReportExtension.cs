@@ -17,11 +17,6 @@ namespace DBManager
             get { return Year.ToString() + Number.ToString("d3"); }
         }
 
-        public bool HasOrder
-        {
-            get { return PurchaseOrderID != null; }
-        }
-
         #endregion
 
         #region Metodi
@@ -32,10 +27,42 @@ namespace DBManager
 
             using (DBEntities entities = new DBEntities())
             {
-                entities.ExternalReports.First(ext => ext.ID == ID)
-                                        .Batches
-                                        .Add(entities.Batches
-                                        .First(btc => btc.ID == batchEntity.ID));
+                ExternalReport attachedEntry = entities.ExternalReports.First(ext => ext.ID == ID);
+
+                TestRecord recordEntry = new TestRecord()
+                {
+                    BatchID = batchEntity.ID,
+                    RecordTypeID = 2
+                };
+
+                foreach (Method mtd in attachedEntry.Methods)
+                    recordEntry.Tests.Add(mtd.GenerateTest());
+
+                attachedEntry.TestRecords.Add(recordEntry);
+
+                entities.SaveChanges();
+            }
+        }
+
+        /// <summary>
+        /// Adds a new method to an ExternalReport entry
+        /// </summary>
+        /// <param name="methodEntity">The Method to Add</param>
+        public void AddTestMethod(Method methodEntity)
+        {
+            using (DBEntities entities = new DBEntities())
+            {
+                ExternalReport attachedExternalReport = entities.ExternalReports.First(ext => ext.ID == ID);
+                Method attachedMethod = entities.Methods.First(mtd => mtd.ID == methodEntity.ID);
+                
+                attachedExternalReport.Methods.Add(attachedMethod);
+
+                IEnumerable<TestRecord> recordList = attachedExternalReport.TestRecords.ToList();
+
+                methodEntity.Load(true);
+
+                foreach (TestRecord tstr in attachedExternalReport.TestRecords)
+                    tstr.Tests.Add(methodEntity.GenerateTest());
 
                 entities.SaveChanges();
             }
@@ -48,6 +75,116 @@ namespace DBManager
             using (DBEntities entities = new DBEntities())
             {
                 entities.ExternalReports.Add(this);
+                entities.SaveChanges();
+            }
+        }
+        
+        /// <summary>
+        /// Returns the methods associated with this External Report
+        /// </summary>
+        /// <returns>An IEnumerable containing the found Method entries</returns>
+        public IEnumerable<Method> GetMethods()
+        {
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.Methods.Include(mtd => mtd.Property)
+                                        .Include(mtd => mtd.Standard.Organization)
+                                        .Include(mtd => mtd.SubMethods)
+                                        .Where(mtd => mtd.ExternalReports
+                                        .Any(exr => exr.ID == ID))
+                                        .ToList();
+            }
+        }
+
+        /// <summary>
+        /// Returns a list of test for each method associated with the Report 
+        /// generated from the entity collections loaded in the instance
+        /// </summary>
+        /// <returns>An IEnumerable of Tuples where Value1 is a method and 
+        /// Value2 is an IEnumerable of tests</returns>
+        public IEnumerable<Tuple<Method, IEnumerable<Test>>> GetResultCollection()
+        {
+            List<Tuple<Method, IEnumerable<Test>>> output = new List<Tuple<Method,IEnumerable<Test>>>();
+            foreach (Method mtd in Methods)
+            {
+                IEnumerable<Test> testList =  TestRecords.SelectMany(tstr => tstr.Tests)
+                                                        .Where(tst => tst.MethodID == mtd.ID);
+                    
+                output.Add(new Tuple<Method, IEnumerable<Test>>(mtd, testList));
+            }
+
+            return output;
+        }
+        
+        /// <summary>
+        /// Fetches the TestRecord entities for this ExternalReport
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<TestRecord> GetTestRecords(bool includeTests = false)
+        {
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                IQueryable<TestRecord> query = entities.TestRecords.Include(tstr => tstr.Batch.Material.Aspect)
+                                                                    .Include(tstr => tstr.Batch.Material.MaterialLine)
+                                                                    .Include(tstr => tstr.Batch.Material.MaterialType)
+                                                                    .Include(tstr => tstr.Batch.Material.Recipe);
+
+                if (includeTests)
+                    query = query.Include(tstr => tstr.Tests
+                                                      .Select(tst => tst.SubTests));
+
+                return query.Where(tstr => tstr.ExternalReports
+                            .Any(extr => extr.ID == ID))
+                            .ToList();
+            }
+        }
+
+        /// <summary>
+        /// Removes a given method from the method associations and from every test record
+        /// in the report
+        /// </summary>
+        /// <param name="methodEntity">The method that will be removed</param>
+        public void RemoveTestMethod(Method methodEntity)
+        {
+            using (DBEntities entities = new DBEntities())
+            {
+                ExternalReport attachedExternalReport = entities.ExternalReports.First(ext => ext.ID == ID);
+                Method attachedMethod = entities.Methods.First(mtd => mtd.ID == methodEntity.ID);
+
+                attachedExternalReport.Methods.Remove(attachedMethod);
+
+                IEnumerable<TestRecord> recordList = attachedExternalReport.TestRecords.ToList();
+
+                IEnumerable<Test> testList = attachedExternalReport.TestRecords.SelectMany(tstr => tstr.Tests)
+                                                                    .Where(tst => tst.MethodID == methodEntity.ID)
+                                                                    .ToList();
+
+                foreach (Test tst in testList)
+                    entities.Entry(tst).State = EntityState.Deleted;
+
+                entities.SaveChanges();
+            }
+        }
+
+        /// <summary>
+        /// Pushes the current Instance to the database updating all the values
+        /// </summary>
+        /// <param name="updateTests">If true all the related SubTest entities are updated too</param>
+        public void Update(bool updateTests = false)
+        {
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.ExternalReports.AddOrUpdate(this);
+                
+                foreach (SubTest sts in TestRecords.SelectMany(tsr => tsr.Tests)
+                                                   .SelectMany(tst => tst.SubTests)
+                                                   .ToList())
+                    entities.SubTests.AddOrUpdate(sts);
+                
                 entities.SaveChanges();
             }
         }
@@ -71,27 +208,6 @@ namespace DBManager
                 entities.SaveChanges();
 
                 entry.ID = 0;
-            }
-        }
-
-        public static IEnumerable<Batch> GetBatches(this ExternalReport entry)
-        {
-            // Returns all Batch entities for an ExternalReport entry
-
-            if (entry == null)
-                return null;
-
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.Configuration.LazyLoadingEnabled = false;
-
-                return entities.Batches.Include(btc => btc.Material.Aspect)
-                                        .Include(btc => btc.Material.MaterialLine)
-                                        .Include(btc => btc.Material.MaterialType)
-                                        .Include(btc => btc.Material.Recipe.Colour)
-                                        .Where(btc => btc.ExternalReports
-                                        .Any(ext => ext.ID == entry.ID))
-                                        .ToList();
             }
         }
 
@@ -128,16 +244,6 @@ namespace DBManager
                 entities.Configuration.LazyLoadingEnabled = false;
                 
                 ExternalReport tempEntry = entities.ExternalReports
-                                                    .Include(exrep => exrep.Batches
-                                                    .Select(btc => btc.Material.Aspect))
-                                                    .Include(exrep => exrep.Batches
-                                                    .Select(btc => btc.Material.Project))
-                                                    .Include(exrep => exrep.Batches
-                                                    .Select(btc => btc.Material.MaterialLine))
-                                                    .Include(exrep => exrep.Batches
-                                                    .Select(btc => btc.Material.MaterialType))
-                                                    .Include(exrep => exrep.Batches
-                                                    .Select(btc => btc.Material.Recipe.Colour))
                                                     .Include(exrep => exrep.ExternalLab)
                                                     .Include(exrep => exrep.Methods
                                                     .Select(mtd => mtd.Property))
@@ -148,30 +254,19 @@ namespace DBManager
                                                     .First(rep => rep.ID == entry.ID);
 
                 entry.ArrivalDate = tempEntry.ArrivalDate;
-                entry.Batches = tempEntry.Batches;
                 entry.Description = tempEntry.Description;
                 entry.ExternalLab = tempEntry.ExternalLab;
                 entry.ExternalLabID = tempEntry.ExternalLabID;
-                entry.ExternalNumber = tempEntry.ExternalNumber;
-                entry.InternalNumber = tempEntry.InternalNumber;
                 entry.MaterialSent = tempEntry.MaterialSent;
                 entry.Methods = tempEntry.Methods;
                 entry.Project = tempEntry.Project;
                 entry.ProjectID = tempEntry.ProjectID;
-                entry.PurchaseOrderID = tempEntry.PurchaseOrderID;
                 entry.ReportReceived = tempEntry.ReportReceived;
                 entry.RequestDone = tempEntry.RequestDone;
                 entry.Samples = tempEntry.Samples;
             }
         }
+               
 
-        public static void Update(this ExternalReport entry)
-        {
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.ExternalReports.AddOrUpdate(entry);
-                entities.SaveChanges();
-            }
-        }
     }
 }

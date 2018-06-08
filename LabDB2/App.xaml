@@ -8,6 +8,8 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/Infrastructure;component/Resources/CommonResourceDictionary.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/Controls;component/Resources/ComboItemTemplatesDictionary.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/Reports;component/Resources/ResultPresentationGridDictionary.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/Controls;component/Resources/StyleDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

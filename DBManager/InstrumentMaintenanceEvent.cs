@@ -17,11 +17,10 @@ namespace DBManager
         public int ID { get; set; }
         public System.DateTime Date { get; set; }
         public string Description { get; set; }
-        public int OrganizationID { get; set; }
         public int InstrumentID { get; set; }
-        public Nullable<int> techID { get; set; }
+        public Nullable<int> PersonID { get; set; }
     
         public virtual Instrument Instrument { get; set; }
-        public virtual Organization Organization { get; set; }
+        public virtual Person Person { get; set; }
     }
 }

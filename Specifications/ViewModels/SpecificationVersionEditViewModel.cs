@@ -87,7 +87,7 @@ namespace Specifications.ViewModels
             _startTestListEdit = new DelegateCommand(
                 () =>
                 {
-                    NavigationToken token = new NavigationToken(SpecificationViewNames.SpecificationTestListEdit,
+                    NavigationToken token = new NavigationToken(SpecificationViewNames.AddMethod,
                                                                 null,
                                                                 RegionNames.SpecificationVersionTestListEditRegion);
 

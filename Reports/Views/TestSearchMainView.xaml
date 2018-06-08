@@ -1,0 +1,234 @@
+﻿<UserControl x:Class="Reports.Views.TestSearchMainView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:prism="http://prismlibrary.com/"
+             prism:ViewModelLocator.AutoWireViewModel="True"
+             xmlns:local="clr-namespace:Reports.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Text="Metodo:"
+                       Grid.Column="0"
+                       Grid.Row="0"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       Margin="5"/>
+            <TextBox Text="{Binding MethodName,
+                                    UpdateSourceTrigger=PropertyChanged}"
+                     Grid.Column="1"
+                     Grid.Row="0"
+                     HorizontalAlignment="Center"
+                     VerticalAlignment="Center"
+                     Margin="5"
+                     Width="100"/>
+
+            <Button Content="Cerca"
+                    Command="{Binding RunQueryCommand}"
+                    Grid.Column="1"
+                    Grid.Row="1"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Padding="10,2"
+                    Margin="5"/>
+        </Grid>
+        
+        <DataGrid ItemsSource="{Binding ResultList}"
+                  AutoGenerateColumns="False"
+                  IsReadOnly="True"
+                  Grid.Row="1"
+                  Margin="5">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Prova"
+                                                    Binding="{Binding Property}"
+                                                    IsReadOnly="True"
+                                                    Width="150"/>
+
+                <DataGridTemplateColumn Width="150">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <DataGrid ItemsSource="{Binding SubTests}"
+                                                  AutoGenerateColumns="False"
+                                                  HeadersVisibility="None"
+                                                  CanUserAddRows="False"
+                                                  CanUserDeleteRows="False"
+                                                  GridLinesVisibility="Horizontal"
+                                                  ClipToBounds="True"
+                                                  HorizontalScrollBarVisibility="Hidden"
+                                                  RowHeight="30"
+                                                  IsReadOnly="True"
+                                                  Margin="-2">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Binding="{Binding Name}"
+                                                                    Width="*"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="Risultato"
+                                                        Width="100">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <DataGrid ItemsSource="{Binding SubTests}"
+                                                  AutoGenerateColumns="False"
+                                                  IsEnabled="{Binding DataContext.CanModify, RelativeSource={RelativeSource AncestorType=DataGridCell}}"
+                                                  HeadersVisibility="None"
+                                                  CanUserAddRows="False"
+                                                  CanUserDeleteRows="False"
+                                                  GridLinesVisibility="Horizontal"
+                                                  ClipToBounds="True"
+                                                  HorizontalScrollBarVisibility="Hidden"
+                                                  RowHeight="30"
+                                                  Margin="-2">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Binding="{Binding Result}"
+                                                                    Width="*">
+                                        <DataGridTextColumn.EditingElementStyle>
+                                            <Style TargetType="{x:Type TextBox}">
+                                                <Setter Property="MaxLength"
+                                                                    Value="45"/>
+                                            </Style>
+                                        </DataGridTextColumn.EditingElementStyle>
+                                    </DataGridTextColumn>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="Requisito"
+                                                        Width="100">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <DataGrid ItemsSource="{Binding SubTests}"
+                                                      AutoGenerateColumns="False"
+                                                      HeadersVisibility="None"
+                                                      CanUserAddRows="False"
+                                                      CanUserDeleteRows="False"
+                                                      GridLinesVisibility="Horizontal"
+                                                      ClipToBounds="True"
+                                                      HorizontalScrollBarVisibility="Hidden"
+                                                      RowHeight="30"
+                                                  Margin="-2">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Binding="{Binding RequiredValue}"
+                                                                        IsReadOnly="True"
+                                                                        Width="*"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="UM"
+                                                        Width="50">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <DataGrid ItemsSource="{Binding SubTests}"
+                                                      AutoGenerateColumns="False"
+                                                      HeadersVisibility="None"
+                                                      CanUserAddRows="False"
+                                                      CanUserDeleteRows="False"
+                                                      GridLinesVisibility="Horizontal"
+                                                      ClipToBounds="True"
+                                                      HorizontalScrollBarVisibility="Hidden"
+                                                      RowHeight="30"
+                                                  Margin="-2">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Binding="{Binding UM}"
+                                                                        IsReadOnly="True"
+                                                                        Width="*"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTextColumn Header="Note"
+                                                    Binding="{Binding Notes}"
+                                                    IsReadOnly="True"
+                                                    Width="100"/>
+
+                <DataGridTextColumn Header="Metodo"
+                                                    Binding="{Binding Method}"
+                                                    IsReadOnly="True"
+                                                    Width="Auto">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="VerticalAlignment"
+                                                    Value="Center"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <DataGridCheckBoxColumn Header="Completo"
+                                                        Binding="{Binding IsComplete, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                        Width="70">
+                    <DataGridCheckBoxColumn.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Setter Property="IsEnabled" Value="{Binding CanModify}"/>
+                            <Setter Property="VerticalContentAlignment"
+                                                    Value="Center"/>
+                        </Style>
+                    </DataGridCheckBoxColumn.CellStyle>
+                    <DataGridCheckBoxColumn.ElementStyle>
+                        <Style TargetType="{x:Type CheckBox}">
+                            <Setter Property="HorizontalAlignment"
+                                                    Value="Center"/>
+                            <Setter Property="VerticalAlignment"
+                                                    Value="Center"/>
+                        </Style>
+                    </DataGridCheckBoxColumn.ElementStyle>
+                </DataGridCheckBoxColumn>
+
+                <DataGridTextColumn Header="Ore lavoro"
+                                                    Binding="{Binding Duration}"/>
+
+
+                <DataGridTextColumn Header="Data Completamento" 
+                                                    Binding="{Binding CompletionDate}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="VerticalAlignment"
+                                                    Value="Center"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <DataGridTemplateColumn Width="50"
+                                                        CanUserResize="False">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Content="Elimina"
+                                                    Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}, 
+                                                                      Path=DataContext.RemoveTestCommand}"
+                                                    CommandParameter="{Binding RelativeSource={RelativeSource Mode=Self},
+                                                                               Path=DataContext.TestInstance}"
+                                                    IsEnabled="{Binding CanDelete}"
+                                                    VerticalAlignment="Center"
+                                                    Height="Auto"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</UserControl>

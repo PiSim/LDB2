@@ -79,5 +79,7 @@ namespace DBManager
         public virtual DbSet<CalibrationResult> CalibrationResults { get; set; }
         public virtual DbSet<InstrumentFiles> InstrumentFiles { get; set; }
         public virtual DbSet<ControlPlanItem> ControlPlanItems { get; set; }
+        public virtual DbSet<TestRecord> TestRecords { get; set; }
+        public virtual DbSet<TestRecordType> TestRecordTypes { get; set; }
     }
 }

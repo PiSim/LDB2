@@ -11,7 +11,7 @@ namespace Infrastructure
         public static string Admin { get { return "ADMIN"; } }
         public static string BatchAdmin { get { return "BATCH_ADMIN"; } }
         public static string BatchEdit { get { return "BATCH_EDIT"; } }
-        public static string ExternalReportAdmin { get { return "EXREPORT_ADMIN"; } }
+        public static string ExternalReportEdit { get { return "EXREPORT_EDIT"; } }
         public static string ExternalReportView { get { return "EXREPORT_VIEW"; } }
         public static string InstrumentAdmin { get { return "INSTRUMENT_ADMIN"; } }
         public static string InstrumentView { get { return "INSTRUMENT_VIEW"; } }
@@ -20,7 +20,6 @@ namespace Infrastructure
         public static string ProjectAdmin { get { return "PRJ_ADMIN"; } }
         public static string ProjectEdit { get { return "PRJ_EDIT"; } }
         public static string ProjectView { get { return "PRJ_VIEW"; } }
-        public static string ReportAdmin { get { return "REPORT_ADMIN"; } }
         public static string ReportEdit { get { return "REPORT_EDIT"; } }
         public static string ReportView { get { return "REPORT_VIEW"; } }
         public static string SampleEdit { get { return "SAMPLE_EDIT"; } }
@@ -29,5 +28,6 @@ namespace Infrastructure
         public static string SpecificationView { get { return "SPEC_VIEW"; } }
         public static string TaskAdmin { get { return "TASK_ADMIN"; } }
         public static string TaskEdit { get { return "TASK_EDIT"; } }
+        public static string TestSearchView { get { return "TESTSEARCH_VIEW"; } }
     }
 }

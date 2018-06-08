@@ -32,6 +32,7 @@ namespace Reports
             _container.RegisterType<Object, Views.ReportEdit>(ViewNames.ReportEditView);
             _container.RegisterType<Object, Views.ExternalReportMain>(ViewNames.ExternalReportMainView);
             _container.RegisterType<Object, Views.ExternalReportEdit>(ViewNames.ExternalReportEditView);
+            _container.RegisterType<Object, Views.TestSearchMainView>(ViewNames.TestSearchMain);
 
             _container.RegisterType<ViewModels.ReportCreationDialogViewModel>();
             _container.RegisterType<ViewModels.ReportEditViewModel>();
@@ -40,9 +41,9 @@ namespace Reports
             _container.RegisterType<ViewModels.ExternalReportMainViewModel>();
 
             _regionManager.RegisterViewWithRegion(RegionNames.BatchExternalReportListRegion,
-                                                typeof(Views.ExternalReportList));
+                                                typeof(Controls.Resources.ExternalReportList));
             _regionManager.RegisterViewWithRegion(RegionNames.MainExternalReportListRegion,
-                                                typeof(Views.ExternalReportList));
+                                                typeof(Controls.Resources.ExternalReportList));
 
             _regionManager.RegisterViewWithRegion(RegionNames.BatchReportListRegion,
                                                 typeof(Views.ReportList));
@@ -56,6 +57,10 @@ namespace Reports
                                                 typeof(Views.ReportList));
             _regionManager.RegisterViewWithRegion(RegionNames.SpecificationReportListRegion,
                                                 typeof(Views.ReportList));
+
+            if (_principal.IsInRole(UserRoleNames.TestSearchView))
+                _regionManager.RegisterViewWithRegion(RegionNames.MainNavigationRegion,
+                                                    typeof(Views.TestSearchNavigationItem));
 
             if (_principal.IsInRole(UserRoleNames.ExternalReportView))
                 _regionManager.RegisterViewWithRegion(RegionNames.MainNavigationRegion

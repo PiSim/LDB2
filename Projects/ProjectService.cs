@@ -57,13 +57,13 @@ namespace Projects
             foreach (Project prj in _prjList)
             {
                 double oldExternalValue = prj.TotalExternalCost;
-                double oldInternalValue = prj.TotalInternalCost;
+                double oldInternalValue = prj.TotalReportDuration;
 
-                prj.GetExternalReportCost();
-                prj.GetInternalReportCost();
+                prj.TotalExternalCost = prj.GetExternalReportCost();
+                prj.TotalReportDuration = prj.GetInternalReportCost();
 
                 if (prj.TotalExternalCost != oldExternalValue
-                    || prj.TotalInternalCost != oldInternalValue )
+                    || prj.TotalReportDuration != oldInternalValue )
                     prj.Update();
             }
         }

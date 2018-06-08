@@ -11,6 +11,66 @@ namespace DBManager
     public partial class Method
     {
 
+        /// <summary>
+        /// Generates a new Test entry from the Method.
+        /// The Method must be loaded.
+        /// </summary>
+        /// <returns>A newly generated, unattached Test entry</returns>
+        public Test GenerateTest()
+        {
+            Test tempTest = new Test();
+            tempTest.Duration = Duration;
+            tempTest.IsComplete = false;
+            tempTest.MethodID = ID;
+            tempTest.Notes = "";
+
+            foreach (SubMethod subMtd in SubMethods)
+            {
+                SubTest tempSubTest = new SubTest();
+                tempSubTest.Name = subMtd.Name;
+                tempSubTest.RequiredValue = "";
+                tempSubTest.UM = subMtd.UM;
+                tempTest.SubTests.Add(tempSubTest);
+            }
+
+            return tempTest;
+        }
+
+        public void Load(bool includeSubTests = false)
+        {
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                IQueryable<Method> query = entities.Methods.Include(mtd => mtd.AssociatedInstruments
+                                                    .Select(inst => inst.InstrumentType))
+                                                    .Include(mtd => mtd.ExternalReports
+                                                    .Select(extr => extr.ExternalLab))
+                                                    .Include(mtd => mtd.Property)
+                                                    .Include(mtd => mtd.Standard.Organization);
+
+                if (includeSubTests)
+                    query = query.Include(mtd => mtd.SubMethods);
+
+                Method tempEntry = query.First(spec => spec.ID == ID);
+
+                AssociatedInstruments = tempEntry.AssociatedInstruments;
+                Duration = tempEntry.Duration;
+                Description = tempEntry.Description;
+                ExternalReports = tempEntry.ExternalReports;
+                Property = tempEntry.Property;
+                PropertyID = tempEntry.PropertyID;
+                Requirements = tempEntry.Requirements;
+                Standard = tempEntry.Standard;
+                StandardID = tempEntry.StandardID;
+
+                if (includeSubTests)
+                    SubMethods = tempEntry.SubMethods;
+
+                UM = tempEntry.UM;
+            }
+        }
 
         public void Update()
         {
@@ -163,43 +223,14 @@ namespace DBManager
 
                 return entities.Tests.Include(tst => tst.Method.Property)
                                     .Include(tst => tst.Method.Standard)
-                                    .Include(tst => tst.Report.Batch)
+                                    .Include(tst => tst.TestRecord.Batch)
                                     .Include(tst => tst.SubTests)
                                     .Where(tst => tst.MethodID == entry.ID)
                                     .ToList();
             }
         }
 
-        public static void Load(this Method entry)
-        {
-            if (entry == null)
-                return;
-
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.Configuration.LazyLoadingEnabled = false;
-                
-                Method tempEntry = entities.Methods.Include(mtd => mtd.AssociatedInstruments
-                                                    .Select(inst => inst.InstrumentType))
-                                                    .Include(mtd => mtd.ExternalReports
-                                                    .Select(extr => extr.ExternalLab))
-                                                    .Include(mtd => mtd.Property)
-                                                    .Include(mtd => mtd.Standard.Organization)
-                                                    .First(spec => spec.ID == entry.ID);
-
-                entry.AssociatedInstruments = tempEntry.AssociatedInstruments;
-                entry.Duration = tempEntry.Duration;
-                entry.Description = tempEntry.Description;
-                entry.ExternalReports = tempEntry.ExternalReports;
-                entry.Property = tempEntry.Property;
-                entry.PropertyID = tempEntry.PropertyID;
-                entry.Requirements = tempEntry.Requirements;
-                entry.Standard = tempEntry.Standard;
-                entry.StandardID = tempEntry.StandardID;
-                entry.SubMethods = tempEntry.SubMethods;
-                entry.UM = tempEntry.UM;
-            }
-        }
+        
 
         public static void LoadSubMethods(this Method entry)
         {

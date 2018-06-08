@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="9fa1cdb38a7949d89850433ccf2fcd72" Name="Diagram1" ZoomLevel="79" ShowGrid="false">
+      <Diagram DiagramId="9fa1cdb38a7949d89850433ccf2fcd72" Name="Diagram1" ZoomLevel="88" ShowGrid="false">
         <EntityTypeShape EntityType="labdbModel.Aspect" Width="1.5" PointX="33.125" PointY="23.125" IsExpanded="true" />
         <EntityTypeShape EntityType="labdbModel.BatchFile" Width="1.5" PointX="35.625" PointY="10.875" IsExpanded="true" />
         <EntityTypeShape EntityType="labdbModel.Batch" Width="1.5" PointX="30.875" PointY="11.375" IsExpanded="true" />
@@ -98,12 +98,11 @@
         <AssociationConnector Association="labdbModel.supplier_to_instrument" />
         <EntityTypeShape EntityType="labdbModel.InstrumentMaintenanceEvent" Width="1.5" PointX="8.5" PointY="27" />
         <AssociationConnector Association="labdbModel.instrument_to_maintenance_event" />
-        <AssociationConnector Association="labdbModel.organization_to_maintenance_event" />
         <EntityTypeShape EntityType="labdbModel.SubMethod" Width="1.5" PointX="6.75" PointY="2.625" />
         <AssociationConnector Association="labdbModel.method_to_measurement1" />
         <AssociationConnector Association="labdbModel.submethod_to_subreq1" />
         <EntityTypeShape EntityType="labdbModel.PersonRoleMapping" Width="1.5" PointX="15.625" PointY="14.75" />
-        <EntityTypeShape EntityType="labdbModel.PersonRole" Width="1.5" PointX="17.5" PointY="15.125" />
+        <EntityTypeShape EntityType="labdbModel.PersonRole" Width="1.5" PointX="15.625" PointY="17.375" />
         <AssociationConnector Association="labdbModel.person_to_role_mapping" />
         <AssociationConnector Association="labdbModel.person_role_to_role_mapping" />
         <AssociationConnector Association="labdbModel.calibration_reference_mappings" />
@@ -111,7 +110,6 @@
         <AssociationConnector Association="labdbModel.instrument_method_mappings" />
         <AssociationConnector Association="labdbModel.default_spec_version_to_ex_construction" />
         <AssociationConnector Association="labdbModel.external_report_method_mappings" />
-        <AssociationConnector Association="labdbModel.external_report_batch_mapping" />
         <AssociationConnector Association="labdbModel.requirement_to_test1" ManuallyRouted="false" >
         </AssociationConnector>
         <AssociationConnector Association="labdbModel.sub_requirement_to_sub_test" />
@@ -157,6 +155,14 @@
         <AssociationConnector Association="labdbModel.control_plan_to_plan_item" />
         <AssociationConnector Association="labdbModel.requirement_to_cplan_item" />
         <AssociationConnector Association="labdbModel.report_to_task" />
+        <AssociationConnector Association="labdbModel.person_to_maintenance_event" />
+        <EntityTypeShape EntityType="labdbModel.TestRecord" Width="1.5" PointX="17.75" PointY="14.625" />
+        <AssociationConnector Association="labdbModel.test_record_to_tests" />
+        <AssociationConnector Association="labdbModel.test_record_to_report" />
+        <AssociationConnector Association="labdbModel.batch_to_test_record" />
+        <EntityTypeShape EntityType="labdbModel.TestRecordType" Width="1.5" PointX="17.75" PointY="17.625" />
+        <AssociationConnector Association="labdbModel.type_to_test_record" />
+        <AssociationConnector Association="labdbModel.external_report_test_record_mappings" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

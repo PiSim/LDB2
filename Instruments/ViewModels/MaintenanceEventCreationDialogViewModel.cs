@@ -19,11 +19,8 @@ namespace Instruments.ViewModels
         private DBPrincipal _principal;
         private DelegateCommand<Window> _cancel, _confirm;
         private IDataService _dataService;
-        private IEnumerable<Organization> _organizationList;
         private Instrument _instrumentInstance;
         private InstrumentMaintenanceEvent _eventInstance;
-        private Organization _selectedOrganization;
-        private Person _selectedTech;
         private string _description;
 
         public MaintenanceEventCreationDialogViewModel(DBPrincipal principal,
@@ -33,8 +30,6 @@ namespace Instruments.ViewModels
             _date = DateTime.Now.Date;
             _principal = principal;
             _description = "";
-            _organizationList = _dataService.GetOrganizations(OrganizationRoleNames.Maintenance);
-
             _cancel = new DelegateCommand<Window>(
                 parentDialog =>
                 {
@@ -48,7 +43,7 @@ namespace Instruments.ViewModels
                     _eventInstance.Date = _date;
                     _eventInstance.Description = _description;
                     _eventInstance.InstrumentID = _instrumentInstance.ID;
-                    _eventInstance.OrganizationID = _selectedOrganization.ID;
+                    _eventInstance.PersonID = _principal.CurrentPerson.ID;
 
                     _eventInstance.Create();
 
@@ -98,23 +93,7 @@ namespace Instruments.ViewModels
             }
         }
 
-        public IEnumerable<Organization> OrganizationList
-        {
-            get { return _organizationList; }
-        }
-
         public IEnumerable<Person> TechList => _dataService.GetPeople(PersonRoleNames.CalibrationTech);
-
-        public Organization SelectedOrganization
-        {
-            get { return _selectedOrganization; }
-            set { _selectedOrganization = value; }
-        }
-
-        public Person SelectedTech
-        {
-            get { return _selectedTech; }
-            set { _selectedTech = value; }
-        }
+        
     }
 }

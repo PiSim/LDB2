@@ -10,23 +10,16 @@ namespace Reports
 {
     public class TestWrapper : BindableBase
     {
-        private bool _canModify;
         private Test _testInstance;
 
         public TestWrapper(Test instance) : base()
         {
-            _canModify = !instance.IsComplete;
             _testInstance = instance;
         }
 
         public bool CanDelete
         {
             get { return !IsComplete; }
-        }
-
-        public bool CanModify
-        {
-            get { return _canModify; }
         }
 
         public string CompletionDate
@@ -59,12 +52,7 @@ namespace Reports
                 RaisePropertyChanged("CompletionDate");
             }
         }
-
-        public bool IsLocked
-        {
-            get { return !_canModify; }
-        }
-
+        
         public string Method
         {
             get { return _testInstance.Method.Standard.Name; }

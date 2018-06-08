@@ -25,6 +25,7 @@ namespace DBManager
             this.CalibrationReports = new HashSet<CalibrationReport>();
             this.RoleMappings = new HashSet<PersonRoleMapping>();
             this.SamplesLogged = new HashSet<Sample>();
+            this.instrument_maintenance_events = new HashSet<InstrumentMaintenanceEvent>();
         }
     
         public int ID { get; private set; }
@@ -46,5 +47,7 @@ namespace DBManager
         public virtual ICollection<PersonRoleMapping> RoleMappings { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Sample> SamplesLogged { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<InstrumentMaintenanceEvent> instrument_maintenance_events { get; set; }
     }
 }

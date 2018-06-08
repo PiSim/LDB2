@@ -22,6 +22,8 @@ namespace Admin.ViewModels
         private EventAggregator _eventAggregator;
         private IAdminService _adminService;
         private IDataService _dataService;
+        private IEnumerable<ScriptBase> _scriptList;
+        private ScriptBase _selectedScript;
         private string _name;
 
         public AdminMainViewModel(EventAggregator eventAggregator,
@@ -31,6 +33,12 @@ namespace Admin.ViewModels
             _adminService = adminService;
             _dataService = dataService;
             _eventAggregator = eventAggregator;
+
+            _scriptList = new List<ScriptBase>()
+            {
+                new Scripts.BuildTestRecords(),
+                new Scripts.BuildExternalTestRecordsScript()
+            };
 
             _newOrganizationRole = new DelegateCommand(
                 () =>
@@ -53,7 +61,7 @@ namespace Admin.ViewModels
             _runMethod = new DelegateCommand(
                 () =>
                 {
-                    Mtd();
+                    _selectedScript.Run();
                         
                 } );
         }
@@ -121,14 +129,17 @@ namespace Admin.ViewModels
             get { return _runMethod; }
         }
 
+        public IEnumerable<ScriptBase> ScriptList => _scriptList;
+
+        public ScriptBase SelectedScript
+        {
+            get => _selectedScript;
+            set => _selectedScript = value;
+        }
+
         public string UnitOfMeasurementManagementRegionName
         {
             get { return RegionNames.UnitOfMeasurementManagementRegion; }
-        }
-
-        private void Mtd()
-        {
-           
         }
     }
 }

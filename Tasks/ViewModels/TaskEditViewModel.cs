@@ -59,14 +59,7 @@ namespace Tasks.ViewModels
             set => _instance.Batch.Number = value;
         }
 
-        public bool CanCreateReport
-        {
-            get
-            {
-                return _principal.IsInRole(UserRoleNames.ReportEdit) 
-                    || _principal.IsInRole(UserRoleNames.ReportAdmin);
-            }
-        }
+        public bool CanCreateReport => _principal.IsInRole(UserRoleNames.ReportEdit);
 
         public bool CanEdit
         {

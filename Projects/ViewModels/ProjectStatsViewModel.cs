@@ -29,6 +29,7 @@ namespace Projects.ViewModels
         {
             _dataService = dataService;
             _eventAggregator = eventAggregator;
+            _principal = principal;
             _projectService = projectService;
 
             _updateStats = new DelegateCommand(

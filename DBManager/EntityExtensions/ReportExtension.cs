@@ -91,7 +91,7 @@ namespace DBManager
 
             using (DBEntities entities = new DBEntities())
             {
-                return entities.Tests.Where(tst => tst.ReportID == entry.ID)
+                return entities.Tests.Where(tst => tst.TestRecordID == entry.TestRecordID)
                                     .All(tst => tst.IsComplete == true);
             }
         }
@@ -150,7 +150,7 @@ namespace DBManager
                                     .Include(tst => tst.Method.Standard.Organization)
                                     .Include(tst => tst.Person)
                                     .Include(tst => tst.SubTests)
-                                    .Where(tst => tst.ReportID == entry.ID)
+                                    .Where(tst => tst.TestRecordID == entry.TestRecordID)
                                     .ToList();
             }
         }
@@ -165,7 +165,7 @@ namespace DBManager
             using (DBEntities entities = new DBEntities())
             {
                 return entities.Tests
-                                .Where(tst => tst.ReportID == entry.ID)
+                                .Where(tst => tst.TestRecordID == entry.TestRecordID)
                                 .Sum(tst => tst.Method.Duration);
             }
         }
@@ -188,7 +188,7 @@ namespace DBManager
                 entities.Reports
                         .First(rep => rep.ID == entry.ID)
                         .TotalDuration = entities.Tests
-                                                    .Where(tst => tst.ReportID == entry.ID)
+                                                    .Where(tst => tst.TestRecordID == entry.TestRecordID)
                                                     .Sum(tst => tst.Duration);
 
                 entities.SaveChanges();

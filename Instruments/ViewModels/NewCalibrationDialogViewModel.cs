@@ -156,14 +156,6 @@ namespace Instruments.ViewModels
             get { return _cancel; }
         }
 
-        public bool CanChangeTech
-        {
-            get
-            {
-                return _principal.IsInRole(UserRoleNames.ReportAdmin); 
-            }
-        }
-
         public DelegateCommand<Window> ConfirmCommand
         {
             get { return _confirm; }

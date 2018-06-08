@@ -59,7 +59,7 @@ namespace DBManager
                         .Add(requirementEntry);
 
                 foreach (ControlPlan cp in entities.ControlPlans.Where(cp => cp.SpecificationID == ID))
-                    requirementEntry.control_plan_items_b
+                    requirementEntry.ControlPlanItems
                                     .Add(new ControlPlanItem()
                     {
                         ControlPlan = cp,

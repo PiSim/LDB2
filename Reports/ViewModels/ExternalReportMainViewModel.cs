@@ -38,7 +38,7 @@ namespace Reports.ViewModels
                 {
                     _reportService.CreateExternalReport();
                 }, 
-                () => _principal.IsInRole(UserRoleNames.ReportAdmin));
+                () => _principal.IsInRole(UserRoleNames.ReportEdit));
 
             _openReport = new DelegateCommand(
                 () =>
@@ -63,7 +63,7 @@ namespace Reports.ViewModels
         {
             get 
             {
-                if (_principal.IsInRole(UserRoleNames.ExternalReportAdmin))
+                if (_principal.IsInRole(UserRoleNames.ExternalReportEdit))
                     return true;
                 
                 else 

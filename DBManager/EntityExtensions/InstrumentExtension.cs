@@ -6,8 +6,26 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DBManager.EntityExtensions
+namespace DBManager
 {
+    public partial class Instrument
+    {
+
+        public IEnumerable<InstrumentMaintenanceEvent> GetMaintenanceEvents()
+        {
+            // Returns all InstrumentMaintenanceEvents for an Instrument
+            
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.InstrumentMaintenanceEvents.Include(ime => ime.Person)
+                                                            .Where(ime => ime.InstrumentID == ID)
+                                                            .ToList();
+            }
+        }
+    }
+
     public static class InstrumentExtension
     {
         public static void AddFiles(this Instrument entry,
@@ -141,23 +159,6 @@ namespace DBManager.EntityExtensions
             }
         }
 
-        public static IEnumerable<InstrumentMaintenanceEvent> GetMaintenanceEvents(this Instrument entry)
-        {
-            // Returns all InstrumentMaintenanceEvents for an Instrument
-
-            if (entry == null)
-                return null;
-
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.Configuration.LazyLoadingEnabled = false;
-
-                return entities.InstrumentMaintenanceEvents.Include(ime => ime.Organization)
-                                                            .Where(ime => ime.InstrumentID == entry.ID)
-                                                            .ToList();
-            }
-        }
-
         public static IEnumerable<InstrumentMeasurableProperty> GetMeasurableProperties(this Instrument entry)
         {
             // Returns all MeasurableProperties for an Instrument
@@ -213,8 +214,6 @@ namespace DBManager.EntityExtensions
                                                             .Include(inst => inst.CalibrationReports
                                                             .Select(cal => cal.Laboratory))
                                                             .Include(inst => inst.InstrumentType)
-                                                            .Include(inst => inst.MaintenanceEvent
-                                                            .Select(mte => mte.Organization))
                                                             .Include(inst => inst.Manufacturer)
                                                             .Include(inst => inst.Supplier)
                                                             .Include(inst => inst.Tests

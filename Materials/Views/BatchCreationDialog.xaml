@@ -123,7 +123,7 @@
                      Margin="5"/>
 
             <ComboBox ItemsSource="{Binding ColourList}"
-                      SelectedItem="{Binding SelectedColour, Mode=TwoWay}"
+                      SelectedItem="{Binding SelectedColour}"
                       DisplayMemberPath="Name"
                       Grid.Column="2"
                       Grid.ColumnSpan="2"

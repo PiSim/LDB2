@@ -23,13 +23,13 @@ namespace Specifications.ViewModels
         private DBPrincipal _principal;
         private DelegateCommand _addControlPlan, 
                                 _addFile,
-                                _addVersion,  
+                                _addVersion,
+                                _closeAddMethodView,
                                 _openFile,
                                 _openReport, 
                                 _removeControlPlan, 
                                 _removeFile,
                                 _removeVersion,
-                                _returnToVersionList,
                                 _save,
                                 _startEdit;
         private DelegateCommand<Method> _addTest;
@@ -117,6 +117,17 @@ namespace Specifications.ViewModels
                 },
                 () => CanEdit);
 
+            _closeAddMethodView = new DelegateCommand(
+                () =>
+                {
+                    NavigationToken token = new NavigationToken(SpecificationViewNames.SpecificationVersionList,
+                                                                null,
+                                                                RegionNames.SpecificationVersionTestListEditRegion);
+
+                    _eventAggregator.GetEvent<NavigationRequested>()
+                                    .Publish(token);
+                });
+
             _openFile = new DelegateCommand(
                 () =>
                 {
@@ -169,17 +180,6 @@ namespace Specifications.ViewModels
                 },
                 () => _principal.IsInRole(UserRoleNames.Admin) 
                     && _selectedVersion != null);
-
-            _returnToVersionList = new DelegateCommand(
-                () =>
-                {
-                    NavigationToken token = new NavigationToken(SpecificationViewNames.SpecificationVersionList,
-                                                                null,
-                                                                RegionNames.SpecificationVersionTestListEditRegion);
-
-                    _eventAggregator.GetEvent<NavigationRequested>()
-                                    .Publish(token);
-                });
 
             _save = new DelegateCommand(
                 () =>
@@ -369,9 +369,9 @@ namespace Specifications.ViewModels
             }
         }
 
-        public DelegateCommand ReturnToVersionListCommand
+        public DelegateCommand CloseAddMethodViewCommand
         {
-            get { return _returnToVersionList; }
+            get { return _closeAddMethodView; }
         }
 
         public DelegateCommand SaveCommand

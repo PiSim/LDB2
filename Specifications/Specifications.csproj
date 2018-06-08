@@ -128,6 +128,9 @@
     <Compile Include="ViewModels\StandardEditViewModel.cs" />
     <Compile Include="ViewModels\StandardListViewModel.cs" />
     <Compile Include="ViewModels\StandardMainViewModel.cs" />
+    <Compile Include="Views\AddMethod.xaml.cs">
+      <DependentUpon>AddMethod.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ConsolidateStandardDialog.xaml.cs">
       <DependentUpon>ConsolidateStandardDialog.xaml</DependentUpon>
     </Compile>
@@ -154,9 +157,6 @@
     </Compile>
     <Compile Include="Views\SpecificationNavigationItem.xaml.cs">
       <DependentUpon>SpecificationNavigationItem.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\SpecificationTestListEdit.xaml.cs">
-      <DependentUpon>SpecificationTestListEdit.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SpecificationVersionEdit.xaml.cs">
       <DependentUpon>SpecificationVersionEdit.xaml</DependentUpon>
@@ -209,6 +209,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Views\AddMethod.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\ConsolidateStandardDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -242,10 +246,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\SpecificationNavigationItem.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\SpecificationTestListEdit.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

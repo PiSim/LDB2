@@ -103,10 +103,10 @@ namespace Projects.ViewModels
                 () =>
                 {
                     NavigationToken token = new NavigationToken(Reports.ViewNames.ExternalReportEditView,
-                                                                SelectedExternal);
+                                                                SelectedExternalReport);
                     _eventAggregator.GetEvent<NavigationRequested>().Publish(token);
                 },
-                () => SelectedExternal != null);
+                () => SelectedExternalReport != null);
 
             _openReport = new DelegateCommand(
                 () =>
@@ -284,6 +284,8 @@ namespace Projects.ViewModels
             get { return _openReport; }
         }
 
+        public string ProjectExternalReportListRegionName => RegionNames.ProjectExternalReportListRegion;
+
         public Project ProjectInstance
         {
             get { return _projectInstance; }
@@ -333,7 +335,7 @@ namespace Projects.ViewModels
             }
         }
 
-        public ExternalReport SelectedExternal
+        public ExternalReport SelectedExternalReport
         {
             get { return _selectedExternal; }
             set

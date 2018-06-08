@@ -112,8 +112,8 @@ namespace Specifications.ViewModels
             _openReport = new DelegateCommand(
                 () =>
                 {
-                    NavigationToken token = new NavigationToken(ReportViewNames.ReportEditView,
-                                                                _selectedTest.Report);
+                NavigationToken token = new NavigationToken((_selectedTest.TestRecord.RecordTypeID == 1) ? ReportViewNames.ReportEditView : ReportViewNames.ExternalReportEditView,
+                                                            _selectedTest.TestRecord.Reports.First());
 
                     _eventAggregator.GetEvent<NavigationRequested>()
                                     .Publish(token);

@@ -1,0 +1,97 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:rep="clr-namespace:Reports">
+    
+    <DataTemplate x:Key="SubTestExternalResultCellTemplate">
+        <DataTemplate.Resources>
+            <rep:ExternalResultPresenterTestExtractor x:Key="TestExtractor"/>
+        </DataTemplate.Resources>
+        <DataGrid ItemsSource="{Binding RelativeSource={RelativeSource Mode=FindAncestor,
+                                                                       AncestorType=DataGridCell},
+                                        Converter={StaticResource TestExtractor}}"
+                  AutoGenerateColumns="False"
+                  HeadersVisibility="None"
+                  CanUserAddRows="False"
+                  CanUserDeleteRows="False"
+                  GridLinesVisibility="Horizontal"
+                  ClipToBounds="True"
+                  HorizontalScrollBarVisibility="Hidden"
+                  RowHeight="30"
+                  Margin="-2">
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding Result}"
+                                    Width="*">
+                    <DataGridTextColumn.EditingElementStyle>
+                        <Style TargetType="{x:Type TextBox}">
+                            <Setter Property="MaxLength"
+                                    Value="45"/>
+                        </Style>
+                    </DataGridTextColumn.EditingElementStyle>
+                </DataGridTextColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+    </DataTemplate>
+
+    <DataTemplate x:Key="SubTestNameCellTemplate">
+        <DataGrid ItemsSource="{Binding SubTests}"
+                  AutoGenerateColumns="False"
+                  HeadersVisibility="None"
+                  CanUserAddRows="False"
+                  CanUserDeleteRows="False"
+                  GridLinesVisibility="Horizontal"
+                  ClipToBounds="True"
+                  HorizontalScrollBarVisibility="Hidden"
+                  RowHeight="30"
+                  IsReadOnly="True"
+                  Margin="-2">
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding Name}"
+                                    Width="*"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </DataTemplate>
+
+    <DataTemplate x:Key="SubTestResultCellTemplate">
+        <DataGrid ItemsSource="{Binding SubTests}"
+                  AutoGenerateColumns="False"
+                  HeadersVisibility="None"
+                  CanUserAddRows="False"
+                  CanUserDeleteRows="False"
+                  GridLinesVisibility="Horizontal"
+                  ClipToBounds="True"
+                  HorizontalScrollBarVisibility="Hidden"
+                  RowHeight="30"
+                  Margin="-2">
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding Result}"
+                                    Width="*">
+                    <DataGridTextColumn.EditingElementStyle>
+                        <Style TargetType="{x:Type TextBox}">
+                            <Setter Property="MaxLength"
+                                    Value="45"/>
+                        </Style>
+                    </DataGridTextColumn.EditingElementStyle>
+                </DataGridTextColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+    </DataTemplate>
+
+    <DataTemplate x:Key="SubTestUMCellTemplate">
+        <DataGrid ItemsSource="{Binding SubTests}"
+                  AutoGenerateColumns="False"
+                  IsReadOnly="True"
+                  HeadersVisibility="None"
+                  CanUserAddRows="False"
+                  CanUserDeleteRows="False"
+                  GridLinesVisibility="Horizontal"
+                  ClipToBounds="True"
+                  HorizontalScrollBarVisibility="Hidden"
+                  RowHeight="30"
+                  Margin="-2">
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding UM}"
+                                    Width="*"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </DataTemplate>
+</ResourceDictionary>

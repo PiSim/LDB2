@@ -94,6 +94,7 @@ namespace Instruments.ViewModels
                 () =>
                 {
                     _instrumentService.ShowNewMaintenanceDialog(_instance);
+                    RaisePropertyChanged("MaintenanceEventList");
                 },
                 () => IsInstrumentAdmin);
 

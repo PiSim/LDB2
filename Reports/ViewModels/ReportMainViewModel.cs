@@ -85,13 +85,9 @@ namespace Reports.ViewModels
             {
                 if (SelectedReport == null)
                     return false;
-                
-                else if (_principal.IsInRole(UserRoleNames.ReportAdmin))
-                    return true;
                     
                 else
-                    return _principal.IsInRole(UserRoleNames.ReportEdit)
-                            && SelectedReport.Author.ID == _principal.CurrentPerson.ID;
+                    return _principal.IsInRole(UserRoleNames.ReportEdit);
             }
         }
             

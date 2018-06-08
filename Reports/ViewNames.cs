@@ -12,5 +12,6 @@ namespace Reports
         public static string ExternalReportEditView { get { return "ExternalReportEditView"; } }
         public static string ReportMain { get { return "ReportsView"; } }
         public static string ReportEditView { get { return "ReportEditView"; } }
+        public static string TestSearchMain { get { return "TestSearchMain"; } }
     }
 }

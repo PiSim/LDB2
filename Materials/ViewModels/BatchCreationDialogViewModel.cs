@@ -134,7 +134,7 @@ namespace Materials.ViewModels
                             RecipeID = RecipeInstance.ID,
                             TypeID = TypeInstance.ID
                         };
-
+                        
                         if (_selectedConstruction != null)
                             tempMaterial.ExternalConstructionID = _selectedConstruction.ID;
 
@@ -410,7 +410,7 @@ namespace Materials.ViewModels
             {
                 _recipeInstance = value;
 
-                if (_recipeInstance != null)
+                if (_recipeInstance != null && _recipeInstance.ColourID != null)
                     SelectedColour = _colourList.FirstOrDefault(col => col.ID == _recipeInstance.ColourID);
                 
                 UpdateMaterial();

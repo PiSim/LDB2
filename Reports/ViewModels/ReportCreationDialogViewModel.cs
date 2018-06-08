@@ -47,7 +47,6 @@ namespace Reports.ViewModels
         private Int32 _number;
         private Material _material;
         private Person _author;
-        private Report _reportInstance;
         private Specification _selectedSpecification;
         private SpecificationVersion _selectedVersion;
         private string _batchNumber, 
@@ -232,9 +231,7 @@ namespace Reports.ViewModels
                 RaisePropertyChanged("VersionSelectionEnabled");
             }
         }
-
-        public bool IsNotAdmin => !_principal.IsInRole(UserRoleNames.ReportAdmin);
-
+        
         public bool IsSpecificationSelected => _selectedSpecification != null;
 
         public Material Material => _material;
@@ -269,9 +266,7 @@ namespace Reports.ViewModels
                     return _taskItemList;
             }
         }
-
-        public Report ReportInstance => _reportInstance; 
-
+        
         public Batch SelectedBatch
         {
             get { return _selectedBatch; }

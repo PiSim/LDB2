@@ -27,8 +27,8 @@ namespace DBManager
 
                 return entities.ExternalReports
                                 .Include(exr => exr.ExternalLab)
-                                .Where(exr => exr.Batches
-                                .Any(btc => btc.ID == ID))
+                                .Where(exr => exr.TestRecords
+                                .Any(tstr => tstr.BatchID == ID))
                                 .ToList();                                
             }
         }
@@ -105,8 +105,6 @@ namespace DBManager
                 entities.Configuration.LazyLoadingEnabled = false;
 
                 Batch tempEntry = entities.Batches.Include(btc => btc.BatchFiles)
-                                                    .Include(btc => btc.ExternalReports
-                                                    .Select(extr => extr.ExternalLab))
                                                     .Include(btc => btc.Masters)
                                                     .Include(btc => btc.Material.Aspect)
                                                     .Include(btc => btc.Material.MaterialType)
@@ -123,7 +121,6 @@ namespace DBManager
                                                     .FirstOrDefault(btc => btc.ID == entry.ID);
 
                 entry.BatchFiles = tempEntry.BatchFiles;
-                entry.ExternalReports = tempEntry.ExternalReports;
                 entry.Masters = tempEntry.Masters;
                 entry.Material = tempEntry.Material;
                 entry.MaterialID = tempEntry.MaterialID;

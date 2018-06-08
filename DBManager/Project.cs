@@ -26,8 +26,9 @@ namespace DBManager
         public string Description { get; set; }
         public Nullable<int> ProjectLeaderID { get; set; }
         public Nullable<int> OemID { get; set; }
-        public int TotalInternalCost { get; set; }
         public double TotalExternalCost { get; set; }
+        public double TotalReportDuration { get; set; }
+        public int TBD_non_usare { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ExternalReport> ExternalReports { get; set; }

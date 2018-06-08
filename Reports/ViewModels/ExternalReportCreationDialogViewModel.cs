@@ -50,7 +50,6 @@ namespace Reports.ViewModels
                         Description = _testDescription,
                         Year = year,
                         Number = _reportService.GetNextExternalReportNumber(year),
-                        ExternalNumber = "",
                         MaterialSent = false,
                         RequestDone = false,
                         Samples = _sampleDescription,

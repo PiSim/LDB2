@@ -24,10 +24,10 @@ namespace Specifications
             _container.RegisterType<ISpecificationService, SpecificationService>(new ContainerControlledLifetimeManager());
             _container.Resolve<SpecificationService>();
 
+            _container.RegisterType<Object, Views.AddMethod>(SpecificationViewNames.AddMethod);
             _container.RegisterType<Object, Views.ControlPlanEdit>(SpecificationViewNames.ControlPlanEdit);
             _container.RegisterType<Object, Views.MethodEdit>(SpecificationViewNames.MethodEdit);
             _container.RegisterType<Object, Views.SpecificationEdit>(SpecificationViewNames.SpecificationEdit);
-            _container.RegisterType<Object, Views.SpecificationTestListEdit>(SpecificationViewNames.SpecificationTestListEdit);
             _container.RegisterType<Object, Views.SpecificationVersionEdit>(SpecificationViewNames.SpecificationVersionEdit);
             _container.RegisterType<Object, Views.SpecificationVersionList>(SpecificationViewNames.SpecificationVersionList);
             _container.RegisterType<Object, Views.StandardEdit>(SpecificationViewNames.StandardEdit);
