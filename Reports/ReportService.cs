@@ -26,27 +26,7 @@ namespace Reports
             _container = container;
             _eventAggregator = aggregator;
             _dataService = dataService;
-
-
-            _eventAggregator.GetEvent<ReportStatusCheckRequested>()
-                            .Subscribe(
-                report =>
-                {
-                    // areTestsComplete is true if all tests are marked as complete
-
-                    bool areTestsComplete = report.AreTestsComplete();
-
-                    if ((report.IsComplete && !areTestsComplete)
-                        || (!report.IsComplete && areTestsComplete))
-                    {
-                        report.IsComplete = !report.IsComplete;
-                        report.Update();
-
-                        _eventAggregator.GetEvent<ReportCompleted>()
-                                        .Publish(report);
-                    }
-
-                });
+            
         }
 
         /// <summary>
@@ -111,8 +91,11 @@ namespace Reports
 
             foreach (SubMethod measure in method.SubMethods)
             {
-                SubRequirement tempSub = new SubRequirement();
-                tempSub.SubMethodID = measure.ID;
+                SubRequirement tempSub = new SubRequirement()
+                {
+                    SubMethodID = measure.ID
+                };
+
                 tempReq.SubRequirements.Add(tempSub);
             }
 
@@ -354,18 +337,21 @@ namespace Reports
 
                 Test tempTest = new Test();
                 tempTest.Duration = req.Method.Duration;
-                tempTest.IsComplete = false;
                 tempTest.MethodID = req.MethodID;
                 tempTest.RequirementID = req.ID;
                 tempTest.Notes = req.Description;
-
+                
                 foreach (SubRequirement subReq in req.SubRequirements)
                 {
-                    SubTest tempSubTest = new SubTest();
-                    tempSubTest.Name = subReq.SubMethod.Name;
-                    tempSubTest.RequiredValue = subReq.RequiredValue;
-                    tempSubTest.SubRequiremntID = subReq.ID;
-                    tempSubTest.UM = subReq.SubMethod.UM;
+                    SubTest tempSubTest = new SubTest()
+                    {
+                        SubRequiremntID = subReq.ID,
+                        Name = subReq.SubMethod.Name,
+                        Position = subReq.SubMethod.Position,
+                        RequiredValue = subReq.RequiredValue,
+                        SubMethodID = subReq.SubMethodID,
+                        UM = subReq.SubMethod.UM,
+                    };
                     tempTest.SubTests.Add(tempSubTest);
                 }
                 output.Add(tempTest);

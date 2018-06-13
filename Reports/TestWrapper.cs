@@ -17,39 +17,11 @@ namespace Reports
             _testInstance = instance;
         }
 
-        public bool CanDelete
-        {
-            get { return !IsComplete; }
-        }
-
-        public string CompletionDate
-        {
-            get 
-            { 
-                return (_testInstance.Date == null) ? null : _testInstance.Date.Value.ToShortDateString();
-            }
-        }
-
         public double Duration
         {
             get
             {
                 return _testInstance.Duration;
-            }
-        }
-
-        public bool IsComplete
-        {
-            get { return _testInstance.IsComplete; }
-            set
-            {
-                _testInstance.IsComplete = value;
-                if (value)
-                    _testInstance.Date = DateTime.Now.Date;
-                else
-                     _testInstance.Date = null;
-                    
-                RaisePropertyChanged("CompletionDate");
             }
         }
         

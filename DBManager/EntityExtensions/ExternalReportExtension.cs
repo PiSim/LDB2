@@ -82,8 +82,8 @@ namespace DBManager
         /// <summary>
         /// Returns the methods associated with this External Report
         /// </summary>
-        /// <returns>An IEnumerable containing the found Method entries</returns>
-        public IEnumerable<Method> GetMethods()
+        /// <returns>An ICollection containing the found Method entries</returns>
+        public ICollection<Method> GetMethods()
         {
             using (DBEntities entities = new DBEntities())
             {
@@ -122,7 +122,7 @@ namespace DBManager
         /// Fetches the TestRecord entities for this ExternalReport
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<TestRecord> GetTestRecords(bool includeTests = false)
+        public ICollection<TestRecord> GetTestRecords(bool includeTests = false)
         {
             using (DBEntities entities = new DBEntities())
             {
@@ -180,10 +180,11 @@ namespace DBManager
             {
                 entities.ExternalReports.AddOrUpdate(this);
                 
-                foreach (SubTest sts in TestRecords.SelectMany(tsr => tsr.Tests)
-                                                   .SelectMany(tst => tst.SubTests)
-                                                   .ToList())
-                    entities.SubTests.AddOrUpdate(sts);
+                if (updateTests)
+                    foreach (SubTest sts in TestRecords.SelectMany(tsr => tsr.Tests)
+                                                       .SelectMany(tst => tst.SubTests)
+                                                       .ToList())
+                        entities.SubTests.AddOrUpdate(sts);
                 
                 entities.SaveChanges();
             }

@@ -18,7 +18,6 @@ namespace DBManager
         {
             Test output = new Test()
             {
-                IsComplete = false,
                 MethodID = MethodID,
                 Notes = Description,
                 RequirementID = RequirementID

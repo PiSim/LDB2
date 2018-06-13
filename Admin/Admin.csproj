@@ -103,6 +103,7 @@
     <Compile Include="AdminModule.cs" />
     <Compile Include="AdminService.cs" />
     <Compile Include="Scripts\BuildExternalTestRecordsScript.cs" />
+    <Compile Include="Scripts\BuildSubMethodPositionScript.cs" />
     <Compile Include="Scripts\BuildTestRecords.cs" />
     <Compile Include="Scripts\ScriptBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">

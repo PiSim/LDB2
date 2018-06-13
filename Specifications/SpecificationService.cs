@@ -32,9 +32,17 @@ namespace Specifications
                         _container.Resolve<Views.MethodCreationDialog>();
 
             if (creationDialog.ShowDialog() == true)
+
+            {
+                Method newInstance = creationDialog.MethodInstance;
+
+                newInstance.Create();
+
                 _eventAggregator.GetEvent<MethodChanged>()
                                 .Publish(new EntityChangedToken(creationDialog.MethodInstance,
                                                                 EntityChangedToken.EntityChangedAction.Created));
+
+            }
         }
 
         /// <summary>
@@ -85,6 +93,74 @@ namespace Specifications
             _eventAggregator.GetEvent<StandardChanged>()
                             .Publish(new EntityChangedToken(standardInstance,
                                                             EntityChangedToken.EntityChangedAction.Deleted));
+        }
+
+        /// <summary>
+        /// Begins the process of substituting an outdated method with a new version
+        /// </summary>
+        /// <param name="toBeUpdated"> an instance of the method to update</param>
+        public void StartMethodUpdate(Method toBeUpdated)
+        {
+            toBeUpdated.SubMethods = toBeUpdated.GetSubMethods();
+
+            Views.MethodCreationDialog creationDialog = new Views.MethodCreationDialog();
+
+            creationDialog.OldVersion = toBeUpdated;
+
+            if (creationDialog.ShowDialog() == true)
+            {
+                using (DBEntities entities = new DBEntities())
+                {
+                    Method attachedOldVersion = entities.Methods.First(mtd => mtd.ID == toBeUpdated.ID);
+                    Method newVersion = creationDialog.MethodInstance;
+
+                    entities.Methods.Add(newVersion);
+
+                    attachedOldVersion.IsOld = true;
+                    
+                    foreach (Requirement req in attachedOldVersion.Requirements.ToList())
+                    {
+                        req.Method = newVersion;
+                        req.MethodID = newVersion.ID;
+                        req.Name = newVersion.Name;
+
+                        int positionCounter = 0;
+
+                        foreach (SubMethod smtd in newVersion.SubMethods)
+                        {
+                            smtd.Position = positionCounter++;
+
+                            SubRequirement updateTarget = req.SubRequirements.FirstOrDefault(sreq => sreq.SubMethodID == smtd.OldVersionID);
+
+                            if (updateTarget != null)
+                            {
+                                updateTarget.SubMethod = smtd;
+                                updateTarget.SubMethodID = smtd.ID;
+                                updateTarget.IsUpdated = true;
+                            }
+
+                            else
+                                req.SubRequirements.Add(new SubRequirement()
+                                {
+                                    IsUpdated = true,
+                                    RequiredValue = "",
+                                    SubMethod = smtd
+                                });
+
+                        }
+
+                        foreach (SubRequirement sreq in req.SubRequirements.Where(nn => !nn.IsUpdated)
+                                                                            .ToList())
+                            entities.Entry(sreq).State = EntityState.Deleted;
+                    }
+                    entities.SaveChanges();
+
+                    _eventAggregator.GetEvent<BatchChanged>()
+                                    .Publish(new EntityChangedToken(newVersion,
+                                                                    EntityChangedToken.EntityChangedAction.Created));
+                };
+
+            }
         }
 
         public void UpdateRequirements(IEnumerable<Requirement> requirementEntries)

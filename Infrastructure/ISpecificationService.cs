@@ -13,6 +13,7 @@ namespace Infrastructure
         void ConsolidateStandard(IEnumerable<Std> standardList,
                                 Std mainEntry);
         void CreateMethod();
+        void StartMethodUpdate(Method toBeUpdated);
         void UpdateRequirements(IEnumerable<Requirement> enumerable);
         void UpdateSubMethods(IEnumerable<SubMethod> subMethodList);
         void DeleteStandard(Std standardInstance);

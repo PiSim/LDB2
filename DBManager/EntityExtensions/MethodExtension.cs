@@ -20,20 +20,38 @@ namespace DBManager
         {
             Test tempTest = new Test();
             tempTest.Duration = Duration;
-            tempTest.IsComplete = false;
             tempTest.MethodID = ID;
             tempTest.Notes = "";
 
             foreach (SubMethod subMtd in SubMethods)
             {
-                SubTest tempSubTest = new SubTest();
-                tempSubTest.Name = subMtd.Name;
-                tempSubTest.RequiredValue = "";
-                tempSubTest.UM = subMtd.UM;
+                SubTest tempSubTest = new SubTest()
+                {
+                    SubMethodID = subMtd.ID,
+                    Name = subMtd.Name,
+                    Position = subMtd.Position,
+                    RequiredValue = "",
+                    UM = subMtd.UM
+                };
                 tempTest.SubTests.Add(tempSubTest);
             }
 
             return tempTest;
+        }
+
+        /// <summary>
+        /// Returns all the submethods for this entry, ordered by position
+        /// </summary>
+        /// <returns>an IList of Submethods</returns>
+        public IList<SubMethod> GetSubMethods()
+        {
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.SubMethods.Where(smtd => smtd.MethodID == ID)
+                                        .ToList();
+            }
         }
 
         public void Load(bool includeSubTests = false)
@@ -68,7 +86,7 @@ namespace DBManager
                 if (includeSubTests)
                     SubMethods = tempEntry.SubMethods;
 
-                UM = tempEntry.UM;
+                TBD = "";
             }
         }
 
@@ -88,36 +106,6 @@ namespace DBManager
 
     public static class MethodExtension
     {
-
-        public static void AddSubMethod(this Method entry,
-                                        SubMethod subMethodEntity)
-        {
-            // Adds a submethod to a method entry and updates all the related requirements
-
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.Configuration.LazyLoadingEnabled = false;
-
-                entities.SubMethods.Add(subMethodEntity);
-
-                subMethodEntity.MethodID = entry.ID;
-
-                IEnumerable<Requirement> tempReqList = entities.Requirements.Where(req => req.MethodID == entry.ID)
-                                                                            .ToList();
-
-                foreach (Requirement req in tempReqList)
-                {
-                    SubRequirement tempSR = new SubRequirement();
-                    tempSR.RequiredValue = "";
-                    tempSR.Requirement = req;
-                    subMethodEntity.SubRequirements.Add(tempSR);
-                    req.SubRequirements.Add(tempSR);
-                }
-
-                entities.SaveChanges();
-            }
-        }
-
         public static void Create(this Method entry)
         {
             using (DBEntities entities = new DBEntities())
@@ -191,22 +179,6 @@ namespace DBManager
                                 .Any(req => req
                                 .MethodID == entry.ID)))
                                 .ToList();
-            }
-        }
-
-        public static IEnumerable<SubMethod> GetSubMethods(this Method entry)
-        {
-            // Returns All SubMethod entities for a Method
-
-            if (entry == null)
-                return null;
-
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.Configuration.LazyLoadingEnabled = false;
-
-                return entities.SubMethods.Where(smtd => smtd.MethodID == entry.ID)
-                                        .ToList();
             }
         }
 

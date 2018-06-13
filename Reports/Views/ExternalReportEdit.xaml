@@ -400,6 +400,7 @@
                     </Grid.RowDefinitions>
 
                     <DataGrid ItemsSource="{Binding ResultCollection}"
+                              
                               AutoGenerateColumns="False"
                               CanUserAddRows="False"
                               CanUserDeleteRows="False"

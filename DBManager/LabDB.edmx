@@ -322,6 +322,9 @@
           <Property Name="um" Type="text" Nullable="false" />
           <Property Name="duration" Type="double" Nullable="false" />
           <Property Name="name" Type="text" />
+          <Property Name="short_description" Type="varchar" MaxLength="45" />
+          <Property Name="old_versionID" Type="int" />
+          <Property Name="is_old" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="organization_role_mappings">
           <Key>
@@ -381,7 +384,7 @@
           <Property Name="description" Type="varchar" MaxLength="45" Nullable="false" />
           <Property Name="project_leaderID" Type="int" />
           <Property Name="oemID" Type="int" />
-          <Property Name="total_internal_cost" Type="int" Nullable="false" />
+          <Property Name="total_internal_cost" Type="int" />
           <Property Name="total_external_cost" Type="double" Nullable="false" />
           <Property Name="total_report_duration" Type="double" Nullable="false" />
         </EntityType>
@@ -499,6 +502,8 @@
           <Property Name="methodID" Type="int" Nullable="false" />
           <Property Name="name" Type="varchar" MaxLength="45" Nullable="false" />
           <Property Name="um" Type="varchar" MaxLength="25" Nullable="false" />
+          <Property Name="old_versionID" Type="int" />
+          <Property Name="position" Type="int" />
         </EntityType>
         <EntityType Name="sub_requirements">
           <Key>
@@ -532,6 +537,8 @@
           <Property Name="requirement" Type="varchar" MaxLength="45" Nullable="false" />
           <Property Name="um" Type="varchar" MaxLength="45" Nullable="false" />
           <Property Name="sub_requirementID" Type="int" />
+          <Property Name="sub_methodID" Type="int" />
+          <Property Name="position" Type="int" />
         </EntityType>
         <EntityType Name="task_items">
           <Key>
@@ -1157,6 +1164,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="method_old_version_to_current">
+          <End Role="methods" Type="Self.methods" Multiplicity="0..1" />
+          <End Role="methods1" Type="Self.methods" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="methods">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="methods1">
+              <PropertyRef Name="old_versionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="method_to_external_report_mapping">
           <End Role="methods" Type="Self.methods" Multiplicity="1" />
           <End Role="external_report_method_mappings" Type="Self.external_report_method_mappings" Multiplicity="*" />
@@ -1705,6 +1724,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="sub_method_old_version_to_current">
+          <End Role="sub_methods" Type="Self.sub_methods" Multiplicity="0..1" />
+          <End Role="sub_methods1" Type="Self.sub_methods" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="sub_methods">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="sub_methods1">
+              <PropertyRef Name="old_versionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="sub_method_to_sub_task_item">
           <End Role="sub_methods" Type="Self.sub_methods" Multiplicity="0..1" />
           <End Role="sub_task_items" Type="Self.sub_task_items" Multiplicity="*" />
@@ -1713,6 +1744,18 @@
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="sub_task_items">
+              <PropertyRef Name="sub_methodID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="sub_method_to_sub_test">
+          <End Role="sub_methods" Type="Self.sub_methods" Multiplicity="0..1" />
+          <End Role="sub_tests" Type="Self.sub_tests" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="sub_methods">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="sub_tests">
               <PropertyRef Name="sub_methodID" />
             </Dependent>
           </ReferentialConstraint>
@@ -2173,6 +2216,10 @@
             <End Role="measure_units" EntitySet="measure_units" />
             <End Role="calibration_report_measurable_property_mappings" EntitySet="calibration_report_measurable_property_mappings" />
           </AssociationSet>
+          <AssociationSet Name="method_old_version_to_current" Association="Self.method_old_version_to_current">
+            <End Role="methods" EntitySet="methods" />
+            <End Role="methods1" EntitySet="methods" />
+          </AssociationSet>
           <AssociationSet Name="method_to_external_report_mapping" Association="Self.method_to_external_report_mapping">
             <End Role="methods" EntitySet="methods" />
             <End Role="external_report_method_mappings" EntitySet="external_report_method_mappings" />
@@ -2345,9 +2392,17 @@
             <End Role="standards" EntitySet="standards" />
             <End Role="specifications" EntitySet="specifications" />
           </AssociationSet>
+          <AssociationSet Name="sub_method_old_version_to_current" Association="Self.sub_method_old_version_to_current">
+            <End Role="sub_methods" EntitySet="sub_methods" />
+            <End Role="sub_methods1" EntitySet="sub_methods" />
+          </AssociationSet>
           <AssociationSet Name="sub_method_to_sub_task_item" Association="Self.sub_method_to_sub_task_item">
             <End Role="sub_methods" EntitySet="sub_methods" />
             <End Role="sub_task_items" EntitySet="sub_task_items" />
+          </AssociationSet>
+          <AssociationSet Name="sub_method_to_sub_test" Association="Self.sub_method_to_sub_test">
+            <End Role="sub_methods" EntitySet="sub_methods" />
+            <End Role="sub_tests" EntitySet="sub_tests" />
           </AssociationSet>
           <AssociationSet Name="sub_requirement_to_sub_task_item" Association="Self.sub_requirement_to_sub_task_item">
             <End Role="sub_requirements" EntitySet="sub_requirements" />
@@ -2571,7 +2626,7 @@
           <Property Name="StandardID" Type="Int32" Nullable="false" a:GetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:SetterAccess="Public" />
           <Property Name="PropertyID" Type="Int32" Nullable="false" a:GetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:SetterAccess="Public" />
           <Property Name="Description" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="UM" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="TBD" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="Requirements" Relationship="Self.method_to_requirement" FromRole="methods" ToRole="requirements" />
           <NavigationProperty Name="Property" Relationship="Self.property_to_method" FromRole="methods" ToRole="properties" />
           <NavigationProperty Name="Standard" Relationship="Self.standard_to_method" FromRole="methods" ToRole="standards" />
@@ -2582,6 +2637,11 @@
           <NavigationProperty Name="TaskItems" Relationship="labdbModel.method_to_task_item" FromRole="Method" ToRole="TaskItem" />
           <Property Name="Duration" Type="Double" Nullable="false" />
           <Property Name="Name" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="ShortDescription" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="OldVersionID" Type="Int32" />
+          <Property Name="IsOld" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="NewerVersions" Relationship="labdbModel.method_old_version_to_current" FromRole="Method" ToRole="Method1" />
+          <NavigationProperty Name="OldVersion" Relationship="labdbModel.method_old_version_to_current" FromRole="Method1" ToRole="Method" />
         </EntityType>
         <EntityType Name="Organization">
           <Key>
@@ -2631,7 +2691,7 @@
           <NavigationProperty Name="Leader" Relationship="Self.leader" FromRole="projects" ToRole="people" />
           <NavigationProperty Name="Materials" Relationship="labdbModel.project_to_material" FromRole="Project" ToRole="Material" />
           <Property Name="TotalReportDuration" Type="Double" Nullable="false" />
-          <Property Name="TBD_non_usare" Type="Int32" Nullable="false" />
+          <Property Name="TBD" Type="Int32" Nullable="true" />
         </EntityType>
         <EntityType Name="Property">
           <Key>
@@ -2801,6 +2861,9 @@
           <Property Name="UM" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
           <Property Name="SubRequiremntID" Type="Int32" />
           <NavigationProperty Name="SubRequirement" Relationship="labdbModel.sub_requirement_to_sub_test" FromRole="SubTest" ToRole="SubRequirement" />
+          <Property Name="SubMethodID" Type="Int32" />
+          <NavigationProperty Name="SubMethod" Relationship="labdbModel.sub_method_to_sub_test" FromRole="SubTest" ToRole="SubMethod" />
+          <Property Name="Position" Type="Int32" />
         </EntityType>
         <EntityType Name="Task">
           <Key>
@@ -2835,13 +2898,13 @@
           <Property Name="MethodID" Type="Int32" Nullable="false" />
           <Property Name="TBD" Type="Int32" Nullable="true" />
           <Property Name="Notes" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
-          <Property Name="operatorID" Type="Int32" Nullable="true" />
-          <Property Name="Date" Type="DateTime" />
-          <NavigationProperty Name="Person" Relationship="labdbModel.operatorID" FromRole="tests" ToRole="people" />
+          <Property Name="TBD4" Type="Int32" Nullable="true" />
+          <Property Name="TBD5" Type="DateTime" />
+          <NavigationProperty Name="TBD6" Relationship="labdbModel.operatorID" FromRole="tests" ToRole="people" />
           <NavigationProperty Name="TBD2" Relationship="Self.report_to_test" FromRole="tests" ToRole="reports" />
           <NavigationProperty Name="SubTests" Relationship="Self.test1" FromRole="tests" ToRole="sub_tests" />
           <NavigationProperty Name="Method" Relationship="labdbModel.method_to_test" FromRole="Test" ToRole="Method" />
-          <Property Name="IsComplete" Type="Boolean" Nullable="false" />
+          <Property Name="TBD3" Type="Boolean" Nullable="false" />
           <Property Name="instrumentID" Type="Int32" />
           <NavigationProperty Name="Instrument" Relationship="labdbModel.instrument_to_test" FromRole="Test" ToRole="instrument" />
           <Property Name="RequirementID" Type="Int32" />
@@ -3107,7 +3170,7 @@
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="tests">
-              <PropertyRef Name="operatorID" />
+              <PropertyRef Name="TBD4" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -3690,6 +3753,18 @@
             <End Role="ExternalReport" EntitySet="ExternalReports" />
             <End Role="TestRecord" EntitySet="TestRecords" />
           </AssociationSet>
+          <AssociationSet Name="sub_method_to_sub_test" Association="labdbModel.sub_method_to_sub_test">
+            <End Role="SubMethod" EntitySet="SubMethods" />
+            <End Role="SubTest" EntitySet="SubTests" />
+          </AssociationSet>
+          <AssociationSet Name="method_old_version_to_current" Association="labdbModel.method_old_version_to_current">
+            <End Role="Method" EntitySet="Methods" />
+            <End Role="Method1" EntitySet="Methods" />
+          </AssociationSet>
+          <AssociationSet Name="sub_method_old_version_to_current" Association="labdbModel.sub_method_old_version_to_current">
+            <End Role="SubMethod" EntitySet="SubMethods" />
+            <End Role="SubMethod1" EntitySet="SubMethods" />
+          </AssociationSet>
           </EntityContainer>
         <Association Name="overridden_to_requirement">
           <End Type="labdbModel.Requirement" Role="Requirement" Multiplicity="0..1">
@@ -4125,6 +4200,11 @@
           <NavigationProperty Name="Method" Relationship="labdbModel.method_to_measurement1" FromRole="sub_methods" ToRole="Method" />
           <NavigationProperty Name="SubRequirements" Relationship="labdbModel.submethod_to_subreq1" FromRole="sub_methods" ToRole="SubRequirement" />
           <NavigationProperty Name="SubTaskItems" Relationship="labdbModel.sub_method_to_sub_task_item" FromRole="SubMethod" ToRole="sub_task_items" />
+          <NavigationProperty Name="SubTests" Relationship="labdbModel.sub_method_to_sub_test" FromRole="SubMethod" ToRole="SubTest" />
+          <Property Name="OldVersionID" Type="Int32" />
+          <NavigationProperty Name="NewerVersions" Relationship="labdbModel.sub_method_old_version_to_current" FromRole="SubMethod" ToRole="SubMethod1" />
+          <NavigationProperty Name="OldVersion" Relationship="labdbModel.sub_method_old_version_to_current" FromRole="SubMethod1" ToRole="SubMethod" />
+          <Property Name="Position" Type="Int32" />
         </EntityType>
         <Association Name="method_to_measurement1">
           <End Type="labdbModel.Method" Role="Method" Multiplicity="1">
@@ -4855,6 +4935,42 @@
           <End Type="labdbModel.ExternalReport" Role="ExternalReport" Multiplicity="*" />
           <End Type="labdbModel.TestRecord" Role="TestRecord" Multiplicity="*" />
         </Association>
+        <Association Name="sub_method_to_sub_test">
+          <End Type="labdbModel.SubMethod" Role="SubMethod" Multiplicity="0..1" />
+          <End Type="labdbModel.SubTest" Role="SubTest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SubMethod">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="SubTest">
+              <PropertyRef Name="SubMethodID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="method_old_version_to_current">
+          <End Type="labdbModel.Method" Role="Method" Multiplicity="0..1" />
+          <End Type="labdbModel.Method" Role="Method1" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Method">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Method1">
+              <PropertyRef Name="OldVersionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="sub_method_old_version_to_current">
+          <End Type="labdbModel.SubMethod" Role="SubMethod" Multiplicity="0..1" />
+          <End Type="labdbModel.SubMethod" Role="SubMethod1" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SubMethod">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="SubMethod1">
+              <PropertyRef Name="OldVersionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -4965,13 +5081,16 @@
           <EntitySetMapping Name="Methods">
             <EntityTypeMapping TypeName="labdbModel.Method">
               <MappingFragment StoreEntitySet="methods">
+                <ScalarProperty Name="IsOld" ColumnName="is_old" />
+                <ScalarProperty Name="OldVersionID" ColumnName="old_versionID" />
+                <ScalarProperty Name="ShortDescription" ColumnName="short_description" />
                 <ScalarProperty Name="Name" ColumnName="name" />
                 <ScalarProperty Name="Duration" ColumnName="duration" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="StandardID" ColumnName="standardID" />
                 <ScalarProperty Name="PropertyID" ColumnName="propertyID" />
                 <ScalarProperty Name="Description" ColumnName="description" />
-                <ScalarProperty Name="UM" ColumnName="um" />
+                <ScalarProperty Name="TBD" ColumnName="um" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -4995,7 +5114,7 @@
           <EntitySetMapping Name="Projects">
             <EntityTypeMapping TypeName="labdbModel.Project">
               <MappingFragment StoreEntitySet="projects">
-                <ScalarProperty Name="TBD_non_usare" ColumnName="total_internal_cost" />
+                <ScalarProperty Name="TBD" ColumnName="total_internal_cost" />
                 <ScalarProperty Name="TotalExternalCost" ColumnName="total_external_cost" />
                 <ScalarProperty Name="TotalReportDuration" ColumnName="total_report_duration" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
@@ -5135,6 +5254,8 @@
           <EntitySetMapping Name="SubTests">
             <EntityTypeMapping TypeName="labdbModel.SubTest">
               <MappingFragment StoreEntitySet="sub_tests">
+                <ScalarProperty Name="Position" ColumnName="position" />
+                <ScalarProperty Name="SubMethodID" ColumnName="sub_methodID" />
                 <ScalarProperty Name="SubRequiremntID" ColumnName="sub_requirementID" />
                 <ScalarProperty Name="UM" ColumnName="um" />
                 <ScalarProperty Name="RequiredValue" ColumnName="requirement" />
@@ -5173,13 +5294,13 @@
                 <ScalarProperty Name="Duration" ColumnName="duration" />
                 <ScalarProperty Name="RequirementID" ColumnName="requirementID" />
                 <ScalarProperty Name="instrumentID" ColumnName="instrumentID" />
-                <ScalarProperty Name="IsComplete" ColumnName="is_complete" />
+                <ScalarProperty Name="TBD3" ColumnName="is_complete" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="MethodID" ColumnName="methodID" />
                 <ScalarProperty Name="TBD" ColumnName="reportID" />
                 <ScalarProperty Name="Notes" ColumnName="notes" />
-                <ScalarProperty Name="operatorID" ColumnName="operatorID" />
-                <ScalarProperty Name="Date" ColumnName="date" />
+                <ScalarProperty Name="TBD4" ColumnName="operatorID" />
+                <ScalarProperty Name="TBD5" ColumnName="date" />
                 </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -5335,6 +5456,8 @@
           <EntitySetMapping Name="SubMethods">
             <EntityTypeMapping TypeName="labdbModel.SubMethod">
               <MappingFragment StoreEntitySet="sub_methods">
+                <ScalarProperty Name="Position" ColumnName="position" />
+                <ScalarProperty Name="OldVersionID" ColumnName="old_versionID" />
                 <ScalarProperty Name="UM" ColumnName="um" />
                 <ScalarProperty Name="Name" ColumnName="name" />
                 <ScalarProperty Name="MethodID" ColumnName="methodID" />

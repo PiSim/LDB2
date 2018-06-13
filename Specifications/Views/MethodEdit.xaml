@@ -24,6 +24,13 @@
             <Button Content="Salva"
                     Command="{Binding SaveCommand}"
                     Margin="5"/>
+            <Button Content="Annulla"
+                    Command="{Binding CancelEditCommand}"
+                    Margin="5"/>
+            <Button Content="Aggiorna Metodo"
+                    Command="{Binding UpdateCommand}"
+                    Margin="5"
+                    ToolTip="Crea un nuovo Metodo per sostituire il presente"/>
         </StackPanel>
         
         <Grid Grid.Row="1">
@@ -119,15 +126,6 @@
                                                 Binding="{Binding UM}"/>
                         </DataGrid.Columns>
                     </DataGrid>
-                    <StackPanel Orientation="Vertical"
-                                Grid.Column="1">
-                        <Button Content="Aggiungi"
-                                Command="{Binding AddMeasurementCommand}"
-                                Margin="5"/>
-                        <Button Content="Rimuovi"
-                                Command="{Binding RemoveMeasurementCommand}"
-                                Margin="5"/>
-                    </StackPanel>
                 </Grid>
             </TabItem>
 

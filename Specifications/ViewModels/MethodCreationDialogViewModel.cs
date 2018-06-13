@@ -6,6 +6,8 @@ using Prism.Mvvm;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
@@ -16,11 +18,10 @@ namespace Specifications.ViewModels
 {
     internal class MethodCreationDialogViewModel : BindableBase, INotifyDataErrorInfo
     {
-        private DelegateCommand<Window> _cancel, _confirm;
+        private bool _isCreationFromOldVersion;
         private readonly Dictionary<string, ICollection<string>> _validationErrors = new Dictionary<string, ICollection<string>>();
         private IDataService _dataService;
-        private IEnumerable<Organization> _oemList;
-        private Method _methodInstance;
+        private Method _oldVersion;
         private Organization _selectedOem;
         private Property _selectedProperty;
         private Std _standardInstance;
@@ -29,18 +30,19 @@ namespace Specifications.ViewModels
         public MethodCreationDialogViewModel(IDataService dataService) : base()
         {
             _dataService = dataService;
-            _oemList = _dataService.GetOrganizations(OrganizationRoleNames.StandardPublisher);
+            OemList = _dataService.GetOrganizations(OrganizationRoleNames.StandardPublisher);
+            PropertiesList = _dataService.GetProperties();
 
-            _cancel = new DelegateCommand<Window>(
+            CancelCommand = new DelegateCommand<Window>(
                 parent =>
                 {
                     parent.DialogResult = false;
                 });
 
-            _confirm = new DelegateCommand<Window>(
+            ConfirmCommand = new DelegateCommand<Window>(
                 parent =>
                 {
-                    _methodInstance = new Method();
+                    MethodInstance = new Method();
 
                     if (_standardInstance == null)
                     {
@@ -51,29 +53,45 @@ namespace Specifications.ViewModels
                             CurrentIssue = ""
                         };
 
-                        _methodInstance.Standard = _standardInstance;
+                        MethodInstance.Standard = _standardInstance;
                     }
 
                     else
                     {
-                        _standardInstance.Update();
-                        _methodInstance.StandardID = _standardInstance.ID;
+                        if (_selectedOem.ID != _standardInstance.OrganizationID)
+                        {
+                            _standardInstance.OrganizationID = _selectedOem.ID;
+                            _standardInstance.Update();
+                        } 
+
+
+                        MethodInstance.StandardID = _standardInstance.ID;
                     }
 
-                    _methodInstance.Duration = 0;
-                    _methodInstance.Description = "";
-                    _methodInstance.PropertyID = _selectedProperty.ID;
-                    _methodInstance.UM = "";
+                    MethodInstance.Duration = WorkHours;
+                    MethodInstance.Description = Description;
+                    MethodInstance.Name = "";
+                    MethodInstance.PropertyID = _selectedProperty.ID;
+                    MethodInstance.ShortDescription = ShortDescription;
+                    MethodInstance.TBD = "";
 
-                    _methodInstance.Create();
-                    
+                    foreach (SubMethod subm in SubMethodList)
+                        MethodInstance.SubMethods.Add(subm);
+
                     parent.DialogResult = true;
                 },
                 parent => !HasErrors);
 
+            Description = "";
             Name = "";
             SelectedOem = null;
             SelectedProperty = null;
+            ShortDescription = "";
+            SubMethodList = new ObservableCollection<SubMethod>();
+            WorkHours = 0;
+
+            SubMethodList.CollectionChanged += OnSubMethodListChanged;
+
         }
 
         #region INotifyDataErrorInfo interface elements
@@ -97,25 +115,40 @@ namespace Specifications.ViewModels
         private void RaiseErrorsChanged(string propertyName)
         {
             ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
-            _confirm.RaiseCanExecuteChanged();
+            ConfirmCommand.RaiseCanExecuteChanged();
         }
 
         #endregion
-        
-        public DelegateCommand<Window> CancelCommand
+
+        #region Methods
+
+        private void OnSubMethodListChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            get { return _cancel; }
+            if (SubMethodList != null && SubMethodList.Count != 0)
+            {
+                if (_validationErrors.ContainsKey("SubMethodList"))
+                    _validationErrors.Remove("SubMethodList");
+            }
+            else
+                _validationErrors["SubMethodList"] = new List<string>() { "La Lista prove non può essere vuota" };
+
+            RaisePropertyChanged("SubMethodList");
+            RaiseErrorsChanged("SubMethodList");
         }
 
-        public DelegateCommand<Window> ConfirmCommand
-        {
-            get { return _confirm; }
-        }
-        
-        public Method MethodInstance
-        {
-            get { return _methodInstance; }
-        }
+        #endregion
+
+        public DelegateCommand AddSubMethodCommand { get; }
+
+        public DelegateCommand<Window> CancelCommand { get; }
+
+        public DelegateCommand<Window> ConfirmCommand { get; }
+
+        public bool CanEditFields => !_isCreationFromOldVersion;
+
+        public string Description { get; set; }
+
+        public Method MethodInstance { get; private set; }
 
         public string Name
         {
@@ -142,15 +175,55 @@ namespace Specifications.ViewModels
             }
         }
 
-        public IEnumerable<Organization> OemList
+        public IEnumerable<Organization> OemList { get; }
+
+        public Method OldVersion
         {
-            get
+            get => _oldVersion;
+            set 
             {
-                return _oemList;
+                _oldVersion = value;
+                _isCreationFromOldVersion = value != null;
+
+                SelectedOem = OemList.FirstOrDefault(oem => oem.ID == _oldVersion?.Standard?.OrganizationID);
+                SelectedProperty = PropertiesList.FirstOrDefault(pro => pro.ID == _oldVersion?.PropertyID);
+
+                SubMethodList.Clear();
+
+                if (_isCreationFromOldVersion)
+                {
+                    Description = _oldVersion.Description;
+                    ShortDescription = _oldVersion.Description;
+                    Name = _oldVersion.Standard?.Name;
+
+                    foreach (SubMethod subm in _oldVersion.SubMethods)
+                        SubMethodList.Add(new SubMethod()
+                        {
+                            Name = subm.Name,
+                            OldVersionID = subm.ID,
+                            UM = subm.UM
+                        });
+                }
+
+                else
+                {
+                    Description = "";
+                    ShortDescription = "";
+                    Name = "";
+                }
+
+                RaisePropertyChanged("CanEditFields");
+                RaisePropertyChanged("Description");
+                RaisePropertyChanged("Name");
+                RaisePropertyChanged("SelectedProperty");
+                RaisePropertyChanged("ShortDescription");
+
             }
         }
 
-        public IEnumerable<Property> PropertiesList => _dataService.GetProperties();
+        public IEnumerable<Property> PropertiesList { get; }
+
+        public DelegateCommand<SubMethod> RemoveSubMethodCommand { get; }
 
         public Organization SelectedOem
         {
@@ -158,9 +231,6 @@ namespace Specifications.ViewModels
             set
             {
                 _selectedOem = value;
-
-                if (_standardInstance != null)
-                    _standardInstance.OrganizationID = _selectedOem.ID;
 
                 if (_selectedOem != null)
                 {
@@ -194,5 +264,11 @@ namespace Specifications.ViewModels
                 RaiseErrorsChanged("SelectedProperty");
             }
         }
+
+        public string ShortDescription { get; set; }
+
+        public ObservableCollection<SubMethod> SubMethodList { get; private set; }
+
+        public double WorkHours { get; set; }
     }
 }

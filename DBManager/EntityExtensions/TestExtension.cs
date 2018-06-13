@@ -10,9 +10,19 @@ namespace DBManager
 {
     public partial class Test
     {
+        public string AspectCode => TestRecord?.Batch?.Material?.Aspect?.Code;
+
+        public string BatchNumber => TestRecord?.Batch?.Number;
+
+        public string MaterialLineCode => TestRecord?.Batch?.Material?.MaterialLine?.Code;
+
+        public string MaterialTypeCode => TestRecord?.Batch?.Material?.MaterialType?.Code;
+
         public string MethodName => Method?.Standard?.Name;
 
         public string PropertyName => Method?.Property?.Name;
+
+        public string RecipeCode => TestRecord?.Batch?.Material?.Recipe?.Code;
 
     }
 

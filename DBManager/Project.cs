@@ -28,7 +28,7 @@ namespace DBManager
         public Nullable<int> OemID { get; set; }
         public double TotalExternalCost { get; set; }
         public double TotalReportDuration { get; set; }
-        public int TBD_non_usare { get; set; }
+        public Nullable<int> TBD { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ExternalReport> ExternalReports { get; set; }

@@ -100,7 +100,10 @@ namespace Reports.ViewModels
                 mtd =>
                 {
                     _instance.AddTestMethod(mtd);
+
+                    _instance.Methods = _instance.GetMethods();
                     RaisePropertyChanged("MethodList");
+
                     RefreshTestRecords();
                 },
                 mtd => EditMode);
@@ -143,15 +146,18 @@ namespace Reports.ViewModels
                 mtd =>
                 {
                     _instance.RemoveTestMethod(mtd);
+
                     _instance.Methods = _instance.GetMethods() as ICollection<Method>;
                     RaisePropertyChanged("MethodList");
+
+                    RefreshTestRecords();
                 },
                 mtd => EditMode);
 
             _save = new DelegateCommand(
                 () =>
                 {
-                    _instance.Update();
+                    _instance.Update(true);
                     EditMode = false;
 
                     EntityChangedToken token = new EntityChangedToken(_instance,
@@ -264,7 +270,7 @@ namespace Reports.ViewModels
                                 
                 if (_instance != null)
                 {
-                    _instance.Methods = _instance.GetMethods() as ICollection<Method>;
+                    _instance.Methods = _instance.GetMethods();
                     RefreshTestRecords();
                 }
 

@@ -23,15 +23,19 @@ namespace DBManager
             this.AssociatedInstruments = new HashSet<Instrument>();
             this.ExternalReports = new HashSet<ExternalReport>();
             this.TaskItems = new HashSet<TaskItem>();
+            this.NewerVersions = new HashSet<Method>();
         }
     
         public int ID { get; private set; }
         public int StandardID { get; set; }
         public int PropertyID { get; set; }
         public string Description { get; set; }
-        public string UM { get; set; }
+        public string TBD { get; set; }
         public double Duration { get; set; }
         public string Name { get; set; }
+        public string ShortDescription { get; set; }
+        public Nullable<int> OldVersionID { get; set; }
+        public bool IsOld { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Requirement> Requirements { get; set; }
@@ -47,5 +51,8 @@ namespace DBManager
         public virtual ICollection<ExternalReport> ExternalReports { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<TaskItem> TaskItems { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Method> NewerVersions { get; set; }
+        public virtual Method OldVersion { get; set; }
     }
 }

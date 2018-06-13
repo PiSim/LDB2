@@ -37,7 +37,8 @@ namespace Admin.ViewModels
             _scriptList = new List<ScriptBase>()
             {
                 new Scripts.BuildTestRecords(),
-                new Scripts.BuildExternalTestRecordsScript()
+                new Scripts.BuildExternalTestRecordsScript(),
+                new Scripts.BuildSubMethodPositionScript()
             };
 
             _newOrganizationRole = new DelegateCommand(

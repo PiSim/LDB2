@@ -27,8 +27,11 @@ namespace DBManager
         public string RequiredValue { get; set; }
         public string UM { get; set; }
         public Nullable<int> SubRequiremntID { get; set; }
+        public Nullable<int> SubMethodID { get; set; }
+        public Nullable<int> Position { get; set; }
     
         public virtual Test Test { get; set; }
         public virtual SubRequirement SubRequirement { get; set; }
+        public virtual SubMethod SubMethod { get; set; }
     }
 }

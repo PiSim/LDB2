@@ -85,17 +85,6 @@ namespace DBManager
 
     public static class ReportExtension
     {
-        public static bool AreTestsComplete(this Report entry)
-        {
-            // Returns true if all the tests are completed
-
-            using (DBEntities entities = new DBEntities())
-            {
-                return entities.Tests.Where(tst => tst.TestRecordID == entry.TestRecordID)
-                                    .All(tst => tst.IsComplete == true);
-            }
-        }
-
         public static void Create(this Report entry)
         {
             using (DBEntities entities = new DBEntities())
@@ -148,7 +137,6 @@ namespace DBManager
                 return entities.Tests.Include(tst => tst.Instrument.InstrumentType)
                                     .Include(tst => tst.Method.Property)
                                     .Include(tst => tst.Method.Standard.Organization)
-                                    .Include(tst => tst.Person)
                                     .Include(tst => tst.SubTests)
                                     .Where(tst => tst.TestRecordID == entry.TestRecordID)
                                     .ToList();

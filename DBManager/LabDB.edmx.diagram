@@ -163,6 +163,9 @@
         <EntityTypeShape EntityType="labdbModel.TestRecordType" Width="1.5" PointX="17.75" PointY="17.625" />
         <AssociationConnector Association="labdbModel.type_to_test_record" />
         <AssociationConnector Association="labdbModel.external_report_test_record_mappings" />
+        <AssociationConnector Association="labdbModel.sub_method_to_sub_test" />
+        <AssociationConnector Association="labdbModel.method_old_version_to_current" />
+        <AssociationConnector Association="labdbModel.sub_method_old_version_to_current" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

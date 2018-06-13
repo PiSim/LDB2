@@ -83,11 +83,7 @@ namespace Reports.ViewModels
                 () =>
                 {
                     if (_reportService.AddTestsToReport(_instance))
-                    {
                         TestList = new List<TestWrapper>(_instance.GetTests().Select(tst => new TestWrapper(tst)));
-                        _eventAggregator.GetEvent<ReportStatusCheckRequested>()
-                                        .Publish(_instance);
-                    }
                 },
                 () => CanModify);
 
@@ -133,9 +129,6 @@ namespace Reports.ViewModels
                         tempTaskItem.Update();
                     }
 
-                    _eventAggregator.GetEvent<ReportStatusCheckRequested>()
-                                    .Publish(_instance);
-
                     TestList = new List<TestWrapper>(_instance.GetTests().Select(tst => new TestWrapper(tst)));
 
                 },
@@ -159,8 +152,6 @@ namespace Reports.ViewModels
 
                     EditMode = false;
                     
-
-                    _eventAggregator.GetEvent<ReportStatusCheckRequested>().Publish(_instance);
                 },
                 () => _editMode);
 

@@ -129,7 +129,6 @@
     <Compile Include="Events\ProjectCostUpdateRequested.cs" />
     <Compile Include="Events\ReportCompleted.cs" />
     <Compile Include="Events\ReportDeleted.cs" />
-    <Compile Include="Events\ReportStatusCheckRequested.cs" />
     <Compile Include="Events\SampleListUpdateRequested.cs" />
     <Compile Include="Events\SampleLogCreated.cs" />
     <Compile Include="Events\SpecificationMethodListChanged.cs" />

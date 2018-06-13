@@ -2,6 +2,24 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:Controls.Resources">
 
+    <Style x:Key="TestDataGridStyle"
+           TargetType="DataGrid">
+        <Setter Property="AutoGenerateColumns"
+                Value="False"/>
+        <Setter Property="Background"
+                Value="White"/>
+        <Setter Property="CanUserAddRows"
+                Value="False"/>
+        <Setter Property="CanUserDeleteRows"
+                Value="False"/>
+        <Setter Property="CanUserResizeRows"
+                Value="False"/>
+        <Setter Property="HorizontalGridLinesBrush"
+                Value="LightGray"/>
+        <Setter Property="VerticalGridLinesBrush"
+                Value="Transparent"/>
+    </Style>
+    
     <Style x:Key="DataGridCellEnabledOnEditModeStyle"
            TargetType="DataGridCell">
         <Setter Property="IsEnabled"

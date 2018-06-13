@@ -20,6 +20,7 @@ namespace DBManager
                 Name = Name,
                 RequiredValue = RequiredValue,
                 SubRequiremntID = SubRequirementID,
+                SubMethodID = SubMethodID,
                 UM = UM
             };
 

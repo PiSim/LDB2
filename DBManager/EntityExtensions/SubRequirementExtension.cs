@@ -8,6 +8,8 @@ namespace DBManager
 {
     public partial class SubRequirement
     {
+        public bool IsUpdated { get; set; } = false;
+
         public string Name => SubMethod?.Name;
 
         public string UM => SubMethod?.UM;

@@ -21,12 +21,10 @@ namespace Specifications.ViewModels
         private bool _editMode;
         private DBPrincipal _principal;
         private DelegateCommand _addFile,
-                                _addMeasurement,
                                 _openFile,
                                 _openReport,
                                 _openSpecification,
                                 _removeFile,
-                                _removeMeasurement,
                                 _save,
                                 _startEdit;
         private EventAggregator _eventAggregator;
@@ -39,7 +37,6 @@ namespace Specifications.ViewModels
         private Organization _selectedOrganization;
         private Property _selectedProperty;
         private Specification _selectedSpecification;
-        private SubMethod _selectedMeasurement;
         private StandardFile _selectedFile;
         private Test _selectedTest;
 
@@ -84,23 +81,14 @@ namespace Specifications.ViewModels
                         RaisePropertyChanged("FileList");
                     }
                 },
-                () => IsSpecAdmin);
+                () => CanModify);
 
-            _addMeasurement = new DelegateCommand(
+            CancelEditCommand = new DelegateCommand(
                 () =>
                 {
-                    SubMethod tempMea = new SubMethod
-                    {
-                        Name = "Nuova Prova",
-                        UM = ""
-                    };
-
-                    _methodInstance.AddSubMethod(tempMea);
-
-                    _subMethodList = _methodInstance.GetSubMethods();
-                    RaisePropertyChanged("Measurements");
+                    EditMode = false;
                 },
-                () => IsSpecAdmin);
+                () => EditMode);
 
             _openFile = new DelegateCommand(
                 () =>
@@ -135,18 +123,7 @@ namespace Specifications.ViewModels
                     _selectedFile.Delete();
                     SelectedFile = null;
                 },
-                () => IsSpecAdmin && _selectedFile != null);
-
-            _removeMeasurement = new DelegateCommand(
-                () =>
-                {
-                    _selectedMeasurement.Delete();
-                    SelectedMeasurement = null;
-
-                    _subMethodList = _methodInstance.GetSubMethods();
-                    RaisePropertyChanged("Measurements");
-                },
-                () => IsSpecAdmin && SelectedMeasurement != null);
+                () => EditMode && _selectedFile != null);
 
             _save = new DelegateCommand(
                 () =>
@@ -169,7 +146,14 @@ namespace Specifications.ViewModels
                 {
                     EditMode = true;
                 },
-                () => IsSpecAdmin && !_editMode);
+                () => CanModify && !_editMode);
+
+            UpdateCommand = new DelegateCommand(
+                () =>
+                {
+                    _specificationService.StartMethodUpdate(_methodInstance);
+                },
+                () => CanModify);
         }
 
         public DelegateCommand AddFileCommand
@@ -177,10 +161,9 @@ namespace Specifications.ViewModels
             get { return _addFile; }
         }
 
-        public DelegateCommand AddMeasurementCommand
-        {
-            get { return _addMeasurement; }
-        }
+        public DelegateCommand CancelEditCommand { get; }
+
+        private bool CanModify => _principal.IsInRole(UserRoleNames.SpecificationEdit);
 
         public bool CanModifyTests
         {
@@ -211,6 +194,9 @@ namespace Specifications.ViewModels
                 _editMode = value;
                 RaisePropertyChanged("CanModifyTests");
                 RaisePropertyChanged("EditMode");
+                _addFile.RaiseCanExecuteChanged();
+                CancelEditCommand.RaiseCanExecuteChanged();
+                _removeFile.RaiseCanExecuteChanged();
                 _save.RaiseCanExecuteChanged();
                 _startEdit.RaiseCanExecuteChanged();
             }
@@ -222,11 +208,6 @@ namespace Specifications.ViewModels
             {
                 return _methodInstance.GetFiles();
             }
-        }
-
-        private bool IsSpecAdmin
-        {
-            get { return _principal.IsInRole(UserRoleNames.SpecificationAdmin); }
         }
 
         public string MethodEditSpecificationListRegionName
@@ -309,11 +290,6 @@ namespace Specifications.ViewModels
         {
             get { return _removeFile; }
         }
-        
-        public DelegateCommand RemoveMeasurementCommand
-        {
-            get { return _removeMeasurement; }
-        }
 
         public IEnumerable<Test> ResultList
         {
@@ -335,20 +311,6 @@ namespace Specifications.ViewModels
                 _selectedFile = value;
                 _openFile.RaiseCanExecuteChanged();
                 _removeFile.RaiseCanExecuteChanged();
-            }
-        }
-
-        public SubMethod SelectedMeasurement
-        {
-            get 
-            {
-                return _selectedMeasurement;
-            }
-            set
-            {
-                _selectedMeasurement = value;
-                _removeMeasurement.RaiseCanExecuteChanged();
-                RaisePropertyChanged("SelectedMeasurement");
             }
         }
 
@@ -413,5 +375,7 @@ namespace Specifications.ViewModels
         {
             get { return _startEdit; }
         }
+
+        public DelegateCommand UpdateCommand { get; }
     }
 }
