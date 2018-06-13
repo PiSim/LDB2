@@ -31,7 +31,6 @@
     <Style x:Key="DataGridCellOnlyVisibleInEditMode"
            TargetType="DataGridCell">
         <Style.Triggers>
-
             <DataTrigger Binding="{Binding DataContext.EditMode,
                                            RelativeSource={RelativeSource Mode=FindAncestor,
                                                                           AncestorType=DataGrid}}"

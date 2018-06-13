@@ -132,7 +132,7 @@ namespace Reports.ViewModels
                     TestList = new List<TestWrapper>(_instance.GetTests().Select(tst => new TestWrapper(tst)));
 
                 },
-                testItem => CanModify);
+                testItem => EditMode);
 
             _save = new DelegateCommand(
                 () =>
@@ -242,6 +242,7 @@ namespace Reports.ViewModels
                 RaisePropertyChanged("EditMode");
                 RaisePropertyChanged("ReadOnlyMode");
 
+                _removeTest.RaiseCanExecuteChanged();
                 _save.RaiseCanExecuteChanged();
                 _startEdit.RaiseCanExecuteChanged();
             }

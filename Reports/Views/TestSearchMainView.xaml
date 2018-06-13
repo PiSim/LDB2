@@ -129,10 +129,6 @@
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
 
-                
-                <DataGridTextColumn Header="Ore lavoro"
-                                               Binding="{Binding Duration}"/>
-                                
             </DataGrid.Columns>
         </DataGrid>
     </Grid>
