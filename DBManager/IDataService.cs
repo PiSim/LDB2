@@ -67,7 +67,17 @@ namespace DBManager
 
         Aspect GetAspect(string aspectCode);
         MaterialLine GetMaterialLine(string lineCode);
-        
+
+
+
+        /// <summary>
+        /// Returns a list of all the method entities in the database.
+        /// </summary>
+        /// <param name="includeObsolete">If false only the entries not marked
+        /// as "obsolete" will be returned</param>
+        /// <returns>An ICollection of Method Entities</returns>
+        ICollection<Method> GetMethods(bool includeObsolete = false);
+
         /// <summary>
         /// Queries for a Recipe with the given ID
         /// </summary>
@@ -85,7 +95,8 @@ namespace DBManager
         Requirement GetRequirement(int ID);
         Std GetStandard(string name);
         SpecificationVersion GetSpecificationVersion(int ID);
-        IEnumerable<Method> GetMethods();
+        
+
         IEnumerable<Material> GetMaterialsWithoutConstruction();
         Report GetReportByNumber(int number);
     }

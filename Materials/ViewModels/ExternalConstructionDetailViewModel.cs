@@ -79,7 +79,7 @@ namespace Materials.ViewModels
             _unassignMaterialToExternal = new DelegateCommand(
                 () =>
                 {
-                    _externalConstructionInstance.RemoveMaterial(_selectedAssignedMaterial);
+                    _selectedAssignedMaterial.UnsetConstruction();
                     SelectedAssignedMaterial = null;
                     RaisePropertyChanged("AssignedMaterials");
                     RaisePropertyChanged("BatchList");

@@ -5,8 +5,30 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DBManager.EntityExtensions
+namespace DBManager
 {
+
+    public partial class Material
+    {
+        /// <summary>
+        /// Removes the ExternalConstruction Association from the material
+        /// </summary>
+        public void UnsetConstruction()
+        {
+            using (DBEntities entities = new DBEntities())
+            {
+                Material attachedEntry = entities.Materials.First(mat => mat.ID == ID);
+
+                attachedEntry.ExternalConstruction.Materials.Remove(attachedEntry);
+
+                entities.SaveChanges();
+            }
+
+        }
+
+
+    }
+
     public static class MaterialExtension
     {
 
@@ -90,6 +112,8 @@ namespace DBManager.EntityExtensions
             entry.Recipe = recipeEntity;
             entry.RecipeID = (recipeEntity == null) ? 0 : recipeEntity.ID;
         }
+
+
 
         public static void Update(this Material entry)
         {

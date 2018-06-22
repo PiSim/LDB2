@@ -40,16 +40,25 @@ namespace Specifications.ViewModels
             _confirm = new DelegateCommand<Window>(
                 parent =>
                 {
-                    Std tempStd = _dataService.GetStandard(_name);
-                    if (tempStd == null)
+
+                    _specificationInstance = new Specification()
                     {
-                        tempStd = new Std();
-                        tempStd.Name = Name;
-                        tempStd.OrganizationID = _oem.ID;
-                        tempStd.CurrentIssue = _currentIssue;
-                        
-                        tempStd.Create();
-                    }
+                        Description = _description,
+                        Name = Name
+                    };
+
+                    Std tempStd = _dataService.GetStandard(_name);
+
+                    if (tempStd == null)
+                        _specificationInstance.Standard = new Std()
+                        {
+                            CurrentIssue = _currentIssue,
+                            Name = Name,
+                            OrganizationID = _oem.ID
+                        };
+
+                    else
+                        _specificationInstance.StandardID = tempStd.ID;
 
                     SpecificationVersion tempMain = new SpecificationVersion();
                     tempMain.Name = "Generica";
@@ -58,16 +67,10 @@ namespace Specifications.ViewModels
                     ControlPlan tempControlPlan = new ControlPlan();
                     tempControlPlan.Name = "Completo";
                     tempControlPlan.IsDefault = true;
-
-                    _specificationInstance = new Specification();
-                    _specificationInstance.Description = _description;
-                    _specificationInstance.StandardID = tempStd.ID;
-
+                    
                     _specificationInstance.ControlPlans.Add(tempControlPlan);
                     _specificationInstance.SpecificationVersions.Add(tempMain);
-
-                    _specificationInstance.Create();
-                    
+                                        
                     parent.DialogResult = true;
                 },
                 parent => !HasErrors);

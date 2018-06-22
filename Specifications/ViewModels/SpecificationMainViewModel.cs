@@ -21,24 +21,25 @@ namespace Specifications.ViewModels
         private DelegateCommand _newSpecification, _openSpecification;
         private EventAggregator _eventAggregator;
         private readonly IDataService _dataService;
+        private readonly ISpecificationService _specificationService;
         private Specification _selectedSpecification;
 
         public SpecificationMainViewModel(DBPrincipal principal,
                                             EventAggregator aggregator,
-                                            IDataService dataService) 
+                                            IDataService dataService,
+                                            ISpecificationService specificationService) 
             : base()
         {
             _dataService = dataService;
             _eventAggregator = aggregator;
             _principal = principal;
+            _specificationService = specificationService;
 
             _newSpecification = new DelegateCommand(
                 () => 
                 {
-                    Views.SpecificationCreationDialog creationDialog = new Views.SpecificationCreationDialog();
-                    
-                    if (creationDialog.ShowDialog() == true)
-                        RaisePropertyChanged("SpecificationList");
+                    _specificationService.CreateSpecification();
+
                 },
                 () => _principal.IsInRole(UserRoleNames.SpecificationEdit));
 
@@ -50,6 +51,18 @@ namespace Specifications.ViewModels
                     _eventAggregator.GetEvent<NavigationRequested>().Publish(token);
                 },
                 () => SelectedSpecification != null);
+
+
+            #region EventSubscriptions
+
+            _eventAggregator.GetEvent<SpecificationChanged>()
+                            .Subscribe(token =>
+                            {
+                                RaisePropertyChanged("SpecificationList");
+                            });
+
+            #endregion
+
         }
 
         public DelegateCommand NewSpecificationCommand

@@ -161,20 +161,6 @@ namespace DBManager.Services
             }
         }
 
-        public static void RemoveMaterial(this ExternalConstruction entry,
-                                            Material toBeRemoved)
-        {
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.Configuration.AutoDetectChangesEnabled = false;
-
-                entities.Materials.First(mat => mat.ID == toBeRemoved.ID)
-                        .ExternalConstructionID = null;
-
-                entities.SaveChanges();
-            }
-        }
-
         public static void Update(this ExternalConstruction entry)
         {
             using (DBEntities entities = new DBEntities())

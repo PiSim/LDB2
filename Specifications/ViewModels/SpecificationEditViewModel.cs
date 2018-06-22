@@ -195,7 +195,7 @@ namespace Specifications.ViewModels
                 {
                     EditMode = true;
                 },
-                () => _principal.IsInRole(UserRoleNames.Admin) && !_editMode);
+                () => _principal.IsInRole(UserRoleNames.SpecificationEdit) && !_editMode);
 
             // Event Subscriptions
 

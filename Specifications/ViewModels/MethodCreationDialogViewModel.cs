@@ -42,7 +42,15 @@ namespace Specifications.ViewModels
             ConfirmCommand = new DelegateCommand<Window>(
                 parent =>
                 {
-                    MethodInstance = new Method();
+                    MethodInstance = new Method()
+                    {
+                        Duration = WorkHours,
+                        Description = Description,
+                        Name = "",
+                        PropertyID = _selectedProperty.ID,
+                        ShortDescription = ShortDescription,
+                        TBD = ""
+                    };
 
                     if (_standardInstance == null)
                     {
@@ -67,13 +75,6 @@ namespace Specifications.ViewModels
 
                         MethodInstance.StandardID = _standardInstance.ID;
                     }
-
-                    MethodInstance.Duration = WorkHours;
-                    MethodInstance.Description = Description;
-                    MethodInstance.Name = "";
-                    MethodInstance.PropertyID = _selectedProperty.ID;
-                    MethodInstance.ShortDescription = ShortDescription;
-                    MethodInstance.TBD = "";
 
                     foreach (SubMethod subm in SubMethodList)
                         MethodInstance.SubMethods.Add(subm);

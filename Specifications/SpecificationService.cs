@@ -45,6 +45,25 @@ namespace Specifications
             }
         }
 
+        public void CreateSpecification()
+        {
+            Views.SpecificationCreationDialog creationDialog = _container.Resolve<Views.SpecificationCreationDialog>();
+
+            if (creationDialog.ShowDialog() == true)
+            {
+
+                Specification newInstance = creationDialog.SpecificationInstance;
+
+                newInstance.Create();
+
+                _eventAggregator.GetEvent<SpecificationChanged>()
+                                .Publish(new EntityChangedToken(newInstance,
+                                                                EntityChangedToken.EntityChangedAction.Created));
+                                
+            }
+        }
+
+
         /// <summary>
         /// Consolidates a list of Std entries into a single one, redirecting all references
         /// All the entries that are left unused are deleted

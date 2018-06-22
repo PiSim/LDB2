@@ -426,19 +426,20 @@ namespace DBManager
             }
         }
 
-        public IEnumerable<Method> GetMethods()
+        public ICollection<Method> GetMethods(bool includeObsolete = false)
         {
-            // Returns all Method entities.
-
-            using (var entities = new DBEntities())
+            using (DBEntities entities = new DBEntities())
             {
                 entities.Configuration.LazyLoadingEnabled = false;
 
-                return entities.Methods.Include(mtd => mtd.Standard.Organization)
-                                        .Include(mtd => mtd.Property)
-                                        .Where(mtd => true)
-                                        .OrderBy(mtd => mtd.Standard.Name)
-                                        .ToList();
+                IQueryable<Method> query = entities.Methods.Include(mtd => mtd.Standard.Organization)
+                                                            .Include(mtd => mtd.Property);
+
+                if (!includeObsolete)
+                    query = query.Where(mtd => !mtd.IsOld);
+
+                return query.OrderBy(mtd => mtd.Standard.Name)
+                            .ToList();
             }
         }
 
