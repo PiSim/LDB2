@@ -16,17 +16,30 @@
                                              Direction="Ascending"/>
                     </CollectionViewSource.SortDescriptions>
                 </CollectionViewSource>
+
+                <Style x:Key="DataGridCellSelectionInvisible"
+                        TargetType="DataGridCell">
+                    <Style.Triggers>
+                        <Trigger Property="DataGridCell.IsSelected" Value="True">
+                            <Setter Property="BorderBrush" Value="Transparent"/>
+                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+                            <Setter Property="Background" Value="Transparent"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
             </Grid.Resources>
+            
             <DataGrid ItemsSource="{Binding Source={StaticResource SubTestResultCollectionView}}"
-                  AutoGenerateColumns="False"
-                  HeadersVisibility="None"
-                  CanUserAddRows="False"
-                  CanUserDeleteRows="False"
-                  GridLinesVisibility="Horizontal"
-                  ClipToBounds="True"
-                  HorizontalScrollBarVisibility="Hidden"
-                  RowHeight="30"
-                  Margin="-2">
+                      AutoGenerateColumns="False"
+                      CellStyle="{StaticResource DataGridCellSelectionInvisible}"
+                      HeadersVisibility="None"
+                      CanUserAddRows="False"
+                      CanUserDeleteRows="False"
+                      GridLinesVisibility="Horizontal"
+                      ClipToBounds="True"
+                      HorizontalScrollBarVisibility="Hidden"
+                      RowHeight="25"
+                      Margin="-2">
                 <DataGrid.Columns>
                     <DataGridTextColumn Binding="{Binding Result}"
                                     Width="*">
@@ -53,9 +66,21 @@
                                              Direction="Ascending"/>
                     </CollectionViewSource.SortDescriptions>
                 </CollectionViewSource>
+
+                <Style x:Key="DataGridCellSelectionInvisible"
+                        TargetType="DataGridCell">
+                    <Style.Triggers>
+                        <Trigger Property="DataGridCell.IsSelected" Value="True">
+                            <Setter Property="BorderBrush" Value="Transparent"/>
+                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+                            <Setter Property="Background" Value="Transparent"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
             </Grid.Resources>
             <DataGrid ItemsSource="{Binding Source={StaticResource SubTestResultCollectionView}}"
                         AutoGenerateColumns="False"
+                        CellStyle="{StaticResource DataGridCellSelectionInvisible}"
                         HeadersVisibility="None"
                       IsReadOnly="True"
                         CanUserAddRows="False"
@@ -63,7 +88,7 @@
                         GridLinesVisibility="Horizontal"
                         ClipToBounds="True"
                         HorizontalScrollBarVisibility="Hidden"
-                        RowHeight="30"
+                        RowHeight="25"
                         Margin="-2">
                 <DataGrid.Columns>
                     <DataGridTextColumn Binding="{Binding Result}"
@@ -85,16 +110,28 @@
                                              Direction="Ascending"/>
                     </CollectionViewSource.SortDescriptions>
                 </CollectionViewSource>
+
+                <Style x:Key="DataGridCellSelectionInvisible"
+                        TargetType="DataGridCell">
+                    <Style.Triggers>
+                        <Trigger Property="DataGridCell.IsSelected" Value="True">
+                            <Setter Property="BorderBrush" Value="Transparent"/>
+                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+                            <Setter Property="Background" Value="Transparent"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
             </Grid.Resources>
             <DataGrid ItemsSource="{Binding Source={StaticResource SubTestCollectionView}}"
                   AutoGenerateColumns="False"
+                  CellStyle="{StaticResource DataGridCellSelectionInvisible}"
                   HeadersVisibility="None"
                   CanUserAddRows="False"
                   CanUserDeleteRows="False"
                   GridLinesVisibility="Horizontal"
                   ClipToBounds="True"
                   HorizontalScrollBarVisibility="Hidden"
-                  RowHeight="30"
+                  RowHeight="25"
                   IsReadOnly="True"
                   Margin="-2">
                 <DataGrid.Columns>
@@ -116,17 +153,29 @@
                                              Direction="Ascending"/>
                     </CollectionViewSource.SortDescriptions>
                 </CollectionViewSource>
+
+                <Style x:Key="DataGridCellSelectionInvisible"
+                        TargetType="DataGridCell">
+                    <Style.Triggers>
+                        <Trigger Property="DataGridCell.IsSelected" Value="True">
+                            <Setter Property="BorderBrush" Value="Transparent"/>
+                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+                            <Setter Property="Background" Value="Transparent"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
             </Grid.Resources>
 
             <DataGrid ItemsSource="{Binding Source={StaticResource SubTestCollectionView}}"
                   AutoGenerateColumns="False"
+                  CellStyle="{StaticResource DataGridCellSelectionInvisible}"
                   HeadersVisibility="None"
                   CanUserAddRows="False"
                   CanUserDeleteRows="False"
                   GridLinesVisibility="Horizontal"
                   ClipToBounds="True"
                   HorizontalScrollBarVisibility="Hidden"
-                  RowHeight="30"
+                  RowHeight="25"
                   Margin="-2">
                 <DataGrid.Columns>
                     <DataGridTextColumn Binding="{Binding Result}"
@@ -154,9 +203,21 @@
                                              Direction="Ascending"/>
                     </CollectionViewSource.SortDescriptions>
                 </CollectionViewSource>
+
+                <Style x:Key="DataGridCellSelectionInvisible"
+                        TargetType="DataGridCell">
+                    <Style.Triggers>
+                        <Trigger Property="DataGridCell.IsSelected" Value="True">
+                            <Setter Property="BorderBrush" Value="Transparent"/>
+                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+                            <Setter Property="Background" Value="Transparent"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
             </Grid.Resources>
             <DataGrid ItemsSource="{Binding Source={StaticResource SubTestCollectionView}}"
                   AutoGenerateColumns="False"
+                  CellStyle="{StaticResource DataGridCellSelectionInvisible}"
                   IsReadOnly="True"
                   HeadersVisibility="None"
                   CanUserAddRows="False"
@@ -164,7 +225,7 @@
                   GridLinesVisibility="Horizontal"
                   ClipToBounds="True"
                   HorizontalScrollBarVisibility="Hidden"
-                  RowHeight="30"
+                  RowHeight="25"
                   Margin="-2">
                 <DataGrid.Columns>
                     <DataGridTextColumn Binding="{Binding UM}"

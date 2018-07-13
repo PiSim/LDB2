@@ -1,7 +1,9 @@
 ﻿using DBManager;
+using Infrastructure.Events;
 using Infrastructure.Queries;
 using Microsoft.Practices.Prism.Mvvm;
 using Prism.Commands;
+using Prism.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,34 +16,79 @@ namespace Reports.ViewModels
     {
         DelegateCommand _runQuery;
         DataAccessService _dataService;
+        EventAggregator _eventAggregator;
         IEnumerable<Test> _resultList;
-        string _methodName;
 
-        public TestSearchMainViewModel(DataAccessService dataService)
+        public TestSearchMainViewModel(DataAccessService dataService,
+                                        EventAggregator eventAggregator)
         {
             _dataService = dataService;
+            _eventAggregator = eventAggregator;
 
             _runQuery = new DelegateCommand(
                 () =>
                 {
                     IQuery<Test> testQuery = new TestQuery()
                     {
-                        MethodName = _methodName
+                        AspectCode = AspectCode,
+                        BatchNumber = BatchNumber,
+                        ColorName = ColorName,
+                        LineCode = LineCode,
+                        MaterialTypeCode = MaterialTypeCode,
+                        MethodName = MethodName,
+                        RecipeCode = RecipeCode,
+                        TestName = TestName
                     };
 
                     _resultList = _dataService.GetQueryResults(testQuery);
                     OnPropertyChanged("ResultList");
                 });
+
+            RowDoubleClickCommand = new DelegateCommand<Test>(
+                tst =>
+                {
+                    Object rpt = tst.TestRecord.GetReport();
+                    string viewName;
+
+                    if (tst.TestRecord.RecordTypeID == 1)
+                        viewName = ViewNames.ReportEditView;
+
+                    else if (tst.TestRecord.RecordTypeID == 2)
+                        viewName = ViewNames.ExternalReportEditView;
+
+                    else
+                        return;
+
+                    NavigationToken token = new NavigationToken(viewName,
+                                                                rpt,
+                                                                null);
+
+                    _eventAggregator.GetEvent<NavigationRequested>()
+                                    .Publish(token);
+                }
+                );
         }
+
+        public string AspectCode { get; set; }
+
+        public string BatchNumber { get; set; }
+
+        public string ColorName { get; set; }
+
+        public string LineCode { get; set; }
+
+        public string MaterialTypeCode { get; set; }
+
+        public string MethodName { get; set; }
+
+        public string RecipeCode { get; set; }
+
+        public DelegateCommand<Test> RowDoubleClickCommand { get; }
 
         public DelegateCommand RunQueryCommand => _runQuery;
 
         public IEnumerable<Test> ResultList => _resultList;
 
-        public string MethodName
-        {
-            get => _methodName;
-            set => _methodName = value;
-        }
+        public string TestName { get; set; }
     }
 }

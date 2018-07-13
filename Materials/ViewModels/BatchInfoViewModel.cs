@@ -91,7 +91,7 @@ namespace Materials.ViewModels
                     _eventAggregator.GetEvent<NavigationRequested>()
                                     .Publish(token);
                 },
-                () => _principal.IsInRole(UserRoleNames.BatchAdmin));
+                () => CanDelete);
 
             _deleteSample = new DelegateCommand<Sample>(
                 smp =>
@@ -311,7 +311,9 @@ namespace Materials.ViewModels
                 _instance = value;
                 if (_instance != null && _instance.ID != 0)
                     _instance.Load();
-                
+
+                _deleteBatch.RaiseCanExecuteChanged();
+
                 _samplesList = _instance.GetSamples();
 
                 _selectedTrialArea = _trialAreaList.FirstOrDefault(tra => tra.ID == _instance?.TrialAreaID);
@@ -359,6 +361,10 @@ namespace Materials.ViewModels
         {
             get { return _cancelEdit; }
         }
+
+        private bool CanDelete => _instance != null
+                                    && _principal.IsInRole(UserRoleNames.BatchEdit)
+                                    && !_instance.HasTests;
 
         public IEnumerable<Colour> ColourList
         {

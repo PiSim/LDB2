@@ -142,6 +142,7 @@
     <Compile Include="ISpecificationService.cs" />
     <Compile Include="Queries\ArrivedUntestedBatchesQuery.cs" />
     <Compile Include="Queries\BatchesNotArrivedQuery.cs" />
+    <Compile Include="Queries\BatchQuery.cs" />
     <Compile Include="Queries\LatestNBatchesQuery.cs" />
     <Compile Include="Queries\Presentation\BatchesNotArrivedQueryPresenter.cs" />
     <Compile Include="Queries\Presentation\IQueryPresenter.cs" />

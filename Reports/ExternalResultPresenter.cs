@@ -25,7 +25,7 @@ namespace Reports
                                     tst);
         }
 
-        public string MethodName => _method.Name;
+        public string MethodName => _method.Standard?.Name;
 
         /// Named "SubTests" for consistency among Datagrids used to display
         /// the test results

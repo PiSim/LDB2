@@ -2,6 +2,7 @@
 using DBManager.Services;
 using Infrastructure;
 using Infrastructure.Events;
+using Infrastructure.Queries;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
@@ -49,21 +50,21 @@ namespace Materials.ViewModels
             _eventAggregator.GetEvent<BatchChanged>().Subscribe(
                 token =>
                 {
-                    RaisePropertyChanged("BatchList");
+                    RunBatchQueryCommand.Execute();
                 });
 
             _eventAggregator.GetEvent<SampleLogCreated>()
                 .Subscribe(
                 sample =>
                 {
-                    RaisePropertyChanged("BatchList");
+                    RunBatchQueryCommand.Execute();
                 });
 
             _eventAggregator.GetEvent<BatchStatusListRefreshRequested>()
                             .Subscribe(
                             () =>
                             {
-                                RaisePropertyChanged("BatchList");
+                                RunBatchQueryCommand.Execute();
                             });
 
             _openBatch = new DelegateCommand<DataGrid>(
@@ -84,12 +85,33 @@ namespace Materials.ViewModels
                     batchList.CopyTo(processList, 0);
                     _reportingService.PrintBatchReport(processList);
                 });
+
+            RunBatchQueryCommand = new DelegateCommand(
+                () =>
+                {
+                    IQuery<Batch> batchQuery = new BatchQuery()
+                    {
+                        AspectCode = AspectCode,
+                        BatchNumber = BatchNumber,
+                        ColorName = ColorName,
+                        ConstructionName = ConstructionName,
+                        MaterialLineCode = MaterialLineCode,
+                        MaterialTypeCode = MaterialTypeCode,
+                        Notes = Notes,
+                        OEMName = OEMName,
+                        ProjectDescription = ProjectDescription,
+                        ProjectNumber = ProjectNumber,
+                        RecipeCode = RecipeCode
+                    };
+
+                    BatchList = _dataService.GetQueryResults<Batch>(batchQuery);
+                    RaisePropertyChanged("BatchList");
+                });
+
+            RunBatchQueryCommand.Execute();
         }
 
-        public IEnumerable<Batch> BatchList
-        {
-            get { return _dataService.GetBatches(); }
-        }
+        public IEnumerable<Batch> BatchList { get; private set; }
 
         public DelegateCommand<Window> CancelCommand
         {
@@ -107,5 +129,34 @@ namespace Materials.ViewModels
         }
 
         public DelegateCommand<IList> PrintSelectedCommand => _printSelected;
+
+
+        public DelegateCommand RunBatchQueryCommand { get; }
+
+        #region Search Parameter Properties
+
+        public string AspectCode { get; set; }
+
+        public string BatchNumber { get; set; }
+
+        public string ColorName { get; set; }
+
+        public string ConstructionName { get; set; }
+
+        public string MaterialLineCode { get; set; }
+
+        public string MaterialTypeCode { get; set; }
+
+        public string Notes { get; set; }
+
+        public string OEMName { get; set; }
+
+        public string ProjectNumber { get; set; }
+
+        public string ProjectDescription { get; set; }
+
+        public string RecipeCode { get; set; }
+
+        #endregion
     }
 }

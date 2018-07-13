@@ -31,5 +31,33 @@ namespace DBManager
                 entities.SaveChanges();
             }
         }
+
+        /// <summary>
+        /// Returns the report which uses this TestRecord
+        /// </summary>
+        /// <returns></returns>
+        public object GetReport()
+        {
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                if (RecordTypeID == 1)
+                    return entities.TestRecords
+                                    .Include(tstr => tstr.Reports).First(tsr => tsr.ID == ID)
+                                    .Reports
+                                    .FirstOrDefault();
+
+                else if (RecordTypeID == 2)
+                    return entities.TestRecords
+                                    .Include(tstr => tstr.ExternalReports)
+                                    .First(tsr => tsr.ID == ID)
+                                    .ExternalReports
+                                                .FirstOrDefault();
+
+                else
+                    return null;
+            }
+        }
     }
 }

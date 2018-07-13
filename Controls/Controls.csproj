@@ -102,7 +102,11 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Behaviours\CommandBehavior.cs" />
+    <Compile Include="Behaviours\CommandBehaviorBinding.cs" />
     <Compile Include="Behaviours\DataGridBindableColumnsBehaviour.cs" />
+    <Compile Include="Behaviours\DoubleClickBehavior.cs" />
+    <Compile Include="Behaviours\EventHandlerGenerator.cs" />
     <Compile Include="ControlsModule.cs" />
     <Compile Include="Behaviours\DropDownButtonBehaviour.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">

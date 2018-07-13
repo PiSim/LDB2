@@ -396,7 +396,7 @@
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition/>
-                        <RowDefinition/>
+                        <RowDefinition Height="0.3*"/>
                     </Grid.RowDefinitions>
 
                     <DataGrid ItemsSource="{Binding ResultCollection}"
@@ -405,7 +405,10 @@
                               CanUserAddRows="False"
                               CanUserDeleteRows="False"
                               CanUserResizeRows="False"
+                              FrozenColumnCount="3"
+                              VerticalScrollBarVisibility="Visible"
                               GridLinesVisibility="Horizontal"
+                              Margin="5"
                               bhvr:DataGridBindableColumnsBehaviour.BindableColumns="{Binding ResultColumnCollection}"/>
 
 

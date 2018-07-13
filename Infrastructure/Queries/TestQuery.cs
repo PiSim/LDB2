@@ -10,18 +10,24 @@ namespace Infrastructure.Queries
 {
     public class TestQuery : IQuery<Test>
     {
-        string _methodName;
-
         public TestQuery()
         {
 
         }
 
-        public string MethodName
-        {
-            get => _methodName;
-            set => _methodName = value;
-        }
+        public string AspectCode { get; set; }
+
+        public string BatchNumber { get; set; }
+
+        public string ColorName { get; set; }
+
+        public string LineCode { get; set; }
+
+        public string MaterialTypeCode { get; set; }
+
+        public string MethodName { get; set; }
+
+        public string RecipeCode { get; set; }
 
         public IQueryable<Test> RunQuery(DBEntities entities)
         {
@@ -33,10 +39,33 @@ namespace Infrastructure.Queries
                                                     .Include(tst => tst.Method.Standard)
                                                     .Include(tst => tst.SubTests);
 
-            if (!string.IsNullOrWhiteSpace(_methodName))
-                query = query.Where(tst => tst.Method.Name.Contains(_methodName));
+            if (!string.IsNullOrWhiteSpace(AspectCode))
+                query = query.Where(tst => tst.TestRecord.Batch.Material.Aspect.Code.Contains(AspectCode));
+            
+            if (!string.IsNullOrWhiteSpace(BatchNumber))
+                query = query.Where(tst => tst.TestRecord.Batch.Number.Contains(BatchNumber));
+
+            if (!string.IsNullOrWhiteSpace(ColorName))
+                query = query.Where(tst => tst.TestRecord.Batch.Material.Recipe.Colour.Name.Contains(ColorName));
+
+            if (!string.IsNullOrWhiteSpace(LineCode))
+                query = query.Where(tst => tst.TestRecord.Batch.Material.MaterialLine.Code.Contains(LineCode));
+
+            if (!string.IsNullOrWhiteSpace(MaterialTypeCode))
+                query = query.Where(tst => tst.TestRecord.Batch.Material.MaterialType.Code.Contains(MaterialTypeCode));
+
+            if (!string.IsNullOrWhiteSpace(MethodName))
+                query = query.Where(tst => tst.Method.Standard.Name.Contains(MethodName));
+
+            if (!string.IsNullOrWhiteSpace(RecipeCode))
+                query = query.Where(tst => tst.TestRecord.Batch.Material.Recipe.Code.Contains(RecipeCode));
+
+            if (!string.IsNullOrWhiteSpace(TestName))
+                query = query.Where(tst => tst.Method.Property.Name.Contains(TestName));
 
             return query;
         }
+
+        public string TestName { get; set; }
     }
 }

@@ -10,6 +10,17 @@ namespace DBManager
 {
     public partial class Batch
     {
+        public bool HasTests
+        {
+            get
+            {
+                using (DBEntities entities = new DBEntities())
+                {
+                    return entities.TestRecords.Any(tstr => tstr.BatchID == ID);
+                }
+            }
+        }
+
         public string MaterialFullCode => Material?.MaterialType?.Code
                                         + Material?.MaterialLine?.Code
                                         + Material?.Aspect?.Code

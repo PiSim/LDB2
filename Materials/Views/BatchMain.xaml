@@ -30,7 +30,7 @@
                     Command="{Binding OpenSampleLogViewCommand}"
                     Margin="5"/>
 
-            <Button Content="Aggiorna lista"
+            <Button Content="Aggiorna liste"
                     Command="{Binding RefreshCommand}"
                     Margin="5"/>
 
@@ -63,8 +63,10 @@
         <TabControl Grid.Column="0"
               Grid.Row="1">
             <TabItem Header="Lista Batch">
-                <ContentControl prism:RegionManager.RegionName="{Binding BatchStatusListRegionName}"
-                            Margin="5"/>
+                <Grid>
+                    <ContentControl prism:RegionManager.RegionName="{Binding BatchStatusListRegionName}"/>
+
+                </Grid>
             </TabItem>
             <TabItem Header="Archivio Sala Macchine">
                 <ContentControl prism:RegionManager.RegionName="{Binding SampleArchiveRegionName}"

@@ -223,7 +223,8 @@ namespace Specifications.ViewModels
                 EditMode = false;
 
                 _methodInstance = value;
-                _methodInstance.Load();
+                if (_methodInstance != null)
+                    _methodInstance.Load();
 
                 SelectedOrganization = _organizationList.FirstOrDefault(org => org.ID == _methodInstance?.Standard.OrganizationID);
                 _selectedProperty = _propertyList.FirstOrDefault(prp => prp.ID == _methodInstance?.PropertyID);

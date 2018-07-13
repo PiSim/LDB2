@@ -132,6 +132,7 @@ namespace Specifications
                 {
                     Method attachedOldVersion = entities.Methods.First(mtd => mtd.ID == toBeUpdated.ID);
                     Method newVersion = creationDialog.MethodInstance;
+                    newVersion.OldVersionID = attachedOldVersion.ID;
 
                     entities.Methods.Add(newVersion);
 

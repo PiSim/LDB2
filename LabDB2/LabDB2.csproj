@@ -30,7 +30,7 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ProductName>LabDB2</ProductName>
     <PublisherName>Pietro Simonini</PublisherName>
-    <ApplicationRevision>33</ApplicationRevision>
+    <ApplicationRevision>34</ApplicationRevision>
     <ApplicationVersion>0.6.1.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>

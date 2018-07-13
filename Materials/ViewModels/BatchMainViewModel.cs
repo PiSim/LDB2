@@ -96,18 +96,10 @@ namespace Materials.ViewModels
                     _eventAggregator.GetEvent<BatchStatusListRefreshRequested>()
                                     .Publish();
                 });
-        }
 
-        public string BatchNumber
-        {
-            get { return _batchNumber; }
-            set
-            {
-                _batchNumber = value;
-                RaisePropertyChanged("BatchNumber");
-            }
+            
         }
-
+        
         public IEnumerable<IQueryPresenter<Batch>> QueryList => _materialService.GetBatchQueries();
 
         public string BatchStatusListRegionName
