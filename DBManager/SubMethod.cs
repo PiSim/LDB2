@@ -17,6 +17,7 @@ namespace DBManager
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public SubMethod()
         {
+            this.UM = "";
             this.SubRequirements = new HashSet<SubRequirement>();
             this.SubTaskItems = new HashSet<SubTaskItem>();
             this.SubTests = new HashSet<SubTest>();

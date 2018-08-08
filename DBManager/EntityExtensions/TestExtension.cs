@@ -24,6 +24,22 @@ namespace DBManager
 
         public string RecipeCode => TestRecord?.Batch?.Material?.Recipe?.Code;
 
+        public string ReportNumber
+        {
+            get
+            {
+                if (TestRecord.RecordTypeID == 1)
+                    return "TR" +
+                            TestRecord.Reports.FirstOrDefault()?.Number.ToString();
+
+                else if (TestRecord.RecordTypeID == 2)
+                    return "TE" +
+                            TestRecord.ExternalReports.FirstOrDefault()?.Year.ToString() +
+                            TestRecord.ExternalReports.FirstOrDefault()?.Number.ToString("d3");
+
+                else return "";
+            }
+        }
     }
 
     public static class TestExtension

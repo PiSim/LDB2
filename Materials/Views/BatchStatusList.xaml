@@ -264,6 +264,10 @@
                                     Binding="{Binding Material.ExternalConstruction.Oem.Name}"/>
                 <DataGridTextColumn Header="Construction"
                                     Binding="{Binding Material.ExternalConstruction.Name}"/>
+                <DataGridTextColumn Header="PCA"
+                                    Binding="{Binding Material.Project.Name}"/>
+                <DataGridTextColumn Header="Progetto"
+                                    Binding="{Binding Material.Project.Description}"/>
                 <DataGridTextColumn Header="Tipo prova"
                                     Binding="{Binding TrialArea.Name}"/>
                 <DataGridCheckBoxColumn Header="Ricevuto"

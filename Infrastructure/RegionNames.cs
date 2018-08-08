@@ -6,7 +6,6 @@ namespace Infrastructure
         public static string AdminUserMainRegion { get { return "AdminUserMainRegion"; } }
         public static string AspectDetailBatchListRegion { get { return "AspectDetailBatchListRegion"; } }
         public static string AspectDetailRegion { get { return "AspectDetailRegion"; } }
-        public static string BatchProjectDetailsRegion { get { return "BatchProjectDetailsRegion"; } }
         public static string BatchExternalReportListRegion { get { return "BatchExternalReportListRegion"; } }
         public static string BatchReportListRegion { get { return "BatchReportListRegion"; } }
         public static string BatchStatusListRegion { get { return "BatchStatusListRegion"; } }
@@ -20,7 +19,6 @@ namespace Infrastructure
         public static string ExternalReportAddMethodRegion => "ExternalReportAddMethodRegion";
         public static string ExternalReportProjectDetailsRegion { get { return "ExternalReportProjectDetailsRegion"; } }
         public static string InstrumentEditCalibrationEditRegion { get { return "InstrumentEditCalibrationEditRegion"; } }
-        public static string InstrumentEditMeasurablePropertyEditRegion { get { return "InstrumentEditMeasurablePropertyEditRegion"; } }
         public static string InstrumentEditMetrologyRegion { get { return "InstrumentEditMetrologyRegion"; } }
         public static string InstrumentTypeManagementEditRegion { get { return "InstrumentTypeManagementEditRegion"; } }
         public static string InstrumentTypeManagementRegion { get { return "InstrumentTypeManagementRegion"; } }
@@ -29,7 +27,6 @@ namespace Infrastructure
         public static string MainRegion { get { return "MainRegion"; } }
         public static string MainExternalReportListRegion { get { return "MainExternalReportListRegion"; } }
         public static string MainReportListRegion { get { return "MainReportListRegion"; } }
-        public static string MainTaskListRegion { get { return "MainTaskListRegion"; } }
         public static string MaterialDetailBatchListRegion { get { return "MaterialDetailBatchListRegionName"; } }
         public static string MaterialDetailRegion { get { return "MaterialDetailRegion"; } }
         public static string MaterialInfoAspectRegion { get { return "MaterialInfoAspectRegion"; } }

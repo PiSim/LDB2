@@ -25,6 +25,9 @@ namespace Reports.ViewModels
             _dataService = dataService;
             _eventAggregator = eventAggregator;
 
+            IncludeExternalReports = true;
+            IncludeInternalReports = true;
+
             _runQuery = new DelegateCommand(
                 () =>
                 {
@@ -33,6 +36,8 @@ namespace Reports.ViewModels
                         AspectCode = AspectCode,
                         BatchNumber = BatchNumber,
                         ColorName = ColorName,
+                        IncludeExternalReports = IncludeExternalReports,
+                        IncludeInternalReports = IncludeInternalReports,
                         LineCode = LineCode,
                         MaterialTypeCode = MaterialTypeCode,
                         MethodName = MethodName,
@@ -74,6 +79,10 @@ namespace Reports.ViewModels
         public string BatchNumber { get; set; }
 
         public string ColorName { get; set; }
+
+        public bool IncludeExternalReports { get; set; }
+
+        public bool IncludeInternalReports { get; set; }
 
         public string LineCode { get; set; }
 

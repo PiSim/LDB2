@@ -39,8 +39,6 @@ namespace Projects
             _container.RegisterType<ViewModels.ProjectInfoViewModel>();
             _container.RegisterType<ViewModels.ProjectMainViewModel>();
 
-            _regionManager.RegisterViewWithRegion(RegionNames.BatchProjectDetailsRegion,
-                                                typeof(Views.ProjectDetailsControl));
             _regionManager.RegisterViewWithRegion(RegionNames.ExternalReportProjectDetailsRegion,
                                                 typeof(Views.ProjectDetailsControl));
             _regionManager.RegisterViewWithRegion(RegionNames.ProjectExternalReportListRegion,

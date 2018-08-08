@@ -42,11 +42,13 @@ namespace Materials.ViewModels
         private IDataService _dataService;
         private IEnumerable<Colour> _colourList;
         private IEnumerable<ExternalConstruction> _externalConstructionList;
+        private IEnumerable<Project> _projectList;
         private IEnumerable<TrialArea> _trialAreaList; 
         private IEnumerable<Sample> _samplesList;
         private IMaterialService _materialService;
         private Material _materialInstance;
         private MaterialLine _lineInstance;
+        private Project _selectedProject;
         private Recipe _recipeInstance;
         private Report _selectedReport;
         private string _aspectCode,
@@ -143,16 +145,28 @@ namespace Materials.ViewModels
 
                     _instance.MaterialID = _materialInstance.ID;
 
-                    // If construction is selected and is different from
+                    // If construction and/or project are selected and are different from
                     // the one in the material instance, update
+
+                    bool requiresUpdate = false;
 
                     if (_selectedExternalConstruction != null
                         && _selectedExternalConstruction.ID != _materialInstance.ExternalConstructionID)
                     {
                         _materialInstance.ExternalConstructionID = _selectedExternalConstruction.ID;
-                        _materialInstance.Update();
+                        requiresUpdate = true;
                     }
-                    
+
+                    if (_selectedProject != null
+                        && _selectedProject.ID != _materialInstance.ProjectID)
+                    {
+                        _materialInstance.ProjectID = _selectedProject.ID;
+                        requiresUpdate = true;
+                    }
+
+                    if (requiresUpdate)
+                        _materialInstance.Update();
+
                     // If color is selected retrieve updated Recipe instance
                     // If the Recipe ColorID is different from the one selected, update
 
@@ -166,7 +180,8 @@ namespace Materials.ViewModels
                             _recipeInstance.Update();
                         }
                     }
-                    
+
+
                     _instance.Update();
 
                     EditMode = false;
@@ -198,6 +213,14 @@ namespace Materials.ViewModels
                     {
                         RaisePropertyChanged("ExternalReportList ");
                     });
+
+            _eventAggregator.GetEvent<ProjectChanged>()
+                .Subscribe(
+                ect =>
+                {
+                    ProjectList = null;
+                    SelectedProject = null;
+                });
 
             _eventAggregator.GetEvent<ReportCreated>().Subscribe(
                 report =>
@@ -336,6 +359,8 @@ namespace Materials.ViewModels
                 SelectedExternalConstruction = ExternalConstructionList.FirstOrDefault(excon => excon.ID == _materialInstance?.ExternalConstructionID);
                 SelectedColour = ColourList.FirstOrDefault(col => col.ID == _recipeInstance?.ColourID);
 
+                SelectedProject = ProjectList.FirstOrDefault(prj => prj.ID == _materialInstance?.ProjectID);
+
                 SelectedExternalReport = null;
                 SelectedReport = null;
 
@@ -351,7 +376,7 @@ namespace Materials.ViewModels
                 RaisePropertyChanged("Samples");
                 RaisePropertyChanged("Notes");
                 RaisePropertyChanged("Number");
-                RaisePropertyChanged("Project");
+                RaisePropertyChanged("SelectedProject");
                 RaisePropertyChanged("ReportList");
                 RaisePropertyChanged("SelectedTrialArea");
             }
@@ -498,17 +523,26 @@ namespace Materials.ViewModels
             get { return _openReport; }
         }
 
-        public Project Project
+        public IEnumerable<Project> ProjectList
         {
-            get
-            {
-                return _instance?.Material?.Project;
-            }
+            get => (_projectList != null) ? _projectList : _projectList = _dataService.GetProjects();
+            private set => _projectList = value; 
         }
 
         public IEnumerable<Sample> Samples
         {
             get { return _samplesList; }
+        }
+
+        public Project SelectedProject
+        {
+            get => _selectedProject;
+
+            set
+            {
+                _selectedProject = value;
+                RaisePropertyChanged("SelectedProject");
+            }
         }
 
         public string RecipeCode

@@ -4196,7 +4196,7 @@
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="MethodID" Type="Int32" Nullable="false" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
-          <Property Name="UM" Type="String" Nullable="false" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="UM" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" DefaultValue="" />
           <NavigationProperty Name="Method" Relationship="labdbModel.method_to_measurement1" FromRole="sub_methods" ToRole="Method" />
           <NavigationProperty Name="SubRequirements" Relationship="labdbModel.submethod_to_subreq1" FromRole="sub_methods" ToRole="SubRequirement" />
           <NavigationProperty Name="SubTaskItems" Relationship="labdbModel.sub_method_to_sub_task_item" FromRole="SubMethod" ToRole="sub_task_items" />

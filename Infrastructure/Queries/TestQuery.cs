@@ -21,6 +21,10 @@ namespace Infrastructure.Queries
 
         public string ColorName { get; set; }
 
+        public bool IncludeExternalReports { get; set; }
+
+        public bool IncludeInternalReports { get; set; }
+
         public string LineCode { get; set; }
 
         public string MaterialTypeCode { get; set; }
@@ -35,9 +39,17 @@ namespace Infrastructure.Queries
                                                     .Include(tst => tst.TestRecord.Batch.Material.MaterialLine)
                                                     .Include(tst => tst.TestRecord.Batch.Material.MaterialType)
                                                     .Include(tst => tst.TestRecord.Batch.Material.Recipe)
+                                                    .Include(tst => tst.TestRecord.ExternalReports)
+                                                    .Include(tst => tst.TestRecord.Reports)
                                                     .Include(tst => tst.Method.Property)
                                                     .Include(tst => tst.Method.Standard)
                                                     .Include(tst => tst.SubTests);
+
+            if (!IncludeExternalReports)
+                query = query.Where(tst => tst.TestRecord.RecordTypeID != 2);
+
+            if (!IncludeInternalReports)
+                query = query.Where(tst => tst.TestRecord.RecordTypeID != 1);
 
             if (!string.IsNullOrWhiteSpace(AspectCode))
                 query = query.Where(tst => tst.TestRecord.Batch.Material.Aspect.Code.Contains(AspectCode));

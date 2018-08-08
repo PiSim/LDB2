@@ -19,6 +19,8 @@
             <RowDefinition Height="35"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
         </Grid.RowDefinitions>
         
         <FrameworkElement x:Name="dummyElement" Visibility="Collapsed"/>
@@ -44,295 +46,252 @@
         
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="60"/>
+                <ColumnDefinition MaxWidth="300"
+                                    MinWidth="100"/>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition MaxWidth="400"
+                                  MinWidth="100"/>
             </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
 
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="60"/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
+            <Label Content="Batch:"
+                    Grid.Column="0"
+                    Margin="5"/>
 
-                <Label Content="Batch:"
-                       Grid.Column="0"
-                       Margin="5"/>
+            <Label Content="{Binding Number}"
+                    Grid.Column="1"
+                    Grid.ColumnSpan="2"
+                    Margin="5"
+                    VerticalAlignment="Center"/>
 
-                <Label Content="{Binding Number}"
-                       Grid.Column="1"
-                       Grid.ColumnSpan="2"
+            <Label Content="Tipo:"
+                    Grid.Column="0"
+                    Grid.Row="1"
+                    VerticalAlignment="Center"
+                    Margin="5"/>
+
+            <TextBox Text="{Binding TypeCode, 
+                                    Mode=TwoWay,
+                                    UpdateSourceTrigger=PropertyChanged}"
+                        IsEnabled="{Binding EditMode}"
+                        MaxLength="4"
+                        Grid.Column="1"
+                        Grid.Row="1"
+                        Margin="5"
+                        VerticalAlignment="Center"/>
+
+            <Label Content="{Binding TypeInstance.Description}"
+                    Grid.Column="2"
+                    Grid.Row="1"
+                    VerticalAlignment="Center"
+                    Margin="5"/>
+
+            <Label Content="Riga:"
+                    Grid.Column="0"
+                    Grid.Row="2"
+                    VerticalAlignment="Center"
+                    Margin="5"/>
+
+            <TextBox Text="{Binding LineCode,
+                                    Mode=TwoWay,
+                                    UpdateSourceTrigger=PropertyChanged}"
+                        IsEnabled="{Binding EditMode}"
+                        MaxLength="3"
+                        Grid.Column="1"
+                        Grid.Row="2"
+                        VerticalAlignment="Center"
+                        Margin="5"/>
+
+            <Label Content="Aspetto:"
+                    Grid.Column="0"
+                    Grid.Row="3"
+                    VerticalAlignment="Center"
+                    Margin="5"/>
+
+            <TextBox Text="{Binding AspectCode, 
+                                        Mode=TwoWay,
+                                        UpdateSourceTrigger=PropertyChanged}"
+                        IsEnabled="{Binding EditMode}"
+                        MaxLength="3"
+                        Grid.Column="1"
+                        Grid.Row="3"
+                        VerticalAlignment="Center"
+                        Margin="5"/>
+                
+            <Label Content="{Binding AspectInstance.Name}"
+                    Grid.Column="2"
+                    Grid.Row="3"
+                    VerticalAlignment="Center"
+                    Margin="5"/>
+
+            <Label Content="Colore:"
+                    Grid.Column="0"
+                    Grid.Row="4"
+                    VerticalAlignment="Center"
+                    Margin="5"/>
+                
+            <TextBox Text="{Binding RecipeCode,
+                                        Mode=TwoWay,
+                                        UpdateSourceTrigger=PropertyChanged}"
+                        IsEnabled="{Binding EditMode}"
+                        MaxLength="4"
+                        Grid.Column="1"
+                        Grid.Row="4"
+                        VerticalAlignment="Center"
+                        Margin="5"/>
+
+            <ComboBox ItemsSource="{Binding ColourList}"
+                        SelectedItem="{Binding SelectedColour, 
+                                                Mode=TwoWay}"
+                        IsEnabled="{Binding EditMode}"
+                        DisplayMemberPath="Name"
+                        Grid.Column="2"
+                        Grid.Row="4"
+                        VerticalAlignment="Center"
+                        Margin="5"/>
+
+            <StackPanel Grid.Column="0"
+                        Grid.ColumnSpan="3"
+                        Grid.Row="5"
+                        Margin="5"
+                        Orientation="Horizontal">
+                <TextBlock HorizontalAlignment="Center"
+                            Margin="5,0"
+                            Text="Non Effettuare test su questa commessa:"
+                            VerticalAlignment="Center"/>
+                <CheckBox IsChecked="{Binding DoNotTest,
+                                            Mode=TwoWay}"
+                                    IsEnabled="{Binding EditMode}"
+                                    Margin="20,0"
+                            VerticalAlignment="Center"/>
+            </StackPanel>
+
+            <TextBlock Grid.Column="3"
+                       Grid.Row="1"
+                       HorizontalAlignment="Left"
                        Margin="5"
+                       Text="Progetto:"
                        VerticalAlignment="Center"/>
 
-                <Label Content="Tipo:"
-                       Grid.Column="0"
-                       Grid.Row="1"
-                       VerticalAlignment="Center"
-                       Margin="5"/>
+            <ComboBox Grid.Column="4"
+                      Grid.Row="1"
+                      IsEnabled="{Binding EditMode}"
+                      ItemsSource="{Binding ProjectList}"
+                      ItemTemplate="{StaticResource ProjectComboTemplate}"
+                      Margin="5"
+                      SelectedItem="{Binding SelectedProject}"/>
 
-                <TextBox Text="{Binding TypeCode, 
-                                        Mode=TwoWay,
-                                        UpdateSourceTrigger=PropertyChanged}"
-                         IsEnabled="{Binding EditMode}"
-                         MaxLength="4"
-                         Grid.Column="1"
-                         Grid.Row="1"
-                         Margin="5"
-                         VerticalAlignment="Center"/>
+            <TextBlock Text="Construction:"
+                    Grid.Column="3"
+                    Grid.Row="2"
+                    VerticalAlignment="Center"
+                    Margin="5"/>
 
-                <Label Content="{Binding TypeInstance.Description}"
-                       Grid.Column="2"
-                       Grid.Row="1"
-                       VerticalAlignment="Center"
-                       Margin="5"/>
+            <ComboBox ItemsSource="{Binding ExternalConstructionList}"
+                        SelectedItem="{Binding SelectedExternalConstruction,
+                                                Mode=TwoWay}"
+                        IsEnabled="{Binding EditMode}"
+                        Grid.Column="4"
+                        Grid.Row="2"
+                        VerticalAlignment="Center"
+                        Margin="5">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="125"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="{Binding Oem.Name}"
+                                        Margin="0,0,10,0"/>
+                            <TextBlock Text="{Binding Name}"
+                                        Grid.Column="1"/>
+                        </Grid>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
 
-                <Label Content="Riga:"
-                       Grid.Column="0"
-                       Grid.Row="2"
-                       VerticalAlignment="Center"
-                       Margin="5"/>
+            <TextBlock Text="Tipo Prova:"
+                    Grid.Column="3"
+                    Grid.Row="3"
+                    VerticalAlignment="Center"
+                    Margin="5"/>
 
-                <TextBox Text="{Binding LineCode,
-                                        Mode=TwoWay,
-                                        UpdateSourceTrigger=PropertyChanged}"
-                         IsEnabled="{Binding EditMode}"
-                         MaxLength="3"
-                         Grid.Column="1"
-                         Grid.Row="2"
-                         VerticalAlignment="Center"
-                         Margin="5"/>
+            <ComboBox ItemsSource="{Binding TrialAreaList}"
+                        SelectedItem="{Binding SelectedTrialArea}"
+                        IsEnabled="{Binding EditMode}"
+                        DisplayMemberPath="Name"
+                        Grid.Column="4"
+                        Grid.Row="3"
+                        Margin="5"/>
 
-                <Label Content="Aspetto:"
-                       Grid.Column="0"
-                       Grid.Row="3"
-                       VerticalAlignment="Center"
-                       Margin="5"/>
+            <TextBlock Text="Note:"
+                    Grid.Column="3"
+                    Grid.Row="4"
+                    VerticalAlignment="Top"
+                    Margin="5"/>
 
-                <TextBox Text="{Binding AspectCode, 
-                                          Mode=TwoWay,
-                                          UpdateSourceTrigger=PropertyChanged}"
-                           IsEnabled="{Binding EditMode}"
-                           MaxLength="3"
-                           Grid.Column="1"
-                           Grid.Row="3"
-                           VerticalAlignment="Center"
-                           Margin="5"/>
-                
-                <Label Content="{Binding AspectInstance.Name}"
-                       Grid.Column="2"
-                       Grid.Row="3"
-                       VerticalAlignment="Center"
-                       Margin="5"/>
+            <TextBox Text="{Binding Notes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        IsEnabled="{Binding EditMode}"
+                        MaxLength="100"
+                        TextWrapping="Wrap"
+                        AcceptsReturn="True"
+                        Grid.Column="4"
+                        Grid.Row="4"
+                     Grid.RowSpan="2"
+                        Margin="5"/>
 
-                <Label Content="Colore:"
-                       Grid.Column="0"
-                       Grid.Row="4"
-                       VerticalAlignment="Center"
-                       Margin="5"/>
-                
-                <TextBox Text="{Binding RecipeCode,
-                                          Mode=TwoWay,
-                                          UpdateSourceTrigger=PropertyChanged}"
-                         IsEnabled="{Binding EditMode}"
-                         MaxLength="4"
-                         Grid.Column="1"
-                         Grid.Row="4"
-                         VerticalAlignment="Center"
-                         Margin="5"/>
-
-                <ComboBox ItemsSource="{Binding ColourList}"
-                          SelectedItem="{Binding SelectedColour, 
-                                                 Mode=TwoWay}"
-                          IsEnabled="{Binding EditMode}"
-                          DisplayMemberPath="Name"
-                          Grid.Column="2"
-                          Grid.Row="4"
-                          VerticalAlignment="Center"
-                          Margin="5"/>
-            </Grid>
-
-            <Grid Grid.Column="1">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition Height="2*"/>
-                </Grid.RowDefinitions>
-
-                <Label Content="Construction:"
-                       Grid.Column="0"
-                       Grid.Row="1"
-                       VerticalAlignment="Center"
-                       Margin="5"/>
-
-                <ComboBox ItemsSource="{Binding ExternalConstructionList}"
-                          SelectedItem="{Binding SelectedExternalConstruction,
-                                                 Mode=TwoWay}"
-                          IsEnabled="{Binding EditMode}"
-                          Grid.Column="2"
-                          Grid.Row="1"
-                          VerticalAlignment="Center"
-                          Margin="5">
-                    <ComboBox.ItemTemplate>
-                        <DataTemplate>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="125"/>
-                                    <ColumnDefinition/>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Text="{Binding Oem.Name}"
-                                           Margin="0,0,10,0"/>
-                                <TextBlock Text="{Binding Name}"
-                                           Grid.Column="1"/>
-                            </Grid>
-                        </DataTemplate>
-                    </ComboBox.ItemTemplate>
-                </ComboBox>
-
-                <Label Content="Tipo Prova:"
-                       Grid.Column="0"
-                       Grid.Row="2"
-                       VerticalAlignment="Center"
-                       Margin="5"/>
-
-                <ComboBox ItemsSource="{Binding TrialAreaList}"
-                          SelectedItem="{Binding SelectedTrialArea}"
-                          IsEnabled="{Binding EditMode}"
-                          DisplayMemberPath="Name"
-                          Grid.Column="1"
-                          Grid.Row="2"
-                          Margin="5"/>
-
-                <Label Content="Note:"
-                       Grid.Column="0"
-                       Grid.Row="3"
-                       VerticalAlignment="Top"
-                       Margin="5"/>
-
-                <TextBox Text="{Binding Notes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                         IsEnabled="{Binding EditMode}"
-                         MaxLength="100"
-                         TextWrapping="Wrap"
-                         AcceptsReturn="True"
-                         Grid.Column="1"
-                         Grid.Row="3"
-                         Margin="5"/>
-            </Grid>
         </Grid>
-        <TabControl Grid.Row="2">
-            <TabItem Header="Dettagli">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                    </Grid.RowDefinitions>
 
-                    <ContentControl prism:RegionManager.RegionName="BatchProjectDetailsRegion"
-                                    Grid.Column="0"
-                                    Grid.Row="0"/>
-                    <GroupBox Header="Rotoli" 
+        <GroupBox Header="Rotoli" 
                               Grid.Column="1"
-                              Grid.Row="0">
-                        <ListView ItemsSource="{Binding Path=Samples}">
-                            <ListView.View>
-                                <GridView>
-                                    <GridViewColumn DisplayMemberBinding="{Binding Path=Code,
+                              Grid.Row="2">
+            <ListView ItemsSource="{Binding Path=Samples}">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Code,
                                                                                    Converter={StaticResource CTAConverter}}"/>
-                                    <GridViewColumn DisplayMemberBinding="{Binding Path=Date,
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Date,
                                                                                    StringFormat=d,
                                                                                    ConverterCulture=IT-it}"/>
-                                    <GridViewColumn>
-                                        <GridViewColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <Button Content="Elimina"
+                        <GridViewColumn>
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Content="Elimina"
                                                         Command="{Binding DataContext.DeleteSampleCommand,
                                                                           Source={x:Reference Name=dummyElement}}"
                                                         CommandParameter="{Binding}"/>
-                                            </DataTemplate>
-                                        </GridViewColumn.CellTemplate>
-                                    </GridViewColumn>
-                                </GridView>
-                            </ListView.View>
-                        </ListView>
-                    </GroupBox>
-                    <Grid Grid.Column="0"
-                          Grid.Row="1">
-                        <StackPanel Orientation="Horizontal"
-                                    VerticalAlignment="Top">
-                            <TextBlock Margin="5">
-                                Non Effettuare Test su questa commessa: 
-                            </TextBlock>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </GroupBox>
 
-                            <CheckBox IsChecked="{Binding DoNotTest,
-                                                          Mode=TwoWay}"
-                                      IsEnabled="{Binding EditMode}"
-                                      Margin="5"/>
-                        </StackPanel>
-                    </Grid>
-                </Grid>
-            </TabItem>
-            <TabItem Header="Report">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                    </Grid.RowDefinitions>
-
-                    <GroupBox Header="Report Interni" 
-                              Grid.Row="0">
-                        <Grid>
-                            <ContentControl prism:RegionManager.RegionName="BatchReportListRegion"
+        <GroupBox Header="Report Interni" 
+                              Grid.Row="3">
+            <Grid>
+                <ContentControl prism:RegionManager.RegionName="BatchReportListRegion"
                                             Grid.Row="1"/>
-                        </Grid>
-                    </GroupBox>
+            </Grid>
+        </GroupBox>
 
-                    <GroupBox Header="Report Esterni"
-                              Grid.Row="1">
-                        <Grid>
-                            <ContentControl prism:RegionManager.RegionName="BatchExternalReportListRegion"/>
+        <GroupBox Header="Report Esterni"
+                              Grid.Row="4">
+            <Grid>
+                <ContentControl prism:RegionManager.RegionName="BatchExternalReportListRegion"/>
 
-                        </Grid>
-                    </GroupBox>
-                    <GroupBox Header="Richiesti"
-                              Grid.Row="2">
-                        <Grid>
-                            <DataGrid ItemsSource="{Binding TaskList}"
-                                      SelectedItem="{Binding SelectedTask}"
-                                      AutoGenerateColumns="False"
-                                      CanUserAddRows="False"
-                                      CanUserDeleteRows="False"
-                                      GridLinesVisibility="None"
-                                      cmd:CommandBinder.DataGridDoubleClickCommand="{Binding OpenRequestCommand}">
-                                    <DataGrid.Columns>
-                                        <DataGridTextColumn Header="Specifica" 
-                                                            Binding="{Binding Path=Specification.Standard.Name}"/>
-                                        <DataGridTextColumn Header="Versione" 
-                                                            Binding="{Binding Path=Specification.Label}"/>
-                                        <DataGridTextColumn Header="Descrizione" 
-                                                            Binding="{Binding Path=Description}"/>
-                                    </DataGrid.Columns>
-                            </DataGrid>
-                        </Grid>
-                    </GroupBox>
-                </Grid>
-            </TabItem>
-        </TabControl>
+            </Grid>
+        </GroupBox>
     </Grid>
 </UserControl>
