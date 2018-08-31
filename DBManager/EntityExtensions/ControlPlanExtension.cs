@@ -46,8 +46,8 @@ namespace DBManager
 
                 if (includeRequirement)
                     return entities.ControlPlanItems
-                                    .Include(cpi => cpi.Requirement.Method.Property)
-                                    .Include(cpi => cpi.Requirement.Method.Standard)
+                                    .Include(cpi => cpi.Requirement.MethodVariant.Method.Property)
+                                    .Include(cpi => cpi.Requirement.MethodVariant.Method.Standard)
                                     .Where(cpi => cpi.ControlPlanID == ID)
                                     .ToList();
 

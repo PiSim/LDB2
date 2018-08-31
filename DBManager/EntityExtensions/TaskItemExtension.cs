@@ -18,7 +18,7 @@ namespace DBManager
         {
             Test output = new Test()
             {
-                MethodID = MethodID,
+                MethodVariantID = Method.MethodVariants.First().ID,
                 Notes = Description,
                 RequirementID = RequirementID
             };

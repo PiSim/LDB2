@@ -106,7 +106,7 @@ namespace DBManager
                     return entities.SpecificationVersions
                                     .First(spcv => spcv.SpecificationID == ID && spcv.IsMain)
                                     .Requirements
-                                    .Sum(req => req.Method.Duration);
+                                    .Sum(req => req.MethodVariant.Method.Duration);
                 }
             }
         }
@@ -159,8 +159,8 @@ namespace DBManager
             {
                 entities.Configuration.LazyLoadingEnabled = false;
 
-                return entities.Requirements.Include(req => req.Method.Property)
-                                            .Include(req => req.Method.Standard.Organization)
+                return entities.Requirements.Include(req => req.MethodVariant.Method.Property)
+                                            .Include(req => req.MethodVariant.Method.Standard.Organization)
                                             .Include(req => req.SubRequirements
                                             .Select(sreq => sreq.SubMethod))
                                             .Where(req => req.SpecificationVersionID == entities.SpecificationVersions

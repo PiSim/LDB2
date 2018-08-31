@@ -164,6 +164,7 @@
     <Compile Include="EntityExtensions\MeasurableQuantityExtension.cs" />
     <Compile Include="EntityExtensions\MeasurementUnitExtension.cs" />
     <Compile Include="EntityExtensions\MethodExtension.cs" />
+    <Compile Include="EntityExtensions\MethodVariantExtension.cs" />
     <Compile Include="EntityExtensions\OrganizationExtension.cs" />
     <Compile Include="EntityExtensions\OrganizationRoleExtension.cs" />
     <Compile Include="EntityExtensions\PersonExtension.cs" />
@@ -258,6 +259,9 @@
       <DependentUpon>LabDB.tt</DependentUpon>
     </Compile>
     <Compile Include="Method.cs">
+      <DependentUpon>LabDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MethodVariant.cs">
       <DependentUpon>LabDB.tt</DependentUpon>
     </Compile>
     <Compile Include="Organization.cs">

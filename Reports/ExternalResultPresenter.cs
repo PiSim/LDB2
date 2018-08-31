@@ -12,24 +12,24 @@ namespace Reports
 {
     public class ExternalResultPresenter
     {
-        private Method _method;
+        private MethodVariant _methodVariant;
         private Dictionary<int, Test> _resultDictionary;
 
-        public ExternalResultPresenter(Method mtd,
+        public ExternalResultPresenter(MethodVariant methodVariant,
                                         IEnumerable<Test> testList)
         {
-            _method = mtd;
+            _methodVariant = methodVariant;
             _resultDictionary = new Dictionary<int, Test>();
             foreach (Test tst in testList)
                 _resultDictionary.Add(tst.TestRecord.BatchID,
                                     tst);
         }
 
-        public string MethodName => _method.Standard?.Name;
+        public string MethodName => _methodVariant.StandardName;
 
         /// Named "SubTests" for consistency among Datagrids used to display
         /// the test results
-        public IEnumerable<SubMethod> SubTests => _method.SubMethods.ToList();
+        public IEnumerable<SubMethod> SubTests => _methodVariant?.Method?.SubMethods.ToList();
 
         public Test this[int batchID] => _resultDictionary[batchID];  
     }

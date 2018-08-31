@@ -321,7 +321,7 @@
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
 
-                            <DataGrid ItemsSource="{Binding AvailableMethodList}"
+                            <DataGrid ItemsSource="{Binding AvailableMethodVariantList}"
                                         AutoGenerateColumns="False"
                                         CanUserAddRows="False"
                                         CanUserDeleteRows="False"
@@ -344,17 +344,18 @@
                                         </DataGridTemplateColumn.CellTemplate>
                                     </DataGridTemplateColumn>
                                     <DataGridTextColumn Header="Standard"
-                                        Binding="{Binding Path=Standard.Name}"/>
+                                        Binding="{Binding StandardName}"
+                                                        SortDirection="Ascending"/>
                                     <DataGridTextColumn Header="Proprietà"
-                                        Binding="{Binding Path=Property.Name}"/>
+                                        Binding="{Binding PropertyName}"/>
                                     <DataGridTextColumn Header="OEM"
-                                        Binding="{Binding Path=Standard.Organization.Name}"/>
+                                        Binding="{Binding OemName}"/>
                                     <DataGridTextColumn Header="Descrizione"
                                         Binding="{Binding Path=Description}"/>
                                 </DataGrid.Columns>
                             </DataGrid>
-                            
-                            <DataGrid ItemsSource="{Binding MethodList}"
+
+                            <DataGrid ItemsSource="{Binding MethodVariantList}"
                                         AutoGenerateColumns="False"
                                         CanUserAddRows="False"
                                         CanUserDeleteRows="False"
@@ -377,11 +378,11 @@
                                         </DataGridTemplateColumn.CellTemplate>
                                     </DataGridTemplateColumn>
                                     <DataGridTextColumn Header="Standard"
-                                                        Binding="{Binding Path=Standard.Name}"/>
+                                                        Binding="{Binding Path=StandardName}"/>
                                     <DataGridTextColumn Header="Proprietà"
-                                                        Binding="{Binding Path=Property.Name}"/>
+                                                        Binding="{Binding Path=PropertyName}"/>
                                     <DataGridTextColumn Header="OEM"
-                                                        Binding="{Binding Path=Standard.Organization.Name}"/>
+                                                        Binding="{Binding Path=OemName}"/>
                                     <DataGridTextColumn Header="Descrizione"
                                                         Binding="{Binding Path=Description}"/>
                                 </DataGrid.Columns>

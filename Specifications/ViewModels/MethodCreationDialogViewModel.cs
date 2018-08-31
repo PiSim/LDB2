@@ -18,10 +18,8 @@ namespace Specifications.ViewModels
 {
     internal class MethodCreationDialogViewModel : BindableBase, INotifyDataErrorInfo
     {
-        private bool _isCreationFromOldVersion;
         private readonly Dictionary<string, ICollection<string>> _validationErrors = new Dictionary<string, ICollection<string>>();
         private IDataService _dataService;
-        private Method _oldVersion;
         private Organization _selectedOem;
         private Property _selectedProperty;
         private Std _standardInstance;
@@ -76,8 +74,19 @@ namespace Specifications.ViewModels
                         MethodInstance.StandardID = _standardInstance.ID;
                     }
 
+                    int subMethodPositioncounter = 0;
                     foreach (SubMethod subm in SubMethodList)
+                    {
+                        subm.Position = subMethodPositioncounter++;
                         MethodInstance.SubMethods.Add(subm);
+                    }
+
+                    MethodInstance.MethodVariants
+                                    .Add(new MethodVariant()
+                                    {
+                                        Description = "",
+                                        Name = "Standard"
+                                    });
 
                     parent.DialogResult = true;
                 },
@@ -145,8 +154,6 @@ namespace Specifications.ViewModels
 
         public DelegateCommand<Window> ConfirmCommand { get; }
 
-        public bool CanEditFields => !_isCreationFromOldVersion;
-
         public string Description { get; set; }
 
         public Method MethodInstance { get; private set; }
@@ -177,51 +184,7 @@ namespace Specifications.ViewModels
         }
 
         public IEnumerable<Organization> OemList { get; }
-
-        public Method OldVersion
-        {
-            get => _oldVersion;
-            set 
-            {
-                _oldVersion = value;
-                _isCreationFromOldVersion = value != null;
-
-                SelectedOem = OemList.FirstOrDefault(oem => oem.ID == _oldVersion?.Standard?.OrganizationID);
-                SelectedProperty = PropertiesList.FirstOrDefault(pro => pro.ID == _oldVersion?.PropertyID);
-
-                SubMethodList.Clear();
-
-                if (_isCreationFromOldVersion)
-                {
-                    Description = _oldVersion.Description;
-                    ShortDescription = _oldVersion.Description;
-                    Name = _oldVersion.Standard?.Name;
-
-                    foreach (SubMethod subm in _oldVersion.SubMethods)
-                        SubMethodList.Add(new SubMethod()
-                        {
-                            Name = subm.Name,
-                            OldVersionID = subm.ID,
-                            UM = subm.UM
-                        });
-                }
-
-                else
-                {
-                    Description = "";
-                    ShortDescription = "";
-                    Name = "";
-                }
-
-                RaisePropertyChanged("CanEditFields");
-                RaisePropertyChanged("Description");
-                RaisePropertyChanged("Name");
-                RaisePropertyChanged("SelectedProperty");
-                RaisePropertyChanged("ShortDescription");
-
-            }
-        }
-
+        
         public IEnumerable<Property> PropertiesList { get; }
 
         public DelegateCommand<SubMethod> RemoveSubMethodCommand { get; }
@@ -260,7 +223,7 @@ namespace Specifications.ViewModels
                         _validationErrors.Remove("SelectedProperty");
                 }
                 else
-                    _validationErrors["SelectedProperty"] = new List<string>() { "Proprietä non valida" };
+                    _validationErrors["SelectedProperty"] = new List<string>() { "Proprietà non valida" };
 
                 RaiseErrorsChanged("SelectedProperty");
             }

@@ -1,56 +1,68 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Migrations;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DBManager
 {
     public partial class Method
-    {
-
+    {        
         /// <summary>
-        /// Generates a new Test entry from the Method.
-        /// The Method must be loaded.
+        /// Retrieves the Specifications Utilizing this Method
         /// </summary>
-        /// <returns>A newly generated, unattached Test entry</returns>
-        public Test GenerateTest()
-        {
-            Test tempTest = new Test();
-            tempTest.Duration = Duration;
-            tempTest.MethodID = ID;
-            tempTest.Notes = "";
-
-            foreach (SubMethod subMtd in SubMethods)
-            {
-                SubTest tempSubTest = new SubTest()
-                {
-                    SubMethodID = subMtd.ID,
-                    Name = subMtd.Name,
-                    Position = subMtd.Position,
-                    RequiredValue = "",
-                    UM = subMtd.UM
-                };
-                tempTest.SubTests.Add(tempSubTest);
-            }
-
-            return tempTest;
-        }
-
-        /// <summary>
-        /// Returns all the submethods for this entry, ordered by position
-        /// </summary>
-        /// <returns>an IList of Submethods</returns>
-        public IList<SubMethod> GetSubMethods()
+        /// <returns></returns>
+        public IEnumerable<Specification> GetSpecifications()
         {
             using (DBEntities entities = new DBEntities())
             {
                 entities.Configuration.LazyLoadingEnabled = false;
 
-                return entities.SubMethods.Where(smtd => smtd.MethodID == ID)
-                                        .ToList();
+                return entities.Specifications
+                                .Include(spec => spec.Standard.Organization)
+                                .Where(spec => spec
+                                .SpecificationVersions
+                                .Any(specv => specv
+                                .Requirements
+                                .Any(req => req
+                                .MethodVariant.MethodID == ID)))
+                                .ToList();
+            }
+        }
+
+
+        /// <summary>
+        /// Retrieves all Test Entities for a Method
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<Test> GetTests()
+        {
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.Tests.Include(tst => tst.MethodVariant.Method.Property)
+                                    .Include(tst => tst.MethodVariant.Method.Standard)
+                                    .Include(tst => tst.TestRecord.Batch)
+                                    .Include(tst => tst.SubTests)
+                                    .Where(tst => tst.MethodVariantID == ID)
+                                    .ToList();
+            }
+        }
+        
+        /// <summary>
+        /// Queries the database for related MethodVariants and returns them as ICollection
+        /// </summary>
+        /// <param name="includeObsolete"> If true returns all entries, otherwise the ones with the flag IsOld are excluded </parameter>
+        /// <returns>An ICollection of the MethodVariant entities for this method Entry</returns>
+        public ICollection<MethodVariant> GetVariants(bool includeObsolete = false)
+        {
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.MethodVariants
+                                .Where(mtdvar => mtdvar.MethodID == ID)
+                                .ToList();
             }
         }
 
@@ -63,8 +75,6 @@ namespace DBManager
 
                 IQueryable<Method> query = entities.Methods.Include(mtd => mtd.AssociatedInstruments
                                                     .Select(inst => inst.InstrumentType))
-                                                    .Include(mtd => mtd.ExternalReports
-                                                    .Select(extr => extr.ExternalLab))
                                                     .Include(mtd => mtd.Property)
                                                     .Include(mtd => mtd.Standard.Organization);
 
@@ -76,17 +86,27 @@ namespace DBManager
                 AssociatedInstruments = tempEntry.AssociatedInstruments;
                 Duration = tempEntry.Duration;
                 Description = tempEntry.Description;
-                ExternalReports = tempEntry.ExternalReports;
                 Property = tempEntry.Property;
                 PropertyID = tempEntry.PropertyID;
-                Requirements = tempEntry.Requirements;
                 Standard = tempEntry.Standard;
                 StandardID = tempEntry.StandardID;
-
-                if (includeSubTests)
-                    SubMethods = tempEntry.SubMethods;
-
+                SubMethods = tempEntry.SubMethods.ToList();
                 TBD = "";
+            }
+        }
+
+        public void LoadSubMethods()
+        {
+            // Loads related sub methods in a given method entry
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                SubMethods = entities.Methods.Include(mtd => mtd.SubMethods)
+                                            .FirstOrDefault(mtd => mtd.ID == ID)?
+                                            .SubMethods
+                                            .ToList();
             }
         }
 
@@ -142,81 +162,7 @@ namespace DBManager
             }
         }
 
-        public static IEnumerable<Test> GetResults(this Method entry)
-        {
-            // Returns all Tests for a given Method entry
-
-            if (entry == null)
-                return new List<Test>();
-
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.Configuration.LazyLoadingEnabled = false;
-
-                return entities.Tests.Include(tst => tst.SubTests)
-                                    .Where(tst => tst.MethodID == entry.ID)
-                                    .ToList();
-            }
-        }
-
-        public static IEnumerable<Specification> GetSpecifications(this Method entry)
-        {
-            // Returns all the specifications referring to the given method
-
-            if (entry == null)
-                return new List<Specification>();
-
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.Configuration.LazyLoadingEnabled = false;
-
-                return entities.Specifications
-                                .Include(spec => spec.Standard.Organization)
-                                .Where(spec => spec
-                                .SpecificationVersions
-                                .Any(specv => specv
-                                .Requirements
-                                .Any(req => req
-                                .MethodID == entry.ID)))
-                                .ToList();
-            }
-        }
-
-        public static IEnumerable<Test> GetTests(this Method entry)
-        {
-            // Returns all Test entities for a Method
-
-            if (entry == null)
-                return null;
-
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.Configuration.LazyLoadingEnabled = false;
-
-                return entities.Tests.Include(tst => tst.Method.Property)
-                                    .Include(tst => tst.Method.Standard)
-                                    .Include(tst => tst.TestRecord.Batch)
-                                    .Include(tst => tst.SubTests)
-                                    .Where(tst => tst.MethodID == entry.ID)
-                                    .ToList();
-            }
-        }
-
         
 
-        public static void LoadSubMethods(this Method entry)
-        {
-            // Loads related sub methods in a given method entry
-
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.Configuration.LazyLoadingEnabled = false;
-
-                Method tempEntry = entities.Methods.Include(mtd => mtd.SubMethods)
-                                                    .First(mtd => mtd.ID == entry.ID);
-
-                entry.SubMethods = tempEntry.SubMethods;
-            }
-        }
     }
 }

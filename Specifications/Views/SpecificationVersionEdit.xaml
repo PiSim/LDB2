@@ -160,7 +160,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-
+                
                 <DataGridTextColumn Header="Note"
                                 Binding="{Binding Notes}"
                                 IsReadOnly="{Binding ReadOnly}"
@@ -184,6 +184,16 @@
                                 Binding="{Binding Method}"
                                 IsReadOnly="True"
                                 Width="Auto">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="VerticalAlignment"
+                                Value="Center"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                
+                <DataGridTextColumn Header="Variante"
+                                    Binding="{Binding VariantName}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="VerticalAlignment"

@@ -22,10 +22,6 @@ namespace Specifications.ViewModels
     {
         private bool _editMode;
         private DBPrincipal _principal;
-        private DelegateCommand _save,
-                                _startEdit,
-                                _startTestListEdit;
-        private DelegateCommand<Requirement> _deleteRequirementCommand;
         private readonly Dictionary<string, ICollection<string>> _validationErrors = new Dictionary<string, ICollection<string>>();
         private EventAggregator _eventAggregator;
         private readonly IDataService _dataService;
@@ -44,7 +40,7 @@ namespace Specifications.ViewModels
             _eventAggregator = eventAggregator;
             _principal = principal;
 
-            _deleteRequirementCommand = new DelegateCommand<Requirement>(
+            DeleteRequirementCommand = new DelegateCommand<Requirement>(
                 req =>
                 {
                     req.Delete();
@@ -56,7 +52,7 @@ namespace Specifications.ViewModels
                     RaisePropertyChanged("RequirementList");
                 });
 
-            _save = new DelegateCommand(
+            SaveCommand = new DelegateCommand(
                 () =>
                 {
                     _specificationVersionInstance.Update();
@@ -76,7 +72,7 @@ namespace Specifications.ViewModels
                 () => _editMode
                     && !HasErrors);
 
-            _startEdit = new DelegateCommand(
+            StartEditCommand = new DelegateCommand(
                 () =>
                 {
                     EditMode = true;
@@ -84,7 +80,7 @@ namespace Specifications.ViewModels
                 () => CanEdit && !_editMode);
             
 
-            _startTestListEdit = new DelegateCommand(
+            StartTestListEditCommand = new DelegateCommand(
                 () =>
                 {
                     NavigationToken token = new NavigationToken(SpecificationViewNames.AddMethod,
@@ -108,6 +104,18 @@ namespace Specifications.ViewModels
                 });
         }
 
+        #region Commands
+
+        public DelegateCommand<Requirement> DeleteRequirementCommand { get; }
+
+        public DelegateCommand StartEditCommand { get; }
+
+        public DelegateCommand SaveCommand { get; }
+
+        public DelegateCommand StartTestListEditCommand { get; }
+
+        #endregion
+
         #region INotifyDataErrorInfo interface elements
 
         public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
@@ -129,7 +137,7 @@ namespace Specifications.ViewModels
         private void RaiseErrorsChanged(string propertyName)
         {
             ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
-            _save.RaiseCanExecuteChanged();
+            SaveCommand.RaiseCanExecuteChanged();
         }
 
         #endregion
@@ -139,10 +147,6 @@ namespace Specifications.ViewModels
             get { return _principal.IsInRole(UserRoleNames.SpecificationEdit); }
         }
 
-        public DelegateCommand<Requirement> DeleteRequirementCommand
-        {
-            get { return _deleteRequirementCommand; }
-        }
 
         private void GenerateRequirementList()
         {
@@ -164,8 +168,8 @@ namespace Specifications.ViewModels
                 RaisePropertyChanged("EditMode");
                 RaisePropertyChanged("IsOverrideVisibility");
 
-                _save.RaiseCanExecuteChanged();
-                _startEdit.RaiseCanExecuteChanged();
+                SaveCommand.RaiseCanExecuteChanged();
+                StartEditCommand.RaiseCanExecuteChanged();
             }
         }
 
@@ -185,11 +189,6 @@ namespace Specifications.ViewModels
         public IEnumerable<RequirementWrapper> RequirementList
         {
             get { return _requirementList; }
-        }
-
-        public DelegateCommand SaveCommand
-        {
-            get { return _save; }
         }
 
         public bool SelectedVersionIsNotMain
@@ -219,11 +218,6 @@ namespace Specifications.ViewModels
                 RaisePropertyChanged("SpecificationVersionEditViewVisibility");
                 RaisePropertyChanged("SpecificationVersionName");
             }
-        }
-
-        public DelegateCommand StartEditCommand
-        {
-            get { return _startEdit; }
         }
 
         public Visibility SpecificationVersionEditViewVisibility
@@ -261,11 +255,6 @@ namespace Specifications.ViewModels
                     RaiseErrorsChanged("SpecificationVersionName");
                 }
             }
-        }
-
-        public DelegateCommand StartTestListEditCommand
-        {
-            get { return _startTestListEdit; }
         }
 
     }

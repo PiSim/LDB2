@@ -30,7 +30,7 @@ namespace Infrastructure.Wrappers
 
         public double Duration
         {
-            get { return _instance.Method.Duration; }
+            get { return _instance.MethodVariant.Method.Duration; }
         }
 
         public bool IsSelected
@@ -44,7 +44,7 @@ namespace Infrastructure.Wrappers
             }
         }
 
-        public string Method => _instance.Method.Standard.Name;
+        public string Method => _instance.MethodVariant.StandardName;
 
         public string Notes
         {
@@ -57,7 +57,7 @@ namespace Infrastructure.Wrappers
 
         public string Property
         {
-            get { return _instance.Method.Property.Name; }
+            get { return _instance.MethodVariant.PropertyName; }
         }
         
         public Requirement Requirement => _instance;
@@ -77,11 +77,11 @@ namespace Infrastructure.Wrappers
 
         public IEnumerable<SubRequirement> SubTests => _instance.SubRequirements.ToList();
         
-        public double? WorkHours => _instance?.Method?.Duration;
+        public double? WorkHours => _instance?.MethodVariant?.Method?.Duration;
 
-        public string PropertyName => _instance.Method.Property.Name;
+        public string PropertyName => _instance?.MethodVariant?.PropertyName;
 
-        public string MethodName => _instance.Method.Standard.Name;
+        public string MethodName => _instance?.MethodVariant?.StandardName;
 
         public IEnumerable SubItems => _instance.SubRequirements.ToList();
     }

@@ -17,13 +17,15 @@ namespace DBManager
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Method()
         {
-            this.Requirements = new HashSet<Requirement>();
+            this.TBD = " ";
+            this.Deprecated2 = new HashSet<Requirement>();
             this.Tests = new HashSet<Test>();
             this.SubMethods = new HashSet<SubMethod>();
             this.AssociatedInstruments = new HashSet<Instrument>();
-            this.ExternalReports = new HashSet<ExternalReport>();
+            this.Deprecated = new HashSet<ExternalReport>();
             this.TaskItems = new HashSet<TaskItem>();
             this.NewerVersions = new HashSet<Method>();
+            this.MethodVariants = new HashSet<MethodVariant>();
         }
     
         public int ID { get; private set; }
@@ -38,7 +40,7 @@ namespace DBManager
         public bool IsOld { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Requirement> Requirements { get; set; }
+        public virtual ICollection<Requirement> Deprecated2 { get; set; }
         public virtual Property Property { get; set; }
         public virtual Std Standard { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -48,11 +50,13 @@ namespace DBManager
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Instrument> AssociatedInstruments { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ExternalReport> ExternalReports { get; set; }
+        public virtual ICollection<ExternalReport> Deprecated { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<TaskItem> TaskItems { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Method> NewerVersions { get; set; }
         public virtual Method OldVersion { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<MethodVariant> MethodVariants { get; set; }
     }
 }

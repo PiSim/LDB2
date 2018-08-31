@@ -27,7 +27,7 @@ namespace Reports
         
         public string Method
         {
-            get { return _testInstance.Method.Standard.Name; }
+            get { return _testInstance.MethodVariant.StandardName; }
         }
 
         public string Notes
@@ -38,7 +38,7 @@ namespace Reports
 
         public string Property
         {
-            get { return _testInstance.Method.Property.Name; }
+            get { return _testInstance.MethodVariant.PropertyName; }
         }
 
         public List<SubTest> SubTests

@@ -20,8 +20,8 @@ namespace DBManager
             {
                 entities.Configuration.LazyLoadingEnabled = false;
 
-                return entities.Requirements.Include(req => req.Method.Property)
-                                            .Include(req => req.Method.Standard.Organization)
+                return entities.Requirements.Include(req => req.MethodVariant.Method.Property)
+                                            .Include(req => req.MethodVariant.Method.Standard.Organization)
                                             .Include(req => req.SubRequirements
                                             .Select(sreq => sreq.SubMethod))
                                             .Where(req => req.SpecificationVersionID == entities.SpecificationVersions
@@ -90,7 +90,7 @@ namespace DBManager
 
                 foreach (Requirement requirement in version.GetRequirements())
                 {
-                    int ii = output.FindIndex(rr => rr.Method.ID == requirement.Method.ID);
+                    int ii = output.FindIndex(rr => rr.MethodVariantID == requirement.MethodVariantID);
                     output[ii] = requirement;
                 }
 
@@ -106,8 +106,8 @@ namespace DBManager
             {
                 entities.Configuration.LazyLoadingEnabled = false;
 
-                return entities.Requirements.Include(req => req.Method.Property)
-                                            .Include(req => req.Method.Standard.Organization)
+                return entities.Requirements.Include(req => req.MethodVariant.Method.Property)
+                                            .Include(req => req.MethodVariant.Method.Standard.Organization)
                                             .Include(req => req.SubRequirements
                                             .Select(sreq => sreq.SubMethod))
                                             .Where(req => req.SpecificationVersionID == entry.ID)
@@ -133,9 +133,9 @@ namespace DBManager
                                                                                 .Include(specv => specv.Requirements
                                                                                 .Select(req => req.Overridden))
                                                                                 .Include(specv => specv.Requirements
-                                                                                .Select(req => req.Method.Property))
+                                                                                .Select(req => req.MethodVariant.Method.Property))
                                                                                 .Include(specv => specv.Requirements
-                                                                                .Select(req => req.Method.Standard.Organization))
+                                                                                .Select(req => req.MethodVariant.Method.Standard.Organization))
                                                                                 .Include(req => req.Specification.Standard.Organization)
                                                                                 .First(specv => specv.ID == entry.ID);
 

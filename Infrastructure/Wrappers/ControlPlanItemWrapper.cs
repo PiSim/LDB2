@@ -36,12 +36,12 @@ namespace Infrastructure
 
         public string Method
         {
-            get { return _requirement.Method.Standard.Name; }
+            get { return _requirement.MethodVariant.Method.Standard.Name; }
         }
 
         public string Property
         {
-            get { return _requirement.Method.Property.Name; }
+            get { return _requirement.MethodVariant.Method.Property.Name; }
         }
 
         public double Duration => throw new NotImplementedException();

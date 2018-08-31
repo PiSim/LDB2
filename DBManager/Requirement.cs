@@ -27,15 +27,16 @@ namespace DBManager
     
         public int ID { get; set; }
         public string Description { get; set; }
-        public int MethodID { get; set; }
+        public int Deprecated2 { get; set; }
         public string Name { get; set; }
         public int Position { get; set; }
         public int SpecificationVersionID { get; set; }
         public bool IsOverride { get; set; }
         public Nullable<int> OverriddenID { get; set; }
         public bool SkipTest { get; set; }
+        public Nullable<int> MethodVariantID { get; set; }
     
-        public virtual Method Method { get; set; }
+        public virtual Method Deprecated { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SubRequirement> SubRequirements { get; set; }
         public virtual SpecificationVersion SpecificationVersions { get; set; }
@@ -48,5 +49,6 @@ namespace DBManager
         public virtual ICollection<Test> tests { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ControlPlanItem> ControlPlanItems { get; set; }
+        public virtual MethodVariant MethodVariant { get; set; }
     }
 }

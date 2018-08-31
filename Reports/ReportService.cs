@@ -30,20 +30,6 @@ namespace Reports
         }
 
         /// <summary>
-        /// Creates a new ExternalReport-Method association and adds a new 
-        /// test entry to each TestRecord associated to the report
-        /// </summary>
-        /// <param name="externalReportEntry">The ExternalReport entity to target</param>
-        /// <param name="methodEntry">The Method that will be added</param>
-        public void AddMethodToExternalReport(ExternalReport externalReportEntry,
-                                            Method methodEntry)
-        {
-            // Creates the new association
-            externalReportEntry.AddTestMethod(methodEntry);
-            
-        }
-
-        /// <summary>
         /// Adds a sum to a project's ExternalCost field
         /// The addition is optimistic and assumes noone is altering the project entry
         /// </summary>
@@ -78,12 +64,19 @@ namespace Reports
         
 
 
-        public Requirement GenerateRequirement(Method method)
+        public Requirement GenerateRequirement(MethodVariant methodVariant)
         {
+            Method method = methodVariant.GetMethod(true);
             method.LoadSubMethods();
 
-            Requirement tempReq = new Requirement();
-            tempReq.MethodID = method.ID;
+            Requirement tempReq = new Requirement()
+            {
+                MethodVariantID = methodVariant.ID,
+                Name = method.Name,
+                Description = methodVariant.Description            
+            };
+
+            tempReq.Deprecated2 = method.ID;
             tempReq.IsOverride = false;
             tempReq.Name = "";
             tempReq.Description = "";
@@ -103,7 +96,7 @@ namespace Reports
         }
 
 
-
+        [Obsolete]
         public IEnumerable<TaskItem> GenerateTaskItemList(IEnumerable<Requirement> reqList)
         {
             List<TaskItem> output = new List<TaskItem>();
@@ -113,7 +106,7 @@ namespace Reports
                 TaskItem tempItem = new TaskItem();
 
                 tempItem.Description = req.Description;
-                tempItem.MethodID = req.MethodID;
+                tempItem.MethodID = req.MethodVariant.Method.ID;
                 tempItem.Name = req.Name;
                 tempItem.Position = 0;
                 tempItem.RequirementID = req.ID;
@@ -181,6 +174,7 @@ namespace Reports
         /// </summary>
         /// <param name="parentTask">A Task entry to use as template</param>
         /// <returns>The newly created report instance</returns>
+        [Obsolete]
         public Report CreateReport(Task parentTask)
         {
             Views.ReportCreationDialog creationDialog = new Views.ReportCreationDialog();
@@ -335,9 +329,14 @@ namespace Reports
             {
                 req.Load();
 
-                Test tempTest = new Test();
-                tempTest.Duration = req.Method.Duration;
-                tempTest.MethodID = req.MethodID;
+                Test tempTest = new Test()
+                {
+                    Deprecated2 = req.Deprecated2,   
+                    MethodVariantID = req.MethodVariantID
+                    
+                };
+
+                tempTest.Duration = req.MethodVariant.Method.Duration;
                 tempTest.RequirementID = req.ID;
                 tempTest.Notes = req.Description;
                 

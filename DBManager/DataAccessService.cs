@@ -263,19 +263,6 @@ namespace DBManager
             }
         }
 
-
-        public MaterialLine GetMaterialLine(string lineCode)
-        {
-            // Returns a MaterialLine entry with the given code, or null if none exists
-
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.Configuration.LazyLoadingEnabled = false;
-
-                return entities.MaterialLines.FirstOrDefault(matl => matl.Code == lineCode);
-            }
-        }
-
         public IEnumerable<InstrumentType> GetInstrumentTypes()
         {
             // Returns all InstrumentType entities
@@ -440,6 +427,40 @@ namespace DBManager
 
                 return query.OrderBy(mtd => mtd.Standard.Name)
                             .ToList();
+            }
+        }
+
+
+        public MaterialLine GetMaterialLine(string lineCode)
+        {
+            // Returns a MaterialLine entry with the given code, or null if none exists
+
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.MaterialLines.FirstOrDefault(matl => matl.Code == lineCode);
+            }
+        }
+
+        public ICollection<MethodVariant> GetMethodVariants(bool IncludeObsolete = false,
+                                                            bool sortResults = true)
+        {
+            using (DBEntities entities = new DBEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                IQueryable<MethodVariant> query = entities.MethodVariants.Include(mtdvar => mtdvar.Method.Property)
+                                                                        .Include(mtdvar => mtdvar.Method.Standard.Organization);
+
+                if (sortResults)
+                    query = query.OrderBy(mtdvar => mtdvar.Method.Name)
+                                .ThenBy(mtdvar => mtdvar.Name);
+
+                if (!IncludeObsolete)
+                    query = query.Where(mtdvar => !mtdvar.IsOld);
+
+                return query.ToList();
             }
         }
 

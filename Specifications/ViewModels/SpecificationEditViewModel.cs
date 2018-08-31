@@ -32,11 +32,11 @@ namespace Specifications.ViewModels
                                 _removeVersion,
                                 _save,
                                 _startEdit;
-        private DelegateCommand<Method> _addTest;
+        private DelegateCommand<MethodVariant> _addTest;
         private readonly Dictionary<string, ICollection<string>> _validationErrors = new Dictionary<string, ICollection<string>>();
         private EventAggregator _eventAggregator;
         private readonly IDataService _dataService;
-        private IEnumerable<Method> _methodList;
+        private IEnumerable<MethodVariant> _methodVariantList;
         private IReportService _reportService;
         private Report _selectedReport;
         private Specification _instance;
@@ -47,7 +47,6 @@ namespace Specifications.ViewModels
                                             EventAggregator aggregator,
                                             IDataService dataService,
                                             IReportService reportService) 
-            : base()
         {
             _dataService = dataService;
             _eventAggregator = aggregator;
@@ -90,7 +89,7 @@ namespace Specifications.ViewModels
                 },
                 () => _principal.IsInRole(UserRoleNames.SpecificationEdit));
 
-            _addTest = new DelegateCommand<Method>(
+            _addTest = new DelegateCommand<MethodVariant>(
                 mtd =>
                 {
                     Requirement newReq = _reportService.GenerateRequirement(mtd);
@@ -204,8 +203,8 @@ namespace Specifications.ViewModels
                             .Subscribe(
                 tkn =>
                 {
-                    _methodList = null;
-                    RaisePropertyChanged("MethodList");
+                    _methodVariantList = null;
+                    RaisePropertyChanged("MethodVariantList");
                 });
 
             _eventAggregator.GetEvent<ReportCreated>().Subscribe(
@@ -248,10 +247,7 @@ namespace Specifications.ViewModels
             get { return _addFile; }
         }
 
-        public DelegateCommand<Method> AddTestCommand
-        {
-            get { return _addTest; }
-        }
+        public DelegateCommand<MethodVariant> AddTestCommand => _addTest;
 
         public DelegateCommand AddVersionCommand
         {
@@ -329,13 +325,13 @@ namespace Specifications.ViewModels
             }
         }
 
-        public IEnumerable<Method> MethodList
+        public IEnumerable<MethodVariant> MethodVariantList
         {
             get
             {
-                if (_methodList == null)
-                    _methodList = _dataService.GetMethods();
-                return _methodList;
+                if (_methodVariantList == null)
+                    _methodVariantList = _dataService.GetMethodVariants();
+                return _methodVariantList;
             }
         }
 

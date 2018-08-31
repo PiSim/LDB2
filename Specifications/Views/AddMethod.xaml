@@ -36,7 +36,7 @@
                     <RowDefinition/>
                 </Grid.RowDefinitions>
 
-                <DataGrid ItemsSource="{Binding MethodList}"
+                <DataGrid ItemsSource="{Binding MethodVariantList}"
                           AutoGenerateColumns="False"
                           CanUserAddRows="False"
                           CanUserDeleteRows="False"
@@ -58,11 +58,13 @@
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
                         <DataGridTextColumn Header="Standard"
-                                            Binding="{Binding Path=Standard.Name}"/>
+                                            Binding="{Binding Path=StandardName}"/>
                         <DataGridTextColumn Header="Proprietà"
-                                            Binding="{Binding Path=Property.Name}"/>
+                                            Binding="{Binding Path=PropertyName}"/>
                         <DataGridTextColumn Header="OEM"
-                                            Binding="{Binding Path=Standard.Organization.Name}"/>
+                                            Binding="{Binding Path=OemName}"/>
+                        <DataGridTextColumn Header="Variante"
+                                            Binding="{Binding Path=Name}"/>
                         <DataGridTextColumn Header="Descrizione"
                                             Binding="{Binding Path=Description}"/>
                     </DataGrid.Columns>

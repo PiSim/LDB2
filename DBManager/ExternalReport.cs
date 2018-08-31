@@ -18,8 +18,9 @@ namespace DBManager
         public ExternalReport()
         {
             this.ExternalReportFiles = new HashSet<ExternalReportFile>();
-            this.Methods = new HashSet<Method>();
+            this.Deprecated = new HashSet<Method>();
             this.TestRecords = new HashSet<TestRecord>();
+            this.MethodVariants = new HashSet<MethodVariant>();
         }
     
         public int ID { get; set; }
@@ -47,8 +48,10 @@ namespace DBManager
         public virtual Organization ExternalLab { get; set; }
         public virtual Project Project { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Method> Methods { get; set; }
+        public virtual ICollection<Method> Deprecated { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<TestRecord> TestRecords { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<MethodVariant> MethodVariants { get; set; }
     }
 }

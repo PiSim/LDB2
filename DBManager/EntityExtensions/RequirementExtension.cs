@@ -7,6 +7,14 @@ using System.Threading.Tasks;
 
 namespace DBManager
 {
+    public partial class Requirement
+    {
+        #region Properties
+
+        public string VariantName => MethodVariant?.Name;
+
+        #endregion
+    }
 
     public static class RequirementExtension
     {
@@ -50,11 +58,10 @@ namespace DBManager
 
                 entities.Requirements.Attach(entry);
 
-                Requirement tempEntry = entities.Requirements.Include(req => req.Method.Property)
-                                                                .Include(req => req.Method.Standard.Organization)
+                Requirement tempEntry = entities.Requirements.Include(req => req.MethodVariant.Method.Property)
+                                                                .Include(req => req.MethodVariant.Method.Standard.Organization)
                                                                 .Include(req => req.Overridden)
-                                                                .Include(req => req.SubRequirements
-                                                                .Select(sreq => sreq.SubMethod.Method))
+                                                                .Include(req => req.SubRequirements)
                                                                 .First(req => req.ID == entry.ID);
 
                 entities.Entry(entry).CurrentValues.SetValues(tempEntry);

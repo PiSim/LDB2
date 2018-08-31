@@ -30,7 +30,7 @@ namespace Reports.ViewModels
                                 _removeFile,
                                 _save,
                                 _startEdit;
-        private DelegateCommand<Method> _addMethod,
+        private DelegateCommand<MethodVariant> _addMethod,
                                         _removeMethod;
         private EventAggregator _eventAggregator;
         private ExternalReport _instance;
@@ -96,12 +96,12 @@ namespace Reports.ViewModels
                 },
                 () => EditMode);
 
-            _addMethod = new DelegateCommand<Method>(
+            _addMethod = new DelegateCommand<MethodVariant>(
                 mtd =>
                 {
                     _instance.AddTestMethod(mtd);
 
-                    _instance.Methods = _instance.GetMethods();
+                    _instance.MethodVariants = _instance.GetMethodVariants();
                     RaisePropertyChanged("MethodList");
 
                     RefreshTestRecords();
@@ -142,12 +142,12 @@ namespace Reports.ViewModels
                 },
                 () => _selectedFile != null && EditMode);
 
-            _removeMethod = new DelegateCommand<Method>(
+            _removeMethod = new DelegateCommand<MethodVariant>(
                 mtd =>
                 {
-                    _instance.RemoveTestMethod(mtd);
+                    _instance.RemoveTestMethodVariant(mtd);
 
-                    _instance.Methods = _instance.GetMethods() as ICollection<Method>;
+                    _instance.MethodVariants = _instance.GetMethodVariants() as ICollection<MethodVariant>;
                     RaisePropertyChanged("MethodList");
 
                     RefreshTestRecords();
@@ -184,7 +184,7 @@ namespace Reports.ViewModels
 
             _resultList = new List<ExternalResultPresenter>();
 
-            foreach (Tuple<Method, IEnumerable<Test>> resTuple in _instance.GetResultCollection())
+            foreach (Tuple<MethodVariant, IEnumerable<Test>> resTuple in _instance.GetResultCollection())
                 _resultList.Add(new ExternalResultPresenter(resTuple.Item1, resTuple.Item2));
 
             RaisePropertyChanged("ResultCollection");
@@ -203,9 +203,9 @@ namespace Reports.ViewModels
             get { return _addFile; }
         }
 
-        public DelegateCommand<Method> AddMethodCommand => _addMethod;
+        public DelegateCommand<MethodVariant> AddMethodCommand => _addMethod;
 
-        public IEnumerable<Method> AvailableMethodList => _dataService.GetMethods();
+        public IEnumerable<MethodVariant> AvailableMethodVariantList => _dataService.GetMethodVariants();
         
         public string BatchNumber
         {
@@ -270,7 +270,7 @@ namespace Reports.ViewModels
                                 
                 if (_instance != null)
                 {
-                    _instance.Methods = _instance.GetMethods();
+                    _instance.MethodVariants = _instance.GetMethodVariants();
                     RefreshTestRecords();
                 }
 
@@ -288,14 +288,14 @@ namespace Reports.ViewModels
                 _addBatch.RaiseCanExecuteChanged();
                 _removeBatch.RaiseCanExecuteChanged();
 
-                RaisePropertyChanged("AvailableMethodList");
+                RaisePropertyChanged("AvailableMethodVariantList");
                 RaisePropertyChanged("CanModifyOrder");
                 RaisePropertyChanged("Description");
                 RaisePropertyChanged("ReportFiles");
                 RaisePropertyChanged("ExternalLab");
                 RaisePropertyChanged("FormattedNumber");
                 RaisePropertyChanged("HasOrder");
-                RaisePropertyChanged("MethodList");
+                RaisePropertyChanged("MethodVariantList");
                 RaisePropertyChanged("SamplesSent");
                 RaisePropertyChanged("SamplesSentDate");
                 RaisePropertyChanged("OrderNumber");
@@ -321,7 +321,7 @@ namespace Reports.ViewModels
             }
         }
 
-        public IEnumerable<Method> MethodList => _instance?.Methods;
+        public IEnumerable<MethodVariant> MethodVariantList => _instance?.MethodVariants;
 
         public DelegateCommand OpenBatchCommand
         {
@@ -379,7 +379,7 @@ namespace Reports.ViewModels
             get { return _removeFile; }
         }
 
-        public DelegateCommand<Method> RemoveMethodCommand => _removeMethod;
+        public DelegateCommand<MethodVariant> RemoveMethodCommand => _removeMethod;
 
         public IEnumerable<ExternalReportFile> ReportFiles
         {

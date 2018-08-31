@@ -79,25 +79,16 @@ namespace Infrastructure.Wrappers
                                             .ToList(); }
         }
 
-        public string Method
-        {
-            get
-            {
-                return _requirementInstance.Method.Standard.Name;
-            }
-        }
-
-        public string Property
-        {
-            get {
-
-                return _requirementInstance.Method.Property.Name; }
-        }
+        public string Method=> _requirementInstance.MethodVariant.Method.Standard.Name;
+        
+        public string Property => _requirementInstance.MethodVariant.Method.Property.Name;
 
         public bool ReadOnly
         {
             get { return !CanModify; }
         }
+
+        public string VariantName => _requirementInstance?.VariantName;
 
         // Method definitions
 
@@ -107,7 +98,7 @@ namespace Infrastructure.Wrappers
             {
                 Description = _requirementInstance.Description,
                 IsOverride = true,
-                MethodID = _requirementInstance.MethodID,
+                MethodVariantID = _requirementInstance.MethodVariantID,
                 OverriddenID = _requirementInstance.ID,
                 SpecificationVersionID = _versionInstance.ID
             };

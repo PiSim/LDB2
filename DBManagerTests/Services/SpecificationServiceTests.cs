@@ -59,10 +59,6 @@ namespace DBManager.Services.Tests
 
             foreach (Requirement req in temp.Requirements)
             {
-                Assert.IsNotNull(req.Method);
-                Assert.IsNotNull(req.Method.Standard);
-                Assert.IsNotNull(req.Method.Standard.Organization);
-                Assert.IsNotNull(req.Method.Property);
             }
         }
     }

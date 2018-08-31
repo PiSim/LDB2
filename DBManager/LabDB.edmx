@@ -142,6 +142,14 @@
           <Property Name="external_reportID" Type="int" Nullable="false" />
           <Property Name="methodID" Type="int" Nullable="false" />
         </EntityType>
+        <EntityType Name="external_report_method_variant_mappings">
+          <Key>
+            <PropertyRef Name="external_reportID" />
+            <PropertyRef Name="method_variantID" />
+          </Key>
+          <Property Name="external_reportID" Type="int" Nullable="false" />
+          <Property Name="method_variantID" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="external_report_test_record_mappings">
           <Key>
             <PropertyRef Name="external_reportID" />
@@ -311,6 +319,17 @@
           <Property Name="name" Type="varchar" MaxLength="45" Nullable="false" />
           <Property Name="measurable_quantityID" Type="int" Nullable="false" />
         </EntityType>
+        <EntityType Name="method_variants">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="45" Nullable="false" />
+          <Property Name="description" Type="text" Nullable="false" />
+          <Property Name="methodID" Type="int" Nullable="false" />
+          <Property Name="previous_versionID" Type="int" />
+          <Property Name="is_old" Type="bit" Nullable="false" />
+        </EntityType>
         <EntityType Name="methods">
           <Key>
             <PropertyRef Name="ID" />
@@ -445,6 +464,7 @@
           <Property Name="is_override" Type="bit" Nullable="false" />
           <Property Name="overriddenID" Type="int" />
           <Property Name="skip_test" Type="bit" Nullable="false" />
+          <Property Name="method_variantID" Type="int" />
         </EntityType>
         <EntityType Name="samples">
           <Key>
@@ -607,6 +627,7 @@
           <Property Name="requirementID" Type="int" />
           <Property Name="duration" Type="double" Nullable="false" />
           <Property Name="test_recordID" Type="int" />
+          <Property Name="method_variantID" Type="int" />
         </EntityType>
         <EntityType Name="trial_areas">
           <Key>
@@ -918,6 +939,20 @@
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="external_report_method_mappings">
+              <PropertyRef Name="external_reportID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="external_report_to_method_variant_mapping">
+          <End Role="external_reports" Type="Self.external_reports" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="external_report_method_variant_mappings" Type="Self.external_report_method_variant_mappings" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="external_reports">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="external_report_method_variant_mappings">
               <PropertyRef Name="external_reportID" />
             </Dependent>
           </ReferentialConstraint>
@@ -1249,6 +1284,70 @@
             </Principal>
             <Dependent Role="tests">
               <PropertyRef Name="methodID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="method_variant_previous_version_to_current">
+          <End Role="method_variants" Type="Self.method_variants" Multiplicity="0..1" />
+          <End Role="method_variants1" Type="Self.method_variants" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="method_variants">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="method_variants1">
+              <PropertyRef Name="previous_versionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="method_variant_to_external_report_mapping">
+          <End Role="method_variants" Type="Self.method_variants" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="external_report_method_variant_mappings" Type="Self.external_report_method_variant_mappings" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="method_variants">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="external_report_method_variant_mappings">
+              <PropertyRef Name="method_variantID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="method_variant_to_method">
+          <End Role="methods" Type="Self.methods" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="method_variants" Type="Self.method_variants" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="methods">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="method_variants">
+              <PropertyRef Name="methodID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="method_variant_to_requirement">
+          <End Role="method_variants" Type="Self.method_variants" Multiplicity="0..1" />
+          <End Role="requirements" Type="Self.requirements" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="method_variants">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="requirements">
+              <PropertyRef Name="method_variantID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="method_variant_to_test">
+          <End Role="method_variants" Type="Self.method_variants" Multiplicity="0..1" />
+          <End Role="tests" Type="Self.tests" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="method_variants">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="tests">
+              <PropertyRef Name="method_variantID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2005,6 +2104,7 @@
           <EntitySet Name="external_constructions" EntityType="Self.external_constructions" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="external_report_files" EntityType="Self.external_report_files" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="external_report_method_mappings" EntityType="Self.external_report_method_mappings" Schema="labdb" store:Type="Tables" />
+          <EntitySet Name="external_report_method_variant_mappings" EntityType="Self.external_report_method_variant_mappings" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="external_report_test_record_mappings" EntityType="Self.external_report_test_record_mappings" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="external_reports" EntityType="Self.external_reports" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="instrument_files" EntityType="Self.instrument_files" Schema="labdb" store:Type="Tables" />
@@ -2021,6 +2121,7 @@
           <EntitySet Name="materials" EntityType="Self.materials" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="measurable_quantities" EntityType="Self.measurable_quantities" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="measure_units" EntityType="Self.measure_units" Schema="labdb" store:Type="Tables" />
+          <EntitySet Name="method_variants" EntityType="Self.method_variants" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="methods" EntityType="Self.methods" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="organization_role_mappings" EntityType="Self.organization_role_mappings" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="organization_roles" EntityType="Self.organization_roles" Schema="labdb" store:Type="Tables" />
@@ -2140,6 +2241,10 @@
             <End Role="external_reports" EntitySet="external_reports" />
             <End Role="external_report_method_mappings" EntitySet="external_report_method_mappings" />
           </AssociationSet>
+          <AssociationSet Name="external_report_to_method_variant_mapping" Association="Self.external_report_to_method_variant_mapping">
+            <End Role="external_reports" EntitySet="external_reports" />
+            <End Role="external_report_method_variant_mappings" EntitySet="external_report_method_variant_mappings" />
+          </AssociationSet>
           <AssociationSet Name="external_report_to_record_mapping" Association="Self.external_report_to_record_mapping">
             <End Role="external_reports" EntitySet="external_reports" />
             <End Role="external_report_test_record_mappings" EntitySet="external_report_test_record_mappings" />
@@ -2242,6 +2347,26 @@
           </AssociationSet>
           <AssociationSet Name="method_to_test" Association="Self.method_to_test">
             <End Role="methods" EntitySet="methods" />
+            <End Role="tests" EntitySet="tests" />
+          </AssociationSet>
+          <AssociationSet Name="method_variant_previous_version_to_current" Association="Self.method_variant_previous_version_to_current">
+            <End Role="method_variants" EntitySet="method_variants" />
+            <End Role="method_variants1" EntitySet="method_variants" />
+          </AssociationSet>
+          <AssociationSet Name="method_variant_to_external_report_mapping" Association="Self.method_variant_to_external_report_mapping">
+            <End Role="method_variants" EntitySet="method_variants" />
+            <End Role="external_report_method_variant_mappings" EntitySet="external_report_method_variant_mappings" />
+          </AssociationSet>
+          <AssociationSet Name="method_variant_to_method" Association="Self.method_variant_to_method">
+            <End Role="methods" EntitySet="methods" />
+            <End Role="method_variants" EntitySet="method_variants" />
+          </AssociationSet>
+          <AssociationSet Name="method_variant_to_requirement" Association="Self.method_variant_to_requirement">
+            <End Role="method_variants" EntitySet="method_variants" />
+            <End Role="requirements" EntitySet="requirements" />
+          </AssociationSet>
+          <AssociationSet Name="method_variant_to_test" Association="Self.method_variant_to_test">
+            <End Role="method_variants" EntitySet="method_variants" />
             <End Role="tests" EntitySet="tests" />
           </AssociationSet>
           <AssociationSet Name="oem" Association="Self.oem">
@@ -2575,7 +2700,7 @@
           <NavigationProperty Name="ExternalLab" Relationship="Self.external_lab" FromRole="external_reports" ToRole="organizations" />
           <NavigationProperty Name="Project" Relationship="Self.project_to_report" FromRole="external_reports" ToRole="projects" />
           <Property Name="ArrivalDate" Type="DateTime" />
-          <NavigationProperty Name="Methods" Relationship="labdbModel.external_report_method_mappings" FromRole="ExternalReport" ToRole="Method" />
+          <NavigationProperty Name="Deprecated" Relationship="labdbModel.external_report_method_mappings" FromRole="ExternalReport" ToRole="Method" />
           <Property Name="Year" Type="Int32" Nullable="false" />
           <Property Name="Number" Nullable="false" Type="Int32" />
           <Property Name="OrderNumber" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
@@ -2587,6 +2712,7 @@
           <Property Name="TBDel" Type="String" Nullable="true" />
           <Property Name="TBDel2" Type="Int32" Nullable="true" />
           <NavigationProperty Name="TestRecords" Relationship="labdbModel.external_report_test_record_mappings" FromRole="ExternalReport" ToRole="TestRecord" />
+          <NavigationProperty Name="MethodVariants" Relationship="labdbModel.external_report_method_variant_mappings" FromRole="ExternalReport" ToRole="MethodVariant" />
         </EntityType>
         <EntityType Name="Master">
           <Key>
@@ -2626,14 +2752,14 @@
           <Property Name="StandardID" Type="Int32" Nullable="false" a:GetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:SetterAccess="Public" />
           <Property Name="PropertyID" Type="Int32" Nullable="false" a:GetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:SetterAccess="Public" />
           <Property Name="Description" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="TBD" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
-          <NavigationProperty Name="Requirements" Relationship="Self.method_to_requirement" FromRole="methods" ToRole="requirements" />
+          <Property Name="TBD" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" DefaultValue=" " />
+          <NavigationProperty Name="Deprecated2" Relationship="Self.method_to_requirement" FromRole="methods" ToRole="requirements" />
           <NavigationProperty Name="Property" Relationship="Self.property_to_method" FromRole="methods" ToRole="properties" />
           <NavigationProperty Name="Standard" Relationship="Self.standard_to_method" FromRole="methods" ToRole="standards" />
           <NavigationProperty Name="Tests" Relationship="labdbModel.method_to_test" FromRole="Method" ToRole="Test" />
           <NavigationProperty Name="SubMethods" Relationship="labdbModel.method_to_measurement1" FromRole="Method" ToRole="sub_methods" />
           <NavigationProperty Name="AssociatedInstruments" Relationship="labdbModel.instrument_method_mappings" FromRole="Method" ToRole="Instrument" />
-          <NavigationProperty Name="ExternalReports" Relationship="labdbModel.external_report_method_mappings" FromRole="Method" ToRole="ExternalReport" />
+          <NavigationProperty Name="Deprecated" Relationship="labdbModel.external_report_method_mappings" FromRole="Method" ToRole="ExternalReport" />
           <NavigationProperty Name="TaskItems" Relationship="labdbModel.method_to_task_item" FromRole="Method" ToRole="TaskItem" />
           <Property Name="Duration" Type="Double" Nullable="false" />
           <Property Name="Name" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
@@ -2642,6 +2768,7 @@
           <Property Name="IsOld" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="NewerVersions" Relationship="labdbModel.method_old_version_to_current" FromRole="Method" ToRole="Method1" />
           <NavigationProperty Name="OldVersion" Relationship="labdbModel.method_old_version_to_current" FromRole="Method1" ToRole="Method" />
+          <NavigationProperty Name="MethodVariants" Relationship="labdbModel.method_variant_to_method" FromRole="Method" ToRole="method_variants" />
         </EntityType>
         <EntityType Name="Organization">
           <Key>
@@ -2755,11 +2882,11 @@
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Description" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="MethodID" Type="Int32" Nullable="false" a:SetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+          <Property Name="Deprecated2" Type="Int32" Nullable="false" a:SetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <Property Name="Name" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" DefaultValue="" />
           <Property Name="Position" Type="Int32" Nullable="false" />
           <Property Name="SpecificationVersionID" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Method" Relationship="Self.method_to_requirement" FromRole="requirements" ToRole="methods" />
+          <NavigationProperty Name="Deprecated" Relationship="Self.method_to_requirement" FromRole="requirements" ToRole="methods" />
           <NavigationProperty Name="SubRequirements" Relationship="Self.requirement_to_subreq" FromRole="requirements" ToRole="sub_requirements" />
           <NavigationProperty Name="SpecificationVersions" Relationship="Self.specversion_to_requirement" FromRole="requirements" ToRole="specification_versions" />
           <Property Name="IsOverride" Type="Boolean" Nullable="false" />
@@ -2770,6 +2897,8 @@
           <NavigationProperty Name="tests" Relationship="labdbModel.requirement_to_test1" FromRole="Requirement" ToRole="Test" />
           <Property Name="SkipTest" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="ControlPlanItems" Relationship="labdbModel.requirement_to_cplan_item" FromRole="Requirement" ToRole="control_plan_items_b" />
+          <Property Name="MethodVariantID" Type="Int32" />
+          <NavigationProperty Name="MethodVariant" Relationship="labdbModel.method_variant_to_requirement" FromRole="Requirement" ToRole="MethodVariant" />
         </EntityType>
         <EntityType Name="Sample">
           <Key>
@@ -2895,7 +3024,7 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="MethodID" Type="Int32" Nullable="false" />
+          <Property Name="Deprecated2" Type="Int32" Nullable="false" />
           <Property Name="TBD" Type="Int32" Nullable="true" />
           <Property Name="Notes" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
           <Property Name="TBD4" Type="Int32" Nullable="true" />
@@ -2903,7 +3032,7 @@
           <NavigationProperty Name="TBD6" Relationship="labdbModel.operatorID" FromRole="tests" ToRole="people" />
           <NavigationProperty Name="TBD2" Relationship="Self.report_to_test" FromRole="tests" ToRole="reports" />
           <NavigationProperty Name="SubTests" Relationship="Self.test1" FromRole="tests" ToRole="sub_tests" />
-          <NavigationProperty Name="Method" Relationship="labdbModel.method_to_test" FromRole="Test" ToRole="Method" />
+          <NavigationProperty Name="Deprecated" Relationship="labdbModel.method_to_test" FromRole="Test" ToRole="Method" />
           <Property Name="TBD3" Type="Boolean" Nullable="false" />
           <Property Name="instrumentID" Type="Int32" />
           <NavigationProperty Name="Instrument" Relationship="labdbModel.instrument_to_test" FromRole="Test" ToRole="instrument" />
@@ -2913,6 +3042,8 @@
           <Property Name="Duration" Type="Double" Nullable="false" />
           <Property Name="TestRecordID" Type="Int32" Nullable="false" />
           <NavigationProperty Name="TestRecord" Relationship="labdbModel.test_record_to_tests" FromRole="Test" ToRole="test_records" />
+          <Property Name="MethodVariantID" Type="Int32" />
+          <NavigationProperty Name="MethodVariant" Relationship="labdbModel.method_variant_to_test" FromRole="Test" ToRole="MethodVariant" />
         </EntityType>
         <EntityType Name="User">
           <Key>
@@ -3086,7 +3217,7 @@
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="requirements">
-              <PropertyRef Name="MethodID" />
+              <PropertyRef Name="Deprecated2" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -3765,6 +3896,27 @@
             <End Role="SubMethod" EntitySet="SubMethods" />
             <End Role="SubMethod1" EntitySet="SubMethods" />
           </AssociationSet>
+          <EntitySet Name="MethodVariants" EntityType="labdbModel.MethodVariant" />
+          <AssociationSet Name="method_variant_to_method" Association="labdbModel.method_variant_to_method">
+            <End Role="Method" EntitySet="Methods" />
+            <End Role="method_variants" EntitySet="MethodVariants" />
+          </AssociationSet>
+          <AssociationSet Name="method_variant_to_requirement" Association="labdbModel.method_variant_to_requirement">
+            <End Role="MethodVariant" EntitySet="MethodVariants" />
+            <End Role="Requirement" EntitySet="Requirements" />
+          </AssociationSet>
+          <AssociationSet Name="method_variant_to_test" Association="labdbModel.method_variant_to_test">
+            <End Role="MethodVariant" EntitySet="MethodVariants" />
+            <End Role="Test" EntitySet="Tests" />
+          </AssociationSet>
+          <AssociationSet Name="external_report_method_variant_mappings" Association="labdbModel.external_report_method_variant_mappings">
+            <End Role="ExternalReport" EntitySet="ExternalReports" />
+            <End Role="MethodVariant" EntitySet="MethodVariants" />
+          </AssociationSet>
+          <AssociationSet Name="method_variant_previous_version_to_current" Association="labdbModel.method_variant_previous_version_to_current">
+            <End Role="MethodVariant" EntitySet="MethodVariants" />
+            <End Role="MethodVariant1" EntitySet="MethodVariants" />
+          </AssociationSet>
           </EntityContainer>
         <Association Name="overridden_to_requirement">
           <End Type="labdbModel.Requirement" Role="Requirement" Multiplicity="0..1">
@@ -3788,7 +3940,7 @@
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="Test">
-              <PropertyRef Name="MethodID" />
+              <PropertyRef Name="Deprecated2" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -4971,6 +5123,77 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="MethodVariant">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" DefaultValue="Variante" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="65535" FixedLength="false" Unicode="false" DefaultValue=" " />
+          <Property Name="MethodID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Method" Relationship="labdbModel.method_variant_to_method" FromRole="method_variants" ToRole="Method" />
+          <NavigationProperty Name="Requirements" Relationship="labdbModel.method_variant_to_requirement" FromRole="MethodVariant" ToRole="Requirement" />
+          <NavigationProperty Name="Tests" Relationship="labdbModel.method_variant_to_test" FromRole="MethodVariant" ToRole="Test" />
+          <NavigationProperty Name="ExternalReports" Relationship="labdbModel.external_report_method_variant_mappings" FromRole="MethodVariant" ToRole="ExternalReport" />
+          <Property Name="PreviousVersionID" Type="Int32" />
+          <NavigationProperty Name="NewerVersion" Relationship="labdbModel.method_variant_previous_version_to_current" FromRole="MethodVariant" ToRole="MethodVariant1" />
+          <NavigationProperty Name="PreviousVersion" Relationship="labdbModel.method_variant_previous_version_to_current" FromRole="MethodVariant1" ToRole="MethodVariant" />
+          <Property Name="IsOld" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <Association Name="method_variant_to_method">
+          <End Type="labdbModel.Method" Role="Method" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="labdbModel.MethodVariant" Role="method_variants" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Method">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="method_variants">
+              <PropertyRef Name="MethodID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="method_variant_to_requirement">
+          <End Type="labdbModel.MethodVariant" Role="MethodVariant" Multiplicity="0..1" />
+          <End Type="labdbModel.Requirement" Role="Requirement" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MethodVariant">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Requirement">
+              <PropertyRef Name="MethodVariantID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="method_variant_to_test">
+          <End Type="labdbModel.MethodVariant" Role="MethodVariant" Multiplicity="0..1" />
+          <End Type="labdbModel.Test" Role="Test" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MethodVariant">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Test">
+              <PropertyRef Name="MethodVariantID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="external_report_method_variant_mappings">
+          <End Type="labdbModel.ExternalReport" Role="ExternalReport" Multiplicity="*" />
+          <End Type="labdbModel.MethodVariant" Role="MethodVariant" Multiplicity="*" />
+        </Association>
+        <Association Name="method_variant_previous_version_to_current">
+          <End Type="labdbModel.MethodVariant" Role="MethodVariant" Multiplicity="0..1" />
+          <End Type="labdbModel.MethodVariant" Role="MethodVariant1" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MethodVariant">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="MethodVariant1">
+              <PropertyRef Name="PreviousVersionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -5176,12 +5399,13 @@
           <EntitySetMapping Name="Requirements">
             <EntityTypeMapping TypeName="labdbModel.Requirement">
               <MappingFragment StoreEntitySet="requirements">
+                <ScalarProperty Name="MethodVariantID" ColumnName="method_variantID" />
                 <ScalarProperty Name="SkipTest" ColumnName="skip_test" />
                 <ScalarProperty Name="OverriddenID" ColumnName="overriddenID" />
                 <ScalarProperty Name="IsOverride" ColumnName="is_override" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Description" ColumnName="description" />
-                <ScalarProperty Name="MethodID" ColumnName="methodID" />
+                <ScalarProperty Name="Deprecated2" ColumnName="methodID" />
                 <ScalarProperty Name="Name" ColumnName="name" />
                 <ScalarProperty Name="Position" ColumnName="position" />
                 <ScalarProperty Name="SpecificationVersionID" ColumnName="specification_versionID" />
@@ -5290,13 +5514,14 @@
           <EntitySetMapping Name="Tests">
             <EntityTypeMapping TypeName="labdbModel.Test">
               <MappingFragment StoreEntitySet="tests">
+                <ScalarProperty Name="MethodVariantID" ColumnName="method_variantID" />
                 <ScalarProperty Name="TestRecordID" ColumnName="test_recordID" />
                 <ScalarProperty Name="Duration" ColumnName="duration" />
                 <ScalarProperty Name="RequirementID" ColumnName="requirementID" />
                 <ScalarProperty Name="instrumentID" ColumnName="instrumentID" />
                 <ScalarProperty Name="TBD3" ColumnName="is_complete" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="MethodID" ColumnName="methodID" />
+                <ScalarProperty Name="Deprecated2" ColumnName="methodID" />
                 <ScalarProperty Name="TBD" ColumnName="reportID" />
                 <ScalarProperty Name="Notes" ColumnName="notes" />
                 <ScalarProperty Name="TBD4" ColumnName="operatorID" />
@@ -5665,6 +5890,26 @@
           <AssociationSetMapping Name="external_report_test_record_mappings" TypeName="labdbModel.external_report_test_record_mappings" StoreEntitySet="external_report_test_record_mappings">
             <EndProperty Name="TestRecord">
               <ScalarProperty Name="ID" ColumnName="test_recordID" />
+            </EndProperty>
+            <EndProperty Name="ExternalReport">
+              <ScalarProperty Name="ID" ColumnName="external_reportID" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <EntitySetMapping Name="MethodVariants">
+            <EntityTypeMapping TypeName="labdbModel.MethodVariant">
+              <MappingFragment StoreEntitySet="method_variants">
+                <ScalarProperty Name="IsOld" ColumnName="is_old" />
+                <ScalarProperty Name="PreviousVersionID" ColumnName="previous_versionID" />
+                <ScalarProperty Name="MethodID" ColumnName="methodID" />
+                <ScalarProperty Name="Description" ColumnName="description" />
+                <ScalarProperty Name="Name" ColumnName="name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="external_report_method_variant_mappings" TypeName="labdbModel.external_report_method_variant_mappings" StoreEntitySet="external_report_method_variant_mappings">
+            <EndProperty Name="MethodVariant">
+              <ScalarProperty Name="ID" ColumnName="method_variantID" />
             </EndProperty>
             <EndProperty Name="ExternalReport">
               <ScalarProperty Name="ID" ColumnName="external_reportID" />

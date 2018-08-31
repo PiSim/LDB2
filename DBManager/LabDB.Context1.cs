@@ -81,5 +81,6 @@ namespace DBManager
         public virtual DbSet<ControlPlanItem> ControlPlanItems { get; set; }
         public virtual DbSet<TestRecord> TestRecords { get; set; }
         public virtual DbSet<TestRecordType> TestRecordTypes { get; set; }
+        public virtual DbSet<MethodVariant> MethodVariants { get; set; }
     }
 }

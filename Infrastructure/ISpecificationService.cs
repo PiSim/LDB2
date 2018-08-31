@@ -14,7 +14,13 @@ namespace Infrastructure
                                 Std mainEntry);
         void CreateMethod();
         void CreateSpecification();
-        void StartMethodUpdate(Method toBeUpdated);
+        void ModifyMethodTestList(Method toBeModified);
+        /// <summary>
+        /// Inserts a list of MethodVariants in the database, or updates the values if the entry already exists
+        /// </summary>
+        /// <param name="variantList">An IEnumerable containing the MethodVariant instances to update/insert</param>
+        void UpdateMethodVariantRange(IEnumerable<MethodVariant> variantList);
+
         void UpdateRequirements(IEnumerable<Requirement> enumerable);
         void UpdateSubMethods(IEnumerable<SubMethod> subMethodList);
         void DeleteStandard(Std standardInstance);

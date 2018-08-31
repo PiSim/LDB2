@@ -38,6 +38,8 @@ namespace Admin.ViewModels
             {
                 new Scripts.BuildTestRecords(),
                 new Scripts.BuildExternalTestRecordsScript(),
+                new Scripts.BuildMethodVersionRequirementReferences(),
+                new Scripts.BuildExternalReportMethodVariantMappingScript(),
                 new Scripts.BuildSubMethodPositionScript()
             };
 

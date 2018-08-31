@@ -18,9 +18,9 @@ namespace DBManager
 
         public string MaterialTypeCode => TestRecord?.Batch?.Material?.MaterialType?.Code;
 
-        public string MethodName => Method?.Standard?.Name;
+        public string MethodName => MethodVariant?.Method?.Standard?.Name;
 
-        public string PropertyName => Method?.Property?.Name;
+        public string PropertyName => MethodVariant?.Method?.Property?.Name;
 
         public string RecipeCode => TestRecord?.Batch?.Material?.Recipe?.Code;
 
@@ -79,13 +79,6 @@ namespace DBManager
 
                 return entities.TaskItems.FirstOrDefault(tski => tski.TestID == entry.ID);
             }
-        }
-
-        public static void SetMethod(this Test entry,
-                                    Method methodEntity)
-        {
-            entry.Method = methodEntity;
-            entry.MethodID = (methodEntity == null) ? 0 : methodEntity.ID;
         }
 
         public static void Update(this IEnumerable<Test> entryList)

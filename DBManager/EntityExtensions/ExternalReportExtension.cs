@@ -35,8 +35,8 @@ namespace DBManager
                     RecordTypeID = 2
                 };
 
-                foreach (Method mtd in attachedEntry.Methods)
-                    recordEntry.Tests.Add(mtd.GenerateTest());
+                foreach (MethodVariant mtdVar in attachedEntry.MethodVariants)
+                    recordEntry.Tests.Add(mtdVar.GenerateTest());
 
                 attachedEntry.TestRecords.Add(recordEntry);
 
@@ -47,22 +47,22 @@ namespace DBManager
         /// <summary>
         /// Adds a new method to an ExternalReport entry
         /// </summary>
-        /// <param name="methodEntity">The Method to Add</param>
-        public void AddTestMethod(Method methodEntity)
+        /// <param name="methodEntity">The MethodVariant to Add</param>
+        public void AddTestMethod(MethodVariant methodVariant)
         {
             using (DBEntities entities = new DBEntities())
             {
                 ExternalReport attachedExternalReport = entities.ExternalReports.First(ext => ext.ID == ID);
-                Method attachedMethod = entities.Methods.First(mtd => mtd.ID == methodEntity.ID);
+                MethodVariant attachedMethodVariant = entities.MethodVariants.First(mtd => mtd.ID == methodVariant.ID);
                 
-                attachedExternalReport.Methods.Add(attachedMethod);
+                attachedExternalReport.MethodVariants.Add(attachedMethodVariant);
 
                 IEnumerable<TestRecord> recordList = attachedExternalReport.TestRecords.ToList();
 
-                methodEntity.Load(true);
+                methodVariant.LoadMethod(true);
 
                 foreach (TestRecord tstr in attachedExternalReport.TestRecords)
-                    tstr.Tests.Add(methodEntity.GenerateTest());
+                    tstr.Tests.Add(methodVariant.GenerateTest());
 
                 entities.SaveChanges();
             }
@@ -80,39 +80,39 @@ namespace DBManager
         }
         
         /// <summary>
-        /// Returns the methods associated with this External Report
+        /// Returns the method Variants associated with this External Report
         /// </summary>
-        /// <returns>An ICollection containing the found Method entries</returns>
-        public ICollection<Method> GetMethods()
+        /// <returns>An ICollection containing the found MethodVariant entries</returns>
+        public ICollection<MethodVariant> GetMethodVariants()
         {
             using (DBEntities entities = new DBEntities())
             {
                 entities.Configuration.LazyLoadingEnabled = false;
 
-                return entities.Methods.Include(mtd => mtd.Property)
-                                        .Include(mtd => mtd.Standard.Organization)
-                                        .Include(mtd => mtd.SubMethods)
-                                        .Where(mtd => mtd.ExternalReports
-                                        .Any(exr => exr.ID == ID))
-                                        .ToList();
+                return entities.MethodVariants.Include(mtdvar => mtdvar.Method.Property)
+                                            .Include(mtdvar => mtdvar.Method.Standard.Organization)
+                                            .Include(mtdvar => mtdvar.Method.SubMethods)
+                                            .Where(mtdvar => mtdvar.ExternalReports
+                                            .Any(exr => exr.ID == ID))
+                                            .ToList();
             }
         }
 
         /// <summary>
-        /// Returns a list of test for each method associated with the Report 
+        /// Returns a list of test for each methodVariant associated with the Report 
         /// generated from the entity collections loaded in the instance
         /// </summary>
-        /// <returns>An IEnumerable of Tuples where Value1 is a method and 
+        /// <returns>An IEnumerable of Tuples where Value1 is a methodVAriant and 
         /// Value2 is an IEnumerable of tests</returns>
-        public IEnumerable<Tuple<Method, IEnumerable<Test>>> GetResultCollection()
+        public IEnumerable<Tuple<MethodVariant, IEnumerable<Test>>> GetResultCollection()
         {
-            List<Tuple<Method, IEnumerable<Test>>> output = new List<Tuple<Method,IEnumerable<Test>>>();
-            foreach (Method mtd in Methods)
+            List<Tuple<MethodVariant, IEnumerable<Test>>> output = new List<Tuple<MethodVariant,IEnumerable<Test>>>();
+            foreach (MethodVariant mtdvar in MethodVariants)
             {
                 IEnumerable<Test> testList =  TestRecords.SelectMany(tstr => tstr.Tests)
-                                                        .Where(tst => tst.MethodID == mtd.ID);
+                                                        .Where(tst => tst.MethodVariantID == mtdvar.ID);
                     
-                output.Add(new Tuple<Method, IEnumerable<Test>>(mtd, testList));
+                output.Add(new Tuple<MethodVariant, IEnumerable<Test>>(mtdvar, testList));
             }
 
             return output;
@@ -131,7 +131,7 @@ namespace DBManager
                 IQueryable<TestRecord> query = entities.TestRecords.Include(tstr => tstr.Batch.Material.Aspect)
                                                                     .Include(tstr => tstr.Batch.Material.MaterialLine)
                                                                     .Include(tstr => tstr.Batch.Material.MaterialType)
-                                                                    .Include(tstr => tstr.Batch.Material.Recipe);
+                                                                    .Include(tstr => tstr.Batch.Material.Recipe.Colour);
 
                 if (includeTests)
                     query = query.Include(tstr => tstr.Tests
@@ -144,23 +144,23 @@ namespace DBManager
         }
 
         /// <summary>
-        /// Removes a given method from the method associations and from every test record
+        /// Removes a given methodVariant from the method associations and from every test record
         /// in the report
         /// </summary>
-        /// <param name="methodEntity">The method that will be removed</param>
-        public void RemoveTestMethod(Method methodEntity)
+        /// <param name="methodEntity">The methodVariant that will be removed</param>
+        public void RemoveTestMethodVariant(MethodVariant methodVariantEntity)
         {
             using (DBEntities entities = new DBEntities())
             {
                 ExternalReport attachedExternalReport = entities.ExternalReports.First(ext => ext.ID == ID);
-                Method attachedMethod = entities.Methods.First(mtd => mtd.ID == methodEntity.ID);
+                MethodVariant attachedMethodVariant = entities.MethodVariants.First(mtdvar => mtdvar.ID == methodVariantEntity.ID);
 
-                attachedExternalReport.Methods.Remove(attachedMethod);
+                attachedExternalReport.MethodVariants.Remove(attachedMethodVariant);
 
                 IEnumerable<TestRecord> recordList = attachedExternalReport.TestRecords.ToList();
 
                 IEnumerable<Test> testList = attachedExternalReport.TestRecords.SelectMany(tstr => tstr.Tests)
-                                                                    .Where(tst => tst.MethodID == methodEntity.ID)
+                                                                    .Where(tst => tst.MethodVariantID == methodVariantEntity.ID)
                                                                     .ToList();
 
                 foreach (Test tst in testList)
@@ -246,10 +246,10 @@ namespace DBManager
                 
                 ExternalReport tempEntry = entities.ExternalReports
                                                     .Include(exrep => exrep.ExternalLab)
-                                                    .Include(exrep => exrep.Methods
-                                                    .Select(mtd => mtd.Property))
-                                                    .Include(exrep => exrep.Methods
-                                                    .Select(mtd => mtd.Standard))
+                                                    .Include(exrep => exrep.MethodVariants
+                                                    .Select(mtdVar => mtdVar.Method.Property))
+                                                    .Include(exrep => exrep.MethodVariants
+                                                    .Select(mtdvar => mtdvar.Method.Standard))
                                                     .Include(exrep => exrep.Project.Leader)
                                                     .Include(exrep => exrep.Project.Oem)
                                                     .First(rep => rep.ID == entry.ID);
@@ -259,7 +259,7 @@ namespace DBManager
                 entry.ExternalLab = tempEntry.ExternalLab;
                 entry.ExternalLabID = tempEntry.ExternalLabID;
                 entry.MaterialSent = tempEntry.MaterialSent;
-                entry.Methods = tempEntry.Methods;
+                entry.MethodVariants = tempEntry.MethodVariants.ToList();
                 entry.Project = tempEntry.Project;
                 entry.ProjectID = tempEntry.ProjectID;
                 entry.ReportReceived = tempEntry.ReportReceived;

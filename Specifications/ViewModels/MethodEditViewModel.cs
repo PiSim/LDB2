@@ -13,6 +13,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DBManager.Services;
 using Infrastructure;
+using System.Collections.Specialized;
 
 namespace Specifications.ViewModels
 {
@@ -20,13 +21,6 @@ namespace Specifications.ViewModels
     {
         private bool _editMode;
         private DBPrincipal _principal;
-        private DelegateCommand _addFile,
-                                _openFile,
-                                _openReport,
-                                _openSpecification,
-                                _removeFile,
-                                _save,
-                                _startEdit;
         private EventAggregator _eventAggregator;
         private IDataService _dataService;
         private IEnumerable<Organization> _organizationList;
@@ -34,6 +28,7 @@ namespace Specifications.ViewModels
         private IEnumerable<SubMethod> _subMethodList;
         private ISpecificationService _specificationService;
         private Method _methodInstance;
+        private ObservableCollection<MethodVariant> _methodVariantList;
         private Organization _selectedOrganization;
         private Property _selectedProperty;
         private Specification _selectedSpecification;
@@ -56,7 +51,7 @@ namespace Specifications.ViewModels
 
             _subMethodList = new List<SubMethod>();
 
-            _addFile = new DelegateCommand(
+            AddFileCommand = new DelegateCommand(
                 () =>
                 {
                     OpenFileDialog fileDialog = new OpenFileDialog
@@ -90,14 +85,14 @@ namespace Specifications.ViewModels
                 },
                 () => EditMode);
 
-            _openFile = new DelegateCommand(
+            OpenFileCommand = new DelegateCommand(
                 () =>
                 {
                     System.Diagnostics.Process.Start(_selectedFile.Path);
                 },
                 () => _selectedFile != null);
 
-            _openReport = new DelegateCommand(
+            OpenReportCommand = new DelegateCommand(
                 () =>
                 {
                 NavigationToken token = new NavigationToken((_selectedTest.TestRecord.RecordTypeID == 1) ? ReportViewNames.ReportEditView : ReportViewNames.ExternalReportEditView,
@@ -108,7 +103,7 @@ namespace Specifications.ViewModels
                 },
                 () => _selectedTest != null);
             
-            _openSpecification = new DelegateCommand(
+            OpenSpecificationCommand = new DelegateCommand(
                 () =>
                 {
                     NavigationToken token = new NavigationToken(SpecificationViewNames.SpecificationEdit,
@@ -117,7 +112,7 @@ namespace Specifications.ViewModels
                 },
                 () => SelectedSpecification != null);
 
-            _removeFile = new DelegateCommand(
+            RemoveFileCommand = new DelegateCommand(
                 () =>
                 {
                     _selectedFile.Delete();
@@ -125,11 +120,13 @@ namespace Specifications.ViewModels
                 },
                 () => EditMode && _selectedFile != null);
 
-            _save = new DelegateCommand(
+            SaveCommand = new DelegateCommand(
                 () =>
                 {
                     _methodInstance.Update();
+
                     _specificationService.UpdateSubMethods(_subMethodList);
+                    _specificationService.UpdateMethodVariantRange(_methodVariantList);
 
                     if (_selectedOrganization.ID != _methodInstance.Standard.OrganizationID)
                     {
@@ -137,11 +134,12 @@ namespace Specifications.ViewModels
                         _methodInstance.Standard.Update();
                     }
 
+
                     EditMode = false;
                 },
                 () => _editMode);
 
-            _startEdit = new DelegateCommand(
+            StartEditCommand = new DelegateCommand(
                 () =>
                 {
                     EditMode = true;
@@ -151,25 +149,68 @@ namespace Specifications.ViewModels
             UpdateCommand = new DelegateCommand(
                 () =>
                 {
-                    _specificationService.StartMethodUpdate(_methodInstance);
+                    _specificationService.ModifyMethodTestList(_methodInstance);
                 },
                 () => CanModify);
+
         }
 
-        public DelegateCommand AddFileCommand
-        {
-            get { return _addFile; }
-        }
+        #region Commands
+
+
+        public DelegateCommand AddFileCommand { get; }
 
         public DelegateCommand CancelEditCommand { get; }
+        
+        public DelegateCommand OpenFileCommand { get; }
 
-        private bool CanModify => _principal.IsInRole(UserRoleNames.SpecificationEdit);
+        public DelegateCommand OpenReportCommand { get; }
 
-        public bool CanModifyTests
+        public DelegateCommand OpenSpecificationCommand { get; }
+
+        public DelegateCommand RemoveFileCommand { get; }
+
+        public DelegateCommand SaveCommand { get; }
+
+        public DelegateCommand StartEditCommand { get; }
+
+        #endregion
+
+
+        #region Methods
+
+        private void OnMethodVariantCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            get { return !EditMode; }
+            if (e.NewItems != null)
+            {
+                foreach (MethodVariant mtdvar in e.NewItems)
+                    mtdvar.MethodID = _methodInstance.ID;
+            }
+
+            if (e.OldItems != null)
+            {
+                foreach (MethodVariant mtdvar in e.OldItems)
+                    mtdvar.RemoveOrSetObsolete();
+
+                RaisePropertyChanged("IsMoreThanOneVariant");
+            }
+
         }
 
+        private void SetMethodVariantCollectionChangedHandler()
+        {
+            if (MethodVariantList == null)
+                return;
+
+            MethodVariantList.CollectionChanged += OnMethodVariantCollectionChanged;
+        }
+
+        #endregion
+
+        #region Properties
+
+        private bool CanModify => _principal.IsInRole(UserRoleNames.SpecificationEdit);
+        
         public double Duration
         {
             get
@@ -194,11 +235,11 @@ namespace Specifications.ViewModels
                 _editMode = value;
                 RaisePropertyChanged("CanModifyTests");
                 RaisePropertyChanged("EditMode");
-                _addFile.RaiseCanExecuteChanged();
+                AddFileCommand.RaiseCanExecuteChanged();
                 CancelEditCommand.RaiseCanExecuteChanged();
-                _removeFile.RaiseCanExecuteChanged();
-                _save.RaiseCanExecuteChanged();
-                _startEdit.RaiseCanExecuteChanged();
+                RemoveFileCommand.RaiseCanExecuteChanged();
+                SaveCommand.RaiseCanExecuteChanged();
+                StartEditCommand.RaiseCanExecuteChanged();
             }
         }
 
@@ -209,6 +250,8 @@ namespace Specifications.ViewModels
                 return _methodInstance.GetFiles();
             }
         }
+
+        public bool IsMoreThanOneVariant => _methodVariantList?.Count != 0;
 
         public string MethodEditSpecificationListRegionName
         {
@@ -224,16 +267,19 @@ namespace Specifications.ViewModels
 
                 _methodInstance = value;
                 if (_methodInstance != null)
-                    _methodInstance.Load();
+                    _methodInstance.Load(true);
 
+                MethodVariantList = new ObservableCollection<MethodVariant>(_methodInstance?.GetVariants());
+                
                 SelectedOrganization = _organizationList.FirstOrDefault(org => org.ID == _methodInstance?.Standard.OrganizationID);
                 _selectedProperty = _propertyList.FirstOrDefault(prp => prp.ID == _methodInstance?.PropertyID);
-                _subMethodList = _methodInstance.GetSubMethods();
+                _subMethodList = _methodInstance?.SubMethods;
 
                 RaisePropertyChanged("Duration");
                 RaisePropertyChanged("FileList");
-                RaisePropertyChanged("IssueList");
+                RaisePropertyChanged("IsMoreThanOneVariant");
                 RaisePropertyChanged("Measurements");
+                RaisePropertyChanged("MethodVariantList");
                 RaisePropertyChanged("Name");
                 RaisePropertyChanged("Oem");
                 RaisePropertyChanged("Property");
@@ -257,24 +303,26 @@ namespace Specifications.ViewModels
             }
         }
 
+        public ObservableCollection<MethodVariant> MethodVariantList
+        {
+            get => _methodVariantList;
+            private set
+            {
+                _methodVariantList = value;
+                RaisePropertyChanged("MethodVariantList");
+
+                // Set Event Handler to Manage added or removed Variants
+
+                if (_methodVariantList != null)
+                    _methodVariantList.CollectionChanged += OnMethodVariantCollectionChanged;
+            }
+        }
+
+
+
         public string Name
         {
             get => _methodInstance?.Standard.Name;
-        }
-
-        public DelegateCommand OpenFileCommand
-        {
-            get { return _openFile; }
-        }
-
-        public DelegateCommand OpenReportCommand
-        {
-            get { return _openReport; }
-        }
-
-        public DelegateCommand OpenSpecificationCommand
-        {
-            get { return _openSpecification; }
         }
 
         public IEnumerable<Organization> OrganizationList
@@ -287,21 +335,12 @@ namespace Specifications.ViewModels
             get { return _propertyList; }
         }
 
-        public DelegateCommand RemoveFileCommand
-        {
-            get { return _removeFile; }
-        }
-
         public IEnumerable<Test> ResultList
         {
             get
             {
-                return _methodInstance.GetTests(); }
-        }
-
-        public DelegateCommand SaveCommand
-        {
-            get { return _save; }
+                return _methodInstance?.GetTests();
+            }
         }
 
         public StandardFile SelectedFile
@@ -310,8 +349,8 @@ namespace Specifications.ViewModels
             set
             {
                 _selectedFile = value;
-                _openFile.RaiseCanExecuteChanged();
-                _removeFile.RaiseCanExecuteChanged();
+                OpenFileCommand.RaiseCanExecuteChanged();
+                RemoveFileCommand.RaiseCanExecuteChanged();
             }
         }
 
@@ -360,7 +399,7 @@ namespace Specifications.ViewModels
                 _selectedTest = value;
 
                 RaisePropertyChanged("SelectedTest");
-                _openReport.RaiseCanExecuteChanged();
+                OpenReportCommand.RaiseCanExecuteChanged();
             }
         }
 
@@ -371,12 +410,9 @@ namespace Specifications.ViewModels
                 return _methodInstance.GetSpecifications();
             }
         }
-        
-        public DelegateCommand StartEditCommand
-        {
-            get { return _startEdit; }
-        }
 
         public DelegateCommand UpdateCommand { get; }
+
+        #endregion
     }
 }

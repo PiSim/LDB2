@@ -135,8 +135,8 @@ namespace DBManager
                 entities.Configuration.LazyLoadingEnabled = false;
 
                 return entities.Tests.Include(tst => tst.Instrument.InstrumentType)
-                                    .Include(tst => tst.Method.Property)
-                                    .Include(tst => tst.Method.Standard.Organization)
+                                    .Include(tst => tst.MethodVariant.Method.Property)
+                                    .Include(tst => tst.MethodVariant.Method.Standard.Organization)
                                     .Include(tst => tst.SubTests)
                                     .Where(tst => tst.TestRecordID == entry.TestRecordID)
                                     .ToList();
@@ -154,7 +154,7 @@ namespace DBManager
             {
                 return entities.Tests
                                 .Where(tst => tst.TestRecordID == entry.TestRecordID)
-                                .Sum(tst => tst.Method.Duration);
+                                .Sum(tst => tst.MethodVariant.Method.Duration);
             }
         }
 

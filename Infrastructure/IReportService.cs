@@ -17,6 +17,6 @@ namespace Infrastructure
         IEnumerable<TaskItem> GenerateTaskItemList(IEnumerable<Requirement> requirementList);
         int GetNextExternalReportNumber(int year);
         int GetNextReportNumber();
-        Requirement GenerateRequirement(Method mtd);
+        Requirement GenerateRequirement(MethodVariant mtd);
     }
 }

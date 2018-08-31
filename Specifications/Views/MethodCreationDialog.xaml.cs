@@ -26,13 +26,6 @@ namespace Specifications.Views
             InitializeComponent();
         }
 
-        public Method OldVersion
-        {
-            get => (DataContext as ViewModels.MethodCreationDialogViewModel).OldVersion;
-
-            set => (DataContext as ViewModels.MethodCreationDialogViewModel).OldVersion = value;
-        }
-
         public Method MethodInstance
         {
             get { return (DataContext as ViewModels.MethodCreationDialogViewModel).MethodInstance; }

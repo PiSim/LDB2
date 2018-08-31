@@ -41,8 +41,8 @@ namespace Infrastructure.Queries
                                                     .Include(tst => tst.TestRecord.Batch.Material.Recipe)
                                                     .Include(tst => tst.TestRecord.ExternalReports)
                                                     .Include(tst => tst.TestRecord.Reports)
-                                                    .Include(tst => tst.Method.Property)
-                                                    .Include(tst => tst.Method.Standard)
+                                                    .Include(tst => tst.MethodVariant.Method.Property)
+                                                    .Include(tst => tst.MethodVariant.Method.Standard)
                                                     .Include(tst => tst.SubTests);
 
             if (!IncludeExternalReports)
@@ -67,13 +67,13 @@ namespace Infrastructure.Queries
                 query = query.Where(tst => tst.TestRecord.Batch.Material.MaterialType.Code.Contains(MaterialTypeCode));
 
             if (!string.IsNullOrWhiteSpace(MethodName))
-                query = query.Where(tst => tst.Method.Standard.Name.Contains(MethodName));
+                query = query.Where(tst => tst.MethodVariant.Method.Standard.Name.Contains(MethodName));
 
             if (!string.IsNullOrWhiteSpace(RecipeCode))
                 query = query.Where(tst => tst.TestRecord.Batch.Material.Recipe.Code.Contains(RecipeCode));
 
             if (!string.IsNullOrWhiteSpace(TestName))
-                query = query.Where(tst => tst.Method.Property.Name.Contains(TestName));
+                query = query.Where(tst => tst.MethodVariant.Method.Property.Name.Contains(TestName));
 
             return query;
         }

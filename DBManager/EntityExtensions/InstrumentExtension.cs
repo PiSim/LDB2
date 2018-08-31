@@ -217,9 +217,9 @@ namespace DBManager
                                                             .Include(inst => inst.Manufacturer)
                                                             .Include(inst => inst.Supplier)
                                                             .Include(inst => inst.Tests
-                                                            .Select(tst => tst.Method.Property))
+                                                            .Select(tst => tst.MethodVariant.Method.Property))
                                                             .Include(inst => inst.Tests
-                                                            .Select(tst => tst.Method.Standard))
+                                                            .Select(tst => tst.MethodVariant.Method.Standard))
                                                             .First(inst => inst.ID == entry.ID);
 
                 entry.AssociatedMethods = tempEntry.AssociatedMethods;

@@ -18,7 +18,6 @@ namespace Specifications.ViewModels
     public class MethodMainViewModel : BindableBase
     {
         private DBPrincipal _principal;
-        private DelegateCommand _deleteMethod, _newMethod;
         private EventAggregator _eventAggregator;
         private readonly IDataService _dataService;
         private ISpecificationService _specificationService;
@@ -34,14 +33,14 @@ namespace Specifications.ViewModels
             _principal = principal;
             _specificationService = specificationService;
 
-            _deleteMethod = new DelegateCommand(
+            DeleteMethodCommand = new DelegateCommand(
                 () =>
                 {
                     _selectedMethod.Delete();
                 },
                 () => IsSpecAdmin && _selectedMethod != null);
 
-            _newMethod = new DelegateCommand(
+            NewMethodCommand = new DelegateCommand(
                 () =>
                 {
                     _specificationService.CreateMethod();
@@ -52,10 +51,13 @@ namespace Specifications.ViewModels
                 tkn => RaisePropertyChanged("MethodList"));
         }
 
-        private DelegateCommand DeleteMethodCommand
-        {
-            get { return _deleteMethod; }
-        }
+        #region Commands
+
+        private DelegateCommand DeleteMethodCommand { get; }
+
+        private DelegateCommand NewMethodCommand { get; }
+
+        #endregion
 
         private bool IsSpecAdmin
         {
@@ -64,11 +66,6 @@ namespace Specifications.ViewModels
 
         public IEnumerable<Method> MethodList => _dataService.GetMethods();
         
-        public DelegateCommand NewMethodCommand
-        {
-            get { return _newMethod; }
-        }
-
         public Method SelectedMethod
         {
             get
@@ -79,7 +76,7 @@ namespace Specifications.ViewModels
             set
             {
                 _selectedMethod = value;
-                _deleteMethod.RaiseCanExecuteChanged();
+                DeleteMethodCommand.RaiseCanExecuteChanged();
                 RaisePropertyChanged("SelectedMethod");
 
                 NavigationToken token = new NavigationToken(SpecificationViewNames.MethodEdit,

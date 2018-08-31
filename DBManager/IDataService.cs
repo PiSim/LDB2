@@ -20,6 +20,16 @@ namespace DBManager
         IEnumerable<InstrumentType> GetInstrumentTypes();
         IEnumerable<InstrumentUtilizationArea> GetInstrumentUtilizationAreas();
         IEnumerable<MeasurableQuantity> GetMeasurableQuantities();
+
+        /// <summary>
+        /// Queries the Database for all MethodVariant Entities
+        /// </summary>
+        /// <param name="includeObsolete">If true the query includes the entries marked as obsolete</param>
+        /// <param name="sortResults">If true the query results are sorted by MethodName then by variant Name</param>
+        /// <returns>An ICollection of MethodVariant entities</returns>
+        ICollection<MethodVariant> GetMethodVariants(bool includeObsolete = false,
+                                                    bool sortResults = true);
+
         IEnumerable<Organization> GetOrganizations();
         IEnumerable<Organization> GetOrganizations(string role);
         IEnumerable<OrganizationRole> GetOrganizationRoles();
