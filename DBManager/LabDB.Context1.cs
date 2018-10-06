@@ -7,16 +7,16 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace DBManager
+namespace LabDbContext
 {
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class LabDBEntities : DbContext
+    public partial class LabDbEntities : DbContext
     {
-        public LabDBEntities()
-            : base("name=LabDBEntities")
+        public LabDbEntities()
+            : base("name=LabDbEntities")
         {
         }
     
@@ -26,7 +26,6 @@ namespace DBManager
         }
     
         public virtual DbSet<Aspect> Aspects { get; set; }
-        public virtual DbSet<BatchFile> BatchFiles { get; set; }
         public virtual DbSet<Batch> Batches { get; set; }
         public virtual DbSet<Colour> Colours { get; set; }
         public virtual DbSet<ExternalConstruction> ExternalConstructions { get; set; }

@@ -6,7 +6,6 @@
     <edmx:Diagrams>
       <Diagram DiagramId="9fa1cdb38a7949d89850433ccf2fcd72" Name="Diagram1" ZoomLevel="88" ShowGrid="false">
         <EntityTypeShape EntityType="labdbModel.Aspect" Width="1.5" PointX="33.125" PointY="23.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="labdbModel.BatchFile" Width="1.5" PointX="35.625" PointY="10.875" IsExpanded="true" />
         <EntityTypeShape EntityType="labdbModel.Batch" Width="1.5" PointX="30.875" PointY="11.375" IsExpanded="true" />
         <EntityTypeShape EntityType="labdbModel.Colour" Width="1.5" PointX="38" PointY="18.75" IsExpanded="true" />
         <EntityTypeShape EntityType="labdbModel.ExternalConstruction" Width="1.5" PointX="27.25" PointY="16.125" IsExpanded="true" />
@@ -33,7 +32,6 @@
         <EntityTypeShape EntityType="labdbModel.Task" Width="1.5" PointX="30.875" PointY="6.375" IsExpanded="true" />
         <EntityTypeShape EntityType="labdbModel.Test" Width="1.5" PointX="9.75" PointY="12.875" IsExpanded="true" />
         <EntityTypeShape EntityType="labdbModel.User" Width="1.5" PointX="11.875" PointY="18.125" IsExpanded="true" />
-        <AssociationConnector Association="labdbModel.batch1" ManuallyRouted="false" />
         <AssociationConnector Association="labdbModel.batch_by_material" ManuallyRouted="false" />
         <AssociationConnector Association="labdbModel.batch_to_master" ManuallyRouted="false" />
         <AssociationConnector Association="labdbModel.batch_to_report" ManuallyRouted="false" />

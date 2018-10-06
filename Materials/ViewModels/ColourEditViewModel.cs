@@ -1,37 +1,33 @@
-﻿using DBManager;
-using DBManager.EntityExtensions;
-using Infrastructure;
+﻿using Infrastructure;
 using Infrastructure.Events;
+using LabDbContext;
+using LabDbContext.EntityExtensions;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Materials.ViewModels
 {
-    public class ColourEditViewModel :BindableBase
+    public class ColourEditViewModel : BindableBase
     {
-        private Batch _selectedBatch;
-        private bool _editMode;
+        #region Fields
+
         private Colour _colourInstance;
-        private DBPrincipal _principal;
-        private DelegateCommand _openBatch,
-                                _save,
-                                _startEdit;
-        private EventAggregator _eventAggregator;
+        private bool _editMode;
+        private IEventAggregator _eventAggregator;
+        private Batch _selectedBatch;
         private Recipe _selectedRecipe;
 
-        public ColourEditViewModel(DBPrincipal principal,
-                                    EventAggregator eventAggregator) : base()
+        #endregion Fields
+
+        #region Constructors
+
+        public ColourEditViewModel(IEventAggregator eventAggregator) : base()
         {
             _eventAggregator = eventAggregator;
-            _principal = principal;
 
-            _openBatch = new DelegateCommand(
+            OpenBatchCommand = new DelegateCommand(
                 () =>
                 {
                     NavigationToken token = new NavigationToken(MaterialViewNames.BatchInfoView,
@@ -40,7 +36,7 @@ namespace Materials.ViewModels
                 },
                 () => _selectedBatch != null);
 
-            _save = new DelegateCommand(
+            SaveCommand = new DelegateCommand(
                 () =>
                 {
                     _colourInstance.Update();
@@ -48,21 +44,19 @@ namespace Materials.ViewModels
                 },
                 () => EditMode);
 
-            _startEdit = new DelegateCommand(
+            StartEditCommand = new DelegateCommand(
                 () =>
                 {
                     EditMode = true;
                 },
-                () => !EditMode && _principal.IsInRole(UserRoleNames.MaterialEdit));
+                () => !EditMode && System.Threading.Thread.CurrentPrincipal.IsInRole(UserRoleNames.MaterialEdit));
         }
 
-        public IEnumerable<Batch> BatchList
-        {
-            get
-            {
-                return _colourInstance.GetBatches();
-            }
-        }
+        #endregion Constructors
+
+        #region Properties
+
+        public IEnumerable<Batch> BatchList => _colourInstance.GetBatches();
 
         public Colour ColourInstance
         {
@@ -72,7 +66,7 @@ namespace Materials.ViewModels
                 EditMode = false;
 
                 _colourInstance = value;
-                
+
                 RaisePropertyChanged("ColourInstance");
                 RaisePropertyChanged("ColourName");
                 RaisePropertyChanged("BatchList");
@@ -86,7 +80,6 @@ namespace Materials.ViewModels
             {
                 if (_colourInstance == null)
                     return null;
-
                 else
                     return _colourInstance.Name;
             }
@@ -104,15 +97,12 @@ namespace Materials.ViewModels
                 _editMode = value;
                 RaisePropertyChanged("EditMode");
 
-                _save.RaiseCanExecuteChanged();
-                _startEdit.RaiseCanExecuteChanged();
+                SaveCommand.RaiseCanExecuteChanged();
+                StartEditCommand.RaiseCanExecuteChanged();
             }
         }
 
-        public DelegateCommand OpenBatchCommand
-        {
-            get { return _openBatch; }
-        }
+        public DelegateCommand OpenBatchCommand { get; }
 
         public IEnumerable<Recipe> RecipeList
         {
@@ -120,16 +110,12 @@ namespace Materials.ViewModels
             {
                 if (_colourInstance == null)
                     return new List<Recipe>();
-
                 else
                     return _colourInstance.GetRecipes();
             }
         }
 
-        public DelegateCommand SaveCommand
-        {
-            get { return _save; }
-        }
+        public DelegateCommand SaveCommand { get; }
 
         public Batch SelectedBatch
         {
@@ -141,7 +127,7 @@ namespace Materials.ViewModels
             set
             {
                 _selectedBatch = value;
-                _openBatch.RaiseCanExecuteChanged();
+                OpenBatchCommand.RaiseCanExecuteChanged();
                 RaisePropertyChanged("SelectedBatch");
             }
         }
@@ -156,9 +142,8 @@ namespace Materials.ViewModels
             }
         }
 
-        public DelegateCommand StartEditCommand
-        {
-            get { return _startEdit; }
-        }
+        public DelegateCommand StartEditCommand { get; }
+
+        #endregion Properties
     }
 }

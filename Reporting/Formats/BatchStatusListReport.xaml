@@ -5,9 +5,9 @@
               ColumnWidth="400" FontSize="14" FontFamily="Arial">
     <Paragraph>
         <TextBlock Text="Data:"
-                   Margin="5"/>
+                   Margin="5" />
         <TextBlock Name="DateBox"
-                   Margin="5"/>
+                   Margin="5" />
     </Paragraph>
     <Table Name="BatchTable"
            TextAlignment="Center">

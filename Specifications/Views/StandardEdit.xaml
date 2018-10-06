@@ -1,58 +1,58 @@
 ﻿<UserControl x:Class="Specifications.Views.StandardEdit"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:Specifications.Views"
              xmlns:prism="http://prismlibrary.com/"
              prism:ViewModelLocator.AutoWireViewModel="True"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid Visibility="{Binding Visibility}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="35"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition/>
-            <RowDefinition/>
+            <RowDefinition Height="35" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+            <RowDefinition />
         </Grid.RowDefinitions>
 
         <StackPanel Orientation="Horizontal"
                     Grid.Row="0">
             <Button Content="Elimina"
                     Command="{Binding DeleteCommand}"
-                    Margin="5"/>
+                    Margin="5" />
             <Button Content="Consolida"
                     Command="{Binding ConsolidateCommand}"
-                    Margin="5"/>
+                    Margin="5" />
         </StackPanel>
-            
+
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
+                <ColumnDefinition />
+                <ColumnDefinition />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="35"/>
-                <RowDefinition Height="35"/>
-                <RowDefinition Height="35"/>
-                <RowDefinition Height="35"/>
+                <RowDefinition Height="35" />
+                <RowDefinition Height="35" />
+                <RowDefinition Height="35" />
+                <RowDefinition Height="35" />
             </Grid.RowDefinitions>
 
             <TextBlock Text="Nome:"
                        Grid.Row="0"
                        Margin="5"
-                       VerticalAlignment="Center"/>
+                       VerticalAlignment="Center" />
 
             <TextBlock Text="{Binding Name}"
                        Grid.Column="1"
                        Grid.Row="0"
                        Margin="5"
-                       VerticalAlignment="Center"/>
+                       VerticalAlignment="Center" />
 
             <TextBlock Text="OEM:"
                        Grid.Row="1"
                        Margin="5"
-                       VerticalAlignment="Center"/>
+                       VerticalAlignment="Center" />
 
             <ComboBox ItemsSource="{Binding OEMList}"
                       SelectedItem="{Binding SelectedOEM}"
@@ -61,30 +61,29 @@
                       Grid.Row="1"
                       Margin="5"
                       Width="150"
-                      VerticalAlignment="Center"/>
+                      VerticalAlignment="Center" />
 
             <TextBlock Text="Edizione:"
                        Grid.Row="2"
                        Margin="5"
-                       VerticalAlignment="Center"/>
-            
+                       VerticalAlignment="Center" />
+
             <TextBlock Text="Ultima Verifica:"
                        Grid.Row="3"
                        Margin="5"
-                       VerticalAlignment="Center"/>
+                       VerticalAlignment="Center" />
 
             <TextBlock Text="{Binding LastCheckDate}"
                        Grid.Column="1"
                        Grid.Row="3"
                        Margin="5"
-                       VerticalAlignment="Center"/>
+                       VerticalAlignment="Center" />
         </Grid>
 
-            
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
+                <ColumnDefinition />
+                <ColumnDefinition />
             </Grid.ColumnDefinitions>
 
             <GroupBox Header="Metodi">
@@ -97,7 +96,7 @@
                           IsReadOnly="True">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Nome"
-                                            Binding="{Binding Name}"/>
+                                            Binding="{Binding Name}" />
                     </DataGrid.Columns>
                 </DataGrid>
             </GroupBox>
@@ -112,13 +111,13 @@
                           IsReadOnly="True">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Nome"
-                                            Binding="{Binding Name}"/>
+                                            Binding="{Binding Name}" />
                     </DataGrid.Columns>
                 </DataGrid>
             </GroupBox>
         </Grid>
-        
+
         <ContentControl prism:RegionManager.RegionName="{Binding StandardFileListRegionName}"
-                            Grid.Row="3"/>
+                            Grid.Row="3" />
     </Grid>
 </UserControl>

@@ -1,53 +1,52 @@
-﻿using DBManager;
-using DBManager.EntityExtensions;
-using DBManager.Services;
-using Microsoft.Practices.Unity;
+﻿using Controls.Views;
+using DataAccess;
 using Infrastructure;
 using Infrastructure.Events;
+using Infrastructure.Queries;
+using LabDbContext;
+using LabDbContext.EntityExtensions;
+using LabDbContext.Services;
+using Materials.Queries;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
-using System;
+using Specifications.Queries;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 
 namespace Materials.ViewModels
 {
-    public class ExternalConstructionDetailViewModel : BindableBase 
+    public class ExternalConstructionDetailViewModel : BindableBase
     {
-        private bool _editMode;
-        private Material _selectedAssignedMaterial, _selectedUnassignedMaterial;
-        private DBPrincipal _principal;
-        private DelegateCommand _assignMaterialToExternal, 
-                                _save,
-                                _startEdit,
-                                _unassignMaterialToExternal;
-        private EventAggregator _eventAggregator;
-        private ExternalConstruction _externalConstructionInstance;
-        private IDataService _dataService;
-        private IEnumerable<Organization> _oemList;
-        private IEnumerable<Specification> _specificationList;
-        private IEnumerable<SpecificationVersion> _specificationVersionList;
-        private IReportService _reportService;
-        private Specification _selectedSpecification;
+        #region Fields
 
-        public ExternalConstructionDetailViewModel(DBPrincipal principal,
-                                                    EventAggregator eventAggregator,
-                                                    IDataService dataService,
+        private bool _editMode;
+        private IEventAggregator _eventAggregator;
+        private ExternalConstruction _externalConstructionInstance;
+        private IDataService<LabDbEntities> _labDbData;
+        private IReportService _reportService;
+        private Material _selectedAssignedMaterial, _selectedUnassignedMaterial;
+        private Specification _selectedSpecification;
+        private DelegateCommand _unassignMaterialToExternal;
+
+        #endregion Fields
+
+        #region Constructors
+
+        public ExternalConstructionDetailViewModel(IDataService<LabDbEntities> labDbdata,
+                                                    IEventAggregator eventAggregator,
                                                     IReportService reportService) : base()
         {
-            _dataService = dataService;
+            _labDbData = labDbdata;
             _reportService = reportService;
             _eventAggregator = eventAggregator;
-            _principal = principal;
             _editMode = false;
 
-            _oemList = _dataService.GetOrganizations(OrganizationRoleNames.OEM);
-            _specificationList = _dataService.GetSpecifications();
+            OEMList = _labDbData.RunQuery(new OrganizationsQuery() { Role = OrganizationsQuery.OrganizationRoles.OEM }).ToList(); ;
+            SpecificationList = _labDbData.RunQuery(new SpecificationsQuery()).ToList();
 
-            _assignMaterialToExternal = new DelegateCommand(
+            AssignMaterialToExternalCommand = new DelegateCommand(
                 () =>
                 {
                     _externalConstructionInstance.AddMaterial(_selectedUnassignedMaterial);
@@ -56,12 +55,12 @@ namespace Materials.ViewModels
                     RaisePropertyChanged("BatchList");
                     RaisePropertyChanged("UnassignedMaterials");
                 },
-                () => _selectedUnassignedMaterial != null 
+                () => _selectedUnassignedMaterial != null
                     && _externalConstructionInstance != null
                     && !EditMode
                     && CanModify);
 
-            _save = new DelegateCommand(
+            SaveCommand = new DelegateCommand(
                 () =>
                 {
                     _externalConstructionInstance.Update();
@@ -69,7 +68,7 @@ namespace Materials.ViewModels
                 },
                 () => _editMode);
 
-            _startEdit = new DelegateCommand(
+            StartEditCommand = new DelegateCommand(
                 () =>
                 {
                     EditMode = true;
@@ -90,10 +89,9 @@ namespace Materials.ViewModels
                     && !EditMode);
         }
 
-        public DelegateCommand AssignMaterialToExternalCommand
-        {
-            get { return _assignMaterialToExternal; }
-        }
+        #endregion Constructors
+
+        #region Properties
 
         public IEnumerable<Material> AssignedMaterials
         {
@@ -101,11 +99,12 @@ namespace Materials.ViewModels
             {
                 if (_externalConstructionInstance == null)
                     return new List<Material>();
-
                 else
                     return new List<Material>(_externalConstructionInstance.GetMaterials());
             }
         }
+
+        public DelegateCommand AssignMaterialToExternalCommand { get; }
 
         public IEnumerable<Batch> BatchList
         {
@@ -113,19 +112,19 @@ namespace Materials.ViewModels
             {
                 if (_externalConstructionInstance == null)
                     return new List<Batch>();
-
                 else
-                    return _externalConstructionInstance.GetBatches();
+                {
+                    BatchesQuery query = new BatchesQuery()
+                    {
+                        ExternalConstructionID = _externalConstructionInstance.ID
+                    };
+
+                    return _labDbData.RunQuery(query).ToList();
+                }
             }
         }
 
-        public bool CanModify
-        {
-            get
-            {
-                return _principal.IsInRole(UserRoleNames.MaterialEdit);
-            }
-        }
+        public bool CanModify => Thread.CurrentPrincipal.IsInRole(UserRoleNames.MaterialEdit);
 
         public bool EditMode
         {
@@ -134,24 +133,18 @@ namespace Materials.ViewModels
             {
                 _editMode = value;
 
-                _assignMaterialToExternal.RaiseCanExecuteChanged();
+                AssignMaterialToExternalCommand.RaiseCanExecuteChanged();
                 _unassignMaterialToExternal.RaiseCanExecuteChanged();
-                _save.RaiseCanExecuteChanged();
-                _startEdit.RaiseCanExecuteChanged();
+                SaveCommand.RaiseCanExecuteChanged();
+                StartEditCommand.RaiseCanExecuteChanged();
                 RaisePropertyChanged("EditMode");
                 RaisePropertyChanged("EnableVersionSelection");
             }
         }
 
-        public bool EnableVersionSelection
-        {
-            get { return _selectedSpecification != null; }
-        }
+        public bool EnableVersionSelection => _selectedSpecification != null;
 
-        public string ExternalConstructionBatchListRegionName
-        {
-            get { return RegionNames.ExternalConstructionBatchListRegion; }
-        }
+        public string ExternalConstructionBatchListRegionName => RegionNames.ExternalConstructionBatchListRegion;
 
         public ExternalConstruction ExternalConstructionInstance
         {
@@ -166,12 +159,11 @@ namespace Materials.ViewModels
                 else
                 {
                     _externalConstructionInstance = value;
-                    _externalConstructionInstance.Load();
 
                     if (_externalConstructionInstance.DefaultSpecVersion != null)
                     {
-                        _selectedSpecification = _specificationList.First(spec => spec.ID == _externalConstructionInstance.DefaultSpecVersion.Specification.ID);
-                        _specificationVersionList = _selectedSpecification.GetVersions();
+                        _selectedSpecification = SpecificationList.First(spec => spec.ID == _externalConstructionInstance.DefaultSpecVersion.Specification.ID);
+                        SpecificationVersionList = _selectedSpecification.GetVersions();
                     }
                 }
 
@@ -196,8 +188,7 @@ namespace Materials.ViewModels
             get
             {
                 if (_externalConstructionInstance == null)
-                   return null;
-
+                    return null;
                 else
                     return _externalConstructionInstance.Name;
             }
@@ -224,28 +215,10 @@ namespace Materials.ViewModels
                 _externalConstructionInstance.DefaultSpecVersionID = (value == null) ? (int?)null : value.ID;
             }
         }
-        
-        public IEnumerable<Organization> OEMList
-        {
-            get
-            {
-                return _oemList;
-            }
-        }
 
-        private void RaiseExternalConstructionChanged()
-        {
-            EntityChangedToken entityChangedToken = new EntityChangedToken(_externalConstructionInstance,
-                                                                            EntityChangedToken.EntityChangedAction.Updated);
+        public IEnumerable<Organization> OEMList { get; }
 
-            _eventAggregator.GetEvent<ExternalConstructionChanged>()
-                            .Publish(entityChangedToken);
-        }
-
-        public DelegateCommand SaveCommand
-        {
-            get { return _save; }
-        }
+        public DelegateCommand SaveCommand { get; }
 
         public Material SelectedAssignedMaterial
         {
@@ -265,7 +238,7 @@ namespace Materials.ViewModels
                 if (_externalConstructionInstance == null)
                     return null;
                 else
-                    return _oemList.FirstOrDefault(org => org.ID == _externalConstructionInstance.OemID);
+                    return OEMList.FirstOrDefault(org => org.ID == _externalConstructionInstance.OemID);
             }
             set
             {
@@ -287,9 +260,8 @@ namespace Materials.ViewModels
             set
             {
                 _selectedSpecification = value;
-                _selectedSpecification.Load();
 
-                _specificationVersionList = _selectedSpecification.GetVersions();
+                SpecificationVersionList = _selectedSpecification.GetVersions();
                 ExternalConstructionSpecificationVersion = SpecificationVersionList.First(spcv => spcv.IsMain);
 
                 RaisePropertyChanged("EnableVersionSelection");
@@ -304,34 +276,36 @@ namespace Materials.ViewModels
             set
             {
                 _selectedUnassignedMaterial = value;
-                _assignMaterialToExternal.RaiseCanExecuteChanged();
+                AssignMaterialToExternalCommand.RaiseCanExecuteChanged();
                 RaisePropertyChanged("SelectedUnassignedMaterial");
             }
         }
 
-        public DelegateCommand StartEditCommand
+        public IEnumerable<Specification> SpecificationList { get; }
+
+        public IEnumerable<SpecificationVersion> SpecificationVersionList { get; private set; }
+
+        public DelegateCommand StartEditCommand { get; }
+
+        public IEnumerable<Material> UnassignedMaterials => _labDbData.RunQuery(new MaterialsQuery())
+                                                                    .Where(mat => mat.ExternalConstructionID == null)
+                                                                    .ToList();
+
+        public DelegateCommand UnassignMaterialToExternalCommand => _unassignMaterialToExternal;
+
+        #endregion Properties
+
+        #region Methods
+
+        private void RaiseExternalConstructionChanged()
         {
-            get { return _startEdit; }
+            EntityChangedToken entityChangedToken = new EntityChangedToken(_externalConstructionInstance,
+                                                                            EntityChangedToken.EntityChangedAction.Updated);
+
+            _eventAggregator.GetEvent<ExternalConstructionChanged>()
+                            .Publish(entityChangedToken);
         }
 
-        public IEnumerable<Specification> SpecificationList
-        {
-            get { return _specificationList; }
-        }
-
-        public IEnumerable<SpecificationVersion> SpecificationVersionList
-        {
-            get
-            {
-                return _specificationVersionList;
-            }
-        }
-
-        public DelegateCommand UnassignMaterialToExternalCommand
-        {
-            get { return _unassignMaterialToExternal; }
-        }
-
-        public IEnumerable<Material> UnassignedMaterials => _dataService.GetMaterialsWithoutConstruction();
+        #endregion Methods
     }
 }

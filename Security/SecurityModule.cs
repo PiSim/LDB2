@@ -1,4 +1,5 @@
-﻿using Microsoft.Practices.Unity;
+﻿using Prism.Ioc;
+using Prism.Ioc;
 using Prism.Modularity;
 using System;
 
@@ -6,17 +7,23 @@ namespace Security
 {
     public class SecurityModule : IModule
     {
-        IUnityContainer _container;
 
-        public SecurityModule(IUnityContainer container)
+        public SecurityModule()
         {
-            _container = container;
         }
 
         public void Initialize()
         {
-            _container.RegisterType<AuthenticationService>();
-            _container.RegisterType<Views.LoginDialog>();
+        }
+
+        public void OnInitialized(IContainerProvider containerProvider)
+        {
+        }
+
+        public void RegisterTypes(IContainerRegistry containerRegistry)
+        {
+
+            containerRegistry.Register<Views.LoginDialog>();
         }
     }
 }

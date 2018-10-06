@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows.Markup;
 using System.Windows;
 using System.Windows.Input;
 
@@ -23,7 +19,7 @@ namespace Controls.Behaviours
                 new FrameworkPropertyMetadata((CommandBehaviorBinding)null));
 
         /// <summary>
-        /// Gets the Behavior property. 
+        /// Gets the Behavior property.
         /// </summary>
         private static CommandBehaviorBinding GetBehavior(DependencyObject d)
         {
@@ -31,14 +27,14 @@ namespace Controls.Behaviours
         }
 
         /// <summary>
-        /// Sets the Behavior property.  
+        /// Sets the Behavior property.
         /// </summary>
         private static void SetBehavior(DependencyObject d, CommandBehaviorBinding value)
         {
             d.SetValue(BehaviorProperty, value);
         }
 
-        #endregion
+        #endregion Behavior
 
         #region Command
 
@@ -51,7 +47,7 @@ namespace Controls.Behaviours
                     new PropertyChangedCallback(OnCommandChanged)));
 
         /// <summary>
-        /// Gets the Command property.  
+        /// Gets the Command property.
         /// </summary>
         public static ICommand GetCommand(DependencyObject d)
         {
@@ -59,7 +55,7 @@ namespace Controls.Behaviours
         }
 
         /// <summary>
-        /// Sets the Command property. 
+        /// Sets the Command property.
         /// </summary>
         public static void SetCommand(DependencyObject d, ICommand value)
         {
@@ -75,7 +71,7 @@ namespace Controls.Behaviours
             binding.Command = (ICommand)e.NewValue;
         }
 
-        #endregion
+        #endregion Command
 
         #region CommandParameter
 
@@ -88,7 +84,7 @@ namespace Controls.Behaviours
                     new PropertyChangedCallback(OnCommandParameterChanged)));
 
         /// <summary>
-        /// Gets the CommandParameter property.  
+        /// Gets the CommandParameter property.
         /// </summary>
         public static object GetCommandParameter(DependencyObject d)
         {
@@ -96,7 +92,7 @@ namespace Controls.Behaviours
         }
 
         /// <summary>
-        /// Sets the CommandParameter property. 
+        /// Sets the CommandParameter property.
         /// </summary>
         public static void SetCommandParameter(DependencyObject d, object value)
         {
@@ -112,7 +108,7 @@ namespace Controls.Behaviours
             binding.CommandParameter = e.NewValue;
         }
 
-        #endregion
+        #endregion CommandParameter
 
         #region Event
 
@@ -125,7 +121,7 @@ namespace Controls.Behaviours
                     new PropertyChangedCallback(OnEventChanged)));
 
         /// <summary>
-        /// Gets the Event property.  This dependency property 
+        /// Gets the Event property.  This dependency property
         /// indicates ....
         /// </summary>
         public static string GetEvent(DependencyObject d)
@@ -134,7 +130,7 @@ namespace Controls.Behaviours
         }
 
         /// <summary>
-        /// Sets the Event property.  This dependency property 
+        /// Sets the Event property.  This dependency property
         /// indicates ....
         /// </summary>
         public static void SetEvent(DependencyObject d, string value)
@@ -155,9 +151,10 @@ namespace Controls.Behaviours
             binding.BindEvent(d, e.NewValue.ToString());
         }
 
-        #endregion
+        #endregion Event
 
         #region Helpers
+
         //tries to get a CommandBehaviorBinding from the element. Creates a new instance if there is not one attached
         private static CommandBehaviorBinding FetchOrCreateBinding(DependencyObject d)
         {
@@ -169,8 +166,7 @@ namespace Controls.Behaviours
             }
             return binding;
         }
-        #endregion
 
+        #endregion Helpers
     }
-
 }

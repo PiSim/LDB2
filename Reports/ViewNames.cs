@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Reports
+﻿namespace Reports
 {
     public class ViewNames
     {
-        public static string ExternalReportMainView { get { return "ExternalReportMainView"; } }
-        public static string ExternalReportEditView { get { return "ExternalReportEditView"; } }
-        public static string ReportMain { get { return "ReportsView"; } }
-        public static string ReportEditView { get { return "ReportEditView"; } }
-        public static string TestSearchMain { get { return "TestSearchMain"; } }
+        #region Properties
+
+        public static string ExternalReportEditView => "ExternalReportEditView";
+        public static string ExternalReportMainView => "ExternalReportMainView";
+        public static string ReportEditView => "ReportEditView";
+        public static string ReportMain => "ReportsView";
+        public static string TestSearchMain => "TestSearchMain";
+
+        #endregion Properties
     }
 }

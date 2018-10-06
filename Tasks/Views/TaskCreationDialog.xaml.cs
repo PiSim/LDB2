@@ -1,18 +1,6 @@
-﻿using DBManager;
-using Infrastructure;
+﻿using LabDbContext;
 using Microsoft.Practices.Prism.Mvvm;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace Tasks.Views
 {
@@ -21,15 +9,19 @@ namespace Tasks.Views
     /// </summary>
     public partial class TaskCreationDialog : Window, IView
     {
-        
+        #region Constructors
+
         public TaskCreationDialog()
         {
             InitializeComponent();
         }
-        
-        public Task TaskInstance
-        {
-            get { return (DataContext as ViewModels.TaskCreationDialogViewModel).TaskInstance; }
-        }
+
+        #endregion Constructors
+
+        #region Properties
+
+        public Task TaskInstance => (DataContext as ViewModels.TaskCreationDialogViewModel).TaskInstance;
+
+        #endregion Properties
     }
 }

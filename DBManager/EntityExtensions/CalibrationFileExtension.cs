@@ -1,20 +1,16 @@
-﻿using DBManager;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 
-namespace DBManager.EntityExtensions
+namespace LabDbContext.EntityExtensions
 {
     public static class CalibrationFileExtension
     {
+        #region Methods
+
         public static void Delete(this CalibrationFiles entry)
         {
             // DEletes a CalibrationFile entry
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.Entry(entities
                         .CalibrationFiles
@@ -25,5 +21,7 @@ namespace DBManager.EntityExtensions
                 entry.ID = 0;
             }
         }
+
+        #endregion Methods
     }
 }

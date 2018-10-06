@@ -1,19 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
+﻿using System.Data.Entity;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace DBManager.EntityExtensions
+namespace LabDbContext.EntityExtensions
 {
     public static class StandardFileExtension
     {
+        #region Methods
+
         public static void Create(this StandardFile entry)
         {
             // Inserts a StandardFile entry in the DB
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.StandardFiles.Add(entry);
                 entities.SaveChanges();
@@ -24,7 +22,7 @@ namespace DBManager.EntityExtensions
         {
             // Deletes a standardFile entry
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.Entry(entities.StandardFiles
                         .First(stdf => stdf.ID == entry.ID))
@@ -33,5 +31,7 @@ namespace DBManager.EntityExtensions
                 entities.SaveChanges();
             }
         }
+
+        #endregion Methods
     }
 }

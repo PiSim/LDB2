@@ -1,17 +1,5 @@
-﻿using DBManager;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using LabDbContext;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace Instruments.Views
 {
@@ -20,20 +8,25 @@ namespace Instruments.Views
     /// </summary>
     public partial class MaintenanceEventCreationDialog : Window
     {
+        #region Constructors
+
         public MaintenanceEventCreationDialog()
         {
             InitializeComponent();
         }
 
-        public InstrumentMaintenanceEvent InstrumentEventInstance
-        {
-            get { return (DataContext as ViewModels.MaintenanceEventCreationDialogViewModel).EventInstance; }
-        }
+        #endregion Constructors
+
+        #region Properties
+
+        public InstrumentMaintenanceEvent InstrumentEventInstance => (DataContext as ViewModels.MaintenanceEventCreationDialogViewModel).EventInstance;
 
         public Instrument InstrumentInstance
         {
             get { return (DataContext as ViewModels.MaintenanceEventCreationDialogViewModel).InstrumentInstance; }
             set { (DataContext as ViewModels.MaintenanceEventCreationDialogViewModel).InstrumentInstance = value; }
         }
+
+        #endregion Properties
     }
 }

@@ -1,55 +1,57 @@
-﻿using DBManager;
-using DBManager.EntityExtensions;
+﻿using Controls.Views;
+using DataAccess;
+using Infrastructure;
 using Infrastructure.Events;
+using Infrastructure.Queries;
+using LabDbContext;
+using LabDbContext.EntityExtensions;
+using LabDbContext.Services;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Windows.Forms;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DBManager.Services;
-using Infrastructure;
 using System.Collections.Specialized;
+using System.Data.Entity;
+using System.Linq;
+using System.Threading;
+using System.Windows.Forms;
 
 namespace Specifications.ViewModels
 {
     public class MethodEditViewModel : BindableBase
     {
+        #region Fields
+
         private bool _editMode;
-        private DBPrincipal _principal;
-        private EventAggregator _eventAggregator;
-        private IDataService _dataService;
-        private IEnumerable<Organization> _organizationList;
-        private IEnumerable<Property> _propertyList;
-        private IEnumerable<SubMethod> _subMethodList;
-        private ISpecificationService _specificationService;
+        private IEventAggregator _eventAggregator;
+        private IDataService<LabDbEntities> _labDbData;
         private Method _methodInstance;
         private ObservableCollection<MethodVariant> _methodVariantList;
+        private StandardFile _selectedFile;
         private Organization _selectedOrganization;
         private Property _selectedProperty;
-        private Specification _selectedSpecification;
-        private StandardFile _selectedFile;
         private Test _selectedTest;
+        private ISpecificationService _specificationService;
 
-        public MethodEditViewModel(DBPrincipal principal,
-                                    EventAggregator aggregator,
-                                    IDataService dataService,
+        #endregion Fields
+
+        #region Constructors
+
+        public MethodEditViewModel(IEventAggregator aggregator,
+                                    IDataService<LabDbEntities> labDbData,
                                     ISpecificationService specificationService) : base()
         {
-            _dataService = dataService;
+            _labDbData = labDbData;
             _editMode = false;
             _eventAggregator = aggregator;
-            _principal = principal;
             _specificationService = specificationService;
 
-            _organizationList = _dataService.GetOrganizations(OrganizationRoleNames.StandardPublisher);
-            _propertyList = _dataService.GetProperties();
+            OrganizationList = _labDbData.RunQuery(new OrganizationsQuery() { Role = OrganizationsQuery.OrganizationRoles.StandardPublisher })
+                                                                        .ToList(); ;
+            PropertyList = _labDbData.RunQuery(new PropertiesQuery()).ToList();
 
-            _subMethodList = new List<SubMethod>();
+            Measurements = new List<SubMethod>();
 
             AddFileCommand = new DelegateCommand(
                 () =>
@@ -92,25 +94,23 @@ namespace Specifications.ViewModels
                 },
                 () => _selectedFile != null);
 
-            OpenReportCommand = new DelegateCommand(
-                () =>
+            OpenReportCommand = new DelegateCommand<Test>(
+                tst =>
                 {
-                NavigationToken token = new NavigationToken((_selectedTest.TestRecord.RecordTypeID == 1) ? ReportViewNames.ReportEditView : ReportViewNames.ExternalReportEditView,
-                                                            _selectedTest.TestRecord.Reports.First());
+                    NavigationToken token = new NavigationToken((tst.TestRecord.RecordTypeID == 1) ? ReportViewNames.ReportEditView : ReportViewNames.ExternalReportEditView,
+                                                                tst.TestRecord.Reports.First());
 
                     _eventAggregator.GetEvent<NavigationRequested>()
                                     .Publish(token);
-                },
-                () => _selectedTest != null);
-            
-            OpenSpecificationCommand = new DelegateCommand(
-                () =>
+                });
+
+            OpenSpecificationCommand = new DelegateCommand<Specification>(
+                spec =>
                 {
                     NavigationToken token = new NavigationToken(SpecificationViewNames.SpecificationEdit,
-                                                                SelectedSpecification);
+                                                                spec);
                     _eventAggregator.GetEvent<NavigationRequested>().Publish(token);
-                },
-                () => SelectedSpecification != null);
+                });
 
             RemoveFileCommand = new DelegateCommand(
                 () =>
@@ -125,7 +125,7 @@ namespace Specifications.ViewModels
                 {
                     _methodInstance.Update();
 
-                    _specificationService.UpdateSubMethods(_subMethodList);
+                    _specificationService.UpdateSubMethods(Measurements);
                     _specificationService.UpdateMethodVariantRange(_methodVariantList);
 
                     if (_selectedOrganization.ID != _methodInstance.Standard.OrganizationID)
@@ -133,7 +133,6 @@ namespace Specifications.ViewModels
                         _methodInstance.Standard.OrganizationID = _selectedOrganization.ID;
                         _methodInstance.Standard.Update();
                     }
-
 
                     EditMode = false;
                 },
@@ -152,21 +151,21 @@ namespace Specifications.ViewModels
                     _specificationService.ModifyMethodTestList(_methodInstance);
                 },
                 () => CanModify);
-
         }
 
-        #region Commands
+        #endregion Constructors
 
+        #region Commands
 
         public DelegateCommand AddFileCommand { get; }
 
         public DelegateCommand CancelEditCommand { get; }
-        
+
         public DelegateCommand OpenFileCommand { get; }
 
-        public DelegateCommand OpenReportCommand { get; }
+        public DelegateCommand<Test> OpenReportCommand { get; }
 
-        public DelegateCommand OpenSpecificationCommand { get; }
+        public DelegateCommand<Specification> OpenSpecificationCommand { get; }
 
         public DelegateCommand RemoveFileCommand { get; }
 
@@ -174,8 +173,7 @@ namespace Specifications.ViewModels
 
         public DelegateCommand StartEditCommand { get; }
 
-        #endregion
-
+        #endregion Commands
 
         #region Methods
 
@@ -194,7 +192,6 @@ namespace Specifications.ViewModels
 
                 RaisePropertyChanged("IsMoreThanOneVariant");
             }
-
         }
 
         private void SetMethodVariantCollectionChangedHandler()
@@ -205,12 +202,10 @@ namespace Specifications.ViewModels
             MethodVariantList.CollectionChanged += OnMethodVariantCollectionChanged;
         }
 
-        #endregion
+        #endregion Methods
 
         #region Properties
 
-        private bool CanModify => _principal.IsInRole(UserRoleNames.SpecificationEdit);
-        
         public double Duration
         {
             get
@@ -222,7 +217,7 @@ namespace Specifications.ViewModels
             }
             set
             {
-                if (_methodInstance !=null)
+                if (_methodInstance != null)
                     _methodInstance.Duration = value;
             }
         }
@@ -243,20 +238,12 @@ namespace Specifications.ViewModels
             }
         }
 
-        public IEnumerable<StandardFile> FileList
-        {
-            get
-            {
-                return _methodInstance.GetFiles();
-            }
-        }
-
+        public IEnumerable<StandardFile> FileList => _methodInstance.GetFiles();
         public bool IsMoreThanOneVariant => _methodVariantList?.Count != 0;
-
-        public string MethodEditSpecificationListRegionName
-        {
-            get { return RegionNames.MethodEditSpecificationListRegion; }
-        }
+        public bool? IsOld => _methodInstance?.IsOld;
+        public IEnumerable<SubMethod> Measurements { get; private set; }
+        public string MethodEditSpecificationListRegionName => RegionNames.MethodEditSpecificationListRegion;
+        public string MethodFileRegionName => RegionNames.MethodFileRegion;
 
         public Method MethodInstance
         {
@@ -266,18 +253,17 @@ namespace Specifications.ViewModels
                 EditMode = false;
 
                 _methodInstance = value;
-                if (_methodInstance != null)
-                    _methodInstance.Load(true);
 
                 MethodVariantList = new ObservableCollection<MethodVariant>(_methodInstance?.GetVariants());
-                
-                SelectedOrganization = _organizationList.FirstOrDefault(org => org.ID == _methodInstance?.Standard.OrganizationID);
-                _selectedProperty = _propertyList.FirstOrDefault(prp => prp.ID == _methodInstance?.PropertyID);
-                _subMethodList = _methodInstance?.SubMethods;
+
+                SelectedOrganization = OrganizationList.FirstOrDefault(org => org.ID == _methodInstance?.Standard.OrganizationID);
+                _selectedProperty = PropertyList.FirstOrDefault(prp => prp.ID == _methodInstance?.PropertyID);
+                Measurements = _methodInstance?.SubMethods;
 
                 RaisePropertyChanged("Duration");
                 RaisePropertyChanged("FileList");
                 RaisePropertyChanged("IsMoreThanOneVariant");
+                RaisePropertyChanged("IsOld");
                 RaisePropertyChanged("Measurements");
                 RaisePropertyChanged("MethodVariantList");
                 RaisePropertyChanged("Name");
@@ -287,19 +273,6 @@ namespace Specifications.ViewModels
                 RaisePropertyChanged("SelectedProperty");
                 RaisePropertyChanged("SpecificationList");
                 RaisePropertyChanged("ResultList");
-            }
-        }
-
-        public string MethodFileRegionName
-        {
-            get { return RegionNames.MethodFileRegion; }
-        }
-
-        public IEnumerable<SubMethod> Measurements
-        {
-            get 
-            {
-                return _subMethodList;
             }
         }
 
@@ -318,30 +291,10 @@ namespace Specifications.ViewModels
             }
         }
 
-
-
-        public string Name
-        {
-            get => _methodInstance?.Standard.Name;
-        }
-
-        public IEnumerable<Organization> OrganizationList
-        {
-            get { return _organizationList; }
-        }
-
-        public IEnumerable<Property> PropertyList
-        {
-            get { return _propertyList; }
-        }
-
-        public IEnumerable<Test> ResultList
-        {
-            get
-            {
-                return _methodInstance?.GetTests();
-            }
-        }
+        public string Name => _methodInstance?.Standard.Name;
+        public IEnumerable<Organization> OrganizationList { get; }
+        public IEnumerable<Property> PropertyList { get; }
+        public IEnumerable<Test> ResultList => _methodInstance.Tests.ToList();
 
         public StandardFile SelectedFile
         {
@@ -382,14 +335,7 @@ namespace Specifications.ViewModels
             }
         }
 
-        public Specification SelectedSpecification
-        {
-            get { return _selectedSpecification; }
-            set
-            {
-                _selectedSpecification = value;
-            }
-        }
+        public Specification SelectedSpecification { get; set; }
 
         public Test SelectedTest
         {
@@ -399,20 +345,13 @@ namespace Specifications.ViewModels
                 _selectedTest = value;
 
                 RaisePropertyChanged("SelectedTest");
-                OpenReportCommand.RaiseCanExecuteChanged();
             }
         }
 
-        public IEnumerable<Specification> SpecificationList
-        {
-            get
-            {
-                return _methodInstance.GetSpecifications();
-            }
-        }
-
+        public IEnumerable<Specification> SpecificationList => (_methodInstance == null) ? null : _methodInstance.MethodVariants.SelectMany(mtdvar => mtdvar.Requirements.Select(req => req.SpecificationVersions.Specification)).ToList();
         public DelegateCommand UpdateCommand { get; }
+        private bool CanModify => Thread.CurrentPrincipal.IsInRole(UserRoleNames.SpecificationEdit);
 
-        #endregion
+        #endregion Properties
     }
 }

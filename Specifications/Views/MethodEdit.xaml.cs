@@ -1,20 +1,8 @@
-﻿using DBManager;
+﻿using Controls.Views;
+using LabDbContext;
 using Microsoft.Practices.Prism.Mvvm;
 using Prism.Regions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Specifications.Views
 {
@@ -23,10 +11,22 @@ namespace Specifications.Views
     /// </summary>
     public partial class MethodEdit : UserControl, IView, INavigationAware
     {
-        public MethodEdit()
+        #region Constructors
+
+        public MethodEdit(IRegionManager regionManager)
         {
             InitializeComponent();
+            regionManager.RegisterViewWithRegion(RegionNames.MethodEditSpecificationListRegion,
+                                                typeof(Controls.Views.SpecificationList));
+            regionManager.RegisterViewWithRegion(RegionNames.MethodFileRegion,
+                                                typeof(FileListControl));
+            regionManager.RegisterViewWithRegion(RegionNames.MethodReportListRegion,
+                                                typeof(ReportListControl));
         }
+
+        #endregion Constructors
+
+        #region Methods
 
         public bool IsNavigationTarget(NavigationContext ncontext)
         {
@@ -35,7 +35,6 @@ namespace Specifications.Views
 
         public void OnNavigatedFrom(NavigationContext ncontext)
         {
-
         }
 
         public void OnNavigatedTo(NavigationContext ncontext)
@@ -43,5 +42,7 @@ namespace Specifications.Views
             (DataContext as ViewModels.MethodEditViewModel).MethodInstance =
                ncontext.Parameters["ObjectInstance"] as Method;
         }
+
+        #endregion Methods
     }
 }

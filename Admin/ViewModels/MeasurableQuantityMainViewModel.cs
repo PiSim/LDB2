@@ -1,29 +1,30 @@
-﻿using DBManager;
-using DBManager.EntityExtensions;
-using DBManager.Services;
+﻿using Controls.Views;
 using Infrastructure;
 using Infrastructure.Events;
+using LabDbContext;
+using LabDbContext.EntityExtensions;
+using LabDbContext.Services;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Admin.ViewModels
 {
     public class MeasurableQuantityMainViewModel : BindableBase
     {
-        private DelegateCommand _deleteQuantity,
-                                _newQuantity;
-        private EventAggregator _eventAggregator;
+        #region Fields
+
         private IAdminService _adminService;
         private IDataService _dataService;
+        private IEventAggregator _eventAggregator;
         private MeasurableQuantity _selectedMeasurableQuantity;
 
-        public MeasurableQuantityMainViewModel(EventAggregator eventAggregator,
+        #endregion Fields
+
+        #region Constructors
+
+        public MeasurableQuantityMainViewModel(IEventAggregator eventAggregator,
                                                 IAdminService adminService,
                                                 IDataService dataService) : base()
         {
@@ -31,13 +32,13 @@ namespace Admin.ViewModels
             _dataService = dataService;
             _eventAggregator = eventAggregator;
 
-            _deleteQuantity = new DelegateCommand(
+            DeleteQuantityCommand = new DelegateCommand(
                 () =>
                 {
                     _selectedMeasurableQuantity.Delete();
                 });
 
-            _newQuantity = new DelegateCommand(
+            NewMeasurableQuantityCommand = new DelegateCommand(
                 () =>
                 {
                     _adminService.CreateNewMeasurableQuantity();
@@ -51,26 +52,14 @@ namespace Admin.ViewModels
                             });
         }
 
-        public string MeasurableQuantityManagementEditRegionName
-        {
-            get { return RegionNames.MeasurableQuantityManagementEditRegion; }
-        }
+        #endregion Constructors
 
-        public IEnumerable<MeasurableQuantity> MeasurableQuantityList
-        {
-            get { return _dataService.GetMeasurableQuantities(); }
-        }
+        #region Properties
 
-        public DelegateCommand DeleteQuantityCommand
-        {
-            get { return _deleteQuantity; }
-        }
-
-
-        public DelegateCommand NewMeasurableQuantityCommand
-        {
-            get { return _newQuantity; }
-        }
+        public DelegateCommand DeleteQuantityCommand { get; }
+        public IEnumerable<MeasurableQuantity> MeasurableQuantityList => _dataService.GetMeasurableQuantities();
+        public string MeasurableQuantityManagementEditRegionName => RegionNames.MeasurableQuantityManagementEditRegion;
+        public DelegateCommand NewMeasurableQuantityCommand { get; }
 
         public MeasurableQuantity SelectedMeasurableQuantity
         {
@@ -87,5 +76,7 @@ namespace Admin.ViewModels
                                 .Publish(token);
             }
         }
+
+        #endregion Properties
     }
 }

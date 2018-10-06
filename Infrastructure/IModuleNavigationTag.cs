@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
-
-namespace Infrastructure
+﻿namespace Infrastructure
 {
     public interface IModuleNavigationTag
     {
+        #region Properties
+
         string ViewName { get; }
+
+        #endregion Properties
     }
 }

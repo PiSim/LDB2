@@ -1,85 +1,85 @@
 ﻿<UserControl x:Class="Materials.Views.BatchInfo"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:con="clr-namespace:Infrastructure.Converters;assembly=Infrastructure"
              xmlns:cmd="clr-namespace:Infrastructure.Commands;assembly=Infrastructure"
              xmlns:prism="http://prismlibrary.com/"
              prism:ViewModelLocator.AutoWireViewModel="True"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
              d:DesignHeight="500" d:DesignWidth="600">
 
     <UserControl.Resources>
-        <con:CodeToActionConverter x:Key="CTAConverter"/>
+        <con:CodeToActionConverter x:Key="CTAConverter" />
     </UserControl.Resources>
-    
+
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="35"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
+            <RowDefinition Height="35" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
         </Grid.RowDefinitions>
-        
-        <FrameworkElement x:Name="dummyElement" Visibility="Collapsed"/>
+
+        <FrameworkElement x:Name="dummyElement" Visibility="Collapsed" />
 
         <StackPanel Orientation="Horizontal"
                     Grid.Row="0">
             <Button Content="Modifica"
                     Command="{Binding StartEditCommand}"
-                    Margin="5"/>
+                    Margin="5" />
             <Button Content="Salva"
                     Command="{Binding SaveCommand}"
-                    Margin="5"/>
+                    Margin="5" />
             <Button Content="Annulla"
                     Command="{Binding CancelEditCommand}"
-                    Margin="5"/>
+                    Margin="5" />
             <Button Content="Aggiorna"
                     Command="{Binding RefreshCommand}"
-                    Margin="5"/>
+                    Margin="5" />
             <Button Content="Elimina batch"
                     Command="{Binding DeleteBatchCommand}"
-                    Margin="5"/>
+                    Margin="5" />
         </StackPanel>
-        
+
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="100"/>
-                <ColumnDefinition Width="60"/>
+                <ColumnDefinition Width="100" />
+                <ColumnDefinition Width="60" />
                 <ColumnDefinition MaxWidth="300"
-                                    MinWidth="100"/>
-                <ColumnDefinition Width="100"/>
+                                    MinWidth="100" />
+                <ColumnDefinition Width="100" />
                 <ColumnDefinition MaxWidth="400"
-                                  MinWidth="100"/>
+                                  MinWidth="100" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
             </Grid.RowDefinitions>
 
             <Label Content="Batch:"
                     Grid.Column="0"
-                    Margin="5"/>
+                    Margin="5" />
 
             <Label Content="{Binding Number}"
                     Grid.Column="1"
                     Grid.ColumnSpan="2"
                     Margin="5"
-                    VerticalAlignment="Center"/>
+                    VerticalAlignment="Center" />
 
             <Label Content="Tipo:"
                     Grid.Column="0"
                     Grid.Row="1"
                     VerticalAlignment="Center"
-                    Margin="5"/>
+                    Margin="5" />
 
-            <TextBox Text="{Binding TypeCode, 
+            <TextBox Text="{Binding TypeCode,
                                     Mode=TwoWay,
                                     UpdateSourceTrigger=PropertyChanged}"
                         IsEnabled="{Binding EditMode}"
@@ -87,19 +87,19 @@
                         Grid.Column="1"
                         Grid.Row="1"
                         Margin="5"
-                        VerticalAlignment="Center"/>
+                        VerticalAlignment="Center" />
 
             <Label Content="{Binding TypeInstance.Description}"
                     Grid.Column="2"
                     Grid.Row="1"
                     VerticalAlignment="Center"
-                    Margin="5"/>
+                    Margin="5" />
 
             <Label Content="Riga:"
                     Grid.Column="0"
                     Grid.Row="2"
                     VerticalAlignment="Center"
-                    Margin="5"/>
+                    Margin="5" />
 
             <TextBox Text="{Binding LineCode,
                                     Mode=TwoWay,
@@ -109,15 +109,15 @@
                         Grid.Column="1"
                         Grid.Row="2"
                         VerticalAlignment="Center"
-                        Margin="5"/>
+                        Margin="5" />
 
             <Label Content="Aspetto:"
                     Grid.Column="0"
                     Grid.Row="3"
                     VerticalAlignment="Center"
-                    Margin="5"/>
+                    Margin="5" />
 
-            <TextBox Text="{Binding AspectCode, 
+            <TextBox Text="{Binding AspectCode,
                                         Mode=TwoWay,
                                         UpdateSourceTrigger=PropertyChanged}"
                         IsEnabled="{Binding EditMode}"
@@ -125,20 +125,20 @@
                         Grid.Column="1"
                         Grid.Row="3"
                         VerticalAlignment="Center"
-                        Margin="5"/>
-                
+                        Margin="5" />
+
             <Label Content="{Binding AspectInstance.Name}"
                     Grid.Column="2"
                     Grid.Row="3"
                     VerticalAlignment="Center"
-                    Margin="5"/>
+                    Margin="5" />
 
             <Label Content="Colore:"
                     Grid.Column="0"
                     Grid.Row="4"
                     VerticalAlignment="Center"
-                    Margin="5"/>
-                
+                    Margin="5" />
+
             <TextBox Text="{Binding RecipeCode,
                                         Mode=TwoWay,
                                         UpdateSourceTrigger=PropertyChanged}"
@@ -147,17 +147,17 @@
                         Grid.Column="1"
                         Grid.Row="4"
                         VerticalAlignment="Center"
-                        Margin="5"/>
+                        Margin="5" />
 
             <ComboBox ItemsSource="{Binding ColourList}"
-                        SelectedItem="{Binding SelectedColour, 
+                        SelectedItem="{Binding SelectedColour,
                                                 Mode=TwoWay}"
                         IsEnabled="{Binding EditMode}"
                         DisplayMemberPath="Name"
                         Grid.Column="2"
                         Grid.Row="4"
                         VerticalAlignment="Center"
-                        Margin="5"/>
+                        Margin="5" />
 
             <StackPanel Grid.Column="0"
                         Grid.ColumnSpan="3"
@@ -167,12 +167,12 @@
                 <TextBlock HorizontalAlignment="Center"
                             Margin="5,0"
                             Text="Non Effettuare test su questa commessa:"
-                            VerticalAlignment="Center"/>
+                            VerticalAlignment="Center" />
                 <CheckBox IsChecked="{Binding DoNotTest,
                                             Mode=TwoWay}"
                                     IsEnabled="{Binding EditMode}"
                                     Margin="20,0"
-                            VerticalAlignment="Center"/>
+                            VerticalAlignment="Center" />
             </StackPanel>
 
             <TextBlock Grid.Column="3"
@@ -180,7 +180,7 @@
                        HorizontalAlignment="Left"
                        Margin="5"
                        Text="Progetto:"
-                       VerticalAlignment="Center"/>
+                       VerticalAlignment="Center" />
 
             <ComboBox Grid.Column="4"
                       Grid.Row="1"
@@ -188,13 +188,13 @@
                       ItemsSource="{Binding ProjectList}"
                       ItemTemplate="{StaticResource ProjectComboTemplate}"
                       Margin="5"
-                      SelectedItem="{Binding SelectedProject}"/>
+                      SelectedItem="{Binding SelectedProject}" />
 
             <TextBlock Text="Construction:"
                     Grid.Column="3"
                     Grid.Row="2"
                     VerticalAlignment="Center"
-                    Margin="5"/>
+                    Margin="5" />
 
             <ComboBox ItemsSource="{Binding ExternalConstructionList}"
                         SelectedItem="{Binding SelectedExternalConstruction,
@@ -208,13 +208,13 @@
                     <DataTemplate>
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="125"/>
-                                <ColumnDefinition/>
+                                <ColumnDefinition Width="125" />
+                                <ColumnDefinition />
                             </Grid.ColumnDefinitions>
                             <TextBlock Text="{Binding Oem.Name}"
-                                        Margin="0,0,10,0"/>
+                                        Margin="0,0,10,0" />
                             <TextBlock Text="{Binding Name}"
-                                        Grid.Column="1"/>
+                                        Grid.Column="1" />
                         </Grid>
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
@@ -224,7 +224,7 @@
                     Grid.Column="3"
                     Grid.Row="3"
                     VerticalAlignment="Center"
-                    Margin="5"/>
+                    Margin="5" />
 
             <ComboBox ItemsSource="{Binding TrialAreaList}"
                         SelectedItem="{Binding SelectedTrialArea}"
@@ -232,13 +232,13 @@
                         DisplayMemberPath="Name"
                         Grid.Column="4"
                         Grid.Row="3"
-                        Margin="5"/>
+                        Margin="5" />
 
             <TextBlock Text="Note:"
                     Grid.Column="3"
                     Grid.Row="4"
                     VerticalAlignment="Top"
-                    Margin="5"/>
+                    Margin="5" />
 
             <TextBox Text="{Binding Notes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                         IsEnabled="{Binding EditMode}"
@@ -248,28 +248,27 @@
                         Grid.Column="4"
                         Grid.Row="4"
                      Grid.RowSpan="2"
-                        Margin="5"/>
-
+                        Margin="5" />
         </Grid>
 
-        <GroupBox Header="Rotoli" 
+        <GroupBox Header="Rotoli"
                               Grid.Column="1"
                               Grid.Row="2">
             <ListView ItemsSource="{Binding Path=Samples}">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn DisplayMemberBinding="{Binding Path=Code,
-                                                                                   Converter={StaticResource CTAConverter}}"/>
+                                                                                   Converter={StaticResource CTAConverter}}" />
                         <GridViewColumn DisplayMemberBinding="{Binding Path=Date,
                                                                                    StringFormat=d,
-                                                                                   ConverterCulture=IT-it}"/>
+                                                                                   ConverterCulture=IT-it}" />
                         <GridViewColumn>
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <Button Content="Elimina"
                                                         Command="{Binding DataContext.DeleteSampleCommand,
                                                                           Source={x:Reference Name=dummyElement}}"
-                                                        CommandParameter="{Binding}"/>
+                                                        CommandParameter="{Binding}" />
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
@@ -278,19 +277,18 @@
             </ListView>
         </GroupBox>
 
-        <GroupBox Header="Report Interni" 
+        <GroupBox Header="Report Interni"
                               Grid.Row="3">
             <Grid>
                 <ContentControl prism:RegionManager.RegionName="BatchReportListRegion"
-                                            Grid.Row="1"/>
+                                            Grid.Row="1" />
             </Grid>
         </GroupBox>
 
         <GroupBox Header="Report Esterni"
                               Grid.Row="4">
             <Grid>
-                <ContentControl prism:RegionManager.RegionName="BatchExternalReportListRegion"/>
-
+                <ContentControl prism:RegionManager.RegionName="BatchExternalReportListRegion" />
             </Grid>
         </GroupBox>
     </Grid>

@@ -1,48 +1,64 @@
-﻿using DBManager;
-using DBManager.EntityExtensions;
-using Infrastructure;
-using Infrastructure.Events;
-using Microsoft.Practices.Unity;
+﻿using Infrastructure.Events;
+using LabDbContext;
+using LabDbContext.EntityExtensions;
 using Prism.Events;
-using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Instruments
 {
-    public class InstrumentService : IInstrumentService
+    public class InstrumentService
     {
-        private EventAggregator _eventAggregator;
-        private IUnityContainer _container;
+        #region Fields
 
-        public InstrumentService(EventAggregator aggregator,
-                                        IUnityContainer container)
+        private IDbContextFactory<LabDbEntities> _dbContextFactory;
+        private IEventAggregator _eventAggregator;
+
+        #endregion Fields
+
+        #region Constructors
+
+        public InstrumentService(IDbContextFactory<LabDbEntities> dbContextFactory,
+                            IEventAggregator aggregator)
         {
             _eventAggregator = aggregator;
-            _container = container;
-
+            _dbContextFactory = dbContextFactory;
         }
 
+        #endregion Constructors
+
+        #region Methods
 
         public void AddCalibrationFiles(IEnumerable<CalibrationFiles> fileList)
         {
             // inserts a set of CalibrationFiles entries in the DB
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = _dbContextFactory.Create())
             {
                 entities.CalibrationFiles.AddRange(fileList);
                 entities.SaveChanges();
             }
         }
 
+        public Instrument CreateInstrument()
+        {
+            Views.InstrumentCreationDialog creationDialog = new Views.InstrumentCreationDialog();
+            if (creationDialog.ShowDialog() == true)
+            {
+                _eventAggregator.GetEvent<InstrumentListUpdateRequested>().Publish();
+                return creationDialog.InstrumentInstance;
+            }
+            else
+                return null;
+        }
+
         public IEnumerable<Instrument> GetCalibrationCalendar()
         {
             // Returns a list of the instruments under control, ordered by due calibration date
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = _dbContextFactory.Create())
             {
                 entities.Configuration.LazyLoadingEnabled = false;
 
@@ -55,12 +71,11 @@ namespace Instruments
             }
         }
 
-
         public IEnumerable<CalibrationResult> GetCalibrationResults()
         {
             // Returns all CalibrationResult entities
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = _dbContextFactory.Create())
             {
                 entities.Configuration.LazyLoadingEnabled = false;
 
@@ -74,9 +89,9 @@ namespace Instruments
         /// </summary>
         /// <param name="year">The year on which the query is performed</param>
         /// <returns>The first unused calibration number</returns>
-        public static int GetNextCalibrationNumber(int year)
+        public int GetNextCalibrationNumber(int year)
         {
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = _dbContextFactory.Create())
             {
                 try
                 {
@@ -90,7 +105,6 @@ namespace Instruments
                 }
             }
         }
-
 
         public CalibrationReport ShowNewCalibrationDialog(Instrument target)
         {
@@ -125,21 +139,10 @@ namespace Instruments
             {
                 return maintenanceEventCreationDialog.InstrumentEventInstance;
             }
-
             else
                 return null;
         }
 
-        public Instrument CreateInstrument()
-        {
-            Views.InstrumentCreationDialog creationDialog = _container.Resolve<Views.InstrumentCreationDialog>();
-            if (creationDialog.ShowDialog() == true)
-            {
-                _eventAggregator.GetEvent<InstrumentListUpdateRequested>().Publish();
-                return creationDialog.InstrumentInstance;
-            }
-            else
-                return null;
-        }
+        #endregion Methods
     }
 }

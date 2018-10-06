@@ -1,9 +1,13 @@
-﻿using DBManager;
-using DBManager.EntityExtensions;
-using DBManager.Services;
+﻿using Controls.Views;
+using DataAccess;
 using Infrastructure;
+using Infrastructure.Commands;
 using Infrastructure.Events;
+using Infrastructure.Queries;
 using Infrastructure.Wrappers;
+using LabDbContext;
+using LabDbContext.EntityExtensions;
+using LabDbContext.Services;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
@@ -12,33 +16,36 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using System.Windows;
 
 namespace Specifications.ViewModels
 {
     public class SpecificationVersionEditViewModel : BindableBase, INotifyDataErrorInfo
     {
-        private bool _editMode;
-        private DBPrincipal _principal;
-        private readonly Dictionary<string, ICollection<string>> _validationErrors = new Dictionary<string, ICollection<string>>();
-        private EventAggregator _eventAggregator;
-        private readonly IDataService _dataService;
+        #region Fields
+
         private readonly ISpecificationService _specificationService;
+        private readonly Dictionary<string, ICollection<string>> _validationErrors = new Dictionary<string, ICollection<string>>();
+        private bool _editMode;
+        private IDataService<LabDbEntities> _labDbData;
+        private IEventAggregator _eventAggregator;
         private List<RequirementWrapper> _requirementList;
         private SpecificationVersion _specificationVersionInstance;
 
-        public SpecificationVersionEditViewModel(DBPrincipal principal,
-                                                EventAggregator eventAggregator,
-                                                IDataService dataService,
+        #endregion Fields
+
+        #region Constructors
+
+        public SpecificationVersionEditViewModel(IDataService<LabDbEntities> labDbData,
+                                                IEventAggregator eventAggregator,
                                                 ISpecificationService specificationService)
         {
-            _dataService = dataService;
             _specificationService = specificationService;
             _editMode = false;
             _eventAggregator = eventAggregator;
-            _principal = principal;
+            _labDbData = labDbData;
+
 
             DeleteRequirementCommand = new DelegateCommand<Requirement>(
                 req =>
@@ -62,7 +69,6 @@ namespace Specifications.ViewModels
 
                     if (_specificationVersionInstance.IsMain)
                         _specificationService.UpdateRequirements(_requirementList.Select(req => req.RequirementInstance));
-
                     else
                         _specificationService.UpdateRequirements(_requirementList.Where(req => req.IsOverride)
                                                                                 .Select(req => req.RequirementInstance));
@@ -78,7 +84,6 @@ namespace Specifications.ViewModels
                     EditMode = true;
                 },
                 () => CanEdit && !_editMode);
-            
 
             StartTestListEditCommand = new DelegateCommand(
                 () =>
@@ -90,8 +95,8 @@ namespace Specifications.ViewModels
                     _eventAggregator.GetEvent<NavigationRequested>()
                                     .Publish(token);
                 },
-                () => _principal.IsInRole(UserRoleNames.SpecificationEdit));
-            
+                () => Thread.CurrentPrincipal.IsInRole(UserRoleNames.SpecificationEdit));
+
             _eventAggregator.GetEvent<SpecificationMethodListChanged>()
                             .Subscribe(
                 spc =>
@@ -104,21 +109,23 @@ namespace Specifications.ViewModels
                 });
         }
 
+        #endregion Constructors
+
         #region Commands
 
         public DelegateCommand<Requirement> DeleteRequirementCommand { get; }
 
-        public DelegateCommand StartEditCommand { get; }
-
         public DelegateCommand SaveCommand { get; }
-
+        public DelegateCommand StartEditCommand { get; }
         public DelegateCommand StartTestListEditCommand { get; }
 
-        #endregion
+        #endregion Commands
 
         #region INotifyDataErrorInfo interface elements
 
         public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
+
+        public bool HasErrors => _validationErrors.Count > 0;
 
         public IEnumerable GetErrors(string propertyName)
         {
@@ -129,35 +136,15 @@ namespace Specifications.ViewModels
             return _validationErrors[propertyName];
         }
 
-        public bool HasErrors
-        {
-            get { return _validationErrors.Count > 0; }
-        }
-
         private void RaiseErrorsChanged(string propertyName)
         {
             ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
             SaveCommand.RaiseCanExecuteChanged();
         }
 
-        #endregion
+        #endregion INotifyDataErrorInfo interface elements
 
-        private bool CanEdit
-        {
-            get { return _principal.IsInRole(UserRoleNames.SpecificationEdit); }
-        }
-
-
-        private void GenerateRequirementList()
-        {
-            if (_specificationVersionInstance == null)
-                _requirementList = new List<RequirementWrapper>();
-
-            else
-                _requirementList = new List<RequirementWrapper>(_specificationVersionInstance.GenerateRequirementList()
-                                                                                            .Select(req => new RequirementWrapper(req, _specificationVersionInstance, _dataService))
-                                                                                            .ToList());
-        }
+        #region Properties
 
         public bool EditMode
         {
@@ -179,17 +166,13 @@ namespace Specifications.ViewModels
             {
                 if (_specificationVersionInstance == null)
                     return Visibility.Collapsed;
-
                 else
-                    return (_editMode && !_specificationVersionInstance.IsMain) 
+                    return (_editMode && !_specificationVersionInstance.IsMain)
                         ? Visibility.Visible : Visibility.Collapsed;
             }
         }
 
-        public IEnumerable<RequirementWrapper> RequirementList
-        {
-            get { return _requirementList; }
-        }
+        public IEnumerable<RequirementWrapper> RequirementList => _requirementList;
 
         public bool SelectedVersionIsNotMain
         {
@@ -202,6 +185,7 @@ namespace Specifications.ViewModels
             }
         }
 
+        public Visibility SpecificationVersionEditViewVisibility => (_specificationVersionInstance != null) ? Visibility.Visible : Visibility.Hidden;
 
         public SpecificationVersion SpecificationVersionInstance
         {
@@ -211,20 +195,12 @@ namespace Specifications.ViewModels
                 EditMode = false;
 
                 _specificationVersionInstance = value;
-                
+
                 GenerateRequirementList();
 
                 RaisePropertyChanged("RequirementList");
                 RaisePropertyChanged("SpecificationVersionEditViewVisibility");
                 RaisePropertyChanged("SpecificationVersionName");
-            }
-        }
-
-        public Visibility SpecificationVersionEditViewVisibility
-        {
-            get
-            {
-                return (_specificationVersionInstance != null) ? Visibility.Visible : Visibility.Hidden;
             }
         }
 
@@ -238,7 +214,6 @@ namespace Specifications.ViewModels
             set
             {
                 _specificationVersionInstance.Name = value;
-                
 
                 if (!string.IsNullOrEmpty(_specificationVersionInstance?.Name))
                 {
@@ -248,7 +223,6 @@ namespace Specifications.ViewModels
                         RaiseErrorsChanged("SpecificationVersionName");
                     }
                 }
-
                 else
                 {
                     _validationErrors["SpecificationVersionName"] = new List<string>() { "Nome non valido" };
@@ -257,5 +231,74 @@ namespace Specifications.ViewModels
             }
         }
 
+        private bool CanEdit => Thread.CurrentPrincipal.IsInRole(UserRoleNames.SpecificationEdit);
+
+        #endregion Properties
+
+        #region Methods
+
+        private void GenerateRequirementList()
+        {
+            if (_specificationVersionInstance == null)
+                _requirementList = new List<RequirementWrapper>();
+            else
+                _requirementList = new List<RequirementWrapper>(_specificationVersionInstance.GenerateRequirementList()
+                                                                                            .Select(req => new RequirementWrapper(req))
+                                                                                            .ToList());
+            SetRequirementListOnIsOverrideChanged();
+        }
+
+        private void SetRequirementListOnIsOverrideChanged()
+        {
+            if (_requirementList == null)
+                return;
+
+            foreach (RequirementWrapper rwr in _requirementList)
+                rwr.IsOverrideChanged += OnIsOverrideChanged;
+        }
+
+        private void OnIsOverrideChanged(object sender, IsOverrideChangedEventArgs e)
+        {
+            if (e.IsOverride)
+                AddOverride(sender as RequirementWrapper);
+
+            else
+                RemoveOverride(sender as RequirementWrapper);
+        }
+
+        public void AddOverride(RequirementWrapper wrapper)
+        {
+            Requirement newOverride = new Requirement
+            {
+                Description = wrapper.RequirementInstance.Description,
+                IsOverride = true,
+                MethodVariantID = wrapper.RequirementInstance.MethodVariantID,
+                OverriddenID = wrapper.RequirementInstance.ID,
+                SpecificationVersionID = SpecificationVersionInstance.ID
+            };
+
+            foreach (SubRequirement subReq in wrapper.RequirementInstance.SubRequirements)
+            {
+                SubRequirement tempSub = new SubRequirement
+                {
+                    SubMethodID = subReq.SubMethodID,
+                    RequiredValue = subReq.RequiredValue
+                };
+
+                newOverride.SubRequirements.Add(tempSub);
+            }
+
+            _labDbData.Execute(new InsertEntityCommand(newOverride));
+            wrapper.RequirementInstance = newOverride;
+        }
+
+        private void RemoveOverride(RequirementWrapper wrapper)
+        {
+            int overrID = (int)wrapper.RequirementInstance.OverriddenID;
+            _labDbData.Execute(new DeleteEntityCommand(wrapper.RequirementInstance));
+            wrapper.RequirementInstance = _labDbData.RunQuery(new RequirementsQuery() { OrderResults = false, EagerLoadingEnabled = false } )
+                                                    .FirstOrDefault(req => req.ID == overrID);
+        }
+        #endregion Methods
     }
 }

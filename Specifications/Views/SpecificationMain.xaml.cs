@@ -1,20 +1,6 @@
 ﻿using Microsoft.Practices.Prism.Mvvm;
-using Microsoft.Practices.Unity;
-using Prism.Events;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+using Prism.Regions;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Specifications.Views
 {
@@ -23,9 +9,13 @@ namespace Specifications.Views
     /// </summary>
     public partial class SpecificationMain : UserControl, IView
     {
-        public SpecificationMain()
+        #region Constructors
+
+        public SpecificationMain(IRegionManager regionManager)
         {
             InitializeComponent();
         }
+
+        #endregion Constructors
     }
 }

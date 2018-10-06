@@ -1,66 +1,39 @@
-﻿using DBManager;
-using Prism.Commands;
+﻿using Prism.Commands;
 using Prism.Mvvm;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace Controls.ViewModels
 {
     public class MaterialCreationDialogViewModel : BindableBase
     {
-        private DelegateCommand<Window> _confirmCreation;
-        private string _aspect, _line, _recipe, _type;
+        #region Constructors
 
-        public MaterialCreationDialogViewModel() 
+        public MaterialCreationDialogViewModel()
             : base()
         {
-            _confirmCreation = new DelegateCommand<Window>(
-                parent => {
+            ConfirmCreationCommand = new DelegateCommand<Window>(
+                parent =>
+                {
                     parent.DialogResult = true;
                 },
                 parent => IsValidInput);
         }
 
-        public string Aspect
-        {
-            get { return _aspect; }
-            set { _aspect = value; }
-        }
+        #endregion Constructors
 
-        public DelegateCommand<Window> ConfirmCreationCommand
-        {
-            get { return _confirmCreation; }
-        }
+        #region Properties
 
+        public string Aspect { get; set; }
 
-        private bool IsValidInput
-        {
-            get
-            {
-                return true;
-            }
-        }
+        public DelegateCommand<Window> ConfirmCreationCommand { get; }
 
-        public string Line
-        {
-            get { return _line; }
-            set { _line = value; }
-        }
+        public string Line { get; set; }
+        public string Recipe { get; set; }
 
-        public string Recipe
-        {
-            get { return _recipe; }
-            set { _recipe = value; }
-        }
+        public string Type { get; set; }
 
-        public string Type
-        {
-            get { return _type; }
-            set { _type = value; }
-        }
+        private bool IsValidInput => true;
+
+        #endregion Properties
     }
 }

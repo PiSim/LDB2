@@ -1,20 +1,23 @@
 ﻿using Prism.Commands;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Materials.ViewModels
 {
-    class BatchesNavigationItemViewModel : Prism.Mvvm.BindableBase
+    internal class BatchesNavigationItemViewModel : Prism.Mvvm.BindableBase
     {
+        #region Fields
+
         private DelegateCommand _onSelected;
+
+        #endregion Fields
+
+        #region Constructors
 
         public BatchesNavigationItemViewModel() : base()
         {
             _onSelected = new DelegateCommand(
                 () => { });
         }
+
+        #endregion Constructors
     }
 }

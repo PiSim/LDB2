@@ -1,39 +1,42 @@
-﻿using DBManager;
-using DBManager.EntityExtensions;
-using DBManager.Services;
-using Infrastructure;
+﻿using Controls.Views;
+using DataAccess;
+using LabDbContext;
+using LabDbContext.EntityExtensions;
+using Materials.Queries;
 using Prism.Events;
 using Prism.Mvvm;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Materials.ViewModels
 {
     public class MaterialDetailViewModel : BindableBase
     {
-        private Material _materialInstance;
-        private EventAggregator _eventAggregator;
+        #region Fields
 
-        public MaterialDetailViewModel(EventAggregator eventAggregator) : base()
+        private IDataService<LabDbEntities> _labDbData;
+        private IEventAggregator _eventAggregator;
+        private Material _materialInstance;
+
+        #endregion Fields
+
+        #region Constructors
+
+        public MaterialDetailViewModel(IDataService<LabDbEntities> labDbData, IEventAggregator eventAggregator) : base()
         {
             _eventAggregator = eventAggregator;
+            _labDbData = labDbData;
         }
 
-        public IEnumerable<Batch> BatchList
-        {
-            get
-            {
-                return _materialInstance.GetBatches();
-            }
-        }
+        #endregion Constructors
 
-        public string MaterialBatchListRegionName
-        {
-            get { return RegionNames.MaterialDetailBatchListRegion; }
-        }
+        #region Properties
+
+        public IEnumerable<Batch> BatchList => (_materialInstance == null) ? null : _labDbData.RunQuery(new BatchesQuery() { })
+                                                                                            .Where(btc => btc.MaterialID == _materialInstance.ID)
+                                                                                            .ToList();
+
+        public string MaterialBatchListRegionName => RegionNames.MaterialDetailBatchListRegion;
 
         public Material MaterialInstance
         {
@@ -46,5 +49,7 @@ namespace Materials.ViewModels
                 RaisePropertyChanged("BatchList");
             }
         }
+
+        #endregion Properties
     }
 }

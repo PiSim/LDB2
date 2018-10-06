@@ -1,6 +1,6 @@
-﻿using DBManager;
-using DBManager.Services;
-using Infrastructure;
+﻿using DataAccess;
+using Infrastructure.Queries;
+using LabDbContext;
 using Prism.Commands;
 using Prism.Mvvm;
 using System;
@@ -8,44 +8,46 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace Projects.ViewModels
 {
     public class ProjectCreationDialogViewModel : BindableBase, INotifyDataErrorInfo
     {
-        private DelegateCommand<Window> _cancel, _confirm;
-        private readonly Dictionary<string, ICollection<string>> _validationErrors = new Dictionary<string, ICollection<string>>();
-        private IDataService _dataService;
-        private Organization _selectedOem;
-        private Person _selectedLeader;
-        private Project _projectInstance;
-        private string _description, _name;
-        
-        public ProjectCreationDialogViewModel(IDataService dataService) : base()
-        {
-            _dataService = dataService;
-            _description = "";
+        #region Fields
 
-            _cancel = new DelegateCommand<Window>(
+        private readonly Dictionary<string, ICollection<string>> _validationErrors = new Dictionary<string, ICollection<string>>();
+        private IDataService<LabDbEntities> _labDbData;
+        private string _name;
+        private Person _selectedLeader;
+        private Organization _selectedOem;
+
+        #endregion Fields
+
+        #region Constructors
+
+        public ProjectCreationDialogViewModel(IDataService<LabDbEntities> labDbData) : base()
+        {
+            _labDbData = labDbData;
+            ProjectDescription = "";
+
+            CancelCommand = new DelegateCommand<Window>(
                 parent =>
                 {
                     parent.DialogResult = false;
                 });
 
-            _confirm = new DelegateCommand<Window>(
+            ConfirmCommand = new DelegateCommand<Window>(
                 parent =>
                 {
-                    _projectInstance = new Project();
-                    _projectInstance.Description = _description;
-                    _projectInstance.ProjectLeaderID = _selectedLeader.ID;
-                    _projectInstance.Name = _name;
-                    _projectInstance.OemID = _selectedOem.ID;
+                    ProjectInstance = new Project();
+                    ProjectInstance.Description = ProjectDescription;
+                    ProjectInstance.ProjectLeaderID = _selectedLeader.ID;
+                    ProjectInstance.Name = _name;
+                    ProjectInstance.OemID = _selectedOem.ID;
 
-                    _projectInstance.Create();
-                    
+                    ProjectInstance.Create();
+
                     parent.DialogResult = true;
                 },
                 parent => !HasErrors);
@@ -55,9 +57,13 @@ namespace Projects.ViewModels
             SelectedOem = null;
         }
 
+        #endregion Constructors
+
         #region INotifyDataErrorInfo interface elements
 
         public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
+
+        public bool HasErrors => _validationErrors.Count > 0;
 
         public IEnumerable GetErrors(string propertyName)
         {
@@ -68,46 +74,29 @@ namespace Projects.ViewModels
             return _validationErrors[propertyName];
         }
 
-        public bool HasErrors
-        {
-            get { return _validationErrors.Count > 0; }
-        }
-
         private void RaiseErrorsChanged(string propertyName)
         {
             ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
-            _confirm.RaiseCanExecuteChanged();
+            ConfirmCommand.RaiseCanExecuteChanged();
         }
 
-        #endregion
+        #endregion INotifyDataErrorInfo interface elements
 
-        public DelegateCommand<Window> CancelCommand
-        {
-            get { return _cancel; }
-        }
+        #region Properties
 
-        public DelegateCommand<Window> ConfirmCommand
-        {
-            get { return _confirm; }
-        }
+        public DelegateCommand<Window> CancelCommand { get; }
 
-        public IEnumerable<Person> LeaderList => _dataService.GetPeople(PersonRoleNames.ProjectLeader);
+        public DelegateCommand<Window> ConfirmCommand { get; }
 
-        public IEnumerable<Organization> OemList => _dataService.GetOrganizations(OrganizationRoleNames.OEM);
+        public IEnumerable<Person> LeaderList => _labDbData.RunQuery(new PeopleQuery() { Role = PeopleQuery.PersonRoles.ProjectLeader })
+                                                            .ToList();
 
-        public string ProjectDescription
-        {
-            get { return _description; }
-            set
-            {
-                _description = value;
-            }
-        }
+        public IEnumerable<Organization> OemList => _labDbData.RunQuery(new OrganizationsQuery() { Role = OrganizationsQuery.OrganizationRoles.OEM })
+                                                                        .ToList();
 
-        public Project ProjectInstance
-        {
-            get { return _projectInstance; }
-        }
+        public string ProjectDescription { get; set; }
+
+        public Project ProjectInstance { get; private set; }
 
         public string ProjectName
         {
@@ -115,7 +104,7 @@ namespace Projects.ViewModels
             set
             {
                 _name = value;
-                if (!string.IsNullOrEmpty(_name) && DBManager.Services.ProjectService.GetProject(_name) == null)
+                if (!string.IsNullOrEmpty(_name) && !_labDbData.RunQuery(new ProjectsQuery() { IncludeCollections = false }).Any(prj => prj.Name == _name))
                 {
                     if (_validationErrors.ContainsKey("ProjectName"))
                     {
@@ -174,5 +163,7 @@ namespace Projects.ViewModels
                 }
             }
         }
+
+        #endregion Properties
     }
 }

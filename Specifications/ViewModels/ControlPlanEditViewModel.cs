@@ -1,53 +1,52 @@
-﻿using DBManager;
-using DBManager.Services;
-using Infrastructure;
-using Infrastructure.Events;
+﻿using Infrastructure;
+using LabDbContext;
 using Prism.Commands;
-using Prism.Events;
 using Prism.Mvvm;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 
 namespace Specifications.ViewModels
 {
     public class ControlPlanEditViewModel : BindableBase
     {
+        #region Fields
+
+        private ControlPlan _controlPlanInstance;
 
         private bool _editMode,
-                    _hasCredentials;
-        private ControlPlan _controlPlanInstance;
-        private DBPrincipal _principal;
-        private DelegateCommand _save,
-                                _startEdit;
-        private IEnumerable<ControlPlanItem> _controlPlanItemsList;
+                            _hasCredentials;
 
-        public ControlPlanEditViewModel(DBPrincipal principal)
+        #endregion Fields
+
+        #region Constructors
+
+        public ControlPlanEditViewModel()
         {
-            _principal = principal;
-            _hasCredentials = _principal.IsInRole(UserRoleNames.SpecificationEdit);
+            _hasCredentials = Thread.CurrentPrincipal.IsInRole(UserRoleNames.SpecificationEdit);
 
-            _save = new DelegateCommand(
+            SaveCommand = new DelegateCommand(
                 () =>
                 {
-                    _controlPlanInstance.control_plan_items_b = _controlPlanItemsList as ICollection<ControlPlanItem>;
+                    _controlPlanInstance.control_plan_items_b = ControlPlanItemsList as ICollection<ControlPlanItem>;
                     _controlPlanInstance.Update();
                     EditMode = false;
                 },
                 () => _hasCredentials && EditMode);
 
-            _startEdit = new DelegateCommand(
+            StartEditCommand = new DelegateCommand(
                 () =>
                 {
                     EditMode = true;
                 },
                 () => _hasCredentials &&
                         _controlPlanInstance != null &&
-                        !_controlPlanInstance.IsDefault && 
-                        !EditMode );
+                        !_controlPlanInstance.IsDefault &&
+                        !EditMode);
         }
+
+        #endregion Constructors
+
+        #region Properties
 
         public ControlPlan ControlPlanInstance
         {
@@ -60,18 +59,15 @@ namespace Specifications.ViewModels
 
                 EditMode = false;
 
-                _controlPlanItemsList = (value == null) ? new List<ControlPlanItem>() :
+                ControlPlanItemsList = (value == null) ? new List<ControlPlanItem>() :
                                                             _controlPlanInstance.GetControlPlanItems(true);
 
                 RaisePropertyChanged("Name");
                 RaisePropertyChanged("ControlPlanItemsList");
             }
         }
-        
-        public IEnumerable<ControlPlanItem> ControlPlanItemsList
-        {
-            get { return _controlPlanItemsList; }
-        }
+
+        public IEnumerable<ControlPlanItem> ControlPlanItemsList { get; private set; }
 
         public bool EditMode
         {
@@ -80,11 +76,11 @@ namespace Specifications.ViewModels
             {
                 _editMode = value;
                 RaisePropertyChanged("EditMode");
-                _save.RaiseCanExecuteChanged();
-                _startEdit.RaiseCanExecuteChanged();
+                SaveCommand.RaiseCanExecuteChanged();
+                StartEditCommand.RaiseCanExecuteChanged();
             }
         }
-        
+
         public string Name
         {
             get { return _controlPlanInstance?.Name; }
@@ -93,15 +89,11 @@ namespace Specifications.ViewModels
                 _controlPlanInstance.Name = value;
             }
         }
-        
-        public DelegateCommand SaveCommand
-        {
-            get { return _save; }
-        }
 
-        public DelegateCommand StartEditCommand
-        {
-            get { return _startEdit; }
-        }
+        public DelegateCommand SaveCommand { get; }
+
+        public DelegateCommand StartEditCommand { get; }
+
+        #endregion Properties
     }
 }

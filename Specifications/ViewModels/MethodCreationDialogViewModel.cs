@@ -1,8 +1,11 @@
-﻿using DBManager;
-using DBManager.EntityExtensions;
-using DBManager.Services;
+﻿using DataAccess;
+using Infrastructure.Queries;
+using LabDbContext;
+using LabDbContext.EntityExtensions;
+using LabDbContext.Services;
 using Prism.Commands;
 using Prism.Mvvm;
+using Specifications.Queries;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -10,26 +13,31 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace Specifications.ViewModels
 {
     internal class MethodCreationDialogViewModel : BindableBase, INotifyDataErrorInfo
     {
+        #region Fields
+
         private readonly Dictionary<string, ICollection<string>> _validationErrors = new Dictionary<string, ICollection<string>>();
-        private IDataService _dataService;
+        private IDataService<LabDbEntities> _labDbData;
+        private string _name;
         private Organization _selectedOem;
         private Property _selectedProperty;
         private Std _standardInstance;
-        private string _name;
 
-        public MethodCreationDialogViewModel(IDataService dataService) : base()
+        #endregion Fields
+
+        #region Constructors
+
+        public MethodCreationDialogViewModel(IDataService<LabDbEntities> labDbdata) : base()
         {
-            _dataService = dataService;
-            OemList = _dataService.GetOrganizations(OrganizationRoleNames.StandardPublisher);
-            PropertiesList = _dataService.GetProperties();
+            _labDbData = labDbdata;
+            OemList = _labDbData.RunQuery(new OrganizationsQuery() { Role = OrganizationsQuery.OrganizationRoles.StandardPublisher })
+                                                                        .ToList(); ;
+            PropertiesList = _labDbData.RunQuery(new PropertiesQuery()).ToList();
 
             CancelCommand = new DelegateCommand<Window>(
                 parent =>
@@ -61,15 +69,13 @@ namespace Specifications.ViewModels
 
                         MethodInstance.Standard = _standardInstance;
                     }
-
                     else
                     {
                         if (_selectedOem.ID != _standardInstance.OrganizationID)
                         {
                             _standardInstance.OrganizationID = _selectedOem.ID;
                             _standardInstance.Update();
-                        } 
-
+                        }
 
                         MethodInstance.StandardID = _standardInstance.ID;
                     }
@@ -101,12 +107,15 @@ namespace Specifications.ViewModels
             WorkHours = 0;
 
             SubMethodList.CollectionChanged += OnSubMethodListChanged;
-
         }
+
+        #endregion Constructors
 
         #region INotifyDataErrorInfo interface elements
 
         public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
+
+        public bool HasErrors => _validationErrors.Count > 0;
 
         public IEnumerable GetErrors(string propertyName)
         {
@@ -117,18 +126,13 @@ namespace Specifications.ViewModels
             return _validationErrors[propertyName];
         }
 
-        public bool HasErrors
-        {
-            get { return _validationErrors.Count > 0; }
-        }
-
         private void RaiseErrorsChanged(string propertyName)
         {
             ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
             ConfirmCommand.RaiseCanExecuteChanged();
         }
 
-        #endregion
+        #endregion INotifyDataErrorInfo interface elements
 
         #region Methods
 
@@ -146,7 +150,9 @@ namespace Specifications.ViewModels
             RaiseErrorsChanged("SubMethodList");
         }
 
-        #endregion
+        #endregion Methods
+
+        #region Properties
 
         public DelegateCommand AddSubMethodCommand { get; }
 
@@ -165,11 +171,10 @@ namespace Specifications.ViewModels
             {
                 _name = value;
 
-                _standardInstance = _dataService.GetStandard(_name);
+                _standardInstance = _labDbData.RunQuery(new StandardQuery() { Name = _name });
 
                 if (_standardInstance != null)
                     SelectedOem = OemList.FirstOrDefault(oem => oem.ID == _standardInstance.OrganizationID);
-
 
                 if (!string.IsNullOrEmpty(_name))
                 {
@@ -184,7 +189,7 @@ namespace Specifications.ViewModels
         }
 
         public IEnumerable<Organization> OemList { get; }
-        
+
         public IEnumerable<Property> PropertiesList { get; }
 
         public DelegateCommand<SubMethod> RemoveSubMethodCommand { get; }
@@ -198,7 +203,7 @@ namespace Specifications.ViewModels
 
                 if (_selectedOem != null)
                 {
-                        if (_validationErrors.ContainsKey("SelectedOem"))
+                    if (_validationErrors.ContainsKey("SelectedOem"))
                         _validationErrors.Remove("SelectedOem");
                 }
                 else
@@ -206,10 +211,9 @@ namespace Specifications.ViewModels
 
                 RaisePropertyChanged("SelectedOem");
                 RaiseErrorsChanged("SelectedOem");
-                
             }
         }
-        
+
         public Property SelectedProperty
         {
             get { return _selectedProperty; }
@@ -234,5 +238,7 @@ namespace Specifications.ViewModels
         public ObservableCollection<SubMethod> SubMethodList { get; private set; }
 
         public double WorkHours { get; set; }
+
+        #endregion Properties
     }
 }

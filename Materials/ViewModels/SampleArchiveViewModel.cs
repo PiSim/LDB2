@@ -1,33 +1,35 @@
-﻿using DBManager;
-using DBManager.EntityExtensions;
-using DBManager.Services;
+﻿using DataAccess;
 using Infrastructure;
 using Infrastructure.Events;
+using LabDbContext;
+using Materials.Queries;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Controls;
 
 namespace Materials.ViewModels
 {
     public class SampleArchiveViewModel : BindableBase
     {
-        private DelegateCommand<DataGrid> _openBatch;
-        private EventAggregator _eventAggregator;
-        private IDataService _dataService;
+        #region Fields
 
-        public SampleArchiveViewModel(EventAggregator eventAggregator,
-                                        IDataService dataService) : base()
+        private IEventAggregator _eventAggregator;
+        private IDataService<LabDbEntities> _labDbData;
+
+        #endregion Fields
+
+        #region Constructors
+
+        public SampleArchiveViewModel(IEventAggregator eventAggregator,
+                                        IDataService<LabDbEntities> labDbData) : base()
         {
-            _dataService = dataService;
+            _labDbData = labDbData;
             _eventAggregator = eventAggregator;
 
-            _openBatch = new DelegateCommand<DataGrid>(
+            OpenBatchCommand = new DelegateCommand<DataGrid>(
                 grid =>
                 {
                     Batch btc = grid.SelectedItem as Batch;
@@ -37,7 +39,6 @@ namespace Materials.ViewModels
                     _eventAggregator.GetEvent<NavigationRequested>()
                                     .Publish(token);
                 });
-
 
             _eventAggregator.GetEvent<SampleLogCreated>()
                 .Subscribe(
@@ -54,12 +55,15 @@ namespace Materials.ViewModels
                             });
         }
 
+        #endregion Constructors
 
-        public IEnumerable<Batch> BatchList => _dataService.GetArchive();
+        #region Properties
 
-        public DelegateCommand<DataGrid> OpenBatchCommand
-        {
-            get { return _openBatch; }
-        }
+        public IEnumerable<Batch> BatchList => _labDbData.RunQuery(new SampleArchiveQuery())
+                                                        .ToList();
+
+        public DelegateCommand<DataGrid> OpenBatchCommand { get; }
+
+        #endregion Properties
     }
 }

@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows.Input;
 using System.Reflection;
 using System.Windows;
+using System.Windows.Input;
 
 namespace Controls.Behaviours
 {
@@ -14,34 +11,42 @@ namespace Controls.Behaviours
     public class CommandBehaviorBinding : IDisposable
     {
         #region Properties
-        /// <summary>
-        /// Get the owner of the CommandBinding ex: a Button
-        /// This property can only be set from the BindEvent Method
-        /// </summary>
-        public DependencyObject Owner { get; private set; }
+
         /// <summary>
         /// The command to execute when the specified event is raised
         /// </summary>
         public ICommand Command { get; set; }
+
         /// <summary>
         /// Gets or sets a CommandParameter
         /// </summary>
         public object CommandParameter { get; set; }
-        /// <summary>
-        /// The event name to hook up to
-        /// This property can only be set from the BindEvent Method
-        /// </summary>
-        public string EventName { get; private set; }
+
         /// <summary>
         /// The event info of the event
         /// </summary>
         public EventInfo Event { get; private set; }
+
         /// <summary>
         /// Gets the EventHandler for the binding with the event
         /// </summary>
         public Delegate EventHandler { get; private set; }
 
-        #endregion
+        /// <summary>
+        /// The event name to hook up to
+        /// This property can only be set from the BindEvent Method
+        /// </summary>
+        public string EventName { get; private set; }
+
+        /// <summary>
+        /// Get the owner of the CommandBinding ex: a Button
+        /// This property can only be set from the BindEvent Method
+        /// </summary>
+        public DependencyObject Owner { get; private set; }
+
+        #endregion Properties
+
+        #region Methods
 
         //Creates an EventHandler on runtime and registers that handler to the Event specified
         public void BindEvent(DependencyObject owner, string eventName)
@@ -68,8 +73,12 @@ namespace Controls.Behaviours
                 Command.Execute(CommandParameter);
         }
 
+        #endregion Methods
+
         #region IDisposable Members
-        bool disposed = false;
+
+        private bool disposed = false;
+
         /// <summary>
         /// Unregisters the EventHandler from the Event
         /// </summary>
@@ -82,6 +91,6 @@ namespace Controls.Behaviours
             }
         }
 
-        #endregion
+        #endregion IDisposable Members
     }
 }

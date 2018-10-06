@@ -8,15 +8,15 @@
            CellSpacing="0">
         <Table.Columns>
             <TableColumn />
-            <TableColumn/>
-            <TableColumn/>
+            <TableColumn />
+            <TableColumn />
         </Table.Columns>
         <TableRowGroup>
             <TableRow>
                 <TableCell RowSpan="2">
                     <Paragraph>
                         <Image Source="{StaticResource ResourceKey=VulcaLogo}"
-                               Margin="5"/>
+                               Margin="5" />
                     </Paragraph>
                 </TableCell>
                 <TableCell RowSpan="2">
@@ -30,12 +30,12 @@
                         </TextBlock>
                     </Paragraph>
                 </TableCell>
-                <TableCell >
+                <TableCell>
                     <Paragraph>
                         <TextBlock Text="TEST REPORT N°:"
-                                   Margin="5"/>
+                                   Margin="5" />
                         <TextBlock Text="{Binding Number}"
-                                   Margin="5"/>
+                                   Margin="5" />
                     </Paragraph>
                 </TableCell>
             </TableRow>
@@ -46,9 +46,9 @@
                         <TextBlock>
                             OEM:
                         </TextBlock>
-                        <TextBlock Text="{Binding Batch.Material.Project.Organization.Name}"/>
+                        <TextBlock Text="{Binding Batch.Material.Project.Organization.Name}" />
                     </Paragraph>
-                </TableCell>               
+                </TableCell>
             </TableRow>
 
             <TableRow>
@@ -63,7 +63,7 @@
                     <Paragraph>
                         <TextBlock Text="{Binding Batch.Number}"
                                    HorizontalAlignment="Right"
-                                   VerticalAlignment="Center"/>
+                                   VerticalAlignment="Center" />
                     </Paragraph>
                 </TableCell>
                 <TableCell BorderThickness="1"
@@ -77,7 +77,7 @@
                         </TextBlock>
                         <TextBlock Text="{Binding Batch.Material.Project.Name}"
                                    HorizontalAlignment="Right"
-                                   VerticalAlignment="Center"/>
+                                   VerticalAlignment="Center" />
                     </Paragraph>
                 </TableCell>
                 <TableCell BorderThickness="1"
@@ -97,8 +97,8 @@
                     <Paragraph>
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
+                                <ColumnDefinition />
+                                <ColumnDefinition />
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0"
                                        HorizontalAlignment="Left"
@@ -111,19 +111,17 @@
                                         HorizontalAlignment="Right"
                                         VerticalAlignment="Center"
                                         Margin="5">
-                                <TextBlock Text="{Binding Batch.Material.MaterialType.Code}"/>
-                                <TextBlock Text="{Binding Batch.Material.MaterialLine.Code}"/>
-                                <TextBlock Text="{Binding Batch.Material.Aspect.Code}"/>
-                                <TextBlock Text="{Binding Batch.Material.Recipe.Code}"/>
+                                <TextBlock Text="{Binding Batch.Material.MaterialType.Code}" />
+                                <TextBlock Text="{Binding Batch.Material.MaterialLine.Code}" />
+                                <TextBlock Text="{Binding Batch.Material.Aspect.Code}" />
+                                <TextBlock Text="{Binding Batch.Material.Recipe.Code}" />
                             </StackPanel>
                         </Grid>
                     </Paragraph>
                 </TableCell>
-                
             </TableRow>
         </TableRowGroup>
     </Table>
     <Paragraph>
-        
     </Paragraph>
 </FlowDocument>

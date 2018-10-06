@@ -1,18 +1,7 @@
-﻿using Microsoft.Practices.Prism.Mvvm;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using Controls.Views;
+using Microsoft.Practices.Prism.Mvvm;
+using Prism.Regions;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Materials.Views
 {
@@ -21,9 +10,21 @@ namespace Materials.Views
     /// </summary>
     public partial class MaterialInfoMain : UserControl, IView
     {
-        public MaterialInfoMain()
+        #region Constructors
+
+        public MaterialInfoMain(IRegionManager regionManager)
         {
             InitializeComponent();
+            regionManager.RegisterViewWithRegion(RegionNames.MaterialInfoAspectRegion,
+                                                typeof(Views.AspectMain));
+            regionManager.RegisterViewWithRegion(RegionNames.MaterialInfoColourRegion,
+                                                typeof(Views.ColourMain));
+            regionManager.RegisterViewWithRegion(RegionNames.MaterialInfoMaterialRegion,
+                                                typeof(Views.MaterialMain));
+            regionManager.RegisterViewWithRegion(RegionNames.MaterialInfoExternalCostructionRegion,
+                                                typeof(Views.ExternalConstructionMain));
         }
+
+        #endregion Constructors
     }
 }

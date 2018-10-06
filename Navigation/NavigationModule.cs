@@ -16,9 +16,6 @@ namespace Navigation
 
         public void Initialize()
         {
-            _container.RegisterType<NavigationServiceProvider>(new ContainerControlledLifetimeManager());
-
-            _container.Resolve<NavigationServiceProvider>();
         }
     }
 }

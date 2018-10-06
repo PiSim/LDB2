@@ -1,22 +1,24 @@
-﻿using DBManager;
-using System;
-using System.Collections.Generic;
+﻿using LabDbContext;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Admin.Scripts
 {
     public class BuildMethodVersionRequirementReferences : ScriptBase
     {
+        #region Constructors
+
         public BuildMethodVersionRequirementReferences()
         {
             _name = "BuildMethodVersionRequirementReferences";
         }
 
+        #endregion Constructors
+
+        #region Methods
+
         public override void Run()
         {
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 foreach (Test test in entities.Tests.Where(tst => tst.MethodVariantID == null).ToList())
                 {
@@ -26,5 +28,7 @@ namespace Admin.Scripts
                 entities.SaveChanges();
             }
         }
+
+        #endregion Methods
     }
 }

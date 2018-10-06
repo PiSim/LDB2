@@ -1,66 +1,62 @@
-﻿using Microsoft.Practices.Unity;
+﻿using Controls.Views;
 using Infrastructure;
+using Prism.Ioc;
 using Prism.Modularity;
 using Prism.Regions;
 using System;
+
+using System.Threading;
 
 namespace Specifications
 {
     public class SpecificationsModule : IModule
     {
-        IRegionManager _regionManager;
-        IUnityContainer _container;
+        #region Constructors
 
-        public SpecificationsModule(IRegionManager regionManager, IUnityContainer container)
+        public SpecificationsModule()
         {
-            _container = container;
-            _regionManager = regionManager;
         }
 
-        public void Initialize()
+        #endregion Constructors
+
+        #region Methods
+
+        public void OnInitialized(IContainerProvider containerProvider)
         {
-            DBPrincipal principal = _container.Resolve<DBPrincipal>();
-
-            _container.RegisterType<ISpecificationService, SpecificationService>(new ContainerControlledLifetimeManager());
-            _container.Resolve<SpecificationService>();
-
-            _container.RegisterType<Object, Views.AddMethod>(SpecificationViewNames.AddMethod);
-            _container.RegisterType<Object, Views.ControlPlanEdit>(SpecificationViewNames.ControlPlanEdit);
-            _container.RegisterType<Object, Views.MethodEdit>(SpecificationViewNames.MethodEdit);
-            _container.RegisterType<Object, Views.SpecificationEdit>(SpecificationViewNames.SpecificationEdit);
-            _container.RegisterType<Object, Views.SpecificationVersionEdit>(SpecificationViewNames.SpecificationVersionEdit);
-            _container.RegisterType<Object, Views.SpecificationVersionList>(SpecificationViewNames.SpecificationVersionList);
-            _container.RegisterType<Object, Views.StandardEdit>(SpecificationViewNames.StandardEdit);
-            _container.RegisterType<Object, Views.StandardMain>(SpecificationViewNames.StandardMain);
-
-            _container.RegisterType<Views.MethodCreationDialog>();
-            _container.RegisterType<Views.SpecificationCreationDialog>();
-
-            _container.RegisterType<ViewModels.MethodCreationDialogViewModel>();
-            _container.RegisterType<ViewModels.MethodEditViewModel>();
-            _container.RegisterType<ViewModels.MethodMainViewModel>();
-            _container.RegisterType<ViewModels.SpecificationCreationDialogViewModel>();
-            _container.RegisterType<ViewModels.SpecificationMainViewModel>();
-            _container.RegisterType<ViewModels.SpecificationEditViewModel>();
-            _container.RegisterType<ViewModels.SpecificationVersionEditViewModel>();
-           
-
-            _regionManager.RegisterViewWithRegion(RegionNames.MethodEditSpecificationListRegion,
-                                                typeof(Controls.Views.SpecificationList));
-            _regionManager.RegisterViewWithRegion(RegionNames.MethodMainRegion,
-                                                typeof(Views.MethodMain));
-            _regionManager.RegisterViewWithRegion(RegionNames.SpecificationMainRegion,
-                                                typeof(Views.SpecificationMain));
-            _regionManager.RegisterViewWithRegion(RegionNames.SpecificationMainListRegion,
-                                                typeof(Controls.Views.SpecificationList));
-            _regionManager.RegisterViewWithRegion(RegionNames.StandardMainRegion,
-                                                typeof(Views.StandardList));
-
             // ADD Specification tag to navigation Menu if user is authorized
 
-            if (principal.IsInRole(UserRoleNames.SpecificationView))
-                _regionManager.RegisterViewWithRegion(RegionNames.MainNavigationRegion, 
+            IRegionManager regionManager = containerProvider.Resolve<IRegionManager>();
+
+            if (Thread.CurrentPrincipal.IsInRole(UserRoleNames.SpecificationView))
+                regionManager.RegisterViewWithRegion(RegionNames.MainNavigationRegion,
                                                     typeof(Views.SpecificationNavigationItem));
         }
+
+        public void RegisterTypes(IContainerRegistry containerRegistry)
+        {
+            containerRegistry.RegisterSingleton<ISpecificationService, SpecificationService>();
+
+            containerRegistry.Register<Object, Views.AddMethod>(SpecificationViewNames.AddMethod);
+            containerRegistry.Register<Object, Views.ControlPlanEdit>(SpecificationViewNames.ControlPlanEdit);
+            containerRegistry.Register<Object, Views.MethodEdit>(SpecificationViewNames.MethodEdit);
+            containerRegistry.Register<Object, Views.SpecificationEdit>(SpecificationViewNames.SpecificationEdit);
+            containerRegistry.Register<Object, Views.SpecificationVersionEdit>(SpecificationViewNames.SpecificationVersionEdit);
+            containerRegistry.Register<Object, Views.SpecificationVersionList>(SpecificationViewNames.SpecificationVersionList);
+            containerRegistry.Register<Object, Views.StandardEdit>(SpecificationViewNames.StandardEdit);
+            containerRegistry.Register<Object, Views.StandardMain>(SpecificationViewNames.StandardMain);
+
+            containerRegistry.Register<Views.MethodCreationDialog>();
+            containerRegistry.Register<Views.SpecificationCreationDialog>();
+
+            containerRegistry.Register<ViewModels.MethodCreationDialogViewModel>();
+            containerRegistry.Register<ViewModels.MethodEditViewModel>();
+            containerRegistry.Register<ViewModels.MethodMainViewModel>();
+            containerRegistry.Register<ViewModels.SpecificationCreationDialogViewModel>();
+            containerRegistry.Register<ViewModels.SpecificationMainViewModel>();
+            containerRegistry.Register<ViewModels.SpecificationEditViewModel>();
+            containerRegistry.Register<ViewModels.SpecificationVersionEditViewModel>();
+        }
+
+        #endregion Methods
     }
 }

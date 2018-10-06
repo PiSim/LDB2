@@ -1,22 +1,29 @@
-﻿using DBManager;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using LabDbContext;
 
 namespace Infrastructure
 {
     public interface IAdminService
     {
-        Organization CreateNewOrganization();
-        PersonRole CreateNewPersonRole();
-        UserRole CreateNewUserRole();
-        User CreateNewUser();
-        OrganizationRole CreateNewOrganizationRole();
-        MeasurableQuantity CreateNewMeasurableQuantity();
-        Person CreateNewPerson();
+        #region Methods
+
         InstrumentType CreateNewInstrumentType();
+
+        MeasurableQuantity CreateNewMeasurableQuantity();
+
+        Organization CreateNewOrganization();
+
+        OrganizationRole CreateNewOrganizationRole();
+
+        Person CreateNewPerson();
+
+        PersonRole CreateNewPersonRole();
+
         Property CreateNewProperty();
+
+        User CreateNewUser();
+
+        UserRole CreateNewUserRole();
+
+        #endregion Methods
     }
 }

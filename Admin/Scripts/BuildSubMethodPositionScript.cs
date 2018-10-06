@@ -1,22 +1,25 @@
-﻿using DBManager;
-using System;
+﻿using LabDbContext;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Admin.Scripts
 {
     public class BuildSubMethodPositionScript : ScriptBase
     {
+        #region Constructors
+
         public BuildSubMethodPositionScript()
         {
             _name = "BuildSubMethodPositionScript";
         }
 
+        #endregion Constructors
+
+        #region Methods
+
         public override void Run()
         {
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 IEnumerable<Method> methodList = entities.Methods.ToList();
 
@@ -33,6 +36,7 @@ namespace Admin.Scripts
                 entities.SaveChanges();
             }
         }
+
+        #endregion Methods
     }
-    
 }

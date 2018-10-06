@@ -1,21 +1,50 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.Entity.Migrations;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace DBManager
+namespace LabDbContext
 {
+    public static class StandardExtension
+    {
+        #region Methods
+
+        public static void Create(this Std entry)
+        {
+            // Inserts a new Std entry in the DB
+
+            using (LabDbEntities entities = new LabDbEntities())
+            {
+                entities.Stds.Add(entry);
+                entities.SaveChanges();
+            }
+        }
+
+        public static void Update(this Std entry)
+        {
+            // Updates a STD entry in the DB
+
+            using (LabDbEntities entities = new LabDbEntities())
+            {
+                entities.Stds
+                        .AddOrUpdate(entry);
+
+                entities.SaveChanges();
+            }
+        }
+
+        #endregion Methods
+    }
+
     public partial class Std
     {
+        #region Methods
 
         /// <summary>
         /// Deletes the entry from the DB and sets the ID of the local instance to 0
         /// </summary>
         public void Delete()
         {
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 Std tempEntry = entities.Stds.First(std => std.ID == ID);
 
@@ -33,8 +62,7 @@ namespace DBManager
         /// <returns>An IEnumerable of StandardFiles entities</returns>
         public IEnumerable<StandardFile> GetFiles()
         {
-
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.Configuration.LazyLoadingEnabled = false;
 
@@ -50,7 +78,7 @@ namespace DBManager
         /// <returns>An IEnumerable of Method entities</returns>
         public IEnumerable<Method> GetMethods()
         {
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.Configuration.LazyLoadingEnabled = false;
 
@@ -66,8 +94,7 @@ namespace DBManager
         /// <returns>An IEnumerable of Specification entities</returns>
         public IEnumerable<Specification> GetSpecifications()
         {
-
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.Configuration.LazyLoadingEnabled = false;
 
@@ -76,32 +103,7 @@ namespace DBManager
                                 .ToList();
             }
         }
-    }
 
-    public static class StandardExtension
-    {
-        public static void Create(this Std entry)
-        {
-            // Inserts a new Std entry in the DB
-
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.Stds.Add(entry);
-                entities.SaveChanges();
-            }
-        }
-
-        public static void Update(this Std entry)
-        {
-            // Updates a STD entry in the DB
-
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.Stds
-                        .AddOrUpdate(entry);
-
-                entities.SaveChanges();
-            }
-        }
+        #endregion Methods
     }
 }

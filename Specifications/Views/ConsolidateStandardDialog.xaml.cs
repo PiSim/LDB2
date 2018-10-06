@@ -1,17 +1,5 @@
-﻿using DBManager;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using LabDbContext;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace Specifications.Views
 {
@@ -20,15 +8,23 @@ namespace Specifications.Views
     /// </summary>
     public partial class ConsolidateStandardDialog : Window
     {
+        #region Constructors
+
         public ConsolidateStandardDialog()
         {
             InitializeComponent();
         }
+
+        #endregion Constructors
+
+        #region Properties
 
         public Std StandardInstance
         {
             get => (DataContext as ViewModels.ConsolidateStandardDialogViewModel).StandardInstance;
             set => (DataContext as ViewModels.ConsolidateStandardDialogViewModel).StandardInstance = value;
         }
+
+        #endregion Properties
     }
 }

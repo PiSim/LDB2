@@ -1,22 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Admin
+﻿namespace Admin
 {
     public class ScriptBase
     {
+        #region Fields
+
         protected string _name,
                         _description;
 
-        public string Name => _name;
+        #endregion Fields
+
+        #region Properties
+
         public string Description => _description;
+        public string Name => _name;
+
+        #endregion Properties
+
+        #region Methods
 
         public virtual void Run()
         {
-
         }
+
+        #endregion Methods
     }
 }

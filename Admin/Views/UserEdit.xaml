@@ -1,29 +1,29 @@
 ﻿<UserControl x:Class="Admin.Views.UserEdit"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:Admin.Views"
              xmlns:prism="http://prismlibrary.com/"
              prism:ViewModelLocator.AutoWireViewModel="True"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="35"/>
-            <RowDefinition/>
-            <RowDefinition/>
+            <RowDefinition Height="35" />
+            <RowDefinition />
+            <RowDefinition />
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal"
                     Grid.Row="0">
             <Button Content="Modifica"
                     Command="{Binding StartEditCommand}"
-                    Margin="5"/>
+                    Margin="5" />
             <Button Content="Salva"
                     Command="{Binding SaveCommand}"
-                    Margin="5"/>
+                    Margin="5" />
         </StackPanel>
-        
+
         <GroupBox Header="Privilegi"
                   Grid.Row="2">
             <ListView Name="RoleList"
@@ -34,14 +34,14 @@
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <CheckBox IsChecked="{Binding IsSelected, Mode=TwoWay}"
-                                              IsEnabled="{Binding DataContext.EditMode, ElementName=RoleList}"/>
+                                              IsEnabled="{Binding DataContext.EditMode, ElementName=RoleList}" />
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
                         <GridViewColumn Header="Nome"
-                                        DisplayMemberBinding="{Binding UserRole.Name}"/>
+                                        DisplayMemberBinding="{Binding UserRole.Name}" />
                         <GridViewColumn Header="Descrizione"
-                                        DisplayMemberBinding="{Binding UserRole.Description}"/>
+                                        DisplayMemberBinding="{Binding UserRole.Description}" />
                     </GridView>
                 </ListView.View>
             </ListView>

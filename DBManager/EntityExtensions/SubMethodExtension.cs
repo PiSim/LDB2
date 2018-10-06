@@ -1,19 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 
-namespace DBManager.EntityExtensions
+namespace LabDbContext.EntityExtensions
 {
     public static class SubMethodExtension
     {
+        #region Methods
 
         public static void Delete(this SubMethod entry)
         {
             // Deletes a SubMethod entry from the DB
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.Entry(entities.SubMethods.First(smtd => smtd.ID == entry.ID))
                         .State = System.Data.Entity.EntityState.Deleted;
@@ -22,5 +19,7 @@ namespace DBManager.EntityExtensions
                 entry.ID = 0;
             }
         }
+
+        #endregion Methods
     }
 }

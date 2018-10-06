@@ -1,42 +1,29 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace Infrastructure.Events
 {
     public class NavigationToken
     {
-        private object _instance;
-        private string _regionName, _viewName;
+        #region Constructors
 
         public NavigationToken(string viewName,
                                 object instance = null,
                                 string regionName = null)
         {
-            if (regionName == null)
-                _regionName = RegionNames.MainRegion;
-            else
-                _regionName = regionName;
-                
-            _instance = instance;
-            _viewName = viewName;
+            RegionName = regionName;
+
+            ObjectInstance = instance;
+            ViewName = viewName;
         }
 
-        public object ObjectInstance
-        {
-            get { return _instance; }
-        }
+        #endregion Constructors
 
-        public string RegionName
-        {
-            get { return _regionName; }
-        }
+        #region Properties
 
-        public string ViewName
-        {
-            get { return _viewName; }
-        }
+        public object ObjectInstance { get; }
+
+        public string RegionName { get; }
+
+        public string ViewName { get; }
+
+        #endregion Properties
     }
 }

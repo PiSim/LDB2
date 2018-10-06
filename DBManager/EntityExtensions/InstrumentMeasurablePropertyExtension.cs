@@ -1,21 +1,18 @@
-﻿using DBManager;
-using System;
-using System.Collections.Generic;
-using System.Data.Entity;
+﻿using System.Collections.Generic;
 using System.Data.Entity.Migrations;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace DBManager.EntityExtensions
+namespace LabDbContext.EntityExtensions
 {
     public static class InstrumentMeasurablePropertyExtension
     {
+        #region Methods
+
         public static void Create(this InstrumentMeasurableProperty entry)
         {
             // Inserts a new InstrumentMeasurableProperty entry in the DB
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.InstrumentMeasurableProperties.Add(entry);
                 entities.SaveChanges();
@@ -26,7 +23,7 @@ namespace DBManager.EntityExtensions
         {
             // Returns the most recent CalibrationReport for this entry, or null if none exist
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.Configuration.LazyLoadingEnabled = false;
 
@@ -46,7 +43,7 @@ namespace DBManager.EntityExtensions
             if (entry == null)
                 return new List<MeasurementUnit>();
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.Configuration.LazyLoadingEnabled = false;
 
@@ -63,12 +60,14 @@ namespace DBManager.EntityExtensions
         {
             // Updates an InstrumentMeasurableProperty entry
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.InstrumentMeasurableProperties.AddOrUpdate(entry);
 
                 entities.SaveChanges();
             }
         }
+
+        #endregion Methods
     }
 }

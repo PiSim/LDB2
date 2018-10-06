@@ -1,122 +1,122 @@
 ﻿<UserControl x:Class="Reporting.Controls.TaskList"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:con="clr-namespace:Infrastructure.Converters;assembly=Infrastructure"
              xmlns:local="clr-namespace:Reporting.Controls"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="600"
              Margin="10">
     <UserControl.Resources>
-        <con:SingleLineTextConverter x:Key="SingleLineConverter"/>
+        <con:SingleLineTextConverter x:Key="SingleLineConverter" />
 
         <DataTemplate x:Key="BatchTemplate">
-            
+
             <Grid Height="23"
                   Name="ItemGrid">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="70"/>
-                    <ColumnDefinition Width="60"/>
-                    <ColumnDefinition Width="90"/>
-                    <ColumnDefinition Width="80"/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition Width="70"/>
-                    <ColumnDefinition Width="70"/>
-                    <ColumnDefinition Width="120"/>
-                    <ColumnDefinition Width="70"/>
+                    <ColumnDefinition Width="70" />
+                    <ColumnDefinition Width="60" />
+                    <ColumnDefinition Width="90" />
+                    <ColumnDefinition Width="80" />
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="70" />
+                    <ColumnDefinition Width="70" />
+                    <ColumnDefinition Width="120" />
+                    <ColumnDefinition Width="70" />
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Column="0"
                            Text="{Binding BatchNumber,
-                                          Mode=OneWay}"/>
+                                          Mode=OneWay}" />
                 <CheckBox IsChecked="{Binding HasBatchArrived,
                                           Mode=OneWay}"
                           IsEnabled="False"
-                          Grid.Column="1"/>
+                          Grid.Column="1" />
                 <TextBlock Grid.Column="2"
                            Text="{Binding SpecificationName,
-                                          Mode=OneWay}"/>
+                                          Mode=OneWay}" />
                 <TextBlock Grid.Column="3"
                            Text="{Binding SpecificationVersionName,
-                                          Mode=OneWay}"/>
+                                          Mode=OneWay}" />
                 <TextBlock Grid.Column="4"
                            Text="{Binding Notes,
                                           Mode=OneWay,
-                                          Converter={StaticResource ResourceKey=SingleLineConverter}}"/>
+                                          Converter={StaticResource ResourceKey=SingleLineConverter}}" />
                 <TextBlock Grid.Column="5"
                            Text="{Binding WorkHours,
-                                          Mode=OneWay}"/>
+                                          Mode=OneWay}" />
                 <TextBlock Grid.Column="6"
                            Text="{Binding ProjectName,
-                                          Mode=OneWay}"/>
+                                          Mode=OneWay}" />
                 <TextBlock Grid.Column="7"
                            Text="{Binding RequesterName,
-                                          Mode=OneWay}"/>
+                                          Mode=OneWay}" />
                 <TextBlock Grid.Column="8"
                            Text="{Binding TaskStatus,
-                                          Mode=OneWay}"/>
+                                          Mode=OneWay}" />
             </Grid>
             <DataTemplate.Triggers>
                 <Trigger Property="ItemsControl.AlternationIndex" Value="0">
-                    <Setter Property="Background" 
-                            Value="LightCyan" 
-                            TargetName="ItemGrid"/>
+                    <Setter Property="Background"
+                            Value="LightCyan"
+                            TargetName="ItemGrid" />
                 </Trigger>
             </DataTemplate.Triggers>
         </DataTemplate>
 
         <Style TargetType="{x:Type TextBlock}">
             <Setter Property="TextWrapping"
-                    Value="Wrap"/>
+                    Value="Wrap" />
             <Setter Property="VerticalAlignment"
-                    Value="Center"/>
+                    Value="Center" />
         </Style>
-        
+
         <Style TargetType="{x:Type ItemsControl}">
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type ItemsControl}">
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="70"/>
-                                <ColumnDefinition Width="60"/>
-                                <ColumnDefinition Width="90"/>
-                                <ColumnDefinition Width="80"/>
-                                <ColumnDefinition/>
-                                <ColumnDefinition Width="70"/>
-                                <ColumnDefinition Width="70"/>
-                                <ColumnDefinition Width="120"/>
-                                <ColumnDefinition Width="70"/>
+                                <ColumnDefinition Width="70" />
+                                <ColumnDefinition Width="60" />
+                                <ColumnDefinition Width="90" />
+                                <ColumnDefinition Width="80" />
+                                <ColumnDefinition />
+                                <ColumnDefinition Width="70" />
+                                <ColumnDefinition Width="70" />
+                                <ColumnDefinition Width="120" />
+                                <ColumnDefinition Width="70" />
                             </Grid.ColumnDefinitions>
 
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="30"/>
-                                <RowDefinition/>
+                                <RowDefinition Height="30" />
+                                <RowDefinition />
                             </Grid.RowDefinitions>
-                            
+
                             <TextBlock Grid.Column="0"
-                                       Text="Batch"/>
+                                       Text="Batch" />
                             <TextBlock Grid.Column="1"
-                                       Text="Arrivato"/>
+                                       Text="Arrivato" />
                             <TextBlock Grid.Column="2"
-                                       Text="Specifica"/>
+                                       Text="Specifica" />
                             <TextBlock Grid.Column="3"
-                                       Text="Versione"/>
+                                       Text="Versione" />
                             <TextBlock Grid.Column="4"
                                        TextWrapping="Wrap">
-                                <Run Text="Descrizione"/>
+                                <Run Text="Descrizione" />
                             </TextBlock>
                             <TextBlock Grid.Column="5"
-                                       Text="Ore Lavoro"/>
+                                       Text="Ore Lavoro" />
                             <TextBlock Grid.Column="6"
-                                       Text="PCA"/>
+                                       Text="PCA" />
                             <TextBlock Grid.Column="7"
-                                       Text="Richiedente"/>
+                                       Text="Richiedente" />
                             <TextBlock Grid.Column="8"
-                                       Text="Stato"/>
+                                       Text="Stato" />
                             <Grid Grid.Row="1"
                                   Grid.ColumnSpan="12">
-                                <ItemsPresenter/>
+                                <ItemsPresenter />
                             </Grid>
                         </Grid>
                     </ControlTemplate>
@@ -125,9 +125,8 @@
         </Style>
     </UserControl.Resources>
 
-
     <ItemsControl Name="MainList"
                   Margin="0"
                   ItemTemplate="{DynamicResource BatchTemplate}"
-                  AlternationCount="2"/>
+                  AlternationCount="2" />
 </UserControl>

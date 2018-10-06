@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Printing;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Printing;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Xps;
@@ -12,6 +7,8 @@ namespace Reporting.Controls
 {
     public class LDBDocumentViewer : DocumentViewer
     {
+        #region Methods
+
         protected override void OnPrintCommand()
         {
             // get a print dialog, defaulted to default printer and default printer's preferences.
@@ -35,5 +32,7 @@ namespace Reporting.Controls
                 writer.WriteAsync(docSeq, printDialog.PrintTicket);
             }
         }
+
+        #endregion Methods
     }
 }

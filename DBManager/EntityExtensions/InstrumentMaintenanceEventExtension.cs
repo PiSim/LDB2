@@ -1,24 +1,21 @@
-﻿using DBManager;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DBManager.EntityExtensions
+﻿namespace LabDbContext.EntityExtensions
 {
     public static class InstrumentMaintenanceEventExtension
     {
+        #region Methods
+
         public static void Create(this InstrumentMaintenanceEvent entry)
         {
             //Inserts a new InstrumentMaintenanceEvent entry in the DB
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.InstrumentMaintenanceEvents.Add(entry);
 
                 entities.SaveChanges();
             }
         }
+
+        #endregion Methods
     }
 }

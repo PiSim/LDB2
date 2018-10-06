@@ -1,17 +1,12 @@
-﻿using DBManager;
-using Reporting.Controls;
+﻿using Reporting.Controls;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Printing;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
-using System.Windows.Media;
 using System.Windows.Xps;
 using System.Windows.Xps.Packaging;
 
@@ -19,9 +14,36 @@ namespace Reporting
 {
     internal class DocRenderer
     {
+        #region Constructors
+
         internal DocRenderer()
         {
+        }
 
+        #endregion Constructors
+
+        #region Methods
+
+        internal static PageOrientation GetPageOrientationOfFirstPageOfFixedDocument(FixedDocument doc)
+        {
+            PageOrientation orientation = PageOrientation.Unknown;
+
+            FixedPage firstPage = GetFirstPageOfFixedDocument(doc);
+
+            if (firstPage != null)
+            {
+                orientation = (firstPage.Width >= firstPage.Height) ? PageOrientation.Landscape : PageOrientation.Portrait;
+            }
+
+            return orientation;
+        }
+
+        internal void AddBatchList(Grid targetGrid, IEnumerable<object> batchList)
+        {
+            BatchList listElement = new BatchList();
+            listElement.MainList.ItemsSource = batchList;
+
+            targetGrid.Children.Add(listElement);
         }
 
         /// <summary>
@@ -59,31 +81,6 @@ namespace Reporting
             return newPage;
         }
 
-        internal void AddStandardHeader(Grid targetGrid,
-                                        string title = "")
-        {
-            targetGrid.Children.Add(new StandardHeader()
-            {
-                Title = title
-            });
-        }
-        
-        internal void AddBatchList(Grid targetGrid, IEnumerable<object> batchList)
-        {
-            BatchList listElement = new BatchList();
-            listElement.MainList.ItemsSource = batchList;
-
-            targetGrid.Children.Add(listElement);
-        }
-
-        internal void AddTaskList(Grid targetGrid, IEnumerable<object> taskList)
-        {
-            TaskList listElement = new TaskList();
-            listElement.MainList.ItemsSource = taskList;
-
-            targetGrid.Children.Add(listElement);
-        }
-
         /// <summary>
         /// Adds a new ReportDataSheetMainGrid to the page, and returns the instance
         /// </summary>
@@ -102,6 +99,23 @@ namespace Reporting
             return mainGrid;
         }
 
+        internal void AddStandardHeader(Grid targetGrid,
+                                                string title = "")
+        {
+            targetGrid.Children.Add(new StandardHeader()
+            {
+                Title = title
+            });
+        }
+
+        internal void AddTaskList(Grid targetGrid, IEnumerable<object> taskList)
+        {
+            TaskList listElement = new TaskList();
+            listElement.MainList.ItemsSource = taskList;
+
+            targetGrid.Children.Add(listElement);
+        }
+
         internal FixedPage GetNewPage()
         {
             FixedPage output = new FixedPage();
@@ -113,23 +127,43 @@ namespace Reporting
 
             return output;
         }
-        
+
         /// <summary>
-        /// Gets the first fixed page in a fixed document, or null.
+        /// Gets the PageOrientation of the first page of a fixed document, based on that page's dimensions.
         /// </summary>
-        /// <param name="doc">The fixed document</param>
-        /// <returns>The first fixed document, or null.</returns>
-        private static FixedPage GetFirstPageOfFixedDocument(FixedDocument doc)
+        /// <param name="doc">The fixed document.</param>
+        /// <returns>
+        /// If the first page could not be found, returns Unknown.
+        /// Returns Portrait when the page width is less than the height.
+        /// Otherwise (width is greater than OR EQUAL), returns Landscape.
+        /// </returns>
+        /// <summary>
+        /// Divides an IEnumerable in multiple ones with an appropriate number of elements for visualization in a single page
+        /// </summary>
+        /// <param name="entityList">The IEnumerable to divide</param>
+        /// <returns>An IEnumerable containing the divided Ienumerables</returns>
+        internal IEnumerable<IEnumerable<object>> PaginateEntityList(IEnumerable<object> entityList)
         {
-            FixedPage firstPage = null;
+            int elementsPerPage = 25;
 
-            if (doc != null && doc.Pages.Count != 0)
-            {
-                PageContent firstCont = doc.Pages[0];
-                firstPage = firstCont.GetPageRoot(false);
-            }
+            return entityList.Select((x, i) => new { Index = i, Value = x })
+                            .GroupBy(x => x.Index / elementsPerPage)
+                            .Select(x => x.Select(v => v.Value).ToList())
+                            .ToList();
+        }
 
-            return firstPage;
+        internal XpsDocument WriteXps(FixedDocument doc)
+        {
+            string tempPath = Path.GetTempPath()
+                + DateTime.Now.ToString("yyyyMMddHHmmss")
+                + ".xps";
+
+            XpsDocument output = new XpsDocument(tempPath, FileAccess.ReadWrite);
+            XpsDocumentWriter writer = XpsDocument.CreateXpsDocumentWriter(output);
+            writer.Write(doc);
+            output.Close();
+
+            return output;
         }
 
         /// <summary>
@@ -149,64 +183,31 @@ namespace Reporting
 
             return firstDoc;
         }
-        
+
         /// <summary>
-        /// Gets the PageOrientation of the first page of a fixed document, based on that page's dimensions.
+        /// Gets the first fixed page in a fixed document, or null.
         /// </summary>
-        /// <param name="doc">The fixed document.</param>
-        /// <returns>
-        /// If the first page could not be found, returns Unknown.
-        /// Returns Portrait when the page width is less than the height.  
-        /// Otherwise (width is greater than OR EQUAL), returns Landscape.
-        /// </returns>
-
-        internal static PageOrientation GetPageOrientationOfFirstPageOfFixedDocument(FixedDocument doc)
+        /// <param name="doc">The fixed document</param>
+        /// <returns>The first fixed document, or null.</returns>
+        private static FixedPage GetFirstPageOfFixedDocument(FixedDocument doc)
         {
-            PageOrientation orientation = PageOrientation.Unknown;
+            FixedPage firstPage = null;
 
-            FixedPage firstPage = GetFirstPageOfFixedDocument(doc);
-
-            if (firstPage != null)
+            if (doc != null && doc.Pages.Count != 0)
             {
-                orientation = (firstPage.Width >= firstPage.Height) ? PageOrientation.Landscape : PageOrientation.Portrait;
+                PageContent firstCont = doc.Pages[0];
+                firstPage = firstCont.GetPageRoot(false);
             }
 
-            return orientation;
+            return firstPage;
         }
 
-        /// <summary>
-        /// Divides an IEnumerable in multiple ones with an appropriate number of elements for visualization in a single page
-        /// </summary>
-        /// <param name="entityList">The IEnumerable to divide</param>
-        /// <returns>An IEnumerable containing the divided Ienumerables</returns>
-        internal IEnumerable<IEnumerable<object>> PaginateEntityList(IEnumerable<object> entityList)
-        {
-            int elementsPerPage = 25;
-
-            return entityList.Select((x, i) => new { Index = i, Value = x })
-                            .GroupBy(x => x.Index / elementsPerPage)
-                            .Select(x => x.Select(v => v.Value).ToList())
-                            .ToList();
-        }
+        #endregion Methods
 
         /// <summary>
         /// Writes a FixedDocument to a temp path and returns the closed XpsDocument
         /// </summary>
         /// <param name="doc">The document to write</param>
         /// <returns>The closed XpsDocument instance</returns>
-
-        internal XpsDocument WriteXps(FixedDocument doc)
-        {
-            string tempPath = Path.GetTempPath()
-                + DateTime.Now.ToString("yyyyMMddHHmmss")
-                + ".xps";
-
-            XpsDocument output = new XpsDocument(tempPath, FileAccess.ReadWrite);
-            XpsDocumentWriter writer = XpsDocument.CreateXpsDocumentWriter(output);
-            writer.Write(doc);
-            output.Close();
-
-            return output;
-        }
     }
 }

@@ -1,47 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Infrastructure.Wrappers
+﻿namespace Infrastructure.Wrappers
 {
     public class SampleLogChoiceWrapper
     {
-        private string _code,
-                        _longText;
-        private int _archiveModifier,
-                    _longTermModifier;
+        #region Constructors
 
         public SampleLogChoiceWrapper(string longText,
                                     string code,
                                     int archiveModifier,
                                     int longTermModifier)
         {
-            _code = code;
-            _longText = longText;
-            _archiveModifier = archiveModifier;
-            _longTermModifier = longTermModifier;
+            Code = code;
+            LongText = longText;
+            ArchiveModifier = archiveModifier;
+            LongTermModifier = longTermModifier;
         }
 
-        public int ArchiveModifier
-        {
-            get { return _archiveModifier; }
-        }
+        #endregion Constructors
 
-        public string Code
-        {
-            get { return _code; }
-        }
+        #region Properties
 
-        public int LongTermModifier
-        {
-            get { return _longTermModifier; }
-        }
+        public int ArchiveModifier { get; }
 
-        public string LongText
-        {
-            get { return _longText; }
-        }
+        public string Code { get; }
+
+        public int LongTermModifier { get; }
+
+        public string LongText { get; }
+
+        #endregion Properties
     }
 }

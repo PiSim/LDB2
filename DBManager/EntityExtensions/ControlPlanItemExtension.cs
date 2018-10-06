@@ -1,23 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DBManager
+﻿namespace LabDbContext
 {
     public partial class ControlPlanItem
     {
+        #region Methods
+
         public void Create()
         {
             // Inserts the Instance in the DB
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.ControlPlanItems.Add(this);
 
                 entities.SaveChanges();
             }
         }
+
+        #endregion Methods
     }
 }

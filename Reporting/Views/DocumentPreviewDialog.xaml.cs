@@ -1,18 +1,5 @@
-﻿
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
+﻿using System.Windows;
 using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using System.Windows.Xps.Packaging;
 
 namespace Reporting.Views
 {
@@ -21,10 +8,16 @@ namespace Reporting.Views
     /// </summary>
     public partial class DocumentPreviewDialog : Window
     {
+        #region Constructors
+
         public DocumentPreviewDialog()
         {
             InitializeComponent();
         }
+
+        #endregion Constructors
+
+        #region Properties
 
         public IDocumentPaginatorSource Document
         {
@@ -34,5 +27,7 @@ namespace Reporting.Views
                 MainViewer.Document = value;
             }
         }
+
+        #endregion Properties
     }
 }

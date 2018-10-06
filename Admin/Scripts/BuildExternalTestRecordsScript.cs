@@ -1,32 +1,36 @@
-﻿using DBManager;
-using System;
+﻿using LabDbContext;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Admin.Scripts
 {
     public class BuildExternalTestRecordsScript : ScriptBase
     {
+        #region Constructors
+
         public BuildExternalTestRecordsScript()
         {
             _name = "BuildExternalTestRecords";
         }
 
+        #endregion Constructors
+
+        #region Methods
+
         public override void Run()
         {
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 IEnumerable<ExternalReport> exrepList = entities.ExternalReports.ToList();
 
                 foreach (ExternalReport exrep in exrepList)
                 {
-
                 }
 
                 entities.SaveChanges();
             }
         }
+
+        #endregion Methods
     }
 }

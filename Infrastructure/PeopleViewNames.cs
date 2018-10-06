@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Infrastructure
+﻿namespace Infrastructure
 {
     public class PeopleViewNames
     {
-        public static string PeopleMainView { get { return "PeopleMain"; } }
+        #region Properties
+
+        public static string PeopleMainView => "PeopleMain";
+
+        #endregion Properties
     }
 }

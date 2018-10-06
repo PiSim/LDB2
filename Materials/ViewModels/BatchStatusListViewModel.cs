@@ -1,18 +1,15 @@
-﻿using DBManager;
-using DBManager.Services;
+﻿using DataAccess;
 using Infrastructure;
 using Infrastructure.Events;
-using Infrastructure.Queries;
+using LabDbContext;
+using Materials.Queries;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
 using Reporting;
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -20,28 +17,31 @@ namespace Materials.ViewModels
 {
     public class BatchStatusListViewModel : BindableBase
     {
-        private DelegateCommand<DataGrid> _openBatch;
-        private DelegateCommand<IList> _printSelected;
-        private DelegateCommand<Window> _cancel, _confirm;
-        private EventAggregator _eventAggregator;
-        private IDataService _dataService;
+        #region Fields
+
+        private IEventAggregator _eventAggregator;
+        private IDataService<LabDbEntities> _labDbData;
         private IReportingService _reportingService;
 
-        public BatchStatusListViewModel(EventAggregator eventAggregator,
-                                        IDataService dataService,
+        #endregion Fields
+
+        #region Constructors
+
+        public BatchStatusListViewModel(IEventAggregator eventAggregator,
+                                        IDataService<LabDbEntities> labDbData,
                                         IReportingService reportingService) : base()
         {
-            _dataService = dataService;
+            _labDbData = labDbData;
             _eventAggregator = eventAggregator;
             _reportingService = reportingService;
 
-            _cancel = new DelegateCommand<Window>(
+            CancelCommand = new DelegateCommand<Window>(
                 parentDialog =>
                 {
                     parentDialog.DialogResult = false;
                 });
 
-            _confirm = new DelegateCommand<Window>(
+            ConfirmCommand = new DelegateCommand<Window>(
                 parentDialog =>
                 {
                     parentDialog.DialogResult = true;
@@ -67,7 +67,7 @@ namespace Materials.ViewModels
                                 RunBatchQueryCommand.Execute();
                             });
 
-            _openBatch = new DelegateCommand<DataGrid>(
+            OpenBatchCommand = new DelegateCommand<DataGrid>(
                 grid =>
                 {
                     Batch btc = grid.SelectedItem as Batch;
@@ -78,7 +78,19 @@ namespace Materials.ViewModels
                                     .Publish(token);
                 });
 
-            _printSelected = new DelegateCommand<IList>(
+            OpenOrderFileCommand = new DelegateCommand<Batch>(
+                batch =>
+                {
+                    try
+                    {
+                        System.Diagnostics.Process.Start(batch.OrderFilePath);
+                    }
+                    catch
+                    {
+                    }
+                });
+
+            PrintSelectedCommand = new DelegateCommand<IList>(
                 batchList =>
                 {
                     Batch[] processList = new Batch[batchList.Count];
@@ -89,7 +101,7 @@ namespace Materials.ViewModels
             RunBatchQueryCommand = new DelegateCommand(
                 () =>
                 {
-                    IQuery<Batch> batchQuery = new BatchQuery()
+                    IQuery<Batch, LabDbEntities> batchQuery = new BatchesQuery()
                     {
                         AspectCode = AspectCode,
                         BatchNumber = BatchNumber,
@@ -104,34 +116,29 @@ namespace Materials.ViewModels
                         RecipeCode = RecipeCode
                     };
 
-                    BatchList = _dataService.GetQueryResults<Batch>(batchQuery);
+                    BatchList = _labDbData.RunQuery(batchQuery).ToList();
                     RaisePropertyChanged("BatchList");
                 });
 
             RunBatchQueryCommand.Execute();
         }
 
+        #endregion Constructors
+
+        #region Properties
+
         public IEnumerable<Batch> BatchList { get; private set; }
 
-        public DelegateCommand<Window> CancelCommand
-        {
-            get { return _cancel; }
-        }
+        public DelegateCommand<Window> CancelCommand { get; }
 
-        public DelegateCommand<Window> ConfirmCommand
-        {
-            get { return _confirm; }
-        }
-
-        public DelegateCommand<DataGrid> OpenBatchCommand
-        {
-            get { return _openBatch; }
-        }
-
-        public DelegateCommand<IList> PrintSelectedCommand => _printSelected;
-
+        public DelegateCommand<Window> ConfirmCommand { get; }
+        public DelegateCommand<DataGrid> OpenBatchCommand { get; }
+        public DelegateCommand<Batch> OpenOrderFileCommand { get; }
+        public DelegateCommand<IList> PrintSelectedCommand { get; }
 
         public DelegateCommand RunBatchQueryCommand { get; }
+
+        #endregion Properties
 
         #region Search Parameter Properties
 
@@ -151,12 +158,10 @@ namespace Materials.ViewModels
 
         public string OEMName { get; set; }
 
-        public string ProjectNumber { get; set; }
-
         public string ProjectDescription { get; set; }
-
+        public string ProjectNumber { get; set; }
         public string RecipeCode { get; set; }
 
-        #endregion
+        #endregion Search Parameter Properties
     }
 }

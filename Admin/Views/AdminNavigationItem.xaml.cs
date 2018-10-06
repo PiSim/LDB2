@@ -8,14 +8,19 @@ namespace Admin.Views
     /// </summary>
     public partial class AdminNavigationItem : UserControl, IModuleNavigationTag
     {
+        #region Constructors
+
         public AdminNavigationItem()
         {
             InitializeComponent();
         }
 
-        public string ViewName
-        {
-            get { return AdminViewNames.AdminMainView; }
-        }
+        #endregion Constructors
+
+        #region Properties
+
+        public string ViewName => AdminViewNames.AdminMainView;
+
+        #endregion Properties
     }
 }

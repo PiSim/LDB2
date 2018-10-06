@@ -1,10 +1,5 @@
-﻿using DBManager;
-using Infrastructure;
+﻿using LabDbContext;
 using Microsoft.Practices.Prism.Mvvm;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows;
 
 namespace Reports.Views
@@ -14,15 +9,27 @@ namespace Reports.Views
     /// </summary>
     public partial class ReportCreationDialog : Window, IView
     {
+        #region Constructors
+
         public ReportCreationDialog()
         {
             InitializeComponent();
         }
 
+        #endregion Constructors
+
+        #region Properties
+
         public Batch Batch
         {
             get => ViewModel.SelectedBatch;
             set { ViewModel.BatchNumber = value.Number; }
+        }
+
+        public ViewModels.ReportCreationDialogViewModel.CreationModes CreationMode
+        {
+            get => ViewModel.CreationMode;
+            set => ViewModel.CreationMode = value;
         }
 
         public Task TaskInstance
@@ -33,10 +40,6 @@ namespace Reports.Views
 
         public ViewModels.ReportCreationDialogViewModel ViewModel => DataContext as ViewModels.ReportCreationDialogViewModel;
 
-        public ViewModels.ReportCreationDialogViewModel.CreationModes CreationMode
-        {
-            get => ViewModel.CreationMode;
-            set => ViewModel.CreationMode = value;
-        }
+        #endregion Properties
     }
 }

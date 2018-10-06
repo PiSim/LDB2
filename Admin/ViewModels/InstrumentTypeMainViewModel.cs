@@ -1,35 +1,39 @@
-﻿using DBManager;
-using DBManager.Services;
+﻿using Controls.Views;
+using DataAccess;
 using Infrastructure;
 using Infrastructure.Events;
+using Infrastructure.Queries;
+using LabDbContext;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Admin.ViewModels
 {
     public class InstrumentTypeMainViewModel : BindableBase
     {
-        private DelegateCommand _newInstrumentType;
-        private EventAggregator _eventAggregator;
+        #region Fields
+
         private IAdminService _adminService;
-        private IDataService _dataService;
+        private IEventAggregator _eventAggregator;
+        private IDataService<LabDbEntities> _labDbData;
         private InstrumentType _selectedInstrumentType;
 
-        public InstrumentTypeMainViewModel(EventAggregator eventAggregator,
+        #endregion Fields
+
+        #region Constructors
+
+        public InstrumentTypeMainViewModel(IEventAggregator eventAggregator,
                                             IAdminService adminService,
-                                            IDataService dataService)
+                                            IDataService<LabDbEntities> labDbData)
         {
             _adminService = adminService;
-            _dataService = dataService;
+            _labDbData = labDbData;
             _eventAggregator = eventAggregator;
 
-            _newInstrumentType = new DelegateCommand(
+            NewInstrumentTypeCommand = new DelegateCommand(
                 () =>
                 {
                     _adminService.CreateNewInstrumentType();
@@ -43,17 +47,15 @@ namespace Admin.ViewModels
                             });
         }
 
-        public IEnumerable<InstrumentType> InstrumentTypeList => _dataService.GetInstrumentTypes();
+        #endregion Constructors
 
-        public string InstrumentTypeManagementEditRegionName
-        {
-            get { return RegionNames.InstrumentTypeManagementEditRegion; }
-        }
+        #region Properties
 
-        public DelegateCommand NewInstrumentTypeCommand
-        {
-            get { return _newInstrumentType; }
-        }
+        public IEnumerable<InstrumentType> InstrumentTypeList => _labDbData.RunQuery(new InstrumentTypesQuery()).ToList();
+
+        public string InstrumentTypeManagementEditRegionName => RegionNames.InstrumentTypeManagementEditRegion;
+
+        public DelegateCommand NewInstrumentTypeCommand { get; }
 
         public InstrumentType SelectedInstrumentType
         {
@@ -71,5 +73,6 @@ namespace Admin.ViewModels
             }
         }
 
+        #endregion Properties
     }
 }

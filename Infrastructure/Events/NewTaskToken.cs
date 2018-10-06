@@ -1,62 +1,47 @@
-﻿using DBManager;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using LabDbContext;
 
 namespace Infrastructure.Events
 {
     public class NewTaskToken
     {
-        private readonly Batch _batch;
-        private readonly Project _project;
-        private readonly Specification _specification;
-        private readonly SpecificationVersion _specVersion;
+        #region Constructors
 
         public NewTaskToken()
         {
-
         }
 
         public NewTaskToken(Batch batch)
         {
-            _batch = batch;
+            Batch = batch;
         }
 
         public NewTaskToken(Project prj)
         {
-            _project = prj;
+            Project = prj;
         }
-        
+
         public NewTaskToken(Specification spec)
         {
-            _specification = spec;
+            Specification = spec;
         }
 
         public NewTaskToken(SpecificationVersion specVersion)
         {
-            _specVersion = specVersion;
+            SpecificationVersion = specVersion;
         }
 
-        public Batch Batch
-        {
-            get { return _batch; }
-        }      
+        #endregion Constructors
 
-        public Project Project
-        {
-            get { return _project; }
-        }
+        #region Properties
 
-        public Specification Specification
-        {
-            get { return _specification; }
-        }
+        public Batch Batch { get; }
 
-        public SpecificationVersion SpecificationVersion
-        {
-            get { return _specVersion; }
-        }
+        public Project Project { get; }
+
+        public Specification Specification { get; }
+
+        public SpecificationVersion SpecificationVersion { get; }
+
+        #endregion Properties
     }
 }

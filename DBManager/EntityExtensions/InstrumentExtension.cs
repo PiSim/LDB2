@@ -3,37 +3,19 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Migrations;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace DBManager
+namespace LabDbContext
 {
-    public partial class Instrument
-    {
-
-        public IEnumerable<InstrumentMaintenanceEvent> GetMaintenanceEvents()
-        {
-            // Returns all InstrumentMaintenanceEvents for an Instrument
-            
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.Configuration.LazyLoadingEnabled = false;
-
-                return entities.InstrumentMaintenanceEvents.Include(ime => ime.Person)
-                                                            .Where(ime => ime.InstrumentID == ID)
-                                                            .ToList();
-            }
-        }
-    }
-
     public static class InstrumentExtension
     {
+        #region Methods
+
         public static void AddFiles(this Instrument entry,
                                     IEnumerable<string> paths)
         {
             // Given a list of paths creates and adds a corresponding series of InstrumentFiles entities
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 foreach (string pth in paths)
                 {
@@ -48,7 +30,6 @@ namespace DBManager
 
                 entities.SaveChanges();
             }
-
         }
 
         public static void AddMethodAssociation(this Instrument entry,
@@ -56,7 +37,7 @@ namespace DBManager
         {
             // Creates a new Instrument/method association
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.Instruments.First(inst => inst.ID == entry.ID)
                                     .AssociatedMethods
@@ -71,7 +52,7 @@ namespace DBManager
         {
             // Inserts a new Instrument entry
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.Instruments.Add(entry);
 
@@ -83,7 +64,7 @@ namespace DBManager
         {
             // Deletes an Instrument entry
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.Entry(entities.Instruments
                         .First(ins => ins.ID == entry.ID))
@@ -102,7 +83,7 @@ namespace DBManager
             if (entry == null)
                 return null;
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.Configuration.LazyLoadingEnabled = false;
 
@@ -118,7 +99,7 @@ namespace DBManager
                                                         DateTime lastCalibration)
         {
             // Returns a Due date for the next calibration considering a given date and the calibration frequency
-            
+
             return lastCalibration.Date.AddMonths(entry.CalibrationInterval);
         }
 
@@ -129,7 +110,7 @@ namespace DBManager
             if (entry == null)
                 return null;
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.Configuration.LazyLoadingEnabled = false;
 
@@ -147,9 +128,8 @@ namespace DBManager
             if (entry == null)
                 return null;
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
-
                 entities.Configuration.LazyLoadingEnabled = false;
 
                 return entities.CalibrationReports
@@ -166,7 +146,7 @@ namespace DBManager
             if (entry == null)
                 return null;
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.Configuration.LazyLoadingEnabled = false;
 
@@ -184,7 +164,7 @@ namespace DBManager
             if (entry == null)
                 return null;
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.Configuration.LazyLoadingEnabled = false;
 
@@ -203,7 +183,7 @@ namespace DBManager
             if (entry == null)
                 return;
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.Configuration.LazyLoadingEnabled = false;
 
@@ -245,7 +225,7 @@ namespace DBManager
         {
             // Creates a new Instrument/method association
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 Instrument tempInstrument = entities.Instruments.First(inst => inst.ID == entry.ID);
                 Method tempMethod = tempInstrument.AssociatedMethods.First(mtd => mtd.ID == methodEntity.ID);
@@ -260,7 +240,7 @@ namespace DBManager
         {
             // Updates a given Instrument entry
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.Instruments.AddOrUpdate(entry);
 
@@ -273,25 +253,44 @@ namespace DBManager
             // Updates the value for CalibrationDueDate using the latest calibration in the DB and the parameters set in the entry instance
             // Returns true if the new value differs from the old one
 
-
             DateTime? oldvalue = (entry.CalibrationDueDate == null) ? (DateTime?)null : entry.CalibrationDueDate.Value;
-           
+
             if (!entry.IsUnderControl)
                 entry.CalibrationDueDate = null;
-
             else
             {
                 CalibrationReport lastCalibration = entry.GetLastCalibration();
 
                 if (lastCalibration == null || lastCalibration.Date == null)
                     entry.CalibrationDueDate = DateTime.Now.Date;
-
                 else
                     entry.CalibrationDueDate = entry.GetCalibrationDueDateFrom(lastCalibration.Date);
             }
 
             return entry.CalibrationDueDate != oldvalue;
-
         }
+
+        #endregion Methods
+    }
+
+    public partial class Instrument
+    {
+        #region Methods
+
+        public IEnumerable<InstrumentMaintenanceEvent> GetMaintenanceEvents()
+        {
+            // Returns all InstrumentMaintenanceEvents for an Instrument
+
+            using (LabDbEntities entities = new LabDbEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.InstrumentMaintenanceEvents.Include(ime => ime.Person)
+                                                            .Where(ime => ime.InstrumentID == ID)
+                                                            .ToList();
+            }
+        }
+
+        #endregion Methods
     }
 }

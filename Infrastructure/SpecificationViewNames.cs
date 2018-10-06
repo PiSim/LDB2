@@ -1,23 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Infrastructure
+﻿namespace Infrastructure
 {
     public static class SpecificationViewNames
     {
+        #region Properties
+
         public static string AddMethod => "AddMethod";
-        public static string ControlPlanEdit { get { return "ControlPlanEdit"; } }
-        public static string MethodEdit { get { return "MethodEdit"; } }
-        public static string MethodMain { get { return "MethodMain"; } }
-        public static string StandardIssueEdit { get { return "StandardIssueEdit"; } }
-        public static string SpecificationEdit { get { return "SpecificationEdit"; } }
-        public static string SpecificationMain { get { return "SpecificationMain"; } }
-        public static string SpecificationVersionEdit { get { return "SpecificationVersionEdit"; } }
-        public static string SpecificationVersionList { get { return "SpecificationVersionList"; } }
+        public static string ControlPlanEdit => "ControlPlanEdit";
+        public static string MethodEdit => "MethodEdit";
+        public static string MethodMain => "MethodMain";
+        public static string SpecificationEdit => "SpecificationEdit";
+        public static string SpecificationMain => "SpecificationMain";
+        public static string SpecificationVersionEdit => "SpecificationVersionEdit";
+        public static string SpecificationVersionList => "SpecificationVersionList";
         public static string StandardEdit => "StandardEdit";
+        public static string StandardIssueEdit => "StandardIssueEdit";
         public static string StandardMain => "StandardMain";
+
+        #endregion Properties
     }
 }

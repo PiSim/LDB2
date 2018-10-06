@@ -1,9 +1,11 @@
-﻿using DBManager;
-using DBManager.EntityExtensions;
-using DBManager.Services;
+﻿using Controls.Views;
+using DataAccess;
 using Infrastructure;
 using Infrastructure.Events;
-using Infrastructure.Wrappers;
+using Infrastructure.Queries;
+using LabDbContext;
+using LabDbContext.EntityExtensions;
+using LabDbContext.Services;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
@@ -12,57 +14,48 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace Specifications.ViewModels
 {
     public class SpecificationEditViewModel : BindableBase, INotifyDataErrorInfo
     {
-        private bool _editMode;
-        private ControlPlan _selectedControlPlan;
-        private DBPrincipal _principal;
-        private DelegateCommand _addControlPlan, 
-                                _addFile,
-                                _addVersion,
-                                _closeAddMethodView,
-                                _openFile,
-                                _openReport, 
-                                _removeControlPlan, 
-                                _removeFile,
-                                _removeVersion,
-                                _save,
-                                _startEdit;
-        private DelegateCommand<MethodVariant> _addTest;
+        #region Fields
+
+        private readonly IDataService<LabDbEntities> _labDbData;
         private readonly Dictionary<string, ICollection<string>> _validationErrors = new Dictionary<string, ICollection<string>>();
-        private EventAggregator _eventAggregator;
-        private readonly IDataService _dataService;
+        private bool _editMode;
+        private IEventAggregator _eventAggregator;
+        private Specification _instance;
         private IEnumerable<MethodVariant> _methodVariantList;
         private IReportService _reportService;
-        private Report _selectedReport;
-        private Specification _instance;
-        private SpecificationVersion _selectedVersion;
+        private ControlPlan _selectedControlPlan;
         private StandardFile _selectedFile;
+        private Report _selectedReport;
+        private SpecificationVersion _selectedVersion;
 
-        public SpecificationEditViewModel(DBPrincipal principal,
-                                            EventAggregator aggregator,
-                                            IDataService dataService,
-                                            IReportService reportService) 
+        #endregion Fields
+
+        #region Constructors
+
+        public SpecificationEditViewModel(IDataService<LabDbEntities> labDbData,
+                                            IEventAggregator aggregator,
+                                            IReportService reportService)
         {
-            _dataService = dataService;
+            _labDbData = labDbData;
             _eventAggregator = aggregator;
-            _principal = principal;
             _reportService = reportService;
 
-
-            _addControlPlan = new DelegateCommand(
+            AddControlPlanCommand = new DelegateCommand(
                 () =>
                 {
                     ControlPlan temp = _instance.AddControlPlan();
 
                     RaisePropertyChanged("ControlPlanList");
                 });
-            
-            _addFile = new DelegateCommand(
+
+            AddFileCommand = new DelegateCommand(
                 () =>
                 {
                     OpenFileDialog fileDialog = new OpenFileDialog
@@ -87,9 +80,9 @@ namespace Specifications.ViewModels
                         RaisePropertyChanged("FileList");
                     }
                 },
-                () => _principal.IsInRole(UserRoleNames.SpecificationEdit));
+                () => Thread.CurrentPrincipal.IsInRole(UserRoleNames.SpecificationEdit));
 
-            _addTest = new DelegateCommand<MethodVariant>(
+            AddTestCommand = new DelegateCommand<MethodVariant>(
                 mtd =>
                 {
                     Requirement newReq = _reportService.GenerateRequirement(mtd);
@@ -100,7 +93,7 @@ namespace Specifications.ViewModels
                 },
                 mtd => CanEdit);
 
-            _addVersion = new DelegateCommand(
+            AddVersionCommand = new DelegateCommand(
                 () =>
                 {
                     SpecificationVersion temp = new SpecificationVersion
@@ -116,7 +109,7 @@ namespace Specifications.ViewModels
                 },
                 () => CanEdit);
 
-            _closeAddMethodView = new DelegateCommand(
+            CloseAddMethodViewCommand = new DelegateCommand(
                 () =>
                 {
                     NavigationToken token = new NavigationToken(SpecificationViewNames.SpecificationVersionList,
@@ -127,7 +120,7 @@ namespace Specifications.ViewModels
                                     .Publish(token);
                 });
 
-            _openFile = new DelegateCommand(
+            OpenFileCommand = new DelegateCommand(
                 () =>
                 {
                     try
@@ -141,7 +134,7 @@ namespace Specifications.ViewModels
                 },
                 () => _selectedFile != null);
 
-            _openReport = new DelegateCommand(
+            OpenReportCommand = new DelegateCommand(
                 () =>
                 {
                     NavigationToken token = new NavigationToken(Reports.ViewNames.ReportEditView,
@@ -150,37 +143,26 @@ namespace Specifications.ViewModels
                 },
                 () => _selectedReport != null);
 
-            _removeControlPlan = new DelegateCommand(
+            RemoveControlPlanCommand = new DelegateCommand(
                 () =>
                 {
                     _selectedControlPlan.Delete();
                     RaisePropertyChanged("ControlPlanList");
                     SelectedControlPlan = null;
-                }, 
-                () => CanEdit 
+                },
+                () => CanEdit
                     && _selectedControlPlan != null
                     && !_selectedControlPlan.IsDefault);
-            
-            _removeFile = new DelegateCommand(
+
+            RemoveFileCommand = new DelegateCommand(
                 () =>
                 {
                     _selectedFile.Delete();
                     SelectedFile = null;
                 },
-                () => _principal.IsInRole(UserRoleNames.SpecificationEdit) && _selectedFile != null);
-            
-            _removeVersion = new DelegateCommand(
-                () =>
-                {
-                    _selectedVersion.Delete();
-                    SelectedVersion = null;
+                () => Thread.CurrentPrincipal.IsInRole(UserRoleNames.SpecificationEdit) && _selectedFile != null);
 
-                    RaisePropertyChanged("VersionList");
-                },
-                () => _principal.IsInRole(UserRoleNames.Admin) 
-                    && _selectedVersion != null);
-
-            _save = new DelegateCommand(
+            SaveCommand = new DelegateCommand(
                 () =>
                 {
                     _instance.Update();
@@ -189,15 +171,14 @@ namespace Specifications.ViewModels
                 },
                 () => _editMode && !HasErrors);
 
-            _startEdit = new DelegateCommand(
+            StartEditCommand = new DelegateCommand(
                 () =>
                 {
                     EditMode = true;
                 },
-                () => _principal.IsInRole(UserRoleNames.SpecificationEdit) && !_editMode);
+                () => Thread.CurrentPrincipal.IsInRole(UserRoleNames.SpecificationEdit) && !_editMode);
 
             // Event Subscriptions
-
 
             _eventAggregator.GetEvent<MethodChanged>()
                             .Subscribe(
@@ -209,12 +190,15 @@ namespace Specifications.ViewModels
 
             _eventAggregator.GetEvent<ReportCreated>().Subscribe(
                 report => RaisePropertyChanged("ReportList"));
-
         }
+
+        #endregion Constructors
 
         #region INotifyDataErrorInfo interface elements
 
         public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
+
+        public bool HasErrors => _validationErrors.Count > 0;
 
         public IEnumerable GetErrors(string propertyName)
         {
@@ -225,44 +209,26 @@ namespace Specifications.ViewModels
             return _validationErrors[propertyName];
         }
 
-        public bool HasErrors
-        {
-            get { return _validationErrors.Count > 0; }
-        }
-
         private void RaiseErrorsChanged(string propertyName)
         {
             ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
         }
 
-        #endregion
+        #endregion INotifyDataErrorInfo interface elements
 
-        public DelegateCommand AddControlPlanCommand
-        {
-            get { return _addControlPlan; }
-        }
-        
-        public DelegateCommand AddFileCommand
-        {
-            get { return _addFile; }
-        }
+        #region Properties
 
-        public DelegateCommand<MethodVariant> AddTestCommand => _addTest;
+        public DelegateCommand AddControlPlanCommand { get; }
 
-        public DelegateCommand AddVersionCommand
-        {
-            get { return _addVersion; }
-        }
+        public DelegateCommand AddFileCommand { get; }
 
-        private bool CanEdit
-        {
-            get { return _principal.IsInRole(UserRoleNames.SpecificationEdit); }
-        }
+        public DelegateCommand<MethodVariant> AddTestCommand { get; }
 
-        public string ControlPlanEditRegionName
-        {
-            get { return RegionNames.ControlPlanEditRegion; }
-        }
+        public DelegateCommand AddVersionCommand { get; }
+
+        public DelegateCommand CloseAddMethodViewCommand { get; }
+
+        public string ControlPlanEditRegionName => RegionNames.ControlPlanEditRegion;
 
         public IEnumerable<ControlPlan> ControlPlanList
         {
@@ -295,7 +261,7 @@ namespace Specifications.ViewModels
             }
             set { _instance.Description = value; }
         }
-        
+
         public bool EditMode
         {
             get { return _editMode; }
@@ -304,15 +270,12 @@ namespace Specifications.ViewModels
                 _editMode = value;
                 RaisePropertyChanged("EditMode");
 
-                _save.RaiseCanExecuteChanged();
-                _startEdit.RaiseCanExecuteChanged();
+                SaveCommand.RaiseCanExecuteChanged();
+                StartEditCommand.RaiseCanExecuteChanged();
             }
         }
 
-        public IEnumerable<StandardFile> FileList
-        {
-            get { return _instance.GetFiles(); }
-        }
+        public IEnumerable<StandardFile> FileList => _instance.GetFiles();
 
         public SpecificationVersion MainVersion
         {
@@ -330,50 +293,24 @@ namespace Specifications.ViewModels
             get
             {
                 if (_methodVariantList == null)
-                    _methodVariantList = _dataService.GetMethodVariants();
+                    _methodVariantList = _labDbData.RunQuery(new MethodVariantsQuery()).ToList();
                 return _methodVariantList;
             }
         }
 
-        public DelegateCommand OpenFileCommand
-        {
-            get { return _openFile; }
-        }
+        public DelegateCommand OpenFileCommand { get; }
 
-        public DelegateCommand OpenReportCommand
-        {
-            get { return _openReport; }
-        }
+        public DelegateCommand OpenReportCommand { get; }
 
-        public IEnumerable<Property> Properties => _dataService.GetProperties();
+        public IEnumerable<Property> Properties => _labDbData.RunQuery(new PropertiesQuery()).ToList();
 
-        public DelegateCommand RemoveControlPlanCommand
-        {
-            get { return _removeControlPlan; }
-        }
+        public DelegateCommand RemoveControlPlanCommand { get; }
 
-        public DelegateCommand RemoveFileCommand
-        {
-            get { return _removeFile; }
-        }
-        
-        public IEnumerable<Report> ReportList
-        {
-            get
-            {
-                return _instance.GetReports();
-            }
-        }
+        public DelegateCommand RemoveFileCommand { get; }
 
-        public DelegateCommand CloseAddMethodViewCommand
-        {
-            get { return _closeAddMethodView; }
-        }
+        public IEnumerable<Report> ReportList => _instance.SpecificationVersions.SelectMany(spcver => spcver.Reports).ToList();
 
-        public DelegateCommand SaveCommand
-        {
-            get { return _save; }
-        }
+        public DelegateCommand SaveCommand { get; }
 
         public ControlPlan SelectedControlPlan
         {
@@ -391,7 +328,7 @@ namespace Specifications.ViewModels
 
                 RaisePropertyChanged("SelectedControlPlan");
                 RaisePropertyChanged("ControlPlanItemsList");
-                _removeControlPlan.RaiseCanExecuteChanged();
+                RemoveControlPlanCommand.RaiseCanExecuteChanged();
             }
         }
 
@@ -401,8 +338,8 @@ namespace Specifications.ViewModels
             set
             {
                 _selectedFile = value;
-                _openFile.RaiseCanExecuteChanged();
-                _removeFile.RaiseCanExecuteChanged();
+                OpenFileCommand.RaiseCanExecuteChanged();
+                RemoveFileCommand.RaiseCanExecuteChanged();
 
                 RaisePropertyChanged("SelectedFile");
             }
@@ -411,10 +348,10 @@ namespace Specifications.ViewModels
         public Report SelectedReport
         {
             get { return _selectedReport; }
-            set 
-            { 
-                _selectedReport = value; 
-                _openReport.RaiseCanExecuteChanged();
+            set
+            {
+                _selectedReport = value;
+                OpenReportCommand.RaiseCanExecuteChanged();
             }
         }
 
@@ -434,13 +371,14 @@ namespace Specifications.ViewModels
             }
         }
 
+        public string SpecificationEditFileRegionName => RegionNames.SpecificationEditFileRegion;
+
         public Specification SpecificationInstance
         {
             get { return _instance; }
             set
             {
                 _instance = value;
-                _instance.Load();
 
                 SelectedControlPlan = null;
                 SelectedVersion = _instance.SpecificationVersions.FirstOrDefault(spcv => spcv.IsMain);
@@ -472,20 +410,9 @@ namespace Specifications.ViewModels
             set => _instance.Name = value;
         }
 
-        public string SpecificationVersionEditRegionName
-        {
-            get { return RegionNames.SpecificationVersionEditRegion; }
-        }
+        public string SpecificationVersionEditRegionName => RegionNames.SpecificationVersionEditRegion;
 
-        public string SpecificationVersionTestListEditRegionName
-        {
-            get { return RegionNames.SpecificationVersionTestListEditRegion; }
-        }
-
-        public string SpecificationEditFileRegionName
-        {
-            get { return RegionNames.SpecificationEditFileRegion; }
-        }
+        public string SpecificationVersionTestListEditRegionName => RegionNames.SpecificationVersionTestListEditRegion;
 
         public string Standard
         {
@@ -503,17 +430,12 @@ namespace Specifications.ViewModels
             }
         }
 
-        public DelegateCommand StartEditCommand
-        {
-            get { return _startEdit; }
-        }
+        public DelegateCommand StartEditCommand { get; }
 
-        public IEnumerable<SpecificationVersion> VersionList
-        {
-            get
-            {
-                return _instance.GetVersions();
-            }
-        }
+        public IEnumerable<SpecificationVersion> VersionList => _instance.GetVersions();
+
+        private bool CanEdit => Thread.CurrentPrincipal.IsInRole(UserRoleNames.SpecificationEdit);
+
+        #endregion Properties
     }
 }

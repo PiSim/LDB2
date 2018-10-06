@@ -13,15 +13,6 @@
           <Property Name="code" Type="char" MaxLength="3" Nullable="false" />
           <Property Name="name" Type="varchar" MaxLength="45" Nullable="false" />
         </EntityType>
-        <EntityType Name="batch_files">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="batchID" Type="int" Nullable="false" />
-          <Property Name="path" Type="longtext" Nullable="false" />
-          <Property Name="description" Type="varchar" MaxLength="45" Nullable="false" />
-        </EntityType>
         <EntityType Name="batches">
           <Key>
             <PropertyRef Name="ID" />
@@ -38,6 +29,7 @@
           <Property Name="do_not_test" Type="bit" Nullable="false" />
           <Property Name="latest_sampleID" Type="int" />
           <Property Name="long_term_stock" Type="int" />
+          <Property Name="order_file_path" Type="text" />
         </EntityType>
         <EntityType Name="calibration_files">
           <Key>
@@ -696,20 +688,6 @@
             </Principal>
             <Dependent Role="batches">
               <PropertyRef Name="basic_reportID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="batch">
-          <End Role="batches" Type="Self.batches" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="batch_files" Type="Self.batch_files" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="batches">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="batch_files">
-              <PropertyRef Name="batchID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2091,7 +2069,6 @@
         </Association>
         <EntityContainer Name="labdbModelStoreContainer">
           <EntitySet Name="aspects" EntityType="Self.aspects" Schema="labdb" store:Type="Tables" />
-          <EntitySet Name="batch_files" EntityType="Self.batch_files" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="batches" EntityType="Self.batches" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="calibration_files" EntityType="Self.calibration_files" Schema="labdb" store:Type="Tables" />
           <EntitySet Name="calibration_reference_mappings" EntityType="Self.calibration_reference_mappings" Schema="labdb" store:Type="Tables" />
@@ -2164,10 +2141,6 @@
           <AssociationSet Name="basic_report_to_batch" Association="Self.basic_report_to_batch">
             <End Role="reports" EntitySet="reports" />
             <End Role="batches" EntitySet="batches" />
-          </AssociationSet>
-          <AssociationSet Name="batch" Association="Self.batch">
-            <End Role="batches" EntitySet="batches" />
-            <End Role="batch_files" EntitySet="batch_files" />
           </AssociationSet>
           <AssociationSet Name="batch_by_material" Association="Self.batch_by_material">
             <End Role="materials" EntitySet="materials" />
@@ -2615,16 +2588,6 @@
           <Property Name="Name" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" DefaultValue="" />
           <NavigationProperty Name="materials" Relationship="labdbModel.aspect_to_material" FromRole="Aspect" ToRole="Material" />
         </EntityType>
-        <EntityType Name="BatchFile">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" a:SetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
-          <Property Name="BatchID" Type="Int32" Nullable="false" a:SetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
-          <Property Name="Path" Type="String" MaxLength="1073741823" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Description" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
-          <NavigationProperty Name="Batch" Relationship="Self.batch1" FromRole="batch_files" ToRole="batches" />
-        </EntityType>
         <EntityType Name="Batch">
           <Key>
             <PropertyRef Name="ID" />
@@ -2633,7 +2596,6 @@
           <Property Name="Number" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="MaterialID" Type="Int32" a:SetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" Nullable="false" />
           <Property Name="Notes" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" DefaultValue="" />
-          <NavigationProperty Name="BatchFiles" Relationship="Self.batch1" FromRole="batches" ToRole="batch_files" />
           <NavigationProperty Name="Material" Relationship="Self.batch_by_material" FromRole="batches" ToRole="materials" />
           <NavigationProperty Name="Masters" Relationship="Self.batch_to_master" FromRole="batches" ToRole="masters" />
           <NavigationProperty Name="Reports" Relationship="Self.batch_to_report" FromRole="batches" ToRole="reports" />
@@ -2652,6 +2614,7 @@
           <NavigationProperty Name="LatestSample" Relationship="labdbModel.latest_sample_to_batch" FromRole="Batch" ToRole="Sample" />
           <Property Name="LongTermStock" Type="Int32" />
           <NavigationProperty Name="TestRecords" Relationship="labdbModel.batch_to_test_record" FromRole="Batch" ToRole="TestRecord" />
+          <Property Name="OrderFilePath" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="Colour">
           <Key>
@@ -3057,20 +3020,6 @@
           <NavigationProperty Name="Person" Relationship="labdbModel.person_to_user" FromRole="User" ToRole="Person" />
           <NavigationProperty Name="RoleMappings" Relationship="labdbModel.user_to_role_mapping" FromRole="User" ToRole="user_role_mappings" />
         </EntityType>
-        <Association Name="batch1">
-          <End Role="batches" Type="labdbModel.Batch" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="batch_files" Type="labdbModel.BatchFile" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="batches">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="batch_files">
-              <PropertyRef Name="BatchID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="batch_by_material">
           <End Role="materials" Type="labdbModel.Material" Multiplicity="1" />
           <End Role="batches" Type="labdbModel.Batch" Multiplicity="*" />
@@ -3435,9 +3384,8 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="LabDBEntities" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="LabDbEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Aspects" EntityType="labdbModel.Aspect" />
-          <EntitySet Name="BatchFiles" EntityType="labdbModel.BatchFile" />
           <EntitySet Name="Batches" EntityType="labdbModel.Batch" />
           <EntitySet Name="Colours" EntityType="labdbModel.Colour" />
           <EntitySet Name="ExternalConstructions" EntityType="labdbModel.ExternalConstruction" />
@@ -3464,10 +3412,6 @@
           <EntitySet Name="Tasks" EntityType="labdbModel.Task" />
           <EntitySet Name="Tests" EntityType="labdbModel.Test" />
           <EntitySet Name="Users" EntityType="labdbModel.User" />
-          <AssociationSet Name="batch" Association="Self.batch1">
-            <End Role="batches" EntitySet="Batches" />
-            <End Role="batch_files" EntitySet="BatchFiles" />
-          </AssociationSet>
           <AssociationSet Name="batch_by_material" Association="Self.batch_by_material">
             <End Role="materials" EntitySet="Materials" />
             <End Role="batches" EntitySet="Batches" />
@@ -3950,7 +3894,7 @@
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" a:SetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <Property Name="Code" Type="String" Nullable="false" MaxLength="4" FixedLength="false" Unicode="false" />
-          <Property Name="Description" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" DefaultValue=" " />
           <NavigationProperty Name="materials" Relationship="labdbModel.type_to_material" FromRole="MaterialType" ToRole="Material" />
         </EntityType>
         <Association Name="person_to_user">
@@ -5199,7 +5143,7 @@
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="labdbModelStoreContainer" CdmEntityContainer="LabDBEntities">
+        <EntityContainerMapping StorageEntityContainer="labdbModelStoreContainer" CdmEntityContainer="LabDbEntities">
           <EntitySetMapping Name="Aspects">
             <EntityTypeMapping TypeName="labdbModel.Aspect">
               <MappingFragment StoreEntitySet="aspects">
@@ -5209,19 +5153,10 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="BatchFiles">
-            <EntityTypeMapping TypeName="labdbModel.BatchFile">
-              <MappingFragment StoreEntitySet="batch_files">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="BatchID" ColumnName="batchID" />
-                <ScalarProperty Name="Path" ColumnName="path" />
-                <ScalarProperty Name="Description" ColumnName="description" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Batches">
             <EntityTypeMapping TypeName="labdbModel.Batch">
               <MappingFragment StoreEntitySet="batches">
+                <ScalarProperty Name="OrderFilePath" ColumnName="order_file_path" />
                 <ScalarProperty Name="LongTermStock" ColumnName="long_term_stock" />
                 <ScalarProperty Name="LatestSampleID" ColumnName="latest_sampleID" />
                 <ScalarProperty Name="DoNotTest" ColumnName="do_not_test" />

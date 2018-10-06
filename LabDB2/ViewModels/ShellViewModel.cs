@@ -4,7 +4,21 @@ namespace LabDB2.ViewModels
 {
     public class ShellViewModel : BindableBase
     {
+        #region Fields
+
         private string _title = "LabDB2";
+
+        #endregion Fields
+
+        #region Constructors
+
+        public ShellViewModel()
+        {
+        }
+
+        #endregion Constructors
+
+        #region Properties
 
         public string Title
         {
@@ -12,9 +26,6 @@ namespace LabDB2.ViewModels
             set { SetProperty(ref _title, value); }
         }
 
-        public ShellViewModel()
-        {
-
-        }
+        #endregion Properties
     }
 }

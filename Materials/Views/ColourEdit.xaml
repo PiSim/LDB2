@@ -1,60 +1,61 @@
 ﻿<UserControl x:Class="Materials.Views.ColourEdit"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:local="clr-namespace:Materials.Views"
              xmlns:prism="http://prismlibrary.com/"
              xmlns:sort="clr-namespace:Infrastructure.Sorting;assembly=Infrastructure"
              prism:ViewModelLocator.AutoWireViewModel="True"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="35"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition/>
+            <RowDefinition Height="35" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
         </Grid.RowDefinitions>
 
         <StackPanel Orientation="Horizontal"
                     Grid.Row="0">
             <Button Content="Modifica"
                     Command="{Binding StartEditCommand}"
-                    Margin="5"/>
+                    Margin="5" />
             <Button Content="Salva"
                     Command="{Binding SaveCommand}"
-                    Margin="5"/>
+                    Margin="5" />
         </StackPanel>
-        
+
         <StackPanel Orientation="Horizontal" Grid.Row="1">
-            <Label Content="Colore:"/>
+            <Label Content="Colore:" />
             <TextBox Text="{Binding ColourName,
                                     Mode=TwoWay,
                                     UpdateSourceTrigger=PropertyChanged}"
                      IsEnabled="{Binding EditMode}"
                      MaxLength="45"
                      Width="150"
-                     Margin="5"/>
+                     Margin="5" />
         </StackPanel>
+
         <TabControl Grid.Row="2">
             <TabItem Header="Ricette">
                 <ListView ItemsSource="{Binding RecipeList}"
                           SelectedItem="{Binding SelectedRecipe, Mode=TwoWay}"
-                          DisplayMemberPath="Code"/>
+                          DisplayMemberPath="Code" />
             </TabItem>
             <TabItem Header="Commesse">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition Width="50"/>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="50" />
                     </Grid.ColumnDefinitions>
-                    <ContentControl prism:RegionManager.RegionName="ColourEditBatchListRegion"/>
+                    <ContentControl prism:RegionManager.RegionName="ColourEditBatchListRegion" />
                     <StackPanel Orientation="Vertical"
                                 Grid.Column="1">
                         <Button Content="Apri"
                                 Command="{Binding Path=OpenBatchCommand}"
-                                Margin="5"/>
+                                Margin="5" />
                     </StackPanel>
                 </Grid>
             </TabItem>

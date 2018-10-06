@@ -1,23 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DBManager
+﻿namespace LabDbContext
 {
     public partial class Property
     {
+        #region Methods
+
         /// <summary>
         /// Inserts the entity in the DB as a new entry
         /// </summary>
         public void Create()
         {
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.Properties.Add(this);
                 entities.SaveChanges();
             }
         }
+
+        #endregion Methods
     }
 }

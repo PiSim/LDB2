@@ -1,53 +1,55 @@
-﻿using DBManager;
-using Controls.Views;
+﻿using DataAccess;
 using Infrastructure;
 using Infrastructure.Events;
-using Microsoft.Practices.Unity;
+using Infrastructure.Queries;
+using LabDbContext;
+using LabDbContext.EntityExtensions;
+using LabDbContext.Services;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
-using System;
+using Reports.Commands;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DBManager.Services;
-using DBManager.EntityExtensions;
+using System.Threading;
 
 namespace Reports.ViewModels
 {
     public class ReportMainViewModel : BindableBase
     {
-        private DBPrincipal _principal;
-        private DelegateCommand _newReport, _openReport, _removeReport;
-        private EventAggregator _eventAggregator;
-        private IDataService _dataService;
+        #region Fields
+
+        private IEventAggregator _eventAggregator;
+        private IDataService<LabDbEntities> _labDbData;
         private IReportService _reportService;
         private Report _selectedReport;
 
-        public ReportMainViewModel(DBPrincipal principal,
-                                    EventAggregator eventAggregator,
-                                    IDataService dataService,
+        #endregion Fields
+
+        #region Constructors
+
+        public ReportMainViewModel(IDataService<LabDbEntities> labDbData,
+                                    IEventAggregator eventAggregator,
                                     IReportService reportService)
         {
-            _dataService = dataService;
+            _labDbData = labDbData;
             _eventAggregator = eventAggregator;
-            _principal = principal;
             _reportService = reportService;
 
-            _openReport = new DelegateCommand(
-                () =>
+            OpenReportCommand = new DelegateCommand<Report>(
+                rep =>
                 {
-                    NavigationToken token = new NavigationToken(ViewNames.ReportEditView, SelectedReport);
+                    NavigationToken token = new NavigationToken(ViewNames.ReportEditView, rep);
                     _eventAggregator.GetEvent<NavigationRequested>().Publish(token);
                 },
-                () => SelectedReport != null);
+                rep => rep != null);
 
-            _newReport = new DelegateCommand(
+            NewReportCommand = new DelegateCommand(
                 () => _reportService.CreateReport(),
                 () => CanCreateReport);
 
-            _removeReport = new DelegateCommand(
+            RemoveReportCommand = new DelegateCommand(
                 () =>
                 {
                     _selectedReport.Delete();
@@ -55,8 +57,24 @@ namespace Reports.ViewModels
                 },
                 () => CanRemoveReport && SelectedReport != null);
 
+
+            SetReportsCompleteCommand = new DelegateCommand<IList>(
+                replist =>
+                {
+                    _labDbData.Execute(new SetReportsIsCompleteCommand(replist.Cast<Report>(), true));
+                    RaisePropertyChanged("ReportList");
+                },
+                replist => Thread.CurrentPrincipal.IsInRole(UserRoleNames.ReportEdit));
+
+            SetReportsNotCompleteCommand = new DelegateCommand<IList>(
+                replist =>
+                {
+                    _labDbData.Execute(new SetReportsIsCompleteCommand(replist.Cast<Report>(), false));
+                    RaisePropertyChanged("ReportList");
+                });
+
             _eventAggregator.GetEvent<ReportCreated>().Subscribe(
-                report => 
+                report =>
                 {
                     RaisePropertyChanged("ReportList");
                     SelectedReport = null;
@@ -68,16 +86,13 @@ namespace Reports.ViewModels
                     RaisePropertyChanged("ReportList");
                     SelectedReport = null;
                 });
-
         }
 
-        public bool CanCreateReport
-        {
-            get
-            {
-                return _principal.IsInRole(UserRoleNames.ReportEdit);
-            }
-        }
+        #endregion Constructors
+
+        #region Properties
+
+        public bool CanCreateReport => Thread.CurrentPrincipal.IsInRole(UserRoleNames.ReportEdit);
 
         public bool CanRemoveReport
         {
@@ -85,39 +100,32 @@ namespace Reports.ViewModels
             {
                 if (SelectedReport == null)
                     return false;
-                    
                 else
-                    return _principal.IsInRole(UserRoleNames.ReportEdit);
+                    return Thread.CurrentPrincipal.IsInRole(UserRoleNames.ReportEdit);
             }
         }
-            
-        public DelegateCommand NewReportCommand
-        {
-            get { return _newReport; }
-        }
 
-        public DelegateCommand OpenReportCommand
-        {
-            get { return _openReport; }
-        }
-
-        public DelegateCommand RemoveReportCommand
-        {
-            get { return _removeReport; }
-        }
-
-        public IEnumerable<Report> ReportList => _dataService.GetReports();
+        public DelegateCommand NewReportCommand { get; }
+        public DelegateCommand<Report> OpenReportCommand { get; }
+        public DelegateCommand RemoveReportCommand { get; }
+        public IEnumerable<Report> ReportList => _labDbData.RunQuery(new ReportsQuery()).ToList();
+        public DelegateCommand<Report> RowDoubleClickCommand { get; }
 
         public Report SelectedReport
         {
             get { return _selectedReport; }
-            set 
-            { 
-                _selectedReport = value; 
-                OpenReportCommand.RaiseCanExecuteChanged();
+            set
+            {
+                _selectedReport = value;
                 RemoveReportCommand.RaiseCanExecuteChanged();
-                RaisePropertyChanged("SelectedReport");                
+                RaisePropertyChanged("SelectedReport");
             }
         }
+
+        public DelegateCommand<IList> SetReportsCompleteCommand { get; }
+
+        public DelegateCommand<IList> SetReportsNotCompleteCommand { get; }
+
+        #endregion Properties
     }
 }

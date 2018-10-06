@@ -1,20 +1,7 @@
-﻿using DBManager;
+﻿using LabDbContext;
 using Microsoft.Practices.Prism.Mvvm;
 using Prism.Regions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Admin.Views
 {
@@ -23,10 +10,16 @@ namespace Admin.Views
     /// </summary>
     public partial class PropertyEdit : UserControl, IView, INavigationAware
     {
+        #region Constructors
+
         public PropertyEdit()
         {
             InitializeComponent();
         }
+
+        #endregion Constructors
+
+        #region Methods
 
         public bool IsNavigationTarget(NavigationContext ncontext)
         {
@@ -35,7 +28,6 @@ namespace Admin.Views
 
         public void OnNavigatedFrom(NavigationContext ncontext)
         {
-
         }
 
         public void OnNavigatedTo(NavigationContext ncontext)
@@ -43,5 +35,7 @@ namespace Admin.Views
             (DataContext as ViewModels.PropertyEditViewModel).PropertyInstance
                 = ncontext.Parameters["ObjectInstance"] as Property;
         }
+
+        #endregion Methods
     }
 }

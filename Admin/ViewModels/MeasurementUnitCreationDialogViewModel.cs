@@ -1,6 +1,6 @@
-﻿using DBManager;
-using DBManager.EntityExtensions;
-using DBManager.Services;
+﻿using LabDbContext;
+using LabDbContext.EntityExtensions;
+using LabDbContext.Services;
 using Prism.Commands;
 using Prism.Mvvm;
 using System;
@@ -8,71 +8,73 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace Admin.ViewModels
 {
     public class MeasurementUnitCreationDialogViewModel : BindableBase, INotifyDataErrorInfo
     {
-        private bool _canModifyQuantity;
-        private DelegateCommand<Window> _cancel,
-                                        _confirm;
+        #region Fields
 
         private readonly Dictionary<string, ICollection<string>> _validationErrors = new Dictionary<string, ICollection<string>>();
-        private IEnumerable<MeasurableQuantity> _measurableQuantityList;
+        private bool _canModifyQuantity;
         private IDataService _dataService;
-        private MeasurableQuantity _selectedMeasurableQuantity;
-        private MeasurementUnit _measurementUnitInstance;
+
         private string _name,
                         _symbol;
 
+        private MeasurableQuantity _selectedMeasurableQuantity;
+
+        #endregion Fields
+
+        #region Constructors
 
         public MeasurementUnitCreationDialogViewModel(IDataService dataService)
         {
             _dataService = dataService;
             _canModifyQuantity = false;
-            _measurableQuantityList = _dataService.GetMeasurableQuantities();
+            MeasurableQuantityList = _dataService.GetMeasurableQuantities();
 
-            _cancel = new DelegateCommand<Window>(
+            CancelCommand = new DelegateCommand<Window>(
                 parentDialog =>
                 {
                     parentDialog.DialogResult = false;
                 });
 
-            _confirm = new DelegateCommand<Window>(
+            ConfirmCommand = new DelegateCommand<Window>(
                 parentDialog =>
                 {
-                    _measurementUnitInstance = new MeasurementUnit()
+                    MeasurementUnitInstance = new MeasurementUnit()
                     {
                         MeasurableQuantityID = _selectedMeasurableQuantity.ID,
                         Name = _name,
                         Symbol = _symbol
                     };
 
-                    _measurementUnitInstance.Create();
+                    MeasurementUnitInstance.Create();
 
                     parentDialog.DialogResult = true;
                 },
                 parentDialog => !HasErrors);
         }
 
-        #region Service Methods
+        #endregion Constructors
+
+        #region Methods
 
         public void SetQuantity(MeasurableQuantity entry)
         {
-            _selectedMeasurableQuantity = _measurableQuantityList.First(meq => meq.ID == entry.ID);
+            _selectedMeasurableQuantity = MeasurableQuantityList.First(meq => meq.ID == entry.ID);
             RaisePropertyChanged("SelectedMeasurableQuantity");
         }
 
-        #endregion
-
-
+        #endregion Methods
 
         #region INotifyDataErrorInfo interface elements
 
         public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
+
+        public bool HasErrors => _validationErrors.Count > 0;
 
         public IEnumerable GetErrors(string propertyName)
         {
@@ -83,23 +85,17 @@ namespace Admin.ViewModels
             return _validationErrors[propertyName];
         }
 
-        public bool HasErrors
-        {
-            get { return _validationErrors.Count > 0; }
-        }
-
         private void RaiseErrorsChanged(string propertyName)
         {
             ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
-            _confirm.RaiseCanExecuteChanged();
+            ConfirmCommand.RaiseCanExecuteChanged();
         }
 
-        #endregion
+        #endregion INotifyDataErrorInfo interface elements
 
-        public DelegateCommand<Window> CancelCommand
-        {
-            get { return _cancel; }
-        }
+        #region Properties
+
+        public DelegateCommand<Window> CancelCommand { get; }
 
         public bool CanModifyQuantity
         {
@@ -111,20 +107,11 @@ namespace Admin.ViewModels
             }
         }
 
-        public DelegateCommand<Window> ConfirmCommand
-        {
-            get { return _confirm; }
-        }
+        public DelegateCommand<Window> ConfirmCommand { get; }
 
-        public IEnumerable<MeasurableQuantity> MeasurableQuantityList
-        {
-            get { return _measurableQuantityList; }
-        }
+        public IEnumerable<MeasurableQuantity> MeasurableQuantityList { get; }
 
-        public MeasurementUnit MeasurementUnitInstance
-        {
-            get { return _measurementUnitInstance; }
-        }
+        public MeasurementUnit MeasurementUnitInstance { get; private set; }
 
         public MeasurableQuantity SelectedMeasurableQuantity
         {
@@ -195,5 +182,7 @@ namespace Admin.ViewModels
                 }
             }
         }
+
+        #endregion Properties
     }
 }

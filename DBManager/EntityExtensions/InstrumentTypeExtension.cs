@@ -1,20 +1,19 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.Data.Entity;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace DBManager.EntityExtensions
+namespace LabDbContext.EntityExtensions
 {
     public static class InstrumentTypeExtension
     {
+        #region Methods
+
         public static void AddMeasurableQuantityAssociation(this InstrumentType entry,
                                                             MeasurableQuantity quantity)
         {
             // Create a new association between an instrument Type and a quantity
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.InstrumentTypes
                         .First(ist => ist.ID == entry.ID)
@@ -31,7 +30,7 @@ namespace DBManager.EntityExtensions
         {
             // Inserts a new InstrumentType in the DB
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.InstrumentTypes.Add(entry);
                 entities.SaveChanges();
@@ -45,7 +44,7 @@ namespace DBManager.EntityExtensions
             if (entry == null)
                 return null;
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.Configuration.LazyLoadingEnabled = false;
 
@@ -63,7 +62,7 @@ namespace DBManager.EntityExtensions
             if (entry == null)
                 return null;
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.Configuration.LazyLoadingEnabled = false;
 
@@ -78,7 +77,7 @@ namespace DBManager.EntityExtensions
         {
             // Removes an association between an instrument Type and a quantity
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 MeasurableQuantity toBeRemoved = entities.MeasurableQuantities
                                                         .First(meq => meq.ID == quantity.ID);
@@ -91,5 +90,7 @@ namespace DBManager.EntityExtensions
                 entities.SaveChanges();
             }
         }
+
+        #endregion Methods
     }
 }

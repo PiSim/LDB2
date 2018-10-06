@@ -1,13 +1,8 @@
-﻿using DBManager;
-using Infrastructure.Events;
-using Prism.Events;
+﻿using LabDbContext;
 using Prism.Mvvm;
-using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Collections;
 
 namespace Infrastructure.Wrappers
 {
@@ -16,22 +11,28 @@ namespace Infrastructure.Wrappers
     /// </summary>
     public class ReportItemWrapper : BindableBase, ISelectableRequirement
     {
+        #region Fields
+
         private bool _isSelected;
         private IRequirementSelector _parent;
-        private Requirement _instance;
+
+        #endregion Fields
+
+        #region Constructors
 
         public ReportItemWrapper(Requirement instance,
                                 IRequirementSelector parent)
         {
-            _instance = instance;
+            RequirementInstance = instance;
             _isSelected = false;
             _parent = parent;
         }
 
-        public double Duration
-        {
-            get { return _instance.MethodVariant.Method.Duration; }
-        }
+        #endregion Constructors
+
+        #region Properties
+
+        public double Duration => RequirementInstance.MethodVariant.Method.Duration;
 
         public bool IsSelected
         {
@@ -44,45 +45,33 @@ namespace Infrastructure.Wrappers
             }
         }
 
-        public string Method => _instance.MethodVariant.StandardName;
+        public string Method => RequirementInstance.MethodVariant.StandardName;
+
+        public string MethodName => RequirementInstance?.MethodVariant?.StandardName;
 
         public string Notes
         {
-            get { return _instance?.Description; }
+            get { return RequirementInstance?.Description; }
             set
             {
-                _instance.Description = value;
+                RequirementInstance.Description = value;
             }
         }
 
-        public string Property
-        {
-            get { return _instance.MethodVariant.PropertyName; }
-        }
-        
-        public Requirement Requirement => _instance;
+        public string Property => RequirementInstance.MethodVariant.PropertyName;
 
-        public Requirement RequirementInstance
-        {
-            get { return _instance; }
-        }
+        public string PropertyName => RequirementInstance?.MethodVariant?.PropertyName;
+        public Requirement Requirement => RequirementInstance;
 
-        public IEnumerable<SubRequirement> SubRequirements
-        {
-            get
-            {
-                return _instance.SubRequirements.ToList();
-            }
-        }
+        public Requirement RequirementInstance { get; }
 
-        public IEnumerable<SubRequirement> SubTests => _instance.SubRequirements.ToList();
-        
-        public double? WorkHours => _instance?.MethodVariant?.Method?.Duration;
+        public IEnumerable SubItems => RequirementInstance.SubRequirements.ToList();
+        public IEnumerable<SubRequirement> SubRequirements => RequirementInstance.SubRequirements.ToList();
 
-        public string PropertyName => _instance?.MethodVariant?.PropertyName;
+        public IEnumerable<SubRequirement> SubTests => RequirementInstance.SubRequirements.ToList();
 
-        public string MethodName => _instance?.MethodVariant?.StandardName;
+        public double? WorkHours => RequirementInstance?.MethodVariant?.Method?.Duration;
 
-        public IEnumerable SubItems => _instance.SubRequirements.ToList();
+        #endregion Properties
     }
 }

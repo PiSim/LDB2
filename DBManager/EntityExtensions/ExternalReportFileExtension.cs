@@ -1,19 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
+﻿using System.Data.Entity;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace DBManager.EntityExtensions
+namespace LabDbContext.EntityExtensions
 {
     public static class ExternalReportFileExtension
     {
+        #region Methods
+
         public static void Create(this ExternalReportFile entry)
         {
             // Inserts an ExternalReportFile entry
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.ExternalReportFiles.Add(entry);
                 entities.SaveChanges();
@@ -24,7 +22,7 @@ namespace DBManager.EntityExtensions
         {
             // Deletes an ExternalReportFile entry
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.Entry(entities.ExternalReportFiles
                         .First(exrf => exrf.ID == entry.ID))
@@ -33,5 +31,7 @@ namespace DBManager.EntityExtensions
                 entities.SaveChanges();
             }
         }
+
+        #endregion Methods
     }
 }

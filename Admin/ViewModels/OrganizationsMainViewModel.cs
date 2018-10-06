@@ -1,37 +1,36 @@
-﻿using DBManager;
-using DBManager.Services;
+﻿using Controls.Views;
+using DataAccess;
 using Infrastructure;
 using Infrastructure.Events;
+using Infrastructure.Queries;
+using LabDbContext;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
-using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Admin.ViewModels
 {
     public class OrganizationsMainViewModel : BindableBase
     {
-        private DelegateCommand _createNewOrganization,
-                                _createNewOrganizationRole,
-#pragma warning disable CS0169 // Il campo 'OrganizationsMainViewModel._deleteOrganization' non viene mai usato
-                                _deleteOrganization;
-#pragma warning restore CS0169 // Il campo 'OrganizationsMainViewModel._deleteOrganization' non viene mai usato
-        private EventAggregator _eventAggregator;
+        #region Fields
+
         private IAdminService _adminService;
-        private IDataService _dataService;
+        private IEventAggregator _eventAggregator;
+        private IDataService<LabDbEntities> _labDbData;
         private Organization _selectedOrganization;
 
-        public OrganizationsMainViewModel(EventAggregator aggregator,
-                                            IAdminService adminService,
-                                            IDataService dataService) : base()
+        #endregion Fields
+
+        #region Constructors
+
+        public OrganizationsMainViewModel(IDataService<LabDbEntities> labDbData,
+                                            IEventAggregator aggregator,
+                                            IAdminService adminService) : base()
         {
+            _labDbData = labDbData;
             _adminService = adminService;
-            _dataService = dataService;
             _eventAggregator = aggregator;
 
             #region EventSubscriptions
@@ -42,29 +41,43 @@ namespace Admin.ViewModels
                             false,
                             ect => ect.Action != EntityChangedToken.EntityChangedAction.Updated);
 
-            #endregion
-            
-            _createNewOrganization = new DelegateCommand(
+            #endregion EventSubscriptions
+
+            CreateNewOrganizationCommand = new DelegateCommand(
                 () =>
                 {
                     _adminService.CreateNewOrganization();
                 });
 
-            _createNewOrganizationRole = new DelegateCommand(
+            CreateNewOrganizationRoleCommand = new DelegateCommand(
                 () =>
                 {
                     _adminService.CreateNewOrganizationRole();
                 });
         }
 
-        public DelegateCommand CreateNewOrganizationCommand
-        {
-            get { return _createNewOrganization; }
-        }
+        #endregion Constructors
 
-        public DelegateCommand CreateNewOrganizationRoleCommand
+        #region Properties
+
+        public DelegateCommand CreateNewOrganizationCommand { get; }
+
+        public DelegateCommand CreateNewOrganizationRoleCommand { get; }
+
+        public string OrganizationEditRegionName => RegionNames.OrganizationEditRegion;
+
+        public IEnumerable<Organization> OrganizationList => _labDbData.RunQuery(new OrganizationsQuery())
+                                                                        .ToList();
+
+        public IEnumerable<OrganizationRoleMapping> RoleList
         {
-            get { return _createNewOrganizationRole; }
+            get
+            {
+                if (_selectedOrganization == null)
+                    return new List<OrganizationRoleMapping>();
+                else
+                    return _selectedOrganization.RoleMapping;
+            }
         }
 
         public Organization SelectedOrganization
@@ -83,24 +96,6 @@ namespace Admin.ViewModels
             }
         }
 
-        public string OrganizationEditRegionName
-        {
-            get { return RegionNames.OrganizationEditRegion; }
-        }
-
-        public IEnumerable<Organization> OrganizationList => _dataService.GetOrganizations();
-
-        public IEnumerable<OrganizationRoleMapping> RoleList
-        {
-            get
-            {
-                if (_selectedOrganization == null)
-                    return new List<OrganizationRoleMapping>();
-
-                else
-                    return _selectedOrganization.RoleMapping;
-            }
-        }
-        
+        #endregion Properties
     }
 }

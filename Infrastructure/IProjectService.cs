@@ -1,15 +1,15 @@
-﻿using DBManager;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using LabDbContext;
 
 namespace Infrastructure
 {
     public interface IProjectService
     {
+        #region Methods
+
         Project CreateProject();
+
         void UpdateAllCosts();
+
+        #endregion Methods
     }
 }

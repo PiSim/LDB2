@@ -1,30 +1,35 @@
 ﻿using Infrastructure.Events;
 using Prism.Events;
 using Prism.Mvvm;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Controls.ViewModels
 {
     public class StatusBarViewModel : BindableBase
     {
-        private EventAggregator _eventAggregator;
+        #region Fields
+
+        private IEventAggregator _eventAggregator;
         private string _shownMessage;
 
-        public StatusBarViewModel(EventAggregator eventAggregator) : base()
+        #endregion Fields
+
+        #region Constructors
+
+        public StatusBarViewModel(IEventAggregator eventAggregator) : base()
         {
             _eventAggregator = eventAggregator;
-            
+
             _eventAggregator.GetEvent<StatusNotificationIssued>().Subscribe(
-                msg => 
+                msg =>
                 {
                     ShownMessage = msg;
                 }
             );
         }
+
+        #endregion Constructors
+
+        #region Properties
 
         public string ShownMessage
         {
@@ -36,5 +41,6 @@ namespace Controls.ViewModels
             }
         }
 
+        #endregion Properties
     }
 }

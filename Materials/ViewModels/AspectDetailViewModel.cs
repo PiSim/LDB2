@@ -1,34 +1,41 @@
-﻿using DBManager;
-using DBManager.EntityExtensions;
+﻿using Controls.Views;
+using DataAccess;
 using Infrastructure;
 using Infrastructure.Events;
+using LabDbContext;
+using LabDbContext.EntityExtensions;
+using Materials.Queries;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
-using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Materials.ViewModels
 {
     public class AspectDetailViewModel : BindableBase
     {
-        private Aspect _aspectInstance;
-        private Batch _selectedBatch;
-        private bool _editMode;
-        private DelegateCommand _openBatch,
-                                _save,
-                                _startEdit;
-        private EventAggregator _eventAggregator;
+        #region Fields
 
-        public AspectDetailViewModel(EventAggregator eventAggregator) : base()
+        private Aspect _aspectInstance;
+        private bool _editMode;
+        private IEventAggregator _eventAggregator;
+        private IDataService<LabDbEntities> _labDbData;
+        private Batch _selectedBatch;
+
+        #endregion Fields
+
+        #region Constructors
+
+        public AspectDetailViewModel(IDataService<LabDbEntities> labDbData,
+                                    IEventAggregator eventAggregator) : base()
         {
             _eventAggregator = eventAggregator;
             _editMode = false;
+            _labDbData = labDbData;
 
-            _openBatch = new DelegateCommand(
+            OpenBatchCommand = new DelegateCommand(
                 () =>
                 {
                     NavigationToken token = new NavigationToken(MaterialViewNames.BatchInfoView,
@@ -39,7 +46,7 @@ namespace Materials.ViewModels
                 },
                 () => _selectedBatch != null);
 
-            _save = new DelegateCommand(
+            SaveCommand = new DelegateCommand(
                 () =>
                 {
                     EditMode = false;
@@ -47,7 +54,7 @@ namespace Materials.ViewModels
                 },
                 () => _editMode);
 
-            _startEdit = new DelegateCommand(
+            StartEditCommand = new DelegateCommand(
                 () =>
                 {
                     EditMode = true;
@@ -55,43 +62,20 @@ namespace Materials.ViewModels
                 () => CanSetModify && !_editMode);
         }
 
+        #endregion Constructors
+
+        #region Properties
+
+        public static string AspectDetailBatchListRegionName => RegionNames.AspectDetailBatchListRegion;
+
         public string AspectCode
         {
             get
             {
                 if (_aspectInstance == null)
                     return null;
-
                 else
                     return _aspectInstance.Code;
-            }
-        }
-
-        public static string AspectDetailBatchListRegionName
-        {
-            get { return RegionNames.AspectDetailBatchListRegion; }
-        }
-
-        public string AspectName
-        {
-            get
-            {
-                if (_aspectInstance == null)
-                    return null;
-                else
-                    return _aspectInstance.Name;
-            }
-
-            set
-            {
-                if (_aspectInstance == null)
-                    return;
-
-                else
-                {
-                    _aspectInstance.Name = value;
-                    RaisePropertyChanged("AspectName");
-                }                
             }
         }
 
@@ -108,12 +92,31 @@ namespace Materials.ViewModels
             }
         }
 
-        public IEnumerable<Batch> BatchList => _aspectInstance?.GetBatches();
-
-        public bool CanSetModify
+        public string AspectName
         {
-            get { return true; }
+            get
+            {
+                if (_aspectInstance == null)
+                    return null;
+                else
+                    return _aspectInstance.Name;
+            }
+
+            set
+            {
+                if (_aspectInstance == null)
+                    return;
+                else
+                {
+                    _aspectInstance.Name = value;
+                    RaisePropertyChanged("AspectName");
+                }
+            }
         }
+
+        public IEnumerable<Batch> BatchList => (_aspectInstance == null ) ? null : _labDbData.RunQuery(new BatchesQuery()).Where(btc => btc.Material.Aspect.ID == _aspectInstance.ID).ToList();
+
+        public bool CanSetModify => true;
 
         public bool EditMode
         {
@@ -123,10 +126,14 @@ namespace Materials.ViewModels
                 _editMode = value;
                 RaisePropertyChanged("EditMode");
 
-                _save.RaiseCanExecuteChanged();
-                _startEdit.RaiseCanExecuteChanged();
+                SaveCommand.RaiseCanExecuteChanged();
+                StartEditCommand.RaiseCanExecuteChanged();
             }
         }
+
+        public DelegateCommand OpenBatchCommand { get; }
+
+        public DelegateCommand SaveCommand { get; }
 
         public Batch SelectedBatch
         {
@@ -134,23 +141,12 @@ namespace Materials.ViewModels
             set
             {
                 _selectedBatch = value;
-                _openBatch.RaiseCanExecuteChanged();
+                OpenBatchCommand.RaiseCanExecuteChanged();
             }
         }
 
-        public DelegateCommand OpenBatchCommand
-        {
-            get { return _openBatch; }
-        }
+        public DelegateCommand StartEditCommand { get; }
 
-        public DelegateCommand SaveCommand
-        {
-            get { return _save; }
-        }
-
-        public DelegateCommand StartEditCommand
-        {
-            get { return _startEdit; }
-        }
+        #endregion Properties
     }
 }

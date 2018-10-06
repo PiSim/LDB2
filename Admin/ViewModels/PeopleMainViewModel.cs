@@ -1,40 +1,42 @@
-﻿using DBManager;
-using DBManager.Services;
+﻿using DataAccess;
 using Infrastructure;
 using Infrastructure.Events;
+using Infrastructure.Queries;
+using LabDbContext;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
-using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Admin.ViewModels
 {
     public class PeopleMainViewModel : BindableBase
     {
-        private DelegateCommand _newPerson,
-                                _save;
+        #region Fields
+
         private IAdminService _adminService;
-        private IDataService _dataService;
-        private EventAggregator _eventAggregator;
+        private IEventAggregator _eventAggregator;
+        private IDataService<LabDbEntities> _labDbData;
+        private DelegateCommand _save;
         private Person _selectedPerson;
 
-        public PeopleMainViewModel(EventAggregator eventAggregator,
+        #endregion Fields
+
+        #region Constructors
+
+        public PeopleMainViewModel(IEventAggregator eventAggregator,
                                     IAdminService adminService,
-                                    IDataService dataService) : base()
+                                    IDataService<LabDbEntities> labDbData) : base()
         {
             _adminService = adminService;
-            _dataService = dataService;
+            _labDbData = labDbData;
             _eventAggregator = eventAggregator;
 
             _eventAggregator.GetEvent<PersonChanged>()
                             .Subscribe(ect => RaisePropertyChanged("PeopleList"));
 
-            _newPerson = new DelegateCommand(
+            CreateNewPersonCommand = new DelegateCommand(
                 () =>
                 {
                     _adminService.CreateNewPerson();
@@ -47,11 +49,25 @@ namespace Admin.ViewModels
                 });
         }
 
-        public DelegateCommand CreateNewPersonCommand
+        #endregion Constructors
+
+        #region Properties
+
+        public DelegateCommand CreateNewPersonCommand { get; }
+
+        public IEnumerable<Person> PeopleList => _labDbData.RunQuery(new PeopleQuery()).ToList();
+
+        public IEnumerable<PersonRoleMapping> PersonRoleMappingList
         {
-            get { return _newPerson; }
+            get
+            {
+                if (_selectedPerson == null)
+                    return new List<PersonRoleMapping>();
+                else
+                    return _selectedPerson.RoleMappings;
+            }
         }
-        
+
         public Person SelectedPerson
         {
             get { return _selectedPerson; }
@@ -65,19 +81,6 @@ namespace Admin.ViewModels
             }
         }
 
-        public IEnumerable<Person> PeopleList => _dataService.GetPeople();
-
-        public IEnumerable<PersonRoleMapping> PersonRoleMappingList
-        {
-            get
-            {
-                if (_selectedPerson == null)
-                    return new List<PersonRoleMapping>();
-
-                else
-                    return _selectedPerson.RoleMappings;
-            }
-        }
-        
+        #endregion Properties
     }
 }

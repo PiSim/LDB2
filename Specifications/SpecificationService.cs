@@ -1,66 +1,37 @@
-﻿using DBManager;
-using Infrastructure;
+﻿using Infrastructure;
 using Infrastructure.Events;
-using Microsoft.Practices.Unity;
+using LabDbContext;
 using Prism.Events;
-using System;
 using System.Collections.Generic;
+using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Data.Entity.Migrations;
 using System.Linq;
-using System.Data.Entity;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Specifications
 {
     public class SpecificationService : ISpecificationService
     {
-        private EventAggregator _eventAggregator;
-        private IUnityContainer _container;
+        #region Fields
 
-        public SpecificationService(EventAggregator eventAggregator,
-                                    IDataService dataService,
-                                    IUnityContainer container)
+        private IDbContextFactory<LabDbEntities> _dbContextFactory;
+        private IEventAggregator _eventAggregator;
+
+        #endregion Fields
+
+        #region Constructors
+
+        public SpecificationService(IDbContextFactory<LabDbEntities> dbContextFactory,
+                            IEventAggregator eventAggregator,
+                                    IDataService dataService)
         {
             _eventAggregator = eventAggregator;
-            _container = container;
+            _dbContextFactory = dbContextFactory;
         }
 
-        public void CreateMethod()
-        {
-            Views.MethodCreationDialog creationDialog =
-                        _container.Resolve<Views.MethodCreationDialog>();
+        #endregion Constructors
 
-            if (creationDialog.ShowDialog() == true)
-            {
-                Method newInstance = creationDialog.MethodInstance;
-
-                newInstance.Create();
-
-                _eventAggregator.GetEvent<MethodChanged>()
-                                .Publish(new EntityChangedToken(creationDialog.MethodInstance,
-                                                                EntityChangedToken.EntityChangedAction.Created));
-            }
-        }
-
-        public void CreateSpecification()
-        {
-            Views.SpecificationCreationDialog creationDialog = _container.Resolve<Views.SpecificationCreationDialog>();
-
-            if (creationDialog.ShowDialog() == true)
-            {
-
-                Specification newInstance = creationDialog.SpecificationInstance;
-
-                newInstance.Create();
-
-                _eventAggregator.GetEvent<SpecificationChanged>()
-                                .Publish(new EntityChangedToken(newInstance,
-                                                                EntityChangedToken.EntityChangedAction.Created));
-                                
-            }
-        }
-
+        #region Methods
 
         /// <summary>
         /// Consolidates a list of Std entries into a single one, redirecting all references
@@ -100,6 +71,38 @@ namespace Specifications
             }
         }
 
+        public void CreateMethod()
+        {
+            Views.MethodCreationDialog creationDialog = new Views.MethodCreationDialog();
+
+            if (creationDialog.ShowDialog() == true)
+            {
+                Method newInstance = creationDialog.MethodInstance;
+
+                newInstance.Create();
+
+                _eventAggregator.GetEvent<MethodChanged>()
+                                .Publish(new EntityChangedToken(creationDialog.MethodInstance,
+                                                                EntityChangedToken.EntityChangedAction.Created));
+            }
+        }
+
+        public void CreateSpecification()
+        {
+            Views.SpecificationCreationDialog creationDialog = new Views.SpecificationCreationDialog();
+
+            if (creationDialog.ShowDialog() == true)
+            {
+                Specification newInstance = creationDialog.SpecificationInstance;
+
+                newInstance.Create();
+
+                _eventAggregator.GetEvent<SpecificationChanged>()
+                                .Publish(new EntityChangedToken(newInstance,
+                                                                EntityChangedToken.EntityChangedAction.Created));
+            }
+        }
+
         /// <summary>
         /// Deletes a Standard instance and raises the appropriate StandardChanged Event
         /// </summary>
@@ -113,36 +116,20 @@ namespace Specifications
         }
 
         /// <summary>
-        /// Inserts a list of MethodVariants in the database, or updates the values if the entry already exists
-        /// </summary>
-        /// <param name="variantList">An IEnumerable containing the MethodVariant instances to update/insert</param>
-        public void UpdateMethodVariantRange(IEnumerable<MethodVariant> variantList)
-        {
-            using (DBEntities entities = new DBEntities())
-            {
-                foreach (MethodVariant mtdvar in variantList)
-                    entities.MethodVariants.AddOrUpdate(mtdvar);
-
-                entities.SaveChanges();
-            }
-
-        }
-
-        /// <summary>
         /// Begins the process of Modifying a Method's subMethod list
         /// </summary>
         /// <param name="toBeModified"> an instance of the method to alter</param>
         public void ModifyMethodTestList(Method toBeModified)
         {
             toBeModified.LoadSubMethods();
-            
+
             Views.ModifyMethodSubMethodListDialog modificationDialog = new Views.ModifyMethodSubMethodListDialog();
 
             modificationDialog.OldVersion = toBeModified;
 
             if (modificationDialog.ShowDialog() == true)
             {
-                using (DBEntities entities = new DBEntities())
+                using (LabDbEntities entities = _dbContextFactory.Create())
                 {
                     /// Retrieves references to up to date entities from the Database
 
@@ -161,7 +148,7 @@ namespace Specifications
                         PropertyID = attachedOldMethod.PropertyID,
                         StandardID = attachedOldMethod.StandardID
                     };
-                                        
+
                     entities.Methods.Add(newMethod);
 
                     attachedOldMethod.IsOld = true;
@@ -179,7 +166,7 @@ namespace Specifications
                     /// Updates all the variants
 
                     ICollection<MethodVariant> oldVariantList = attachedOldMethod.MethodVariants.ToList();
-                    
+
                     foreach (MethodVariant mtdvar in oldVariantList)
                     {
                         mtdvar.IsOld = true;
@@ -188,17 +175,17 @@ namespace Specifications
                         {
                             Description = mtdvar.Description,
                             Name = mtdvar.Name,
-                            PreviousVersionID = mtdvar.ID                            
+                            PreviousVersionID = mtdvar.ID
                         };
 
                         newMethod.MethodVariants.Add(newVariant);
 
-                        BuildUpdatedRequirementsForMethodVariant(mtdvar, 
-                                                                newVariant, 
-                                                                newMethod, 
-                                                                entities);                        
+                        BuildUpdatedRequirementsForMethodVariant(mtdvar,
+                                                                newVariant,
+                                                                newMethod,
+                                                                entities);
                     }
-                    
+
                     entities.SaveChanges();
 
                     _eventAggregator.GetEvent<BatchChanged>()
@@ -209,45 +196,17 @@ namespace Specifications
         }
 
         /// <summary>
-        /// Updates all the Requirement entities for an Updated MethodVariant.
-        /// Creates/Updates/Deletes Corresponding SubRequirements in order to Match the current SubMethod list of the Method
+        /// Inserts a list of MethodVariants in the database, or updates the values if the entry already exists
         /// </summary>
-        /// <param name="oldVariant">The MethodVariant to be replaced</param>
-        /// <param name="newVariant">The MethodVariant that will replace the old one</param>
-        /// <param name="newMethod">A reference to the new Method instance</param>
-        /// <param name="entities">A reference to the DB transaction instance</param>
-        private void BuildUpdatedRequirementsForMethodVariant(MethodVariant oldVariant,
-                                                            MethodVariant newVariant,
-                                                            Method newMethod,
-                                                            DBEntities entities)
+        /// <param name="variantList">An IEnumerable containing the MethodVariant instances to update/insert</param>
+        public void UpdateMethodVariantRange(IEnumerable<MethodVariant> variantList)
         {
-            foreach (Requirement req in oldVariant.Requirements.ToList())
+            using (LabDbEntities entities = _dbContextFactory.Create())
             {
-                req.MethodVariant = newVariant;
+                foreach (MethodVariant mtdvar in variantList)
+                    entities.MethodVariants.AddOrUpdate(mtdvar);
 
-                foreach (SubMethod smtd in newMethod.SubMethods)
-                {
-                    SubRequirement updateTarget = req.SubRequirements.FirstOrDefault(sreq => sreq.SubMethodID == smtd.OldVersionID);
-
-                    if (updateTarget != null)
-                    {
-                        updateTarget.SubMethod = smtd;
-                        updateTarget.IsUpdated = true;
-                    }
-
-                    else
-                        req.SubRequirements.Add(new SubRequirement()
-                        {
-                            IsUpdated = true,
-                            RequiredValue = "",
-                            SubMethod = smtd,
-                        });
-
-                }
-
-                foreach (SubRequirement sreq in req.SubRequirements.Where(nn => !nn.IsUpdated)
-                                                                    .ToList())
-                    entities.Entry(sreq).State = EntityState.Deleted;
+                entities.SaveChanges();
             }
         }
 
@@ -255,7 +214,7 @@ namespace Specifications
         {
             // Updates all the Requirement entries passed as parameter
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = _dbContextFactory.Create())
             {
                 foreach (Requirement req in requirementEntries)
                 {
@@ -272,7 +231,7 @@ namespace Specifications
         {
             // Updates all the SubMethod entries
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = _dbContextFactory.Create())
             {
                 foreach (SubMethod smtd in methodEntries)
                     entities.SubMethods.AddOrUpdate(smtd);
@@ -280,5 +239,48 @@ namespace Specifications
                 entities.SaveChanges();
             }
         }
+
+        /// <summary>
+        /// Updates all the Requirement entities for an Updated MethodVariant.
+        /// Creates/Updates/Deletes Corresponding SubRequirements in order to Match the current SubMethod list of the Method
+        /// </summary>
+        /// <param name="oldVariant">The MethodVariant to be replaced</param>
+        /// <param name="newVariant">The MethodVariant that will replace the old one</param>
+        /// <param name="newMethod">A reference to the new Method instance</param>
+        /// <param name="entities">A reference to the DB transaction instance</param>
+        private void BuildUpdatedRequirementsForMethodVariant(MethodVariant oldVariant,
+                                                            MethodVariant newVariant,
+                                                            Method newMethod,
+                                                            LabDbEntities entities)
+        {
+            foreach (Requirement req in oldVariant.Requirements.ToList())
+            {
+                req.MethodVariant = newVariant;
+
+                foreach (SubMethod smtd in newMethod.SubMethods)
+                {
+                    SubRequirement updateTarget = req.SubRequirements.FirstOrDefault(sreq => sreq.SubMethodID == smtd.OldVersionID);
+
+                    if (updateTarget != null)
+                    {
+                        updateTarget.SubMethod = smtd;
+                        updateTarget.IsUpdated = true;
+                    }
+                    else
+                        req.SubRequirements.Add(new SubRequirement()
+                        {
+                            IsUpdated = true,
+                            RequiredValue = "",
+                            SubMethod = smtd,
+                        });
+                }
+
+                foreach (SubRequirement sreq in req.SubRequirements.Where(nn => !nn.IsUpdated)
+                                                                    .ToList())
+                    entities.Entry(sreq).State = EntityState.Deleted;
+            }
+        }
+
+        #endregion Methods
     }
 }

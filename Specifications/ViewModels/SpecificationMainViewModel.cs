@@ -1,57 +1,54 @@
-﻿using DBManager;
-using DBManager.Services;
+﻿using Controls.Views;
+using DataAccess;
 using Infrastructure;
 using Infrastructure.Events;
-using Microsoft.Practices.Unity;
+using Infrastructure.Queries;
+using LabDbContext;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
-using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 
 namespace Specifications.ViewModels
 {
     public class SpecificationMainViewModel : BindableBase
     {
-        private DBPrincipal _principal;
-        private DelegateCommand _newSpecification, _openSpecification;
-        private EventAggregator _eventAggregator;
-        private readonly IDataService _dataService;
+        #region Fields
+
+        private readonly IDataService<LabDbEntities> _labDbData;
         private readonly ISpecificationService _specificationService;
+        private IEventAggregator _eventAggregator;
         private Specification _selectedSpecification;
 
-        public SpecificationMainViewModel(DBPrincipal principal,
-                                            EventAggregator aggregator,
-                                            IDataService dataService,
-                                            ISpecificationService specificationService) 
+        #endregion Fields
+
+        #region Constructors
+
+        public SpecificationMainViewModel(IEventAggregator aggregator,
+                                            IDataService<LabDbEntities> labDbData,
+                                            ISpecificationService specificationService)
             : base()
         {
-            _dataService = dataService;
+            _labDbData = labDbData;
             _eventAggregator = aggregator;
-            _principal = principal;
             _specificationService = specificationService;
 
-            _newSpecification = new DelegateCommand(
-                () => 
+            NewSpecificationCommand = new DelegateCommand(
+                () =>
                 {
                     _specificationService.CreateSpecification();
-
                 },
-                () => _principal.IsInRole(UserRoleNames.SpecificationEdit));
+                () => Thread.CurrentPrincipal.IsInRole(UserRoleNames.SpecificationEdit));
 
-            _openSpecification = new DelegateCommand(
-                () => 
+            OpenSpecificationCommand = new DelegateCommand<Specification>(
+                spec =>
                 {
                     NavigationToken token = new NavigationToken(SpecificationViewNames.SpecificationEdit,
                                                                 SelectedSpecification);
                     _eventAggregator.GetEvent<NavigationRequested>().Publish(token);
-                },
-                () => SelectedSpecification != null);
-
+                });
 
             #region EventSubscriptions
 
@@ -61,26 +58,16 @@ namespace Specifications.ViewModels
                                 RaisePropertyChanged("SpecificationList");
                             });
 
-            #endregion
-
+            #endregion EventSubscriptions
         }
 
-        public DelegateCommand NewSpecificationCommand
-        {
-            get { return _newSpecification; }
-        }
+        #endregion Constructors
 
-        public DelegateCommand OpenSpecificationCommand
-        {
-            get { return _openSpecification; }
-        }
+        #region Properties
 
-        public IEnumerable<Specification> SpecificationList => _dataService.GetSpecifications();
+        public DelegateCommand NewSpecificationCommand { get; }
 
-        public string SpecificationMainListRegionName
-        {
-            get { return RegionNames.SpecificationMainListRegion; }
-        }
+        public DelegateCommand<Specification> OpenSpecificationCommand { get; }
 
         public Specification SelectedSpecification
         {
@@ -88,8 +75,13 @@ namespace Specifications.ViewModels
             set
             {
                 _selectedSpecification = value;
-                _openSpecification.RaiseCanExecuteChanged();
             }
         }
+
+        public IEnumerable<Specification> SpecificationList => _labDbData.RunQuery(new SpecificationsQuery()).ToList();
+
+        public string SpecificationMainListRegionName => RegionNames.SpecificationMainListRegion;
+
+        #endregion Properties
     }
 }

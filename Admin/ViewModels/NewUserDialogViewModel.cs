@@ -1,81 +1,72 @@
-﻿using DBManager;
-using DBManager.Services;
+﻿using DataAccess;
+using Infrastructure;
+using Infrastructure.Queries;
+using LabDbContext;
 using Prism.Commands;
 using Prism.Mvvm;
-using Security;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace Admin.ViewModels
 {
     public class NewUserDialogViewModel : BindableBase
     {
-        AuthenticationService _authenticator; 
-        private DelegateCommand<Window> _cancel, _confirm;
-        private IDataService _dataService;
+        #region Fields
+
+        private IAuthenticationService _authenticator;
+        private IDataService<LabDbEntities> _labDbData;
         private Person _selectedPerson;
         private string _userName;
-        private User _userInstance;
 
-        public NewUserDialogViewModel(AuthenticationService authenticator,
-                                        IDataService dataService) : base()
+        #endregion Fields
+
+        #region Constructors
+
+        public NewUserDialogViewModel(IAuthenticationService authenticator,
+                                        IDataService<LabDbEntities> labDbData) : base()
         {
             _authenticator = authenticator;
-            _dataService = dataService;
+            _labDbData = labDbData;
 
-            _cancel = new DelegateCommand<Window>(
+            CancelCommand = new DelegateCommand<Window>(
                 parentDialog =>
                 {
                     parentDialog.DialogResult = false;
                 });
 
-            _confirm = new DelegateCommand<Window>(
+            ConfirmCommand = new DelegateCommand<Window>(
                 parentDialog =>
                 {
-                    
-                    if ((parentDialog as Views.NewUserDialog).PasswordBox1.Password 
+                    if ((parentDialog as Views.NewUserDialog).PasswordBox1.Password
                         != (parentDialog as Views.NewUserDialog).PasswordBox2.Password)
                     {
                         (parentDialog as Views.NewUserDialog).PasswordBox1.Clear();
                         (parentDialog as Views.NewUserDialog).PasswordBox1.Clear();
                     }
-
                     else
                     {
-                        _userInstance = _authenticator.CreateNewUser(_selectedPerson,
+                        UserInstance = _authenticator.CreateNewUser(_selectedPerson,
                                                                     _userName,
                                                                     (parentDialog as Views.NewUserDialog).PasswordBox1.Password);
                         parentDialog.DialogResult = true;
                     }
-                }, 
+                },
                 parentDialog => IsValidInput);
         }
 
-        public DelegateCommand<Window> CancelCommand
-        {
-            get { return _cancel; }
-        }
+        #endregion Constructors
 
-        public DelegateCommand<Window> ConfirmCommand
-        {
-            get { return _confirm; }
-        }
+        #region Properties
 
-        public bool IsValidInput
-        {
-            get
-            {
-                return _userName != null && 
+        public DelegateCommand<Window> CancelCommand { get; }
+
+        public DelegateCommand<Window> ConfirmCommand { get; }
+
+        public bool IsValidInput => _userName != null &&
                         _selectedPerson != null;
-            }
-        }
 
-        public IEnumerable<Person> PeopleList => _dataService.GetPeople();
+        public IEnumerable<Person> PeopleList => _labDbData.RunQuery(new PeopleQuery()).ToList();
 
         public Person SelectedPerson
         {
@@ -83,14 +74,11 @@ namespace Admin.ViewModels
             set
             {
                 _selectedPerson = value;
-                _confirm.RaiseCanExecuteChanged();
+                ConfirmCommand.RaiseCanExecuteChanged();
             }
         }
 
-        public User UserInstance
-        {
-            get { return _userInstance; }
-        }
+        public User UserInstance { get; private set; }
 
         public string UserName
         {
@@ -98,8 +86,10 @@ namespace Admin.ViewModels
             set
             {
                 _userName = value;
-                _confirm.RaiseCanExecuteChanged();
+                ConfirmCommand.RaiseCanExecuteChanged();
             }
         }
+
+        #endregion Properties
     }
 }

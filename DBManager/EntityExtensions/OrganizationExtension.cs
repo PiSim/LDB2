@@ -1,20 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Migrations;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace DBManager.EntityExtensions
+namespace LabDbContext.EntityExtensions
 {
     public static class OrganizationExtension
     {
+        #region Methods
+
         public static void Create(this Organization entry)
         {
             //Inserts a new Organization entry
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.Organizations.Add(entry);
                 entities.SaveChanges();
@@ -28,7 +27,7 @@ namespace DBManager.EntityExtensions
             if (entry == null)
                 return null;
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.Configuration.LazyLoadingEnabled = false;
 
@@ -38,31 +37,11 @@ namespace DBManager.EntityExtensions
             }
         }
 
-        public static void Load(this Organization entry)
-        {
-            // Loads all relevant Related Entities into a given organization entry
-
-            if (entry == null)
-                return;
-
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.Configuration.LazyLoadingEnabled = false;
-
-                Organization tempEntry = entities.Organizations.Include(org => org.RoleMapping
-                                                                .Select(orm => orm.Role))
-                                                                .First(org => org.ID == entry.ID);
-
-                entry.Name = tempEntry.Name;
-                entry.RoleMapping = tempEntry.RoleMapping;
-            }
-        }
-
         public static void Update(this IEnumerable<OrganizationRoleMapping> entries)
         {
             // updates a list of OrganizationRoleMapping entries
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 foreach (OrganizationRoleMapping orm in entries)
                     entities.OrganizationRoleMappings.AddOrUpdate(orm);
@@ -75,12 +54,14 @@ namespace DBManager.EntityExtensions
         {
             // Updates the db values for a given Organization entry
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.Organizations.AddOrUpdate(entry);
 
                 entities.SaveChanges();
             }
         }
+
+        #endregion Methods
     }
 }

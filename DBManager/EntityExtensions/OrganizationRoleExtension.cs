@@ -1,20 +1,14 @@
-﻿using DBManager;
-using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DBManager.EntityExtensions
+﻿namespace LabDbContext.EntityExtensions
 {
     public static class OrganizationRoleExtension
     {
+        #region Methods
+
         public static void Create(this OrganizationRole entry)
         {
             // Inserts a new OrganizationRole entry in the DB
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.OrganizationRoles.Add(entry);
 
@@ -22,5 +16,6 @@ namespace DBManager.EntityExtensions
             }
         }
 
+        #endregion Methods
     }
 }

@@ -1,14 +1,11 @@
-﻿using DBManager;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Infrastructure
+﻿namespace Infrastructure
 {
     public interface ITaskService
     {
+        #region Methods
+
         void CreateNewTask();
+
+        #endregion Methods
     }
 }

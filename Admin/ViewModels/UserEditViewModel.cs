@@ -1,32 +1,35 @@
-﻿using DBManager;
-using DBManager.EntityExtensions;
-using DBManager.Services;
+﻿using DataAccess;
+using Infrastructure.Queries;
+using LabDbContext;
+using LabDbContext.EntityExtensions;
+using LabDbContext.Services;
 using Prism.Commands;
 using Prism.Mvvm;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Admin.ViewModels
 {
     public class UserEditViewModel : BindableBase
     {
+        #region Fields
+
         private bool _editMode;
-        private DelegateCommand _save, _startEdit;
-        private IDataService _dataService;
-        private IEnumerable<Person> _peopleList;
+        private IDataService<LabDbEntities> _labDbData;
         private IEnumerable<UserRoleMapping> _roleList;
         private User _userInstance;
 
-        public UserEditViewModel(IDataService dataService) : base()
-        {
-            _dataService = dataService;
-            _editMode = false;
-            _peopleList = _dataService.GetPeople();
+        #endregion Fields
 
-            _save = new DelegateCommand(
+        #region Constructors
+
+        public UserEditViewModel(IDataService<LabDbEntities> labDbData) : base()
+        {
+            _labDbData = labDbData;
+            _editMode = false;
+            PeopleList = _labDbData.RunQuery(new PeopleQuery()).ToList();
+
+            SaveCommand = new DelegateCommand(
                 () =>
                 {
                     _userInstance.Update();
@@ -35,14 +38,17 @@ namespace Admin.ViewModels
                 },
                 () => _editMode == true);
 
-            _startEdit = new DelegateCommand(
-                () => 
+            StartEditCommand = new DelegateCommand(
+                () =>
                 {
                     EditMode = true;
                 },
                 () => _editMode == false && _userInstance != null);
         }
 
+        #endregion Constructors
+
+        #region Properties
 
         public bool EditMode
         {
@@ -52,15 +58,12 @@ namespace Admin.ViewModels
                 _editMode = value;
 
                 RaisePropertyChanged("EditMode");
-                _save.RaiseCanExecuteChanged();
-                _startEdit.RaiseCanExecuteChanged();
+                SaveCommand.RaiseCanExecuteChanged();
+                StartEditCommand.RaiseCanExecuteChanged();
             }
         }
 
-        public IEnumerable<Person> PeopleList
-        {
-            get { return _peopleList; }
-        }
+        public IEnumerable<Person> PeopleList { get; }
 
         public IEnumerable<UserRoleMapping> RoleList
         {
@@ -73,15 +76,9 @@ namespace Admin.ViewModels
             }
         }
 
-        public DelegateCommand SaveCommand
-        {
-            get { return _save; }
-        }
+        public DelegateCommand SaveCommand { get; }
 
-        public DelegateCommand StartEditCommand
-        {
-            get { return _startEdit; }
-        }
+        public DelegateCommand StartEditCommand { get; }
 
         public User UserInstance
         {
@@ -93,6 +90,7 @@ namespace Admin.ViewModels
                 EditMode = false;
             }
         }
-        
+
+        #endregion Properties
     }
 }

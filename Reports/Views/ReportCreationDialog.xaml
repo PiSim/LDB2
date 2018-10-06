@@ -11,50 +11,50 @@
         ResizeMode="NoResize">
     <Grid Background="LightGray">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="350"/>
-            <ColumnDefinition/>
+            <ColumnDefinition Width="350" />
+            <ColumnDefinition />
         </Grid.ColumnDefinitions>
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="175"/>
-            <RowDefinition/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="175" />
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <FrameworkElement x:Name="dummyElement"
-                          Visibility="Collapsed"/>
+                          Visibility="Collapsed" />
 
         <Grid Grid.Column="0"
               Grid.Row="0"
               Margin="5">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
             </Grid.RowDefinitions>
 
             <Label Content="Numero:"
                    Grid.Column="0"
                    Grid.Row="0"
-                   Margin="5"/>
+                   Margin="5" />
             <TextBox Grid.Column="1"
                      Grid.Row="0"
                      Margin="5">
                 <Binding Path="Number"
                          Mode="TwoWay"
-                         UpdateSourceTrigger="PropertyChanged"/>
+                         UpdateSourceTrigger="PropertyChanged" />
             </TextBox>
 
             <Label Content="Batch:"
                    Grid.Column="0"
                    Grid.Row="1"
-                   Margin="5"/>
+                   Margin="5" />
 
             <TextBox Grid.Column="1"
                      Grid.Row="1"
@@ -62,62 +62,62 @@
                      IsReadOnly="{Binding IsCreatingFromTask}">
                 <Binding Path="BatchNumber"
                          Mode="TwoWay"
-                         UpdateSourceTrigger="PropertyChanged"/>
+                         UpdateSourceTrigger="PropertyChanged" />
             </TextBox>
 
             <Label Content="Materiale:"
                    Grid.Column="0"
                    Grid.Row="2"
-                   Margin="5"/>
+                   Margin="5" />
 
             <con:MaterialCodeBox MaterialInstance="{Binding Material}"
                                  Grid.Column="1"
                                  Grid.Row="2"
-                                 Margin="5"/>
+                                 Margin="5" />
 
             <Label Content="Construction:"
                    Grid.Column="0"
                    Grid.Row="3"
-                   Margin="5"/>
+                   Margin="5" />
 
             <TextBox Text="{Binding ExternalConstruction, Mode=OneWay}"
                      IsReadOnly="True"
                      Grid.Column="1"
                      Grid.Row="3"
-                     Margin="5"/>
+                     Margin="5" />
 
             <Label Content="Autore:"
                    Grid.Column="0"
                    Grid.Row="4"
-                   Margin="5"/>
+                   Margin="5" />
             <ComboBox ItemsSource="{Binding TechList}"
                       SelectedItem="{Binding Author, Mode=TwoWay}"
                       IsReadOnly="{Binding IsNotAdmin}"
                       DisplayMemberPath="Name"
                       Grid.Column="1"
                       Grid.Row="4"
-                      Margin="5"/>
+                      Margin="5" />
         </Grid>
-        
+
         <Grid Grid.Column="1"
               Grid.Row="0"
               Margin="5">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
             </Grid.RowDefinitions>
 
             <Label Content="Specifica:"
                    Grid.Column="0"
                    Grid.Row="0"
-                   Margin="5"/>
+                   Margin="5" />
             <ComboBox ItemsSource="{Binding SpecificationList}"
                       SelectedItem="{Binding SelectedSpecification, Mode=TwoWay}"
                       IsEnabled="{Binding SpecificationSelectionEnabled}"
@@ -130,45 +130,45 @@
                                     Height="Auto">
                             <TextBlock Text="{Binding Standard.Organization.Name}"
                                        Width="100"
-                                       Margin="0,0,5,0"/>
+                                       Margin="0,0,5,0" />
                             <TextBlock Text="{Binding Name}"
-                                       Margin="0,0,5,0"/>
-                            <TextBlock Text="{Binding Description}"/>
+                                       Margin="0,0,5,0" />
+                            <TextBlock Text="{Binding Description}" />
                         </StackPanel>
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
             </ComboBox>
-            
+
             <Label Content="Versione:"
                    Grid.Column="0"
                    Grid.Row="1"
-                   Margin="5"/>
-            
+                   Margin="5" />
+
             <ComboBox ItemsSource="{Binding VersionList}"
                       SelectedItem="{Binding SelectedVersion, Mode=TwoWay}"
                       IsEnabled="{Binding VersionSelectionEnabled}"
                       DisplayMemberPath="Name"
                       Grid.Column="1"
                       Grid.Row="1"
-                      Margin="5"/>
-            
+                      Margin="5" />
+
             <Label Content="Piano di controllo:"
                    Grid.Column="0"
                    Grid.Row="2"
-                   Margin="5"/>
+                   Margin="5" />
             <ComboBox ItemsSource="{Binding ControlPlanList}"
                       SelectedItem="{Binding SelectedControlPlan, Mode=TwoWay}"
                       IsEnabled="{Binding ControlPlanSelectionEnabled}"
                       DisplayMemberPath="Name"
                       Grid.Column="1"
                       Grid.Row="2"
-                      Margin="5"/>
+                      Margin="5" />
 
             <Label Content="Note:"
                    Grid.Column="0"
                    Grid.Row="3"
                    Margin="5"
-                   VerticalAlignment="Center"/>
+                   VerticalAlignment="Center" />
 
             <TextBox Text="{Binding Description}"
                      MaxLength="200"
@@ -177,17 +177,15 @@
                      Grid.Column="1"
                      Grid.Row="3"
                      Grid.RowSpan="2"
-                     Margin="5"/>
-
+                     Margin="5" />
         </Grid>
-
 
         <GroupBox Header="Test"
                   Grid.Column="0"
                   Grid.ColumnSpan="2"
                   Grid.Row="1"
                   Margin="5">
-            
+
                 <DataGrid x:Name="RequirementGrid"
                           IsReadOnly="True"
                           ItemsSource="{Binding RequirementList}"
@@ -206,16 +204,16 @@
                         <DataGridCheckBoxColumn.ElementStyle>
                             <Style TargetType="CheckBox">
                                 <Setter Property="HorizontalAlignment"
-                                        Value="Center"/>
+                                        Value="Center" />
                                 <Setter Property="VerticalAlignment"
-                                        Value="Center"/>
+                                        Value="Center" />
                             </Style>
                         </DataGridCheckBoxColumn.ElementStyle>
                     </DataGridCheckBoxColumn>
 
                         <DataGridTextColumn Header="Prova"
                                             Binding="{Binding PropertyName}"
-                                            Width="150"/>
+                                            Width="150" />
 
                         <DataGridTemplateColumn Width="150">
                             <DataGridTemplateColumn.CellTemplate>
@@ -234,7 +232,7 @@
                                         <DataGrid.Columns>
                                             <DataGridTextColumn Binding="{Binding Name}"
                                                                 IsReadOnly="True"
-                                                                Width="*"/>
+                                                                Width="*" />
                                         </DataGrid.Columns>
                                     </DataGrid>
                                 </DataTemplate>
@@ -260,7 +258,7 @@
                                         <DataGrid.Columns>
                                             <DataGridTextColumn Binding="{Binding RequiredValue}"
                                                                 IsReadOnly="True"
-                                                                Width="*"/>
+                                                                Width="*" />
                                         </DataGrid.Columns>
                                     </DataGrid>
                                 </DataTemplate>
@@ -285,7 +283,7 @@
                                         <DataGrid.Columns>
                                             <DataGridTextColumn Binding="{Binding UM}"
                                                                 IsReadOnly="True"
-                                                                Width="*"/>
+                                                                Width="*" />
                                         </DataGrid.Columns>
                                     </DataGrid>
                                 </DataTemplate>
@@ -294,7 +292,7 @@
 
                         <DataGridTextColumn Header="Note"
                                             Binding="{Binding Notes}"
-                                            Width="100"/>
+                                            Width="100" />
 
                         <DataGridTextColumn Header="Metodo"
                                             Binding="{Binding MethodName}"
@@ -302,7 +300,7 @@
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="VerticalAlignment"
-                                            Value="Center"/>
+                                            Value="Center" />
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
@@ -314,15 +312,14 @@
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="TextBlock">
                                     <Setter Property="HorizontalAlignment"
-                                            Value="Center"/>
+                                            Value="Center" />
                                     <Setter Property="VerticalAlignment"
-                                            Value="Center"/>
+                                            Value="Center" />
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
                     </DataGrid.Columns>
                 </DataGrid>
-
         </GroupBox>
 
         <Grid Grid.Column="1"
@@ -330,32 +327,31 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
                 <ColumnDefinition Width="*"
-                                  MaxWidth="75"/>
+                                  MaxWidth="75" />
                 <ColumnDefinition Width="*"
-                                  MaxWidth="75"/>
+                                  MaxWidth="75" />
             </Grid.ColumnDefinitions>
 
             <TextBlock VerticalAlignment="Center"
                        Margin="5">
-                <Run Text="Totale ore lavoro: "/>
+                <Run Text="Totale ore lavoro: " />
                 <Run Text="{Binding TotalDuration,
-                                    Mode=OneWay}"/>
+                                    Mode=OneWay}" />
             </TextBlock>
-            
+
             <Button Content="Annulla"
                     Command="{Binding CancelCommand}"
                     CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
                     Grid.Column="1"
                     Grid.Row="5"
-                    Margin="5"/>
+                    Margin="5" />
 
             <Button Content="OK"
                     Command="{Binding ConfirmCommand}"
                     CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
                     Grid.Column="2"
                     Grid.Row="5"
-                    Margin="5"/>
+                    Margin="5" />
         </Grid>
-
     </Grid>
 </Window>

@@ -1,25 +1,19 @@
-﻿using DBManager;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using DBManager.Services;
-using System;
-using System.Collections.Generic;
-using System.Data.Entity;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DBManager.EntityExtensions;
 
-namespace DBManager.Services.Tests
+namespace LabDbContext.Services.Tests
 {
     [TestClass()]
     public class SpecificationServiceTests
     {
+        #region Methods
+
         [TestMethod()]
         public void SpecificationLoadTest()
         {
             Specification tempSpec;
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.Configuration.LazyLoadingEnabled = false;
 
@@ -35,7 +29,7 @@ namespace DBManager.Services.Tests
             Assert.IsTrue(tempSpec.SpecificationVersions.Count != 0);
 
             SpecificationVersion main = tempSpec.SpecificationVersions.First(spcv => spcv.IsMain);
-            
+
             Assert.IsTrue(tempSpec.ControlPlans.Count != 0);
         }
 
@@ -44,7 +38,7 @@ namespace DBManager.Services.Tests
         {
             SpecificationVersion temp;
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 temp = entities.SpecificationVersions.First(spcv => spcv.ID == 26);
             }
@@ -61,5 +55,7 @@ namespace DBManager.Services.Tests
             {
             }
         }
+
+        #endregion Methods
     }
 }

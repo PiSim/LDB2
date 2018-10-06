@@ -1,14 +1,8 @@
-﻿using DBManager;
-using Prism.Events;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Prism.Events;
 
 namespace Infrastructure.Events
 {
-    public class TaskCompleted : PubSubEvent<DBManager.Task>
+    public class TaskCompleted : PubSubEvent<LabDbContext.Task>
     {
     }
 }

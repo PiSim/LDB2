@@ -1,10 +1,10 @@
 ﻿<UserControl x:Class="Controls.Views.MaterialCodeBox"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:Controls.Views"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300"
              Name="this">
     <StackPanel Orientation="Horizontal"
@@ -12,17 +12,17 @@
         <TextBox Text="{Binding MaterialInstance.MaterialType.Code, ElementName=this, Mode=OneWay}"
                  IsReadOnly="True"
                  Width="50"
-                 Margin="0,0,5,0"/>
+                 Margin="0,0,5,0" />
         <TextBox Text="{Binding MaterialInstance.MaterialLine.Code, ElementName=this, Mode=OneWay}"
                  IsReadOnly="True"
                  Width="40"
-                 Margin="0,0,5,0"/>
+                 Margin="0,0,5,0" />
         <TextBox Text="{Binding  MaterialInstance.Aspect.Code, ElementName=this, Mode=OneWay}"
                  IsReadOnly="True"
                  Width="40"
-                 Margin="0,0,5,0"/>
+                 Margin="0,0,5,0" />
         <TextBox Text="{Binding MaterialInstance.Recipe.Code, ElementName=this, Mode=OneWay}"
                  Width="50"
-                 IsReadOnly="True"/>
+                 IsReadOnly="True" />
     </StackPanel>
 </UserControl>

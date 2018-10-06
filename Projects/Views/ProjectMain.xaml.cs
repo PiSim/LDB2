@@ -1,20 +1,7 @@
-﻿using DBManager;
+﻿using Controls.Views;
 using Microsoft.Practices.Prism.Mvvm;
-using Prism.Events;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+using Prism.Regions;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Projects.Views
 {
@@ -23,9 +10,15 @@ namespace Projects.Views
     /// </summary>
     public partial class ProjectMain : UserControl, IView
     {
-        public ProjectMain()
+        #region Constructors
+
+        public ProjectMain(IRegionManager regionManager)
         {
             InitializeComponent();
+            regionManager.RegisterViewWithRegion(RegionNames.ProjectStatRegion,
+                                                typeof(Views.ProjectStats));
         }
+
+        #endregion Constructors
     }
 }

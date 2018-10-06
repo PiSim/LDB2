@@ -1,21 +1,7 @@
-﻿using DBManager;
+﻿using Controls.Views;
 using Microsoft.Practices.Prism.Mvvm;
-using Prism.Events;
 using Prism.Regions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Tasks.Views
 {
@@ -24,10 +10,18 @@ namespace Tasks.Views
     /// </summary>
     public partial class TaskEdit : UserControl, INavigationAware, IView
     {
-        public TaskEdit()
+        #region Constructors
+
+        public TaskEdit(IRegionManager regionManager)
         {
             InitializeComponent();
+            regionManager.RegisterViewWithRegion(RegionNames.TaskEditProjectDetailsRegion,
+                                                typeof(ProjectDetailsControl));
         }
+
+        #endregion Constructors
+
+        #region Methods
 
         public bool IsNavigationTarget(NavigationContext ncontext)
         {
@@ -36,13 +30,14 @@ namespace Tasks.Views
 
         public void OnNavigatedFrom(NavigationContext ncontext)
         {
-
         }
 
         public void OnNavigatedTo(NavigationContext ncontext)
         {
             (DataContext as ViewModels.TaskEditViewModel).TaskInstance =
-                 ncontext.Parameters["ObjectInstance"] as DBManager.Task;
+                 ncontext.Parameters["ObjectInstance"] as LabDbContext.Task;
         }
+
+        #endregion Methods
     }
 }

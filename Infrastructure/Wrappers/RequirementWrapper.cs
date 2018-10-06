@@ -1,129 +1,80 @@
-﻿using DBManager;
-using DBManager.EntityExtensions;
-using DBManager.Services;
+﻿using LabDbContext;
+using LabDbContext.EntityExtensions;
+using LabDbContext.Services;
 using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Infrastructure.Wrappers
 {
+    public class IsOverrideChangedEventArgs : EventArgs
+    {
+        public Requirement RequirementInstance { get; set; }
+        public bool IsOverride { get; set; }
+    }
+    
     public class RequirementWrapper : BindableBase
     {
-        private IDataService _dataService;
-        private Requirement _requirementInstance;
-        private SpecificationVersion _versionInstance;
+        public event EventHandler<IsOverrideChangedEventArgs> IsOverrideChanged;
 
-        public RequirementWrapper(Requirement instance,
-                                    SpecificationVersion version,
-                                    IDataService dataService) : base()
+        #region Constructors
+
+        public RequirementWrapper(Requirement instance) : base()
         {
-            _dataService = dataService;
-            _requirementInstance = instance;
-            _versionInstance = version;
+            RequirementInstance = instance;
         }
 
-        public bool CanModify
-        {
-            get
-            {
-                if (_versionInstance.IsMain)
-                    return true;
+        #endregion Constructors
 
-                else
-                    return IsOverride;
-            }
-        }
-
-        public bool CanSetOverride
-        {
-            get { return !_versionInstance.IsMain;  }
-        }
+        #region Properties
         
-        public string Notes
-        {
-            get { return _requirementInstance.Description; }
-            set
-            {
-                _requirementInstance.Description = value;
-            }
-        }
-
         public bool IsOverride
         {
-            get { return _requirementInstance.IsOverride; }
+            get { return RequirementInstance.IsOverride; }
 
             set
             {
-                if (value)
-                    AddOverride();
-                else
-                    RemoveOverride();
-
-                _requirementInstance.Load();
-                RaisePropertyChanged("CanModify");
-                RaisePropertyChanged("SubRequirements");
+                RaiseIsOverrideChanged();
             }
         }
-        
+
+        public string Method => RequirementInstance.MethodVariant.Method.Standard.Name;
+
+        public string Notes
+        {
+            get { return RequirementInstance.Description; }
+            set
+            {
+                RequirementInstance.Description = value;
+            }
+        }
+
+        public string Property => RequirementInstance.MethodVariant.Method.Property.Name;
+
+
         public Requirement RequirementInstance
         {
-            get { return _requirementInstance; }
+            get; set;
         }
 
-        public IEnumerable<SubRequirement> SubRequirements
-        {
-            get { return _requirementInstance.SubRequirements
-                                            .ToList(); }
-        }
+        public IEnumerable<SubRequirement> SubRequirements => RequirementInstance.SubRequirements
+                                            .ToList();
 
-        public string Method=> _requirementInstance.MethodVariant.Method.Standard.Name;
-        
-        public string Property => _requirementInstance.MethodVariant.Method.Property.Name;
+        public string VariantName => RequirementInstance?.VariantName;
 
-        public bool ReadOnly
-        {
-            get { return !CanModify; }
-        }
-
-        public string VariantName => _requirementInstance?.VariantName;
+        #endregion Properties
 
         // Method definitions
 
-        public void AddOverride()
+        #region Methods
+
+
+        private void RaiseIsOverrideChanged()
         {
-            Requirement newOverride = new Requirement
-            {
-                Description = _requirementInstance.Description,
-                IsOverride = true,
-                MethodVariantID = _requirementInstance.MethodVariantID,
-                OverriddenID = _requirementInstance.ID,
-                SpecificationVersionID = _versionInstance.ID
-            };
-
-            foreach (SubRequirement subReq in _requirementInstance.SubRequirements)
-            {
-                SubRequirement tempSub = new SubRequirement
-                {
-                    SubMethodID = subReq.SubMethodID,
-                    RequiredValue = subReq.RequiredValue
-                };
-
-                newOverride.SubRequirements.Add(tempSub);
-            }
-            
-            newOverride.Create();
-            _requirementInstance = newOverride;
+            IsOverrideChanged?.Invoke(this, new IsOverrideChangedEventArgs() { IsOverride = IsOverride, RequirementInstance = RequirementInstance });
         }
 
-        private void RemoveOverride()
-        {
-            int overrID = (int)_requirementInstance.OverriddenID;
-            _requirementInstance.Delete();
-            _requirementInstance = _dataService.GetRequirement(overrID);
-        }
+        #endregion Methods
     }
-
 }

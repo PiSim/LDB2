@@ -1,53 +1,49 @@
-using DBManager;
-using DBManager.EntityExtensions;
-using DBManager.Services;
+using Controls.Views;
+using DataAccess;
 using Infrastructure;
 using Infrastructure.Events;
-using Microsoft.Practices.Unity;
+using Infrastructure.Queries;
+using LabDbContext;
+using LabDbContext.EntityExtensions;
+using LabDbContext.Services;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
-using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 
 namespace Projects.ViewModels
 {
     public class ProjectInfoViewModel : BindableBase
     {
+        #region Fields
+
         private bool _editMode;
-        private Batch _selectedBatch;
-        private DBPrincipal _principal;
-        private DelegateCommand _openBatch, 
-                                _openExternalReport, 
-                                _openReport, 
-                                _save,
-                                _startEdit;
-        private DelegateCommand<Material> _addMaterial,
-                                        _removeMaterial;
-        private IDataService _dataService;
+        private IEventAggregator _eventAggregator;
+        private IDataService<LabDbEntities> _labDbData;
         private IEnumerable<Person> _leaderList;
         private IEnumerable<Organization> _oemList;
-        private EventAggregator _eventAggregator;
-        private ExternalReport _selectedExternal;
         private Project _projectInstance;
+        private DelegateCommand _save;
+        private Batch _selectedBatch;
+        private ExternalReport _selectedExternal;
         private Report _selectedReport;
 
-        public ProjectInfoViewModel(DBPrincipal principal,
-                                    EventAggregator aggregator,
-                                    IDataService dataService)
+        #endregion Fields
+
+        #region Constructors
+
+        public ProjectInfoViewModel(IDataService<LabDbEntities> labDbData,
+                                    IEventAggregator aggregator)
             : base()
         {
-            _dataService = dataService;
+            _labDbData = labDbData;
             _editMode = false;
             _eventAggregator = aggregator;
-            _principal = principal;
 
             #region EventSubscriptions
-            
+
             // ReportList Update
 
             _eventAggregator.GetEvent<ReportCreated>().Subscribe(
@@ -56,7 +52,6 @@ namespace Projects.ViewModels
                     SelectedReport = null;
                     RaisePropertyChanged("ReportList");
                 });
-
 
             // LeaderList Update
 
@@ -73,12 +68,12 @@ namespace Projects.ViewModels
             _eventAggregator.GetEvent<TaskListUpdateRequested>()
                             .Subscribe(() => RaisePropertyChanged("TaskList"));
 
-            #endregion
+            #endregion EventSubscriptions
 
             #region CommandDefinitions
 
-            _addMaterial = new DelegateCommand<Material>(
-                mat => 
+            AddMaterialCommand = new DelegateCommand<Material>(
+                mat =>
                 {
                     if (mat != null)
                     {
@@ -89,9 +84,9 @@ namespace Projects.ViewModels
                         RaisePropertyChanged("UnassignedMaterials");
                     }
                 });
-            
-            _openBatch = new DelegateCommand(
-                () => 
+
+            OpenBatchCommand = new DelegateCommand(
+                () =>
                 {
                     NavigationToken token = new NavigationToken(MaterialViewNames.BatchInfoView,
                                                                 SelectedBatch);
@@ -99,7 +94,7 @@ namespace Projects.ViewModels
                 },
                 () => SelectedBatch != null);
 
-            _openExternalReport = new DelegateCommand(
+            OpenExternalReportCommand = new DelegateCommand(
                 () =>
                 {
                     NavigationToken token = new NavigationToken(Reports.ViewNames.ExternalReportEditView,
@@ -108,7 +103,7 @@ namespace Projects.ViewModels
                 },
                 () => SelectedExternalReport != null);
 
-            _openReport = new DelegateCommand(
+            OpenReportCommand = new DelegateCommand(
                 () =>
                 {
                     NavigationToken token = new NavigationToken(Reports.ViewNames.ReportEditView,
@@ -116,7 +111,7 @@ namespace Projects.ViewModels
                     _eventAggregator.GetEvent<NavigationRequested>().Publish(token);
                 });
 
-            _removeMaterial = new DelegateCommand<Material>(
+            RemoveMaterialCommand = new DelegateCommand<Material>(
                 mat =>
                 {
                     if (mat != null)
@@ -137,18 +132,20 @@ namespace Projects.ViewModels
                 },
                 () => _editMode);
 
-            _startEdit = new DelegateCommand(
+            StartEditCommand = new DelegateCommand(
                 () =>
                 {
                     EditMode = true;
                 },
-                () => !_editMode && _principal.IsInRole(UserRoleNames.ProjectAdmin));
+                () => !_editMode && Thread.CurrentPrincipal.IsInRole(UserRoleNames.ProjectAdmin));
 
-            #endregion
+            #endregion CommandDefinitions
         }
 
+        #endregion Constructors
+
         #region Methods
-        
+
         private void UpdateLeaderList()
         {
             _leaderList = null;
@@ -163,22 +160,15 @@ namespace Projects.ViewModels
             RaisePropertyChanged("SelectedOEM");
         }
 
-        #endregion
+        #endregion Methods
 
-        public DelegateCommand<Material> AddMaterialCommand => _addMaterial;
-        
-        public IEnumerable<Material> AssignedMaterials
-        {
-            get { return _projectInstance.GetMaterials(); }
-        }
+        #region Properties
 
-        public IEnumerable<Batch> BatchList
-        {
-            get 
-            {
-                return _projectInstance.GetBatches();
-            }
-        }
+        public DelegateCommand<Material> AddMaterialCommand { get; }
+
+        public IEnumerable<Material> AssignedMaterials => _projectInstance.GetMaterials();
+
+        public IEnumerable<Batch> BatchList => _projectInstance.GetBatches();
 
         public string Description
         {
@@ -205,7 +195,7 @@ namespace Projects.ViewModels
                 RaisePropertyChanged("EditMode");
 
                 _save.RaiseCanExecuteChanged();
-                _startEdit.RaiseCanExecuteChanged();
+                StartEditCommand.RaiseCanExecuteChanged();
             }
         }
 
@@ -219,7 +209,19 @@ namespace Projects.ViewModels
                 return _projectInstance.ExternalReports;
             }
         }
-        
+
+        public IEnumerable<Person> LeaderList
+        {
+            get
+            {
+                if (_leaderList == null)
+                    _leaderList = _labDbData.RunQuery(new PeopleQuery() { Role = PeopleQuery.PersonRoles.ProjectLeader })
+                                                            .ToList();
+
+                return _leaderList;
+            }
+        }
+
         public string LeaderName
         {
             get
@@ -230,18 +232,6 @@ namespace Projects.ViewModels
                 return _projectInstance.Leader.Name;
             }
         }
-
-        public IEnumerable<Person> LeaderList
-        {
-            get
-            {
-                if (_leaderList == null)
-                    _leaderList = _dataService.GetPeople(PersonRoleNames.ProjectLeader);
-
-                return _leaderList;
-            }
-        }
-
 
         public string Name
         {
@@ -263,26 +253,18 @@ namespace Projects.ViewModels
             get
             {
                 if (_oemList == null)
-                    _oemList = _dataService.GetOrganizations(OrganizationRoleNames.OEM);
+                    _oemList = _labDbData.RunQuery(new OrganizationsQuery() { Role = OrganizationsQuery.OrganizationRoles.OEM })
+                                                                        .ToList(); ;
 
                 return _oemList;
             }
         }
 
-        public DelegateCommand OpenBatchCommand
-        {
-            get { return _openBatch; }
-        }
+        public DelegateCommand OpenBatchCommand { get; }
 
-        public DelegateCommand OpenExternalReportCommand
-        {
-            get { return _openExternalReport; }
-        }
+        public DelegateCommand OpenExternalReportCommand { get; }
 
-        public DelegateCommand OpenReportCommand
-        {
-            get { return _openReport; }
-        }
+        public DelegateCommand OpenReportCommand { get; }
 
         public string ProjectExternalReportListRegionName => RegionNames.ProjectExternalReportListRegion;
 
@@ -293,7 +275,7 @@ namespace Projects.ViewModels
             {
                 _projectInstance = value;
                 _projectInstance?.Load();
-                
+
                 SelectedBatch = null;
 
                 RaisePropertyChanged("AssignedMaterials");
@@ -309,28 +291,19 @@ namespace Projects.ViewModels
             }
         }
 
-        public DelegateCommand<Material> RemoveMaterialCommand => _removeMaterial;
+        public DelegateCommand<Material> RemoveMaterialCommand { get; }
 
-        public IEnumerable<Report> ReportList
-        {
-            get
-            {
-                return _projectInstance.GetReports();
-            }
-        }
+        public IEnumerable<Report> ReportList => _projectInstance.GetReports();
 
-        public DelegateCommand SaveCommand
-        {
-            get { return _save; }
-        }
-        
+        public DelegateCommand SaveCommand => _save;
+
         public Batch SelectedBatch
         {
             get { return _selectedBatch; }
             set
             {
                 _selectedBatch = value;
-                _openBatch.RaiseCanExecuteChanged();
+                OpenBatchCommand.RaiseCanExecuteChanged();
                 RaisePropertyChanged("SelectedBatch");
             }
         }
@@ -341,7 +314,7 @@ namespace Projects.ViewModels
             set
             {
                 _selectedExternal = value;
-                _openExternalReport.RaiseCanExecuteChanged();
+                OpenExternalReportCommand.RaiseCanExecuteChanged();
             }
         }
 
@@ -374,18 +347,16 @@ namespace Projects.ViewModels
         public Report SelectedReport
         {
             get { return _selectedReport; }
-            set 
-            { 
-                _selectedReport = value; 
-                _openReport.RaiseCanExecuteChanged();
+            set
+            {
+                _selectedReport = value;
+                OpenReportCommand.RaiseCanExecuteChanged();
             }
         }
-        public DelegateCommand StartEditCommand
-        {
-            get { return _startEdit; }
-        }
 
-        public IEnumerable<DBManager.Task> TaskList
+        public DelegateCommand StartEditCommand { get; }
+
+        public IEnumerable<LabDbContext.Task> TaskList
         {
             get
             {
@@ -395,10 +366,11 @@ namespace Projects.ViewModels
                 return _projectInstance.GetTasks();
             }
         }
-        
-        public IEnumerable<Material> UnassignedMaterials
-        {
-            get { return MaterialService.GetMaterialsWithoutProject(); }
-        }
-    }        
+
+        public IEnumerable<Material> UnassignedMaterials => _labDbData.RunQuery(new MaterialsQuery())
+                                                                .Where(mat => mat.ProjectID == null)
+                                                                .ToList();
+
+        #endregion Properties
+    }
 }

@@ -1,93 +1,101 @@
-﻿using DBManager;
-using DBManager.Services;
+﻿using Controls.Views;
+using DataAccess;
 using Infrastructure;
 using Infrastructure.Events;
-using Infrastructure.Queries;
-using Infrastructure.Queries.Presentation;
-using Navigation;
+using LabDbContext;
+using Materials.Queries;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
 using Reporting;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
+using System.Threading;
 
 namespace Materials.ViewModels
 {
-    class BatchMainViewModel : BindableBase
+    internal class BatchMainViewModel : BindableBase
     {
-        private bool _isPrintMenuOpen;
-        private DBPrincipal _principal;
-        private DelegateCommand _createBatch, 
-                                _quickOpen, 
-                                _openPrintMenu,
-                                _openSampleLogView,
-                                _printStatusList,
-                                _refresh;
-        private DelegateCommand<IQueryPresenter<Batch>> _printBatchQuery;
-        private IDataService _dataService;
-        private IEventAggregator _eventAggregator;
-        private IMaterialService _materialService;
-        private IReportingService _reportingService;
-        private Sample _selectedSampleArrival;
-        private string _batchNumber;
+        #region Fields
 
-        public BatchMainViewModel(DBPrincipal principal,
-                                IEventAggregator eventAggregator,
-                                IDataService dataService,
-                                IMaterialService materialService,
-                                IReportingService reportingService) 
-            : base()
+        private string _batchNumber;
+        private IEventAggregator _eventAggregator;
+        private bool _isPrintMenuOpen;
+        private IDataService<LabDbEntities> _labDbData;
+        private MaterialService _materialService;
+        private DelegateCommand _refresh;
+        private IReportingService _reportingService;
+
+        #endregion Fields
+
+        #region Constructors
+
+        public BatchMainViewModel(IEventAggregator eventAggregator,
+                                IDataService<LabDbEntities> labDbData,
+                                MaterialService materialService,
+                                IReportingService reportingService)
         {
-            _dataService = dataService;
+            _labDbData = labDbData;
             _eventAggregator = eventAggregator;
             _isPrintMenuOpen = false;
             _materialService = materialService;
-            _principal = principal;
             _reportingService = reportingService;
 
-            _createBatch = new DelegateCommand(
+            CreateBatchCommand = new DelegateCommand(
                 () =>
                 {
                     _materialService.CreateBatch();
                 },
-                () => _principal.IsInRole(UserRoleNames.BatchEdit));
+                () => Thread.CurrentPrincipal.IsInRole(UserRoleNames.BatchEdit));
 
-            _openPrintMenu = new DelegateCommand(
+            OpenPrintMenuCommand = new DelegateCommand(
                 () =>
                 {
                     IsPrintMenuOpen = true;
                 });
 
-            _openSampleLogView = new DelegateCommand(
+            OpenSampleLogViewCommand = new DelegateCommand(
                 () =>
                 {
                     _materialService.ShowSampleLogDialog();
                 },
-                () => _principal.IsInRole(UserRoleNames.SampleEdit));
-            
-            _quickOpen = new DelegateCommand(
+                () => Thread.CurrentPrincipal.IsInRole(UserRoleNames.SampleEdit));
+
+            QuickOpenCommand = new DelegateCommand(
                 () =>
                 {
                     _eventAggregator.GetEvent<BatchVisualizationRequested>()
                                     .Publish(_batchNumber);
                 });
 
-            _printBatchQuery = new DelegateCommand<IQueryPresenter<Batch>>(
+            PrintBatchQueryCommand = new DelegateCommand<IQueryPresenter<Batch, LabDbEntities>>(
                 query =>
                 {
-                    IEnumerable<Batch> tempQuery = _dataService.GetQueryResults(query.Query);
+                    IEnumerable<Batch> tempQuery = _labDbData.RunQuery(query.Query);
                     _reportingService.PrintBatchReport(tempQuery);
                 });
 
-            _printStatusList = new DelegateCommand(
+            PrintStatusListCommand = new DelegateCommand(
                 () =>
                 {
-                    _reportingService.PrintBatchReport(_dataService.GetBatches(50));
+                    _reportingService.PrintBatchReport(_labDbData.RunQuery(new LatestNBatchesQuery(50)));
+                });
+
+            SearchNewBatchesCommand = new DelegateCommand(
+                () =>
+                {
+                    ICollection<Tuple<string, string, string>> fileList = _materialService.GetNewBatchesFromFile();
+
+                    ICollection<Batch> parsedBatches = ParseBatches(fileList);
+
+                    Views.NewBatchSearchResultDialog dialog = new Views.NewBatchSearchResultDialog()
+                    {
+                        ParsedBatches = parsedBatches
+                    };
+
+                    if (dialog.ShowDialog() == true)
+                    {
+                    }
                 });
 
             _refresh = new DelegateCommand(
@@ -96,21 +104,48 @@ namespace Materials.ViewModels
                     _eventAggregator.GetEvent<BatchStatusListRefreshRequested>()
                                     .Publish();
                 });
-
-            
         }
-        
-        public IEnumerable<IQueryPresenter<Batch>> QueryList => _materialService.GetBatchQueries();
 
-        public string BatchStatusListRegionName
+        #endregion Constructors
+
+        #region Methods
+
+        private ICollection<Batch> ParseBatches(ICollection<Tuple<string, string, string>> fileList)
         {
-            get { return RegionNames.BatchStatusListRegion; }
+            Batch current;
+            List<Batch> output = new List<Batch>(fileList.Count);
+            foreach (Tuple<string, string, string> batchfile in fileList)
+            {
+                string parsedTypeCode = (batchfile.Item2.Length >= 4) ? batchfile.Item2.Substring(0, 4) : "";
+                string parsedLineCode = (batchfile.Item2.Length >= 7) ? batchfile.Item2.Substring(4, 3) : "";
+                string parsedAspectCode = (batchfile.Item2.Length >= 10) ? batchfile.Item2.Substring(7, 3) : "";
+                string parsedRecipeCode = (batchfile.Item2.Length >= 14) ? batchfile.Item2.Substring(10, 4) : "";
+
+                current = new Batch()
+                {
+                    Material = new Material()
+                    {
+                        Aspect = new Aspect() { Code = parsedAspectCode },
+                        MaterialLine = new MaterialLine() { Code = parsedLineCode },
+                        MaterialType = new MaterialType() { Code = parsedTypeCode },
+                        Recipe = new Recipe() { Code = parsedRecipeCode }
+                    },
+                    Number = batchfile.Item1,
+                    OrderFilePath = batchfile.Item3
+                };
+
+                output.Add(current);
+            }
+
+            return output;
         }
 
-        public DelegateCommand CreateBatchCommand
-        {
-            get { return _createBatch; }
-        }
+        #endregion Methods
+
+        #region Properties
+
+        public string BatchStatusListRegionName => RegionNames.BatchStatusListRegion;
+        public DelegateCommand CreateBatchCommand { get; }
 
         public bool IsPrintMenuOpen
         {
@@ -122,52 +157,28 @@ namespace Materials.ViewModels
             }
         }
 
-        public DelegateCommand OpenPrintMenuCommand => _openPrintMenu;
+        public DelegateCommand OpenPrintMenuCommand { get; }
+        public DelegateCommand OpenSampleLogViewCommand { get; }
+        public DelegateCommand<IQueryPresenter<Batch, LabDbEntities>> PrintBatchQueryCommand { get; }
+        public DelegateCommand PrintStatusListCommand { get; }
 
-        public DelegateCommand OpenSampleLogViewCommand
+        public IEnumerable<IQueryPresenter<Batch, LabDbEntities>> QueryList { get; } = new List<IQueryPresenter<Batch, LabDbEntities>>
         {
-            get { return _openSampleLogView; }
-        }
+            new ArrivedUntestedBatchesQueryPresenter(),
+            new BatchesNotArrivedQueryPresenter(),
+            new Latest25BatchesQueryPresenter()
+        };
 
-        public DelegateCommand QuickOpenCommand
-        {
-            get { return _quickOpen; }
-        }
+        public DelegateCommand QuickOpenCommand { get; }
+        public DelegateCommand RefreshCommand => _refresh;
 
-        public DelegateCommand<IQueryPresenter<Batch>> PrintBatchQueryCommand => _printBatchQuery;
+        public string SampleArchiveRegionName => RegionNames.SampleArchiveRegion;
 
-        public DelegateCommand PrintStatusListCommand
-        {
-            get { return _printStatusList; }
-        }
+        public string SampleLongTermStorageRegionName => RegionNames.SampleLongTermStorageRegion;
 
-        public IEnumerable<Sample> RecentArrivalsList => _dataService.GetSamples(25);
+        public DelegateCommand SearchNewBatchesCommand { get; set; }
+        public Sample SelectedSampleArrival { get; set; }
 
-        public DelegateCommand RefreshCommand
-        {
-            get
-            {
-                return _refresh;
-            }
-        }
-
-        public string SampleArchiveRegionName
-        {
-            get { return RegionNames.SampleArchiveRegion; }
-        }
-
-        public string SampleLongTermStorageRegionName
-        {
-            get { return RegionNames.SampleLongTermStorageRegion; }
-        }
-
-        public Sample SelectedSampleArrival
-        {
-            get { return _selectedSampleArrival; }
-            set
-            {
-                _selectedSampleArrival = value;
-            }
-        }
+        #endregion Properties
     }
 }

@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace DBManager
+namespace LabDbContext
 {
     using System;
     using System.Collections.Generic;

@@ -1,87 +1,87 @@
-﻿using Controls.Views;
-using DBManager;
-using DBManager.EntityExtensions;
-using DBManager.Services;
+﻿using DataAccess;
 using Infrastructure;
+using Infrastructure.Commands;
 using Infrastructure.Events;
-using Infrastructure.Wrappers;
-using Microsoft.Practices.Unity;
+using Infrastructure.Queries;
+using LabDbContext;
+using LabDbContext.EntityExtensions;
+using LabDbContext.Services;
+using Materials.Commands;
+using Materials.Queries;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 
 namespace Materials.ViewModels
 {
     public class BatchInfoViewModel : BindableBase, INotifyDataErrorInfo
     {
-        private Aspect _aspectInstance;
-        private Batch _instance;
-        private bool _editMode;
-        private Colour _selectedColour;
-        private DBPrincipal _principal;
-        private DelegateCommand _cancelEdit,
-                                _deleteBatch,
-                                _openExternalReport, 
-                                _openReport,
-                                _refresh,
-                                _save,
-                                _startEdit;
-        private DelegateCommand<Sample> _deleteSample;
+        #region Fields
+
         private readonly Dictionary<string, ICollection<string>> _validationErrors = new Dictionary<string, ICollection<string>>();
-        private EventAggregator _eventAggregator;
-        private ExternalReport _selectedExternalReport;
-        private ExternalConstruction _selectedExternalConstruction;
-        private IDataService _dataService;
-        private IEnumerable<Colour> _colourList;
-        private IEnumerable<ExternalConstruction> _externalConstructionList;
-        private IEnumerable<Project> _projectList;
-        private IEnumerable<TrialArea> _trialAreaList; 
-        private IEnumerable<Sample> _samplesList;
-        private IMaterialService _materialService;
-        private Material _materialInstance;
-        private MaterialLine _lineInstance;
-        private Project _selectedProject;
-        private Recipe _recipeInstance;
-        private Report _selectedReport;
+
         private string _aspectCode,
                         _lineCode,
                         _recipeCode,
                         _typeCode;
-        private MaterialType _typeInstance;
-        private TrialArea _selectedTrialArea;
 
-        public BatchInfoViewModel(DBPrincipal principal,
-                                EventAggregator aggregator,
-                                IDataService dataService,
-                                IMaterialService materialService) : base()
+        private Aspect _aspectInstance;
+        private IEnumerable<Colour> _colourList;
+        private bool _editMode;
+        private IEventAggregator _eventAggregator;
+        private IEnumerable<ExternalConstruction> _externalConstructionList;
+        private Batch _instance;
+        private IDataService<LabDbEntities> _labDbData;
+        private MaterialLine _lineInstance;
+        private Material _materialInstance;
+        private MaterialService _materialService;
+        private IEnumerable<Project> _projectList;
+        private Recipe _recipeInstance;
+        private Colour _selectedColour;
+        private ExternalConstruction _selectedExternalConstruction;
+        private ExternalReport _selectedExternalReport;
+        private Project _selectedProject;
+        private Report _selectedReport;
+        private TrialArea _selectedTrialArea;
+        private MaterialType _typeInstance;
+
+        #endregion Fields
+
+        #region Constructors
+
+        public BatchInfoViewModel(IEventAggregator aggregator,
+                                IDataService<LabDbEntities> labDbData,
+                                MaterialService materialService) : base()
         {
-            _dataService = dataService;
+            _labDbData = labDbData;
+
             _materialService = materialService;
             _eventAggregator = aggregator;
-            _principal = principal;
             _editMode = false;
 
-            _trialAreaList = _dataService.GetTrialAreas();
+            TrialAreaList = _labDbData.RunQuery(new TrialAreasQuery())
+                                    .ToList();
 
-            _cancelEdit = new DelegateCommand(
+            CancelEditCommand = new DelegateCommand(
                 () =>
                 {
                     if (_instance == null)
                         BatchInstance = null;
                     else
-                        BatchInstance = _dataService.GetBatch(_instance.ID);
+                        BatchInstance = _labDbData.RunQuery(new BatchQuery()
+                        {
+                            ID = BatchInstance.ID
+                        });
                 },
                 () => EditMode);
 
-            _deleteBatch = new DelegateCommand(
+            DeleteBatchCommand = new DelegateCommand(
                 () =>
                 {
                     _instance.Delete();
@@ -95,17 +95,16 @@ namespace Materials.ViewModels
                 },
                 () => CanDelete);
 
-            _deleteSample = new DelegateCommand<Sample>(
+            DeleteSampleCommand = new DelegateCommand<Sample>(
                 smp =>
                 {
                     _materialService.DeleteSample(smp);
-                    _samplesList = _instance.GetSamples();
                     RaisePropertyChanged("Samples");
                 },
-                smp => _principal.IsInRole(UserRoleNames.BatchEdit));
+                smp => Thread.CurrentPrincipal.IsInRole(UserRoleNames.BatchEdit));
 
-            _openExternalReport = new DelegateCommand(
-                () => 
+            OpenExternalReportCommand = new DelegateCommand(
+                () =>
                 {
                     NavigationToken token = new NavigationToken(ReportViewNames.ExternalReportEditView,
                                                                 _selectedExternalReport);
@@ -113,8 +112,8 @@ namespace Materials.ViewModels
                 },
                 () => _selectedExternalReport != null);
 
-            _openReport = new DelegateCommand(
-                () => 
+            OpenReportCommand = new DelegateCommand(
+                () =>
                 {
                     NavigationToken token = new NavigationToken(ReportViewNames.ReportEditView,
                                                                 _selectedReport);
@@ -122,78 +121,33 @@ namespace Materials.ViewModels
                 },
                 () => _selectedReport != null);
 
-            _refresh = new DelegateCommand(
+            RefreshCommand = new DelegateCommand(
                 () =>
                 {
-                    BatchInstance = _dataService.GetBatch(_instance.ID);
+                    BatchInstance = _labDbData.RunQuery(new BatchQuery()
+                    {
+                        ID = BatchInstance.ID
+                    });
                 },
                 () => !EditMode);
 
-            _save = new DelegateCommand(
+            SaveCommand = new DelegateCommand(
                 () =>
                 {
-                    CheckMaterial();
-                    
-                    // If a material with the given parameters does not exist, create it
-                    // Then update the batch instance with the correct ID
-
-                    if (_materialInstance == null)
-                        _materialInstance = _materialService.CreateMaterial(_typeCode,
-                                                                            _lineCode,
-                                                                            _aspectCode,
-                                                                            _recipeCode);
-
-                    _instance.MaterialID = _materialInstance.ID;
-
-                    // If construction and/or project are selected and are different from
-                    // the one in the material instance, update
-
-                    bool requiresUpdate = false;
-
-                    if (_selectedExternalConstruction != null
-                        && _selectedExternalConstruction.ID != _materialInstance.ExternalConstructionID)
-                    {
-                        _materialInstance.ExternalConstructionID = _selectedExternalConstruction.ID;
-                        requiresUpdate = true;
-                    }
-
-                    if (_selectedProject != null
-                        && _selectedProject.ID != _materialInstance.ProjectID)
-                    {
-                        _materialInstance.ProjectID = _selectedProject.ID;
-                        requiresUpdate = true;
-                    }
-
-                    if (requiresUpdate)
-                        _materialInstance.Update();
-
-                    // If color is selected retrieve updated Recipe instance
-                    // If the Recipe ColorID is different from the one selected, update
-
-                    if (_selectedColour != null)
-                    {
-                        Recipe _recipeInstance = _dataService.GetRecipe(_materialInstance.RecipeID);
-
-                        if (_recipeInstance.ColourID != _selectedColour.ID)
-                        {
-                            _recipeInstance.ColourID = _selectedColour.ID;
-                            _recipeInstance.Update();
-                        }
-                    }
-
-
-                    _instance.Update();
-
+                    CreateChildEntitiesIfMissing();
+                    ReloadChildEntitiesInstances();
+                    Material _materialTemplate = GenerateMaterialUpdateTemplate();
+                    _labDbData.Execute(new BatchUpdateCommand(BatchInstance, _materialTemplate));
                     EditMode = false;
                 },
                 () => EditMode && !HasErrors);
 
-            _startEdit = new DelegateCommand(
+            StartEditCommand = new DelegateCommand(
                 () =>
                 {
                     EditMode = true;
                 },
-                () => !EditMode && _principal.IsInRole(UserRoleNames.BatchEdit));
+                () => !EditMode && Thread.CurrentPrincipal.IsInRole(UserRoleNames.BatchEdit));
 
             #region EventSubscriptions
 
@@ -229,8 +183,11 @@ namespace Materials.ViewModels
                     RaisePropertyChanged("ReportList");
                 });
 
-            #endregion
+            #endregion EventSubscriptions
         }
+
+
+        #endregion Constructors
 
         #region Service method for internal use
 
@@ -242,12 +199,30 @@ namespace Materials.ViewModels
                 _lineInstance != null &&
                 _aspectInstance != null &&
                 _recipeInstance != null)
-                MaterialInstance = _dataService.GetMaterial(_typeInstance,
-                                                            _lineInstance,
-                                                            _aspectInstance,
-                                                            _recipeInstance);
+                MaterialInstance = _labDbData.RunQuery(new MaterialQuery()
+                {
+                    AspectID = _aspectInstance.ID,
+                    MaterialLineID = _lineInstance.ID,
+                    MaterialTypeID = _typeInstance.ID,
+                    RecipeID = _recipeInstance.ID
+                });
             else
                 MaterialInstance = null;
+        }
+
+        private void CreateChildEntitiesIfMissing()
+        {
+            if (_typeInstance == null)
+                _labDbData.Execute(new InsertEntityCommand(new MaterialType() { Code = TypeCode }));
+
+            if (_lineInstance == null)
+                _labDbData.Execute(new InsertEntityCommand(new MaterialLine() { Code = LineCode }));
+
+            if (_aspectInstance == null)
+                _labDbData.Execute(new InsertEntityCommand(new Aspect() { Code = AspectCode }));
+
+            if (_recipeInstance == null)
+                _labDbData.Execute(new InsertEntityCommand(new Recipe() { Code = RecipeCode }));
         }
 
         private void ExternalConstructionChangedHandler()
@@ -258,11 +233,65 @@ namespace Materials.ViewModels
             SelectedExternalConstruction = ExternalConstructionList.FirstOrDefault(exc => exc.ID == _instance?.Material?.ExternalConstructionID);
         }
 
-        #endregion
 
-        #region INotifyDataErrorInfo interface elements
+        private void ReloadChildEntitiesInstances()
+        {
+            TypeCode = TypeCode;
+            LineCode = LineCode;
+            AspectCode = AspectCode;
+            RecipeCode = RecipeCode;
+        }
+
+        /// <summary>
+        /// Generates a template Material that will be passed to a BatchUpdateCommand instance to perform the Batch Update
+        /// </summary>
+        /// <returns>A disconnected Material instance containing the information required for the update</returns>
+        private Material GenerateMaterialUpdateTemplate()
+        {
+            return new Material()
+            {
+                Aspect = new Aspect()
+                {
+                    Code = _aspectCode
+                },
+
+                ExternalConstruction = SelectedExternalConstruction,
+
+                MaterialLine = new MaterialLine()
+                {
+                    Code = _lineCode
+                },
+
+                MaterialType = new MaterialType()
+                {
+                    Code = _typeCode
+                },
+
+                Project = SelectedProject,
+
+                Recipe = new Recipe()
+                {
+                    Code = _recipeCode,
+                    Colour = _selectedColour
+                }
+            };
+        }
+
+        #endregion Service method for internal use
+
+        #region Events
 
         public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
+
+        #endregion Events
+
+        #region Properties
+
+        public bool HasErrors => _validationErrors.Count > 0;
+
+        #endregion Properties
+
+        #region Methods
 
         public IEnumerable GetErrors(string propertyName)
         {
@@ -273,19 +302,16 @@ namespace Materials.ViewModels
             return _validationErrors[propertyName];
         }
 
-        public bool HasErrors
-        {
-            get { return _validationErrors.Count > 0; }
-        }
-
         private void RaiseErrorsChanged(string propertyName)
         {
             ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
             RaisePropertyChanged("HasErrors");
-            _save.RaiseCanExecuteChanged();
+            SaveCommand.RaiseCanExecuteChanged();
         }
 
-        #endregion
+        #endregion Methods
+
+        #region Properties
 
         public string AspectCode
         {
@@ -296,7 +322,11 @@ namespace Materials.ViewModels
 
                 if (_aspectCode.Length == 3)
                 {
-                    AspectInstance = _dataService.GetAspect(_aspectCode);
+                    AspectInstance = _labDbData.RunQuery(new AspectQuery()
+                    {
+                        AspectCode = _aspectCode
+                    });
+
                     if (_validationErrors.ContainsKey("AspectCode"))
                     {
                         _validationErrors.Remove("AspectCode");
@@ -332,15 +362,10 @@ namespace Materials.ViewModels
                 EditMode = false;
 
                 _instance = value;
-                if (_instance != null && _instance.ID != 0)
-                    _instance.Load();
 
-                _deleteBatch.RaiseCanExecuteChanged();
+                DeleteBatchCommand.RaiseCanExecuteChanged();
 
-                _samplesList = _instance.GetSamples();
-
-                _selectedTrialArea = _trialAreaList.FirstOrDefault(tra => tra.ID == _instance?.TrialAreaID);
-                
+                _selectedTrialArea = TrialAreaList.FirstOrDefault(tra => tra.ID == _instance?.TrialAreaID);
 
                 _typeInstance = _instance?.Material?.MaterialType;
                 _typeCode = _typeInstance?.Code;
@@ -370,43 +395,32 @@ namespace Materials.ViewModels
                 RaisePropertyChanged("AspectInstance");
                 RaisePropertyChanged("AspectCode");
                 RaisePropertyChanged("RecipeCode");
-
                 RaisePropertyChanged("DoNotTest");
                 RaisePropertyChanged("ExternalReportList");
                 RaisePropertyChanged("Samples");
                 RaisePropertyChanged("Notes");
                 RaisePropertyChanged("Number");
-                RaisePropertyChanged("SelectedProject");
                 RaisePropertyChanged("ReportList");
                 RaisePropertyChanged("SelectedTrialArea");
             }
         }
 
-        public DelegateCommand CancelEditCommand
-        {
-            get { return _cancelEdit; }
-        }
-
-        private bool CanDelete => _instance != null
-                                    && _principal.IsInRole(UserRoleNames.BatchEdit)
-                                    && !_instance.HasTests;
+        public DelegateCommand CancelEditCommand { get; }
 
         public IEnumerable<Colour> ColourList
         {
             get
             {
                 if (_colourList == null)
-                    _colourList = _dataService.GetColours();
+                    _colourList = _labDbData.RunQuery(new ColorsQuery())
+                                            .ToList();
                 return _colourList;
             }
         }
 
-        public DelegateCommand DeleteBatchCommand
-        {
-            get { return _deleteBatch; }
-        }
+        public DelegateCommand DeleteBatchCommand { get; }
 
-        public DelegateCommand<Sample> DeleteSampleCommand => _deleteSample;
+        public DelegateCommand<Sample> DeleteSampleCommand { get; }
 
         public bool DoNotTest
         {
@@ -428,25 +442,29 @@ namespace Materials.ViewModels
                 _editMode = value;
 
                 RaisePropertyChanged("EditMode");
-                _cancelEdit.RaiseCanExecuteChanged();
-                _refresh.RaiseCanExecuteChanged();
-                _save.RaiseCanExecuteChanged();
-                _startEdit.RaiseCanExecuteChanged();
+                CancelEditCommand.RaiseCanExecuteChanged();
+                RefreshCommand.RaiseCanExecuteChanged();
+                SaveCommand.RaiseCanExecuteChanged();
+                StartEditCommand.RaiseCanExecuteChanged();
             }
         }
-        
+
         public IEnumerable<ExternalConstruction> ExternalConstructionList
         {
             get
             {
                 if (_externalConstructionList == null)
-                    _externalConstructionList = _dataService.GetExternalConstructions();
+                    _externalConstructionList = _labDbData.RunQuery(new ExternalConstructionsQuery())
+                                                        .ToList();
 
                 return _externalConstructionList;
             }
         }
 
-        public IEnumerable<ExternalReport> ExternalReportList => _instance?.GetExternalReports();
+        public IEnumerable<ExternalReport> ExternalReportList => (_instance == null) ? null : _labDbData.RunQuery(new ExternalReportsQuery())
+                                                                                                        .Where(exrep => exrep.TestRecords
+                                                                                                        .Any(tstrec => tstrec.BatchID == _instance.ID))
+                                                                                                        .ToList();
         
         public string LineCode
         {
@@ -457,7 +475,10 @@ namespace Materials.ViewModels
 
                 if (_lineCode.Length == 3)
                 {
-                    LineInstance = _dataService.GetMaterialLine(_lineCode);
+                    LineInstance = _labDbData.RunQuery(new MaterialLineQuery()
+                    {
+                        MaterialLineCode = LineCode
+                    });
                     if (_validationErrors.ContainsKey("LineCode"))
                     {
                         _validationErrors.Remove("LineCode");
@@ -505,44 +526,16 @@ namespace Materials.ViewModels
             }
         }
 
-        public string Number
-        {
-            get
-            {
-                return _instance?.Number;
-            }
-        }
+        public string Number => _instance?.Number;
 
-        public DelegateCommand OpenExternalReportCommand
-        {
-            get { return _openExternalReport; }
-        }
+        public DelegateCommand OpenExternalReportCommand { get; }
 
-        public DelegateCommand OpenReportCommand
-        {
-            get { return _openReport; }
-        }
+        public DelegateCommand OpenReportCommand { get; }
 
         public IEnumerable<Project> ProjectList
         {
-            get => (_projectList != null) ? _projectList : _projectList = _dataService.GetProjects();
-            private set => _projectList = value; 
-        }
-
-        public IEnumerable<Sample> Samples
-        {
-            get { return _samplesList; }
-        }
-
-        public Project SelectedProject
-        {
-            get => _selectedProject;
-
-            set
-            {
-                _selectedProject = value;
-                RaisePropertyChanged("SelectedProject");
-            }
+            get => (_projectList != null) ? _projectList : _projectList = _labDbData.RunQuery(new ProjectsQuery()).ToList();
+            private set => _projectList = value;
         }
 
         public string RecipeCode
@@ -554,7 +547,11 @@ namespace Materials.ViewModels
 
                 if (_recipeCode.Length == 4)
                 {
-                    RecipeInstance = _dataService.GetRecipe(_recipeCode);
+                    RecipeInstance = _labDbData.RunQuery(new RecipeQuery()
+                    {
+                        RecipeCode = _recipeCode
+                    });
+
                     if (_validationErrors.ContainsKey("RecipeCode"))
                     {
                         _validationErrors.Remove("RecipeCode");
@@ -583,21 +580,14 @@ namespace Materials.ViewModels
             }
         }
 
-        public DelegateCommand RefreshCommand
-        {
-            get { return _refresh; }
-        }
+        public DelegateCommand RefreshCommand { get; }
 
-        public IEnumerable<Report> ReportList
-        {
-            get { return _instance?.Reports; }
-        }
+        public IEnumerable<Report> ReportList => _instance?.Reports;
 
-        public DelegateCommand SaveCommand
-        {
-            get { return _save; }
-        }
-        
+        public IEnumerable<Sample> Samples => _instance?.Samples;
+
+        public DelegateCommand SaveCommand { get; }
+
         public Colour SelectedColour
         {
             get { return _selectedColour; }
@@ -621,23 +611,34 @@ namespace Materials.ViewModels
             }
         }
 
-        public Report SelectedReport
-        {
-            get { return _selectedReport; }
-            set 
-            {
-                _selectedReport = value; 
-                _openReport.RaiseCanExecuteChanged();
-            }
-        }
-
         public ExternalReport SelectedExternalReport
         {
             get { return _selectedExternalReport; }
-            set 
+            set
             {
                 _selectedExternalReport = value;
-                _openExternalReport.RaiseCanExecuteChanged();
+                OpenExternalReportCommand.RaiseCanExecuteChanged();
+            }
+        }
+
+        public Project SelectedProject
+        {
+            get => _selectedProject;
+
+            set
+            {
+                _selectedProject = value;
+                RaisePropertyChanged("SelectedProject");
+            }
+        }
+
+        public Report SelectedReport
+        {
+            get { return _selectedReport; }
+            set
+            {
+                _selectedReport = value;
+                OpenReportCommand.RaiseCanExecuteChanged();
             }
         }
 
@@ -651,15 +652,9 @@ namespace Materials.ViewModels
             }
         }
 
-        public DelegateCommand StartEditCommand
-        {
-            get { return _startEdit; }
-        }
+        public DelegateCommand StartEditCommand { get; }
 
-        public IEnumerable<TrialArea> TrialAreaList
-        {
-            get { return _trialAreaList; }
-        }
+        public IEnumerable<TrialArea> TrialAreaList { get; }
 
         public string TypeCode
         {
@@ -670,7 +665,11 @@ namespace Materials.ViewModels
 
                 if (_typeCode.Length == 4)
                 {
-                    TypeInstance = _dataService.GetMaterialType(_typeCode);
+                    TypeInstance = _labDbData.RunQuery(new MaterialTypeQuery()
+                    {
+                        MaterialTypeCode = _typeCode
+                    });
+
                     if (_validationErrors.ContainsKey("TypeCode"))
                     {
                         _validationErrors.Remove("TypeCode");
@@ -698,7 +697,12 @@ namespace Materials.ViewModels
                 RaisePropertyChanged("TypeInstance");
                 CheckMaterial();
             }
-
         }
+
+        private bool CanDelete => _instance != null
+                                                                                                                                                                                                                                                                                            && Thread.CurrentPrincipal.IsInRole(UserRoleNames.BatchEdit)
+                                    && !_instance.HasTests;
+
+        #endregion Properties
     }
 }

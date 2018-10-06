@@ -1,43 +1,44 @@
-﻿using DBManager;
+﻿using DataAccess;
 using Infrastructure;
 using Infrastructure.Wrappers;
+using LabDbContext;
 using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Mvvm;
-using System;
+using Specifications.Queries;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 
 namespace Specifications.ViewModels
 {
     public class ConsolidateStandardDialogViewModel : BindableBase
     {
-        private DelegateCommand<Window> _cancel,
-                                        _confirm;
-        private IDataService _dataService;
-        private IEnumerable<GenericItemWrapper<Std>> _selectedElements;
+        #region Fields
+
+        private IDataService<LabDbEntities> _labDbData;
         private ISpecificationService _specificationService;
         private Std _standardInstance;
 
-        public ConsolidateStandardDialogViewModel(IDataService dataService,
+        #endregion Fields
+
+        #region Constructors
+
+        public ConsolidateStandardDialogViewModel(IDataService<LabDbEntities> labDbData,
                                                     ISpecificationService specificationService)
         {
-            _dataService = dataService;
+            _labDbData = labDbData;
             _specificationService = specificationService;
 
-            _cancel = new DelegateCommand<Window>(
+            CancelCommand = new DelegateCommand<Window>(
                 parentDialog =>
                 {
                     parentDialog.DialogResult = false;
                 });
 
-            _confirm = new DelegateCommand<Window>(
+            ConfirmCommand = new DelegateCommand<Window>(
                 parentDialog =>
                 {
-                    _specificationService.ConsolidateStandard(_selectedElements.Where(giw => giw.IsSelected)
+                    _specificationService.ConsolidateStandard(StandardList.Where(giw => giw.IsSelected)
                                                                                 .Select(giw => giw.Item),
                                                                 _standardInstance);
                     parentDialog.DialogResult = true;
@@ -45,8 +46,12 @@ namespace Specifications.ViewModels
                 parentDialog => _standardInstance != null);
         }
 
-        public DelegateCommand<Window> CancelCommand => _cancel;
-        public DelegateCommand<Window> ConfirmCommand => _confirm;
+        #endregion Constructors
+
+        #region Properties
+
+        public DelegateCommand<Window> CancelCommand { get; }
+        public DelegateCommand<Window> ConfirmCommand { get; }
 
         public string ParentName => _standardInstance.Name;
 
@@ -56,17 +61,17 @@ namespace Specifications.ViewModels
             set
             {
                 _standardInstance = value;
-                _selectedElements = _dataService.GetStandards()
-                                                .Where(std => std.ID != _standardInstance.ID)
-                                                .Select(std => new GenericItemWrapper<Std>(std))
-                                                .ToList();
+                StandardList = _labDbData.RunQuery(new StandardsQuery())
+                                        .Select(std => new GenericItemWrapper<Std>(std))
+                                        .ToList();
                 OnPropertyChanged("StandardList");
                 OnPropertyChanged("ParentName");
-                _confirm.RaiseCanExecuteChanged();
+                ConfirmCommand.RaiseCanExecuteChanged();
             }
         }
 
-        public IEnumerable<GenericItemWrapper<Std>> StandardList => _selectedElements;
+        public IEnumerable<GenericItemWrapper<Std>> StandardList { get; private set; }
 
+        #endregion Properties
     }
 }

@@ -1,30 +1,29 @@
-﻿using DBManager;
-using DBManager.Services;
+﻿using LabDbContext;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Admin.ViewModels
 {
     public class MeasurementUnitMainViewModel : BindableBase
     {
-        private DelegateCommand _newUnit;
-        private EventAggregator _eventAggregator;
-        private IDataService _dataService;
-        private MeasurementUnit _selectedUnit;
+        #region Fields
 
-        public MeasurementUnitMainViewModel(EventAggregator eventAggregator,
+        private IDataService _dataService;
+        private IEventAggregator _eventAggregator;
+
+        #endregion Fields
+
+        #region Constructors
+
+        public MeasurementUnitMainViewModel(IEventAggregator eventAggregator,
                                             IDataService dataService)
         {
             _eventAggregator = eventAggregator;
             _dataService = dataService;
 
-            _newUnit = new DelegateCommand(
+            NewUnitCommand = new DelegateCommand(
                 () =>
                 {
                     Views.MeasurementUnitCreationDialog creationDialog = new Views.MeasurementUnitCreationDialog();
@@ -34,20 +33,16 @@ namespace Admin.ViewModels
                 });
         }
 
-        public DelegateCommand NewUnitCommand
-        {
-            get { return _newUnit; }
-        }
+        #endregion Constructors
 
-        public MeasurementUnit SelectedUnit
-        {
-            get { return _selectedUnit; }
-            set
-            {
-                _selectedUnit = value;
-            }
-        }
+        #region Properties
+
+        public DelegateCommand NewUnitCommand { get; }
+
+        public MeasurementUnit SelectedUnit { get; set; }
 
         public IEnumerable<MeasurementUnit> UnitOfMeasurementList => _dataService.GetMeasurementUnits();
+
+        #endregion Properties
     }
 }

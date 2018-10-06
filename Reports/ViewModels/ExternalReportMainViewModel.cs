@@ -1,46 +1,46 @@
-﻿using DBManager;
-using DBManager.Services;
+﻿using DataAccess;
 using Infrastructure;
 using Infrastructure.Events;
-using Microsoft.Practices.Unity;
+using Infrastructure.Queries;
+using LabDbContext;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 
 namespace Reports.ViewModels
 {
     public class ExternalReportMainViewModel : BindableBase
     {
-        private DBPrincipal _principal;
-        private DelegateCommand _newReport, _openReport;
-        private EventAggregator _eventAggregator;
-        private ExternalReport _selectedReport;
-        private IDataService _dataService;
-        private IReportService _reportService;
+        #region Fields
 
-        public ExternalReportMainViewModel(DBPrincipal principal,
-                                            EventAggregator aggregator,
-                                            IDataService dataService,
+        private IEventAggregator _eventAggregator;
+        private IDataService<LabDbEntities> _labDbData;
+        private IReportService _reportService;
+        private ExternalReport _selectedReport;
+
+        #endregion Fields
+
+        #region Constructors
+
+        public ExternalReportMainViewModel(IDataService<LabDbEntities> labDbData,
+                                            IEventAggregator aggregator,
                                             IReportService reportService)
         {
-            _dataService = dataService;
+            _labDbData = labDbData;
             _eventAggregator = aggregator;
             _reportService = reportService;
-            _principal = principal;
-            
-            _newReport = new DelegateCommand(
-                () => 
+
+            NewExternalReportCommand = new DelegateCommand(
+                () =>
                 {
                     _reportService.CreateExternalReport();
-                }, 
-                () => _principal.IsInRole(UserRoleNames.ReportEdit));
+                },
+                () => Thread.CurrentPrincipal.IsInRole(UserRoleNames.ReportEdit));
 
-            _openReport = new DelegateCommand(
+            OpenExternalReportCommand = new DelegateCommand(
                 () =>
                 {
                     NavigationToken token = new NavigationToken(ViewNames.ExternalReportEditView,
@@ -57,40 +57,40 @@ namespace Reports.ViewModels
                                 SelectedExternalReport = null;
                                 RaisePropertyChanged("ExternalReportList");
                             });
-        } 
+        }
+
+        #endregion Constructors
+
+        #region Properties
 
         public bool CanCreateExternalReport
         {
-            get 
+            get
             {
-                if (_principal.IsInRole(UserRoleNames.ExternalReportEdit))
+                if (Thread.CurrentPrincipal.IsInRole(UserRoleNames.ExternalReportEdit))
                     return true;
-                
-                else 
+                else
                     return false;
             }
         }
-        
-        public DelegateCommand NewExternalReportCommand
-        {
-            get { return _newReport; }
-        }
 
-        public DelegateCommand OpenExternalReportCommand
-        {
-            get { return _openReport; }
-        }
+        public IEnumerable<ExternalReport> ExternalReportList => _labDbData.RunQuery(new ExternalReportsQuery())
+                                                                            .ToList();
 
-        public IEnumerable<ExternalReport> ExternalReportList => _dataService.GetExternalReports();
+        public DelegateCommand NewExternalReportCommand { get; }
+
+        public DelegateCommand OpenExternalReportCommand { get; }
 
         public ExternalReport SelectedExternalReport
         {
             get { return _selectedReport; }
-            set 
-            { 
-                _selectedReport = value; 
-                _openReport.RaiseCanExecuteChanged();
+            set
+            {
+                _selectedReport = value;
+                OpenExternalReportCommand.RaiseCanExecuteChanged();
             }
         }
+
+        #endregion Properties
     }
 }

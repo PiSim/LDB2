@@ -11,53 +11,53 @@
         Height="125" Width="250">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Label Content="Tipo"
                Grid.Column="0"
                Grid.Row="0"
-               Margin="5"/>
-        <TextBox Text="{Binding Path=Type, Mode=TwoWay}" 
+               Margin="5" />
+        <TextBox Text="{Binding Path=Type, Mode=TwoWay}"
                  Grid.Column="0"
                  Grid.Row="1"
-                 Margin="5"/>
+                 Margin="5" />
         <Label Content="Riga"
                Grid.Column="1"
                Grid.Row="0"
-               Margin="5"/>
+               Margin="5" />
         <TextBox Text="{Binding Path=Line, Mode=TwoWay}"
                  Grid.Column="1"
                  Grid.Row="1"
-                 Margin="5"/>
+                 Margin="5" />
         <Label Content="Aspetto"
                Grid.Column="2"
                Grid.Row="0"
-               Margin="5"/>
+               Margin="5" />
         <TextBox Text="{Binding Path=Aspect, Mode=TwoWay}"
                  Grid.Column="2"
                  Grid.Row="1"
-                 Margin="5"/>
+                 Margin="5" />
         <Label Content="Mescola"
                Grid.Column="3"
                Grid.Row="0"
-               Margin="5"/>
+               Margin="5" />
         <TextBox Text="{Binding Path=Recipe, Mode=TwoWay}"
                  Grid.Column="3"
                  Grid.Row="1"
-                 Margin="5"/>
+                 Margin="5" />
         <Button Content="OK"
                 Command="{Binding ConfirmCreationCommand}"
                 CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
                 Grid.Column="3"
                 Grid.Row="2"
-                Margin="5"/>
+                Margin="5" />
     </Grid>
 </Window>

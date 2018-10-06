@@ -1,27 +1,31 @@
-﻿using DBManager;
+﻿using LabDbContext;
 using Prism.Events;
 using Reporting.Controls;
-using System;
 using System.Collections.Generic;
-using System.Drawing.Printing;
-using System.IO;
-using System.Linq;
-using System.Windows.Controls;
 using System.Windows.Documents;
-using System.Windows.Xps.Packaging;
 
 namespace Reporting
 {
     public class ReportingService : IReportingService
     {
-        private DocRenderer _docRenderer;
-        private EventAggregator _eventAggregator;
+        #region Fields
 
-        public ReportingService(EventAggregator eventAggregator)
+        private DocRenderer _docRenderer;
+        private IEventAggregator _eventAggregator;
+
+        #endregion Fields
+
+        #region Constructors
+
+        public ReportingService(IEventAggregator eventAggregator)
         {
             _docRenderer = new DocRenderer();
             _eventAggregator = eventAggregator;
         }
+
+        #endregion Constructors
+
+        #region Methods
 
         /// <summary>
         /// Renders a document detailing a list of batch items and shows it in a preview window for printing.
@@ -33,8 +37,8 @@ namespace Reporting
             batchReport.DocumentPaginator.PageSize = PageSizes.A4Landscape;
 
             IEnumerable<IEnumerable<object>> paginatedBatches = _docRenderer.PaginateEntityList(batchesToPrint);
-            
-            foreach(IEnumerable<object> batchListPage in paginatedBatches)
+
+            foreach (IEnumerable<object> batchListPage in paginatedBatches)
             {
                 FixedPage currentPage = _docRenderer.AddPageToFixedDocument(batchReport);
                 MainPageGrid currentMainGrid = _docRenderer.AddMainGrid(currentPage);
@@ -92,5 +96,7 @@ namespace Reporting
 
             previewDialog.Show();
         }
+
+        #endregion Methods
     }
 }

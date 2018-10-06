@@ -1,35 +1,35 @@
 ﻿<UserControl x:Class="Instruments.Views.Metrology"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:Instruments.Views"
              xmlns:prism="http://prismlibrary.com/"
              prism:ViewModelLocator.AutoWireViewModel="True"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="0.25*"
-                           MinHeight="120"/>
-            <RowDefinition/>
+                           MinHeight="120" />
+            <RowDefinition />
         </Grid.RowDefinitions>
 
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="35"/>
-                <RowDefinition/>
+                <RowDefinition Height="35" />
+                <RowDefinition />
             </Grid.RowDefinitions>
 
             <StackPanel Orientation="Horizontal"
                         Grid.Row="0">
                 <Button Content="Aggiungi"
                         Command="{Binding AddPropertyCommand}"
-                        Margin="5"/>
+                        Margin="5" />
             </StackPanel>
 
             <!-- Invisible FrameworkElement only used as reference to access DataContext-->
-            <FrameworkElement x:Name="dummyElement" Visibility="Collapsed"/>
+            <FrameworkElement x:Name="dummyElement" Visibility="Collapsed" />
 
             <DataGrid ItemsSource="{Binding InstrumentMeasurablePropertyList}"
                       SelectedItem="{Binding SelectedInstrumentMeasurableProperty,
@@ -42,13 +42,13 @@
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Quantità"
                                         Binding="{Binding Name}"
-                                        IsReadOnly="True"/>
+                                        IsReadOnly="True" />
                     <DataGridTextColumn Header="Range, Lim. Inferiore"
-                                        Binding="{Binding LowerRangeValue}"/>
+                                        Binding="{Binding LowerRangeValue}" />
                     <DataGridTextColumn Header="Range, Lim. Superiore"
-                                        Binding="{Binding UpperRangeValue}"/>
+                                        Binding="{Binding UpperRangeValue}" />
                     <DataGridTextColumn Header="Divisione"
-                                        Binding="{Binding Division}"/>
+                                        Binding="{Binding Division}" />
                     <DataGridTemplateColumn Header="UM"
                                             IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
@@ -57,17 +57,17 @@
                                           SelectedItem="{Binding UM}"
                                           DisplayMemberPath="Symbol"
                                           IsEnabled="{Binding Source={x:Reference Name=dummyElement},
-                                                              Path=DataContext.EditMode}"/>
+                                                              Path=DataContext.EditMode}" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
                     <DataGridTextColumn Header="Incertezza target"
-                                        Binding="{Binding TargetUncertainty}"/>
+                                        Binding="{Binding TargetUncertainty}" />
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>
 
         <ContentControl prism:RegionManager.RegionName="{Binding InstrumentEditMeasurablePropertyEditRegionName}"
-                        Grid.Row="1"/>
+                        Grid.Row="1" />
     </Grid>
 </UserControl>

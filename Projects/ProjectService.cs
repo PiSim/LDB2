@@ -1,35 +1,40 @@
-﻿using DBManager;
+﻿using DataAccess;
 using Infrastructure;
 using Infrastructure.Events;
-using Microsoft.Practices.Unity;
+using Infrastructure.Queries;
+using LabDbContext;
 using Prism.Events;
-using System;
 using System.Collections.Generic;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Projects
 {
     public class ProjectService : IProjectService
     {
-        private DBEntities _entities;
-        private EventAggregator _eventAggregator;
-        private IDataService _dataService;
-        private IUnityContainer _container;
+        #region Fields
 
-        public ProjectService(DBEntities entities,
-                                EventAggregator eventAggregator,
-                                IDataService dataService,
-                                IUnityContainer container)
+        private IDbContextFactory<LabDbEntities> _dbContextFactory;
+        private IEventAggregator _eventAggregator;
+        private IDataService<LabDbEntities> _labDbData;
+
+        #endregion Fields
+
+        #region Constructors
+
+        public ProjectService(IDbContextFactory<LabDbEntities> dbContextFactory,
+                                        IDataService<LabDbEntities> labDbData,
+                            IEventAggregator eventAggregator)
         {
-            _container = container;
-            _dataService = dataService;
-            _entities = entities;
+            _labDbData = labDbData;
+            _dbContextFactory = dbContextFactory;
             _eventAggregator = eventAggregator;
-            
         }
-        
+
+        #endregion Constructors
+
+        #region Methods
+
         public Project CreateProject()
         {
             Views.ProjectCreationDialog creationDialog = new Views.ProjectCreationDialog();
@@ -41,18 +46,18 @@ namespace Projects
                                                                 EntityChangedToken.EntityChangedAction.Created));
                 return creationDialog.ProjectInstance;
             }
-
             else
                 return null;
         }
-        
+
         /// <summary>
         /// Updates the ExternalCost of every project.
         /// TBD: Updates the internal cost too
         /// </summary>
         public void UpdateAllCosts()
         {
-            IEnumerable<Project> _prjList = _dataService.GetProjects();
+            IEnumerable<Project> _prjList = _labDbData.RunQuery(new ProjectsQuery())
+                                                                .ToList();
 
             foreach (Project prj in _prjList)
             {
@@ -63,9 +68,11 @@ namespace Projects
                 prj.TotalReportDuration = prj.GetInternalReportCost();
 
                 if (prj.TotalExternalCost != oldExternalValue
-                    || prj.TotalReportDuration != oldInternalValue )
+                    || prj.TotalReportDuration != oldInternalValue)
                     prj.Update();
             }
         }
+
+        #endregion Methods
     }
 }

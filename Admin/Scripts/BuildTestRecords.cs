@@ -1,22 +1,25 @@
-﻿using DBManager;
-using System;
+﻿using LabDbContext;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Admin.Scripts
 {
     public class BuildTestRecords : ScriptBase
     {
+        #region Constructors
+
         public BuildTestRecords()
         {
             _name = "BuildTestRecordsScript";
         }
 
+        #endregion Constructors
+
+        #region Methods
+
         public override void Run()
         {
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 IEnumerable<Test> testList = entities.Tests.ToList();
 
@@ -27,5 +30,7 @@ namespace Admin.Scripts
                 entities.SaveChanges();
             }
         }
+
+        #endregion Methods
     }
 }

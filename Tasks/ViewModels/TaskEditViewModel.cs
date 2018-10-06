@@ -1,45 +1,42 @@
-﻿using DBManager;
-using DBManager.EntityExtensions;
-using DBManager.Services;
+﻿using Controls.Views;
 using Infrastructure;
-using Infrastructure.Events;
-using Infrastructure.Wrappers;
+using LabDbContext;
+using LabDbContext.EntityExtensions;
+using LabDbContext.Services;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 
 namespace Tasks.ViewModels
 {
     public class TaskEditViewModel : BindableBase
     {
-        private bool _editMode;
-        private DBPrincipal _principal;
-        private DelegateCommand _convertToReport,
-                                _save,
-                                _startEdit;
-        private EventAggregator _eventAggregator;
-        private IReportService _reportService;
-        private DBManager.Task _instance;
+        #region Fields
 
-        public TaskEditViewModel(DBPrincipal principal,
-                                EventAggregator aggregator,
+        private bool _editMode;
+        private IEventAggregator _eventAggregator;
+        private LabDbContext.Task _instance;
+        private IReportService _reportService;
+
+        #endregion Fields
+
+        #region Constructors
+
+        public TaskEditViewModel(IEventAggregator aggregator,
                                 IReportService reportService) : base()
         {
             _editMode = false;
             _eventAggregator = aggregator;
-            _principal = principal;
             _reportService = reportService;
 
-            _convertToReport = new DelegateCommand(
-                () =>_reportService.CreateReport(_instance),
+            ConvertToReportCommand = new DelegateCommand(
+                () => _reportService.CreateReport(_instance),
                 () => CanCreateReport);
 
-            _save = new DelegateCommand(
+            SaveCommand = new DelegateCommand(
                 () =>
                 {
                     _instance.Update();
@@ -47,10 +44,14 @@ namespace Tasks.ViewModels
                 },
                 () => _editMode);
 
-            _startEdit = new DelegateCommand(
+            StartEditCommand = new DelegateCommand(
                 () => EditMode = true,
                 () => CanEdit && !_editMode);
         }
+
+        #endregion Constructors
+
+        #region Properties
 
         public string BatchNumber
         {
@@ -59,7 +60,7 @@ namespace Tasks.ViewModels
             set => _instance.Batch.Number = value;
         }
 
-        public bool CanCreateReport => _principal.IsInRole(UserRoleNames.ReportEdit);
+        public bool CanCreateReport => Thread.CurrentPrincipal.IsInRole(UserRoleNames.ReportEdit);
 
         public bool CanEdit
         {
@@ -67,17 +68,15 @@ namespace Tasks.ViewModels
             {
                 if (_instance == null)
                     return false;
-
                 else if ((_instance.IsComplete == true) || _instance.IsAssigned)
                     return false;
-
                 else
-                    return (_principal.CurrentPerson.ID == _instance.Requester.ID)
-                        || _principal.IsInRole(UserRoleNames.TaskAdmin);
+                    return ((Thread.CurrentPrincipal as DBPrincipal).CurrentPerson.ID == _instance.Requester.ID)
+                        || Thread.CurrentPrincipal.IsInRole(UserRoleNames.TaskAdmin);
             }
         }
 
-        public DelegateCommand ConvertToReportCommand => _convertToReport;
+        public DelegateCommand ConvertToReportCommand { get; }
 
         public bool EditMode
         {
@@ -87,8 +86,8 @@ namespace Tasks.ViewModels
                 _editMode = value;
                 RaisePropertyChanged("EditMode");
 
-                _save.RaiseCanExecuteChanged();
-                _startEdit.RaiseCanExecuteChanged();
+                SaveCommand.RaiseCanExecuteChanged();
+                StartEditCommand.RaiseCanExecuteChanged();
             }
         }
 
@@ -120,15 +119,17 @@ namespace Tasks.ViewModels
 
         public IEnumerable<TaskItem> RequiredTestList => (_instance != null) ? _instance.GetTaskItems() : new List<TaskItem>();
 
-        public DelegateCommand SaveCommand => _save;
+        public DelegateCommand SaveCommand { get; }
 
         public string SpecificationVersionString => _instance?.SpecificationName + " " + _instance?.SpecificationVersionName;
 
         public DateTime? StartDate => _instance?.StartDate;
 
-        public DelegateCommand StartEditCommand => _startEdit;
+        public DelegateCommand StartEditCommand { get; }
 
-        public DBManager.Task TaskInstance
+        public string TaskEditProjectDetailsRegionName => RegionNames.TaskEditProjectDetailsRegion;
+
+        public LabDbContext.Task TaskInstance
         {
             get { return _instance; }
             set
@@ -151,9 +152,6 @@ namespace Tasks.ViewModels
             }
         }
 
-        public string TaskEditProjectDetailsRegionName
-        {
-            get { return RegionNames.TaskEditProjectDetailsRegion; }
-        }
+        #endregion Properties
     }
 }

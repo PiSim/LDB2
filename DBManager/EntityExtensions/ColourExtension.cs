@@ -1,21 +1,19 @@
-﻿using DBManager;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Migrations;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace DBManager.EntityExtensions
+namespace LabDbContext.EntityExtensions
 {
     public static class ColourExtension
     {
+        #region Methods
+
         public static void Create(this Colour entry)
         {
             // Inserts a Colour entry in the DB
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.Colours.Add(entry);
                 entities.SaveChanges();
@@ -26,7 +24,7 @@ namespace DBManager.EntityExtensions
         {
             // Deletes a Colour entity
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.Entry(entities
                         .Colours
@@ -45,7 +43,7 @@ namespace DBManager.EntityExtensions
             if (entry == null)
                 return null;
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.Configuration.LazyLoadingEnabled = false;
 
@@ -55,7 +53,6 @@ namespace DBManager.EntityExtensions
                                         .Include(bat => bat.Material.Recipe.Colour)
                                         .Where(bat => bat.Material.Recipe.ColourID == entry.ID)
                                         .ToList();
-
             }
         }
 
@@ -64,7 +61,7 @@ namespace DBManager.EntityExtensions
             if (entry == null)
                 return new List<Recipe>();
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.Configuration.LazyLoadingEnabled = false;
 
@@ -78,11 +75,13 @@ namespace DBManager.EntityExtensions
         {
             // Updates a colour entry
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.Colours.AddOrUpdate(entry);
                 entities.SaveChanges();
             }
         }
+
+        #endregion Methods
     }
 }

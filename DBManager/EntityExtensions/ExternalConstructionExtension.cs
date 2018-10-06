@@ -1,33 +1,12 @@
-﻿using DBManager;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace DBManager
+namespace LabDbContext
 {
-    public partial class ExternalConstruction
-    {
-        public IEnumerable<Batch> GetBatches()
-        {
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.Configuration.LazyLoadingEnabled = false;
-
-                return entities.Batches.Include(btc => btc.Material.Aspect)
-                                        .Include(btc => btc.Material.MaterialLine)
-                                        .Include(btc => btc.Material.MaterialType)
-                                        .Include(btc => btc.Material.Recipe.Colour)
-                                        .Where(btc => btc.Material.ExternalConstructionID == ID)
-                                        .ToList();
-            }
-        }
-    }
-
     public static class ExternalConstructionExtension
     {
+        #region Methods
 
         public static IEnumerable<Material> GetMaterials(this ExternalConstruction entry)
         {
@@ -36,7 +15,7 @@ namespace DBManager
             if (entry == null)
                 return null;
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.Configuration.LazyLoadingEnabled = false;
 
@@ -48,5 +27,26 @@ namespace DBManager
                                         .ToList();
             }
         }
+
+        #endregion Methods
+    }
+
+    public partial class ExternalConstruction
+    {
+        #region Methods
+
+        public IEnumerable<Batch> GetBatches(LabDbEntities entities)
+        {
+            entities.Configuration.LazyLoadingEnabled = false;
+
+            return entities.Batches.Include(btc => btc.Material.Aspect)
+                                    .Include(btc => btc.Material.MaterialLine)
+                                    .Include(btc => btc.Material.MaterialType)
+                                    .Include(btc => btc.Material.Recipe.Colour)
+                                    .Where(btc => btc.Material.ExternalConstructionID == ID)
+                                    .ToList();
+        }
+
+        #endregion Methods
     }
 }

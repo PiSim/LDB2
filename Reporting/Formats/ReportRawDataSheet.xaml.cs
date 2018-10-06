@@ -1,15 +1,11 @@
-﻿using DBManager;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using LabDbContext;
 using System.Windows.Documents;
 
 namespace Reporting.Formats
 {
     public partial class ReportRawDataSheet : FlowDocument
     {
+        #region Constructors
 
         public ReportRawDataSheet(Report target) : base()
         {
@@ -17,5 +13,6 @@ namespace Reporting.Formats
             InitializeComponent();
         }
 
+        #endregion Constructors
     }
 }

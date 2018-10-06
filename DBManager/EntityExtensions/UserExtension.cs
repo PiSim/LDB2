@@ -1,22 +1,19 @@
-﻿using DBManager;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Migrations;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace DBManager.EntityExtensions
+namespace LabDbContext.EntityExtensions
 {
     public static class UserExtension
     {
+        #region Methods
 
         public static void Delete(this User entry)
         {
             // Deletes a User entry
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.Entry(entities.Users
                         .First(usr => usr.ID == entry.ID))
@@ -35,7 +32,7 @@ namespace DBManager.EntityExtensions
             if (entry == null)
                 return null;
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.Configuration.LazyLoadingEnabled = false;
 
@@ -49,7 +46,7 @@ namespace DBManager.EntityExtensions
         {
             // Updates a User Entry
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.Users.AddOrUpdate(entry);
 
@@ -57,5 +54,6 @@ namespace DBManager.EntityExtensions
             }
         }
 
+        #endregion Methods
     }
 }

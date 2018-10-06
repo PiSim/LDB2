@@ -1,44 +1,43 @@
-﻿using DBManager;
-using DBManager.EntityExtensions;
-using Infrastructure;
+﻿using Infrastructure;
 using Infrastructure.Wrappers;
+using LabDbContext;
+using LabDbContext.EntityExtensions;
 using Prism.Commands;
 using Prism.Mvvm;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace Reports.ViewModels
 {
     public class AddTestDialogViewModel : BindableBase, IRequirementSelector
     {
-        private DelegateCommand<Window> _cancel, _confirm;
-        private IEnumerable<ReportItemWrapper> _testList;
+        #region Fields
+
         private Report _reportInstance;
+
+        #endregion Fields
+
+        #region Constructors
 
         public AddTestDialogViewModel() : base()
         {
-
-            _cancel = new DelegateCommand<Window>(
+            CancelCommand = new DelegateCommand<Window>(
                 parent =>
                 {
                     parent.DialogResult = false;
                 });
 
-            _confirm = new DelegateCommand<Window>(
+            ConfirmCommand = new DelegateCommand<Window>(
                 parent =>
                 {
                     parent.DialogResult = true;
                 });
         }
 
-        public void OnRequirementSelectionChanged()
-        {
+        #endregion Constructors
 
-        }
+        #region Properties
 
         public string BatchNumber
         {
@@ -50,15 +49,9 @@ namespace Reports.ViewModels
             }
         }
 
-        public DelegateCommand<Window> CancelCommand
-        {
-            get { return _cancel; }
-        }
+        public DelegateCommand<Window> CancelCommand { get; }
 
-        public DelegateCommand<Window> ConfirmCommand
-        {
-            get { return _confirm; }
-        }
+        public DelegateCommand<Window> ConfirmCommand { get; }
 
         public Report ReportInstance
         {
@@ -68,7 +61,7 @@ namespace Reports.ViewModels
                 _reportInstance = value;
                 _reportInstance.SpecificationVersion.Load();
 
-                _testList = _reportInstance.SpecificationVersion.GenerateRequirementList()
+                TestList = _reportInstance.SpecificationVersion.GenerateRequirementList()
                                                                 .Select(req => new ReportItemWrapper(req, this))
                                                                 .ToList();
 
@@ -102,9 +95,16 @@ namespace Reports.ViewModels
             }
         }
 
-        public IEnumerable<ReportItemWrapper> TestList
+        public IEnumerable<ReportItemWrapper> TestList { get; private set; }
+
+        #endregion Properties
+
+        #region Methods
+
+        public void OnRequirementSelectionChanged()
         {
-            get { return _testList; }
         }
+
+        #endregion Methods
     }
 }

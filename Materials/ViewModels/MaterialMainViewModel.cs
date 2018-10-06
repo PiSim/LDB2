@@ -1,37 +1,43 @@
-﻿using DBManager;
-using DBManager.EntityExtensions;
-using DBManager.Services;
+﻿using Controls.Views;
+using DataAccess;
 using Infrastructure;
 using Infrastructure.Events;
+using Infrastructure.Queries;
+using LabDbContext;
 using Prism.Events;
 using Prism.Mvvm;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Materials.ViewModels
 {
     public class MaterialMainViewModel : BindableBase
     {
-        private Material _selectedMaterial;
-        private EventAggregator _eventAggregator;
+        #region Fields
 
-        public MaterialMainViewModel(EventAggregator eventAggregator)
+        private IEventAggregator _eventAggregator;
+        private IDataService<LabDbEntities> _labDbData;
+        private Material _selectedMaterial;
+
+        #endregion Fields
+
+        #region Constructors
+
+        public MaterialMainViewModel(IDataService<LabDbEntities> labDbData,
+                                    IEventAggregator eventAggregator)
         {
+            _labDbData = labDbData;
             _eventAggregator = eventAggregator;
         }
 
-        public string MaterialDetailRegionName
-        {
-            get { return RegionNames.MaterialDetailRegion; }
-        }
+        #endregion Constructors
 
-        public IEnumerable<Material> MaterialList
-        {
-            get { return DBManager.Services.MaterialService.GetMaterials(); }
-        }
+        #region Properties
+
+        public string MaterialDetailRegionName => RegionNames.MaterialDetailRegion;
+
+        public IEnumerable<Material> MaterialList => _labDbData.RunQuery(new MaterialsQuery())
+                                                                .ToList();
 
         public Material SelectedMaterial
         {
@@ -50,5 +56,6 @@ namespace Materials.ViewModels
             }
         }
 
+        #endregion Properties
     }
 }

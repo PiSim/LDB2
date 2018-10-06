@@ -1,32 +1,29 @@
-﻿using DBManager;
-using System;
-using System.Collections.Generic;
-using System.Data.Entity;
+﻿using System.Data.Entity;
 using System.Data.Entity.Migrations;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace DBManager
+namespace LabDbContext
 {
     public partial class Person
     {
+        #region Methods
+
         public void Create()
         {
             // inserts a new Person entry in the DB
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.People.Add(this);
                 entities.SaveChanges();
             }
         }
-        
+
         public void Load()
         {
             // Loads the relevant Related Entities into a given Person Instance
-            
-            using (DBEntities entities = new DBEntities())
+
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.Configuration.LazyLoadingEnabled = false;
 
@@ -42,11 +39,13 @@ namespace DBManager
 
         public void Update()
         {
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.People.AddOrUpdate(this);
                 entities.SaveChanges();
             }
         }
+
+        #endregion Methods
     }
 }

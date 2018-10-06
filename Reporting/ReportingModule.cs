@@ -1,28 +1,35 @@
-﻿using Microsoft.Practices.Unity;
+﻿using Prism.Ioc;
 using Prism.Modularity;
-using Prism.Regions;
-using System;
 
 namespace Reporting
 {
     [Module(ModuleName = "Reporting")]
     public class ReportingModule : IModule
     {
-        IRegionManager _regionManager;
-        private IUnityContainer _container;
+        #region Constructors
 
-        public ReportingModule(IRegionManager regionManager,
-                                IUnityContainer container)
+        public ReportingModule()
         {
-            _container = container;
-            _regionManager = regionManager;
         }
+
+        #endregion Constructors
+
+        #region Methods
 
         public void Initialize()
         {
-            _container.RegisterType<ReportingEngine>(new ContainerControlledLifetimeManager());
-            _container.Resolve<ReportingEngine>();
-            _container.RegisterType<IReportingService, ReportingService>();
         }
+
+        public void OnInitialized(IContainerProvider containerProvider)
+        {
+        }
+
+        public void RegisterTypes(IContainerRegistry containerRegistry)
+        {
+            containerRegistry.RegisterSingleton<ReportingEngine>();
+            containerRegistry.Register<IReportingService, ReportingService>();
+        }
+
+        #endregion Methods
     }
 }

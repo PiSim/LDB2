@@ -1,19 +1,6 @@
-﻿using DBManager;
-using Microsoft.Practices.Prism.Mvvm;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using Microsoft.Practices.Prism.Mvvm;
+using Prism.Regions;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Reports.Views
 {
@@ -22,9 +9,13 @@ namespace Reports.Views
     /// </summary>
     public partial class ReportMain : UserControl, IView
     {
-        public ReportMain()
+        #region Constructors
+
+        public ReportMain(IRegionManager regionManager)
         {
             InitializeComponent();
         }
+
+        #endregion Constructors
     }
 }

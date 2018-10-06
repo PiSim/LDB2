@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
+﻿using System.Data.Entity;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace DBManager
+namespace LabDbContext
 {
     public partial class MethodVariant
     {
@@ -17,14 +13,16 @@ namespace DBManager
 
         public string StandardName => Method?.Standard?.Name;
 
-        #endregion
+        #endregion Properties
+
+        #region Methods
 
         /// <summary>
         /// Inserts the entity in the database
         /// </summary>
         public void Create()
         {
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.MethodVariants.Add(this);
                 entities.SaveChanges();
@@ -68,7 +66,7 @@ namespace DBManager
         /// <returns>A Method entity</returns>
         public Method GetMethod(bool IncludeSubMethods = false)
         {
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.Configuration.LazyLoadingEnabled = false;
 
@@ -95,7 +93,7 @@ namespace DBManager
         /// </summary>
         public void RemoveOrSetObsolete()
         {
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 MethodVariant attachedInstance = entities.MethodVariants.FirstOrDefault(mtdvar => mtdvar.ID == ID);
                 if (attachedInstance == null)
@@ -105,7 +103,6 @@ namespace DBManager
                     && attachedInstance.Tests.Count == 0)
                     entities.Entry(attachedInstance)
                             .State = EntityState.Deleted;
-
                 else
                 {
                     attachedInstance.IsOld = true;
@@ -115,5 +112,7 @@ namespace DBManager
                 entities.SaveChanges();
             }
         }
+
+        #endregion Methods
     }
 }

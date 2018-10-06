@@ -1,136 +1,47 @@
-﻿using Controls.Views;
-using DBManager;
-using DBManager.EntityExtensions;
+﻿using DataAccess;
 using Infrastructure;
 using Infrastructure.Events;
+using Infrastructure.Queries;
 using Infrastructure.Wrappers;
-using Microsoft.Practices.Unity;
+using LabDbContext;
+using LabDbContext.EntityExtensions;
 using Prism.Events;
 using Reports.Views;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 
 namespace Reports
 {
     public class ReportService : IReportService
     {
-        private EventAggregator _eventAggregator;
-        private IDataService _dataService;
-        private IUnityContainer _container;
+        #region Fields
 
-        public ReportService(EventAggregator aggregator,
-                            IDataService dataService,
-                            IUnityContainer container)
+        private IDataService _dataService;
+        private IDbContextFactory<LabDbEntities> _dbContextFactory;
+        private IEventAggregator _eventAggregator;
+        private IDataService<LabDbEntities> _labDbData;
+
+        #endregion Fields
+
+        #region Constructors
+
+        public ReportService(IDataService<LabDbEntities> labDbData,
+                            IDbContextFactory<LabDbEntities> dbContextFactory,
+                            IEventAggregator aggregator,
+                            IDataService dataService)
         {
-            _container = container;
+            _labDbData = labDbData;
             _eventAggregator = aggregator;
             _dataService = dataService;
-            
+            _dbContextFactory = dbContextFactory;
         }
 
-        /// <summary>
-        /// Adds a sum to a project's ExternalCost field
-        /// The addition is optimistic and assumes noone is altering the project entry
-        /// </summary>
-        /// <param name="projectID">The ID of the project to Update</param>
-        /// <param name="sumToAdd">The amount that will be added.</param>
-        public void AddToProjectExternalCost(int? projectID,
-                                            double sumToAdd)
-        {
-            using (DBEntities entities = new DBEntities())
-            {
-                Project connectedEntry = entities.Projects
-                                                 .First(prj => prj.ID == projectID);
+        #endregion Constructors
 
-                connectedEntry.TotalExternalCost += sumToAdd;
+        #region Methods
 
-                entities.SaveChanges();
-            }
-        }
-
-
-        public void ApplyControlPlan(IEnumerable<ISelectableRequirement> reqList, ControlPlan conPlan)
-        {
-            IEnumerable<ControlPlanItem> itemList = conPlan.GetControlPlanItems();
-
-            foreach (ISelectableRequirement isr in reqList)
-            {
-                isr.IsSelected = itemList.First(cpi => cpi.RequirementID == isr.RequirementInstance.ID
-                                                        || cpi.RequirementID == isr.RequirementInstance.OverriddenID)
-                                        .IsSelected;
-            }
-        }
-        
-
-
-        public Requirement GenerateRequirement(MethodVariant methodVariant)
-        {
-            Method method = methodVariant.GetMethod(true);
-            method.LoadSubMethods();
-
-            Requirement tempReq = new Requirement()
-            {
-                MethodVariantID = methodVariant.ID,
-                Name = method.Name,
-                Description = methodVariant.Description            
-            };
-
-            tempReq.Deprecated2 = method.ID;
-            tempReq.IsOverride = false;
-            tempReq.Name = "";
-            tempReq.Description = "";
-            tempReq.Position = 0;
-
-            foreach (SubMethod measure in method.SubMethods)
-            {
-                SubRequirement tempSub = new SubRequirement()
-                {
-                    SubMethodID = measure.ID
-                };
-
-                tempReq.SubRequirements.Add(tempSub);
-            }
-
-            return tempReq;
-        }
-
-
-        [Obsolete]
-        public IEnumerable<TaskItem> GenerateTaskItemList(IEnumerable<Requirement> reqList)
-        {
-            List<TaskItem> output = new List<TaskItem>();
-
-            foreach (Requirement req in reqList)
-            {
-                TaskItem tempItem = new TaskItem();
-
-                tempItem.Description = req.Description;
-                tempItem.MethodID = req.MethodVariant.Method.ID;
-                tempItem.Name = req.Name;
-                tempItem.Position = 0;
-                tempItem.RequirementID = req.ID;
-                tempItem.SpecificationVersionID = req.SpecificationVersionID;
-
-                foreach (SubRequirement sreq in req.SubRequirements)
-                {
-                    SubTaskItem tempSubItem = new SubTaskItem();
-
-                    tempSubItem.Name = sreq.SubMethod.Name;
-                    tempSubItem.RequiredValue = sreq.RequiredValue;
-                    tempSubItem.SubMethodID = sreq.SubMethodID;
-                    tempSubItem.SubRequirementID = sreq.ID;
-                    tempSubItem.UM = sreq.SubMethod.UM;
-
-                    tempItem.SubTaskItems.Add(tempSubItem);
-                }
-
-                output.Add(tempItem);
-            }
-
-            return output;
-        }
-        
         /// <summary>
         /// Opens AddTestDialog and adds the selected Tests #
         /// to an existing report if selection is succesfull
@@ -147,7 +58,7 @@ namespace Reports
                 if (testDialog.TestList.Count() == 0)
                     return false;
 
-                // Calls the method for generating a test list from the selected 
+                // Calls the method for generating a test list from the selected
                 // Requirement instances
 
                 IEnumerable<Test> testList = GenerateTestList(
@@ -160,9 +71,56 @@ namespace Reports
 
                 return true;
             }
-
             else
                 return false;
+        }
+
+        /// <summary>
+        /// Adds a sum to a project's ExternalCost field
+        /// The addition is optimistic and assumes noone is altering the project entry
+        /// </summary>
+        /// <param name="projectID">The ID of the project to Update</param>
+        /// <param name="sumToAdd">The amount that will be added.</param>
+        public void AddToProjectExternalCost(int? projectID,
+                                            double sumToAdd)
+        {
+            using (LabDbEntities entities = _dbContextFactory.Create())
+            {
+                Project connectedEntry = entities.Projects
+                                                 .First(prj => prj.ID == projectID);
+
+                connectedEntry.TotalExternalCost += sumToAdd;
+
+                entities.SaveChanges();
+            }
+        }
+
+        public void ApplyControlPlan(IEnumerable<ISelectableRequirement> reqList, ControlPlan conPlan)
+        {
+            IEnumerable<ControlPlanItem> itemList = conPlan.GetControlPlanItems();
+
+            foreach (ISelectableRequirement isr in reqList)
+            {
+                isr.IsSelected = itemList.First(cpi => cpi.RequirementID == isr.RequirementInstance.ID
+                                                        || cpi.RequirementID == isr.RequirementInstance.OverriddenID)
+                                        .IsSelected;
+            }
+        }
+
+        public ExternalReport CreateExternalReport()
+        {
+            Views.ExternalReportCreationDialog creationDialog = new Views.ExternalReportCreationDialog();
+
+            if (creationDialog.ShowDialog() == true)
+            {
+                EntityChangedToken token = new EntityChangedToken(creationDialog.ExternalReportInstance,
+                                                                EntityChangedToken.EntityChangedAction.Created);
+                _eventAggregator.GetEvent<ExternalReportChanged>()
+                                .Publish(token);
+                return creationDialog.ExternalReportInstance;
+            }
+            else
+                return null;
         }
 
         public Report CreateReport() => CreateReport(null);
@@ -198,6 +156,152 @@ namespace Reports
             return null;
         }
 
+        public Requirement GenerateRequirement(MethodVariant methodVariant)
+        {
+            Method method = methodVariant.GetMethod(true);
+            method.LoadSubMethods();
+
+            Requirement tempReq = new Requirement()
+            {
+                MethodVariantID = methodVariant.ID,
+                Name = method.Name,
+                Description = methodVariant.Description
+            };
+
+            tempReq.Deprecated2 = method.ID;
+            tempReq.IsOverride = false;
+            tempReq.Name = "";
+            tempReq.Description = "";
+            tempReq.Position = 0;
+
+            foreach (SubMethod measure in method.SubMethods)
+            {
+                SubRequirement tempSub = new SubRequirement()
+                {
+                    SubMethodID = measure.ID
+                };
+
+                tempReq.SubRequirements.Add(tempSub);
+            }
+
+            return tempReq;
+        }
+
+        [Obsolete]
+        public IEnumerable<TaskItem> GenerateTaskItemList(IEnumerable<Requirement> reqList)
+        {
+            List<TaskItem> output = new List<TaskItem>();
+
+            foreach (Requirement req in reqList)
+            {
+                TaskItem tempItem = new TaskItem();
+
+                tempItem.Description = req.Description;
+                tempItem.MethodID = req.MethodVariant.Method.ID;
+                tempItem.Name = req.Name;
+                tempItem.Position = 0;
+                tempItem.RequirementID = req.ID;
+                tempItem.SpecificationVersionID = req.SpecificationVersionID;
+
+                foreach (SubRequirement sreq in req.SubRequirements)
+                {
+                    SubTaskItem tempSubItem = new SubTaskItem();
+
+                    tempSubItem.Name = sreq.SubMethod.Name;
+                    tempSubItem.RequiredValue = sreq.RequiredValue;
+                    tempSubItem.SubMethodID = sreq.SubMethodID;
+                    tempSubItem.SubRequirementID = sreq.ID;
+                    tempSubItem.UM = sreq.SubMethod.UM;
+
+                    tempItem.SubTaskItems.Add(tempSubItem);
+                }
+
+                output.Add(tempItem);
+            }
+
+            return output;
+        }
+
+        public ICollection<Test> GenerateTestList(IEnumerable<Requirement> reqList)
+        {
+            List<Test> output = new List<Test>();
+
+            foreach (Requirement req in reqList)
+            {
+                req.Load();
+
+                Test tempTest = new Test()
+                {
+                    Deprecated2 = req.Deprecated2,
+                    MethodVariantID = req.MethodVariantID
+                };
+
+                tempTest.Duration = req.MethodVariant.Method.Duration;
+                tempTest.RequirementID = req.ID;
+                tempTest.Notes = req.Description;
+
+                foreach (SubRequirement subReq in req.SubRequirements)
+                {
+                    SubTest tempSubTest = new SubTest()
+                    {
+                        SubRequiremntID = subReq.ID,
+                        Name = subReq.SubMethod.Name,
+                        Position = subReq.SubMethod.Position,
+                        RequiredValue = subReq.RequiredValue,
+                        SubMethodID = subReq.SubMethodID,
+                        UM = subReq.SubMethod.UM,
+                    };
+                    tempTest.SubTests.Add(tempSubTest);
+                }
+                output.Add(tempTest);
+            }
+
+            return output;
+        }
+
+        public int GetNextExternalReportNumber(int year)
+        {
+            // Returns the next available ExternalReport number for a given year
+
+            using (LabDbEntities entities = _dbContextFactory.Create())
+            {
+                try
+                {
+                    return entities.ExternalReports
+                                    .Where(erep => erep.Year == year)
+                                    .Max(erep => erep.Number) + 1;
+                }
+                catch
+                {
+                    return 1;
+                }
+            }
+        }
+
+        public int GetNextReportNumber()
+        {
+            // Returns the next available ReportNumber
+
+            using (LabDbEntities entities = _dbContextFactory.Create())
+            {
+                return entities.Reports
+                                .Max(rep => rep.Number) + 1;
+            }
+        }
+
+        /// <summary>
+        /// Iterates through all the Report instances and recalculates all the durations,
+        /// committing the result to the DB
+        /// </summary>
+        public void RecalculateAllWorkHours()
+        {
+            IEnumerable<Report> reportList = _labDbData.RunQuery(new ReportsQuery());
+
+            foreach (Report currentReport in reportList)
+            {
+                currentReport.UpdateDuration();
+            }
+        }
 
         /// <summary>
         /// Process the Data input of a Report creation dialog to create a new Report instance and proceeds to insert it in the database
@@ -228,13 +332,11 @@ namespace Reports
             {
                 BatchID = output.BatchID,
                 RecordTypeID = 1
-                
             };
 
             if (dialogViewModelInstance.IsCreatingFromTask)
                 foreach (Test tst in dialogViewModelInstance.TaskInstance.GenerateTests())
                     output.TestRecord.Tests.Add(tst);
-
             else
                 foreach (Test tst in GenerateTestList(dialogViewModelInstance.SelectedRequirements))
                     output.TestRecord.Tests.Add(tst);
@@ -251,7 +353,7 @@ namespace Reports
 
             if (dialogViewModelInstance.SelectedBatch.BasicReportID == null)
             {
-                using (DBEntities entities = new DBEntities())
+                using (LabDbEntities entities = _dbContextFactory.Create())
                 {
                     entities.Batches
                             .First(btc => btc.ID == dialogViewModelInstance.SelectedBatch.ID)
@@ -272,105 +374,6 @@ namespace Reports
             return output;
         }
 
-
-
-        public int GetNextReportNumber()
-        {
-            // Returns the next available ReportNumber
-
-            using (DBEntities entities = new DBEntities())
-            {
-                return entities.Reports
-                                .Max(rep => rep.Number) + 1;
-            }
-        }
-
-        public int GetNextExternalReportNumber(int year)
-        {
-            // Returns the next available ExternalReport number for a given year
-
-            using (DBEntities entities = new DBEntities())
-            {
-                try
-                {
-                    return entities.ExternalReports
-                                    .Where(erep => erep.Year == year)
-                                    .Max(erep => erep.Number) + 1;
-                }
-                catch
-                {
-                    return 1;
-                }
-            }
-        }
-
-        public ExternalReport CreateExternalReport()
-        {
-            Views.ExternalReportCreationDialog creationDialog = new Views.ExternalReportCreationDialog();
-
-            if (creationDialog.ShowDialog() == true)
-            {
-                EntityChangedToken token = new EntityChangedToken(creationDialog.ExternalReportInstance,
-                                                                EntityChangedToken.EntityChangedAction.Created);
-                _eventAggregator.GetEvent<ExternalReportChanged>()
-                                .Publish(token);
-                return creationDialog.ExternalReportInstance;
-            }
-            else
-                return null;
-        }
-        
-
-        public ICollection<Test> GenerateTestList(IEnumerable<Requirement> reqList)
-        {
-            List<Test> output = new List<Test>();
-
-            foreach (Requirement req in reqList)
-            {
-                req.Load();
-
-                Test tempTest = new Test()
-                {
-                    Deprecated2 = req.Deprecated2,   
-                    MethodVariantID = req.MethodVariantID
-                    
-                };
-
-                tempTest.Duration = req.MethodVariant.Method.Duration;
-                tempTest.RequirementID = req.ID;
-                tempTest.Notes = req.Description;
-                
-                foreach (SubRequirement subReq in req.SubRequirements)
-                {
-                    SubTest tempSubTest = new SubTest()
-                    {
-                        SubRequiremntID = subReq.ID,
-                        Name = subReq.SubMethod.Name,
-                        Position = subReq.SubMethod.Position,
-                        RequiredValue = subReq.RequiredValue,
-                        SubMethodID = subReq.SubMethodID,
-                        UM = subReq.SubMethod.UM,
-                    };
-                    tempTest.SubTests.Add(tempSubTest);
-                }
-                output.Add(tempTest);
-            }
-
-            return output;
-        }
-        
-        /// <summary>
-        /// Iterates through all the Report instances and recalculates all the durations,
-        /// committing the result to the DB
-        /// </summary>
-        public void RecalculateAllWorkHours()
-        {
-            IEnumerable<Report> reportList = _dataService.GetReports();
-
-            foreach (Report currentReport in reportList)
-            {
-                currentReport.UpdateDuration();
-            }
-        }
+        #endregion Methods
     }
 }

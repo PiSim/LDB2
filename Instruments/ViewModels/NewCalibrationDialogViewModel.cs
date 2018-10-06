@@ -1,9 +1,6 @@
-﻿using DBManager;
-using DBManager.EntityExtensions;
-using DBManager.Services;
-using Infrastructure;
-using Infrastructure.Events;
-using Infrastructure.Wrappers;
+﻿using DataAccess;
+using Infrastructure.Queries;
+using LabDbContext;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
@@ -11,85 +8,80 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Forms;
 
 namespace Instruments.ViewModels
 {
     public class NewCalibrationDialogViewModel : BindableBase
     {
-        private bool _isVerificationOnly;
-        private CalibrationReport _reportInstance;
-        private DateTime _calibrationDate;
-        private DBEntities _entities;
-        private DBPrincipal _principal;
-        private DelegateCommand _removeReference;
-        private DelegateCommand<string> _addReference;
-        private DelegateCommand<Window> _cancel, _confirm;
-        private EventAggregator _eventAggregator;
-        private IDataService _dataService;
-        private IEnumerable<Organization> _labList;
+        #region Fields
+
+        private LabDbEntities _entities;
+        private IEventAggregator _eventAggregator;
+        private InstrumentService _instrumentService;
         private Instrument _instumentInstance, _selectedReference;
-        private Person _selectedTech;
-        private string _calibrationNotes, _calibrationResult, _referenceCode;
-        private ObservableCollection<Instrument> _referenceList;
+        private IDataService<LabDbEntities> _labDbData;
+        private string _referenceCode;
         private Organization _selectedLab;
 
-        public NewCalibrationDialogViewModel(DBEntities entities,
-                                            DBPrincipal principal,
-                                            EventAggregator eventAggregator,
-                                            IDataService dataService) : base()
-        {
-            _dataService = dataService;
-            _entities = entities;
-            _isVerificationOnly = false;
-            _referenceList = new ObservableCollection<Instrument>();
-            _labList = _dataService.GetOrganizations(OrganizationRoleNames.CalibrationLab);
-            _eventAggregator = eventAggregator;
-            _principal = principal;
+        #endregion Fields
 
-            _calibrationDate = DateTime.Now.Date;
-            
-            _addReference = new DelegateCommand<string>(
+        #region Constructors
+
+        public NewCalibrationDialogViewModel(LabDbEntities entities,
+                                            IEventAggregator eventAggregator,
+                                            InstrumentService instrumentService,
+                                            IDataService<LabDbEntities> labDbData) : base()
+        {
+            _labDbData = labDbData;
+            _entities = entities;
+            _instrumentService = instrumentService;
+            IsVerificationOnly = false;
+            ReferenceList = new ObservableCollection<Instrument>();
+            LabList = _labDbData.RunQuery(new OrganizationsQuery() { Role = OrganizationsQuery.OrganizationRoles.CalibrationLab })
+                                                                        .ToList();
+            _eventAggregator = eventAggregator;
+
+            CalibrationDate = DateTime.Now.Date;
+
+            AddReferenceCommand = new DelegateCommand<string>(
                 code =>
                 {
                     Instrument tempRef = _entities.Instruments.FirstOrDefault(inst => inst.Code == code);
                     if (tempRef != null)
                     {
-                        _referenceList.Add(tempRef);
+                        ReferenceList.Add(tempRef);
                         ReferenceCode = "";
                     }
                 });
 
-            _cancel = new DelegateCommand<Window>(
+            CancelCommand = new DelegateCommand<Window>(
                 parentDialog =>
                 {
                     parentDialog.DialogResult = false;
                 });
 
-            _confirm = new DelegateCommand<Window>(
+            ConfirmCommand = new DelegateCommand<Window>(
                 parentDialog =>
                 {
-                    _reportInstance = new CalibrationReport();
-                    _reportInstance.Date = _calibrationDate;
-                    _reportInstance.Year = DateTime.Now.Year - 2000;
-                    _reportInstance.Number = InstrumentService.GetNextCalibrationNumber(_reportInstance.Year);
-                    _reportInstance.Instrument = _instumentInstance;
-                    _reportInstance.IsVerification = _isVerificationOnly;
-                    _reportInstance.laboratoryID = _selectedLab.ID;
-                    _reportInstance.Notes = "";
-                    _reportInstance.ResultID = 1;
+                    ReportInstance = new CalibrationReport();
+                    ReportInstance.Date = CalibrationDate;
+                    ReportInstance.Year = DateTime.Now.Year - 2000;
+                    ReportInstance.Number = _instrumentService.GetNextCalibrationNumber(ReportInstance.Year);
+                    ReportInstance.Instrument = _instumentInstance;
+                    ReportInstance.IsVerification = IsVerificationOnly;
+                    ReportInstance.laboratoryID = _selectedLab.ID;
+                    ReportInstance.Notes = "";
+                    ReportInstance.ResultID = 1;
 
                     if (IsNotExternalLab)
                     {
-                        _reportInstance.Tech = _selectedTech;
+                        ReportInstance.OperatorID = SelectedTech.ID;
 
-                        foreach (Instrument refInstrument in _referenceList)
-                            _reportInstance.ReferenceInstruments.Add(refInstrument);
+                        foreach (Instrument refInstrument in ReferenceList)
+                            ReportInstance.ReferenceInstruments.Add(refInstrument);
                     }
-                    
+
                     foreach (InstrumentMeasurableProperty imp in _instumentInstance.GetMeasurableProperties())
                     {
                         CalibrationReportInstrumentPropertyMapping cripm = new CalibrationReportInstrumentPropertyMapping()
@@ -101,71 +93,40 @@ namespace Instruments.ViewModels
                             UpperRangeValue = imp.RangeUpperLimit
                         };
 
-                        _reportInstance.InstrumentMeasurablePropertyMappings.Add(cripm);
+                        ReportInstance.InstrumentMeasurablePropertyMappings.Add(cripm);
                     }
 
-                    _entities.CalibrationReports.Add(_reportInstance);
+                    _entities.CalibrationReports.Add(ReportInstance);
                     _entities.SaveChanges();
 
                     parentDialog.DialogResult = true;
                 });
-            
-            _removeReference = new DelegateCommand(
+
+            RemoveReference = new DelegateCommand(
                 () =>
                 {
-                    _referenceList.Remove(_selectedReference);
+                    ReferenceList.Remove(_selectedReference);
                     SelectedReference = null;
                 },
                 () => _selectedReference != null);
         }
-        
-        public DelegateCommand<string> AddReferenceCommand
-        {
-            get { return _addReference; }
-        }
 
-        public DateTime CalibrationDate
-        {
-            get { return _calibrationDate; }
-            set
-            {
-                _calibrationDate = value;
-            }
-        }
+        #endregion Constructors
 
-        public string CalibrationNotes
-        {
-            get { return _calibrationNotes; }
-            set 
-            {
-                _calibrationNotes = value;
-            }
-        }
+        #region Properties
 
-        public string CalibrationResult
-        {
-            get { return _calibrationResult; }
-            set 
-            {
-                _calibrationResult = value;
-            }
-        }
+        public DelegateCommand<string> AddReferenceCommand { get; }
 
-        public DelegateCommand<Window> CancelCommand
-        {
-            get { return _cancel; }
-        }
+        public DateTime CalibrationDate { get; set; }
 
-        public DelegateCommand<Window> ConfirmCommand
-        {
-            get { return _confirm; }
-        }
+        public string CalibrationNotes { get; set; }
 
-        public string FileListRegionName
-        {
-            get { return RegionNames.NewCalibrationFileListRegion; }
-        }
-        
+        public string CalibrationResult { get; set; }
+
+        public DelegateCommand<Window> CancelCommand { get; }
+
+        public DelegateCommand<Window> ConfirmCommand { get; }
+
         public string InstrumentCode
         {
             get
@@ -183,19 +144,12 @@ namespace Instruments.ViewModels
             set
             {
                 _instumentInstance = _entities.Instruments.First(ins => ins.ID == value.ID);
-                SelectedLab = _labList.FirstOrDefault(lab => lab.ID == _instumentInstance.CalibrationResponsibleID);
+                SelectedLab = LabList.FirstOrDefault(lab => lab.ID == _instumentInstance.CalibrationResponsibleID);
                 RaisePropertyChanged("InstrumentCode");
                 RaisePropertyChanged("PropertyList");
                 RaisePropertyChanged("SelectedLab");
             }
         }
-
-        public bool IsVerificationOnly
-        {
-            get { return _isVerificationOnly; }
-            set { _isVerificationOnly = value; }
-        }
-            
 
         public bool IsNotExternalLab
         {
@@ -208,13 +162,8 @@ namespace Instruments.ViewModels
             }
         }
 
-        public IEnumerable<Organization> LabList
-        {
-            get
-            {
-                return _labList;
-            }
-        }
+        public bool IsVerificationOnly { get; set; }
+        public IEnumerable<Organization> LabList { get; }
 
         public string ReferenceCode
         {
@@ -226,21 +175,12 @@ namespace Instruments.ViewModels
             }
         }
 
-        public ObservableCollection<Instrument> ReferenceList
-        {
-            get { return _referenceList; }
-        }
+        public ObservableCollection<Instrument> ReferenceList { get; }
 
-        public DelegateCommand RemoveReference
-        {
-            get { return _removeReference; }
-        }
+        public DelegateCommand RemoveReference { get; }
 
-        public CalibrationReport ReportInstance
-        {
-            get { return _reportInstance; }
-        }
-        
+        public CalibrationReport ReportInstance { get; private set; }
+
         public Organization SelectedLab
         {
             get { return _selectedLab; }
@@ -262,28 +202,16 @@ namespace Instruments.ViewModels
             set
             {
                 _selectedReference = value;
-                _removeReference.RaiseCanExecuteChanged();
+                RemoveReference.RaiseCanExecuteChanged();
                 RaisePropertyChanged();
             }
         }
 
-        public Person SelectedTech
-        {
-            get { return _selectedTech; }
-            set
-            {
-                _selectedTech = value;
-            }
-        }
+        public Person SelectedTech { get; set; }
 
-        public List<Person> TechList
-        {
-            get
-            {
-                PersonRole tempRole = _entities.PersonRoles.First(prr => prr.Name == PersonRoleNames.CalibrationTech);
-                return new List<Person>(tempRole.RoleMappings.Where(prm => prm.IsSelected)
-                                            .Select(prm => prm.Person));
-            }
-        }
+        public List<Person> TechList => _labDbData.RunQuery(new PeopleQuery() { Role = PeopleQuery.PersonRoles.CalibrationTech })
+                                                            .ToList();
+
+        #endregion Properties
     }
 }

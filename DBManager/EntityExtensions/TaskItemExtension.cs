@@ -1,50 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Migrations;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace DBManager
+namespace LabDbContext
 {
-    public partial class TaskItem
-    {
-        /// <summary>
-        /// Creates a new Test entry based on the values currently loaded in the Task instance
-        /// </summary>
-        /// <returns>The new Test entity</returns>
-        public Test GetTest()
-        {
-            Test output = new Test()
-            {
-                MethodVariantID = Method.MethodVariants.First().ID,
-                Notes = Description,
-                RequirementID = RequirementID
-            };
-
-            foreach (SubTaskItem subItem in SubTaskItems)
-                output.SubTests.Add(subItem.GetSubTest());
-
-            return output;
-        }
-
-        public string MethodName => Method?.Standard?.Name;
-
-        public string PropertyName => Method?.Property?.Name;
-    }
-    
     public static class TaskItemExtension
     {
+        #region Methods
 
         public static void Load(this TaskItem entry)
         {
-            // Loads a TaskItem entry and all the relevant related entities 
+            // Loads a TaskItem entry and all the relevant related entities
 
             if (entry == null)
                 return;
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.Configuration.LazyLoadingEnabled = false;
 
@@ -70,7 +42,7 @@ namespace DBManager
         {
             // Updates a task Item entry
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.TaskItems.AddOrUpdate(entry);
                 entities.SaveChanges();
@@ -81,7 +53,7 @@ namespace DBManager
         {
             // Updates a list of TaskItem entries
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 foreach (TaskItem entry in entryList)
                     entities.TaskItems.AddOrUpdate(entry);
@@ -89,5 +61,41 @@ namespace DBManager
                 entities.SaveChanges();
             }
         }
+
+        #endregion Methods
+    }
+
+    public partial class TaskItem
+    {
+        #region Properties
+
+        public string MethodName => Method?.Standard?.Name;
+
+        public string PropertyName => Method?.Property?.Name;
+
+        #endregion Properties
+
+        #region Methods
+
+        /// <summary>
+        /// Creates a new Test entry based on the values currently loaded in the Task instance
+        /// </summary>
+        /// <returns>The new Test entity</returns>
+        public Test GetTest()
+        {
+            Test output = new Test()
+            {
+                MethodVariantID = Method.MethodVariants.First().ID,
+                Notes = Description,
+                RequirementID = RequirementID
+            };
+
+            foreach (SubTaskItem subItem in SubTaskItems)
+                output.SubTests.Add(subItem.GetSubTest());
+
+            return output;
+        }
+
+        #endregion Methods
     }
 }

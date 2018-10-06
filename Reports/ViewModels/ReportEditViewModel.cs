@@ -1,60 +1,58 @@
-﻿using DBManager;
-using DBManager.EntityExtensions;
-using DBManager.Services;
+﻿using DataAccess;
 using Infrastructure;
 using Infrastructure.Events;
+using Infrastructure.Queries;
+using LabDbContext;
+using LabDbContext.EntityExtensions;
+using LabDbContext.Services;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
 using Reporting;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace Reports.ViewModels
 {
     public class ReportEditViewModel : BindableBase
     {
-        private bool _projectChanged,
-                     _editMode;
-        private DBPrincipal _principal;
-        private DelegateCommand _addFile, 
-                                _addTests, 
-                                _generateRawDataSheet, 
-                                _openFile, 
-                                _removeFile,
-                                _save,
-                                _startEdit;
-        private DelegateCommand<Test> _removeTest;
-        private EventAggregator _eventAggregator;
+        #region Fields
+
+        private IEventAggregator _eventAggregator;
         private Report _instance;
-        private IDataService _dataService;
+        private IDataService<LabDbEntities> _labDbData;
+
+        private bool _projectChanged,
+                                                     _editMode;
+
         private IEnumerable<Project> _projectList;
-        private IEnumerable<TestWrapper> _testList;
-        private IReportService _reportService;
         private IReportingService _reportingService;
-        private Project _selectedProject;
+        private IReportService _reportService;
+        private DelegateCommand _save;
         private ReportFile _selectedFile;
-        
-        public ReportEditViewModel(DBPrincipal principal,
-                                    EventAggregator aggregator,
-                                    IDataService dataService,
+        private Project _selectedProject;
+        private IEnumerable<TestWrapper> _testList;
+
+        #endregion Fields
+
+        #region Constructors
+
+        public ReportEditViewModel(IEventAggregator aggregator,
+                                    IDataService<LabDbEntities> labDbData,
                                     IReportService reportService,
                                     IReportingService reportingService) : base()
         {
-            _dataService = dataService;
+            _labDbData = labDbData;
             _editMode = false;
             _eventAggregator = aggregator;
-            _principal = principal;
             _projectChanged = false;
             _reportService = reportService;
             _reportingService = reportingService;
 
-            _addFile = new DelegateCommand(
+            AddFileCommand = new DelegateCommand(
                 () =>
                 {
                     OpenFileDialog fileDialog = new OpenFileDialog
@@ -79,21 +77,21 @@ namespace Reports.ViewModels
                 },
                 () => CanModify);
 
-            _addTests = new DelegateCommand(
+            AddTestsCommand = new DelegateCommand(
                 () =>
                 {
                     if (_reportService.AddTestsToReport(_instance))
-                        TestList = new List<TestWrapper>(_instance.GetTests().Select(tst => new TestWrapper(tst)));
+                        TestList = new List<TestWrapper>(  _instance.TestRecord.Tests.Select(tst => new TestWrapper(tst)));
                 },
                 () => CanModify);
 
-            _generateRawDataSheet = new DelegateCommand(
+            GenerateRawDataSheetCommand = new DelegateCommand(
                 () =>
                 {
                     _reportingService.PrintReportDataSheet(_instance);
                 });
 
-            _openFile = new DelegateCommand(
+            OpenFileCommand = new DelegateCommand(
                 () =>
                 {
                     try
@@ -107,7 +105,7 @@ namespace Reports.ViewModels
                 },
                 () => _selectedFile != null);
 
-            _removeFile = new DelegateCommand(
+            RemoveFileCommand = new DelegateCommand(
                 () =>
                 {
                     _selectedFile.Delete();
@@ -117,7 +115,7 @@ namespace Reports.ViewModels
                 },
                 () => CanModify && _selectedFile != null);
 
-            _removeTest = new DelegateCommand<Test>(
+            RemoveTestCommand = new DelegateCommand<Test>(
                 testItem =>
                 {
                     TaskItem tempTaskItem = testItem.GetTaskItem();
@@ -125,12 +123,10 @@ namespace Reports.ViewModels
 
                     if (tempTaskItem != null)
                     {
-                        tempTaskItem = _dataService.GetTaskItem(tempTaskItem.ID);
-                        tempTaskItem.Update();
+                        throw new NotImplementedException();
                     }
 
-                    TestList = new List<TestWrapper>(_instance.GetTests().Select(tst => new TestWrapper(tst)));
-
+                    TestList = new List<TestWrapper>(_instance.TestRecord.Tests.Select(tst => new TestWrapper(tst)));
                 },
                 testItem => EditMode);
 
@@ -151,11 +147,10 @@ namespace Reports.ViewModels
                         _instance.SetProject(_selectedProject);
 
                     EditMode = false;
-                    
                 },
                 () => _editMode);
 
-            _startEdit = new DelegateCommand(
+            StartEditCommand = new DelegateCommand(
                 () =>
                 {
                     EditMode = true;
@@ -171,64 +166,60 @@ namespace Reports.ViewModels
                                 RaisePropertyChanged("ProjectList");
                             });
 
-            #endregion
+            #endregion EventSubscriptions
         }
 
-        public DelegateCommand AddFileCommand
-        {
-            get { return _addFile; }
-        }
+        #endregion Constructors
 
-        public DelegateCommand AddTestsCommand
-        {
-            get { return _addTests; }
-        }
+        #region Properties
+
+        public DelegateCommand AddFileCommand { get; }
+
+        public DelegateCommand AddTestsCommand { get; }
 
         public string BatchNumber
         {
-            get 
-            { 
+            get
+            {
                 if (_instance == null)
                     return null;
                 else
-                    return _instance.Batch.Number; 
+                    return _instance.Batch.Number;
             }
         }
 
         public bool CanModify
         {
-            get 
+            get
             {
                 if (_instance == null)
                     return false;
-
-                else if (_principal.IsInRole(UserRoleNames.ReportEdit))
+                else if (Thread.CurrentPrincipal.IsInRole(UserRoleNames.ReportEdit))
                     return true;
-                
-                else 
+                else
                     return false;
             }
         }
 
         public string Category
         {
-            get 
-            { 
+            get
+            {
                 if (_instance == null)
                     return null;
                 else
-                    return _instance.Category; 
+                    return _instance.Category;
             }
         }
-        
+
         public string Description
         {
-            get 
-            { 
+            get
+            {
                 if (_instance == null)
                     return null;
                 else
-                    return _instance.Description; 
+                    return _instance.Description;
             }
             set { _instance.Description = value; }
         }
@@ -242,24 +233,15 @@ namespace Reports.ViewModels
                 RaisePropertyChanged("EditMode");
                 RaisePropertyChanged("ReadOnlyMode");
 
-                _removeTest.RaiseCanExecuteChanged();
+                RemoveTestCommand.RaiseCanExecuteChanged();
                 _save.RaiseCanExecuteChanged();
-                _startEdit.RaiseCanExecuteChanged();
+                StartEditCommand.RaiseCanExecuteChanged();
             }
         }
 
-        public IEnumerable<ReportFile> FileList
-        {
-            get 
-            {
-                return _instance.GetReportFiles();
-            }
-        }
+        public IEnumerable<ReportFile> FileList => _instance.GetReportFiles();
 
-        public DelegateCommand GenerateRawDataSheetCommand
-        {
-            get { return _generateRawDataSheet; }
-        }
+        public DelegateCommand GenerateRawDataSheetCommand { get; }
 
         public Report Instance
         {
@@ -270,16 +252,15 @@ namespace Reports.ViewModels
                 _projectChanged = false;
 
                 _instance = value;
-                _instance.Load();
 
-                _testList = new List<TestWrapper>(_instance.GetTests().Select(tst => new TestWrapper(tst)));
+                _testList = new List<TestWrapper>(_instance.TestRecord.Tests.Select(tst => new TestWrapper(tst)));
                 _selectedProject = _instance?.GetProject();
 
-                _addFile.RaiseCanExecuteChanged();
-                _addTests.RaiseCanExecuteChanged();
-                _removeFile.RaiseCanExecuteChanged();
-                _removeTest.RaiseCanExecuteChanged();
-                _startEdit.RaiseCanExecuteChanged();
+                AddFileCommand.RaiseCanExecuteChanged();
+                AddTestsCommand.RaiseCanExecuteChanged();
+                RemoveFileCommand.RaiseCanExecuteChanged();
+                RemoveTestCommand.RaiseCanExecuteChanged();
+                StartEditCommand.RaiseCanExecuteChanged();
 
                 RaisePropertyChanged("BatchNumber");
                 RaisePropertyChanged("CanModify");
@@ -298,39 +279,58 @@ namespace Reports.ViewModels
 
         public Material Material
         {
-            get 
-            { 
+            get
+            {
                 if (_instance == null)
                     return null;
                 else
-                     return _instance.Batch.Material; 
+                    return _instance.Batch.Material;
             }
         }
 
         public string Number
         {
-            get 
-            { 
+            get
+            {
                 if (_instance == null)
                     return null;
                 else
-                      return _instance.Number.ToString(); 
+                    return _instance.Number.ToString();
             }
         }
 
-        public DelegateCommand OpenFileCommand
-        {
-            get { return _openFile; }
-        }
+        public DelegateCommand OpenFileCommand { get; }
 
         public IEnumerable<Project> ProjectList
         {
             get
             {
                 if (_projectList == null)
-                    _projectList = _dataService.GetProjects();
+                    _projectList = _labDbData.RunQuery(new ProjectsQuery())
+                                            .ToList();
 
                 return _projectList;
+            }
+        }
+
+        public bool ReadOnlyMode => !EditMode;
+
+        public DelegateCommand RemoveFileCommand { get; }
+
+        public DelegateCommand<Test> RemoveTestCommand { get; }
+
+        public DelegateCommand SaveCommand => _save;
+
+        public ReportFile SelectedFile
+        {
+            get { return _selectedFile; }
+            set
+            {
+                _selectedFile = value;
+                OpenFileCommand.RaiseCanExecuteChanged();
+                RemoveFileCommand.RaiseCanExecuteChanged();
+
+                RaisePropertyChanged("SelectedFile");
             }
         }
 
@@ -348,56 +348,20 @@ namespace Reports.ViewModels
             }
         }
 
-        public bool ReadOnlyMode
-        {
-            get { return !EditMode; }
-        }
-
-        public DelegateCommand RemoveFileCommand
-        {
-            get { return _removeFile; }
-        }
-
-        public DelegateCommand<Test> RemoveTestCommand
-        {
-            get { return _removeTest; }
-        }
-
-        public DelegateCommand SaveCommand
-        {
-            get { return _save; }
-        }
-        
         public string SpecificationName => _instance?.SpecificationVersion?.Specification.Name;
 
         public string SpecificationVersion
         {
-            get 
-            { 
+            get
+            {
                 if (_instance == null)
                     return null;
                 else
-                     return _instance.SpecificationVersion.Name; 
+                    return _instance.SpecificationVersion.Name;
             }
         }
 
-        public ReportFile SelectedFile
-        {
-            get { return _selectedFile; }
-            set
-            {
-                _selectedFile = value;
-                _openFile.RaiseCanExecuteChanged();
-                _removeFile.RaiseCanExecuteChanged();
-
-                RaisePropertyChanged("SelectedFile");
-            }
-        } 
-
-        public DelegateCommand StartEditCommand
-        {
-            get { return _startEdit; }
-        }
+        public DelegateCommand StartEditCommand { get; }
 
         public IEnumerable<TestWrapper> TestList
         {
@@ -409,12 +373,8 @@ namespace Reports.ViewModels
             }
         }
 
-        public double TotalDuration
-        {
-            get
-            {
-                return (_instance == null) ? 0 : _instance.TotalDuration;
-            }
-        }
+        public double TotalDuration => (_instance == null) ? 0 : _instance.TotalDuration;
+
+        #endregion Properties
     }
 }

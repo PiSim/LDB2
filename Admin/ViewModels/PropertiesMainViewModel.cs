@@ -1,53 +1,53 @@
-﻿using DBManager;
-using DBManager.Services;
+﻿using Controls.Views;
+using DataAccess;
 using Infrastructure;
 using Infrastructure.Events;
+using Infrastructure.Queries;
+using LabDbContext;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Admin.ViewModels
 {
     public class PropertiesMainViewModel : BindableBase
     {
-        private DelegateCommand _newProperty;
-        private EventAggregator _eventAggregator;
+        #region Fields
+
         private IAdminService _adminService;
-        private IDataService _dataService;
+        private IEventAggregator _eventAggregator;
+        private IDataService<LabDbEntities> _labDbData;
         private Property _selectedProperty;
 
-        public PropertiesMainViewModel(EventAggregator eventAggregator,
-                                            IAdminService adminService,
-                                            IDataService dataService)
+        #endregion Fields
+
+        #region Constructors
+
+        public PropertiesMainViewModel(IDataService<LabDbEntities> labDbdata, 
+                                        IEventAggregator eventAggregator,
+                                            IAdminService adminService)
         {
+            _labDbData = labDbdata;
             _adminService = adminService;
-            _dataService = dataService;
             _eventAggregator = eventAggregator;
 
-            _newProperty = new DelegateCommand(
+            NewPropertyCommand = new DelegateCommand(
                 () =>
                 {
                     _adminService.CreateNewProperty();
                 });
-            
         }
 
-        public IEnumerable<Property> PropertyList => _dataService.GetProperties();
+        #endregion Constructors
 
-        public string PropertyManagementEditRegionName
-        {
-            get { return RegionNames.PropertyManagementEditRegion; }
-        }
+        #region Properties
 
-        public DelegateCommand NewPropertyCommand
-        {
-            get { return _newProperty; }
-        }
+        public DelegateCommand NewPropertyCommand { get; }
+        public IEnumerable<Property> PropertyList => _labDbData.RunQuery(new PropertiesQuery()).ToList();
+
+        public string PropertyManagementEditRegionName => RegionNames.PropertyManagementEditRegion;
 
         public Property SelectedProperty
         {
@@ -65,5 +65,6 @@ namespace Admin.ViewModels
             }
         }
 
+        #endregion Properties
     }
 }

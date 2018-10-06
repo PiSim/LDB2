@@ -1,0 +1,193 @@
+﻿<Window x:Class="Materials.Views.NewBatchSearchResultDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:prism="http://prismlibrary.com/"
+        prism:ViewModelLocator.AutoWireViewModel="True"
+        mc:Ignorable="d"
+        Title="Ricerca nuovi batch" Height="900" Width="1500">
+    <Window.Resources>
+        <Style x:Key="ThreeCharMaterialDataTextBoxStyle"
+               TargetType="TextBox">
+            <Setter Property="CharacterCasing"
+                    Value="Upper"/>
+            <Setter Property="MaxLength"
+                    Value="3"/>
+            <Setter Property="MaxLines"
+                    Value="1"/>
+            <Setter Property="TextWrapping"
+                    Value="NoWrap"/>
+        </Style>
+        <Style x:Key="FourCharMaterialDataTextBoxStyle"
+               TargetType="TextBox">
+            <Setter Property="CharacterCasing"
+                    Value="Upper"/>
+            <Setter Property="MaxLength"
+                    Value="4"/>
+            <Setter Property="MaxLines"
+                    Value="1"/>
+            <Setter Property="TextWrapping"
+                    Value="NoWrap"/>
+        </Style>
+    </Window.Resources>
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="35" />
+            <RowDefinition />
+            <RowDefinition Height="35" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0"
+                   Margin="5"
+                   VerticalAlignment="Center">
+            Trovati
+            <Run Text="{Binding ParsedBatches.Count, Mode=OneWay}" />
+            nuovi batch
+        </TextBlock>
+
+        <DataGrid ItemsSource="{Binding ParsedBatches}"
+                  Grid.Row="1"
+                  Style="{StaticResource ResourceKey=GenericDataGridStyle}">
+            <DataGrid.Columns>
+                <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <CheckBox IsChecked="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged}"
+                                      HorizontalAlignment="Center"
+                                      VerticalAlignment="Center"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.HeaderTemplate>
+                        <DataTemplate>
+                            <CheckBox IsChecked="{Binding DataContext.AreAllBatchesSelected, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DataGrid}, UpdateSourceTrigger=PropertyChanged}"
+                                      HorizontalAlignment="Center"
+                                      VerticalAlignment="Center"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.HeaderTemplate>
+                </DataGridTemplateColumn>
+                
+                <DataGridTextColumn Header="Numero"
+                                    Binding="{Binding Number, Mode=OneWay}"/>
+                <DataGridTextColumn Header="Materiale"
+                                    Binding="{Binding MaterialTypeCode, UpdateSourceTrigger=PropertyChanged}"
+                                    EditingElementStyle="{StaticResource FourCharMaterialDataTextBoxStyle}" />
+                <DataGridTextColumn Header="Riga"
+                                    Binding="{Binding MaterialLineCode, UpdateSourceTrigger=PropertyChanged}"
+                                    EditingElementStyle="{StaticResource ThreeCharMaterialDataTextBoxStyle}" />
+                <DataGridTextColumn Header="Aspetto"
+                                    Binding="{Binding AspectCode, UpdateSourceTrigger=PropertyChanged}" 
+                                    EditingElementStyle="{StaticResource ThreeCharMaterialDataTextBoxStyle}"/>
+                <DataGridTextColumn Header="Ricetta"
+                                    Binding="{Binding RecipeCode, UpdateSourceTrigger=PropertyChanged}"
+                                    EditingElementStyle="{StaticResource FourCharMaterialDataTextBoxStyle}" />
+
+                <DataGridTemplateColumn Header="Colore"
+                                        Width="200">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ComboBox ItemsSource="{Binding DataContext.ColorList, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DataGrid}}"
+                                    SelectedItem="{Binding ColorInstance, UpdateSourceTrigger=PropertyChanged}"
+                                      DisplayMemberPath="Name" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="No Test">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <CheckBox IsChecked="{Binding DoNotTest, UpdateSourceTrigger=PropertyChanged}"
+                                      HorizontalAlignment="Center"
+                                      VerticalAlignment="Center"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="Construction"
+                                        Width="300">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ComboBox ItemsSource="{Binding DataContext.ConstructionList, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DataGrid}}"
+                                    SelectedItem="{Binding ConstructionInstance, UpdateSourceTrigger=PropertyChanged}">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock>
+                                            <Run Text="{Binding Oem.Name}" />
+
+                                            <Run Text="{Binding Name}" />
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Progetto"
+                                        Width="300">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ComboBox ItemsSource="{Binding DataContext.ProjectList, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DataGrid}}"
+                                    SelectedItem="{Binding ProjectInstance, UpdateSourceTrigger=PropertyChanged}">
+
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock>
+
+                                            <Run Text="{Binding Name}" />
+                                            <Run Text="{Binding Oem.Name}" />
+                                            <Run Text="{Binding Description}" />
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="Area Prova"
+                                        Width="170">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ComboBox ItemsSource="{Binding DataContext.TrialAreaList, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DataGrid}}"
+                                    SelectedItem="{Binding TrialAreaInstance, UpdateSourceTrigger=PropertyChanged}"
+                                      DisplayMemberPath="Name"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="Pdf Ordine">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Command="{Binding DataContext.OpenOrderFileCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DataGrid}}"
+                                    CommandParameter="{Binding }"
+                                    BorderBrush="Transparent"
+                                    Background="Transparent"
+                                    Height="20"
+                                    Width="20"
+                                    Margin="-2">
+                                <Image Source="{StaticResource PdfIconSmall}" />
+                            </Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <StackPanel Grid.Row="2"
+                    HorizontalAlignment="Right"
+                    Margin="5"
+                    Orientation="Horizontal">
+            <Button Content="Annulla"
+                    Command="{Binding CancelCommand}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
+                    Margin="5,0"
+                    Width="75" />
+            <Button Content="Ok"
+                    Command="{Binding ConfirmCommand}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
+                    Margin="5,0"
+                    Width="75" />
+        </StackPanel>
+    </Grid>
+</Window>

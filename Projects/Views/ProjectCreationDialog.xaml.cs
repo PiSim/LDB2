@@ -1,18 +1,6 @@
-﻿using DBManager;
+﻿using LabDbContext;
 using Microsoft.Practices.Prism.Mvvm;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace Projects.Views
 {
@@ -21,14 +9,19 @@ namespace Projects.Views
     /// </summary>
     public partial class ProjectCreationDialog : Window, IView
     {
+        #region Constructors
+
         public ProjectCreationDialog()
         {
             InitializeComponent();
         }
 
-        public Project ProjectInstance
-        {
-            get { return (DataContext as ViewModels.ProjectCreationDialogViewModel).ProjectInstance; }
-        }
+        #endregion Constructors
+
+        #region Properties
+
+        public Project ProjectInstance => (DataContext as ViewModels.ProjectCreationDialogViewModel).ProjectInstance;
+
+        #endregion Properties
     }
 }

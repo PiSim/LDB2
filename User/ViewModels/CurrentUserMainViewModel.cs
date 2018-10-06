@@ -1,34 +1,33 @@
-﻿using DBManager;
-using Infrastructure;
+﻿using Infrastructure;
+using LabDbContext;
 using Prism.Mvvm;
-using Security;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 
 namespace User.ViewModels
 {
     public class CurrentUserMainViewModel : BindableBase
     {
-        private DBPrincipal _principal;
+        #region Fields
+
         private DBIdentity _identity;
 
-        public CurrentUserMainViewModel(DBPrincipal principal) : base()
+        #endregion Fields
+
+        #region Constructors
+
+        public CurrentUserMainViewModel() : base()
         {
-            _principal = principal;
-            _identity = principal.Identity as DBIdentity;
+            _identity = Thread.CurrentPrincipal.Identity as DBIdentity;
         }
 
-        private string Name
-        {
-            get { return _identity.User.Person.Name; }
-        }
+        #endregion Constructors
 
-        public List<Report> ReportList
-        {
-            get { return new List<Report>(_identity.User.Person.Reports); }
-        }
+        #region Properties
+
+        public List<Report> ReportList => new List<Report>(_identity.User.Person.Reports);
+        private string Name => _identity.User.Person.Name;
+
+        #endregion Properties
     }
 }

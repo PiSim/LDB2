@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DBManager
+﻿namespace LabDbContext
 {
     public partial class SubRequirement
     {
+        #region Properties
+
         public bool IsUpdated { get; set; } = false;
 
         public string Name => SubMethod?.Name;
 
         public string UM => SubMethod?.UM;
+
+        #endregion Properties
     }
 }

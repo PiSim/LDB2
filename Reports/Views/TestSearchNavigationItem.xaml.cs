@@ -8,14 +8,19 @@ namespace Reports.Views
     /// </summary>
     public partial class TestSearchNavigationItem : UserControl, IModuleNavigationTag
     {
+        #region Constructors
+
         public TestSearchNavigationItem()
         {
             InitializeComponent();
         }
 
-        public string ViewName
-        {
-            get { return ViewNames.TestSearchMain; }
-        }
+        #endregion Constructors
+
+        #region Properties
+
+        public string ViewName => ViewNames.TestSearchMain;
+
+        #endregion Properties
     }
 }

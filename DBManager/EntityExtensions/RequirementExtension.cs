@@ -1,28 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
+﻿using System.Data.Entity;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace DBManager
+namespace LabDbContext
 {
-    public partial class Requirement
-    {
-        #region Properties
-
-        public string VariantName => MethodVariant?.Name;
-
-        #endregion
-    }
-
     public static class RequirementExtension
     {
+        #region Methods
+
         public static void Create(this Requirement entry)
         {
             // Insert new Requirement entry in the DB
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.Requirements.Add(entry);
                 entities.SaveChanges();
@@ -33,7 +22,7 @@ namespace DBManager
         {
             // Deletes Requirement entry
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.Entry(entities
                         .Requirements
@@ -50,9 +39,7 @@ namespace DBManager
         {
             // Loads DB values a given Requirement entry
 
-
-
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.Configuration.LazyLoadingEnabled = false;
 
@@ -67,5 +54,16 @@ namespace DBManager
                 entities.Entry(entry).CurrentValues.SetValues(tempEntry);
             }
         }
+
+        #endregion Methods
+    }
+
+    public partial class Requirement
+    {
+        #region Properties
+
+        public string VariantName => MethodVariant?.Name;
+
+        #endregion Properties
     }
 }

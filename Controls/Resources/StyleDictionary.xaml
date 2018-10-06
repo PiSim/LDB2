@@ -2,32 +2,54 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:Controls.Resources">
 
+    <Style x:Key="GenericDataGridStyle"
+           TargetType="DataGrid">
+        <Setter Property="AutoGenerateColumns"
+                Value="False" />
+        <Setter Property="Background"
+                Value="White" />
+        <Setter Property="CanUserAddRows"
+                Value="False" />
+        <Setter Property="CanUserDeleteRows"
+                Value="False" />
+        <Setter Property="CanUserResizeRows"
+                Value="False" />
+        <Setter Property="HorizontalGridLinesBrush"
+                Value="LightGray" />
+        <Setter Property="SelectionMode"
+                Value="Single" />
+        <Setter Property="VerticalGridLinesBrush"
+                Value="Transparent" />
+        <Setter Property="VirtualizingPanel.ScrollUnit"
+                Value="Pixel" />
+    </Style>
+
     <Style x:Key="TestDataGridStyle"
            TargetType="DataGrid">
         <Setter Property="AutoGenerateColumns"
-                Value="False"/>
+                Value="False" />
         <Setter Property="Background"
-                Value="White"/>
+                Value="White" />
         <Setter Property="CanUserAddRows"
-                Value="False"/>
+                Value="False" />
         <Setter Property="CanUserDeleteRows"
-                Value="False"/>
+                Value="False" />
         <Setter Property="CanUserResizeRows"
-                Value="False"/>
+                Value="False" />
         <Setter Property="HorizontalGridLinesBrush"
-                Value="LightGray"/>
+                Value="LightGray" />
         <Setter Property="VerticalGridLinesBrush"
-                Value="Transparent"/>
+                Value="Transparent" />
         <Setter Property="VirtualizingPanel.ScrollUnit"
-                Value="Pixel"/>
+                Value="Pixel" />
     </Style>
-    
+
     <Style x:Key="DataGridCellEnabledOnEditModeStyle"
            TargetType="DataGridCell">
         <Setter Property="IsEnabled"
                 Value="{Binding DataContext.EditMode,
                                 RelativeSource={RelativeSource Mode=FindAncestor,
-                                AncestorType=DataGrid}}"/>
+                                AncestorType=DataGrid}}" />
     </Style>
 
     <Style x:Key="DataGridCellOnlyVisibleInEditMode"
@@ -38,14 +60,14 @@
                                                                           AncestorType=DataGrid}}"
                          Value="False">
                 <Setter Property="Visibility"
-                        Value="Collapsed"/>
+                        Value="Collapsed" />
             </DataTrigger>
             <DataTrigger Binding="{Binding DataContext.EditMode,
                                            RelativeSource={RelativeSource Mode=FindAncestor,
                                                                           AncestorType=DataGrid}}"
                          Value="True">
                 <Setter Property="Visibility"
-                        Value="Visible"/>
+                        Value="Visible" />
             </DataTrigger>
         </Style.Triggers>
     </Style>
@@ -54,9 +76,9 @@
             TargetType="DataGridCell">
         <Style.Triggers>
             <Trigger Property="DataGridCell.IsSelected" Value="True">
-                <Setter Property="BorderBrush" Value="Transparent"/>
-                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
-                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="BorderBrush" Value="Transparent" />
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
+                <Setter Property="Background" Value="Transparent" />
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -68,12 +90,12 @@
             <DataTrigger Binding="{Binding EditMode}"
                          Value="False">
                 <Setter Property="Visibility"
-                        Value="Collapsed"/>
+                        Value="Collapsed" />
             </DataTrigger>
             <DataTrigger Binding="{Binding EditMode}"
                          Value="True">
                 <Setter Property="Visibility"
-                        Value="Visible"/>
+                        Value="Visible" />
             </DataTrigger>
         </Style.Triggers>
     </Style>

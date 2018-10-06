@@ -1,99 +1,61 @@
-﻿using DBManager;
-using DBManager.EntityExtensions;
-using DBManager.Services;
-using Infrastructure;
+﻿using Infrastructure;
+using LabDbContext;
+using LabDbContext.EntityExtensions;
+using LabDbContext.Services;
 using Prism.Commands;
 using Prism.Mvvm;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using System.Windows;
 
 namespace Instruments.ViewModels
 {
     public class MaintenanceEventCreationDialogViewModel : BindableBase
     {
-        private DateTime _date;
-        private DBPrincipal _principal;
-        private DelegateCommand<Window> _cancel, _confirm;
-        private IDataService _dataService;
-        private Instrument _instrumentInstance;
-        private InstrumentMaintenanceEvent _eventInstance;
-        private string _description;
+        #region Constructors
 
-        public MaintenanceEventCreationDialogViewModel(DBPrincipal principal,
-                                                        IDataService dataService) : base()
+        public MaintenanceEventCreationDialogViewModel() : base()
         {
-            _dataService = dataService;
-            _date = DateTime.Now.Date;
-            _principal = principal;
-            _description = "";
-            _cancel = new DelegateCommand<Window>(
+            Date = DateTime.Now.Date;
+
+            Description = "";
+            CancelCommand = new DelegateCommand<Window>(
                 parentDialog =>
                 {
                     parentDialog.DialogResult = false;
                 });
 
-            _confirm = new DelegateCommand<Window>(
+            ConfirmCommand = new DelegateCommand<Window>(
                 parentDialog =>
                 {
-                    _eventInstance = new InstrumentMaintenanceEvent();
-                    _eventInstance.Date = _date;
-                    _eventInstance.Description = _description;
-                    _eventInstance.InstrumentID = _instrumentInstance.ID;
-                    _eventInstance.PersonID = _principal.CurrentPerson.ID;
+                    EventInstance = new InstrumentMaintenanceEvent();
+                    EventInstance.Date = Date;
+                    EventInstance.Description = Description;
+                    EventInstance.InstrumentID = InstrumentInstance.ID;
+                    EventInstance.PersonID = (Thread.CurrentPrincipal as DBPrincipal).CurrentPerson.ID;
 
-                    _eventInstance.Create();
+                    EventInstance.Create();
 
                     parentDialog.DialogResult = true;
                 });
         }
 
-        public DelegateCommand<Window> CancelCommand
-        {
-            get { return _cancel; }
-        }
+        #endregion Constructors
 
-        public DelegateCommand<Window> ConfirmCommand
-        {
-            get { return _confirm; }
-        }
+        #region Properties
 
-        public DateTime Date
-        {
-            get { return _date; }
-            set
-            {
-                _date = value;
-            }
-        }
+        public DelegateCommand<Window> CancelCommand { get; }
 
-        public string Description
-        {
-            get { return _description; }
-            set
-            {
-                _description = value;
-            }
-        }
+        public DelegateCommand<Window> ConfirmCommand { get; }
 
-        public InstrumentMaintenanceEvent EventInstance
-        {
-            get { return _eventInstance; }
-        }
+        public DateTime Date { get; set; }
 
-        public Instrument InstrumentInstance
-        {
-            get { return _instrumentInstance; }
-            set
-            {
-                _instrumentInstance = value;
-            }
-        }
+        public string Description { get; set; }
 
-        public IEnumerable<Person> TechList => _dataService.GetPeople(PersonRoleNames.CalibrationTech);
-        
+        public InstrumentMaintenanceEvent EventInstance { get; private set; }
+
+        public Instrument InstrumentInstance { get; set; }
+
+        #endregion Properties
     }
 }

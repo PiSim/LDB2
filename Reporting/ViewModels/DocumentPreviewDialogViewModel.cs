@@ -1,23 +1,25 @@
 ﻿using Prism.Mvvm;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Documents;
-using System.Windows.Xps.Packaging;
 
 namespace Reporting.ViewModels
 {
     public class DocumentPreviewDialogViewModel : BindableBase
     {
+        #region Fields
+
         private IDocumentPaginatorSource _documentInstance;
+
+        #endregion Fields
+
+        #region Constructors
 
         public DocumentPreviewDialogViewModel()
         {
-
         }
 
+        #endregion Constructors
+
+        #region Properties
 
         public IDocumentPaginatorSource DocumentInstance
         {
@@ -28,5 +30,7 @@ namespace Reporting.ViewModels
                 RaisePropertyChanged("DocumentInstance");
             }
         }
+
+        #endregion Properties
     }
 }

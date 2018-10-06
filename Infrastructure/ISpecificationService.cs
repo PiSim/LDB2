@@ -1,20 +1,23 @@
-﻿
-using System;
+﻿using LabDbContext;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DBManager;
 
 namespace Infrastructure
 {
     public interface ISpecificationService
     {
+        #region Methods
+
         void ConsolidateStandard(IEnumerable<Std> standardList,
                                 Std mainEntry);
+
         void CreateMethod();
+
         void CreateSpecification();
+
+        void DeleteStandard(Std standardInstance);
+
         void ModifyMethodTestList(Method toBeModified);
+
         /// <summary>
         /// Inserts a list of MethodVariants in the database, or updates the values if the entry already exists
         /// </summary>
@@ -22,7 +25,9 @@ namespace Infrastructure
         void UpdateMethodVariantRange(IEnumerable<MethodVariant> variantList);
 
         void UpdateRequirements(IEnumerable<Requirement> enumerable);
+
         void UpdateSubMethods(IEnumerable<SubMethod> subMethodList);
-        void DeleteStandard(Std standardInstance);
+
+        #endregion Methods
     }
 }

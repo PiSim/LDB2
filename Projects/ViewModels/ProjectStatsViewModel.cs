@@ -1,44 +1,44 @@
-﻿using DBManager;
-using DBManager.Services;
+﻿using DataAccess;
 using Infrastructure;
 using Infrastructure.Events;
-using Infrastructure.Wrappers;
+using Infrastructure.Queries;
+using LabDbContext;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 
 namespace Projects.ViewModels
 {
     public class ProjectStatsViewModel : BindableBase
     {
-        private DBPrincipal _principal;
-        private DelegateCommand _updateStats;
-        private EventAggregator _eventAggregator;
-        private readonly IDataService _dataService;
-        private readonly IProjectService _projectService;
+        #region Fields
 
-        public ProjectStatsViewModel(DBPrincipal principal,
-                                    EventAggregator eventAggregator,
-                                    IDataService dataService,
+        private readonly IDataService<LabDbEntities> _labDbData;
+        private readonly IProjectService _projectService;
+        private IEventAggregator _eventAggregator;
+
+        #endregion Fields
+
+        #region Constructors
+
+        public ProjectStatsViewModel(IEventAggregator eventAggregator,
+                                    IDataService<LabDbEntities> labDbData,
                                     IProjectService projectService)
         {
-            _dataService = dataService;
+            _labDbData = labDbData;
             _eventAggregator = eventAggregator;
-            _principal = principal;
             _projectService = projectService;
 
-            _updateStats = new DelegateCommand(
+            UpdateProjectStats = new DelegateCommand(
                 () =>
                 {
                     _projectService.UpdateAllCosts();
                     RaisePropertyChanged("ProjectStatList");
                 });
-                
+
             _eventAggregator.GetEvent<ProjectChanged>()
                             .Subscribe(
                             ect =>
@@ -47,10 +47,17 @@ namespace Projects.ViewModels
                             });
         }
 
-        public bool IsAdmin => _principal.IsInRole(UserRoleNames.Admin);
+        #endregion Constructors
 
-        public IEnumerable<Project> ProjectStatList => _dataService.GetProjects(true);
+        #region Properties
 
-        public DelegateCommand UpdateProjectStats => _updateStats;
+        public bool IsAdmin => Thread.CurrentPrincipal.IsInRole(UserRoleNames.Admin);
+
+        public IEnumerable<Project> ProjectStatList => _labDbData.RunQuery(new ProjectsQuery())
+                                                                .ToList();
+
+        public DelegateCommand UpdateProjectStats { get; }
+
+        #endregion Properties
     }
 }

@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Infrastructure
+﻿namespace Infrastructure
 {
     public static class ResourceKeys
     {
+        #region Properties
+
+        public static string DataGridCellEnabledOnEditModeStyle => "DataGridCellEnabledOnEditModeStyle";
+        public static string DataGridSubTestExternalResultCellTemplate => "SubTestExternalResultCellTemplate";
         public static string DataGridSubTestNameCellTemplate => "SubTestNameCellTemplate";
         public static string DataGridSubTestResultCellTemplate => "SubTestResultCellTemplate";
         public static string DataGridSubTestUMCellTemplate => "SubTestUMCellTemplate";
-        public static string DataGridSubTestExternalResultCellTemplate => "SubTestExternalResultCellTemplate";
-        public static string DataGridCellEnabledOnEditModeStyle => "DataGridCellEnabledOnEditModeStyle";
+
+        #endregion Properties
     }
 }

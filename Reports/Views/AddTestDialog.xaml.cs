@@ -1,19 +1,8 @@
-﻿using DBManager;
-using Infrastructure.Wrappers;
+﻿using Infrastructure.Wrappers;
+using LabDbContext;
 using Microsoft.Practices.Prism.Mvvm;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace Reports.Views
 {
@@ -22,10 +11,16 @@ namespace Reports.Views
     /// </summary>
     public partial class AddTestDialog : Window, IView
     {
+        #region Constructors
+
         public AddTestDialog()
         {
             InitializeComponent();
         }
+
+        #endregion Constructors
+
+        #region Properties
 
         public Report ReportInstance
         {
@@ -36,9 +31,8 @@ namespace Reports.Views
             }
         }
 
-        public IEnumerable<ReportItemWrapper> TestList
-        {
-            get { return (DataContext as ViewModels.AddTestDialogViewModel).TestList; }
-        }
+        public IEnumerable<ReportItemWrapper> TestList => (DataContext as ViewModels.AddTestDialogViewModel).TestList;
+
+        #endregion Properties
     }
 }

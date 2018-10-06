@@ -1,40 +1,43 @@
-﻿using DBManager;
-using DBManager.EntityExtensions;
-using DBManager.Services;
+﻿using Controls.Views;
+using DataAccess;
 using Infrastructure;
 using Infrastructure.Events;
+using LabDbContext;
+using LabDbContext.EntityExtensions;
+using LabDbContext.Services;
+using Materials.Queries;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 
 namespace Materials.ViewModels
 {
     public class AspectMainViewModel : BindableBase
     {
-        private Aspect _selectedAspect;
-        private DBPrincipal _principal;
-        private DelegateCommand _createAspect, _removeAspect;
-        private EventAggregator _eventAggregator;
-        private readonly IDataService _dataService;
-        private IEnumerable<Aspect> _aspectList;
-        private readonly IMaterialService _materialService;
+        #region Fields
 
-        public AspectMainViewModel(DBPrincipal principal,
-                                EventAggregator eventAggregator,
-                                IDataService dataService,
-                                IMaterialService materialService) : base()
+        private readonly IDataService<LabDbEntities> _labDbData;
+        private readonly MaterialService _materialService;
+        private IEnumerable<Aspect> _aspectList;
+        private IEventAggregator _eventAggregator;
+        private Aspect _selectedAspect;
+
+        #endregion Fields
+
+        #region Constructors
+
+        public AspectMainViewModel(IEventAggregator eventAggregator,
+                                IDataService<LabDbEntities> labDbData,
+                                MaterialService materialService) : base()
         {
-            _dataService = dataService;
-            _principal = principal;
+            _labDbData = labDbData;
             _eventAggregator = eventAggregator;
             _materialService = materialService;
 
-            _createAspect = new DelegateCommand(
+            CreateAspectCommand = new DelegateCommand(
                 () =>
                 {
                     Aspect tempAspect = _materialService.CreateAspect();
@@ -48,7 +51,7 @@ namespace Materials.ViewModels
                 },
                 () => CanModify);
 
-            _removeAspect = new DelegateCommand(
+            RemoveAspectCommand = new DelegateCommand(
                 () =>
                 {
                     _selectedAspect.Delete();
@@ -58,33 +61,28 @@ namespace Materials.ViewModels
                 () => false);
         }
 
-        public string AspectDetailRegionName
-        {
-            get { return RegionNames.AspectDetailRegion; }
-        }
+        #endregion Constructors
+
+        #region Properties
+
+        public string AspectDetailRegionName => RegionNames.AspectDetailRegion;
 
         public IEnumerable<Aspect> AspectList
         {
             get
             {
                 if (_aspectList == null)
-                    _aspectList = _dataService.GetAspects();
+                    _aspectList = _labDbData.RunQuery(new AspectsQuery()).ToList();
 
                 return _aspectList;
             }
         }
 
-        public bool CanModify
-        {
-            get { return _principal.IsInRole(UserRoleNames.MaterialEdit); }
-        }
+        public bool CanModify => Thread.CurrentPrincipal.IsInRole(UserRoleNames.MaterialEdit);
 
-        public DelegateCommand CreateAspectCommand => _createAspect;
+        public DelegateCommand CreateAspectCommand { get; }
 
-        public DelegateCommand RemoveAspectCommand
-        {
-            get { return _removeAspect; }
-        }
+        public DelegateCommand RemoveAspectCommand { get; }
 
         public Aspect SelectedAspect
         {
@@ -100,5 +98,7 @@ namespace Materials.ViewModels
                 _eventAggregator.GetEvent<NavigationRequested>().Publish(token);
             }
         }
+
+        #endregion Properties
     }
 }

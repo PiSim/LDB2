@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Reporting
+﻿namespace Reporting
 {
     internal class Resources
     {
-        public static string VulcaLogo { get { return "Infrastructure/Resources/vulca_logo.jpg"; } }
+        #region Properties
+
+        public static string VulcaLogo => "Infrastructure/Resources/vulca_logo.jpg";
+
+        #endregion Properties
     }
 }

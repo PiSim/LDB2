@@ -1,18 +1,7 @@
-﻿using Microsoft.Practices.Prism.Mvvm;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using Controls.Views;
+using Microsoft.Practices.Prism.Mvvm;
+using Prism.Regions;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Admin.Views
 {
@@ -21,9 +10,30 @@ namespace Admin.Views
     /// </summary>
     public partial class AdminMain : UserControl, IView
     {
-        public AdminMain()
+        #region Constructors
+
+        public AdminMain(IRegionManager regionManager)
         {
             InitializeComponent();
+
+            regionManager.RegisterViewWithRegion(RegionNames.AdminUserMainRegion,
+                                                    typeof(Views.UserMain));
+            regionManager.RegisterViewWithRegion(RegionNames.InstrumentTypeManagementRegion,
+                                                    typeof(Views.InstrumentTypeMain));
+            regionManager.RegisterViewWithRegion(RegionNames.InstrumentUtilizationAreasRegion,
+                                                    typeof(Views.InstrumentUtilizationAreaMain));
+            regionManager.RegisterViewWithRegion(RegionNames.MeasurableQuantityManagementRegion,
+                                                    typeof(Views.MeasurableQuantityMain));
+            regionManager.RegisterViewWithRegion(RegionNames.UnitOfMeasurementManagementRegion,
+                                                    typeof(Views.MeasurementUnitMain));
+            regionManager.RegisterViewWithRegion(RegionNames.OrganizationRoleManagementRegion,
+                                                    typeof(Views.OrganizationsMain));
+            regionManager.RegisterViewWithRegion(RegionNames.PeopleManagementRegion,
+                                                    typeof(Views.PeopleMain));
+            regionManager.RegisterViewWithRegion(RegionNames.PropertyManagementRegion,
+                                                    typeof(Views.PropertyMain));
         }
+
+        #endregion Constructors
     }
 }

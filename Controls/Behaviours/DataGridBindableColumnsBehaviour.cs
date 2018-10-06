@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -12,11 +7,27 @@ namespace Controls.Behaviours
 {
     public class DataGridBindableColumnsBehaviour
     {
+        #region Fields
+
         public static readonly DependencyProperty BindableColumnsProperty =
         DependencyProperty.RegisterAttached("BindableColumns",
                                             typeof(ObservableCollection<DataGridColumn>),
                                             typeof(DataGridBindableColumnsBehaviour),
                                             new UIPropertyMetadata(null, BindableColumnsPropertyChanged));
+
+        #endregion Fields
+
+        #region Methods
+
+        public static ObservableCollection<DataGridColumn> GetBindableColumns(DependencyObject element)
+        {
+            return (ObservableCollection<DataGridColumn>)element.GetValue(BindableColumnsProperty);
+        }
+
+        public static void SetBindableColumns(DependencyObject element, ObservableCollection<DataGridColumn> value)
+        {
+            element.SetValue(BindableColumnsProperty, value);
+        }
 
         private static void BindableColumnsPropertyChanged(DependencyObject source, DependencyPropertyChangedEventArgs e)
         {
@@ -67,14 +78,6 @@ namespace Controls.Behaviours
             };
         }
 
-        public static void SetBindableColumns(DependencyObject element, ObservableCollection<DataGridColumn> value)
-        {
-            element.SetValue(BindableColumnsProperty, value);
-        }
-
-        public static ObservableCollection<DataGridColumn> GetBindableColumns(DependencyObject element)
-        {
-            return (ObservableCollection<DataGridColumn>)element.GetValue(BindableColumnsProperty);
-        }
+        #endregion Methods
     }
 }

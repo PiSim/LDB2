@@ -1,28 +1,29 @@
-﻿using Microsoft.Practices.Unity;
-using Prism.Events;
+﻿using Prism.Ioc;
 using Prism.Modularity;
-using Prism.Regions;
-using Infrastructure.Queries;
-using System;
 
 namespace Infrastructure
 {
     [Module(ModuleName = "InfrastructureModule")]
     public class InfrastructureModule : IModule
     {
-        IRegionManager _regionManager;
-        IUnityContainer _container;
+        #region Constructors
 
-        public InfrastructureModule(IUnityContainer container,
-                                    RegionManager regionManager)
+        public InfrastructureModule()
         {
-            _container = container;
-            _regionManager = regionManager;
         }
 
-        public void Initialize()
+        #endregion Constructors
+
+        #region Methods
+
+        public void OnInitialized(IContainerProvider containerProvider)
         {
-            _container.RegisterType<ArrivedUntestedBatchesQuery>();
         }
+
+        public void RegisterTypes(IContainerRegistry containerRegistry)
+        {
+        }
+
+        #endregion Methods
     }
 }

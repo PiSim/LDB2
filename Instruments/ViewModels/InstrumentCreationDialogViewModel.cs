@@ -1,6 +1,9 @@
-﻿using DBManager;
-using DBManager.EntityExtensions;
-using DBManager.Services;
+﻿using DataAccess;
+using Infrastructure.Queries;
+using Instruments.Queries;
+using LabDbContext;
+using LabDbContext.EntityExtensions;
+using LabDbContext.Services;
 using Prism.Commands;
 using Prism.Mvvm;
 using System;
@@ -12,70 +15,65 @@ using System.Windows;
 
 namespace Instruments.ViewModels
 {
-
     internal class InstrumentCreationDialogViewModel : BindableBase, INotifyDataErrorInfo
     {
-        private bool _isUnderControl;
-        private DelegateCommand<Window> _cancel, _confirm;
+        #region Fields
+
         private readonly Dictionary<string, ICollection<string>> _validationErrors = new Dictionary<string, ICollection<string>>();
-        private IDataService _dataService;
-        private IEnumerable<Organization> _calibrationLabList;
-        private Instrument _instrumentInstance;
-        private InstrumentType _selectedType;
-        private InstrumentUtilizationArea _selectedArea;
-        private int _controlPeriod;
-        private Organization _manufacturer,
-                            _selectedCalibrationLab;
-        private string _code, 
-                        _model,
-                        _notes,
-                        _serial;
+        private string _code;
+        private bool _isUnderControl;
+        private IDataService<LabDbEntities> _labDbData;
+        private Organization _selectedCalibrationLab;
 
-        public InstrumentCreationDialogViewModel(IDataService dataService) : base()
+        #endregion Fields
+
+        #region Constructors
+
+        public InstrumentCreationDialogViewModel(IDataService<LabDbEntities> labDbData) : base()
         {
-            _dataService = dataService;
-            _controlPeriod = 12;
-            _notes = "";
-            _model = "";
-            _serial = "";
-            _calibrationLabList = _dataService.GetOrganizations(OrganizationRoleNames.CalibrationLab);
+            _labDbData = labDbData;
+            ControlPeriod = 12;
+            Notes = "";
+            Model = "";
+            SerialNumber = "";
+            CalibrationLabList = _labDbData.RunQuery(new OrganizationsQuery() { Role = OrganizationsQuery.OrganizationRoles.CalibrationLab })
+                                            .ToList();
 
-            _cancel = new DelegateCommand<Window>(
+            CancelCommand = new DelegateCommand<Window>(
                 parent =>
                 {
                     parent.DialogResult = false;
                 });
 
-            _confirm = new DelegateCommand<Window>(
+            ConfirmCommand = new DelegateCommand<Window>(
                 parent =>
                 {
-                    _instrumentInstance = new Instrument();
-                    _instrumentInstance.Code = _code;
-                    _instrumentInstance.Description = _notes;
-                    _instrumentInstance.InstrumentTypeID = _selectedType.ID;
-                    _instrumentInstance.IsInService = true;
-                    _instrumentInstance.IsUnderControl = _isUnderControl;
-                    _instrumentInstance.CalibrationInterval = _controlPeriod;
-                    _instrumentInstance.UtilizationAreaID = _selectedArea.ID;
-                    _instrumentInstance.CalibrationDueDate = (_isUnderControl) ? DateTime.Now : (DateTime?)null;
-                    _instrumentInstance.CalibrationResponsibleID = _selectedCalibrationLab?.ID;
-                    _instrumentInstance.manufacturerID = SelectedManufacturer.ID;
-                    _instrumentInstance.Model = Model;
-                    _instrumentInstance.SerialNumber = _serial;
-                    
-                    foreach (MeasurableQuantity meq in _selectedType.GetAssociatedMeasurableQuantities())
+                    InstrumentInstance = new Instrument();
+                    InstrumentInstance.Code = _code;
+                    InstrumentInstance.Description = Notes;
+                    InstrumentInstance.InstrumentTypeID = SelectedType.ID;
+                    InstrumentInstance.IsInService = true;
+                    InstrumentInstance.IsUnderControl = _isUnderControl;
+                    InstrumentInstance.CalibrationInterval = ControlPeriod;
+                    InstrumentInstance.UtilizationAreaID = SelectedArea.ID;
+                    InstrumentInstance.CalibrationDueDate = (_isUnderControl) ? DateTime.Now : (DateTime?)null;
+                    InstrumentInstance.CalibrationResponsibleID = _selectedCalibrationLab?.ID;
+                    InstrumentInstance.manufacturerID = SelectedManufacturer.ID;
+                    InstrumentInstance.Model = Model;
+                    InstrumentInstance.SerialNumber = SerialNumber;
+
+                    foreach (MeasurableQuantity meq in SelectedType.GetAssociatedMeasurableQuantities())
                     {
                         InstrumentMeasurableProperty tempIMP = new InstrumentMeasurableProperty()
                         {
                             MeasurableQuantityID = meq.ID,
                             UnitID = meq.UnitsOfMeasurement.First().ID
                         };
-                        
-                        _instrumentInstance.InstrumentMeasurableProperties.Add(tempIMP);
+
+                        InstrumentInstance.InstrumentMeasurableProperties.Add(tempIMP);
                     }
 
-                    _instrumentInstance.Create();
-
+                    InstrumentInstance.Create();
 
                     parent.DialogResult = true;
                 },
@@ -84,10 +82,13 @@ namespace Instruments.ViewModels
             SelectedCalibrationLab = null;
         }
 
+        #endregion Constructors
 
         #region INotifyDataErrorInfo interface elements
 
         public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
+
+        public bool HasErrors => _validationErrors.Count > 0;
 
         public IEnumerable GetErrors(string propertyName)
         {
@@ -98,28 +99,19 @@ namespace Instruments.ViewModels
             return _validationErrors[propertyName];
         }
 
-        public bool HasErrors
-        {
-            get { return _validationErrors.Count > 0; }
-        }
-
         private void RaiseErrorsChanged(string propertyName)
         {
             ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
-            _confirm.RaiseCanExecuteChanged();
+            ConfirmCommand.RaiseCanExecuteChanged();
         }
 
-        #endregion
+        #endregion INotifyDataErrorInfo interface elements
 
-        public DelegateCommand<Window> CancelCommand
-        {
-            get { return _cancel; }
-        }
+        #region Properties
 
-        public IEnumerable<Organization> CalibrationLabList
-        {
-            get { return _calibrationLabList; }
-        }
+        public IEnumerable<InstrumentUtilizationArea> AreaList => _labDbData.RunQuery(new InstrumentUtilizationAreasQuery()).ToList();
+        public IEnumerable<Organization> CalibrationLabList { get; }
+        public DelegateCommand<Window> CancelCommand { get; }
 
         public string Code
         {
@@ -130,9 +122,8 @@ namespace Instruments.ViewModels
 
                 if (string.IsNullOrEmpty(_code))
                     InstrumentInstance = null;
-
                 else
-                    InstrumentInstance = _dataService.GetInstrument(_code);
+                    _labDbData.RunQuery(new InstrumentQuery() { Code = _code });
 
                 if (InstrumentInstance == null &&
                     _validationErrors.ContainsKey("Code"))
@@ -140,7 +131,6 @@ namespace Instruments.ViewModels
                     _validationErrors.Remove("Code");
                     RaiseErrorsChanged("Code");
                 }
-
                 else if (InstrumentInstance != null)
                 {
                     _validationErrors["Code"] = new List<string>() { "Lo strumento " + _code + " esiste già" };
@@ -149,28 +139,11 @@ namespace Instruments.ViewModels
             }
         }
 
-        public DelegateCommand<Window> ConfirmCommand
-        {
-            get { return _confirm; }
-        }
+        public DelegateCommand<Window> ConfirmCommand { get; }
 
-        public int ControlPeriod
-        {
-            get { return _controlPeriod; }
-            set
-            {
-                _controlPeriod = value;
-            }
-        }
+        public int ControlPeriod { get; set; }
 
-        public Instrument InstrumentInstance
-        {
-            get { return _instrumentInstance; }
-            private set
-            {
-                _instrumentInstance = value;
-            }
-        }
+        public Instrument InstrumentInstance { get; private set; }
 
         public bool IsUnderControl
         {
@@ -180,42 +153,20 @@ namespace Instruments.ViewModels
                 _isUnderControl = value;
                 RaisePropertyChanged("IsUnderControl");
                 if (value)
-                    SelectedCalibrationLab = _calibrationLabList.First(lab => lab.Name == "Vulcaflex");
+                    SelectedCalibrationLab = CalibrationLabList.First(lab => lab.Name == "Vulcaflex");
                 else
                     SelectedCalibrationLab = null;
             }
         }
 
-        private bool IsValidInput
-        {
-            get { return true; }
-        }
+        public IEnumerable<Organization> ManufacturerList => _labDbData.RunQuery(new OrganizationsQuery() { Role = OrganizationsQuery.OrganizationRoles.Manufacturer })
+                                                                        .ToList();
 
-        public IEnumerable<Organization> ManufacturerList
-        {
-            get 
-            {
-                return _dataService.GetOrganizations(OrganizationRoleNames.Manufacturer);                
-            }
-        }
+        public string Model { get; set; }
 
-        public string Model
-        {
-            get { return _model; }
-            set 
-            {
-                _model = value;
-            }
-        }
+        public string Notes { get; set; }
 
-        public string Notes
-        {
-            get { return _notes; }
-            set
-            {
-                _notes = value;
-            }
-        }
+        public InstrumentUtilizationArea SelectedArea { get; set; }
 
         public Organization SelectedCalibrationLab
         {
@@ -229,7 +180,6 @@ namespace Instruments.ViewModels
                 _selectedCalibrationLab = value;
                 if (_selectedCalibrationLab == null && IsUnderControl)
                     _validationErrors["SelectedCalibrationLab"] = new List<string>() { "Selezionare un laboratorio" };
-
                 else
                     _validationErrors.Remove("SelectedCalibrationLab");
 
@@ -238,42 +188,12 @@ namespace Instruments.ViewModels
             }
         }
 
-        public Organization SelectedManufacturer
-        {
-            get { return _manufacturer;}
-            set
-            {
-                _manufacturer = value;
-            }
-        }
+        public Organization SelectedManufacturer { get; set; }
+        public InstrumentType SelectedType { get; set; }
+        public string SerialNumber { get; set; }
+        public IEnumerable<InstrumentType> TypeList => _labDbData.RunQuery(new InstrumentTypesQuery()).ToList();
+        private bool IsValidInput => true;
 
-        public InstrumentType SelectedType
-        {
-            get { return _selectedType; }
-            set { _selectedType = value; }
-        }
-
-        public InstrumentUtilizationArea SelectedArea
-        {
-            get { return _selectedArea; }
-            set
-            {
-                _selectedArea = value;
-            }
-        }
-
-        public string SerialNumber
-        {
-            get { return _serial; }
-            set
-            {
-                _serial = value;
-            }
-        }
-
-        public IEnumerable<InstrumentType> TypeList => _dataService.GetInstrumentTypes();
-
-        public IEnumerable<InstrumentUtilizationArea> AreaList => _dataService.GetInstrumentUtilizationAreas();
-
+        #endregion Properties
     }
 }

@@ -1,43 +1,43 @@
-﻿using DBManager;
-using DBManager.EntityExtensions;
-using DBManager.Services;
+﻿using DataAccess;
 using Infrastructure;
 using Infrastructure.Events;
-using Microsoft.Practices.Unity;
+using Instruments.Queries;
+using LabDbContext;
+using LabDbContext.EntityExtensions;
+using LabDbContext.Services;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
-using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 
 namespace Instruments.ViewModels
 {
     public class InstrumentMainViewModel : BindableBase
     {
-        private DBPrincipal _principal;
-        private DelegateCommand _deleteInstrument, _newInstrument, _openInstrument,
-                                _openPending;
-        private EventAggregator _eventAggregator;
-        private IDataService _dataService;
-        private IInstrumentService _instrumentService;
+        #region Fields
+
+        private IEventAggregator _eventAggregator;
+        private InstrumentService _instrumentService;
+        private IDataService<LabDbEntities> _labDbData;
+
         private Instrument _selectedInstrument,
                             _selectedPending;
 
-        public InstrumentMainViewModel(DBPrincipal principal,
-                                        EventAggregator eventAggregator,
-                                        IDataService dataService,
-                                        IInstrumentService instrumentService) : base()
+        #endregion Fields
+
+        #region Constructors
+
+        public InstrumentMainViewModel(IDataService<LabDbEntities> labDbData,
+                                        IEventAggregator eventAggregator,
+                                        InstrumentService instrumentService) : base()
         {
-            _principal = principal;
             _eventAggregator = eventAggregator;
-            _dataService = dataService;
+            _labDbData = labDbData;
             _instrumentService = instrumentService;
 
-            _deleteInstrument = new DelegateCommand(
+            DeleteInstrumentCommand = new DelegateCommand(
                 () =>
                 {
                     _selectedInstrument.Delete();
@@ -45,14 +45,14 @@ namespace Instruments.ViewModels
                 },
                 () => IsInstrumentAdmin && _selectedInstrument != null);
 
-            _newInstrument = new DelegateCommand(
+            NewInstrumentCommand = new DelegateCommand(
                 () =>
                 {
                     _instrumentService.CreateInstrument();
                 },
                 () => IsInstrumentAdmin);
 
-            _openInstrument = new DelegateCommand(
+            OpenInstrumentCommand = new DelegateCommand(
                 () =>
                 {
                     NavigationToken token = new NavigationToken(InstrumentViewNames.InstrumentEditView,
@@ -61,7 +61,7 @@ namespace Instruments.ViewModels
                 },
                 () => SelectedInstrument != null);
 
-            _openPending = new DelegateCommand(
+            OpenPendingCommand = new DelegateCommand(
                 () =>
                 {
                     NavigationToken token = new NavigationToken(InstrumentViewNames.InstrumentEditView,
@@ -70,7 +70,7 @@ namespace Instruments.ViewModels
                 });
 
             _eventAggregator.GetEvent<CalibrationIssued>().Subscribe(
-                calRep => 
+                calRep =>
                 {
                     RaisePropertyChanged("PendingCalibrationsList");
                     RaisePropertyChanged("CalibrationsList");
@@ -79,41 +79,24 @@ namespace Instruments.ViewModels
             _eventAggregator.GetEvent<InstrumentListUpdateRequested>().Subscribe(
                 () =>
                 {
-                     RaisePropertyChanged("InstrumentList");
-                     RaisePropertyChanged("PendingCalibrationsList");
+                    RaisePropertyChanged("InstrumentList");
+                    RaisePropertyChanged("PendingCalibrationsList");
                 });
-
         }
 
-        public IEnumerable<CalibrationReport> CalibrationsList => _dataService.GetCalibrationReports();
+        #endregion Constructors
 
-        public DelegateCommand DeleteInstrumentCommand
-        {
-            get { return _deleteInstrument; }
-        }
+        #region Properties
 
-        public IEnumerable<Instrument> InstrumentList => _dataService.GetInstruments();
+        public IEnumerable<CalibrationReport> CalibrationsList => _labDbData.RunQuery(new CalibrationReportsQuery()).ToList();
 
-        private bool IsInstrumentAdmin
-        {
-            get { return _principal.IsInRole(UserRoleNames.InstrumentAdmin); }
-        }
+        public DelegateCommand DeleteInstrumentCommand { get; }
 
-        public DelegateCommand NewInstrumentCommand
-        {
-            get { return _newInstrument; }
-        }
+        public IEnumerable<Instrument> InstrumentList => _labDbData.RunQuery(new InstrumentsQuery()).ToList();
 
-        public DelegateCommand OpenInstrumentCommand
-        {
-            get { return _openInstrument; }
-        }
-
-        public DelegateCommand OpenPendingCommand
-        {
-            get { return _openPending; }
-        }
-
+        public DelegateCommand NewInstrumentCommand { get; }
+        public DelegateCommand OpenInstrumentCommand { get; }
+        public DelegateCommand OpenPendingCommand { get; }
         public IEnumerable<Instrument> PendingCalibrationsList => _instrumentService.GetCalibrationCalendar();
 
         public Instrument SelectedInstrument
@@ -123,13 +106,12 @@ namespace Instruments.ViewModels
             {
                 _selectedInstrument = value;
 
-                _openInstrument.RaiseCanExecuteChanged();
-                _deleteInstrument.RaiseCanExecuteChanged();
+                OpenInstrumentCommand.RaiseCanExecuteChanged();
+                DeleteInstrumentCommand.RaiseCanExecuteChanged();
 
                 RaisePropertyChanged("SelectedInstrument");
             }
         }
-
 
         public Instrument SelectedPending
         {
@@ -140,5 +122,9 @@ namespace Instruments.ViewModels
                 RaisePropertyChanged("SelectedPending");
             }
         }
+
+        private bool IsInstrumentAdmin => Thread.CurrentPrincipal.IsInRole(UserRoleNames.InstrumentAdmin);
+
+        #endregion Properties
     }
 }

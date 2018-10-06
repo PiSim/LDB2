@@ -1,5 +1,6 @@
-﻿using Infrastructure;
-using Microsoft.Practices.Unity;
+﻿using Controls.Views;
+using Infrastructure;
+using Prism.Ioc;
 using Prism.Modularity;
 using Prism.Regions;
 using System;
@@ -8,32 +9,37 @@ namespace Tasks
 {
     public class TasksModule : IModule
     {
-        IRegionManager _regionManager;
-        IUnityContainer _container;
+        #region Constructors
 
-        public TasksModule(IRegionManager regionManager, IUnityContainer container)
+        public TasksModule()
         {
-            _container = container;
-            _regionManager = regionManager;
         }
+
+        #endregion Constructors
+
+        #region Methods
 
         public void Initialize()
         {
-            _container.RegisterType<ITaskService, TaskService>();
+        }
 
-            _container.RegisterType<Object, Views.TaskEdit>(TaskViewNames.TaskEditView);
-            _container.RegisterType<Object, Views.TaskMain>(TaskViewNames.TaskMainView);
-            
-            _container.RegisterType<ViewModels.TaskEditViewModel>();
-            _container.RegisterType<ViewModels.TaskMainViewModel>();
-            
-            _container.RegisterType<Views.TaskCreationDialog>();
-
-            _container.RegisterType<TaskService>(new ContainerControlledLifetimeManager());
-            _container.Resolve<TaskService>();
-            
-            _regionManager.RegisterViewWithRegion(RegionNames.MainNavigationRegion
+        public void OnInitialized(IContainerProvider containerProvider)
+        {
+            IRegionManager regionManager = containerProvider.Resolve<IRegionManager>();
+            regionManager.RegisterViewWithRegion(RegionNames.MainNavigationRegion
                                                 , typeof(Views.TaskNavigationItem));
         }
+
+        public void RegisterTypes(IContainerRegistry containerRegistry)
+        {
+            containerRegistry.RegisterSingleton<ITaskService, TaskService>();
+
+            containerRegistry.Register<Object, Views.TaskEdit>(TaskViewNames.TaskEditView);
+            containerRegistry.Register<Object, Views.TaskMain>(TaskViewNames.TaskMainView);
+
+            containerRegistry.Register<Views.TaskCreationDialog>();
+        }
+
+        #endregion Methods
     }
 }

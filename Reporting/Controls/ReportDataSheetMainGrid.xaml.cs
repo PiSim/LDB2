@@ -1,18 +1,5 @@
-﻿using DBManager;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using LabDbContext;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Reporting.Controls
 {
@@ -21,12 +8,22 @@ namespace Reporting.Controls
     /// </summary>
     public partial class ReportDataSheetMainGrid : UserControl
     {
+        #region Fields
+
         private Report _reportInstance;
+
+        #endregion Fields
+
+        #region Constructors
 
         public ReportDataSheetMainGrid()
         {
             InitializeComponent();
         }
+
+        #endregion Constructors
+
+        #region Properties
 
         public Report ReportInstance
         {
@@ -38,5 +35,7 @@ namespace Reporting.Controls
                 ReportHeader.ReportInstance = _reportInstance;
             }
         }
+
+        #endregion Properties
     }
 }

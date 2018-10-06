@@ -1,26 +1,28 @@
-﻿using DBManager;
-using System;
-using System.Collections.Generic;
+﻿using LabDbContext;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Admin.Scripts
 {
     public class BuildExternalReportMethodVariantMappingScript : ScriptBase
     {
+        #region Constructors
+
         public BuildExternalReportMethodVariantMappingScript()
         {
             _name = "BuildExternalReportMethodVariantMappingScript";
         }
 
+        #endregion Constructors
+
+        #region Methods
+
         public override void Run()
         {
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
-                foreach(ExternalReport exrep in entities.ExternalReports.ToList())
+                foreach (ExternalReport exrep in entities.ExternalReports.ToList())
                 {
-                    foreach ( Method mtd in exrep.Deprecated)
+                    foreach (Method mtd in exrep.Deprecated)
                     {
                         exrep.MethodVariants.Add(mtd.MethodVariants.First());
                     }
@@ -29,5 +31,7 @@ namespace Admin.Scripts
                 entities.SaveChanges();
             }
         }
+
+        #endregion Methods
     }
 }

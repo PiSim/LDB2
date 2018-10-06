@@ -1,38 +1,26 @@
-﻿using DBManager;
-using Infrastructure;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Controls.Views;
 
 namespace Materials.ViewModels
 {
     public class MaterialInfoMainViewModel
     {
+        #region Constructors
+
         public MaterialInfoMainViewModel()
         {
-
-        }
-        
-        public string MaterialInfoAspectRegionName
-        {
-            get { return RegionNames.MaterialInfoAspectRegion; }
         }
 
-        public string MaterialInfoColourRegionName
-        {
-            get { return RegionNames.MaterialInfoColourRegion; }
-        }
+        #endregion Constructors
 
-        public string MaterialInfoMaterialRegionName
-        {
-            get { return RegionNames.MaterialInfoMaterialRegion; }
-        }
+        #region Properties
 
-        public string MaterialInfoExternalConstructionRegionName
-        {
-            get { return RegionNames.MaterialInfoExternalCostructionRegion; }
-        }
+        public string MaterialInfoAspectRegionName => RegionNames.MaterialInfoAspectRegion;
+
+        public string MaterialInfoColourRegionName => RegionNames.MaterialInfoColourRegion;
+
+        public string MaterialInfoExternalConstructionRegionName => RegionNames.MaterialInfoExternalCostructionRegion;
+        public string MaterialInfoMaterialRegionName => RegionNames.MaterialInfoMaterialRegion;
+
+        #endregion Properties
     }
 }

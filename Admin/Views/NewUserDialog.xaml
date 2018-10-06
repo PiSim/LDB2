@@ -10,56 +10,56 @@
         Title="NewUserDialog" Height="225" Width="350">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
         </Grid.RowDefinitions>
-        
+
         <Label Content="Nome Utente:"
                Grid.Column="0"
                Grid.Row="0"
-               Margin="5"/>
-        
+               Margin="5" />
+
         <TextBox Text="{Binding UserName, Mode=TwoWay}"
                  Grid.Column="1"
                  Grid.ColumnSpan="3"
                  Grid.Row="0"
-                 Margin="5"/>
-                 
+                 Margin="5" />
+
         <Label Content="Password:"
                Grid.Column="0"
                Grid.Row="1"
-               Margin="5"/>
-        
+               Margin="5" />
+
         <PasswordBox Name="PasswordBox1"
                      Grid.Column="1"
                      Grid.ColumnSpan="3"
                      Grid.Row="1"
-                     Margin="5"/>
-                  
+                     Margin="5" />
+
         <Label Content="Conferma Password:"
                Grid.Column="0"
                Grid.Row="2"
-               Margin="5"/>
-        
+               Margin="5" />
+
         <PasswordBox Name="PasswordBox2"
                      Grid.Column="1"
                      Grid.ColumnSpan="3"
                      Grid.Row="2"
-                     Margin="5"/>
+                     Margin="5" />
 
         <Label Content="Persona:"
                Grid.Column="0"
                Grid.Row="3"
-               Margin="5"/>
+               Margin="5" />
 
         <ComboBox ItemsSource="{Binding PeopleList}"
                   SelectedItem="{Binding SelectedPerson, Mode=TwoWay}"
@@ -67,20 +67,20 @@
                   Grid.Column="1"
                   Grid.ColumnSpan="3"
                   Grid.Row="3"
-                  Margin="5"/>
+                  Margin="5" />
 
         <Button Content="Annulla"
                 Command="{Binding CancelCommand}"
                 CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
                 Grid.Column="2"
                 Grid.Row="4"
-                Margin="5"/>
+                Margin="5" />
 
         <Button Content="Ok"
                 Command="{Binding ConfirmCommand}"
                 CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
                 Grid.Column="3"
                 Grid.Row="4"
-                Margin="5"/>
+                Margin="5" />
     </Grid>
 </Window>

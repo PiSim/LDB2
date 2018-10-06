@@ -1,17 +1,12 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using DBManager.EntityExtensions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DBManager.Services;
 
-namespace DBManager.EntityExtensions.Tests
+namespace LabDbContext.EntityExtensions.Tests
 {
     [TestClass()]
     public class StandardExtensionTests
     {
+        #region Methods
+
         [TestMethod()]
         public void StandardCRUDTest()
         {
@@ -20,8 +15,10 @@ namespace DBManager.EntityExtensions.Tests
             tempStd.Name = "PROVA";
             tempStd.OrganizationID = 1;
             tempStd.Create();
-            
+
             tempStd.Delete();
         }
+
+        #endregion Methods
     }
 }

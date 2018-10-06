@@ -1,32 +1,27 @@
-﻿using DBManager;
-using DBManager.EntityExtensions;
-using DBManager.Services;
+﻿using Controls.Views;
 using Infrastructure;
-using Infrastructure.Events;
-using Infrastructure.Wrappers;
-using Microsoft.Practices.Unity;
+using LabDbContext;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Admin.ViewModels
 {
     public class AdminMainViewModel : BindableBase
     {
-        private DelegateCommand _newOrganizationRole, _newPersonRole, _newUserRole, _runMethod;
-        private EventAggregator _eventAggregator;
+        #region Fields
+
         private IAdminService _adminService;
         private IDataService _dataService;
-        private IEnumerable<ScriptBase> _scriptList;
-        private ScriptBase _selectedScript;
-        private string _name;
+        private IEventAggregator _eventAggregator;
+        private DelegateCommand _runMethod;
 
-        public AdminMainViewModel(EventAggregator eventAggregator,
+        #endregion Fields
+
+        #region Constructors
+
+        public AdminMainViewModel(IEventAggregator eventAggregator,
                                     IAdminService adminService,
                                     IDataService dataService) : base()
         {
@@ -34,28 +29,29 @@ namespace Admin.ViewModels
             _dataService = dataService;
             _eventAggregator = eventAggregator;
 
-            _scriptList = new List<ScriptBase>()
+            ScriptList = new List<ScriptBase>()
             {
                 new Scripts.BuildTestRecords(),
                 new Scripts.BuildExternalTestRecordsScript(),
                 new Scripts.BuildMethodVersionRequirementReferences(),
                 new Scripts.BuildExternalReportMethodVariantMappingScript(),
-                new Scripts.BuildSubMethodPositionScript()
+                new Scripts.BuildSubMethodPositionScript(),
+                new Scripts.RemoveMaterialDuplicatesScript()
             };
 
-            _newOrganizationRole = new DelegateCommand(
+            NewOrganizationRoleCommand = new DelegateCommand(
                 () =>
                 {
                     _adminService.CreateNewOrganization();
                 });
 
-            _newPersonRole = new DelegateCommand(
+            AddPersonRoleCommand = new DelegateCommand(
                 () =>
                 {
                     _adminService.CreateNewPersonRole();
                 });
 
-            _newUserRole = new DelegateCommand(
+            NewUserRoleCommand = new DelegateCommand(
                 () =>
                 {
                     _adminService.CreateNewUserRole();
@@ -64,85 +60,43 @@ namespace Admin.ViewModels
             _runMethod = new DelegateCommand(
                 () =>
                 {
-                    _selectedScript.Run();
-                        
-                } );
+                    SelectedScript.Run();
+                });
         }
 
-        public string AdminUserMainRegionName
-        {
-            get { return RegionNames.AdminUserMainRegion; }
-        }
+        #endregion Constructors
 
-        public string Name
-        {
-            get { return _name; }
-            set
-            {
-                _name = value;
-            }
-        }
+        #region Properties
 
-        public DelegateCommand AddPersonRoleCommand
-        {
-            get { return _newPersonRole; }
-        }
+        public DelegateCommand AddPersonRoleCommand { get; }
+        public string AdminUserMainRegionName => RegionNames.AdminUserMainRegion;
 
-        public string InstrumentTypeManagementRegionName
-        {
-            get { return RegionNames.InstrumentTypeManagementRegion; }
-        }
+        public string InstrumentTypeManagementRegionName => RegionNames.InstrumentTypeManagementRegion;
 
-        public string InstrumentUtilizationAreasRegionName
-        {
-            get { return RegionNames.InstrumentUtilizationAreasRegion; }
-        }
+        public string InstrumentUtilizationAreasRegionName => RegionNames.InstrumentUtilizationAreasRegion;
 
-        public string MeasurableQuantityManagementRegionName
-        {
-            get { return RegionNames.MeasurableQuantityManagementRegion; }
-        }
+        public string MeasurableQuantityManagementRegionName => RegionNames.MeasurableQuantityManagementRegion;
 
-        public DelegateCommand NewOrganizationRoleCommand
-        {
-            get { return _newOrganizationRole; }
-        }
+        public string Name { get; set; }
 
-        public DelegateCommand NewUserRoleCommand
-        {
-            get { return _newUserRole; }
-        }
+        public DelegateCommand NewOrganizationRoleCommand { get; }
 
-        public string OrganizationRoleManagementRegionName
-        {
-            get { return RegionNames.OrganizationRoleManagementRegion; }
-        }
+        public DelegateCommand NewUserRoleCommand { get; }
 
-        public IEnumerable<PersonRole> PersonRoleList
-        {
-            get { return _dataService.GetPersonRoles(); }
-        }
+        public string OrganizationRoleManagementRegionName => RegionNames.OrganizationRoleManagementRegion;
 
         public string PeopleManagementRegionName => RegionNames.PeopleManagementRegion;
-
+        public IEnumerable<PersonRole> PersonRoleList => _dataService.GetPersonRoles();
         public string PropertyRegionName => RegionNames.PropertyManagementRegion;
 
-        public DelegateCommand RunMethodCommand
-        {
-            get { return _runMethod; }
-        }
+        public DelegateCommand RunMethodCommand => _runMethod;
 
-        public IEnumerable<ScriptBase> ScriptList => _scriptList;
+        public IEnumerable<ScriptBase> ScriptList { get; }
 
-        public ScriptBase SelectedScript
-        {
-            get => _selectedScript;
-            set => _selectedScript = value;
-        }
+        public ScriptBase SelectedScript { get; set; }
 
-        public string UnitOfMeasurementManagementRegionName
-        {
-            get { return RegionNames.UnitOfMeasurementManagementRegion; }
-        }
+        public string UnitOfMeasurementManagementRegionName => RegionNames.UnitOfMeasurementManagementRegion;
+
+        #endregion Properties
     }
 }

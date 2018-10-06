@@ -1,12 +1,11 @@
 ﻿<UserControl x:Class="Controls.Resources.ExternalReportList"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:cmd="clr-namespace:Infrastructure.Commands;assembly=Infrastructure"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-             xmlns:sort="clr-namespace:Infrastructure.Sorting;assembly=Infrastructure"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
         <DataGrid ItemsSource="{Binding ExternalReportList}"
@@ -17,27 +16,26 @@
                   CanUserDeleteRows="False"
                   SelectionMode="Single"
                   SelectionUnit="FullRow"
-                  GridLinesVisibility="None"
-                  cmd:CommandBinder.DataGridDoubleClickCommand="{Binding OpenExternalReportCommand}">
+                  GridLinesVisibility="None">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Numero"
-                                    Binding="{Binding FormattedNumber}"/>
+                                    Binding="{Binding FormattedNumber}" />
                 <DataGridTextColumn Header="Campioni"
-                                    Binding="{Binding Samples}"/>
+                                    Binding="{Binding Samples}" />
                 <DataGridTextColumn Header="Prove"
-                                    Binding="{Binding Description}"/>
+                                    Binding="{Binding Description}" />
                 <DataGridTextColumn Header="Laboratorio"
-                                    Binding="{Binding ExternalLab.Name}"/>
+                                    Binding="{Binding ExternalLab.Name}" />
                 <DataGridCheckBoxColumn Header="RDA"
-                                        Binding="{Binding RequestDone}"/>
+                                        Binding="{Binding RequestDone}" />
                 <DataGridCheckBoxColumn Header="ODA"
                                         Binding="{Binding HasOrder,
-                                                          Mode=OneWay}"/>
+                                                          Mode=OneWay}" />
                 <DataGridCheckBoxColumn Header="Invio"
-                                        Binding="{Binding MaterialSent}"/>
+                                        Binding="{Binding MaterialSent}" />
                 <DataGridCheckBoxColumn Header="Ricevuto"
-                                        Binding="{Binding ReportReceived}"/>
+                                        Binding="{Binding ReportReceived}" />
             </DataGrid.Columns>
-        </DataGrid>    
+        </DataGrid>
     </Grid>
 </UserControl>

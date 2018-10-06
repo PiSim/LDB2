@@ -1,22 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Infrastructure
+﻿namespace Infrastructure
 {
     public class TaskViewNames
     {
-        public static string TaskEditView { get { return "TaskEditView"; } }
-        public static string TaskMainView
-        {
-            get { return "TaskMainView"; }
-        }
+        #region Properties
 
-        public static string Pipeline
-        {
-            get { return "Pipeline"; }
-        }
+        public static string Pipeline => "Pipeline";
+        public static string TaskEditView => "TaskEditView";
+        public static string TaskMainView => "TaskMainView";
+
+        #endregion Properties
     }
 }

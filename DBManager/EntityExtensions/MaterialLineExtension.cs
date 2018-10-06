@@ -1,25 +1,21 @@
-﻿using DBManager;
-using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DBManager.EntityExtensions
+﻿namespace LabDbContext.EntityExtensions
 {
     public static class MaterialLineExtension
     {
+        #region Methods
+
         public static void Create(this MaterialLine entry)
         {
             // Inserts a new MaterialLine entry
 
-            using (DBEntities entitites = new DBEntities())
+            using (LabDbEntities entitites = new LabDbEntities())
             {
                 entitites.MaterialLines.Add(entry);
 
                 entitites.SaveChanges();
             }
         }
+
+        #endregion Methods
     }
 }

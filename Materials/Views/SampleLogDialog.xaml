@@ -9,29 +9,29 @@
         mc:Ignorable="d"
         Title="SampleLogDialog" Height="575" Width="500">
     <Window.Resources>
-        <con:CodeToActionConverter x:Key="CodeConverter"/>
+        <con:CodeToActionConverter x:Key="CodeConverter" />
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="130"/>
-            <RowDefinition/>
-            <RowDefinition Height="35"/>
+            <RowDefinition Height="130" />
+            <RowDefinition />
+            <RowDefinition Height="35" />
         </Grid.RowDefinitions>
 
-        <FrameworkElement x:Name="dummyElement" Visibility="Collapsed"/>
+        <FrameworkElement x:Name="dummyElement" Visibility="Collapsed" />
 
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
             </Grid.RowDefinitions>
 
             <TextBlock Grid.Column="0"
@@ -49,9 +49,9 @@
                      VerticalAlignment="Center">
                 <Binding Path="BatchNumber"
                          Mode="TwoWay"
-                         UpdateSourceTrigger="PropertyChanged"/>
+                         UpdateSourceTrigger="PropertyChanged" />
             </TextBox>
-            
+
             <TextBlock Grid.Column="0"
                        Grid.Row="1"
                        VerticalAlignment="Center"
@@ -59,14 +59,13 @@
                 Azione:
             </TextBlock>
 
-
             <ComboBox ItemsSource="{Binding Path=ChoiceList}"
                       DisplayMemberPath="LongText"
                       SelectedItem="{Binding Path=SelectedChoice, Mode=TwoWay}"
                       VerticalAlignment="Center"
                       Grid.Column="1"
                       Grid.Row="1"
-                      Margin="5"/>
+                      Margin="5" />
 
             <TextBlock Grid.Column="2"
                        Grid.Row="0"
@@ -79,7 +78,7 @@
                        Grid.Column="3"
                        Grid.Row="0"
                        Margin="5"
-                       VerticalAlignment="Center"/>
+                       VerticalAlignment="Center" />
 
             <TextBlock Grid.Column="2"
                        Grid.Row="1"
@@ -92,7 +91,7 @@
                        Grid.Column="3"
                        Grid.Row="1"
                        Margin="5"
-                       VerticalAlignment="Center"/>
+                       VerticalAlignment="Center" />
 
             <TextBlock Grid.Column="2"
                        Grid.Row="2"
@@ -105,7 +104,7 @@
                        Grid.Column="3"
                        Grid.Row="2"
                        Margin="5"
-                       VerticalAlignment="Center"/>
+                       VerticalAlignment="Center" />
 
             <Button Content="OK"
                     Command="{Binding ConfirmCommand}"
@@ -115,33 +114,33 @@
                     HorizontalAlignment="Right"
                     VerticalAlignment="Center"
                     Width="40"
-                    Margin="5"/>
+                    Margin="5" />
         </Grid>
-        
+
         <GroupBox Header="Recenti"
                   Grid.Row="1">
             <ListView ItemsSource="{Binding LatestSampleList}">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Header="Batch"
-                                        DisplayMemberBinding="{Binding Batch.Number}"/>
+                                        DisplayMemberBinding="{Binding Batch.Number}" />
                         <GridViewColumn Header=""
                                         DisplayMemberBinding="{Binding Code,
                                                                        Converter={StaticResource ResourceKey=CodeConverter}}">
                         </GridViewColumn>
                         <GridViewColumn Header="Data"
-                                        DisplayMemberBinding="{Binding Date, 
+                                        DisplayMemberBinding="{Binding Date,
                                                                        StringFormat=d,
-                                                                       ConverterCulture=it-IT}"/>
+                                                                       ConverterCulture=it-IT}" />
                         <GridViewColumn Header="Inserito da"
-                                        DisplayMemberBinding="{Binding LogAuthor.Name}"/>
+                                        DisplayMemberBinding="{Binding LogAuthor.Name}" />
                         <GridViewColumn>
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <Button Content="Elimina"
                                                         Command="{Binding DataContext.DeleteSampleCommand,
                                                                           Source={x:Reference Name=dummyElement}}"
-                                                        CommandParameter="{Binding}"/>
+                                                        CommandParameter="{Binding}" />
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
@@ -157,7 +156,7 @@
                     Command="{Binding EndCommand}"
                     CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
                     Width="50"
-                    Margin="5"/>
+                    Margin="5" />
         </StackPanel>
     </Grid>
 </Window>

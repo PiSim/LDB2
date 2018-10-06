@@ -1,17 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using Controls.Views;
+using Prism.Regions;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Materials.Views
 {
@@ -20,9 +9,15 @@ namespace Materials.Views
     /// </summary>
     public partial class AspectMain : UserControl
     {
-        public AspectMain()
+        #region Constructors
+
+        public AspectMain(IRegionManager regionManager)
         {
             InitializeComponent();
+            regionManager.RegisterViewWithRegion(RegionNames.AspectDetailBatchListRegion,
+                                                typeof(BatchListControl));
         }
+
+        #endregion Constructors
     }
 }

@@ -1,29 +1,31 @@
-﻿using DBManager;
-using DBManager.EntityExtensions;
-using DBManager.Services;
+﻿using DataAccess;
+using Infrastructure.Queries;
+using LabDbContext;
+using LabDbContext.EntityExtensions;
+using LabDbContext.Services;
 using Prism.Commands;
-using Prism.Events;
 using Prism.Mvvm;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Admin.ViewModels
 {
     public class InstrumentUtilizationAreaMainViewModel : BindableBase
     {
-        private DelegateCommand _createArea,
-                                _deleteArea;
-        private IDataService _dataService;
+        #region Fields
+
+        private IDataService<LabDbEntities> _labDbData;
         private InstrumentUtilizationArea _selectedArea;
 
-        public InstrumentUtilizationAreaMainViewModel(IDataService dataService)
-        {
-            _dataService = dataService;
+        #endregion Fields
 
-            _createArea = new DelegateCommand(
+        #region Constructors
+
+        public InstrumentUtilizationAreaMainViewModel(IDataService<LabDbEntities> labDbData)
+        {
+            _labDbData = labDbData;
+
+            CreateAreaCommand = new DelegateCommand(
                 () =>
                 {
                     Controls.Views.StringInputDialog inputDialog = new Controls.Views.StringInputDialog();
@@ -41,10 +43,9 @@ namespace Admin.ViewModels
 
                         RaisePropertyChanged("UtilizationAreaList");
                     }
-
                 });
 
-            _deleteArea = new DelegateCommand(
+            DeleteAreaCommand = new DelegateCommand(
                 () =>
                 {
                     _selectedArea.Delete();
@@ -53,15 +54,13 @@ namespace Admin.ViewModels
                 () => _selectedArea != null);
         }
 
-        public DelegateCommand CreateAreaCommand
-        {
-            get { return _createArea; }
-        }
+        #endregion Constructors
 
-        public DelegateCommand DeleteAreaCommand
-        {
-            get { return _deleteArea; }
-        }
+        #region Properties
+
+        public DelegateCommand CreateAreaCommand { get; }
+
+        public DelegateCommand DeleteAreaCommand { get; }
 
         public InstrumentUtilizationArea SelectedArea
         {
@@ -69,10 +68,12 @@ namespace Admin.ViewModels
             set
             {
                 _selectedArea = value;
-                _deleteArea.RaiseCanExecuteChanged();
+                DeleteAreaCommand.RaiseCanExecuteChanged();
             }
         }
 
-        public IEnumerable<InstrumentUtilizationArea> UtilizationAreaList => _dataService.GetInstrumentUtilizationAreas();
+        public IEnumerable<InstrumentUtilizationArea> UtilizationAreaList => _labDbData.RunQuery(new InstrumentUtilizationAreasQuery()).ToList();
+
+        #endregion Properties
     }
 }

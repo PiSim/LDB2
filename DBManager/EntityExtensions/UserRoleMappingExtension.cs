@@ -1,19 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.Entity.Migrations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace DBManager.EntityExtensions
+namespace LabDbContext.EntityExtensions
 {
     public static class UserRoleMappingExtension
     {
+        #region Methods
+
         public static void Create(this UserRoleMapping entry)
         {
             // Inserts a new UserRoleMapping entry
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.UserRoleMappings.Add(entry);
 
@@ -25,13 +23,15 @@ namespace DBManager.EntityExtensions
         {
             // Updates all entries in a list of UserRoleMappings
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 foreach (UserRoleMapping urm in entryList)
                     entities.UserRoleMappings.AddOrUpdate(urm);
 
                 entities.SaveChanges();
             }
-        }        
+        }
+
+        #endregion Methods
     }
 }

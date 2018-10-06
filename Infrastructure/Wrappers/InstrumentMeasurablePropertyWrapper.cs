@@ -1,124 +1,107 @@
-﻿using DBManager;
-using DBManager.EntityExtensions;
+﻿using LabDbContext;
+using LabDbContext.EntityExtensions;
 using Prism.Mvvm;
-using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Infrastructure.Wrappers
 {
     public class InstrumentMeasurablePropertyWrapper : BindableBase
     {
-        private bool _isModified,
-                    _isSelected;
-        private IEnumerable<MeasurementUnit> _umList;
-        private InstrumentMeasurableProperty _instance;
+        #region Constructors
 
         public InstrumentMeasurablePropertyWrapper(InstrumentMeasurableProperty instance) : base()
         {
-            _isSelected = false;
-            _isModified = false;
-            _instance = instance;
-            _umList = _instance.GetMeasurementUnits();
+            IsSelected = false;
+            IsModified = false;
+            PropertyInstance = instance;
+            UMList = PropertyInstance.GetMeasurementUnits();
         }
+
+        #endregion Constructors
+
+        #region Properties
 
         public double CalibrationLowerRangeValue
         {
-            get { return _instance.CalibrationRangeLowerLimit; }
+            get { return PropertyInstance.CalibrationRangeLowerLimit; }
             set
             {
-                _instance.CalibrationRangeLowerLimit = value;
-                _isModified = true;
+                PropertyInstance.CalibrationRangeLowerLimit = value;
+                IsModified = true;
             }
         }
 
         public double CalibrationUpperRangeValue
         {
-            get { return _instance.CalibrationRangeUpperLimit; }
+            get { return PropertyInstance.CalibrationRangeUpperLimit; }
             set
             {
-                _instance.CalibrationRangeUpperLimit = value;
-                _isModified = true;
+                PropertyInstance.CalibrationRangeUpperLimit = value;
+                IsModified = true;
             }
         }
 
         public float Division
         {
-            get { return _instance.Resolution; }
+            get { return PropertyInstance.Resolution; }
             set
             {
-                _instance.Resolution = value;
-                _isModified = true;
+                PropertyInstance.Resolution = value;
+                IsModified = true;
             }
         }
 
-        public bool IsModified
-        {
-            get { return _isModified; }
-        }
+        public bool IsModified { get; private set; }
 
-        public bool IsSelected
-        {
-            get { return _isSelected; }
-            set { _isSelected = value; }
-        }
+        public bool IsSelected { get; set; }
 
         public double LowerRangeValue
         {
-            get { return _instance.RangeLowerLimit; }
+            get { return PropertyInstance.RangeLowerLimit; }
             set
             {
-                _instance.RangeLowerLimit = value;
-                _isModified = true;
+                PropertyInstance.RangeLowerLimit = value;
+                IsModified = true;
             }
         }
 
-        public string Name
-        {
-            get { return _instance.MeasurableQuantity.Name; }
-        }
+        public string Name => PropertyInstance.MeasurableQuantity.Name;
 
-        public InstrumentMeasurableProperty PropertyInstance
-        {
-            get { return _instance; }
-        }
+        public InstrumentMeasurableProperty PropertyInstance { get; }
 
         public float TargetUncertainty
         {
-            get { return _instance.TargetUncertainty; }
+            get { return PropertyInstance.TargetUncertainty; }
             set
             {
-                _instance.TargetUncertainty = value;
-                _isModified = true;
-            }
-        }
-        
-        public MeasurementUnit UM
-        {
-            get { return _umList.First(um => um.ID == _instance.UnitID); }
-            set
-            {
-                _instance.UnitID = value.ID;
-                _isModified = true;
+                PropertyInstance.TargetUncertainty = value;
+                IsModified = true;
             }
         }
 
-        public IEnumerable<MeasurementUnit> UMList
+        public MeasurementUnit UM
         {
-            get { return _umList; }
+            get { return UMList.First(um => um.ID == PropertyInstance.UnitID); }
+            set
+            {
+                PropertyInstance.UnitID = value.ID;
+                IsModified = true;
+            }
         }
+
+        public IEnumerable<MeasurementUnit> UMList { get; }
 
         public double UpperRangeValue
         {
-            get { return _instance.RangeUpperLimit; }
+            get { return PropertyInstance.RangeUpperLimit; }
             set
             {
-                _instance.RangeUpperLimit = value;
-                _isModified = true;
+                PropertyInstance.RangeUpperLimit = value;
+                IsModified = true;
             }
         }
+
+        #endregion Properties
     }
 }

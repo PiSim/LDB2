@@ -1,35 +1,33 @@
-﻿using DBManager;
-using DBManager.EntityExtensions;
-using DBManager.Services;
+﻿using LabDbContext;
 using Prism.Commands;
 using Prism.Mvvm;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace Instruments.ViewModels
 {
     public class AddPropertyDialogViewModel : BindableBase
     {
-        private DelegateCommand<Window> _cancel,
-                                        _confirm;
+        #region Fields
+
         private IDataService _dataService;
         private MeasurableQuantity _selectedQuantity;
+
+        #endregion Fields
+
+        #region Constructors
 
         public AddPropertyDialogViewModel(IDataService dataService)
         {
             _dataService = dataService;
 
-            _cancel = new DelegateCommand<Window>(
+            CancelCommand = new DelegateCommand<Window>(
                 dialog =>
                 {
                     dialog.DialogResult = false;
                 });
 
-            _confirm = new DelegateCommand<Window>(
+            ConfirmCommand = new DelegateCommand<Window>(
                 dialog =>
                 {
                     dialog.DialogResult = true;
@@ -37,20 +35,15 @@ namespace Instruments.ViewModels
                 dialog => _selectedQuantity != null);
         }
 
-        public DelegateCommand<Window> CancelCommand
-        {
-            get { return _cancel; }
-        }
+        #endregion Constructors
 
-        public DelegateCommand<Window> ConfirmCommand
-        {
-            get { return _confirm; }
-        }
+        #region Properties
 
-        public IEnumerable<MeasurableQuantity> QuantityList
-        {
-            get { return _dataService.GetMeasurableQuantities(); }
-        }
+        public DelegateCommand<Window> CancelCommand { get; }
+
+        public DelegateCommand<Window> ConfirmCommand { get; }
+
+        public IEnumerable<MeasurableQuantity> QuantityList => _dataService.GetMeasurableQuantities();
 
         public MeasurableQuantity SelectedQuantity
         {
@@ -58,9 +51,10 @@ namespace Instruments.ViewModels
             set
             {
                 _selectedQuantity = value;
-                _confirm.RaiseCanExecuteChanged();
+                ConfirmCommand.RaiseCanExecuteChanged();
             }
         }
 
+        #endregion Properties
     }
 }

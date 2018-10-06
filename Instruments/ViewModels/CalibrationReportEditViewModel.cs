@@ -1,17 +1,19 @@
-﻿using DBManager;
-using DBManager.EntityExtensions;
-using DBManager.Services;
+﻿using Controls.Views;
+using DataAccess;
 using Infrastructure;
 using Infrastructure.Events;
-using Infrastructure.Wrappers;
+using Infrastructure.Queries;
+using Instruments.Queries;
+using LabDbContext;
+using LabDbContext.EntityExtensions;
+using LabDbContext.Services;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using System.Windows;
 using System.Windows.Forms;
 
@@ -19,52 +21,51 @@ namespace Instruments.ViewModels
 {
     public class CalibrationReportEditViewModel : BindableBase
     {
-        private bool _editMode,
-                    _readOnlyMode;
-        private CalibrationFiles _selectedFile;
+        #region Fields
+
         private CalibrationReport _calibrationInstance;
-        private CalibrationResult _selectedResult;
-        private DBPrincipal _principal;
-        private DelegateCommand _addFile,
-                                _cancelEdit,
-                                _delete,
-                                _openFile,
-                                _removeFile,
-                                _removeReference,
-                                _save,
-                                _startEdit;
-        private DelegateCommand<string> _addReference;
-        private EventAggregator _eventAggregator;
+
         private IDataService _dataService;
-        private IEnumerable<CalibrationReportInstrumentPropertyMapping> _mappingList;
-        private IEnumerable<CalibrationResult> _resultList;
-        private IEnumerable<Organization> _labList;
-        private IEnumerable<Person> _techList;
-        private IInstrumentService _instrumentService;
-        private Instrument _selectedReference;
+
+        private bool _editMode,
+                                            _readOnlyMode;
+
+        private IEventAggregator _eventAggregator;
+        private InstrumentService _instrumentService;
+        private IDataService<LabDbEntities> _labDbData;
+        private string _referenceCode;
+        private CalibrationFiles _selectedFile;
         private Organization _selectedLab;
         private Person _selectedPerson;
-        private string _referenceCode;
+        private Instrument _selectedReference;
+        private CalibrationResult _selectedResult;
+        private DelegateCommand _startEdit;
 
-        public CalibrationReportEditViewModel(DBPrincipal principal,
-                                                EventAggregator eventAggregator,
+        #endregion Fields
+
+        #region Constructors
+
+        public CalibrationReportEditViewModel(IDataService<LabDbEntities> labDbData,
+                                                IEventAggregator eventAggregator,
                                                 IDataService dataService,
-                                                IInstrumentService instrumentService)
+                                                InstrumentService instrumentService)
         {
+            _labDbData = labDbData;
             _dataService = dataService;
             _editMode = false;
             _instrumentService = instrumentService;
-            _principal = principal;
+
             _eventAggregator = eventAggregator;
 
-            _labList = _dataService.GetOrganizations(OrganizationRoleNames.CalibrationLab);
-            _resultList = _instrumentService.GetCalibrationResults();
-            _techList = _dataService.GetPeople(PersonRoleNames.CalibrationTech);
+            LabList = _labDbData.RunQuery(new OrganizationsQuery() { Role = OrganizationsQuery.OrganizationRoles.CalibrationLab })
+                                .ToList();
+            CalibrationResultList = _instrumentService.GetCalibrationResults();
+            TechList = _labDbData.RunQuery(new PeopleQuery() { Role = PeopleQuery.PersonRoles.CalibrationTech })
+                                                            .ToList();
 
-            _addFile = new DelegateCommand(
+            AddFileCommand = new DelegateCommand(
                 () =>
                 {
-                    
                     OpenFileDialog fileDialog = new OpenFileDialog
                     {
                         InitialDirectory = UserSettings.CalibrationReportPath,
@@ -73,8 +74,6 @@ namespace Instruments.ViewModels
 
                     if (fileDialog.ShowDialog() == DialogResult.OK)
                     {
-
-
                         IEnumerable<CalibrationFiles> fileList = fileDialog.FileNames
                                                                             .Select(file => new CalibrationFiles()
                                                                             {
@@ -88,10 +87,10 @@ namespace Instruments.ViewModels
                     }
                 });
 
-            _addReference = new DelegateCommand<string>(
+            AddReferenceCommand = new DelegateCommand<string>(
                 code =>
                 {
-                    Instrument tempRef = _dataService.GetInstrument(code);
+                    Instrument tempRef = _labDbData.RunQuery(new InstrumentQuery() { Code = code });
                     if (tempRef != null)
                     {
                         _calibrationInstance.AddReference(tempRef);
@@ -100,28 +99,27 @@ namespace Instruments.ViewModels
                     }
                 });
 
-            _cancelEdit = new DelegateCommand(
+            CancelEditCommand = new DelegateCommand(
                 () =>
                 {
-                    CalibrationInstance = _dataService.GetCalibrationReport(_calibrationInstance.ID);
+                    CalibrationInstance = _labDbData.RunQuery(new CalibrationReportsQuery()).FirstOrDefault(crep => crep.ID == _calibrationInstance.ID);
                 },
                 () => EditMode);
 
-            _delete = new DelegateCommand(
+            DeleteCommand = new DelegateCommand(
                 () =>
                 {
                     _calibrationInstance.Delete();
                 },
-                () => _principal.IsInRole(UserRoleNames.InstrumentAdmin));
+                () => Thread.CurrentPrincipal.IsInRole(UserRoleNames.InstrumentAdmin));
 
-            _openFile = new DelegateCommand(
+            OpenFileCommand = new DelegateCommand(
                 () =>
                 {
                     try
                     {
                         System.Diagnostics.Process.Start(_selectedFile.Path);
                     }
-
                     catch (Exception)
                     {
                         _eventAggregator.GetEvent<StatusNotificationIssued>().Publish("File non trovato");
@@ -129,7 +127,7 @@ namespace Instruments.ViewModels
                 },
                 () => _selectedFile != null);
 
-            _removeFile = new DelegateCommand(
+            RemoveFileCommand = new DelegateCommand(
                 () =>
                 {
                     _selectedFile.Delete();
@@ -140,7 +138,7 @@ namespace Instruments.ViewModels
                 },
                 () => _selectedFile != null);
 
-            _removeReference = new DelegateCommand(
+            RemoveReferenceCommand = new DelegateCommand(
                 () =>
                 {
                     _calibrationInstance.RemoveReference(SelectedReference);
@@ -149,11 +147,11 @@ namespace Instruments.ViewModels
                 },
                 () => SelectedReference != null);
 
-            _save = new DelegateCommand(
+            SaveCommand = new DelegateCommand(
                 () =>
                 {
                     _calibrationInstance.Update();
-                    foreach (CalibrationReportInstrumentPropertyMapping cripmw in _mappingList)
+                    foreach (CalibrationReportInstrumentPropertyMapping cripmw in PropertyMappingList)
                         cripmw.Update();
 
                     EditMode = false;
@@ -168,16 +166,13 @@ namespace Instruments.ViewModels
                 () => !EditMode);
         }
 
-        public DelegateCommand AddFileCommand
-        {
-            get { return _addFile; }
-        }
+        #endregion Constructors
 
-        public DelegateCommand<string> AddReferenceCommand
-        {
-            get { return _addReference; }
-        }
+        #region Properties
 
+        public DelegateCommand AddFileCommand { get; }
+
+        public DelegateCommand<string> AddReferenceCommand { get; }
 
         public CalibrationReport CalibrationInstance
         {
@@ -188,11 +183,11 @@ namespace Instruments.ViewModels
                 _calibrationInstance = value;
                 _calibrationInstance.Load();
 
-                _mappingList = _calibrationInstance?.GetPropertyMappings();
+                PropertyMappingList = _calibrationInstance?.GetPropertyMappings();
 
-                _selectedLab = _labList.FirstOrDefault(lab => lab.ID == _calibrationInstance?.laboratoryID);
-                _selectedResult = _resultList.FirstOrDefault(res => res.ID == _calibrationInstance?.ResultID);
-                _selectedPerson = _techList.FirstOrDefault(tech => tech.ID == _calibrationInstance?.OperatorID);
+                _selectedLab = LabList.FirstOrDefault(lab => lab.ID == _calibrationInstance?.laboratoryID);
+                _selectedResult = CalibrationResultList.FirstOrDefault(res => res.ID == _calibrationInstance?.ResultID);
+                _selectedPerson = TechList.FirstOrDefault(tech => tech.ID == _calibrationInstance?.OperatorID);
 
                 RaisePropertyChanged("SelectedLab");
                 RaisePropertyChanged("SelectedResult");
@@ -211,20 +206,9 @@ namespace Instruments.ViewModels
             }
         }
 
-        public DelegateCommand CancelEditCommand
-        {
-            get { return _cancelEdit; }
-        }
-
-        public IEnumerable<CalibrationResult> CalibrationResultList
-        {
-            get { return _resultList; }
-        }
-
-        public DelegateCommand DeleteCommand
-        {
-            get { return _delete; }
-        }
+        public IEnumerable<CalibrationResult> CalibrationResultList { get; }
+        public DelegateCommand CancelEditCommand { get; }
+        public DelegateCommand DeleteCommand { get; }
 
         public bool EditMode
         {
@@ -235,21 +219,15 @@ namespace Instruments.ViewModels
                 ReadOnlyMode = !value;
                 RaisePropertyChanged("EditMode");
                 RaisePropertyChanged("TechSelectionEnabled");
-                _cancelEdit.RaiseCanExecuteChanged();
-                _save.RaiseCanExecuteChanged();
+                CancelEditCommand.RaiseCanExecuteChanged();
+                SaveCommand.RaiseCanExecuteChanged();
                 _startEdit.RaiseCanExecuteChanged();
             }
         }
 
-        public IEnumerable<CalibrationFiles> FileList
-        {
-            get { return _calibrationInstance.GetFiles(); }
-        }
+        public IEnumerable<CalibrationFiles> FileList => _calibrationInstance.GetFiles();
 
-        public string FileListRegionName
-        {
-            get { return RegionNames.CalibrationEditFileListRegion; }
-        }
+        public string FileListRegionName => RegionNames.CalibrationEditFileListRegion;
 
         public bool IsVerification
         {
@@ -257,7 +235,6 @@ namespace Instruments.ViewModels
             {
                 if (_calibrationInstance == null)
                     return false;
-
                 else
                     return _calibrationInstance.IsVerification;
             }
@@ -268,23 +245,11 @@ namespace Instruments.ViewModels
             }
         }
 
-        public IEnumerable<Organization> LabList
-        {
-            get { return _labList; }
-        }
+        public IEnumerable<Organization> LabList { get; }
 
-        public DelegateCommand OpenFileCommand
-        {
-            get { return _openFile; }
-        }
+        public DelegateCommand OpenFileCommand { get; }
 
-        public IEnumerable<CalibrationReportInstrumentPropertyMapping> PropertyMappingList
-        {
-            get
-            {
-                return _mappingList;
-            }
-        }
+        public IEnumerable<CalibrationReportInstrumentPropertyMapping> PropertyMappingList { get; private set; }
 
         public bool ReadOnlyMode
         {
@@ -306,20 +271,11 @@ namespace Instruments.ViewModels
             }
         }
 
-        public IEnumerable<Instrument> ReferenceList
-        {
-            get { return _calibrationInstance.GetReferenceInstruments(); }
-        }
+        public IEnumerable<Instrument> ReferenceList => _calibrationInstance.GetReferenceInstruments();
 
-        public DelegateCommand RemoveFileCommand
-        {
-            get { return _removeFile; }
-        }
+        public DelegateCommand RemoveFileCommand { get; }
 
-        public DelegateCommand RemoveReferenceCommand
-        {
-            get { return _removeReference; }
-        }
+        public DelegateCommand RemoveReferenceCommand { get; }
 
         public Visibility ReportViewVisibility
         {
@@ -327,16 +283,12 @@ namespace Instruments.ViewModels
             {
                 if (_calibrationInstance == null)
                     return Visibility.Hidden;
-
                 else
                     return Visibility.Visible;
             }
         }
 
-        public DelegateCommand SaveCommand
-        {
-            get { return _save; }
-        }
+        public DelegateCommand SaveCommand { get; }
 
         public CalibrationFiles SelectedFile
         {
@@ -344,8 +296,8 @@ namespace Instruments.ViewModels
             set
             {
                 _selectedFile = value;
-                _removeFile.RaiseCanExecuteChanged();
-                _openFile.RaiseCanExecuteChanged();
+                RemoveFileCommand.RaiseCanExecuteChanged();
+                OpenFileCommand.RaiseCanExecuteChanged();
 
                 RaisePropertyChanged("SelectedFile");
             }
@@ -368,7 +320,7 @@ namespace Instruments.ViewModels
             {
                 _selectedReference = value;
                 RaisePropertyChanged("SelectedReference");
-                _removeReference.RaiseCanExecuteChanged();
+                RemoveReferenceCommand.RaiseCanExecuteChanged();
             }
         }
 
@@ -392,20 +344,11 @@ namespace Instruments.ViewModels
             }
         }
 
-        public DelegateCommand StartEditCommand
-        {
-            get { return _startEdit; }
-        }
+        public DelegateCommand StartEditCommand => _startEdit;
 
-        public IEnumerable<Person> TechList
-        {
-            get { return _techList; }
-        }
+        public IEnumerable<Person> TechList { get; }
 
-        public bool TechSelectionEnabled
-        {
-            get { return EditMode && _selectedLab.Name == "Vulcaflex"; }
-        }
+        public bool TechSelectionEnabled => EditMode && _selectedLab.Name == "Vulcaflex";
 
         public string UncertaintyHeader
         {
@@ -413,10 +356,11 @@ namespace Instruments.ViewModels
             {
                 if (IsVerification)
                     return "Scarto Max";
-
                 else
                     return "Incertezza Estesa";
             }
         }
+
+        #endregion Properties
     }
 }

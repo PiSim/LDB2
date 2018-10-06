@@ -1,47 +1,40 @@
-﻿using Controls.Views;
-using DBManager;
-using DBManager.EntityExtensions;
-using DBManager.Services;
+﻿using DataAccess;
 using Infrastructure;
 using Infrastructure.Events;
-using Infrastructure.Queries.Presentation;
+using Infrastructure.Queries;
 using Infrastructure.Wrappers;
-using Microsoft.Practices.Unity;
+using LabDbContext;
+using LabDbContext.EntityExtensions;
+using LabDbContext.Services;
+using Materials.Queries;
 using Prism.Events;
 using System;
 using System.Collections.Generic;
-using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
+using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Materials
 {
-    public class MaterialService : IMaterialService
+    public class MaterialService
     {
-        // Service class for internal use of the Materials Module
-        // Performs various CRUD operations on Material-related entities
-        
-        private DBPrincipal _principal;
-        private EventAggregator _eventAggregator;
-        private IDataService _dataService;
-        private readonly IEnumerable<IQueryPresenter<Batch>> _batchQueries = new List<IQueryPresenter<Batch>>
-        {
-            new ArrivedUntestedBatchesQueryPresenter(),
-            new BatchesNotArrivedQueryPresenter(),
-            new Latest25BatchesQueryPresenter()
-        };
-        private IUnityContainer _container;
+        // Service class for use internal to the Materials Module
 
-        public MaterialService(DBPrincipal principal,
-                                EventAggregator eventAggregator,
-                                IDataService dataService,
-                                IUnityContainer container)
+        #region Fields
+
+        private IEventAggregator _eventAggregator;
+        private IDataService<LabDbEntities> _labDbData;
+
+        #endregion Fields
+
+        #region Constructors
+
+        public MaterialService(IDataService<LabDbEntities> labDbData,
+                                IDbContextFactory<LabDbEntities> dbContextFactory,
+                            IEventAggregator eventAggregator)
         {
-            _container = container;
-            _dataService = dataService;
+            _labDbData = labDbData;
             _eventAggregator = eventAggregator;
-            _principal = principal;
 
             _eventAggregator.GetEvent<BatchVisualizationRequested>()
                             .Subscribe(batchNumber =>
@@ -52,7 +45,7 @@ namespace Materials
             _eventAggregator.GetEvent<ReportCreated>().Subscribe(
                 report =>
                 {
-                    Batch targetBatch = _dataService.GetBatch(report.BatchID);
+                    Batch targetBatch = _labDbData.RunQuery(new BatchQuery() { ID = report.BatchID });
 
                     if (targetBatch.BasicReportID == null)
                     {
@@ -60,30 +53,13 @@ namespace Materials
                         targetBatch.Update();
                     }
                 });
+
         }
 
-        public Sample AddSampleLog(string batchNumber, string actionCode)
-        {
-            Batch temp = _dataService.GetBatch(batchNumber);
+        #endregion Constructors
 
-            Sample output = new Sample();
+        #region Methods
 
-            output.BatchID = temp.ID;
-            output.Date = DateTime.Now;
-            output.Code = actionCode;
-            output.personID = _principal.CurrentPerson.ID;
-
-            output.Create();
-
-            if (actionCode == "A" && !temp.FirstSampleArrived)
-            {
-                temp.FirstSampleArrived = true;
-                temp.FirstSampleID = output.ID;
-                temp.Update();
-            }
-
-            return output;
-        }
 
         public Aspect CreateAspect()
         {
@@ -94,11 +70,9 @@ namespace Materials
                 aspectCreationDialog.AspectInstance.Create();
                 return aspectCreationDialog.AspectInstance;
             }
-
             else
                 return null;
         }
-
 
         public Batch CreateBatch()
         {
@@ -112,108 +86,14 @@ namespace Materials
                                 .Publish(token);
                 return batchCreator.BatchInstance;
             }
-
             else
                 return null;
-        }
-
-        public Material CreateMaterial(MaterialType typeInstance,
-                                        MaterialLine lineInstance,
-                                        Aspect aspectInstance,
-                                        Recipe recipeInstance)
-        {
-            if (typeInstance.ID == 0 ||
-                lineInstance.ID == 0 ||
-                aspectInstance.ID == 0 ||
-                recipeInstance.ID == 0)
-                throw new InvalidOperationException();
-
-            Material output = new Material();
-
-            output.TypeID = typeInstance.ID;
-            output.LineID = lineInstance.ID;
-            output.AspectID = aspectInstance.ID;
-            output.RecipeID = recipeInstance.ID;
-
-            output.Create();
-
-            return output;
-        }
-        
-        public Material CreateMaterial(string typeCode,
-                                        string lineCode,
-                                        string aspectCode,
-                                        string colorRecipeCode)
-        {
-
-            // Check if a MaterialType instance with the given code exists
-            // If not, throw exception
-
-            MaterialType typeInstance = _dataService.GetMaterialType(typeCode);
-
-            if (typeInstance == null)
-                throw new InvalidOperationException();
-
-            // Check if a MaterialLine instance with the given code exists
-            // If not, create it
-
-            MaterialLine lineInstance = _dataService.GetMaterialLine(lineCode);
-
-            if (lineInstance == null)
-            {
-                lineInstance = new MaterialLine()
-                {
-                    Code = lineCode
-                };
-
-                lineInstance.Create();
-            }
-
-            // Check if an Aspect instance with the given code exists
-            // If not, create it
-
-            Aspect aspectInstance = _dataService.GetAspect(aspectCode);
-
-            if (aspectInstance == null)
-            {
-                aspectInstance = new Aspect()
-                {
-                    Code = aspectCode
-                };
-
-                aspectInstance.Create();
-            }
-
-
-            // Check if a Recipe instance with the given code exists
-            // If not, create it
-
-            Recipe recipeInstance = _dataService.GetRecipe(colorRecipeCode);
-
-            if (recipeInstance == null)
-            {
-                recipeInstance = new Recipe()
-                {
-                    Code = colorRecipeCode
-                };
-
-                recipeInstance.Create();
-            }
-
-            // Call method to create Material instance with the gathered subEntities
-
-            Material output = CreateMaterial(typeInstance,
-                                            lineInstance,
-                                            aspectInstance,
-                                            recipeInstance);
-
-            return output;
         }
 
         public ExternalConstruction CreateNewExternalConstruction()
         {
             ExternalConstruction newEntry = new ExternalConstruction();
-            IEnumerable<ExternalConstruction> tempList = _dataService.GetExternalConstructions();
+            IEnumerable<ExternalConstruction> tempList = _labDbData.RunQuery(new ExternalConstructionsQuery()).ToList();
 
             int nameCounter = 1;
             string curName = "Nuova Construction";
@@ -221,7 +101,6 @@ namespace Materials
             {
                 if (!tempList.Any(exc => exc.Name == curName))
                     break;
-
                 else
                     curName = "Nuova Construction " + nameCounter++;
             }
@@ -233,31 +112,34 @@ namespace Materials
             return newEntry;
         }
 
-
         public void DeleteSample(Sample smp)
         {
             smp.Delete();
             SampleLogChoiceWrapper tempChoice = SampleLogActions.ActionList.First(scc => scc.Code == smp.Code);
-            Batch tempBatch = _dataService.GetBatch(smp.BatchID);
+            Batch tempBatch = _labDbData.RunQuery(new BatchQuery() { ID = smp.BatchID });
 
             tempBatch.ArchiveStock -= tempChoice.ArchiveModifier;
             tempBatch.LongTermStock -= tempChoice.LongTermModifier;
             tempBatch.Update();
         }
 
-        public IEnumerable<IQueryPresenter<Batch>> GetBatchQueries() => _batchQueries;
-        
-        public Batch StartBatchSelection()
+        public Dictionary<string, Batch> GetBatchIndex()
         {
-            BatchPickerDialog batchPicker = new BatchPickerDialog();
-            if (batchPicker.ShowDialog() == true)
-            {
-                Batch output = _dataService.GetBatch(batchPicker.BatchNumber);
-                return output;
-            }
+            Dictionary<string, Batch> outDict = _labDbData.RunQuery(new BatchesQuery())
+                                                            .ToDictionary(batch => batch.Number, batch => batch);
 
-            else
-                return null;
+            return outDict;
+        }
+
+        public ICollection<Tuple<string, string, string>> GetNewBatchesFromFile()
+        {
+            LinkedList<Tuple<string, string, string>> output = new LinkedList<Tuple<string, string, string>>();
+            Dictionary<string, Batch> batchDict = GetBatchIndex();
+            foreach (Tuple<string, string, string> parsedBatch in GetOrderFiles())
+                if (!batchDict.ContainsKey(parsedBatch.Item1))
+                    output.AddLast(parsedBatch);
+
+            return output;
         }
 
         public void ShowSampleLogDialog()
@@ -269,17 +151,45 @@ namespace Materials
 
         public void TryQuickBatchVisualize(string batchNumber)
         {
-
-            Batch temp = _dataService.GetBatch(batchNumber);
+            Batch temp = _labDbData.RunQuery(new BatchQuery() { Number = batchNumber });
 
             if (temp != null)
             {
                 NavigationToken token = new NavigationToken(MaterialViewNames.BatchInfoView, temp);
                 _eventAggregator.GetEvent<NavigationRequested>().Publish(token);
             }
-
             else
                 _eventAggregator.GetEvent<StatusNotificationIssued>().Publish("Batch non trovato");
         }
+
+        private IEnumerable<Tuple<string, string, string>> GetOrderFiles()
+        {
+            IEnumerable<string> names = Directory.EnumerateFiles(Properties.Settings.Default.NewOrdersFolderPath);
+
+            Tuple<string, string, string> currentParsed;
+            LinkedList<Tuple<string, string, string>> output = new LinkedList<Tuple<string, string, string>>();
+
+            foreach (string name in names)
+            {
+                currentParsed = TryParseFileName(name);
+                if (currentParsed != null)
+                    output.AddLast(currentParsed);
+            }
+
+            return output;
+        }
+
+        private Tuple<string, string, string> TryParseFileName(string path)
+        {
+            string name = Path.GetFileNameWithoutExtension(path);
+            name = name.Replace(" ", string.Empty);
+            string[] parsed = name.Split('-');
+            if (parsed.Count() >= 2 && parsed[0].Length <= 10)
+                return new Tuple<string, string, string>(parsed[0], parsed[1], path);
+            else
+                return null;
+        }
+
+        #endregion Methods
     }
 }

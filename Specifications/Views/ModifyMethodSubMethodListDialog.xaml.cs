@@ -1,17 +1,6 @@
-﻿using DBManager;
-using System;
+﻿using LabDbContext;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace Specifications.Views
 {
@@ -20,17 +9,25 @@ namespace Specifications.Views
     /// </summary>
     public partial class ModifyMethodSubMethodListDialog : Window
     {
+        #region Constructors
+
         public ModifyMethodSubMethodListDialog()
         {
             InitializeComponent();
         }
 
-        public ICollection<SubMethod> SubMethodList => (DataContext as ViewModels.ModifyMethodSubMethodListDialogViewModel).SubMethodList;
+        #endregion Constructors
+
+        #region Properties
 
         public Method OldVersion
         {
             get => (DataContext as ViewModels.ModifyMethodSubMethodListDialogViewModel).OldVersion;
             set => (DataContext as ViewModels.ModifyMethodSubMethodListDialogViewModel).OldVersion = value;
         }
+
+        public ICollection<SubMethod> SubMethodList => (DataContext as ViewModels.ModifyMethodSubMethodListDialogViewModel).SubMethodList;
+
+        #endregion Properties
     }
 }

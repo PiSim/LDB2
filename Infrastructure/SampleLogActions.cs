@@ -1,15 +1,13 @@
 ﻿using Infrastructure.Wrappers;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Infrastructure
 {
     public static class SampleLogActions
     {
-        private static readonly IEnumerable<SampleLogChoiceWrapper> _choiceList = new List<SampleLogChoiceWrapper>()
+        #region Properties
+
+        public static IEnumerable<SampleLogChoiceWrapper> ActionList { get; } = new List<SampleLogChoiceWrapper>()
         {
             new SampleLogChoiceWrapper("Arrivato in laboratorio",
                                         "A",
@@ -33,6 +31,6 @@ namespace Infrastructure
                                         -1)
         };
 
-        public static IEnumerable<SampleLogChoiceWrapper> ActionList => _choiceList;
+        #endregion Properties
     }
 }

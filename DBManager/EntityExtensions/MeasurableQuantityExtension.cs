@@ -1,29 +1,26 @@
-﻿using DBManager;
-using System;
-using System.Collections.Generic;
-using System.Data.Entity;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace DBManager.EntityExtensions
+namespace LabDbContext.EntityExtensions
 {
     public static class MeasurableQuantityExtension
     {
+        #region Methods
+
         public static void Create(this MeasurableQuantity entry)
         {
             // Inserts a new MeasurableQuantity entry in the DB
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.MeasurableQuantities.Add(entry);
                 entities.SaveChanges();
             }
         }
-        
+
         public static void Delete(this MeasurableQuantity entry)
         {
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.Entry(entities
                         .MeasurableQuantities
@@ -43,7 +40,7 @@ namespace DBManager.EntityExtensions
             if (entry == null)
                 return new List<MeasurementUnit>();
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.Configuration.LazyLoadingEnabled = false;
 
@@ -51,5 +48,7 @@ namespace DBManager.EntityExtensions
                                                 .ToList();
             }
         }
+
+        #endregion Methods
     }
 }

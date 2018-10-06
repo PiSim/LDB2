@@ -1,17 +1,13 @@
-﻿using Prism;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace LabDB2.ViewModels
+﻿namespace LabDB2.ViewModels
 {
-    class ToolbarViewModel : Prism.Mvvm.BindableBase
-    { 
+    internal class ToolbarViewModel : Prism.Mvvm.BindableBase
+    {
+        #region Constructors
+
         public ToolbarViewModel() : base()
         {
-
         }
+
+        #endregion Constructors
     }
 }

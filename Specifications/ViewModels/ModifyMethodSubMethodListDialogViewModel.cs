@@ -1,5 +1,4 @@
-﻿using DBManager;
-using Infrastructure;
+﻿using LabDbContext;
 using Prism.Commands;
 using Prism.Mvvm;
 using System;
@@ -8,21 +7,23 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace Specifications.ViewModels
 {
     public class ModifyMethodSubMethodListDialogViewModel : BindableBase, INotifyDataErrorInfo
     {
+        #region Fields
+
         private readonly Dictionary<string, ICollection<string>> _validationErrors = new Dictionary<string, ICollection<string>>();
-        Method _oldVersion;
-        
+        private Method _oldVersion;
+
+        #endregion Fields
+
+        #region Constructors
+
         public ModifyMethodSubMethodListDialogViewModel()
         {
-
             CancelCommand = new DelegateCommand<Window>(
                 parentDialog =>
                 {
@@ -36,17 +37,21 @@ namespace Specifications.ViewModels
                 });
         }
 
+        #endregion Constructors
+
         #region Commands
-        
+
         public DelegateCommand<Window> CancelCommand { get; }
 
         public DelegateCommand<Window> ConfirmCommand { get; }
-        
-        #endregion
+
+        #endregion Commands
 
         #region INotifyDataErrorInfo interface elements
 
         public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
+
+        public bool HasErrors => _validationErrors.Count > 0;
 
         public IEnumerable GetErrors(string propertyName)
         {
@@ -57,18 +62,13 @@ namespace Specifications.ViewModels
             return _validationErrors[propertyName];
         }
 
-        public bool HasErrors
-        {
-            get { return _validationErrors.Count > 0; }
-        }
-
         private void RaiseErrorsChanged(string propertyName)
         {
             ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
             ConfirmCommand.RaiseCanExecuteChanged();
         }
 
-        #endregion
+        #endregion INotifyDataErrorInfo interface elements
 
         #region Methods
 
@@ -77,7 +77,7 @@ namespace Specifications.ViewModels
             RaisePropertyChanged("IsMoreThanOneSubMethod");
         }
 
-        #endregion
+        #endregion Methods
 
         #region Properties
 
@@ -92,7 +92,7 @@ namespace Specifications.ViewModels
                 _oldVersion.LoadSubMethods();
 
                 SubMethodList = new ObservableCollection<SubMethod>();
-                
+
                 foreach (SubMethod subm in _oldVersion.SubMethods)
                     SubMethodList.Add(new SubMethod()
                     {
@@ -109,7 +109,6 @@ namespace Specifications.ViewModels
 
         public ObservableCollection<SubMethod> SubMethodList { get; private set; }
 
-        #endregion
-
+        #endregion Properties
     }
 }

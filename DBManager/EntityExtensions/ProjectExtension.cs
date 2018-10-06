@@ -1,20 +1,124 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Migrations;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace DBManager
+namespace LabDbContext
 {
+    public static class ProjectExtension
+    {
+        #region Methods
+
+        public static IEnumerable<ExternalReport> GetExternalReports(this Project entry)
+        {
+            // Returns the external reports for a Project
+
+            using (LabDbEntities entities = new LabDbEntities())
+            {
+                return entities.ExternalReports
+                                .Where(erep => erep
+                                .ProjectID == entry.ID);
+            }
+        }
+
+        public static IEnumerable<Material> GetMaterials(this Project entry)
+        {
+            // Returns all Material entities for a Project
+
+            if (entry == null)
+                return null;
+
+            using (LabDbEntities entities = new LabDbEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.Materials.Include(mat => mat.Aspect)
+                                        .Include(mat => mat.ExternalConstruction)
+                                        .Include(mat => mat.MaterialLine)
+                                        .Include(mat => mat.MaterialType)
+                                        .Include(mat => mat.Recipe.Colour)
+                                        .Where(con => con.ProjectID == entry.ID)
+                                        .ToList();
+            }
+        }
+
+        public static IEnumerable<Test> GetTests(this Project entry)
+        {
+            // Returns all the tests for a project
+
+            using (LabDbEntities entities = new LabDbEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.Tests
+                                .Where(tst => tst
+                                .TestRecord
+                                .Batch
+                                .Material
+                                .ProjectID == entry.ID)
+                                .ToList();
+            }
+        }
+
+        #endregion Methods
+    }
+
     public partial class Project
     {
-        IEnumerable<Report> _reportList;
-        
+        #region Properties
+
+        public int BatchCount
+        {
+            get
+            {
+                using (LabDbEntities entities = new LabDbEntities())
+                {
+                    return entities.Batches
+                                    .Where(btc => btc.Material.ProjectID == ID)
+                                    .Count();
+                }
+            }
+        }
+
+        public int ExternalReportCount => ExternalReports.Count;
+
+        public int MaterialCount
+        {
+            get
+            {
+                using (LabDbEntities entities = new LabDbEntities())
+                {
+                    return entities.Materials
+                                    .Where(mat => mat.ProjectID == ID)
+                                    .Count();
+                }
+            }
+        }
+
+        public string ProjectString => Name + " " + Description;
+
+        public int ReportCount
+        {
+            get
+            {
+                using (LabDbEntities entities = new LabDbEntities())
+                {
+                    return entities.Reports
+                                    .Where(rep => rep.Batch.Material.ProjectID == ID)
+                                    .Count();
+                }
+            }
+        }
+
+        public IEnumerable<Report> Reports { get; private set; }
+
+        #endregion Properties
+
+        #region Methods
+
         public void Create()
         {
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.Projects.Add(this);
                 entities.SaveChanges();
@@ -23,7 +127,7 @@ namespace DBManager
 
         public void Delete()
         {
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 Project tempEntry = entities.Projects.FirstOrDefault(prj => prj.ID == ID);
 
@@ -39,15 +143,12 @@ namespace DBManager
             }
         }
 
-        public int ExternalReportCount => ExternalReports.Count;
-
-
         public IEnumerable<Batch> GetBatches()
         {
-            // Gets all batches for a given Project entity, 
+            // Gets all batches for a given Project entity,
             // returns empty list if instance is null
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.Configuration.LazyLoadingEnabled = false;
 
@@ -68,12 +169,11 @@ namespace DBManager
         /// <returns>The calculated value</returns>
         public double GetExternalReportCost()
         {
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
-                IQueryable<ExternalReport> externalReportList =  entities.ExternalReports
+                IQueryable<ExternalReport> externalReportList = entities.ExternalReports
                                                                             .Where(extr => extr.ProjectID == ID);
 
-                
                 return (externalReportList.Count() == 0) ? 0 : externalReportList.Sum(extr => extr.OrderTotal);
             }
         }
@@ -85,7 +185,7 @@ namespace DBManager
         /// <returns>The calculated value</returns>
         public double GetInternalReportCost()
         {
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 IQueryable<Test> testList = entities.Tests
                                                     .Where(tst => tst.TestRecord.Batch.Material.ProjectID == ID);
@@ -100,11 +200,11 @@ namespace DBManager
         {
             // Returns all Report entities for the Project and stores the updated collection in the instance
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.Configuration.LazyLoadingEnabled = false;
 
-                _reportList = entities.Reports.Where(rep => rep.Batch.Material.ProjectID == ID)
+                Reports = entities.Reports.Where(rep => rep.Batch.Material.ProjectID == ID)
                                                 .Include(rep => rep.Author)
                                                 .Include(rep => rep.Batch.Material.Aspect)
                                                 .Include(rep => rep.Batch.Material.MaterialLine)
@@ -113,7 +213,7 @@ namespace DBManager
                                                 .Include(rep => rep.SpecificationVersion.Specification.Standard)
                                                 .ToList();
 
-                return _reportList;
+                return Reports;
             }
         }
 
@@ -121,7 +221,7 @@ namespace DBManager
         {
             // Returns all Task entities for the Project and stores the updated collection in the instance
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.Configuration.LazyLoadingEnabled = false;
 
@@ -134,25 +234,12 @@ namespace DBManager
                                     .ToList();
             }
         }
-        
-        public int BatchCount
-        {
-            get
-            {
-                using (DBEntities entities = new DBEntities())
-                {
-                    return entities.Batches
-                                    .Where(btc => btc.Material.ProjectID == ID)
-                                    .Count();
-                }
-            }
-        }
 
         public void Load()
         {
             // Explicitly loads a Project and all related entities
-            
-            using (DBEntities entities = new DBEntities())
+
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.Configuration.LazyLoadingEnabled = false;
 
@@ -174,41 +261,11 @@ namespace DBManager
             }
         }
 
-        public int MaterialCount
-        {
-            get
-            {
-                using (DBEntities entities = new DBEntities())
-                {
-                    return entities.Materials
-                                    .Where(mat => mat.ProjectID == ID)
-                                    .Count();
-                }
-            }
-        }
-
-        public string ProjectString => Name + " " + Description;
-        
-        public IEnumerable<Report> Reports => _reportList;
-
-        public int ReportCount
-        {
-            get
-            {
-                using (DBEntities entities = new DBEntities())
-                {
-                    return entities.Reports
-                                    .Where(rep => rep.Batch.Material.ProjectID == ID)
-                                    .Count();
-                }
-            }
-        }
-        
         public void Update()
         {
             // Updates the DBValues of the Project entry
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.Projects
                         .AddOrUpdate(this);
@@ -216,60 +273,7 @@ namespace DBManager
                 entities.SaveChanges();
             }
         }
+
+        #endregion Methods
     }
-
-    public static class ProjectExtension
-    {
-        public static IEnumerable<Material> GetMaterials(this Project entry)
-        {
-            // Returns all Material entities for a Project
-
-            if (entry == null)
-                return null;
-
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.Configuration.LazyLoadingEnabled = false;
-
-                return entities.Materials.Include(mat => mat.Aspect)
-                                        .Include(mat => mat.ExternalConstruction)
-                                        .Include(mat => mat.MaterialLine)
-                                        .Include(mat => mat.MaterialType)
-                                        .Include(mat => mat.Recipe.Colour)
-                                        .Where(con => con.ProjectID == entry.ID)
-                                        .ToList();
-            }
-        }
-
-        public static IEnumerable<ExternalReport> GetExternalReports(this Project entry)
-        {
-            // Returns the external reports for a Project
-
-            using (DBEntities entities = new DBEntities())
-            {
-                return entities.ExternalReports
-                                .Where(erep => erep
-                                .ProjectID == entry.ID);
-            }
-        }
-        
-        public static IEnumerable<Test> GetTests(this Project entry)
-        {
-            // Returns all the tests for a project
-
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.Configuration.LazyLoadingEnabled = false;
-
-                return entities.Tests
-                                .Where(tst => tst
-                                .TestRecord
-                                .Batch
-                                .Material
-                                .ProjectID == entry.ID)
-                                .ToList();
-            }
-        }
-    }
-
 }

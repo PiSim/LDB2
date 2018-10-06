@@ -1,51 +1,50 @@
-﻿using DBManager;
-using DBManager.EntityExtensions;
-using DBManager.Services;
-using Infrastructure;
+﻿using LabDbContext;
+using LabDbContext.EntityExtensions;
+using LabDbContext.Services;
 using Prism.Commands;
-using Prism.Events;
 using Prism.Mvvm;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace Admin.ViewModels
 {
     public class OrganizationEditViewModel : BindableBase
     {
+        #region Fields
+
         private bool _editMode;
-        private DBPrincipal _principal;
-        private DelegateCommand _save,
-                                _startEdit;
-        private IEnumerable<OrganizationRoleMapping> _roleList;
         private Organization _organizationInstance;
 
-        public OrganizationEditViewModel(DBPrincipal principal) : base()
+        #endregion Fields
+
+        #region Constructors
+
+        public OrganizationEditViewModel() : base()
         {
             _editMode = false;
-            _principal = principal;
 
-            _save = new DelegateCommand(
+            SaveCommand = new DelegateCommand(
                 () =>
                 {
                     _organizationInstance.Update();
-                    _roleList.Update();
+                    RoleList.Update();
 
                     EditMode = false;
                 },
                 () => _editMode);
 
-            _startEdit = new DelegateCommand(
+            StartEditCommand = new DelegateCommand(
                 () =>
                 {
                     EditMode = true;
                 },
                 () => !_editMode);
         }
-        
+
+        #endregion Constructors
+
+        #region Properties
+
         public bool EditMode
         {
             get { return _editMode; }
@@ -54,8 +53,8 @@ namespace Admin.ViewModels
                 _editMode = value;
                 RaisePropertyChanged("EditMode");
 
-                _save.RaiseCanExecuteChanged();
-                _startEdit.RaiseCanExecuteChanged();
+                SaveCommand.RaiseCanExecuteChanged();
+                StartEditCommand.RaiseCanExecuteChanged();
             }
         }
 
@@ -65,7 +64,6 @@ namespace Admin.ViewModels
             {
                 if (_organizationInstance == null)
                     return Visibility.Collapsed;
-
                 else
                     return Visibility.Visible;
             }
@@ -77,7 +75,7 @@ namespace Admin.ViewModels
             set
             {
                 _organizationInstance = value;
-                _roleList = _organizationInstance.GetRoles();
+                RoleList = _organizationInstance.GetRoles();
 
                 RaisePropertyChanged("RoleList");
                 RaisePropertyChanged("OrganizationEditViewVisibility");
@@ -100,19 +98,12 @@ namespace Admin.ViewModels
             }
         }
 
-        public IEnumerable<OrganizationRoleMapping> RoleList
-        {
-            get { return _roleList; }
-        }
+        public IEnumerable<OrganizationRoleMapping> RoleList { get; private set; }
 
-        public DelegateCommand SaveCommand
-        {
-            get { return _save; }
-        }
+        public DelegateCommand SaveCommand { get; }
 
-        public DelegateCommand StartEditCommand
-        {
-            get { return _startEdit; }
-        }
+        public DelegateCommand StartEditCommand { get; }
+
+        #endregion Properties
     }
 }

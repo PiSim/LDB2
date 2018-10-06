@@ -1,73 +1,55 @@
-﻿using Infrastructure;
-using Microsoft.Practices.Unity;
-using Prism.Events;
+﻿using Controls.Views;
+using Infrastructure;
+using Prism.Ioc;
 using Prism.Modularity;
 using Prism.Regions;
 using System;
+using System.Security.Principal;
+using System.Threading;
 
 namespace Reports
 {
     [Module(ModuleName = "ReportsModule")]
     public class ReportsModule : IModule
     {
-        DBPrincipal _principal;
-        IRegionManager _regionManager;
-        IUnityContainer _container;
+        #region Constructors
 
-        public ReportsModule(DBPrincipal principal,
-                            IRegionManager regionManager,
-                            IUnityContainer container)
+        public ReportsModule()
         {
-            _container = container;
-            _principal = principal;
-            _regionManager = regionManager;
         }
 
-        public void Initialize()
+        #endregion Constructors
+
+        #region Methods
+
+        public void OnInitialized(IContainerProvider containerProvider)
         {
-            _container.RegisterType<IReportService, ReportService>(new ContainerControlledLifetimeManager());
-            _container.Resolve<IReportService>();
+            IPrincipal principal = Thread.CurrentPrincipal;
+            IRegionManager regionManager = containerProvider.Resolve<IRegionManager>();
 
-            _container.RegisterType<Object, Views.ReportMain>(ViewNames.ReportMain);
-            _container.RegisterType<Object, Views.ReportEdit>(ViewNames.ReportEditView);
-            _container.RegisterType<Object, Views.ExternalReportMain>(ViewNames.ExternalReportMainView);
-            _container.RegisterType<Object, Views.ExternalReportEdit>(ViewNames.ExternalReportEditView);
-            _container.RegisterType<Object, Views.TestSearchMainView>(ViewNames.TestSearchMain);
-
-            _container.RegisterType<ViewModels.ReportCreationDialogViewModel>();
-            _container.RegisterType<ViewModels.ReportEditViewModel>();
-            _container.RegisterType<ViewModels.ReportMainViewModel>();
-            _container.RegisterType<ViewModels.ExternalReportEditViewModel>();
-            _container.RegisterType<ViewModels.ExternalReportMainViewModel>();
-
-            _regionManager.RegisterViewWithRegion(RegionNames.BatchExternalReportListRegion,
-                                                typeof(Controls.Resources.ExternalReportList));
-            _regionManager.RegisterViewWithRegion(RegionNames.MainExternalReportListRegion,
-                                                typeof(Controls.Resources.ExternalReportList));
-
-            _regionManager.RegisterViewWithRegion(RegionNames.BatchReportListRegion,
-                                                typeof(Views.ReportList));
-            _regionManager.RegisterViewWithRegion(RegionNames.CurrentUserMainReportListRegion,
-                                                typeof(Views.ReportList));
-            _regionManager.RegisterViewWithRegion(RegionNames.MainReportListRegion,
-                                                typeof(Views.ReportList));
-            _regionManager.RegisterViewWithRegion(RegionNames.MethodReportListRegion,
-                                                typeof(Views.ReportList));
-            _regionManager.RegisterViewWithRegion(RegionNames.ProjectReportListRegion,
-                                                typeof(Views.ReportList));
-            _regionManager.RegisterViewWithRegion(RegionNames.SpecificationReportListRegion,
-                                                typeof(Views.ReportList));
-
-            if (_principal.IsInRole(UserRoleNames.TestSearchView))
-                _regionManager.RegisterViewWithRegion(RegionNames.MainNavigationRegion,
+            if (principal.IsInRole(UserRoleNames.TestSearchView))
+                regionManager.RegisterViewWithRegion(RegionNames.MainNavigationRegion,
                                                     typeof(Views.TestSearchNavigationItem));
 
-            if (_principal.IsInRole(UserRoleNames.ExternalReportView))
-                _regionManager.RegisterViewWithRegion(RegionNames.MainNavigationRegion
+            if (principal.IsInRole(UserRoleNames.ExternalReportView))
+                regionManager.RegisterViewWithRegion(RegionNames.MainNavigationRegion
                                                     , typeof(Views.ExternalReportsNavigationItem));
-            if (_principal.IsInRole(UserRoleNames.ReportView))
-                _regionManager.RegisterViewWithRegion(RegionNames.MainNavigationRegion
+            if (principal.IsInRole(UserRoleNames.ReportView))
+                regionManager.RegisterViewWithRegion(RegionNames.MainNavigationRegion
                                                     , typeof(Views.ReportsNavigationItem));
         }
+
+        public void RegisterTypes(IContainerRegistry containerRegistry)
+        {
+            containerRegistry.RegisterSingleton<IReportService, ReportService>();
+
+            containerRegistry.Register<Object, Views.ReportMain>(ViewNames.ReportMain);
+            containerRegistry.Register<Object, Views.ReportEdit>(ViewNames.ReportEditView);
+            containerRegistry.Register<Object, Views.ExternalReportMain>(ViewNames.ExternalReportMainView);
+            containerRegistry.Register<Object, Views.ExternalReportEdit>(ViewNames.ExternalReportEditView);
+            containerRegistry.Register<Object, Views.TestSearchMainView>(ViewNames.TestSearchMain);
+        }
+
+        #endregion Methods
     }
 }

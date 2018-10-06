@@ -3,19 +3,19 @@
     <DataTemplate x:Key="ProjectComboTemplate">
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="65"/>
-                <ColumnDefinition Width="120"/>
-                <ColumnDefinition/>
+                <ColumnDefinition Width="65" />
+                <ColumnDefinition Width="120" />
+                <ColumnDefinition />
             </Grid.ColumnDefinitions>
             <TextBlock Text="{Binding Name}"
                        Grid.Column="0"
-                       Margin="5"/>
+                       Margin="5" />
             <TextBlock Text="{Binding Oem.Name}"
                        Grid.Column="1"
-                       Margin="0,5,5,5"/>
+                       Margin="0,5,5,5" />
             <TextBlock Text="{Binding Description}"
                        Grid.Column="2"
-                       Margin="0,5,5,5"/>
+                       Margin="0,5,5,5" />
         </Grid>
     </DataTemplate>
 </ResourceDictionary>

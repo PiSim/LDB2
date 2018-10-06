@@ -1,46 +1,49 @@
-﻿using DBManager;
-using DBManager.Services;
+﻿using Controls.Views;
+using DataAccess;
 using Infrastructure;
 using Infrastructure.Events;
+using LabDbContext;
+using LabDbContext.Services;
+using Materials.Queries;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 
 namespace Materials.ViewModels
 {
     public class ExternalConstructionMainViewModel : BindableBase
     {
-        private DBPrincipal _principal;
-        private DelegateCommand _createExternalConstruction, _removeExternalConstruction;
-        private EventAggregator _eventAggregator;
-        private ExternalConstruction _selectedExternalConstruction;
-        private IDataService _dataService;
-        private IMaterialService _materialService;
+        #region Fields
 
-        public ExternalConstructionMainViewModel(DBPrincipal principal,
-                                                EventAggregator eventAggregator,
-                                                IDataService dataService,
-                                                IMaterialService materialService) : base()
+        private IEventAggregator _eventAggregator;
+        private IDataService<LabDbEntities> _labDbData;
+        private MaterialService _materialService;
+        private ExternalConstruction _selectedExternalConstruction;
+
+        #endregion Fields
+
+        #region Constructors
+
+        public ExternalConstructionMainViewModel(IDataService<LabDbEntities> labDbData,
+                                                IEventAggregator eventAggregator,
+                                                MaterialService materialService) : base()
         {
-            _dataService = dataService;
+            _labDbData = labDbData;
             _materialService = materialService;
             _eventAggregator = eventAggregator;
-            _principal = principal;
 
-            _createExternalConstruction = new DelegateCommand(
+            CreateExternalConstructionCommand = new DelegateCommand(
                 () =>
                 {
                     if (_materialService.CreateNewExternalConstruction() != null)
                         RaisePropertyChanged("ExternalConstructionList");
                 },
-                () => _principal.IsInRole(UserRoleNames.MaterialEdit));
+                () => Thread.CurrentPrincipal.IsInRole(UserRoleNames.MaterialEdit));
 
-            _removeExternalConstruction = new DelegateCommand(
+            RemoveExternalConstructionCommand = new DelegateCommand(
                 () =>
                 {
                     _selectedExternalConstruction.Delete();
@@ -48,32 +51,27 @@ namespace Materials.ViewModels
                     RaisePropertyChanged("ExternalConstructionList");
                 },
                 () => _selectedExternalConstruction != null
-                    && _principal.IsInRole(UserRoleNames.MaterialAdmin));
+                    && Thread.CurrentPrincipal.IsInRole(UserRoleNames.MaterialAdmin));
 
             #region Event Subscriptions
 
             _eventAggregator.GetEvent<ExternalConstructionChanged>()
                             .Subscribe(ect => RaisePropertyChanged("ExternalConstructionList"));
 
-            #endregion
+            #endregion Event Subscriptions
         }
 
-        public DelegateCommand CreateExternalConstructionCommand
-        {
-            get { return _createExternalConstruction; }
-        }
+        #endregion Constructors
 
-        public string ExternalConstructionDetailRegionName
-        {
-            get { return RegionNames.ExternalConstructionDetailRegion; }
-        }
+        #region Properties
 
-        public IEnumerable<ExternalConstruction> ExternalConstructionList => _dataService.GetExternalConstructions();
+        public DelegateCommand CreateExternalConstructionCommand { get; }
 
-        public DelegateCommand RemoveExternalConstructionCommand
-        {
-            get { return _removeExternalConstruction; }
-        }
+        public string ExternalConstructionDetailRegionName => RegionNames.ExternalConstructionDetailRegion;
+
+        public IEnumerable<ExternalConstruction> ExternalConstructionList => _labDbData.RunQuery(new ExternalConstructionsQuery()).ToList();
+
+        public DelegateCommand RemoveExternalConstructionCommand { get; }
 
         public ExternalConstruction SelectedExternalConstruction
         {
@@ -81,7 +79,7 @@ namespace Materials.ViewModels
             set
             {
                 _selectedExternalConstruction = value;
-                _removeExternalConstruction.RaiseCanExecuteChanged();
+                RemoveExternalConstructionCommand.RaiseCanExecuteChanged();
 
                 NavigationToken token = new NavigationToken(MaterialViewNames.ExternalConstructionDetail,
                                                             _selectedExternalConstruction,
@@ -92,5 +90,7 @@ namespace Materials.ViewModels
                 RaisePropertyChanged("SelectedExternalConstruction");
             }
         }
+
+        #endregion Properties
     }
 }

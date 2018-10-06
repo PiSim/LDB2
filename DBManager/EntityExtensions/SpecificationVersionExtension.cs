@@ -1,40 +1,14 @@
-﻿using DBManager.EntityExtensions;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Migrations;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace DBManager
+namespace LabDbContext
 {
-    public partial class SpecificationVersion
-    {
-        
-        public IEnumerable<Requirement> GetMainVersionRequirements()
-        {
-            // Returns the requirement list of the Specification entry's main version
-
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.Configuration.LazyLoadingEnabled = false;
-
-                return entities.Requirements.Include(req => req.MethodVariant.Method.Property)
-                                            .Include(req => req.MethodVariant.Method.Standard.Organization)
-                                            .Include(req => req.SubRequirements
-                                            .Select(sreq => sreq.SubMethod))
-                                            .Where(req => req.SpecificationVersionID == entities.SpecificationVersions
-                                            .FirstOrDefault(specv => specv.SpecificationID == SpecificationID && specv.IsMain).ID)
-                                            .ToList();
-            }
-        }
-
-        public string VersionString => Specification?.Standard?.Name + " " + Name;
-    }    
-
     public static class SpecificationVersionExtension
     {
+        #region Methods
+
         public static void AddRequirement(this SpecificationVersion entry,
                                         Requirement requirementEntry)
         {
@@ -43,7 +17,7 @@ namespace DBManager
             entry.Requirements.Add(requirementEntry);
             requirementEntry.SpecificationVersionID = entry.ID;
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.Requirements.Add(requirementEntry);
                 entities.SaveChanges();
@@ -54,7 +28,7 @@ namespace DBManager
         {
             // Inserts a new SpecificationVersion entry in the DB
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.SpecificationVersions.Add(entry);
 
@@ -66,7 +40,7 @@ namespace DBManager
         {
             // Deletes SpecificationVersion entity
             {
-                using (DBEntities entities = new DBEntities())
+                using (LabDbEntities entities = new LabDbEntities())
                 {
                     entities.SpecificationVersions.Attach(entry);
                     entities.Entry(entry).State = EntityState.Deleted;
@@ -82,7 +56,6 @@ namespace DBManager
 
             if (version.IsMain)
                 return version.GetRequirements();
-
             else
             {
                 List<Requirement> output = new List<Requirement>(
@@ -102,7 +75,7 @@ namespace DBManager
         {
             // returns loaded requirement list for version
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.Configuration.LazyLoadingEnabled = false;
 
@@ -115,7 +88,6 @@ namespace DBManager
             }
         }
 
-
         public static void Load(this SpecificationVersion entry)
         {
             // Loads relevant RelatedEntities for given SpecificationVersion entry
@@ -123,10 +95,10 @@ namespace DBManager
             if (entry == null)
                 return;
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.Configuration.LazyLoadingEnabled = false;
-                
+
                 SpecificationVersion tempEntry = entities.SpecificationVersions.Include(specv => specv.ExternalConstructions)
                                                                                 .Include(specv => specv.Requirements
                                                                                 .Select(req => req.SubRequirements))
@@ -154,7 +126,7 @@ namespace DBManager
         {
             // Updates a SpcificationVersion Entry
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.SpecificationVersions.AddOrUpdate(entry);
 
@@ -162,5 +134,37 @@ namespace DBManager
             }
         }
 
+        #endregion Methods
+    }
+
+    public partial class SpecificationVersion
+    {
+        #region Properties
+
+        public string VersionString => Specification?.Standard?.Name + " " + Name;
+
+        #endregion Properties
+
+        #region Methods
+
+        public IEnumerable<Requirement> GetMainVersionRequirements()
+        {
+            // Returns the requirement list of the Specification entry's main version
+
+            using (LabDbEntities entities = new LabDbEntities())
+            {
+                entities.Configuration.LazyLoadingEnabled = false;
+
+                return entities.Requirements.Include(req => req.MethodVariant.Method.Property)
+                                            .Include(req => req.MethodVariant.Method.Standard.Organization)
+                                            .Include(req => req.SubRequirements
+                                            .Select(sreq => sreq.SubMethod))
+                                            .Where(req => req.SpecificationVersionID == entities.SpecificationVersions
+                                            .FirstOrDefault(specv => specv.SpecificationID == SpecificationID && specv.IsMain).ID)
+                                            .ToList();
+            }
+        }
+
+        #endregion Methods
     }
 }

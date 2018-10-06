@@ -1,29 +1,31 @@
-﻿using DBManager;
-using DBManager.EntityExtensions;
-using DBManager.Services;
+﻿using Controls.Views;
 using Infrastructure;
 using Infrastructure.Events;
+using LabDbContext;
+using LabDbContext.EntityExtensions;
+using LabDbContext.Services;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Admin.ViewModels
 {
     public class UserMainViewModel : BindableBase
     {
-        private DelegateCommand _createNewUser, _deleteUser;
-        private EventAggregator _eventAggregator;
+        #region Fields
+
         private IAdminService _adminService;
         private IDataService _dataService;
-        private IEnumerable<User> _userList;
+        private IEventAggregator _eventAggregator;
         private User _selectedUser;
+        private IEnumerable<User> _userList;
 
-        public UserMainViewModel(EventAggregator eventAggregator,
+        #endregion Fields
+
+        #region Constructors
+
+        public UserMainViewModel(IEventAggregator eventAggregator,
                                 IAdminService adminService,
                                 IDataService dataService) : base()
         {
@@ -33,7 +35,7 @@ namespace Admin.ViewModels
 
             _userList = _dataService.GetUsers();
 
-            _createNewUser = new DelegateCommand(
+            CreateNewUserCommand = new DelegateCommand(
                 () =>
                 {
                     _adminService.CreateNewUser();
@@ -41,7 +43,7 @@ namespace Admin.ViewModels
                     UserList = _dataService.GetUsers();
                 });
 
-            _deleteUser = new DelegateCommand(
+            DeleteUserCommand = new DelegateCommand(
                 () =>
                 {
                     _selectedUser.Delete();
@@ -51,20 +53,15 @@ namespace Admin.ViewModels
                 () => _selectedUser != null);
         }
 
-        public string AdminUserEditRegionName
-        {
-            get { return RegionNames.AdminUserEditRegion; }
-        }
+        #endregion Constructors
 
-        public DelegateCommand CreateNewUserCommand
-        {
-            get { return _createNewUser; }
-        }
+        #region Properties
 
-        public DelegateCommand DeleteUserCommand
-        {
-            get { return _deleteUser; }
-        }
+        public string AdminUserEditRegionName => RegionNames.AdminUserEditRegion;
+
+        public DelegateCommand CreateNewUserCommand { get; }
+
+        public DelegateCommand DeleteUserCommand { get; }
 
         public User SelectedUser
         {
@@ -72,7 +69,7 @@ namespace Admin.ViewModels
             set
             {
                 _selectedUser = value;
-                _deleteUser.RaiseCanExecuteChanged();
+                DeleteUserCommand.RaiseCanExecuteChanged();
 
                 NavigationToken token = new NavigationToken(AdminViewNames.UserEditView,
                                                             _selectedUser,
@@ -93,5 +90,7 @@ namespace Admin.ViewModels
                 RaisePropertyChanged("UserList");
             }
         }
+
+        #endregion Properties
     }
 }

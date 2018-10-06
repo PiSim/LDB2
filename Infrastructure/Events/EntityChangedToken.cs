@@ -1,9 +1,20 @@
-﻿
-
-namespace Infrastructure.Events
+﻿namespace Infrastructure.Events
 {
     public class EntityChangedToken
     {
+        #region Constructors
+
+        public EntityChangedToken(object entity,
+                                    EntityChangedAction action)
+        {
+            Entity = entity;
+            Action = action;
+        }
+
+        #endregion Constructors
+
+        #region Enums
+
         public enum EntityChangedAction
         {
             Created,
@@ -11,18 +22,13 @@ namespace Infrastructure.Events
             Deleted
         }
 
-        private object _entity;
-        private EntityChangedAction _action;
+        #endregion Enums
 
-        public EntityChangedToken(object entity,
-                                    EntityChangedAction action)
-        {
-            _entity = entity;
-            _action = action;
-        }
+        #region Properties
 
-        public object Entity => _entity;
+        public EntityChangedAction Action { get; }
+        public object Entity { get; }
 
-        public EntityChangedAction Action => _action;
+        #endregion Properties
     }
 }

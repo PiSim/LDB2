@@ -1,56 +1,46 @@
-﻿using DBManager;
-using Prism.Commands;
+﻿using Prism.Commands;
 using Prism.Mvvm;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Controls.ViewModels
 {
     public class StringInputDialogViewModel : BindableBase
     {
-        private DelegateCommand _cancel, _confirm;
-        private string _message, _payload;
+        #region Fields
+
+        private string _message;
         private Views.StringInputDialog _parentDialog;
+
+        #endregion Fields
+
+        #region Constructors
 
         public StringInputDialogViewModel(Views.StringInputDialog parentDialog) : base()
         {
             _parentDialog = parentDialog;
             _message = "Generic message";
 
-            _cancel = new DelegateCommand(
+            CancelCommand = new DelegateCommand(
                 () =>
                 {
                     _parentDialog.DialogResult = false;
                 });
 
-            _confirm = new DelegateCommand(
+            ConfirmCommand = new DelegateCommand(
                 () =>
                 {
                     _parentDialog.DialogResult = true;
                 });
         }
 
-        public DelegateCommand CancelCommand
-        {
-            get { return _cancel; }
-        }
+        #endregion Constructors
 
-        public DelegateCommand ConfirmCommand
-        {
-            get { return _confirm; }
-        }
-        
-        public string InputString
-        {
-            get { return _payload; }
-            set
-            {
-                _payload = value;
-            }
-        }
+        #region Properties
+
+        public DelegateCommand CancelCommand { get; }
+
+        public DelegateCommand ConfirmCommand { get; }
+
+        public string InputString { get; set; }
 
         public string Message
         {
@@ -61,5 +51,7 @@ namespace Controls.ViewModels
                 RaisePropertyChanged("Message");
             }
         }
+
+        #endregion Properties
     }
 }

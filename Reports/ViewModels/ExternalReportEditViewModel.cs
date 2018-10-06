@@ -1,8 +1,11 @@
-﻿using DBManager;
-using DBManager.EntityExtensions;
-using DBManager.Services;
+﻿using Controls.Views;
+using DataAccess;
 using Infrastructure;
 using Infrastructure.Events;
+using Infrastructure.Queries;
+using LabDbContext;
+using LabDbContext.EntityExtensions;
+using LabDbContext.Services;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
@@ -10,59 +13,50 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using System.Windows.Controls;
 using System.Windows.Forms;
-
 
 namespace Reports.ViewModels
 {
     public class ExternalReportEditViewModel : BindableBase
     {
+        #region Fields
+
+        private string _batchNumber;
         private bool _editMode;
-        private DBPrincipal _principal;
-        private DelegateCommand _addBatch,
-                                _addFile,
-                                _openBatch,
-                                _openFile,
-                                _removeBatch,
-                                _removeFile,
-                                _save,
-                                _startEdit;
-        private DelegateCommand<MethodVariant> _addMethod,
-                                        _removeMethod;
-        private EventAggregator _eventAggregator;
+        private IEventAggregator _eventAggregator;
         private ExternalReport _instance;
-        private ExternalReportFile _selectedFile;
-        private IDataService _dataService;
+        private IDataService<LabDbEntities> _labDbData;
         private IEnumerable<Project> _projectList;
-        private List<ExternalResultPresenter> _resultList;
-        private IMaterialService _materialService;
         private IReportService _reportService;
         private ObservableCollection<DataGridColumn> _resultColumnCollection;
-        private string _batchNumber;
+        private List<ExternalResultPresenter> _resultList;
+        private ExternalReportFile _selectedFile;
         private TestRecord _selectedRecord;
 
-        public ExternalReportEditViewModel(DBPrincipal principal,
-                                            EventAggregator aggregator,
-                                            IDataService dataService,
-                                            IMaterialService materialService,
-                                            IReportService reportService) : base()
+        #endregion Fields
+
+        #region Constructors
+
+        public ExternalReportEditViewModel(IEventAggregator aggregator,
+                                            IDataService<LabDbEntities> labDbData,
+                                            IReportService reportService)
         {
-            _dataService = dataService;
+            _labDbData = labDbData;
             _editMode = false;
             _eventAggregator = aggregator;
-            _materialService = materialService;
-            _principal = principal;
             _reportService = reportService;
 
-            _addBatch = new DelegateCommand(
+            AddBatchCommand = new DelegateCommand(
                 () =>
                 {
-                    Batch tempBatch = _materialService.StartBatchSelection();
-                    if (tempBatch != null)
+                    Batch tempBatch;
+
+                    BatchPickerDialog batchPicker = new BatchPickerDialog();
+                    if (batchPicker.ShowDialog() == true)
                     {
+                        tempBatch = _labDbData.RunQuery(new BatchQuery() { Number = batchPicker.BatchNumber });
                         _instance.AddBatch(tempBatch);
                         RefreshTestRecords();
                         ResultColumnCollection = _instance.GetResultPresentationColumns();
@@ -70,7 +64,7 @@ namespace Reports.ViewModels
                 },
                 () => _instance != null && EditMode);
 
-            _addFile = new DelegateCommand(
+            AddFileCommand = new DelegateCommand(
                 () =>
                 {
                     OpenFileDialog fileDialog = new OpenFileDialog
@@ -96,19 +90,19 @@ namespace Reports.ViewModels
                 },
                 () => EditMode);
 
-            _addMethod = new DelegateCommand<MethodVariant>(
+            AddMethodCommand = new DelegateCommand<MethodVariant>(
                 mtd =>
                 {
                     _instance.AddTestMethod(mtd);
 
-                    _instance.MethodVariants = _instance.GetMethodVariants();
-                    RaisePropertyChanged("MethodList");
+                    _instance.MethodVariants.Add(mtd);
+                    RaisePropertyChanged("MethodVariantList");
 
                     RefreshTestRecords();
                 },
                 mtd => EditMode);
 
-            _openBatch = new DelegateCommand(
+            OpenBatchCommand = new DelegateCommand(
                 () =>
                 {
                     NavigationToken token = new NavigationToken(MaterialViewNames.BatchInfoView,
@@ -117,14 +111,14 @@ namespace Reports.ViewModels
                 },
                 () => _selectedRecord != null);
 
-            _openFile = new DelegateCommand(
+            OpenFileCommand = new DelegateCommand(
                 () =>
                 {
                     System.Diagnostics.Process.Start(_selectedFile.Path);
                 },
                 () => _selectedFile != null);
 
-            _removeBatch = new DelegateCommand(
+            RemoveBatchCommand = new DelegateCommand(
                 () =>
                 {
                     _selectedRecord.Delete();
@@ -134,7 +128,7 @@ namespace Reports.ViewModels
                 },
                 () => _selectedRecord != null && EditMode);
 
-            _removeFile = new DelegateCommand(
+            RemoveFileCommand = new DelegateCommand(
                 () =>
                 {
                     _selectedFile.Delete();
@@ -142,19 +136,19 @@ namespace Reports.ViewModels
                 },
                 () => _selectedFile != null && EditMode);
 
-            _removeMethod = new DelegateCommand<MethodVariant>(
+            RemoveMethodCommand = new DelegateCommand<MethodVariant>(
                 mtd =>
                 {
                     _instance.RemoveTestMethodVariant(mtd);
 
-                    _instance.MethodVariants = _instance.GetMethodVariants() as ICollection<MethodVariant>;
-                    RaisePropertyChanged("MethodList");
+                    _instance.MethodVariants.Remove(mtd);
+                    RaisePropertyChanged("MethodVariantList");
 
                     RefreshTestRecords();
                 },
                 mtd => EditMode);
 
-            _save = new DelegateCommand(
+            SaveCommand = new DelegateCommand(
                 () =>
                 {
                     _instance.Update(true);
@@ -168,7 +162,7 @@ namespace Reports.ViewModels
                 },
                 () => _editMode);
 
-            _startEdit = new DelegateCommand(
+            StartEditCommand = new DelegateCommand(
                 () =>
                 {
                     EditMode = true;
@@ -176,12 +170,35 @@ namespace Reports.ViewModels
                 () => !_editMode && CanModify);
         }
 
+        #endregion Constructors
+
+        #region Commands
+
+        public DelegateCommand AddBatchCommand { get; }
+
+        public DelegateCommand AddFileCommand { get; }
+
+        public DelegateCommand<MethodVariant> AddMethodCommand { get; }
+
+        public DelegateCommand OpenBatchCommand { get; }
+
+        public DelegateCommand OpenFileCommand { get; }
+
+        public DelegateCommand RemoveBatchCommand { get; }
+
+        public DelegateCommand RemoveFileCommand { get; }
+
+        public DelegateCommand<MethodVariant> RemoveMethodCommand { get; }
+
+        public DelegateCommand SaveCommand { get; }
+        public DelegateCommand StartEditCommand { get; }
+
+        #endregion Commands
+
         #region Methods
 
         private void RefreshTestRecords()
         {
-            _instance.TestRecords = _instance.GetTestRecords(true) as ICollection<TestRecord>;
-
             _resultList = new List<ExternalResultPresenter>();
 
             foreach (Tuple<MethodVariant, IEnumerable<Test>> resTuple in _instance.GetResultCollection())
@@ -191,22 +208,12 @@ namespace Reports.ViewModels
             RaisePropertyChanged("RecordList");
         }
 
-        #endregion
+        #endregion Methods
 
-        public DelegateCommand AddBatchCommand
-        {
-            get { return _addBatch; }
-        }
+        #region Properties
 
-        public DelegateCommand AddFileCommand
-        {
-            get { return _addFile; }
-        }
+        public IEnumerable<MethodVariant> AvailableMethodVariantList => _labDbData.RunQuery(new MethodVariantsQuery()).ToList();
 
-        public DelegateCommand<MethodVariant> AddMethodCommand => _addMethod;
-
-        public IEnumerable<MethodVariant> AvailableMethodVariantList => _dataService.GetMethodVariants();
-        
         public string BatchNumber
         {
             get { return _batchNumber; }
@@ -216,15 +223,15 @@ namespace Reports.ViewModels
                 RaisePropertyChanged("BatchNumber");
             }
         }
-        
+
+        public bool CanModify => Thread.CurrentPrincipal.IsInRole(UserRoleNames.ExternalReportEdit);
+
         public string Description
         {
             get => _instance?.Description;
 
             set => _instance.Description = value;
         }
-
-        public bool CanModify => _principal.IsInRole(UserRoleNames.ExternalReportEdit);
 
         public bool EditMode
         {
@@ -235,14 +242,14 @@ namespace Reports.ViewModels
                 RaisePropertyChanged("CanModifyOrder");
                 RaisePropertyChanged("EditMode");
 
-                _addBatch.RaiseCanExecuteChanged();
-                _addFile.RaiseCanExecuteChanged();
-                _addMethod.RaiseCanExecuteChanged();
-                _removeBatch.RaiseCanExecuteChanged();
-                _removeFile.RaiseCanExecuteChanged();
-                _removeMethod.RaiseCanExecuteChanged();
-                _save.RaiseCanExecuteChanged();
-                _startEdit.RaiseCanExecuteChanged();
+                AddBatchCommand.RaiseCanExecuteChanged();
+                AddFileCommand.RaiseCanExecuteChanged();
+                AddMethodCommand.RaiseCanExecuteChanged();
+                RemoveBatchCommand.RaiseCanExecuteChanged();
+                RemoveFileCommand.RaiseCanExecuteChanged();
+                RemoveMethodCommand.RaiseCanExecuteChanged();
+                SaveCommand.RaiseCanExecuteChanged();
+                StartEditCommand.RaiseCanExecuteChanged();
             }
         }
 
@@ -266,27 +273,22 @@ namespace Reports.ViewModels
                 EditMode = false;
 
                 _instance = value;
-                _instance.Load();
-                                
-                if (_instance != null)
-                {
-                    _instance.MethodVariants = _instance.GetMethodVariants();
-                    RefreshTestRecords();
-                }
 
+                if (_instance != null)
+                    RefreshTestRecords();
                 else
                 {
                     ResultCollection = new List<ExternalResultPresenter>();
                     RaisePropertyChanged("RecordList");
                 }
-                
+
                 ResultColumnCollection = _instance?.GetResultPresentationColumns();
 
                 SelectedRecord = null;
                 SelectedFile = null;
 
-                _addBatch.RaiseCanExecuteChanged();
-                _removeBatch.RaiseCanExecuteChanged();
+                AddBatchCommand.RaiseCanExecuteChanged();
+                RemoveBatchCommand.RaiseCanExecuteChanged();
 
                 RaisePropertyChanged("AvailableMethodVariantList");
                 RaisePropertyChanged("CanModifyOrder");
@@ -310,7 +312,7 @@ namespace Reports.ViewModels
         }
 
         public string FormattedNumber => _instance?.FormattedNumber;
-         
+
         public bool HasOrder
         {
             get => (_instance == null) ? false : _instance.HasOrder;
@@ -322,16 +324,6 @@ namespace Reports.ViewModels
         }
 
         public IEnumerable<MethodVariant> MethodVariantList => _instance?.MethodVariants;
-
-        public DelegateCommand OpenBatchCommand
-        {
-            get { return _openBatch; }
-        }
-
-        public DelegateCommand OpenFileCommand
-        {
-            get { return _openFile; }
-        }
 
         public string OrderNumber
         {
@@ -345,17 +337,6 @@ namespace Reports.ViewModels
             set => _instance.OrderTotal = value;
         }
 
-        public IEnumerable<Project> ProjectList
-        {
-            get
-            {
-                if (_projectList == null)
-                    _projectList = _dataService.GetProjects();
-
-                return _projectList;
-            }
-        }
-
         public Project Project
         {
             get
@@ -367,24 +348,20 @@ namespace Reports.ViewModels
             }
         }
 
+        public IEnumerable<Project> ProjectList
+        {
+            get
+            {
+                if (_projectList == null)
+                    _projectList = _labDbData.RunQuery(new ProjectsQuery()).ToList();
+
+                return _projectList;
+            }
+        }
+
         public IEnumerable<TestRecord> RecordList => _instance?.TestRecords;
 
-        public DelegateCommand RemoveBatchCommand
-        {
-            get { return _removeBatch; }
-        }
-
-        public DelegateCommand RemoveFileCommand
-        {
-            get { return _removeFile; }
-        }
-
-        public DelegateCommand<MethodVariant> RemoveMethodCommand => _removeMethod;
-
-        public IEnumerable<ExternalReportFile> ReportFiles
-        {
-            get { return _instance.GetExternalReportFiles(); }
-        }
+        public IEnumerable<ExternalReportFile> ReportFiles => _instance.GetExternalReportFiles();
 
         public bool ReportReceived
         {
@@ -392,14 +369,13 @@ namespace Reports.ViewModels
             {
                 if (_instance == null)
                     return false;
-
                 else
                     return _instance.ReportReceived;
             }
             set
             {
                 _instance.ReportReceived = value;
-                if(value)
+                if (value)
                     _instance.ReportReceivedDate = DateTime.Now.Date;
                 else
                     _instance.RequestDoneDate = null;
@@ -410,13 +386,14 @@ namespace Reports.ViewModels
 
         public DateTime? ReportReceivedDate => _instance?.ReportReceivedDate;
 
+        public DateTime? RequestDate => _instance?.RequestDoneDate;
+
         public bool RequestDone
         {
             get
             {
                 if (_instance == null)
                     return false;
-
                 else
                     return _instance.RequestDone;
             }
@@ -432,8 +409,6 @@ namespace Reports.ViewModels
             }
         }
 
-        public DateTime? RequestDate => _instance?.RequestDoneDate;
-        
         public IEnumerable<ExternalResultPresenter> ResultCollection
         {
             get => _resultList;
@@ -443,7 +418,7 @@ namespace Reports.ViewModels
                 RaisePropertyChanged("ResultCollection");
             }
         }
-         
+
         public ObservableCollection<DataGridColumn> ResultColumnCollection
         {
             get => _resultColumnCollection;
@@ -466,13 +441,13 @@ namespace Reports.ViewModels
 
             set { _instance.Samples = value; }
         }
+
         public bool SamplesSent
         {
             get
             {
                 if (_instance == null)
                     return false;
-
                 else
                     return _instance.MaterialSent;
             }
@@ -491,20 +466,6 @@ namespace Reports.ViewModels
         }
 
         public DateTime? SamplesSentDate => _instance?.MaterialSentDate;
-        
-        // Named 'SelectedRecord' for consistency among views
-        public TestRecord SelectedRecord
-        {
-            get { return _selectedRecord; }
-            set
-            {
-                _selectedRecord = value;
-                RaisePropertyChanged("SelectedRecord");
-                _openBatch.RaiseCanExecuteChanged();
-                _removeBatch.RaiseCanExecuteChanged();
-            }
-        }
-        public DelegateCommand SaveCommand => _save;
 
         public ExternalReportFile SelectedFile
         {
@@ -512,8 +473,8 @@ namespace Reports.ViewModels
             set
             {
                 _selectedFile = value;
-                _openFile.RaiseCanExecuteChanged();
-                _removeFile.RaiseCanExecuteChanged();
+                OpenFileCommand.RaiseCanExecuteChanged();
+                RemoveFileCommand.RaiseCanExecuteChanged();
             }
         }
 
@@ -524,10 +485,23 @@ namespace Reports.ViewModels
             {
                 if (_instance != null) _instance.ProjectID = value.ID;
             }
-        } 
-        public DelegateCommand StartEditCommand => _startEdit;
+        }
 
-        public IEnumerable<TestRecord> TestRecordList => _instance?.GetTestRecords();
+        // Named 'SelectedRecord' for consistency among views
+        public TestRecord SelectedRecord
+        {
+            get { return _selectedRecord; }
+            set
+            {
+                _selectedRecord = value;
+                RaisePropertyChanged("SelectedRecord");
+                OpenBatchCommand.RaiseCanExecuteChanged();
+                RemoveBatchCommand.RaiseCanExecuteChanged();
+            }
+        }
+
+        public IEnumerable<TestRecord> TestRecordList => _instance.TestRecords;
+
+        #endregion Properties
     }
 }
-

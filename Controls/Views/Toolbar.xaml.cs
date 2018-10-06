@@ -1,23 +1,8 @@
 ﻿using Infrastructure;
 using Infrastructure.Events;
-using Navigation;
-using Microsoft.Practices.Unity;
 using Prism.Events;
-using Prism.Regions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Controls.Views
 {
@@ -26,14 +11,23 @@ namespace Controls.Views
     /// </summary>
     public partial class Toolbar : UserControl
     {
-        private EventAggregator _eventAggregator;
+        #region Fields
 
-        public Toolbar(EventAggregator eventAggregator)
+        private IEventAggregator _eventAggregator;
+
+        #endregion Fields
+
+        #region Constructors
+
+        public Toolbar(IEventAggregator eventAggregator)
         {
             _eventAggregator = eventAggregator;
             InitializeComponent();
         }
 
+        #endregion Constructors
+
+        #region Methods
 
         private void OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -46,5 +40,7 @@ namespace Controls.Views
             if (e.Key == Key.Enter)
                 (DataContext as ViewModels.ToolbarViewModel).RunSearchCommand.Execute(SearchBox.Text);
         }
+
+        #endregion Methods
     }
 }

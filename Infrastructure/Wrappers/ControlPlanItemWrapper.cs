@@ -1,28 +1,30 @@
-﻿using DBManager;
-using Infrastructure.Wrappers;
-using Prism.Events;
+﻿using Infrastructure.Wrappers;
+using LabDbContext;
 using Prism.Mvvm;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Collections;
 
 namespace Infrastructure
 {
-
     public class ControlPlanItemWrapper : BindableBase, ISelectableRequirement
     {
+        #region Fields
+
         private bool _isSelected;
-        private Requirement _requirement;
+
+        #endregion Fields
+
+        #region Constructors
 
         public ControlPlanItemWrapper(Requirement requirement) : base()
         {
-            _requirement = requirement;
+            RequirementInstance = requirement;
         }
 
+        #endregion Constructors
 
+        #region Properties
+
+        public double Duration => 0;
 
         public bool IsSelected
         {
@@ -34,43 +36,23 @@ namespace Infrastructure
             }
         }
 
-        public string Method
-        {
-            get { return _requirement.MethodVariant.Method.Standard.Name; }
-        }
+        bool ISelectableRequirement.IsSelected { get => false; set { } }
+        public string Method => RequirementInstance.MethodVariant.Method.Standard.Name;
 
-        public string Property
-        {
-            get { return _requirement.MethodVariant.Method.Property.Name; }
-        }
+        public string MethodName => null;
+        string ITestItem.MethodName => null;
+        public string Notes => RequirementInstance.Description;
+        public string Property => RequirementInstance.MethodVariant.Method.Property.Name;
+        public string PropertyName => null;
+        string ITestItem.PropertyName => null;
+        public Requirement RequirementInstance { get; }
 
-        public double Duration => throw new NotImplementedException();
+        Requirement ISelectableRequirement.RequirementInstance => null;
+        IEnumerable ITestItem.SubItems => null;
+        public IEnumerable SubTests => null;
+        public double WorkHours => 0;
+        double? ITestItem.WorkHours => 0;
 
-        public Requirement RequirementInstance
-        {
-            get { return _requirement; }
-        }
-
-        public double WorkHours => throw new NotImplementedException();
-
-        public string PropertyName => throw new NotImplementedException();
-
-        public string MethodName => throw new NotImplementedException();
-
-        public string Notes => _requirement.Description;
-
-        public IEnumerable SubTests => throw new NotImplementedException();
-
-        bool ISelectableRequirement.IsSelected { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-
-        Requirement ISelectableRequirement.RequirementInstance => throw new NotImplementedException();
-
-        string ITestItem.PropertyName => throw new NotImplementedException();
-
-        string ITestItem.MethodName => throw new NotImplementedException();
-
-        IEnumerable ITestItem.SubItems => throw new NotImplementedException();
-
-        double? ITestItem.WorkHours => throw new NotImplementedException();
+        #endregion Properties
     }
 }

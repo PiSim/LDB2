@@ -1,19 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Migrations;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace DBManager
+namespace LabDbContext
 {
     public partial class ControlPlan
     {
+        #region Methods
 
         public void Create()
         {
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.ControlPlans.Add(this);
                 entities.SaveChanges();
@@ -22,7 +20,7 @@ namespace DBManager
 
         public void Delete()
         {
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 ControlPlan tempEntry = entities.ControlPlans.FirstOrDefault(cp => cp.ID == ID);
                 if (tempEntry != null)
@@ -40,7 +38,7 @@ namespace DBManager
         {
             // Returns all the items in a Control Plan
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.Configuration.LazyLoadingEnabled = false;
 
@@ -50,7 +48,6 @@ namespace DBManager
                                     .Include(cpi => cpi.Requirement.MethodVariant.Method.Standard)
                                     .Where(cpi => cpi.ControlPlanID == ID)
                                     .ToList();
-
                 else
                     return entities.ControlPlanItems
                                     .Where(cpi => cpi.ControlPlanID == ID)
@@ -60,7 +57,7 @@ namespace DBManager
 
         public void Update()
         {
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.ControlPlans.AddOrUpdate(this);
                 foreach (ControlPlanItem cpi in control_plan_items_b)
@@ -69,5 +66,7 @@ namespace DBManager
                 entities.SaveChanges();
             }
         }
+
+        #endregion Methods
     }
 }

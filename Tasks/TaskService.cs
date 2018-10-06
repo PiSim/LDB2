@@ -1,34 +1,41 @@
-﻿using DBManager;
-using DBManager.EntityExtensions;
-using Infrastructure;
+﻿using Infrastructure;
 using Infrastructure.Events;
-using Microsoft.Practices.Unity;
+using LabDbContext;
 using Prism.Events;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Data.Entity.Infrastructure;
 
 namespace Tasks
 {
     public class TaskService : ITaskService
     {
-        private EventAggregator _eventAggregator;
-        private IUnityContainer _container;
+        #region Fields
 
-        public TaskService(EventAggregator aggregator,
-                           IUnityContainer container)
+        private IDbContextFactory<LabDbEntities> _dbContextFactory;
+        private IEventAggregator _eventAggregator;
+
+        #endregion Fields
+
+        #region Constructors
+
+        public TaskService(IDbContextFactory<LabDbEntities> dbContextFactory,
+                            IEventAggregator aggregator)
         {
             _eventAggregator = aggregator;
-            _container = container;
+            _dbContextFactory = dbContextFactory;
         }
+
+        #endregion Constructors
+
+        #region Methods
 
         public void CreateNewTask()
         {
-            Views.TaskCreationDialog creationDialog =
-                _container.Resolve<Views.TaskCreationDialog>();
+            Views.TaskCreationDialog creationDialog = new Views.TaskCreationDialog();
 
             if (creationDialog.ShowDialog() == true)
                 _eventAggregator.GetEvent<TaskListUpdateRequested>().Publish();
         }
+
+        #endregion Methods
     }
 }

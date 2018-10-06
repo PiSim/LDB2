@@ -1,61 +1,60 @@
 ﻿<UserControl x:Class="Projects.Views.ProjectInfo"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Projects.Views"
              xmlns:prism="http://prismlibrary.com/"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              prism:ViewModelLocator.AutoWireViewModel="True"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="600">
     <Grid x:Name="ProjectInfoGrid">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
+            <ColumnDefinition />
+            <ColumnDefinition />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="35"/>
-            <RowDefinition MaxHeight="125"/>
-            <RowDefinition/>
+            <RowDefinition Height="35" />
+            <RowDefinition MaxHeight="125" />
+            <RowDefinition />
         </Grid.RowDefinitions>
 
         <StackPanel Orientation="Horizontal">
             <Button Content="Modifica"
                     Command="{Binding StartEditCommand}"
-                    Margin="5"/>
+                    Margin="5" />
             <Button Content="Salva"
                     Command="{Binding SaveCommand}"
-                    Margin="5"/>
+                    Margin="5" />
         </StackPanel>
-        
+
         <Grid Grid.Column="0"
               Grid.Row="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
+                <ColumnDefinition />
+                <ColumnDefinition />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
             </Grid.RowDefinitions>
 
             <Label Content="Progetto:"
                    Grid.Column="0"
-                   Grid.Row="0"/>
-            
+                   Grid.Row="0" />
+
             <TextBox Text="{Binding Name}"
                      IsEnabled="{Binding EditMode}"
                      HorizontalContentAlignment="Center"
                      Grid.Column="1"
                      Grid.Row="0"
-                     Margin="5"/>
-            
+                     Margin="5" />
+
             <Label Content="Capo progetto:"
                    Grid.Column="0"
                    Grid.Row="1"
-                   Height="Auto"/>
+                   Height="Auto" />
 
             <ComboBox ItemsSource="{Binding LeaderList}"
                       SelectedItem="{Binding SelectedLeader}"
@@ -63,12 +62,12 @@
                       DisplayMemberPath="Name"
                       Grid.Column="1"
                       Grid.Row="1"
-                      Margin="5"/>
+                      Margin="5" />
 
             <Label Content="OEM:"
                    Grid.Column="0"
                    Grid.Row="2"
-                   Height="Auto"/>
+                   Height="Auto" />
 
             <ComboBox ItemsSource="{Binding OEMList}"
                       SelectedItem="{Binding SelectedOEM}"
@@ -76,22 +75,20 @@
                       DisplayMemberPath="Name"
                       Grid.Column="1"
                       Grid.Row="2"
-                      Margin="5"/>
+                      Margin="5" />
 
             <Label Content="Descrizione:"
                    Grid.Column="0"
                    Grid.Row="3"
-                   Height="Auto"/>
-            
+                   Height="Auto" />
+
             <TextBox Text="{Binding Description}"
                      IsEnabled="{Binding EditMode}"
                      HorizontalContentAlignment="Center"
                      Grid.Column="1"
                      Grid.Row="3"
-                     Margin="5"/>
-
+                     Margin="5" />
         </Grid>
-
 
         <TabControl Grid.Column="0"
                     Grid.ColumnSpan="2"
@@ -99,30 +96,30 @@
             <TabItem Header="Report">
                 <Grid Background="#FFE5E5E5">
                     <Grid.RowDefinitions>
-                        <RowDefinition/>
-                        <RowDefinition/>
+                        <RowDefinition />
+                        <RowDefinition />
                     </Grid.RowDefinitions>
                     <GroupBox Header="Interni"
                               Grid.Row="0">
-                        <ContentControl prism:RegionManager.RegionName="ProjectReportListRegion"/>
+                        <ContentControl prism:RegionManager.RegionName="ProjectReportListRegion" />
                     </GroupBox>
                     <GroupBox Header="Esterni"
                               Grid.Row="1">
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition />
+                                <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
                             <ContentControl prism:RegionManager.RegionName="{Binding ProjectExternalReportListRegionName}"
                                             Grid.Column="0"
-                                            Margin="5"/>
+                                            Margin="5" />
                             <Button Content="Apri"
                                     Command="{Binding Path=OpenExternalReportCommand}"
                                     Grid.Column="1"
                                     HorizontalAlignment="Right"
                                     VerticalAlignment="Top"
                                     Width="50"
-                                    Margin="5"/>
+                                    Margin="5" />
                         </Grid>
                     </GroupBox>
                 </Grid>
@@ -134,15 +131,15 @@
                               Grid.Row="1">
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition />
+                                <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
 
                             <ListView ItemsSource="{Binding Path=TaskList}"
                                       SelectedItem="{Binding Path=SelectedTask}">
                                 <ListView.View>
                                     <GridView>
-                                        <GridViewColumn Header="Commessa" DisplayMemberBinding="{Binding Path=Batch.Number}"/>
+                                        <GridViewColumn Header="Commessa" DisplayMemberBinding="{Binding Path=Batch.Number}" />
                                     </GridView>
                                 </ListView.View>
                             </ListView>
@@ -150,14 +147,14 @@
                                     Command="{Binding Path=OpenRequestCommand}"
                                     Grid.Column="1"
                                     HorizontalAlignment="Right"
-                                    VerticalAlignment="Top"    
-                                    Margin="0,0,0,0"/>
+                                    VerticalAlignment="Top"
+                                    Margin="0,0,0,0" />
                             <Button Content="Crea nuova"
                                     Command="{Binding Path=CreateRequestCommand}"
                                     Grid.Column="1"
                                     HorizontalAlignment="Right"
-                                    VerticalAlignment="Top"    
-                                    Margin="0,0,0,25"/>
+                                    VerticalAlignment="Top"
+                                    Margin="0,0,0,25" />
                         </Grid>
                     </GroupBox>
                 </Grid>
@@ -165,8 +162,8 @@
             <TabItem Header="Materiali">
                 <Grid Background="#FFE5E5E5">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
                     </Grid.ColumnDefinitions>
 
                     <GroupBox Header="Assegnati al progetto"
@@ -182,29 +179,29 @@
                                   Background="White">
 
                             <DataGrid.Columns>
-                                <DataGridTextColumn Header="Tipo" 
-                                                    Binding="{Binding MaterialType.Code}"/>
-                                <DataGridTextColumn Header="Linea" 
-                                                    Binding="{Binding Path=MaterialLine.Code}"/>
-                                <DataGridTextColumn Header="Aspetto" 
-                                                    Binding="{Binding Path=Aspect.Code}"/>
-                                <DataGridTextColumn Header="Cod.Colore" 
-                                                    Binding="{Binding Path=Recipe.Code}"/>
-                                <DataGridTextColumn Header="" 
-                                                    Binding="{Binding Path=Aspect.Name}"/>
-                                <DataGridTextColumn Header="Colore" 
-                                                    Binding="{Binding Path=Recipe.Colour.Name}"/>
+                                <DataGridTextColumn Header="Tipo"
+                                                    Binding="{Binding MaterialType.Code}" />
+                                <DataGridTextColumn Header="Linea"
+                                                    Binding="{Binding Path=MaterialLine.Code}" />
+                                <DataGridTextColumn Header="Aspetto"
+                                                    Binding="{Binding Path=Aspect.Code}" />
+                                <DataGridTextColumn Header="Cod.Colore"
+                                                    Binding="{Binding Path=Recipe.Code}" />
+                                <DataGridTextColumn Header=""
+                                                    Binding="{Binding Path=Aspect.Name}" />
+                                <DataGridTextColumn Header="Colore"
+                                                    Binding="{Binding Path=Recipe.Colour.Name}" />
                                 <DataGridTemplateColumn Width="35"
                                                         CanUserResize="False">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <Button Command="{Binding DataContext.RemoveMaterialCommand,
-                                                                      Source={x:Reference Name=ProjectInfoGrid}}"
+                                                    Source={x:Reference Name=ProjectInfoGrid}}"
                                                     CommandParameter="{Binding}">
                                                 <Polygon Points="0,0 0,10 8,5"
-                                                            Stroke="Black"
-                                                            Fill="Black"
-                                                            Margin="1"/>
+                                                         Stroke="Black"
+                                                         Fill="Black"
+                                                         Margin="1" />
                                             </Button>
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
@@ -228,28 +225,28 @@
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <Button Command="{Binding DataContext.AddMaterialCommand,
-                                                                        Source={x:Reference Name=ProjectInfoGrid}}" 
+                                                    Source={x:Reference Name=ProjectInfoGrid}}"
                                                     CommandParameter="{Binding}">
                                                 <Polygon Points="8,0 0,5 8,10"
-                                                            Stroke="Black"
-                                                            Fill="Black"
-                                                            Margin="1"/>
+                                                         Stroke="Black"
+                                                         Fill="Black"
+                                                         Margin="1" />
                                             </Button>
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
-                                <DataGridTextColumn Header="Tipo" 
-                                                    Binding="{Binding MaterialType.Code}"/>
-                                <DataGridTextColumn Header="Linea" 
-                                                    Binding="{Binding MaterialLine.Code}"/>
-                                <DataGridTextColumn Header="Aspetto" 
-                                                    Binding="{Binding Aspect.Code}"/>
-                                <DataGridTextColumn Header="Cod. Colore" 
-                                                    Binding="{Binding Recipe.Code}"/>
-                                <DataGridTextColumn Header="" 
-                                                    Binding="{Binding Aspect.Name}"/>
-                                <DataGridTextColumn Header="Colore" 
-                                                    Binding="{Binding Recipe.Colour.Name}"/>
+                                <DataGridTextColumn Header="Tipo"
+                                                    Binding="{Binding MaterialType.Code}" />
+                                <DataGridTextColumn Header="Linea"
+                                                    Binding="{Binding MaterialLine.Code}" />
+                                <DataGridTextColumn Header="Aspetto"
+                                                    Binding="{Binding Aspect.Code}" />
+                                <DataGridTextColumn Header="Cod. Colore"
+                                                    Binding="{Binding Recipe.Code}" />
+                                <DataGridTextColumn Header=""
+                                                    Binding="{Binding Aspect.Name}" />
+                                <DataGridTextColumn Header="Colore"
+                                                    Binding="{Binding Recipe.Colour.Name}" />
                             </DataGrid.Columns>
                         </DataGrid>
                     </GroupBox>
@@ -258,23 +255,22 @@
             <TabItem Header="Commesse">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="100" />
                     </Grid.ColumnDefinitions>
 
                     <ContentControl prism:RegionManager.RegionName="ProjectBatchListRegion"
                                     Grid.Column="0"
-                                    Margin="5"/>
+                                    Margin="5" />
 
                     <StackPanel Orientation="Vertical"
                                 Grid.Column="1">
                         <Button Content="Apri"
-                            Command="{Binding Path=OpenBatchCommand}"
-                            Margin="5"/>
+                                Command="{Binding Path=OpenBatchCommand}"
+                                Margin="5" />
                     </StackPanel>
                 </Grid>
             </TabItem>
-
         </TabControl>
     </Grid>
 </UserControl>

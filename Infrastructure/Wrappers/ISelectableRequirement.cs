@@ -1,16 +1,14 @@
-﻿using DBManager;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using LabDbContext;
 
 namespace Infrastructure.Wrappers
 {
     public interface ISelectableRequirement : ITestItem
     {
+        #region Properties
+
         bool IsSelected { get; set; }
         Requirement RequirementInstance { get; }
+
+        #endregion Properties
     }
 }

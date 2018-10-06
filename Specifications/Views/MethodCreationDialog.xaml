@@ -10,37 +10,37 @@
         Title="Nuovo Metodo" Height="460" Width="350">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="35"/>
-            <RowDefinition Height="35"/>
-            <RowDefinition Height="35"/>
-            <RowDefinition Height="35"/>
-            <RowDefinition Height="70"/>
-            <RowDefinition Height="35"/>
-            <RowDefinition/>
-            <RowDefinition Height="35"/>
+            <RowDefinition Height="35" />
+            <RowDefinition Height="35" />
+            <RowDefinition Height="35" />
+            <RowDefinition Height="35" />
+            <RowDefinition Height="70" />
+            <RowDefinition Height="35" />
+            <RowDefinition />
+            <RowDefinition Height="35" />
         </Grid.RowDefinitions>
         <Label Content="Standard:"
                Grid.Column="0"
                Grid.Row="0"
-               Margin="5"/>
-        <TextBox Text="{Binding Name, 
+               Margin="5" />
+        <TextBox Text="{Binding Name,
                                 Mode=TwoWay,
                                 UpdateSourceTrigger=PropertyChanged}"
                  Grid.Column="1"
                  Grid.ColumnSpan="3"
                  Grid.Row="0"
                  IsEnabled="{Binding CanEditFields}"
-                 Margin="5"/>
+                 Margin="5" />
         <Label Content="Oem:"
                Grid.Column="0"
                Grid.Row="1"
-               Margin="5"/>
+               Margin="5" />
         <ComboBox ItemsSource="{Binding OemList}"
                   SelectedItem="{Binding SelectedOem, Mode=TwoWay}"
                   DisplayMemberPath="Name"
@@ -48,14 +48,14 @@
                   Grid.ColumnSpan="3"
                   Grid.Row="1"
                   IsEnabled="{Binding CanEditFields}"
-                  Margin="5"/>
+                  Margin="5" />
 
         <Label Content="Proprietà Misurata:"
                Grid.Column="0"
                Grid.Row="2"
-               Margin="5"/>
+               Margin="5" />
         <ComboBox ItemsSource="{Binding PropertiesList}"
-                  SelectedItem="{Binding SelectedProperty, 
+                  SelectedItem="{Binding SelectedProperty,
                                          Mode=TwoWay,
                                          UpdateSourceTrigger=PropertyChanged}"
                   DisplayMemberPath="Name"
@@ -63,13 +63,13 @@
                   Grid.ColumnSpan="3"
                   Grid.Row="2"
                   IsEnabled="{Binding CanEditFields}"
-                  Margin="5"/>
+                  Margin="5" />
 
         <TextBlock Text="Descrizione:"
                    Grid.Column="0"
                    Grid.Row="3"
                    VerticalAlignment="Center"
-                   Margin="5"/>
+                   Margin="5" />
 
         <TextBox Text="{Binding ShortDescription}"
                  Grid.Column="1"
@@ -77,13 +77,13 @@
                  Grid.Row="3"
                  Margin="5"
                  MaxLength="45"
-                 VerticalAlignment="Center"/>
+                 VerticalAlignment="Center" />
 
         <TextBlock Text="Condizioni:"
                    Grid.Column="0"
                    Grid.Row="4"
                    VerticalAlignment="Top"
-                   Margin="5,10"/>
+                   Margin="5,10" />
 
         <TextBox Text="{Binding Description}"
                  AcceptsReturn="True"
@@ -91,20 +91,20 @@
                  Grid.ColumnSpan="3"
                  Grid.Row="4"
                  TextWrapping="Wrap"
-                 Margin="5"/>
+                 Margin="5" />
 
-        <TextBlock Grid.Column="0" 
+        <TextBlock Grid.Column="0"
                    Grid.Row="5"
                    HorizontalAlignment="Left"
                    Margin="5"
                    Text="Ore di lavoro:"
-                   VerticalAlignment="Center"/>
+                   VerticalAlignment="Center" />
 
         <TextBox Grid.Column="1"
                  Grid.Row="5"
                  Margin="5"
                  Text="{Binding WorkHours}"
-                 VerticalAlignment="Center"/>
+                 VerticalAlignment="Center" />
 
         <GroupBox Grid.Column="0"
                   Grid.ColumnSpan="4"
@@ -113,11 +113,11 @@
             <GroupBox.Header>
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
                     </Grid.ColumnDefinitions>
                     <TextBlock Text="Prove"
-                               VerticalAlignment="Center"/>
+                               VerticalAlignment="Center" />
                 </Grid>
             </GroupBox.Header>
             <DataGrid ItemsSource="{Binding SubMethodList}"
@@ -127,10 +127,10 @@
                 <DataGrid.Columns>
                     <DataGridTextColumn Binding="{Binding Name}"
                                         Header="Nome"
-                                        Width="*"/>
+                                        Width="*" />
                     <DataGridTextColumn Binding="{Binding UM}"
                                         Header="UM"
-                                        Width="0.5*"/>
+                                        Width="0.5*" />
                 </DataGrid.Columns>
             </DataGrid>
         </GroupBox>
@@ -139,13 +139,13 @@
                 CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
                 Grid.Column="2"
                 Grid.Row="7"
-                Margin="5"/>
+                Margin="5" />
 
         <Button Content="Ok"
                 Command="{Binding ConfirmCommand}"
                 CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
                 Grid.Column="3"
                 Grid.Row="7"
-                Margin="5"/>
+                Margin="5" />
     </Grid>
 </Window>

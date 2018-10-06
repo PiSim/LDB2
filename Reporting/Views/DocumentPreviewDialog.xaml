@@ -10,6 +10,6 @@
         mc:Ignorable="d"
         Title="Anteprima di stampa" Height="300" Width="300">
     <Grid>
-        <con:LDBDocumentViewer x:Name="MainViewer"/>
+        <con:LDBDocumentViewer x:Name="MainViewer" />
     </Grid>
 </Window>

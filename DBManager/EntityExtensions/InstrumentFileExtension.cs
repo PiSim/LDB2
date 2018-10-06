@@ -1,16 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 
-namespace DBManager
+namespace LabDbContext
 {
     public partial class InstrumentFiles
     {
+        #region Methods
+
         public void Delete()
         {
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 InstrumentFiles tempEntry = entities.InstrumentFiles
                                                     .FirstOrDefault(inf => inf.ID == ID);
@@ -25,5 +23,7 @@ namespace DBManager
                 ID = 0;
             }
         }
+
+        #endregion Methods
     }
 }

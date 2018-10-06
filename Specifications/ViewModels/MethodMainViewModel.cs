@@ -1,36 +1,39 @@
-﻿using DBManager;
-using DBManager.EntityExtensions;
-using DBManager.Services;
+﻿using Controls.Views;
+using DataAccess;
 using Infrastructure;
 using Infrastructure.Events;
-using Microsoft.Practices.Unity;
+using Infrastructure.Queries;
+using LabDbContext;
+using LabDbContext.EntityExtensions;
+using LabDbContext.Services;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 
 namespace Specifications.ViewModels
 {
     public class MethodMainViewModel : BindableBase
     {
-        private DBPrincipal _principal;
-        private EventAggregator _eventAggregator;
-        private readonly IDataService _dataService;
-        private ISpecificationService _specificationService;
-        private Method _selectedMethod;
+        #region Fields
 
-        public MethodMainViewModel(DBPrincipal principal,
-                                    EventAggregator aggregator,
-                                    IDataService dataService,
+        private IEventAggregator _eventAggregator;
+        private IDataService<LabDbEntities> _labDbData;
+        private Method _selectedMethod;
+        private ISpecificationService _specificationService;
+
+        #endregion Fields
+
+        #region Constructors
+
+        public MethodMainViewModel(IEventAggregator aggregator,
+                                    IDataService<LabDbEntities> labDbData,
                                     ISpecificationService specificationService) : base()
         {
-            _dataService = dataService;
+            _labDbData = labDbData;
             _eventAggregator = aggregator;
-            _principal = principal;
             _specificationService = specificationService;
 
             DeleteMethodCommand = new DelegateCommand(
@@ -51,21 +54,21 @@ namespace Specifications.ViewModels
                 tkn => RaisePropertyChanged("MethodList"));
         }
 
+        #endregion Constructors
+
         #region Commands
 
         private DelegateCommand DeleteMethodCommand { get; }
 
         private DelegateCommand NewMethodCommand { get; }
 
-        #endregion
+        #endregion Commands
 
-        private bool IsSpecAdmin
-        {
-            get { return _principal.IsInRole(UserRoleNames.SpecificationAdmin); }
-        }
+        #region Properties
 
-        public IEnumerable<Method> MethodList => _dataService.GetMethods();
-        
+        public IEnumerable<Method> MethodList => _labDbData.RunQuery(new MethodsQuery())
+                                                            .ToList();
+
         public Method SelectedMethod
         {
             get
@@ -86,5 +89,9 @@ namespace Specifications.ViewModels
                 _eventAggregator.GetEvent<NavigationRequested>().Publish(token);
             }
         }
+
+        private bool IsSpecAdmin => Thread.CurrentPrincipal.IsInRole(UserRoleNames.SpecificationAdmin);
+
+        #endregion Properties
     }
 }

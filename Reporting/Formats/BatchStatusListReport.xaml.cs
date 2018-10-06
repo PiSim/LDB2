@@ -1,17 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Documents;
+﻿using System.Windows.Documents;
 
 namespace Reporting.Formats
 {
     public partial class BatchStatusListReport : FlowDocument
     {
+        #region Constructors
+
         public BatchStatusListReport() : base()
         {
             InitializeComponent();
         }
+
+        #endregion Constructors
     }
 }

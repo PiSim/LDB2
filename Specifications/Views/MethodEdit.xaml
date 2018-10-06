@@ -1,63 +1,63 @@
 ﻿<UserControl x:Class="Specifications.Views.MethodEdit"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:Specifications.Views"
-             xmlns:cmd="clr-namespace:Infrastructure.Commands;assembly=Infrastructure"
+             xmlns:bhv="clr-namespace:Controls.Behaviours;assembly=Controls"
              xmlns:prism="http://prismlibrary.com/"
              prism:ViewModelLocator.AutoWireViewModel="True"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="35"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
+            <RowDefinition Height="35" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
         </Grid.RowDefinitions>
 
         <StackPanel Orientation="Horizontal"
                     Grid.Row="0">
             <Button Content="Modifica"
                     Command="{Binding StartEditCommand}"
-                    Margin="5"/>
+                    Margin="5" />
             <Button Content="Salva"
                     Command="{Binding SaveCommand}"
-                    Margin="5"/>
+                    Margin="5" />
             <Button Content="Annulla"
                     Command="{Binding CancelEditCommand}"
-                    Margin="5"/>
+                    Margin="5" />
         </StackPanel>
-        
+
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="200"/>
-                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="200" />
+                <ColumnDefinition />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
             </Grid.RowDefinitions>
 
             <Label Content="Standard:"
                    Grid.Column="0"
                    Grid.Row="0"
-                   Margin="5"/>
+                   Margin="5" />
 
             <Label Content="{Binding Name}"
                    Grid.Column="1"
                    Grid.Row="0"
-                   Margin="5"/>
+                   Margin="5" />
 
             <Label Content="Proprietà Misurata:"
                    Grid.Column="0"
                    Grid.Row="1"
-                   Margin="5"/>
+                   Margin="5" />
 
             <ComboBox ItemsSource="{Binding PropertyList}"
                       SelectedItem="{Binding SelectedProperty}"
@@ -65,12 +65,12 @@
                       DisplayMemberPath="Name"
                       Grid.Column="1"
                       Grid.Row="1"
-                      Margin="5"/>
+                      Margin="5" />
 
             <Label Content="Ente:"
                    Grid.Column="0"
                    Grid.Row="2"
-                   Margin="5"/>
+                   Margin="5" />
 
             <ComboBox ItemsSource="{Binding OrganizationList}"
                       SelectedItem="{Binding SelectedOrganization}"
@@ -78,12 +78,12 @@
                       DisplayMemberPath="Name"
                       Grid.Column="1"
                       Grid.Row="2"
-                      Margin="5"/>
+                      Margin="5" />
 
             <Label Content="Ore di lavoro:"
                    Grid.Column="0"
                    Grid.Row="3"
-                   Margin="5"/>
+                   Margin="5" />
 
             <TextBox Text="{Binding Duration}"
                      IsEnabled="{Binding EditMode}"
@@ -92,11 +92,10 @@
                      HorizontalAlignment="Left"
                      HorizontalContentAlignment="Center"
                      Width="50"
-                     Margin="5"/>
-
+                     Margin="5" />
         </Grid>
 
-        <GroupBox Grid.Row="2" 
+        <GroupBox Grid.Row="2"
                       Header="Varianti">
             <Grid>
 
@@ -112,21 +111,21 @@
                               SelectionUnit="FullRow">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Nome"
-                                                Binding="{Binding Name}"/>
+                                                Binding="{Binding Name}" />
 
                         <DataGridTextColumn Header="Condizioni"
-                                                Binding="{Binding Description}"/>
+                                                Binding="{Binding Description}" />
                     </DataGrid.Columns>
                 </DataGrid>
             </Grid>
         </GroupBox>
 
-        <GroupBox Grid.Row="3" 
+        <GroupBox Grid.Row="3"
                       Header="Prove">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="35"/>
-                    <RowDefinition/>
+                    <RowDefinition Height="35" />
+                    <RowDefinition />
                 </Grid.RowDefinitions>
 
                 <Button Command="{Binding UpdateCommand}"
@@ -134,7 +133,7 @@
                             Grid.Row="0"
                             HorizontalAlignment="Left"
                             Margin="5"
-                            VerticalAlignment="Center"/>
+                            VerticalAlignment="Center" />
 
                 <DataGrid ItemsSource="{Binding Measurements}"
                             SelectedItem="{Binding SelectedMeasurement, Mode=TwoWay}"
@@ -150,22 +149,22 @@
                             Name="TestGrid">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Nome"
-                                                Binding="{Binding Name}"/>
+                                                Binding="{Binding Name}" />
 
                         <DataGridTextColumn Header="UM"
-                                                Binding="{Binding UM}"/>
+                                                Binding="{Binding UM}" />
                     </DataGrid.Columns>
                 </DataGrid>
             </Grid>
         </GroupBox>
-        
+
         <TabControl Grid.Row="4"
                     Margin="5">
 
             <TabItem Header="File">
                 <Grid>
                     <ContentControl prism:RegionManager.RegionName="{Binding MethodFileRegionName}"
-                                    Grid.Column="0"/>
+                                    Grid.Column="0" />
                 </Grid>
             </TabItem>
             <TabItem Header="Risultati">
@@ -175,9 +174,21 @@
                           GridLinesVisibility="Horizontal"
                           IsReadOnly="True"
                           HorizontalContentAlignment="Center"
-                          VerticalContentAlignment="Center"
-                          cmd:CommandBinder.DataGridDoubleClickCommand="{Binding OpenReportCommand}">
-                <DataGrid.Columns>
+                          VerticalContentAlignment="Center">
+                    <DataGrid.RowStyle>
+                        <Style TargetType="DataGridRow">
+                            <Setter Property="bhv:CommandBehavior.Command"
+                            Value="{Binding DataContext.OpenReportCommand,
+                                            RelativeSource={RelativeSource Mode=FindAncestor,
+                                                                            AncestorType=DataGrid}}" />
+                            <Setter Property="bhv:CommandBehavior.CommandParameter"
+                            Value="{Binding }" />
+                            <Setter Property="bhv:CommandBehavior.Event"
+                            Value="MouseDoubleClick" />
+
+                        </Style>
+                    </DataGrid.RowStyle>
+                    <DataGrid.Columns>
                         <DataGridTextColumn Header="Batch"
                                             Binding="{Binding Report.Batch.Number}"
                                             IsReadOnly="True"
@@ -185,7 +196,7 @@
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="TextBlock">
                                     <Setter Property="VerticalAlignment"
-                                            Value="Center"/>
+                                            Value="Center" />
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
@@ -207,7 +218,7 @@
                                         <DataGrid.Columns>
                                             <DataGridTextColumn Binding="{Binding Name}"
                                                                 IsReadOnly="True"
-                                                                Width="*"/>
+                                                                Width="*" />
                                         </DataGrid.Columns>
                                     </DataGrid>
                                 </DataTemplate>
@@ -231,7 +242,7 @@
                                         <DataGrid.Columns>
                                             <DataGridTextColumn Binding="{Binding Result}"
                                                                 IsReadOnly="True"
-                                                                        Width="*"/>
+                                                                        Width="*" />
                                         </DataGrid.Columns>
                                     </DataGrid>
                                 </DataTemplate>
@@ -255,7 +266,7 @@
                                         <DataGrid.Columns>
                                             <DataGridTextColumn Binding="{Binding Requirement}"
                                                                 IsReadOnly="True"
-                                                                Width="*"/>
+                                                                Width="*" />
                                         </DataGrid.Columns>
                                     </DataGrid>
                                 </DataTemplate>
@@ -279,7 +290,7 @@
                                         <DataGrid.Columns>
                                             <DataGridTextColumn Binding="{Binding UM}"
                                                                         IsReadOnly="True"
-                                                                        Width="*"/>
+                                                                        Width="*" />
                                         </DataGrid.Columns>
                                     </DataGrid>
                                 </DataTemplate>
@@ -289,8 +300,7 @@
                         <DataGridTextColumn Header="Note"
                                                     Binding="{Binding Notes}"
                                                     IsReadOnly="True"
-                                                    Width="100"/>
-                        
+                                                    Width="100" />
 
                         <DataGridCheckBoxColumn Header="Completo"
                                                 Binding="{Binding IsComplete, Mode=OneWay}"
@@ -299,34 +309,34 @@
                             <DataGridCheckBoxColumn.ElementStyle>
                                 <Style TargetType="{x:Type CheckBox}">
                                     <Setter Property="HorizontalAlignment"
-                                                    Value="Center"/>
+                                                    Value="Center" />
                                     <Setter Property="VerticalAlignment"
-                                                    Value="Center"/>
+                                                    Value="Center" />
                                 </Style>
                             </DataGridCheckBoxColumn.ElementStyle>
                         </DataGridCheckBoxColumn>
 
                         <DataGridTextColumn Header="Report"
                                             Binding="{Binding Report.Number}"
-                                            IsReadOnly="True"/>
+                                            IsReadOnly="True" />
 
-                        <DataGridTextColumn Header="Data Completamento" 
+                        <DataGridTextColumn Header="Data Completamento"
                                                     Binding="{Binding Date}"
                                                     IsReadOnly="True">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="VerticalAlignment"
-                                                    Value="Center"/>
+                                                    Value="Center" />
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
                     </DataGrid.Columns>
                 </DataGrid>
             </TabItem>
-            
+
             <TabItem Header="Specifiche">
                 <ContentControl prism:RegionManager.RegionName="{Binding MethodEditSpecificationListRegionName}"
-                                Margin="5"/>
+                                Margin="5" />
             </TabItem>
         </TabControl>
     </Grid>

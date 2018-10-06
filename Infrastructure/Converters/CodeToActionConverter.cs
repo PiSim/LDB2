@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Data;
 
 namespace Infrastructure.Converters
 {
     public class CodeToActionConverter : IValueConverter
     {
+        #region Fields
+
         private readonly Dictionary<string, string> _converterDictionary = new Dictionary<string, string>()
                                                                 {
                                                                     {"A", "Arrivato" },
@@ -19,10 +18,17 @@ namespace Infrastructure.Converters
                                                                     {"R", "Ritornato da Cotex" }
                                                                 };
 
+        #endregion Fields
+
+        #region Constructors
+
         public CodeToActionConverter()
         {
-
         }
+
+        #endregion Constructors
+
+        #region Methods
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
@@ -33,5 +39,7 @@ namespace Infrastructure.Converters
         {
             throw new NotImplementedException();
         }
+
+        #endregion Methods
     }
 }

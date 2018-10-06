@@ -1,49 +1,31 @@
-﻿using DBManager;
-using DBManager.Services;
-using Infrastructure;
-using Infrastructure.Events;
-using Prism.Events;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Printing;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using LabDbContext;
 using System.Windows.Controls;
 using System.Windows.Documents;
-using System.Windows.Media;
 
 namespace Reporting
 {
     public class ReportingEngine
     {
-        private DBEntities _entities;
-        private EventAggregator _eventAggregator;
-        private IDataService _dataService;
+        #region Fields
 
-        public ReportingEngine(DBEntities entities,
-                                EventAggregator eventAggregator,
-                                IDataService dataService)
+        private LabDbEntities _entities;
+
+        #endregion Fields
+
+        #region Constructors
+
+        public ReportingEngine(LabDbEntities entities)
         {
-            _dataService = dataService;
             _entities = entities;
-            _eventAggregator = eventAggregator;
-
-            _eventAggregator.GetEvent<GenerateReportDataSheetRequested>()
-                            .Subscribe(
-                            report =>
-                            {
-                                GenerateReportRawDataSheet(report);
-                            });
         }
+
+        #endregion Constructors
+
+        #region Methods
 
         public void GenerateReportRawDataSheet(Report target)
         {
             Formats.ReportRawDataSheet dataSheet = new Formats.ReportRawDataSheet(target);
-
-
-
 
             PrintDialog printer = new PrintDialog();
 
@@ -52,6 +34,8 @@ namespace Reporting
             if (printer.ShowDialog() == true)
                 printer.PrintDocument(paginator, "Report");
         }
+
+        #endregion Methods
 
         //public static void PrintBatchStatusList()
         //{
@@ -121,7 +105,7 @@ namespace Reporting
         //    currentRow.Cells.Add(new TableCell
         //                        (new Paragraph
         //                        (new Run("OEM"))));
-            
+
         //    currentRow.Cells.Add(new TableCell
         //                        (new Paragraph
         //                        (new Run("Construction"))));
@@ -175,7 +159,7 @@ namespace Reporting
         //        currentRow.Cells.Add(new TableCell
         //                            (new Paragraph
         //                            (new Run((btc.Material != null && btc.Material.Recipe.Colour != null) ? btc.Material.Recipe.Colour.Name : ""))));
-                
+
         //        currentRow.Cells.Add(new TableCell
         //                            (new Paragraph
         //                            (new Run((btc.Material != null && btc.Material.ExternalConstruction != null) ? btc.Material.ExternalConstruction.Oem?.Name : ""))));

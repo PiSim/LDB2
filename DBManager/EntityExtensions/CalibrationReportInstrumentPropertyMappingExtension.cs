@@ -1,27 +1,23 @@
-﻿using DBManager;
-using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Data.Entity.Migrations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Data.Entity.Migrations;
 
-namespace DBManager.EntityExtensions
+namespace LabDbContext.EntityExtensions
 {
     public static class CalibrationReportInstrumentPropertyMappingExtension
     {
+        #region Methods
+
         public static void Update(this CalibrationReportInstrumentPropertyMapping entry)
         {
             // Updates a CAlibrationReportInstrumentPropertyMapping entry
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.CalibrationReportInstrumentPropertyMappings.AddOrUpdate(entry);
 
                 entities.SaveChanges();
             }
-
         }
+
+        #endregion Methods
     }
 }

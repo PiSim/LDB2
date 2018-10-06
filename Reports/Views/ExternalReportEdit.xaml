@@ -1,75 +1,75 @@
 ﻿<UserControl x:Class="Reports.Views.ExternalReportEdit"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:prism="http://prismlibrary.com/"
              xmlns:bhvr="clr-namespace:Controls.Behaviours;assembly=Controls"
              xmlns:local="clr-namespace:Reports"
              prism:ViewModelLocator.AutoWireViewModel="True"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
              d:DesignHeight="500" d:DesignWidth="600">
     <UserControl.Resources>
-        <local:ExternalResultPresenterTestExtractor x:Key="TestExtractor"/>
+        <local:ExternalResultPresenterTestExtractor x:Key="TestExtractor" />
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="35"/>
-            <RowDefinition Height="150"/>
-            <RowDefinition/>
+            <RowDefinition Height="35" />
+            <RowDefinition Height="150" />
+            <RowDefinition />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
+            <ColumnDefinition />
         </Grid.ColumnDefinitions>
 
         <FrameworkElement x:Name="dummyElement"
-                          Visibility="Collapsed"/>
+                          Visibility="Collapsed" />
 
         <StackPanel Orientation="Horizontal">
             <Button Content="Modifica"
                     Command="{Binding StartEditCommand}"
-                    Margin="5"/>
+                    Margin="5" />
             <Button Content="Salva"
                     Command="{Binding SaveCommand}"
-                    Margin="5"/>
+                    Margin="5" />
             <Button Content="Elimina"
                     Command="{Binding DeleteCommand}"
-                    Margin="5"/>
+                    Margin="5" />
         </StackPanel>
 
         <Grid Grid.Column="0"
               Grid.Row="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="108"/>
-                <ColumnDefinition/>
-                <ColumnDefinition Width="108"/>
-                <ColumnDefinition/>
+                <ColumnDefinition Width="108" />
+                <ColumnDefinition />
+                <ColumnDefinition Width="108" />
+                <ColumnDefinition />
             </Grid.ColumnDefinitions>
 
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition/>
+                <RowDefinition Height="Auto" />
+                <RowDefinition />
             </Grid.RowDefinitions>
 
             <Label Content="Numero interno:"
                    Grid.Column="0"
-                   Grid.Row="0" 
-                   Margin="5"/>
+                   Grid.Row="0"
+                   Margin="5" />
 
             <Label Content="{Binding FormattedNumber}"
                    Grid.Column="1"
                    Grid.Row="0"
-                   Margin="5"/>
+                   Margin="5" />
 
             <Label Content="Laboratorio:"
                    Grid.Column="2"
                    Grid.Row="0"
-                   Margin="5"/>
+                   Margin="5" />
 
-            <Label Content="{Binding Path=ExternalLab}" 
+            <Label Content="{Binding Path=ExternalLab}"
                    Grid.Column="3"
                    Grid.Row="0"
-                   Margin="5"/>
+                   Margin="5" />
 
             <GroupBox Header="Campioni:"
                       Grid.Column="0"
@@ -78,16 +78,16 @@
                 <TextBox Text="{Binding Path=Samples}"
                          IsEnabled="{Binding EditMode}"
                          TextWrapping="Wrap"
-                         AcceptsReturn="True"/>
+                         AcceptsReturn="True" />
             </GroupBox>
-            <GroupBox Header="Prove:" 
+            <GroupBox Header="Prove:"
                       Grid.Column="2"
                       Grid.ColumnSpan="2"
                       Grid.Row="1">
                 <TextBox Text="{Binding Path=Description}"
                          IsEnabled="{Binding EditMode}"
                          TextWrapping="Wrap"
-                         AcceptsReturn="True"/>
+                         AcceptsReturn="True" />
             </GroupBox>
         </Grid>
 
@@ -95,65 +95,64 @@
             <TabItem Header="Dettagli">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition/>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition />
                     </Grid.RowDefinitions>
 
                     <Grid Grid.Row="0">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition/>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition />
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="40"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition/>
+                            <RowDefinition Height="40" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition />
                         </Grid.RowDefinitions>
 
                         <TextBlock Text="Progetto:"
                                    Grid.Column="0"
                                    Grid.Row="0"
                                    Margin="5"
-                                   VerticalAlignment="Center"/>
+                                   VerticalAlignment="Center" />
 
                         <ComboBox ItemsSource="{Binding ProjectList}"
-                                  SelectedItem="{Binding SelectedProject, 
+                                  SelectedItem="{Binding SelectedProject,
                                                          Mode=TwoWay}"
                                   ItemTemplate="{StaticResource ProjectComboTemplate}"
                                   IsEnabled="{Binding EditMode}"
                                   Grid.Column="1"
                                   Grid.Row="0"
-                                  Margin="5"/>
-                        
-                        
+                                  Margin="5" />
+
                         <GroupBox Header="Stato"
                                   Grid.Row="1"
                                   Grid.ColumnSpan="2">
                             <Grid>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition MaxWidth="100"/>
+                                    <ColumnDefinition />
+                                    <ColumnDefinition MaxWidth="100" />
                                 </Grid.ColumnDefinitions>
                                 <Grid.RowDefinitions>
-                                    <RowDefinition/>
-                                    <RowDefinition/>
-                                    <RowDefinition/>
-                                    <RowDefinition/>
-                                    <RowDefinition/>
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                    <RowDefinition />
                                 </Grid.RowDefinitions>
-                                
+
                                 <CheckBox IsChecked="{Binding RequestDone, Mode=TwoWay}"
                                           IsEnabled="{Binding EditMode}"
                                           Content="RDA fatta"
                                           Padding="15,0"
                                           Grid.Row="0"
                                           VerticalContentAlignment="Center"
-                                          Margin="5"/>
+                                          Margin="5" />
 
                                 <TextBlock Text="{Binding RequestDate,
                                                           StringFormat=d,
@@ -162,59 +161,59 @@
                                            Grid.Row="0"
                                            HorizontalAlignment="Center"
                                            VerticalAlignment="Center"
-                                           Margin="5"/>
+                                           Margin="5" />
 
                                 <CheckBox IsChecked="{Binding HasOrder, Mode=TwoWay}"
                                           IsEnabled="{Binding EditMode}"
                                           Content="Ordine di Acquisto"
                                           Padding="15,0"
                                           Grid.Row="1"
-                                          Margin="5"/>
+                                          Margin="5" />
 
                                 <Grid Grid.ColumnSpan="2"
                                       Grid.Row="2"
                                       Margin="31,0,0,0">
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition />
                                     </Grid.ColumnDefinitions>
                                     <Grid.RowDefinitions>
-                                        <RowDefinition/>
-                                        <RowDefinition/>
+                                        <RowDefinition />
+                                        <RowDefinition />
                                     </Grid.RowDefinitions>
 
                                     <TextBlock Text="Numero:"
                                        Grid.Column="0"
                                        Grid.Row="0"
                                        Margin="5"
-                                       VerticalAlignment="Center"/>
+                                       VerticalAlignment="Center" />
 
                                     <TextBox Text="{Binding OrderNumber}"
                                      IsEnabled="{Binding EditMode}"
                                      Grid.Column="1"
                                      Grid.Row="0"
                                      VerticalAlignment="Center"
-                                         Margin="5"/>
+                                         Margin="5" />
 
                                     <TextBlock Text="Totale:"
                                        Grid.Column="0"
                                        Grid.Row="1"
                                        Margin="5"
-                                       VerticalAlignment="Center"/>
+                                       VerticalAlignment="Center" />
 
                                     <Grid Grid.Column="1"
                                         Grid.Row="1"
                                         VerticalAlignment="Center">
                                         <Grid.ColumnDefinitions>
-                                            <ColumnDefinition/>
-                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition />
+                                            <ColumnDefinition Width="Auto" />
                                         </Grid.ColumnDefinitions>
                                         <TextBox Text="{Binding OrderPrice}"
                                          IsEnabled="{Binding EditMode}"
-                                         Margin="5"/>
+                                         Margin="5" />
                                         <TextBlock Text="EUR"
                                            Grid.Column="1"
-                                           Margin="0,5,5,5"/>
+                                           Margin="0,5,5,5" />
                                     </Grid>
                                 </Grid>
 
@@ -224,7 +223,7 @@
                                           Padding="15,0"
                                           VerticalContentAlignment="Center"
                                           Grid.Row="3"
-                                          Margin="5"/>
+                                          Margin="5" />
 
                                 <TextBlock Text="{Binding SamplesSentDate,
                                                           StringFormat=d,
@@ -233,7 +232,7 @@
                                            Grid.Row="3"
                                            HorizontalAlignment="Center"
                                            VerticalAlignment="Center"
-                                           Margin="5"/>
+                                           Margin="5" />
 
                                 <CheckBox IsChecked="{Binding ReportReceived, Mode=TwoWay}"
                                           IsEnabled="{Binding EditMode}"
@@ -241,34 +240,32 @@
                                           Padding="15,0"
                                           VerticalContentAlignment="Center"
                                           Grid.Row="4"
-                                          Margin="5"/>
+                                          Margin="5" />
 
-                                <TextBlock Text="{Binding ReportReceivedDate, 
+                                <TextBlock Text="{Binding ReportReceivedDate,
                                     StringFormat=d,
                                                           ConverterCulture=it-IT}"
                                            Grid.Column="1"
                                            Grid.Row="4"
                                            HorizontalAlignment="Center"
                                            VerticalAlignment="Center"
-                                           Margin="5"/>
+                                           Margin="5" />
                             </Grid>
                         </GroupBox>
                     </Grid>
-
-                    
 
                     <GroupBox Header="Batch Inviati"
                               Grid.Column="1">
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition />
+                                <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition/>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition />
                             </Grid.RowDefinitions>
 
                             <Grid Grid.RowSpan="4">
@@ -276,38 +273,38 @@
                                           SelectedItem="{Binding SelectedRecord}">
                                     <ListView.View>
                                         <GridView>
-                                            <GridViewColumn Header="Odp" 
-                                                            DisplayMemberBinding="{Binding Batch.Number}"/>
+                                            <GridViewColumn Header="Odp"
+                                                            DisplayMemberBinding="{Binding Batch.Number}" />
                                             <GridViewColumn Header="Tipo"
-                                                            DisplayMemberBinding="{Binding Batch.Material.MaterialType.Code}"/>
+                                                            DisplayMemberBinding="{Binding Batch.Material.MaterialType.Code}" />
                                             <GridViewColumn Header="Riga"
-                                                            DisplayMemberBinding="{Binding Batch.Material.MaterialLine.Code}"/>
+                                                            DisplayMemberBinding="{Binding Batch.Material.MaterialLine.Code}" />
                                             <GridViewColumn Header="Aspetto"
-                                                            DisplayMemberBinding="{Binding Batch.Material.Aspect.Code}"/>
+                                                            DisplayMemberBinding="{Binding Batch.Material.Aspect.Code}" />
                                             <GridViewColumn Header="Mescola"
-                                                            DisplayMemberBinding="{Binding Batch.Material.Recipe.Code}"/>
+                                                            DisplayMemberBinding="{Binding Batch.Material.Recipe.Code}" />
                                             <GridViewColumn Header="Colore"
-                                                            DisplayMemberBinding="{Binding Batch.Material.Recipe.Colour.Name}"/>
+                                                            DisplayMemberBinding="{Binding Batch.Material.Recipe.Colour.Name}" />
                                         </GridView>
                                     </ListView.View>
                                 </ListView>
                             </Grid>
 
-                            <Button Content="Apri" 
-                                    Command="{Binding Path=OpenBatchCommand}" 
+                            <Button Content="Apri"
+                                    Command="{Binding Path=OpenBatchCommand}"
                                     Grid.Column="1"
                                     Grid.Row="0"
-                                    Margin="5"/>
-                            <Button Content="Aggiungi" 
-                                    Command="{Binding Path=AddBatchCommand}" 
+                                    Margin="5" />
+                            <Button Content="Aggiungi"
+                                    Command="{Binding Path=AddBatchCommand}"
                                     Grid.Column="1"
                                     Grid.Row="1"
-                                    Margin="5"/>
-                            <Button Content="Rimuovi" 
-                                    Command="{Binding Path=RemoveBatchCommand}" 
+                                    Margin="5" />
+                            <Button Content="Rimuovi"
+                                    Command="{Binding Path=RemoveBatchCommand}"
                                     Grid.Column="1"
                                     Grid.Row="2"
-                                    Margin="5"/>
+                                    Margin="5" />
                         </Grid>
                     </GroupBox>
 
@@ -317,8 +314,8 @@
                               Grid.Row="2">
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition/>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition />
                             </Grid.ColumnDefinitions>
 
                             <DataGrid ItemsSource="{Binding AvailableMethodVariantList}"
@@ -339,19 +336,19 @@
                                                 <Button Content="+"
                                                         Command="{Binding DataContext.AddMethodCommand,
                                                         Source={x:Reference Name=dummyElement}}"
-                                                        CommandParameter="{Binding }"/>
+                                                        CommandParameter="{Binding }" />
                                             </DataTemplate>
                                         </DataGridTemplateColumn.CellTemplate>
                                     </DataGridTemplateColumn>
                                     <DataGridTextColumn Header="Standard"
                                         Binding="{Binding StandardName}"
-                                                        SortDirection="Ascending"/>
+                                                        SortDirection="Ascending" />
                                     <DataGridTextColumn Header="Proprietà"
-                                        Binding="{Binding PropertyName}"/>
+                                        Binding="{Binding PropertyName}" />
+                                    <DataGridTextColumn Header="Variante"
+                                        Binding="{Binding Name}" />
                                     <DataGridTextColumn Header="OEM"
-                                        Binding="{Binding OemName}"/>
-                                    <DataGridTextColumn Header="Descrizione"
-                                        Binding="{Binding Path=Description}"/>
+                                        Binding="{Binding OemName}" />
                                 </DataGrid.Columns>
                             </DataGrid>
 
@@ -373,35 +370,36 @@
                                                 <Button Content="-"
                                                         Command="{Binding DataContext.RemoveMethodCommand,
                                                         Source={x:Reference Name=dummyElement}}"
-                                                        CommandParameter="{Binding }"/>
+                                                        CommandParameter="{Binding }" />
                                             </DataTemplate>
                                         </DataGridTemplateColumn.CellTemplate>
                                     </DataGridTemplateColumn>
                                     <DataGridTextColumn Header="Standard"
-                                                        Binding="{Binding Path=StandardName}"/>
+                                                        Binding="{Binding Path=StandardName}" />
                                     <DataGridTextColumn Header="Proprietà"
-                                                        Binding="{Binding Path=PropertyName}"/>
+                                                        Binding="{Binding Path=PropertyName}" />
                                     <DataGridTextColumn Header="OEM"
-                                                        Binding="{Binding Path=OemName}"/>
-                                    <DataGridTextColumn Header="Descrizione"
-                                                        Binding="{Binding Path=Description}"/>
+                                                        Binding="{Binding Path=OemName}" />
+                                    <DataGridTextColumn Header="Variante"
+                                                        Binding="{Binding Name}" />
+                                    <DataGridTextColumn Header="Condizioni"
+                                                        Binding="{Binding Description}" />
                                 </DataGrid.Columns>
                             </DataGrid>
-                        </Grid>                        
+                        </Grid>
                     </GroupBox>
-
                 </Grid>
             </TabItem>
 
             <TabItem Header="Risultati">
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition/>
-                        <RowDefinition Height="0.3*"/>
+                        <RowDefinition />
+                        <RowDefinition Height="0.3*" />
                     </Grid.RowDefinitions>
 
                     <DataGrid ItemsSource="{Binding ResultCollection}"
-                              
+
                               AutoGenerateColumns="False"
                               CanUserAddRows="False"
                               CanUserDeleteRows="False"
@@ -410,45 +408,44 @@
                               VerticalScrollBarVisibility="Visible"
                               GridLinesVisibility="Horizontal"
                               Margin="5"
-                              bhvr:DataGridBindableColumnsBehaviour.BindableColumns="{Binding ResultColumnCollection}"/>
-
+                              bhvr:DataGridBindableColumnsBehaviour.BindableColumns="{Binding ResultColumnCollection}" />
 
                     <GroupBox Header="File"
                               Grid.Row="1">
                         <Grid>
-                            <ListView ItemsSource="{Binding Path=ReportFiles}" 
+                            <ListView ItemsSource="{Binding Path=ReportFiles}"
                                   SelectedItem="{Binding Path=SelectedFile, Mode=TwoWay}"
                                   Margin="0,0,60,0">
                                 <ListView.View>
                                     <GridView>
-                                        <GridViewColumn Header="Percorso" 
-                                                    DisplayMemberBinding="{Binding Path}"/>
+                                        <GridViewColumn Header="Percorso"
+                                                    DisplayMemberBinding="{Binding Path}" />
                                         <GridViewColumn Header="Descrizione">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
-                                                    <TextBox Text="{Binding Path=Description, Mode=TwoWay}"/>
+                                                    <TextBox Text="{Binding Path=Description, Mode=TwoWay}" />
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </GridViewColumn>
                                     </GridView>
                                 </ListView.View>
                             </ListView>
-                            <Button Content="Apri" 
-                                Command="{Binding Path=OpenFileCommand}" 
+                            <Button Content="Apri"
+                                Command="{Binding Path=OpenFileCommand}"
                                 HorizontalAlignment="Right"
-                                VerticalAlignment="Top" 
-                                Margin="0,0,0,0"/>
-                            <Button Content="Aggiungi" 
-                                Command="{Binding Path=AddFileCommand}" 
+                                VerticalAlignment="Top"
+                                Margin="0,0,0,0" />
+                            <Button Content="Aggiungi"
+                                Command="{Binding Path=AddFileCommand}"
                                 HorizontalAlignment="Right"
-                                VerticalAlignment="Top" 
-                                Margin="0,25,0,0"/>
-                            <Button Content="Rimuovi" 
+                                VerticalAlignment="Top"
+                                Margin="0,25,0,0" />
+                            <Button Content="Rimuovi"
                                 Command="{Binding Path=RemoveFileCommand}"
                                 HorizontalAlignment="Right"
-                                VerticalAlignment="Top" 
-                                Margin="0,50,0,0"/>
-                        </Grid>                        
+                                VerticalAlignment="Top"
+                                Margin="0,50,0,0" />
+                        </Grid>
                     </GroupBox>
                 </Grid>
             </TabItem>

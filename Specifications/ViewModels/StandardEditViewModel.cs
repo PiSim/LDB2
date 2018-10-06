@@ -1,58 +1,58 @@
-﻿using DBManager;
-using Infrastructure;
+﻿using Infrastructure;
+using LabDbContext;
 using Microsoft.Practices.Prism.Mvvm;
 using Prism.Commands;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using System.Windows;
 
 namespace Specifications.ViewModels
 {
     public class StandardEditViewModel : BindableBase
     {
-        private DBPrincipal _principal;
-        private DelegateCommand _consolidate,
-                                _delete;
+        #region Fields
+
         private ISpecificationService _specificationService;
         private Std _standardInstance;
 
-        public StandardEditViewModel(DBPrincipal principal,
-                                    ISpecificationService specificationService)
+        #endregion Fields
+
+        #region Constructors
+
+        public StandardEditViewModel(ISpecificationService specificationService)
         {
-            _principal = principal;
             _specificationService = specificationService;
 
-            _consolidate = new DelegateCommand(
+            ConsolidateCommand = new DelegateCommand(
                 () =>
                 {
                     Views.ConsolidateStandardDialog consolidateDialog = new Views.ConsolidateStandardDialog();
                     consolidateDialog.StandardInstance = _standardInstance;
                     consolidateDialog.ShowDialog();
                 },
-                () => _principal.IsInRole(UserRoleNames.SpecificationAdmin));
+                () => Thread.CurrentPrincipal.IsInRole(UserRoleNames.SpecificationAdmin));
 
-            _delete = new DelegateCommand(
+            DeleteCommand = new DelegateCommand(
                 () =>
                 {
-                _specificationService.DeleteStandard(_standardInstance);
+                    _specificationService.DeleteStandard(_standardInstance);
                 },
-                () => _principal.IsInRole(UserRoleNames.SpecificationAdmin));
+                () => Thread.CurrentPrincipal.IsInRole(UserRoleNames.SpecificationAdmin));
         }
 
-        public DelegateCommand ConsolidateCommand => _consolidate;
+        #endregion Constructors
 
-        public DelegateCommand DeleteCommand => _delete;
+        #region Properties
+
+        public DelegateCommand ConsolidateCommand { get; }
+
+        public DelegateCommand DeleteCommand { get; }
 
         public IEnumerable<StandardFile> FileList => _standardInstance?.GetFiles();
 
         public IEnumerable<Method> MethodList => _standardInstance?.GetMethods();
 
         public IEnumerable<Specification> SpecificationList => _standardInstance?.GetSpecifications();
-
-        public string StandardFileListRegionName => RegionNames.StandardFileListRegion;
 
         public Std StandardInstance
         {
@@ -69,7 +69,7 @@ namespace Specifications.ViewModels
         }
 
         public Visibility Visibility => (_standardInstance == null) ? Visibility.Collapsed : Visibility.Visible;
-        
-    }
 
+        #endregion Properties
+    }
 }

@@ -8,14 +8,8 @@ namespace Security
 {
     public class RoleNames
     {
-        public static string Admin
-        {
-            get { return "ADMIN"; }
-        }
+        public static string Admin => "ADMIN";
 
-        public static string LoadTasks
-        {
-            get { return "TASK_LOAD"; }
-        }
+        public static string LoadTasks => "TASK_LOAD";
     }
 }

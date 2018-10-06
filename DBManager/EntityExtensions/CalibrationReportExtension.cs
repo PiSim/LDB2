@@ -1,21 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Migrations;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace DBManager.EntityExtensions
+namespace LabDbContext.EntityExtensions
 {
     public static class CalibrationReportExtension
     {
+        #region Methods
+
         public static void AddReference(this CalibrationReport entry,
                                         Instrument referenceEntry)
         {
             // Adds an association with the given reference instrument
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.CalibrationReports
                         .First(calrep => calrep.ID == entry.ID)
@@ -32,7 +31,7 @@ namespace DBManager.EntityExtensions
         {
             // Inserts a calibration entry in the DB
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.CalibrationReports.Add(entry);
                 entities.SaveChanges();
@@ -43,7 +42,7 @@ namespace DBManager.EntityExtensions
         {
             // Deletes a Calibration entry from the DB
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.Entry(entities
                         .CalibrationReports
@@ -62,7 +61,7 @@ namespace DBManager.EntityExtensions
             if (entry == null)
                 return new List<CalibrationFiles>();
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.Configuration.LazyLoadingEnabled = false;
 
@@ -74,10 +73,10 @@ namespace DBManager.EntityExtensions
 
         public static string GetFormattedNumber(this CalibrationReport entry)
         {
-            // Returns a string uniquely representing a Calibration report 
+            // Returns a string uniquely representing a Calibration report
             // the string is generated from the report's number and year properties
 
-            return entry.Year.ToString() + entry.Number.ToString("D4"); 
+            return entry.Year.ToString() + entry.Number.ToString("D4");
         }
 
         public static IEnumerable<CalibrationReportInstrumentPropertyMapping> GetPropertyMappings(this CalibrationReport entry)
@@ -87,7 +86,7 @@ namespace DBManager.EntityExtensions
             if (entry == null)
                 return null;
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.Configuration.LazyLoadingEnabled = false;
 
@@ -106,7 +105,7 @@ namespace DBManager.EntityExtensions
             if (entry == null)
                 return new List<Instrument>();
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.Configuration.LazyLoadingEnabled = false;
 
@@ -117,7 +116,7 @@ namespace DBManager.EntityExtensions
                                 .Select(refin => refin.Manufacturer))
                                 .First(calr => calr.ID == entry.ID)
                                 .ReferenceInstruments
-                                .ToList();                                
+                                .ToList();
             }
         }
 
@@ -128,7 +127,7 @@ namespace DBManager.EntityExtensions
             if (entry == null)
                 return;
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.Configuration.LazyLoadingEnabled = false;
 
@@ -145,7 +144,7 @@ namespace DBManager.EntityExtensions
         {
             // Deletes an association between a CalibrationReport and a reference instrument
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 CalibrationReport tempEntry = entities.CalibrationReports
                                                         .First(calrep => calrep.ID == entry.ID);
@@ -162,7 +161,7 @@ namespace DBManager.EntityExtensions
         {
             // Updates a CAlibrationReport entry
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.CalibrationReports
                         .AddOrUpdate(entry);
@@ -170,5 +169,7 @@ namespace DBManager.EntityExtensions
                 entities.SaveChanges();
             }
         }
+
+        #endregion Methods
     }
 }

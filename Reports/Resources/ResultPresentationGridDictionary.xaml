@@ -2,10 +2,10 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
                     xmlns:rep="clr-namespace:Reports">
-    <rep:ExternalResultPresenterTestExtractor x:Key="TestExtractor"/>
-    
+    <rep:ExternalResultPresenterTestExtractor x:Key="TestExtractor" />
+
     <DataTemplate x:Key="SubTestExternalResultCellTemplate">
-        <Grid >
+        <Grid>
             <Grid.Resources>
                 <CollectionViewSource x:Key="SubTestResultCollectionView"
                                       Source="{Binding RelativeSource={RelativeSource Mode=FindAncestor,
@@ -13,7 +13,7 @@
                                                         Converter={StaticResource TestExtractor}}">
                     <CollectionViewSource.SortDescriptions>
                         <scm:SortDescription PropertyName="Position"
-                                             Direction="Ascending"/>
+                                             Direction="Ascending" />
                     </CollectionViewSource.SortDescriptions>
                 </CollectionViewSource>
 
@@ -21,14 +21,14 @@
                         TargetType="DataGridCell">
                     <Style.Triggers>
                         <Trigger Property="DataGridCell.IsSelected" Value="True">
-                            <Setter Property="BorderBrush" Value="Transparent"/>
-                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
-                            <Setter Property="Background" Value="Transparent"/>
+                            <Setter Property="BorderBrush" Value="Transparent" />
+                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
+                            <Setter Property="Background" Value="Transparent" />
                         </Trigger>
                     </Style.Triggers>
                 </Style>
             </Grid.Resources>
-            
+
             <DataGrid ItemsSource="{Binding Source={StaticResource SubTestResultCollectionView}}"
                       AutoGenerateColumns="False"
                       CellStyle="{StaticResource DataGridCellSelectionInvisible}"
@@ -46,24 +46,23 @@
                         <DataGridTextColumn.EditingElementStyle>
                             <Style TargetType="{x:Type TextBox}">
                                 <Setter Property="MaxLength"
-                                    Value="45"/>
+                                    Value="45" />
                             </Style>
                         </DataGridTextColumn.EditingElementStyle>
                     </DataGridTextColumn>
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>
-        
     </DataTemplate>
 
     <DataTemplate x:Key="SubTestGenericReadOnlyResultCellTemplate">
-        <Grid >
+        <Grid>
             <Grid.Resources>
                 <CollectionViewSource x:Key="SubTestResultCollectionView"
                                       Source="{Binding SubTests}">
                     <CollectionViewSource.SortDescriptions>
                         <scm:SortDescription PropertyName="Position"
-                                             Direction="Ascending"/>
+                                             Direction="Ascending" />
                     </CollectionViewSource.SortDescriptions>
                 </CollectionViewSource>
 
@@ -71,9 +70,9 @@
                         TargetType="DataGridCell">
                     <Style.Triggers>
                         <Trigger Property="DataGridCell.IsSelected" Value="True">
-                            <Setter Property="BorderBrush" Value="Transparent"/>
-                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
-                            <Setter Property="Background" Value="Transparent"/>
+                            <Setter Property="BorderBrush" Value="Transparent" />
+                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
+                            <Setter Property="Background" Value="Transparent" />
                         </Trigger>
                     </Style.Triggers>
                 </Style>
@@ -92,11 +91,10 @@
                         Margin="-2">
                 <DataGrid.Columns>
                     <DataGridTextColumn Binding="{Binding Result}"
-                                    Width="*"/>
+                                    Width="*" />
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>
-
     </DataTemplate>
 
     <DataTemplate x:Key="SubTestNameCellTemplate">
@@ -107,7 +105,7 @@
                                       Source="{Binding SubTests}">
                     <CollectionViewSource.SortDescriptions>
                         <scm:SortDescription PropertyName="Position"
-                                             Direction="Ascending"/>
+                                             Direction="Ascending" />
                     </CollectionViewSource.SortDescriptions>
                 </CollectionViewSource>
 
@@ -115,9 +113,9 @@
                         TargetType="DataGridCell">
                     <Style.Triggers>
                         <Trigger Property="DataGridCell.IsSelected" Value="True">
-                            <Setter Property="BorderBrush" Value="Transparent"/>
-                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
-                            <Setter Property="Background" Value="Transparent"/>
+                            <Setter Property="BorderBrush" Value="Transparent" />
+                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
+                            <Setter Property="Background" Value="Transparent" />
                         </Trigger>
                     </Style.Triggers>
                 </Style>
@@ -136,7 +134,7 @@
                   Margin="-2">
                 <DataGrid.Columns>
                     <DataGridTextColumn Binding="{Binding Name}"
-                                    Width="*"/>
+                                    Width="*" />
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>
@@ -150,7 +148,7 @@
                                       Source="{Binding SubTests}">
                     <CollectionViewSource.SortDescriptions>
                         <scm:SortDescription PropertyName="Position"
-                                             Direction="Ascending"/>
+                                             Direction="Ascending" />
                     </CollectionViewSource.SortDescriptions>
                 </CollectionViewSource>
 
@@ -158,9 +156,9 @@
                         TargetType="DataGridCell">
                     <Style.Triggers>
                         <Trigger Property="DataGridCell.IsSelected" Value="True">
-                            <Setter Property="BorderBrush" Value="Transparent"/>
-                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
-                            <Setter Property="Background" Value="Transparent"/>
+                            <Setter Property="BorderBrush" Value="Transparent" />
+                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
+                            <Setter Property="Background" Value="Transparent" />
                         </Trigger>
                     </Style.Triggers>
                 </Style>
@@ -183,7 +181,7 @@
                         <DataGridTextColumn.EditingElementStyle>
                             <Style TargetType="{x:Type TextBox}">
                                 <Setter Property="MaxLength"
-                                    Value="45"/>
+                                    Value="45" />
                             </Style>
                         </DataGridTextColumn.EditingElementStyle>
                     </DataGridTextColumn>
@@ -200,7 +198,7 @@
                                       Source="{Binding SubTests}">
                     <CollectionViewSource.SortDescriptions>
                         <scm:SortDescription PropertyName="Position"
-                                             Direction="Ascending"/>
+                                             Direction="Ascending" />
                     </CollectionViewSource.SortDescriptions>
                 </CollectionViewSource>
 
@@ -208,9 +206,9 @@
                         TargetType="DataGridCell">
                     <Style.Triggers>
                         <Trigger Property="DataGridCell.IsSelected" Value="True">
-                            <Setter Property="BorderBrush" Value="Transparent"/>
-                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
-                            <Setter Property="Background" Value="Transparent"/>
+                            <Setter Property="BorderBrush" Value="Transparent" />
+                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
+                            <Setter Property="Background" Value="Transparent" />
                         </Trigger>
                     </Style.Triggers>
                 </Style>
@@ -229,10 +227,9 @@
                   Margin="-2">
                 <DataGrid.Columns>
                     <DataGridTextColumn Binding="{Binding UM}"
-                                    Width="*"/>
+                                    Width="*" />
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>
-        
     </DataTemplate>
 </ResourceDictionary>

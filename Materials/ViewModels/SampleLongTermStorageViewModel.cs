@@ -1,30 +1,35 @@
-﻿using DBManager;
-using DBManager.EntityExtensions;
-using DBManager.Services;
+﻿using DataAccess;
 using Infrastructure;
 using Infrastructure.Events;
+using LabDbContext;
+using Materials.Queries;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Controls;
 
 namespace Materials.ViewModels
 {
     public class SampleLongTermStorageViewModel : BindableBase
     {
-        private DelegateCommand<DataGrid> _openBatch;
-        private EventAggregator _eventAggregator;
+        #region Fields
 
-        public SampleLongTermStorageViewModel(EventAggregator eventAggregator) : base()
+        private IEventAggregator _eventAggregator;
+        private IDataService<LabDbEntities> _labDbData;
+
+        #endregion Fields
+
+        #region Constructors
+
+        public SampleLongTermStorageViewModel(IDataService<LabDbEntities> labDbData,
+                                                IEventAggregator eventAggregator) : base()
         {
+            _labDbData = labDbData;
             _eventAggregator = eventAggregator;
 
-            _openBatch = new DelegateCommand<DataGrid>(
+            OpenBatchCommand = new DelegateCommand<DataGrid>(
                 grid =>
                 {
                     Batch btc = grid.SelectedItem as Batch;
@@ -34,7 +39,6 @@ namespace Materials.ViewModels
                     _eventAggregator.GetEvent<NavigationRequested>()
                                     .Publish(token);
                 });
-
 
             _eventAggregator.GetEvent<SampleLogCreated>()
                 .Subscribe(
@@ -51,15 +55,16 @@ namespace Materials.ViewModels
                             });
         }
 
+        #endregion Constructors
 
-        public IEnumerable<Batch> BatchList
-        {
-            get { return DBManager.Services.MaterialService.GetLongTermStorage(); }
-        }
+        #region Properties
 
-        public DelegateCommand<DataGrid> OpenBatchCommand
-        {
-            get { return _openBatch; }
-        }
+        public IEnumerable<Batch> BatchList => _labDbData.RunQuery(new BatchesQuery())
+                                                        .Where(bat => bat.LongTermStock != 0)
+                                                        .ToList();
+
+        public DelegateCommand<DataGrid> OpenBatchCommand { get; }
+
+        #endregion Properties
     }
 }

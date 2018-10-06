@@ -1,30 +1,31 @@
-﻿using DBManager;
-using DBManager.EntityExtensions;
+﻿using LabDbContext;
+using LabDbContext.EntityExtensions;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Admin.ViewModels
 {
     public class InstrumentTypeEditViewModel : BindableBase
     {
-        private DelegateCommand _associateMeasurable,
-                                _unassociateMeasurable;
-        private EventAggregator _eventAggregator;
+        #region Fields
+
+        private IEventAggregator _eventAggregator;
         private InstrumentType _instrumentTypeInstance;
+
         private MeasurableQuantity _selectedAssociated,
                                     _selectedUnassociated;
 
-        public InstrumentTypeEditViewModel(EventAggregator eventAggregator)
+        #endregion Fields
+
+        #region Constructors
+
+        public InstrumentTypeEditViewModel(IEventAggregator eventAggregator)
         {
             _eventAggregator = eventAggregator;
 
-            _associateMeasurable = new DelegateCommand(
+            AssociateMeasurableCommand = new DelegateCommand(
                 () =>
                 {
                     _instrumentTypeInstance.AddMeasurableQuantityAssociation(_selectedUnassociated);
@@ -34,7 +35,7 @@ namespace Admin.ViewModels
                 () => _instrumentTypeInstance != null
                     && _selectedUnassociated != null);
 
-            _unassociateMeasurable = new DelegateCommand(
+            UnassociateMeasurableCommand = new DelegateCommand(
                 () =>
                 {
                     _instrumentTypeInstance.RemoveMeasurableQuantityAssociation(_selectedAssociated);
@@ -45,15 +46,12 @@ namespace Admin.ViewModels
                     && _selectedAssociated != null);
         }
 
-        public DelegateCommand AssociateMeasurableCommand
-        {
-            get { return _associateMeasurable; }
-        }
+        #endregion Constructors
 
-        public IEnumerable<MeasurableQuantity> AssociatedMeasurableQuantityList
-        {
-            get { return _instrumentTypeInstance.GetAssociatedMeasurableQuantities(); }
-        }
+        #region Properties
+
+        public IEnumerable<MeasurableQuantity> AssociatedMeasurableQuantityList => _instrumentTypeInstance.GetAssociatedMeasurableQuantities();
+        public DelegateCommand AssociateMeasurableCommand { get; }
 
         public InstrumentType InstrumentTypeInstance
         {
@@ -74,7 +72,7 @@ namespace Admin.ViewModels
             set
             {
                 _selectedAssociated = value;
-                _unassociateMeasurable.RaiseCanExecuteChanged();
+                UnassociateMeasurableCommand.RaiseCanExecuteChanged();
                 RaisePropertyChanged("SelectedAssociated");
             }
         }
@@ -85,19 +83,14 @@ namespace Admin.ViewModels
             set
             {
                 _selectedUnassociated = value;
-                _associateMeasurable.RaiseCanExecuteChanged();
+                AssociateMeasurableCommand.RaiseCanExecuteChanged();
                 RaisePropertyChanged("SelectedUnassociated");
             }
         }
 
-        public DelegateCommand UnassociateMeasurableCommand
-        {
-            get { return _unassociateMeasurable; }
-        }
+        public IEnumerable<MeasurableQuantity> UnassociatedMeasurableQuantityList => _instrumentTypeInstance.GetUnassociatedMeasurableQuantities();
+        public DelegateCommand UnassociateMeasurableCommand { get; }
 
-        public IEnumerable<MeasurableQuantity> UnassociatedMeasurableQuantityList
-        {
-            get { return _instrumentTypeInstance.GetUnassociatedMeasurableQuantities(); }
-        }
+        #endregion Properties
     }
 }

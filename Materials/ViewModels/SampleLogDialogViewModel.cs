@@ -1,9 +1,12 @@
-﻿using DBManager;
-using DBManager.EntityExtensions;
-using DBManager.Services;
+﻿using DataAccess;
 using Infrastructure;
 using Infrastructure.Events;
+using Infrastructure.Queries;
 using Infrastructure.Wrappers;
+using LabDbContext;
+using LabDbContext.EntityExtensions;
+using LabDbContext.Services;
+using Materials.Queries;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
@@ -12,48 +15,46 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using System.Windows;
 
 namespace Materials.ViewModels
 {
     public class SampleLogDialogViewModel : BindableBase, INotifyDataErrorInfo
     {
-        private Batch _batchInstance;
-        private DBPrincipal _principal;
-        private DelegateCommand _confirm;
-        private DelegateCommand<Sample> _deleteSample;
-        private DelegateCommand<Window> _end;
+        #region Fields
 
         private readonly Dictionary<string, ICollection<string>> _validationErrors = new Dictionary<string, ICollection<string>>();
-        private EventAggregator _eventAggregator;
-        private IDataService _dataService;
-        private IMaterialService _materialService;
-        private string _batchNumber;
-        private SampleLogChoiceWrapper _selectedChoice;
+        private Batch _batchInstance;
 
-        public SampleLogDialogViewModel(DBPrincipal principal,
-                                        EventAggregator aggregator,
-                                        IDataService dataService,
-                                        IMaterialService materialService) : base()
+        private string _batchNumber;
+        private IEventAggregator _eventAggregator;
+        private IDataService<LabDbEntities> _labDbData;
+        private MaterialService _materialService;
+
+        #endregion Fields
+
+        #region Constructors
+
+        public SampleLogDialogViewModel(IDataService<LabDbEntities> labDbData,
+                                        IEventAggregator aggregator,
+                                        MaterialService materialService) : base()
         {
-            _principal = principal;
-            _dataService = dataService;
+            _labDbData = labDbData;
             _eventAggregator = aggregator;
             _materialService = materialService;
 
-            _selectedChoice = SampleLogActions.ActionList.First(cho => cho.Code == "A");
+            SelectedChoice = SampleLogActions.ActionList.First(cho => cho.Code == "A");
 
-            _confirm = new DelegateCommand(
+            ConfirmCommand = new DelegateCommand(
                 () =>
                 {
                     Sample newLog = new Sample
                     {
                         BatchID = _batchInstance.ID,
-                        Code = _selectedChoice.Code,
+                        Code = SelectedChoice.Code,
                         Date = DateTime.Now.Date,
-                        personID = _principal.CurrentPerson.ID
+                        personID = (Thread.CurrentPrincipal as DBPrincipal).CurrentPerson.ID
                     };
 
                     newLog.Create();
@@ -67,8 +68,8 @@ namespace Materials.ViewModels
                     if (newLog.Code == "A")
                         _batchInstance.LatestSampleID = newLog.ID;
 
-                    _batchInstance.ArchiveStock += _selectedChoice.ArchiveModifier;
-                    _batchInstance.LongTermStock += _selectedChoice.LongTermModifier;
+                    _batchInstance.ArchiveStock += SelectedChoice.ArchiveModifier;
+                    _batchInstance.LongTermStock += SelectedChoice.LongTermModifier;
                     _batchInstance.Update();
 
                     BatchNumber = null;
@@ -80,14 +81,14 @@ namespace Materials.ViewModels
                 },
                 () => !HasErrors);
 
-            _deleteSample = new DelegateCommand<Sample>(
+            DeleteSampleCommand = new DelegateCommand<Sample>(
                 smp =>
                 {
                     _materialService.DeleteSample(smp);
                     RaisePropertyChanged("LatestSampleList");
                 });
 
-            _end = new DelegateCommand<Window>(
+            EndCommand = new DelegateCommand<Window>(
                 parentDialog =>
                 {
                     parentDialog.Close();
@@ -96,9 +97,13 @@ namespace Materials.ViewModels
             BatchNumber = "";
         }
 
+        #endregion Constructors
+
         #region INotifyDataErrorInfo interface elements
 
         public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
+
+        public bool HasErrors => _validationErrors.Count > 0;
 
         public IEnumerable GetErrors(string propertyName)
         {
@@ -109,24 +114,15 @@ namespace Materials.ViewModels
             return _validationErrors[propertyName];
         }
 
-        public bool HasErrors
-        {
-            get { return _validationErrors.Count > 0; }
-        }
-
         private void RaiseErrorsChanged(string propertyName)
         {
             ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
-            _confirm.RaiseCanExecuteChanged();
+            ConfirmCommand.RaiseCanExecuteChanged();
         }
 
-        #endregion
+        #endregion INotifyDataErrorInfo interface elements
 
-
-        public IEnumerable<SampleLogChoiceWrapper> ChoiceList
-        {
-            get { return SampleLogActions.ActionList; }
-        }
+        #region Properties
 
         public Batch BatchInstance
         {
@@ -139,7 +135,6 @@ namespace Materials.ViewModels
                 {
                     _validationErrors["BatchNumber"] = new List<string>() { "Batch inserito non valido" };
                 }
-
                 else if (_validationErrors.ContainsKey("BatchNumber"))
                     _validationErrors.Remove("BatchNumber");
 
@@ -154,29 +149,23 @@ namespace Materials.ViewModels
             set
             {
                 _batchNumber = value;
-                BatchInstance = _dataService.GetBatch(_batchNumber);
+                BatchInstance = _labDbData.RunQuery(new BatchQuery() { Number = _batchNumber });
 
                 RaiseErrorsChanged("BatchNumber");
                 RaisePropertyChanged("BatchNumber");
             }
         }
 
-        public DelegateCommand ConfirmCommand
-        {
-            get { return _confirm; }
-        }
+        public IEnumerable<SampleLogChoiceWrapper> ChoiceList => SampleLogActions.ActionList;
+        public DelegateCommand ConfirmCommand { get; }
 
-        public DelegateCommand<Sample> DeleteSampleCommand
-        {
-            get { return _deleteSample; }
-        }
+        public DelegateCommand<Sample> DeleteSampleCommand { get; }
 
-        public DelegateCommand<Window> EndCommand
-        {
-            get { return _end; }
-        }
+        public DelegateCommand<Window> EndCommand { get; }
 
-        public IEnumerable<Sample> LatestSampleList => _dataService.GetSamples(15);
+        public IEnumerable<Sample> LatestSampleList => _labDbData.RunQuery(new SamplesQuery() { OrderResults = true })
+                                                                .Take(15)
+                                                                .ToList();
 
         public string MaterialCode
         {
@@ -192,13 +181,8 @@ namespace Materials.ViewModels
             }
         }
 
-        public SampleLogChoiceWrapper SelectedChoice
-        {
-            get { return _selectedChoice; }
-            set
-            {
-                _selectedChoice = value;
-            }
-        }
+        public SampleLogChoiceWrapper SelectedChoice { get; set; }
+
+        #endregion Properties
     }
 }

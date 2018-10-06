@@ -1,54 +1,42 @@
-using DBManager;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using LabDbContext;
 using System.Security.Principal;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Infrastructure
 {
     public class DBIdentity : IIdentity
     {
-        private User _user;
+        #region Constructors
 
         public DBIdentity()
         {
-
         }
 
         public DBIdentity(User authUser)
         {
-            _user = authUser;
+            User = authUser;
         }
+
+        #endregion Constructors
+
+        #region Properties
+
+        public string AuthenticationType => "Custom authentication";
+
+        public bool IsAuthenticated => User != null;
 
         public string Name
         {
             get
             {
-                if (_user == null)
+                if (User == null)
                     return null;
 
-                return _user.FullName ?? _user.UserName;
+                return User.FullName ?? User.UserName;
             }
         }
 
-        public string AuthenticationType
-        {
-            get { return "Custom authentication"; }
-        }
+        public User User { get; }
 
-        public bool IsAuthenticated
-        {
-            get
-            {
-                return _user != null;
-            }
-        }
-
-        public User User
-        {
-            get { return _user; }
-        }
+        #endregion Properties
     }
 }

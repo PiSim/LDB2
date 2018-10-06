@@ -1,16 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
+﻿using System.Windows;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace Materials.Views
 {
@@ -19,15 +8,23 @@ namespace Materials.Views
     /// </summary>
     public partial class SampleLogDialog : Window
     {
+        #region Constructors
+
         public SampleLogDialog()
         {
             InitializeComponent();
         }
 
+        #endregion Constructors
+
+        #region Methods
+
         private void TextBox_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter && ConfirmButton.Command.CanExecute(null))
-                ConfirmButton.Command.Execute(null);             
+                ConfirmButton.Command.Execute(null);
         }
+
+        #endregion Methods
     }
 }

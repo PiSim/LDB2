@@ -10,25 +10,25 @@
         Title="Aggiungi Grandezza" Height="150" Width="300">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition />
             </Grid.ColumnDefinitions>
             <TextBlock Text="Grandezza:"
                        Grid.Column="0"
                        Margin="5"
-                       VerticalAlignment="Center"/>
+                       VerticalAlignment="Center" />
             <ComboBox ItemsSource="{Binding QuantityList}"
                       SelectedItem="{Binding SelectedQuantity}"
                       DisplayMemberPath="Name"
                       VerticalAlignment="Center"
                       Grid.Column="1"
-                      Margin="5"/>
+                      Margin="5" />
         </Grid>
         <StackPanel Orientation="Horizontal"
                     Grid.Row="1"
@@ -37,11 +37,11 @@
             <Button Content="Annulla"
                     Command="{Binding CancelCommand}"
                     CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
-                    Margin="5"/>
+                    Margin="5" />
             <Button Content="Ok"
                     Command="{Binding ConfirmCommand}"
                     CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
-                    Margin="5"/>
+                    Margin="5" />
         </StackPanel>
     </Grid>
 </Window>

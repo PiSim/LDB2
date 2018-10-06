@@ -1,18 +1,5 @@
 ﻿using Infrastructure;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Reports.Views
 {
@@ -21,14 +8,19 @@ namespace Reports.Views
     /// </summary>
     public partial class ExternalReportsNavigationItem : UserControl, IModuleNavigationTag
     {
+        #region Constructors
+
         public ExternalReportsNavigationItem()
         {
             InitializeComponent();
         }
 
-        public string ViewName
-        {
-            get { return ViewNames.ExternalReportMainView; }
-        }
+        #endregion Constructors
+
+        #region Properties
+
+        public string ViewName => ViewNames.ExternalReportMainView;
+
+        #endregion Properties
     }
 }

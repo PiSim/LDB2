@@ -1,31 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
+﻿using System.Data.Entity;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace DBManager.EntityExtensions
+namespace LabDbContext.EntityExtensions
 {
     public static class InstrumentUtilizationAreaExtension
     {
+        #region Methods
+
         public static void Create(this InstrumentUtilizationArea entry)
         {
             // Inserts a new InstrumentUtilizationArea entry in the DB
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.InstrumentUtilizationAreas.Add(entry);
                 entities.SaveChanges();
             }
         }
 
-
         public static void Delete(this InstrumentUtilizationArea entry)
         {
             // Deletes an InstrumentUtilizationArea entry
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.Entry(entities
                         .InstrumentUtilizationAreas
@@ -36,5 +33,7 @@ namespace DBManager.EntityExtensions
                 entry.ID = 0;
             }
         }
+
+        #endregion Methods
     }
 }

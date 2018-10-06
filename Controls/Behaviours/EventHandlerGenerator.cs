@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Reflection.Emit;
 using System.Reflection;
+using System.Reflection.Emit;
 
 namespace Controls.Behaviours
 {
@@ -12,6 +9,8 @@ namespace Controls.Behaviours
     /// </summary>
     public static class EventHandlerGenerator
     {
+        #region Methods
+
         /// <summary>
         /// Generates a delegate with a matching signature of the supplied eventHandlerType
         /// This method only supports Events that have a delegate of type void
@@ -70,5 +69,6 @@ namespace Controls.Behaviours
             return handler.CreateDelegate(eventHandlerType, methodInvoker);
         }
 
+        #endregion Methods
     }
 }

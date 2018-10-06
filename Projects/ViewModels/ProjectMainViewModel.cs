@@ -1,92 +1,85 @@
-﻿using DBManager;
-using DBManager.Services;
+﻿using Controls.Views;
+using DataAccess;
 using Infrastructure;
 using Infrastructure.Events;
+using Infrastructure.Queries;
+using LabDbContext;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 
 namespace Projects.ViewModels
 {
     public class ProjectMainViewModel : BindableBase
     {
-        private DBPrincipal _principal;
-        private DelegateCommand _newProject, _openProject;
-        private EventAggregator _eventAggregator;
-        private IDataService _dataService;
+        #region Fields
+
+        private IEventAggregator _eventAggregator;
+        private IDataService<LabDbEntities> _labDbData;
         private IProjectService _projectService;
         private Project _selectedProject;
 
-        public ProjectMainViewModel(DBPrincipal principal,
-                                    EventAggregator aggregator,
-                                    IDataService dataService,
-                                    IProjectService projectService) 
+        #endregion Fields
+
+        #region Constructors
+
+        public ProjectMainViewModel(IDataService<LabDbEntities> labDbdata,
+                                    IEventAggregator aggregator,
+                                    IProjectService projectService)
             : base()
         {
-            _dataService = dataService;
+            _labDbData = labDbdata;
             _projectService = projectService;
             _eventAggregator = aggregator;
-            _principal = principal;
 
             _eventAggregator.GetEvent<ProjectChanged>()
                             .Subscribe(ect => RaisePropertyChanged("ProjectList"));
 
-            _newProject = new DelegateCommand(
+            NewProjectCommand = new DelegateCommand(
                 () =>
                 {
                     _projectService.CreateProject();
                 },
                 () => IsProjectEdit);
 
-            _openProject = new DelegateCommand(
-                () => 
+            OpenProjectCommand = new DelegateCommand(
+                () =>
                 {
                     NavigationToken token = new NavigationToken(ProjectsViewNames.ProjectInfoView,
                                                                 _selectedProject);
                     _eventAggregator.GetEvent<NavigationRequested>().Publish(token);
                 },
-                () => _selectedProject != null
-            );
+                () => _selectedProject != null);
         }
 
-        public bool IsProjectEdit
-        {
-            get { return _principal.IsInRole(UserRoleNames.ProjectEdit); }
-        }
+        #endregion Constructors
 
-        public DelegateCommand NewProjectCommand
-        {
-            get { return _newProject; }
-        }
-        
-        public DelegateCommand OpenProjectCommand
-        {
-            get { return _openProject; }
-        }
-        
-        public IEnumerable<Project> ProjectList
-        {
-            get { return _dataService.GetProjects(); } 
-        }
+        #region Properties
 
-        public string ProjectStatRegionName
-        {
-            get { return RegionNames.ProjectStatRegion; }
-        }
-        
+        public bool IsProjectEdit => Thread.CurrentPrincipal.IsInRole(UserRoleNames.ProjectEdit);
+
+        public DelegateCommand NewProjectCommand { get; }
+
+        public DelegateCommand OpenProjectCommand { get; }
+
+        public IEnumerable<Project> ProjectList => _labDbData.RunQuery(new ProjectsQuery())
+                                                                .ToList();
+
+        public string ProjectStatRegionName => RegionNames.ProjectStatRegion;
+
         public Project SelectedProject
         {
             get { return _selectedProject; }
             set
             {
                 _selectedProject = value;
-                _openProject.RaiseCanExecuteChanged();
+                OpenProjectCommand.RaiseCanExecuteChanged();
             }
         }
+
+        #endregion Properties
     }
 }

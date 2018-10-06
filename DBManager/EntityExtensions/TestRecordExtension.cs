@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
+﻿using System.Data.Entity;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace DBManager
+namespace LabDbContext
 {
     public partial class TestRecord
     {
+        #region Methods
+
         public void Create()
         {
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.TestRecords.Add(this);
 
@@ -24,7 +22,7 @@ namespace DBManager
         /// </summary>
         public void Delete()
         {
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.Entry(entities.TestRecords.First(tstr => tstr.ID == ID))
                         .State = EntityState.Deleted;
@@ -38,7 +36,7 @@ namespace DBManager
         /// <returns></returns>
         public object GetReport()
         {
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.Configuration.LazyLoadingEnabled = false;
 
@@ -47,17 +45,17 @@ namespace DBManager
                                     .Include(tstr => tstr.Reports).First(tsr => tsr.ID == ID)
                                     .Reports
                                     .FirstOrDefault();
-
                 else if (RecordTypeID == 2)
                     return entities.TestRecords
                                     .Include(tstr => tstr.ExternalReports)
                                     .First(tsr => tsr.ID == ID)
                                     .ExternalReports
                                                 .FirstOrDefault();
-
                 else
                     return null;
             }
         }
+
+        #endregion Methods
     }
 }

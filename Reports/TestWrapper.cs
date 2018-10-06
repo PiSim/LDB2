@@ -1,55 +1,39 @@
-﻿using DBManager;
+﻿using LabDbContext;
 using Prism.Mvvm;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Reports
 {
     public class TestWrapper : BindableBase
     {
-        private Test _testInstance;
+        #region Constructors
 
         public TestWrapper(Test instance) : base()
         {
-            _testInstance = instance;
+            TestInstance = instance;
         }
 
-        public double Duration
-        {
-            get
-            {
-                return _testInstance.Duration;
-            }
-        }
-        
-        public string Method
-        {
-            get { return _testInstance.MethodVariant.StandardName; }
-        }
+        #endregion Constructors
+
+        #region Properties
+
+        public double Duration => TestInstance.Duration;
+
+        public string Method => TestInstance.MethodVariant.StandardName;
 
         public string Notes
         {
-            get { return _testInstance.Notes; }
-            set { _testInstance.Notes = value; }
+            get { return TestInstance.Notes; }
+            set { TestInstance.Notes = value; }
         }
 
-        public string Property
-        {
-            get { return _testInstance.MethodVariant.PropertyName; }
-        }
+        public string Property => TestInstance.MethodVariant.PropertyName;
 
-        public List<SubTest> SubTests
-        {
-            get { return _testInstance.SubTests.ToList(); }
-        }
+        public List<SubTest> SubTests => TestInstance.SubTests.ToList();
 
-        public Test TestInstance
-        {
-            get { return _testInstance; }
-        }
+        public Test TestInstance { get; }
 
+        #endregion Properties
     }
 }

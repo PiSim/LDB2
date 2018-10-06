@@ -6,16 +6,16 @@
         Title="{Binding Title}" Height="700" Width="900">
     <Grid Background="LightGray">
         <Grid.RowDefinitions>
-            <RowDefinition Height="40"/>
-            <RowDefinition/>
-            <RowDefinition Height="30"/>
+            <RowDefinition Height="40" />
+            <RowDefinition />
+            <RowDefinition Height="30" />
         </Grid.RowDefinitions>
         <ContentControl prism:RegionManager.RegionName="ToolbarRegion"
-                        Grid.Row="0"/>
+                        Grid.Row="0" />
         <ContentControl prism:RegionManager.RegionName="MainRegion"
                         Grid.Row="1"
-                        Margin="5"/>
+                        Margin="5" />
         <ContentControl prism:RegionManager.RegionName="StatusBarRegion"
-                        Grid.Row="2"/>
+                        Grid.Row="2" />
     </Grid>
 </Window>

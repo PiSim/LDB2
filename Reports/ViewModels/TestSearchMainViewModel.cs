@@ -1,37 +1,44 @@
-﻿using DBManager;
+﻿using DataAccess;
 using Infrastructure.Events;
 using Infrastructure.Queries;
+using LabDbContext;
 using Microsoft.Practices.Prism.Mvvm;
 using Prism.Commands;
 using Prism.Events;
+using Reports.Queries;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Reports.ViewModels
 {
     public class TestSearchMainViewModel : BindableBase
     {
-        DelegateCommand _runQuery;
-        DataAccessService _dataService;
-        EventAggregator _eventAggregator;
-        IEnumerable<Test> _resultList;
+        #region Fields
 
-        public TestSearchMainViewModel(DataAccessService dataService,
-                                        EventAggregator eventAggregator)
+        private DataAccessService _dataService;
+        private IEventAggregator _eventAggregator;
+        private IDataService<LabDbEntities> _labDbData;
+
+        #endregion Fields
+
+        #region Constructors
+
+        public TestSearchMainViewModel(IDataService<LabDbEntities> labDbData,
+                                        DataAccessService dataService,
+                                        IEventAggregator eventAggregator)
         {
+            _labDbData = labDbData;
             _dataService = dataService;
             _eventAggregator = eventAggregator;
 
             IncludeExternalReports = true;
             IncludeInternalReports = true;
 
-            _runQuery = new DelegateCommand(
+            RunQueryCommand = new DelegateCommand(
                 () =>
                 {
-                    IQuery<Test> testQuery = new TestQuery()
+                    IQuery<Test, LabDbEntities> testQuery = new TestQuery()
                     {
                         AspectCode = AspectCode,
                         BatchNumber = BatchNumber,
@@ -45,22 +52,26 @@ namespace Reports.ViewModels
                         TestName = TestName
                     };
 
-                    _resultList = _dataService.GetQueryResults(testQuery);
+                    ResultList = _labDbData.RunQuery(testQuery).ToList();
                     OnPropertyChanged("ResultList");
                 });
 
             RowDoubleClickCommand = new DelegateCommand<Test>(
                 tst =>
                 {
-                    Object rpt = tst.TestRecord.GetReport();
+                    object rpt;                    
                     string viewName;
 
                     if (tst.TestRecord.RecordTypeID == 1)
+                    {
+                        rpt = _labDbData.RunQuery(new ReportQuery() { TestRecordID = tst.TestRecord.ID });
                         viewName = ViewNames.ReportEditView;
-
+                    }
                     else if (tst.TestRecord.RecordTypeID == 2)
+                    {
+                        rpt = _labDbData.RunQuery(new ExternalReportsQuery()).FirstOrDefault(exrep => exrep.TestRecords.Any(trec => trec.ID == tst.TestRecord.ID ));
                         viewName = ViewNames.ExternalReportEditView;
-
+                    }
                     else
                         return;
 
@@ -73,6 +84,10 @@ namespace Reports.ViewModels
                 }
                 );
         }
+
+        #endregion Constructors
+
+        #region Properties
 
         public string AspectCode { get; set; }
 
@@ -92,12 +107,12 @@ namespace Reports.ViewModels
 
         public string RecipeCode { get; set; }
 
+        public IEnumerable<Test> ResultList { get; private set; }
         public DelegateCommand<Test> RowDoubleClickCommand { get; }
 
-        public DelegateCommand RunQueryCommand => _runQuery;
-
-        public IEnumerable<Test> ResultList => _resultList;
-
+        public DelegateCommand RunQueryCommand { get; }
         public string TestName { get; set; }
+
+        #endregion Properties
     }
 }

@@ -1,19 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 
-namespace DBManager
+namespace LabDbContext
 {
     public partial class Sample
     {
+        #region Methods
 
         public void Create()
         {
             // Inserts a Sample entry in the DB
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.Samples.Add(this);
 
@@ -25,15 +22,13 @@ namespace DBManager
         {
             // Deletes the entry from the DB
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 Sample tempEntry = entities.Samples
                                             .FirstOrDefault(smp => smp.ID == ID);
 
                 if (tempEntry == null)
                     return;
-
-                
 
                 entities.Entry(tempEntry)
                         .State = System.Data.Entity.EntityState.Deleted;
@@ -42,7 +37,8 @@ namespace DBManager
 
                 ID = 0;
             }
-
         }
+
+        #endregion Methods
     }
 }

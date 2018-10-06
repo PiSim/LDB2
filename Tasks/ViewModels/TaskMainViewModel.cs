@@ -1,44 +1,42 @@
-﻿using DBManager;
-using DBManager.EntityExtensions;
-using DBManager.Services;
+﻿using Controls.Views;
 using Infrastructure;
 using Infrastructure.Events;
-using Microsoft.Practices.Unity;
+using LabDbContext;
+using LabDbContext.EntityExtensions;
+using LabDbContext.Services;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
 using Reporting;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Threading;
 using System.Windows.Controls;
 
 namespace Tasks.ViewModels
 {
     public class TaskMainViewModel : BindableBase
     {
-        private bool _showAssigned, _showComplete;
-        private DBPrincipal _principal;
-        private DelegateCommand _newTask, 
-                                _removeTask;
-        private DelegateCommand<DataGrid> _printTaskList;
-        private EventAggregator _eventAggregator;
-        private DBManager.Task _selectedTask;
+        #region Fields
+
         private IDataService _dataService;
+        private IEventAggregator _eventAggregator;
         private IReportingService _reportingService;
+        private LabDbContext.Task _selectedTask;
+        private bool _showAssigned, _showComplete;
         private ITaskService _taskService;
 
-        public TaskMainViewModel(DBPrincipal principal,
-                                EventAggregator eventAggregator,
+        #endregion Fields
+
+        #region Constructors
+
+        public TaskMainViewModel(IEventAggregator eventAggregator,
                                 IDataService dataService,
                                 IReportingService reportingService,
-                                ITaskService taskService) 
+                                ITaskService taskService)
             : base()
         {
             _dataService = dataService;
             _eventAggregator = eventAggregator;
-            _principal = principal;
             _reportingService = reportingService;
             _showAssigned = false;
             _showComplete = false;
@@ -52,20 +50,20 @@ namespace Tasks.ViewModels
                     RaisePropertyChanged("TaskList");
                 });
 
-            _newTask = new DelegateCommand(
+            NewTaskCommand = new DelegateCommand(
                 () =>
                 {
                     _taskService.CreateNewTask();
                 },
-                () => CanCreateTask );
+                () => CanCreateTask);
 
-            _printTaskList = new DelegateCommand<DataGrid>(
+            PrintTaskListCommand = new DelegateCommand<DataGrid>(
                 grid =>
                 {
                     _reportingService.PrintTaskList(grid.ItemsSource as IEnumerable<Task>);
                 });
 
-            _removeTask = new DelegateCommand(
+            RemoveTaskCommand = new DelegateCommand(
                 () =>
                 {
                     SelectedTask.Delete();
@@ -75,74 +73,51 @@ namespace Tasks.ViewModels
                 () => CanDeleteTask);
         }
 
-        public bool CanCreateTask
-        {
-            get
-            {
-                return _principal.IsInRole(UserRoleNames.TaskEdit) 
-                    || _principal.IsInRole(UserRoleNames.TaskAdmin);
-            }
-        }
+        #endregion Constructors
+
+        #region Properties
+
+        public bool CanCreateTask => Thread.CurrentPrincipal.IsInRole(UserRoleNames.TaskEdit)
+                    || Thread.CurrentPrincipal.IsInRole(UserRoleNames.TaskAdmin);
 
         public bool CanDeleteTask
         {
-            get 
+            get
             {
                 if (_selectedTask == null)
                     return false;
-
                 else if (_selectedTask.IsAssigned || (_selectedTask.IsComplete == true))
                     return false;
-
-                else if (_selectedTask.Requester.ID == _principal.CurrentPerson.ID && _principal.IsInRole(UserRoleNames.TaskEdit))
+                else if (_selectedTask.Requester.ID == (Thread.CurrentPrincipal as DBPrincipal).CurrentPerson.ID && Thread.CurrentPrincipal.IsInRole(UserRoleNames.TaskEdit))
                     return true;
-
-                else if (_principal.IsInRole(UserRoleNames.TaskAdmin))
+                else if (Thread.CurrentPrincipal.IsInRole(UserRoleNames.TaskAdmin))
                     return true;
-
                 else
                     return false;
             }
         }
 
-        public string MainTaskListRegionName
-        {
-            get { return RegionNames.TaskMainListRegion; }
-        }
+        public string MainTaskListRegionName => RegionNames.TaskMainListRegion;
 
-        public string TaskViewRegionName
-        {
-            get { return RegionNames.TaskViewRegion; }
-        }
-        
-        public DelegateCommand NewTaskCommand
-        {
-            get { return _newTask; }
-        }
+        public DelegateCommand NewTaskCommand { get; }
+        public DelegateCommand<DataGrid> PrintTaskListCommand { get; }
+        public DelegateCommand RemoveTaskCommand { get; }
 
-        public DelegateCommand RemoveTaskCommand
-        {
-            get { return _removeTask; }
-        }
-
-        public DelegateCommand<DataGrid> PrintTaskListCommand => _printTaskList;
-
-
-        public DBManager.Task SelectedTask 
+        public LabDbContext.Task SelectedTask
         {
             get { return _selectedTask; }
-            set 
+            set
             {
                 _selectedTask = value;
                 RaisePropertyChanged("SelectedTask");
-                _removeTask.RaiseCanExecuteChanged();
+                RemoveTaskCommand.RaiseCanExecuteChanged();
 
                 NavigationToken token = new NavigationToken(TaskViewNames.TaskEditView,
                                                             _selectedTask,
                                                             RegionNames.TaskViewRegion);
 
                 _eventAggregator.GetEvent<NavigationRequested>().Publish(token);
-            }       
+            }
         }
 
         public bool ShowAssigned
@@ -174,14 +149,12 @@ namespace Tasks.ViewModels
                 RaisePropertyChanged("TaskList");
             }
         }
-        
-        public IEnumerable<DBManager.Task> TaskList
-        {
-            get
-            {
-                return _dataService.GetTasks(_showComplete,
+
+        public IEnumerable<LabDbContext.Task> TaskList => _dataService.GetTasks(_showComplete,
                                                 _showAssigned);
-            }
-        }
+
+        public string TaskViewRegionName => RegionNames.TaskViewRegion;
+
+        #endregion Properties
     }
 }

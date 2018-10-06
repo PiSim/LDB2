@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DBManager
+﻿namespace LabDbContext
 {
     public partial class SubTaskItem
     {
+        #region Methods
+
         /// <summary>
         /// Creates a SubTest entry with the values currently loaded in the SubTaskItem instance
         /// </summary>
@@ -27,5 +22,6 @@ namespace DBManager
             return tempSubTest;
         }
 
+        #endregion Methods
     }
 }

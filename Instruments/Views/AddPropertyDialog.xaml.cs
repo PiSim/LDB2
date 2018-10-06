@@ -1,18 +1,6 @@
-﻿using DBManager;
+﻿using LabDbContext;
 using Microsoft.Practices.Prism.Mvvm;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace Instruments.Views
 {
@@ -21,14 +9,19 @@ namespace Instruments.Views
     /// </summary>
     public partial class AddPropertyDialog : Window, IView
     {
+        #region Constructors
+
         public AddPropertyDialog()
         {
             InitializeComponent();
         }
 
-        public MeasurableQuantity QuantityInstance
-        {
-            get { return (DataContext as ViewModels.AddPropertyDialogViewModel).SelectedQuantity; }
-        }
+        #endregion Constructors
+
+        #region Properties
+
+        public MeasurableQuantity QuantityInstance => (DataContext as ViewModels.AddPropertyDialogViewModel).SelectedQuantity;
+
+        #endregion Properties
     }
 }

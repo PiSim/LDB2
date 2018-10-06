@@ -1,19 +1,21 @@
-﻿using DBManager;
-using System;
-using System.Collections.Generic;
+﻿using DataAccess;
+using LabDbContext;
 using System.Data.Entity;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Infrastructure.Queries
 {
-    public class TestQuery : IQuery<Test>
+    public class TestQuery : IQuery<Test, LabDbEntities>
     {
+        #region Constructors
+
         public TestQuery()
         {
-
         }
+
+        #endregion Constructors
+
+        #region Properties
 
         public string AspectCode { get; set; }
 
@@ -33,7 +35,13 @@ namespace Infrastructure.Queries
 
         public string RecipeCode { get; set; }
 
-        public IQueryable<Test> RunQuery(DBEntities entities)
+        public string TestName { get; set; }
+
+        #endregion Properties
+
+        #region Methods
+
+        public IQueryable<Test> Execute(LabDbEntities entities)
         {
             IQueryable<Test> query = entities.Tests.Include(tst => tst.TestRecord.Batch.Material.Aspect)
                                                     .Include(tst => tst.TestRecord.Batch.Material.MaterialLine)
@@ -53,7 +61,7 @@ namespace Infrastructure.Queries
 
             if (!string.IsNullOrWhiteSpace(AspectCode))
                 query = query.Where(tst => tst.TestRecord.Batch.Material.Aspect.Code.Contains(AspectCode));
-            
+
             if (!string.IsNullOrWhiteSpace(BatchNumber))
                 query = query.Where(tst => tst.TestRecord.Batch.Number.Contains(BatchNumber));
 
@@ -78,6 +86,6 @@ namespace Infrastructure.Queries
             return query;
         }
 
-        public string TestName { get; set; }
+        #endregion Methods
     }
 }

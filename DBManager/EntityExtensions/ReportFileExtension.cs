@@ -1,19 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
+﻿using System.Data.Entity;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace DBManager.EntityExtensions
+namespace LabDbContext.EntityExtensions
 {
     public static class ReportFileExtension
     {
+        #region Methods
+
         public static void Create(this ReportFile entry)
         {
             // Inserts a ReportFile entry in the DB
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.ReportFiles.Add(entry);
                 entities.SaveChanges();
@@ -24,7 +22,7 @@ namespace DBManager.EntityExtensions
         {
             // Deletes a ReportFile entry
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.Entry(entities.ReportFiles
                         .First(repf => repf.ID == entry.ID))
@@ -35,5 +33,7 @@ namespace DBManager.EntityExtensions
                 entry.ID = 0;
             }
         }
+
+        #endregion Methods
     }
 }

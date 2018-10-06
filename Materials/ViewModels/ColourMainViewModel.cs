@@ -1,45 +1,46 @@
-﻿using DBManager;
-using DBManager.EntityExtensions;
-using DBManager.Services;
+﻿using Controls.Views;
+using DataAccess;
 using Infrastructure;
 using Infrastructure.Events;
+using LabDbContext;
+using LabDbContext.EntityExtensions;
+using LabDbContext.Services;
+using Materials.Queries;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 
 namespace Materials.ViewModels
 {
     public class ColourMainViewModel : BindableBase
     {
+        #region Fields
+
+        private IEventAggregator _eventAggregator;
+        private IDataService<LabDbEntities> _labDbData;
         private Colour _selectedColour;
-        private DBPrincipal _principal;
-        private DelegateCommand _createColour,
-                                _deleteColour;
-        private EventAggregator _eventAggregator;
-        private IDataService _dataService;
 
-        public ColourMainViewModel(DBPrincipal principal,
-                                    EventAggregator eventAggregator,
-                                    IDataService dataService) : base()
+        #endregion Fields
+
+        #region Constructors
+
+        public ColourMainViewModel(IEventAggregator eventAggregator,
+                                    IDataService<LabDbEntities> labDbdata) : base()
         {
-            _dataService = dataService;
+            _labDbData = labDbdata;
             _eventAggregator = eventAggregator;
-            _principal = principal;
 
-            _createColour = new DelegateCommand(
+            CreateColourCommand = new DelegateCommand(
                 () =>
                 {
                     Controls.Views.StringInputDialog newColourDialog = new Controls.Views.StringInputDialog();
                     newColourDialog.Message = "Inserire il nome per il nuovo colore:";
                     if (newColourDialog.ShowDialog() == true)
                     {
-
-                        if (DBManager.Services.MaterialService.GetColour(newColourDialog.InputString) != null
+                        if (_labDbData.RunQuery(new ColorsQuery()).Any(col => col.Name == newColourDialog.InputString)
                             || newColourDialog.InputString.Length > 45)
                             return;
 
@@ -56,9 +57,9 @@ namespace Materials.ViewModels
                                                                         EntityChangedToken.EntityChangedAction.Created));
                     }
                 },
-                () => _principal.IsInRole(UserRoleNames.MaterialEdit));
+                () => Thread.CurrentPrincipal.IsInRole(UserRoleNames.MaterialEdit));
 
-            _deleteColour = new DelegateCommand(
+            DeleteColourCommand = new DelegateCommand(
                 () =>
                 {
                     _selectedColour.Delete(); _eventAggregator.GetEvent<ColorChanged>()
@@ -67,10 +68,10 @@ namespace Materials.ViewModels
 
                     SelectedColour = null;
                 },
-                () => _selectedColour != null 
-                    && _principal.IsInRole(UserRoleNames.MaterialAdmin));
+                () => _selectedColour != null
+                    && Thread.CurrentPrincipal.IsInRole(UserRoleNames.MaterialAdmin));
 
-            #region Event Subscriptions
+            #region Events
 
             _eventAggregator.GetEvent<ColorChanged>()
                             .Subscribe(ect =>
@@ -78,28 +79,21 @@ namespace Materials.ViewModels
                                 RaisePropertyChanged("ColourList");
                             });
 
-            #endregion
-
-
-
+            #endregion Events
         }
 
-        public string ColourEditRegionName
-        {
-            get { return RegionNames.ColourEditRegion; }
-        }
+        #endregion Constructors
 
-        public IEnumerable<Colour> ColourList => _dataService.GetColours();
+        #region Properties
 
-        public DelegateCommand CreateColourCommand
-        {
-            get { return _createColour; }
-        }
+        public string ColourEditRegionName => RegionNames.ColourEditRegion;
 
-        public DelegateCommand DeleteColourCommand
-        {
-            get { return _deleteColour; }
-        }
+        public IEnumerable<Colour> ColourList => _labDbData.RunQuery(new ColorsQuery())
+                                                                .ToList();
+
+        public DelegateCommand CreateColourCommand { get; }
+
+        public DelegateCommand DeleteColourCommand { get; }
 
         public Colour SelectedColour
         {
@@ -112,7 +106,7 @@ namespace Materials.ViewModels
             {
                 _selectedColour = value;
                 RaisePropertyChanged("SelectedColour");
-                _deleteColour.RaiseCanExecuteChanged();
+                DeleteColourCommand.RaiseCanExecuteChanged();
 
                 NavigationToken token = new NavigationToken(MaterialViewNames.ColourEdit,
                                                             _selectedColour,
@@ -121,5 +115,7 @@ namespace Materials.ViewModels
                 _eventAggregator.GetEvent<NavigationRequested>().Publish(token);
             }
         }
+
+        #endregion Properties
     }
 }

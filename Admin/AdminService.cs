@@ -1,37 +1,43 @@
 using Controls.Views;
-using DBManager;
-using DBManager.EntityExtensions;
 using Infrastructure;
 using Infrastructure.Events;
-using Microsoft.Practices.Unity;
+using LabDbContext;
+using LabDbContext.EntityExtensions;
 using Prism.Events;
-using System;
 using System.Collections.Generic;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 
 namespace Admin
 {
     public class AdminService : IAdminService
     {
-        private DBPrincipal _principal;
-        private EventAggregator _eventAggregator;
-        private IDataService _dataService;
-        private IUnityContainer _container;
+        #region Fields
 
-        public AdminService(DBPrincipal principal,
-                                    EventAggregator aggregator,
-                                    IDataService dataService,
-                                    IUnityContainer container)
+        private IDataService _dataService;
+        private IDbContextFactory<LabDbEntities> _dbContextFactory;
+        private IEventAggregator _eventAggregator;
+
+        #endregion Fields
+
+        #region Constructors
+
+        public AdminService(IDbContextFactory<LabDbEntities> dbContextFactory,
+                            IEventAggregator aggregator,
+                            IDataService dataService)
         {
             _eventAggregator = aggregator;
-            _container = container;
+            _dbContextFactory = dbContextFactory;
             _dataService = dataService;
-            _principal = principal;
         }
+
+        #endregion Constructors
+
+        #region Methods
 
         public void AddOrganizationRole(string name)
         {
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = _dbContextFactory.Create())
             {
                 OrganizationRole newRole = new OrganizationRole
                 {
@@ -55,118 +61,6 @@ namespace Admin
                 entities.SaveChanges();
             }
         }
-
-
-
-        public Person CreateNewPerson()
-        {
-            StringInputDialog addPersonDialog = new StringInputDialog
-            {
-                Title = "Creazione nuova Persona",
-                Message = "Nome:"
-            };
-
-            if (addPersonDialog.ShowDialog() != true)
-                return null;
-
-            Person newPerson = new Person
-            {
-                Name = addPersonDialog.InputString
-            };
-
-            foreach (PersonRole prr in _dataService.GetPersonRoles())
-            {
-                PersonRoleMapping tempPRM = new PersonRoleMapping();
-                tempPRM.roleID = prr.ID;
-                tempPRM.IsSelected = false;
-                newPerson.RoleMappings.Add(tempPRM);
-            }
-
-            newPerson.Create();
-
-            return newPerson;
-        }
-
-        public UserRole CreateNewUserRole()
-        {
-            StringInputDialog addPersonDialog = new StringInputDialog
-            {
-                Title = "Creazione nuovo Ruolo Utente",
-                Message = "Nome:"
-            };
-
-            if (addPersonDialog.ShowDialog() != true)
-                return null;
-
-            UserRole newRole = new UserRole
-            {
-                Name = addPersonDialog.InputString,
-                Description = ""
-            };
-
-            newRole.Create();
-
-            foreach (User usr in _dataService.GetUsers())
-            {
-                UserRoleMapping newMap = new UserRoleMapping
-                {
-                    IsSelected = false,
-                    RoleID = newRole.ID,
-                    UserID = usr.ID
-                };
-
-                newMap.Create();
-            }
-
-            return newRole;
-        }
-
-        public PersonRole CreateNewPersonRole()
-        {
-            StringInputDialog addPersonRoleDialog = _container.Resolve<StringInputDialog>();
-            addPersonRoleDialog.Title = "Creazione nuovo Ruolo Persona";
-            addPersonRoleDialog.Message = "Nome:";
-
-            if (addPersonRoleDialog.ShowDialog() != true)
-                return null;
-
-            PersonRole newRole = new PersonRole
-            {
-                Name = addPersonRoleDialog.InputString,
-                Description = ""
-            };
-
-            using (DBEntities entities = new DBEntities())
-            {
-                entities.PersonRoles.Add(newRole);
-
-                foreach (Person per in entities.People)
-                {
-                    PersonRoleMapping newMapping = new PersonRoleMapping
-                    {
-                        Person = per,
-                        IsSelected = false
-                    };
-                    newRole.RoleMappings.Add(newMapping);
-                }
-
-                entities.SaveChanges();
-            }
-
-            return newRole;
-        }
-        
-        public User CreateNewUser()
-        {
-            Views.NewUserDialog newUserDialog = _container.Resolve<Views.NewUserDialog>();
-
-            if (newUserDialog.ShowDialog() == true)
-                return newUserDialog.NewUserInstance;
-
-            else
-                return null;
-        }
-
 
         public InstrumentType CreateNewInstrumentType()
         {
@@ -247,33 +141,6 @@ namespace Admin
             else return null;
         }
 
-
-        /// <summary>
-        /// Creates and inserts in the DB the mappings between a new OrganizationRole
-        /// and all the existing organization
-        /// </summary>
-        /// <param name="newRole">The role for which will be built the mappings</param>
-        internal void CreateMappingsForNewRole(OrganizationRole newRole)
-        {
-            using (DBEntities entities = new DBEntities())
-            {
-                IEnumerable<Organization> _orgList = entities.Organizations.ToList();
-
-                foreach (Organization org in _orgList)
-                {
-                    OrganizationRoleMapping tempMap = new OrganizationRoleMapping()
-                    {
-                        IsSelected = false,
-                        RoleID = newRole.ID
-                    };
-
-                    org.RoleMapping.Add(tempMap);
-                }
-
-                entities.SaveChanges();
-            }
-        }
-
         public OrganizationRole CreateNewOrganizationRole()
         {
             StringInputDialog creationDialog = new StringInputDialog();
@@ -293,6 +160,70 @@ namespace Admin
             return null;
         }
 
+        public Person CreateNewPerson()
+        {
+            StringInputDialog addPersonDialog = new StringInputDialog
+            {
+                Title = "Creazione nuova Persona",
+                Message = "Nome:"
+            };
+
+            if (addPersonDialog.ShowDialog() != true)
+                return null;
+
+            Person newPerson = new Person
+            {
+                Name = addPersonDialog.InputString
+            };
+
+            foreach (PersonRole prr in _dataService.GetPersonRoles())
+            {
+                PersonRoleMapping tempPRM = new PersonRoleMapping();
+                tempPRM.roleID = prr.ID;
+                tempPRM.IsSelected = false;
+                newPerson.RoleMappings.Add(tempPRM);
+            }
+
+            newPerson.Create();
+
+            return newPerson;
+        }
+
+        public PersonRole CreateNewPersonRole()
+        {
+            StringInputDialog addPersonRoleDialog = new StringInputDialog();
+            addPersonRoleDialog.Title = "Creazione nuovo Ruolo Persona";
+            addPersonRoleDialog.Message = "Nome:";
+
+            if (addPersonRoleDialog.ShowDialog() != true)
+                return null;
+
+            PersonRole newRole = new PersonRole
+            {
+                Name = addPersonRoleDialog.InputString,
+                Description = ""
+            };
+
+            using (LabDbEntities entities = _dbContextFactory.Create())
+            {
+                entities.PersonRoles.Add(newRole);
+
+                foreach (Person per in entities.People)
+                {
+                    PersonRoleMapping newMapping = new PersonRoleMapping
+                    {
+                        Person = per,
+                        IsSelected = false
+                    };
+                    newRole.RoleMappings.Add(newMapping);
+                }
+
+                entities.SaveChanges();
+            }
+
+            return newRole;
+        }
+
         public Property CreateNewProperty()
         {
             StringInputDialog creationDialog = new StringInputDialog();
@@ -303,14 +234,83 @@ namespace Admin
                 Property output = new Property();
                 output.Name = creationDialog.InputString;
                 output.Create();
-                
+
                 return output;
             }
 
             return null;
         }
+
+        public User CreateNewUser()
+        {
+            Views.NewUserDialog newUserDialog = new Views.NewUserDialog();
+
+            if (newUserDialog.ShowDialog() == true)
+                return newUserDialog.NewUserInstance;
+            else
+                return null;
+        }
+
+        public UserRole CreateNewUserRole()
+        {
+            StringInputDialog addPersonDialog = new StringInputDialog
+            {
+                Title = "Creazione nuovo Ruolo Utente",
+                Message = "Nome:"
+            };
+
+            if (addPersonDialog.ShowDialog() != true)
+                return null;
+
+            UserRole newRole = new UserRole
+            {
+                Name = addPersonDialog.InputString,
+                Description = ""
+            };
+
+            newRole.Create();
+
+            foreach (User usr in _dataService.GetUsers())
+            {
+                UserRoleMapping newMap = new UserRoleMapping
+                {
+                    IsSelected = false,
+                    RoleID = newRole.ID,
+                    UserID = usr.ID
+                };
+
+                newMap.Create();
+            }
+
+            return newRole;
+        }
+
+        /// <summary>
+        /// Creates and inserts in the DB the mappings between a new OrganizationRole
+        /// and all the existing organization
+        /// </summary>
+        /// <param name="newRole">The role for which will be built the mappings</param>
+        internal void CreateMappingsForNewRole(OrganizationRole newRole)
+        {
+            using (LabDbEntities entities = _dbContextFactory.Create())
+            {
+                IEnumerable<Organization> _orgList = entities.Organizations.ToList();
+
+                foreach (Organization org in _orgList)
+                {
+                    OrganizationRoleMapping tempMap = new OrganizationRoleMapping()
+                    {
+                        IsSelected = false,
+                        RoleID = newRole.ID
+                    };
+
+                    org.RoleMapping.Add(tempMap);
+                }
+
+                entities.SaveChanges();
+            }
+        }
+
+        #endregion Methods
     }
-
 }
-
-

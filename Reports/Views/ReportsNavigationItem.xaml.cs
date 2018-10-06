@@ -8,14 +8,19 @@ namespace Reports.Views
     /// </summary>
     public partial class ReportsNavigationItem : UserControl, IModuleNavigationTag
     {
+        #region Constructors
+
         public ReportsNavigationItem()
         {
             InitializeComponent();
         }
 
-        public string ViewName
-        {
-            get { return ViewNames.ReportMain; }
-        }
+        #endregion Constructors
+
+        #region Properties
+
+        public string ViewName => ViewNames.ReportMain;
+
+        #endregion Properties
     }
 }

@@ -1,38 +1,39 @@
-﻿using DBManager;
-using DBManager.Services;
+﻿using DataAccess;
+using LabDbContext;
+using Materials.Queries;
 using Microsoft.Practices.Prism.Commands;
 using Prism.Mvvm;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace Materials.ViewModels
 {
     public class AspectCreationDialogViewModel : BindableBase, INotifyDataErrorInfo
     {
-        private Aspect _aspectInstance;
-        private readonly DelegateCommand<Window> _cancel,
-                                                _confirm;
+        #region Fields
+
         private readonly Dictionary<string, ICollection<string>> _validationErrors = new Dictionary<string, ICollection<string>>();
-        private readonly IDataService _dataService;
+        private IDataService<LabDbEntities> _labDbData;
 
-        public AspectCreationDialogViewModel(IDataService dataService)
+        #endregion Fields
+
+        #region Constructors
+
+        public AspectCreationDialogViewModel(IDataService<LabDbEntities> labDbdata)
         {
-            _aspectInstance = new Aspect();
-            _dataService = dataService;
+            _labDbData = labDbdata;
+            AspectInstance = new Aspect();
 
-            _cancel = new DelegateCommand<Window>(
+            CancelCommand = new DelegateCommand<Window>(
                 parent =>
                 {
                     parent.DialogResult = false;
                 });
 
-            _confirm = new DelegateCommand<Window>(
+            ConfirmCommand = new DelegateCommand<Window>(
                 parent =>
                 {
                     parent.DialogResult = true;
@@ -41,13 +42,15 @@ namespace Materials.ViewModels
 
             AspectCode = "";
             AspectName = "";
-        
         }
 
+        #endregion Constructors
 
         #region INotifyDataErrorInfo interface elements
 
         public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
+
+        public bool HasErrors => _validationErrors.Count > 0;
 
         public IEnumerable GetErrors(string propertyName)
         {
@@ -58,31 +61,25 @@ namespace Materials.ViewModels
             return _validationErrors[propertyName];
         }
 
-        public bool HasErrors
-        {
-            get { return _validationErrors.Count > 0; }
-        }
-
         private void RaiseErrorsChanged(string propertyName)
         {
-            _confirm.RaiseCanExecuteChanged();
+            ConfirmCommand.RaiseCanExecuteChanged();
             ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
             RaisePropertyChanged("HasErrors");
         }
 
-        #endregion
+        #endregion INotifyDataErrorInfo interface elements
 
-
-        public Aspect AspectInstance => _aspectInstance;
+        #region Properties
 
         public string AspectCode
         {
-            get { return _aspectInstance.Code; }
+            get { return AspectInstance.Code; }
             set
             {
-                _aspectInstance.Code = value;
+                AspectInstance.Code = value;
 
-                if (value.Length == 3 && _dataService.GetAspect(value) == null)
+                if (value.Length == 3 && _labDbData.RunQuery(new AspectQuery() { AspectCode = value }) == null)
                 {
                     if (_validationErrors.ContainsKey("AspectCode"))
                     {
@@ -92,21 +89,24 @@ namespace Materials.ViewModels
                 }
                 else
                     _validationErrors["AspectCode"] = new List<string>() { "Codice aspetto non valido" };
-
             }
         }
+
+        public Aspect AspectInstance { get; }
 
         public string AspectName
         {
-            get { return _aspectInstance.Name; }
+            get { return AspectInstance.Name; }
             set
             {
-                _aspectInstance.Name = value;
+                AspectInstance.Name = value;
             }
         }
 
-        public DelegateCommand<Window> CancelCommand => _cancel;
+        public DelegateCommand<Window> CancelCommand { get; }
 
-        public DelegateCommand<Window> ConfirmCommand => _confirm;
+        public DelegateCommand<Window> ConfirmCommand { get; }
+
+        #endregion Properties
     }
 }

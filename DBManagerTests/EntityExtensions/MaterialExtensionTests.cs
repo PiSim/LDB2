@@ -1,25 +1,19 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using DBManager.EntityExtensions;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DBManager.Services;
 
-namespace DBManager.EntityExtensions.Tests
+namespace LabDbContext.EntityExtensions.Tests
 {
     [TestClass()]
     public class MaterialExtensionTests
     {
-        
+        #region Methods
 
         [TestMethod()]
         public void MaterialLoadTest()
         {
             Material tempMaterial;
 
-            using (DBEntities entities = new DBEntities())
+            using (LabDbEntities entities = new LabDbEntities())
             {
                 entities.Configuration.LazyLoadingEnabled = false;
                 tempMaterial = entities.Materials.First(mat => mat.ID == 1);
@@ -28,9 +22,10 @@ namespace DBManager.EntityExtensions.Tests
             Assert.IsNotNull(tempMaterial);
 
             tempMaterial.Load();
-            
-            Assert.IsNotNull(tempMaterial.Recipe);
 
+            Assert.IsNotNull(tempMaterial.Recipe);
         }
+
+        #endregion Methods
     }
 }

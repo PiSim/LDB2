@@ -1,18 +1,5 @@
-﻿using DBManager;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using LabDbContext;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Reporting.Controls
 {
@@ -21,13 +8,23 @@ namespace Reporting.Controls
     /// </summary>
     public partial class ReportDataSheetHeader : UserControl
     {
+        #region Fields
+
         private Batch _batchInstance;
         private Report _reportInstance;
+
+        #endregion Fields
+
+        #region Constructors
 
         public ReportDataSheetHeader()
         {
             InitializeComponent();
         }
+
+        #endregion Constructors
+
+        #region Properties
 
         public Batch BatchInstance
         {
@@ -40,7 +37,6 @@ namespace Reporting.Controls
                 MaterialCodeBox.Text = _batchInstance?.MaterialFullCode;
                 ConstructionBox.Text = _batchInstance?.Material?.ExternalConstruction?.Name;
                 ColorNameBox.Text = _batchInstance?.Material?.Recipe?.Colour?.Name;
-
             }
         }
 
@@ -60,5 +56,7 @@ namespace Reporting.Controls
                 NotesBox.Text = _reportInstance.Description;
             }
         }
+
+        #endregion Properties
     }
 }

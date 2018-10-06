@@ -1,7 +1,6 @@
 ﻿using Infrastructure;
-using Microsoft.Practices.Unity;
+using Prism.Ioc;
 using Prism.Modularity;
-using Prism.Regions;
 using System;
 
 namespace User
@@ -9,24 +8,26 @@ namespace User
     [Module(ModuleName = "UserModule")]
     public class UserModule : IModule
     {
-        private IRegionManager _regionManager;
-        private IUnityContainer _container;
+        #region Constructors
 
-        public UserModule(IRegionManager regionManager,
-                        IUnityContainer container)
+        public UserModule()
         {
-            _container = container;
-            _regionManager = regionManager;
         }
 
-        public void Initialize()
+        #endregion Constructors
+
+        #region Methods
+
+        public void OnInitialized(IContainerProvider containerProvider)
         {
-            _container.RegisterType<Object, Views.CurrentUserMain>(UserViewNames.CurrentUserMain);
-
-            _container.RegisterType<ViewModels.CurrentUserMainViewModel>();
-
-            _container.RegisterType<UserServiceProvider>(new ContainerControlledLifetimeManager());
-            _container.Resolve<UserServiceProvider>();
         }
+
+        public void RegisterTypes(IContainerRegistry containerRegistry)
+        {
+            containerRegistry.Register<Object, Views.CurrentUserMain>(UserViewNames.CurrentUserMain);
+            containerRegistry.Register<ViewModels.CurrentUserMainViewModel>();
+        }
+
+        #endregion Methods
     }
 }

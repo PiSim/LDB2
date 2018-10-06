@@ -9,25 +9,25 @@
         Title="Nuovo Report Esterno" Height="500" Width="500">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="35"/>
-            <RowDefinition Height="35"/>
-            <RowDefinition/>
-            <RowDefinition Height="10"/>
-            <RowDefinition/>
-            <RowDefinition Height="35"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="35" />
+            <RowDefinition Height="35" />
+            <RowDefinition />
+            <RowDefinition Height="10" />
+            <RowDefinition />
+            <RowDefinition Height="35" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <Label Content="Laboratorio:"
                Grid.Column="0"
                Grid.Row="0"
-               Margin="5"/>
+               Margin="5" />
 
         <ComboBox ItemsSource="{Binding LaboratoriesList}"
                   SelectedItem="{Binding SelectedLab, Mode=TwoWay}"
@@ -35,12 +35,12 @@
                   Grid.Column="1"
                   Grid.ColumnSpan="3"
                   Grid.Row="0"
-                  Margin="5"/>
+                  Margin="5" />
 
         <Label Content="Progetto:"
                Grid.Column="0"
                Grid.Row="1"
-               Margin="5"/>
+               Margin="5" />
 
         <ComboBox ItemsSource="{Binding ProjectList}"
                   SelectedItem="{Binding SelectedProject, Mode=TwoWay}"
@@ -48,13 +48,12 @@
                   Grid.ColumnSpan="3"
                   Grid.Row="1"
                   Margin="5"
-                  ItemTemplate="{StaticResource ProjectComboTemplate}"/>
-
+                  ItemTemplate="{StaticResource ProjectComboTemplate}" />
 
         <Label Content="Descrizione&#10;Prove:"
                Grid.Column="0"
                Grid.Row="2"
-               Margin="5"/>
+               Margin="5" />
 
         <TextBox Text="{Binding TestDescription, Mode=TwoWay}"
                  TextWrapping="Wrap"
@@ -62,12 +61,12 @@
                  Grid.Column="1"
                  Grid.ColumnSpan="3"
                  Grid.Row="2"
-                 Margin="5"/>
+                 Margin="5" />
 
         <Label Content="Descrizione&#10;Campioni:"
                Grid.Column="0"
                Grid.Row="4"
-               Margin="5"/>
+               Margin="5" />
 
         <TextBox Text="{Binding SampleDescription, Mode=TwoWay}"
                  TextWrapping="Wrap"
@@ -75,20 +74,20 @@
                  Grid.Column="1"
                  Grid.ColumnSpan="3"
                  Grid.Row="4"
-                 Margin="5"/>
+                 Margin="5" />
 
         <Button Content="Annulla"
                 Command="{Binding CancelCommand}"
                 CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
                 Grid.Column="2"
                 Grid.Row="6"
-                Margin="5"/>
+                Margin="5" />
 
         <Button Content="Ok"
                 Command="{Binding ConfirmCommand}"
                 CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
                 Grid.Column="3"
                 Grid.Row="6"
-                Margin="5"/>
+                Margin="5" />
     </Grid>
 </Window>

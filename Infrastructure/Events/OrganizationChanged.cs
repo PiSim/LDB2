@@ -1,9 +1,8 @@
-﻿using DBManager;
-using Prism.Events;
+﻿using Prism.Events;
 
 namespace Infrastructure.Events
 {
     public class OrganizationChanged : PubSubEvent<EntityChangedToken>
-    {        
+    {
     }
 }

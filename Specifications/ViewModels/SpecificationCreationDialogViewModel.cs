@@ -1,87 +1,91 @@
-﻿using DBManager;
-using DBManager.EntityExtensions;
-using DBManager.Services;
+﻿using DataAccess;
+using Infrastructure.Queries;
+using LabDbContext;
 using Prism.Commands;
 using Prism.Mvvm;
+using Specifications.Queries;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace Specifications.ViewModels
 {
     public class SpecificationCreationDialogViewModel : BindableBase, INotifyDataErrorInfo
     {
-        private DelegateCommand<Window> _cancel, _confirm;
+        #region Fields
+
         private readonly Dictionary<string, ICollection<string>> _validationErrors = new Dictionary<string, ICollection<string>>();
-        private IDataService _dataService;
+        private IDataService<LabDbEntities> _labDbData;
+
+        private string _name;
+
         private Organization _oem;
-        private Specification _specificationInstance;
-        private string _currentIssue,
-                        _description,
-                        _name;
 
-        public SpecificationCreationDialogViewModel(IDataService dataService) : base()
+        #endregion Fields
+
+        #region Constructors
+
+        public SpecificationCreationDialogViewModel(IDataService<LabDbEntities> labDbData) : base()
         {
-            _currentIssue = "";
-            _dataService = dataService;
-            _description = "";
+            _labDbData = labDbData;
+            CurrentIssue = "";
+            Description = "";
 
-            _cancel = new DelegateCommand<Window>(
+            CancelCommand = new DelegateCommand<Window>(
                 parent =>
                 {
                     parent.DialogResult = false;
                 });
 
-            _confirm = new DelegateCommand<Window>(
+            ConfirmCommand = new DelegateCommand<Window>(
                 parent =>
                 {
-
-                    _specificationInstance = new Specification()
+                    SpecificationInstance = new Specification()
                     {
-                        Description = _description,
+                        Description = Description,
                         Name = Name
                     };
 
-                    Std tempStd = _dataService.GetStandard(_name);
+                    Std tempStd = _labDbData.RunQuery(new StandardQuery() { Name = Name });
 
                     if (tempStd == null)
-                        _specificationInstance.Standard = new Std()
+                        SpecificationInstance.Standard = new Std()
                         {
-                            CurrentIssue = _currentIssue,
+                            CurrentIssue = CurrentIssue,
                             Name = Name,
                             OrganizationID = _oem.ID
                         };
-
                     else
-                        _specificationInstance.StandardID = tempStd.ID;
+                        SpecificationInstance.StandardID = tempStd.ID;
 
                     SpecificationVersion tempMain = new SpecificationVersion();
                     tempMain.Name = "Generica";
                     tempMain.IsMain = true;
-                    
+
                     ControlPlan tempControlPlan = new ControlPlan();
                     tempControlPlan.Name = "Completo";
                     tempControlPlan.IsDefault = true;
-                    
-                    _specificationInstance.ControlPlans.Add(tempControlPlan);
-                    _specificationInstance.SpecificationVersions.Add(tempMain);
-                                        
+
+                    SpecificationInstance.ControlPlans.Add(tempControlPlan);
+                    SpecificationInstance.SpecificationVersions.Add(tempMain);
+
                     parent.DialogResult = true;
                 },
                 parent => !HasErrors);
 
-
             Oem = null;
         }
+
+        #endregion Constructors
 
         #region INotifyDataErrorInfo interface elements
 
         public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
+
+        public bool HasErrors => _validationErrors.Count > 0;
 
         public IEnumerable GetErrors(string propertyName)
         {
@@ -92,46 +96,23 @@ namespace Specifications.ViewModels
             return _validationErrors[propertyName];
         }
 
-        public bool HasErrors
-        {
-            get { return _validationErrors.Count > 0; }
-        }
-
         private void RaiseErrorsChanged(string propertyName)
         {
             ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
-            _confirm.RaiseCanExecuteChanged();
+            ConfirmCommand.RaiseCanExecuteChanged();
         }
 
-        #endregion
+        #endregion INotifyDataErrorInfo interface elements
 
-        public DelegateCommand<Window> CancelCommand
-        {
-            get { return _cancel; }
-        }
+        #region Properties
 
-        public DelegateCommand<Window> ConfirmCommand
-        {
-            get { return _confirm; }
-        }
+        public DelegateCommand<Window> CancelCommand { get; }
 
-        public string CurrentIssue
-        {
-            get { return _currentIssue; }
-            set
-            {
-                _currentIssue = value;
-            }
-        }
+        public DelegateCommand<Window> ConfirmCommand { get; }
 
-        public string Description
-        {
-            get { return _description; }
-            set
-            {
-                _description = value;
-            }
-        }
+        public string CurrentIssue { get; set; }
+
+        public string Description { get; set; }
 
         public string Name
         {
@@ -141,7 +122,7 @@ namespace Specifications.ViewModels
                 _name = value;
 
                 if (!string.IsNullOrEmpty(_name)
-                    && _dataService.GetSpecification(_name) == null)
+                    && _labDbData.RunQuery(new StandardQuery() { Name = _name }) == null)
                 {
                     if (_validationErrors.ContainsKey("Name"))
                     {
@@ -149,7 +130,6 @@ namespace Specifications.ViewModels
                         RaiseErrorsChanged("Name");
                     }
                 }
-
                 else
                 {
                     _validationErrors["Name"] = new List<string>() { "Nome non valido" };
@@ -173,7 +153,6 @@ namespace Specifications.ViewModels
                         RaiseErrorsChanged("Oem");
                     }
                 }
-
                 else
                 {
                     _validationErrors["Oem"] = new List<string>() { "Oem non valido" };
@@ -182,14 +161,11 @@ namespace Specifications.ViewModels
             }
         }
 
-        public IEnumerable<Organization> OemList => _dataService.GetOrganizations(OrganizationRoleNames.StandardPublisher);
+        public IEnumerable<Organization> OemList => _labDbData.RunQuery(new OrganizationsQuery() { Role = OrganizationsQuery.OrganizationRoles.StandardPublisher })
+                                                                        .ToList();
 
-        public Specification SpecificationInstance
-        {
-            get
-            {
-                return _specificationInstance;
-            }
-        }
+        public Specification SpecificationInstance { get; private set; }
+
+        #endregion Properties
     }
 }

@@ -1,21 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Infrastructure
+﻿namespace Infrastructure
 {
     public class MaterialViewNames
     {
-        public static string AspectDetail { get { return "AspectDetailView"; } }
-        public static string BatchesView { get { return "BatchesView"; } }
-        public static string BatchInfoView { get { return "BatchInfoView"; } }
-        public static string ColourEdit { get { return "ColourEditView"; } }
-        public static string ColourMain { get { return "ColourMainView"; } }
-        public static string MaterialDetail { get { return "MaterialDetailView"; } }
-        public static string ExternalConstructionDetail { get { return "ExternalConstructionDetailView"; } }
-        public static string MaterialView { get { return "MaterialMainView"; } }
-        public static string SampleLogView { get { return "SampleLogView"; } }
+        #region Properties
+
+        public static string AspectDetail => "AspectDetailView";
+        public static string BatchesView => "BatchesView";
+        public static string BatchInfoView => "BatchInfoView";
+        public static string ColourEdit => "ColourEditView";
+        public static string ColourMain => "ColourMainView";
+        public static string ExternalConstructionDetail => "ExternalConstructionDetailView";
+        public static string MaterialDetail => "MaterialDetailView";
+        public static string MaterialView => "MaterialMainView";
+        public static string SampleLogView => "SampleLogView";
+
+        #endregion Properties
     }
 }

@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace DBManager
+namespace LabDbContext
 {
     using System;
     using System.Collections.Generic;
@@ -18,7 +18,6 @@ namespace DBManager
         public Batch()
         {
             this.Notes = "";
-            this.BatchFiles = new HashSet<BatchFile>();
             this.Masters = new HashSet<Master>();
             this.Reports = new HashSet<Report>();
             this.Samples = new HashSet<Sample>();
@@ -38,9 +37,8 @@ namespace DBManager
         public bool DoNotTest { get; set; }
         public Nullable<int> LatestSampleID { get; set; }
         public Nullable<int> LongTermStock { get; set; }
+        public string OrderFilePath { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<BatchFile> BatchFiles { get; set; }
         public virtual Material Material { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Master> Masters { get; set; }

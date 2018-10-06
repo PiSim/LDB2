@@ -1,19 +1,5 @@
 ﻿using Infrastructure;
-using Navigation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Instruments.Views
 {
@@ -22,14 +8,19 @@ namespace Instruments.Views
     /// </summary>
     public partial class InstrumentsNavigationItem : UserControl, IModuleNavigationTag
     {
+        #region Constructors
+
         public InstrumentsNavigationItem()
         {
             InitializeComponent();
         }
 
-        public string ViewName
-        {
-            get { return InstrumentViewNames.InstrumentsMainView; }
-        }
+        #endregion Constructors
+
+        #region Properties
+
+        public string ViewName => InstrumentViewNames.InstrumentsMainView;
+
+        #endregion Properties
     }
 }
