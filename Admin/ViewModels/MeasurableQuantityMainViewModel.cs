@@ -7,16 +7,17 @@ using LabDbContext.Services;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
+using System;
 using System.Collections.Generic;
 
 namespace Admin.ViewModels
 {
+    [Obsolete]
     public class MeasurableQuantityMainViewModel : BindableBase
     {
         #region Fields
 
         private IAdminService _adminService;
-        private IDataService _dataService;
         private IEventAggregator _eventAggregator;
         private MeasurableQuantity _selectedMeasurableQuantity;
 

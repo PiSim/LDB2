@@ -12,13 +12,13 @@ using System.Windows;
 
 namespace Admin.ViewModels
 {
+    [Obsolete]
     public class MeasurementUnitCreationDialogViewModel : BindableBase, INotifyDataErrorInfo
     {
         #region Fields
 
         private readonly Dictionary<string, ICollection<string>> _validationErrors = new Dictionary<string, ICollection<string>>();
         private bool _canModifyQuantity;
-        private IDataService _dataService;
 
         private string _name,
                         _symbol;
@@ -29,11 +29,9 @@ namespace Admin.ViewModels
 
         #region Constructors
 
-        public MeasurementUnitCreationDialogViewModel(IDataService dataService)
+        public MeasurementUnitCreationDialogViewModel()
         {
-            _dataService = dataService;
             _canModifyQuantity = false;
-            MeasurableQuantityList = _dataService.GetMeasurableQuantities();
 
             CancelCommand = new DelegateCommand<Window>(
                 parentDialog =>

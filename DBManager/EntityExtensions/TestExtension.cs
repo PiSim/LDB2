@@ -6,7 +6,6 @@ namespace LabDbContext
 {
     public static class TestExtension
     {
-        #region Methods
 
         public static void CreateTests(this IEnumerable<Test> testList)
         {
@@ -16,52 +15,7 @@ namespace LabDbContext
                 entities.SaveChanges();
             }
         }
-
-        public static void Delete(this Test entry)
-        {
-            // Deletes a Test entry
-
-            using (LabDbEntities entities = new LabDbEntities())
-            {
-                entities.Entry(entities.Tests
-                        .First(tst => tst.ID == entry.ID))
-                        .State = System.Data.Entity.EntityState.Deleted;
-
-                entities.SaveChanges();
-
-                entry.ID = 0;
-            }
-        }
-
-        public static TaskItem GetTaskItem(this Test entry)
-        {
-            // Returns the task item that originated a Test entry, or null if one doesn't exist
-
-            using (LabDbEntities entities = new LabDbEntities())
-            {
-                entities.Configuration.LazyLoadingEnabled = false;
-
-                return entities.TaskItems.FirstOrDefault(tski => tski.TestID == entry.ID);
-            }
-        }
-
-        public static void Update(this IEnumerable<Test> entryList)
-        {
-            // Updates all related Test and Subtest instances in a report
-
-            using (LabDbEntities entities = new LabDbEntities())
-            {
-                foreach (Test tst in entryList)
-                {
-                    entities.Tests.AddOrUpdate(tst);
-                    foreach (SubTest sts in tst.SubTests)
-                        entities.SubTests.AddOrUpdate(sts);
-                }
-                entities.SaveChanges();
-            }
-        }
-
-        #endregion Methods
+        
     }
 
     public partial class Test

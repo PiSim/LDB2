@@ -22,8 +22,7 @@ namespace Specifications
         #region Constructors
 
         public SpecificationService(IDbContextFactory<LabDbEntities> dbContextFactory,
-                            IEventAggregator eventAggregator,
-                                    IDataService dataService)
+                            IEventAggregator eventAggregator)
         {
             _eventAggregator = eventAggregator;
             _dbContextFactory = dbContextFactory;

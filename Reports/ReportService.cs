@@ -17,8 +17,7 @@ namespace Reports
     public class ReportService : IReportService
     {
         #region Fields
-
-        private IDataService _dataService;
+        
         private IDbContextFactory<LabDbEntities> _dbContextFactory;
         private IEventAggregator _eventAggregator;
         private IDataService<LabDbEntities> _labDbData;
@@ -29,12 +28,10 @@ namespace Reports
 
         public ReportService(IDataService<LabDbEntities> labDbData,
                             IDbContextFactory<LabDbEntities> dbContextFactory,
-                            IEventAggregator aggregator,
-                            IDataService dataService)
+                            IEventAggregator aggregator)
         {
             _labDbData = labDbData;
             _eventAggregator = aggregator;
-            _dataService = dataService;
             _dbContextFactory = dbContextFactory;
         }
 

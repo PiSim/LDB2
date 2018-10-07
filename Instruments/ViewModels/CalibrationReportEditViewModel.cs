@@ -1,6 +1,7 @@
 ﻿using Controls.Views;
 using DataAccess;
 using Infrastructure;
+using Infrastructure.Commands;
 using Infrastructure.Events;
 using Infrastructure.Queries;
 using Instruments.Queries;
@@ -24,9 +25,7 @@ namespace Instruments.ViewModels
         #region Fields
 
         private CalibrationReport _calibrationInstance;
-
-        private IDataService _dataService;
-
+        
         private bool _editMode,
                                             _readOnlyMode;
 
@@ -47,11 +46,9 @@ namespace Instruments.ViewModels
 
         public CalibrationReportEditViewModel(IDataService<LabDbEntities> labDbData,
                                                 IEventAggregator eventAggregator,
-                                                IDataService dataService,
                                                 InstrumentService instrumentService)
         {
             _labDbData = labDbData;
-            _dataService = dataService;
             _editMode = false;
             _instrumentService = instrumentService;
 
@@ -130,7 +127,7 @@ namespace Instruments.ViewModels
             RemoveFileCommand = new DelegateCommand(
                 () =>
                 {
-                    _selectedFile.Delete();
+                    _labDbData.Execute(new DeleteEntityCommand(_selectedFile));
 
                     RaisePropertyChanged("FileList");
 

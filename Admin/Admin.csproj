@@ -142,6 +142,9 @@
   <ItemGroup>
     <Compile Include="AdminModule.cs" />
     <Compile Include="AdminService.cs" />
+    <Compile Include="Queries\OrganizationRolesQuery.cs" />
+    <Compile Include="Queries\PersonRolesQuery.cs" />
+    <Compile Include="Queries\UsersQuery.cs" />
     <Compile Include="Scripts\BuildExternalTestRecordsScript.cs" />
     <Compile Include="Scripts\BuildExternalReportMethodVariantMappingScript.cs" />
     <Compile Include="Scripts\BuildMethodVersionRequirementReferences.cs" />

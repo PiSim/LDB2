@@ -6,30 +6,6 @@ namespace LabDbContext
     public partial class TestRecord
     {
         #region Methods
-
-        public void Create()
-        {
-            using (LabDbEntities entities = new LabDbEntities())
-            {
-                entities.TestRecords.Add(this);
-
-                entities.SaveChanges();
-            }
-        }
-
-        /// <summary>
-        /// Removes this entry from the database
-        /// </summary>
-        public void Delete()
-        {
-            using (LabDbEntities entities = new LabDbEntities())
-            {
-                entities.Entry(entities.TestRecords.First(tstr => tstr.ID == ID))
-                        .State = EntityState.Deleted;
-                entities.SaveChanges();
-            }
-        }
-
         /// <summary>
         /// Returns the report which uses this TestRecord
         /// </summary>
