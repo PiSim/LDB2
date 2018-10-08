@@ -1,6 +1,7 @@
 ﻿using Controls.Views;
 using DataAccess;
 using Infrastructure;
+using Infrastructure.Commands;
 using Infrastructure.Events;
 using Infrastructure.Queries;
 using LabDbContext;
@@ -82,7 +83,7 @@ namespace Reports.ViewModels
                             temp.Description = "";
                             temp.ExternalReportID = _instance.ID;
 
-                            temp.Create();
+                            _labDbData.Execute(new InsertEntityCommand(temp));
                         }
 
                         RaisePropertyChanged("ReportFiles");

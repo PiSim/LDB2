@@ -1,6 +1,7 @@
 ﻿using Controls.Views;
 using DataAccess;
 using Infrastructure;
+using Infrastructure.Commands;
 using Infrastructure.Events;
 using Infrastructure.Queries;
 using Infrastructure.Wrappers;
@@ -139,7 +140,7 @@ namespace Instruments.ViewModels
             RemoveFileCommand = new DelegateCommand(
                 () =>
                 {
-                    _selectedFile.Delete();
+                    _labDbData.Execute(new DeleteEntityCommand(_selectedFile));
 
                     RaisePropertyChanged("FileList");
                     SelectedFile = null;

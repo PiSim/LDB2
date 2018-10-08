@@ -154,7 +154,7 @@ namespace Admin
                 OrganizationRole output = new OrganizationRole();
                 output.Description = "";
                 output.Name = creationDialog.InputString;
-                output.Create();
+                _labDbData.Execute(new InsertEntityCommand(output));
 
                 CreateMappingsForNewRole(output);
                 return output;
@@ -282,7 +282,7 @@ namespace Admin
                     UserID = usr.ID
                 };
 
-                newMap.Create();
+                _labDbData.Execute(new InsertEntityCommand(newMap));
             }
 
             return newRole;

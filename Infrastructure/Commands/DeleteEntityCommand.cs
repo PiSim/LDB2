@@ -15,6 +15,10 @@ namespace Infrastructure.Commands
     {
         private object _entity;
 
+        public DeleteEntityCommand()
+        {
+        }
+
         public DeleteEntityCommand(object entity)
         {
             _entity = entity;

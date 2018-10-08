@@ -1,5 +1,6 @@
 ﻿using DataAccess;
 using Infrastructure;
+using Infrastructure.Commands;
 using Infrastructure.Events;
 using Infrastructure.Queries;
 using LabDbContext;
@@ -69,7 +70,7 @@ namespace Reports.ViewModels
                             temp.Path = pth;
                             temp.Description = "";
                             temp.reportID = _instance.ID;
-                            temp.Create();
+                            _labDbData.Execute(new InsertEntityCommand(temp));
                         }
 
                         RaisePropertyChanged("FileList");
@@ -119,7 +120,7 @@ namespace Reports.ViewModels
                 testItem =>
                 {
                     TaskItem tempTaskItem = testItem.GetTaskItem();
-                    testItem.Delete();
+                    _labDbData.Execute(new DeleteEntityCommand(testItem));
 
                     if (tempTaskItem != null)
                     {

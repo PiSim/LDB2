@@ -1,3 +1,0 @@
-﻿namespace LabDbContext.Services.Tests
-{
-}

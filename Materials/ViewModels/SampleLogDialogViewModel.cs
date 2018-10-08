@@ -1,5 +1,6 @@
 ﻿using DataAccess;
 using Infrastructure;
+using Infrastructure.Commands;
 using Infrastructure.Events;
 using Infrastructure.Queries;
 using Infrastructure.Wrappers;
@@ -57,7 +58,7 @@ namespace Materials.ViewModels
                         personID = (Thread.CurrentPrincipal as DBPrincipal).CurrentPerson.ID
                     };
 
-                    newLog.Create();
+                    _labDbData.Execute(new InsertEntityCommand(newLog));
 
                     if (_batchInstance.FirstSampleArrived == false)
                     {

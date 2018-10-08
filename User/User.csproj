@@ -176,9 +176,9 @@
       <Project>{315cd8ab-0509-4d45-aba5-b2cbd0f10f69}</Project>
       <Name>Controls</Name>
     </ProjectReference>
-    <ProjectReference Include="..\DBManager\LabDbContext.csproj">
-      <Project>{ab8b448c-dd74-4d60-a041-3e5d03a32180}</Project>
-      <Name>LabDbContext</Name>
+    <ProjectReference Include="..\DataAccess\DataAccess.csproj">
+      <Project>{d2cbb1e5-a945-4715-828c-e2ae2dafcd0a}</Project>
+      <Name>DataAccess</Name>
     </ProjectReference>
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj">
       <Project>{c432c3be-1051-45f1-95a1-9397bbf35923}</Project>
@@ -187,6 +187,10 @@
     <ProjectReference Include="..\Instruments\Instruments.csproj">
       <Project>{820441f7-4e40-4536-9b31-6a30c7811e92}</Project>
       <Name>Instruments</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LabDbContext\LabDbContext.csproj">
+      <Project>{ab8b448c-dd74-4d60-a041-3e5d03a32180}</Project>
+      <Name>LabDbContext</Name>
     </ProjectReference>
     <ProjectReference Include="..\Projects\Projects.csproj">
       <Project>{18b8efff-84ff-4652-b3e6-a35f59461247}</Project>

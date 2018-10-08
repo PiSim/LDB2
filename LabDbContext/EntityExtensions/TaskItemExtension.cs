@@ -5,9 +5,6 @@ using System.Linq;
 
 namespace LabDbContext
 {
-    public static class TaskItemExtension
-    {
-
     public partial class TaskItem
     {
         #region Properties

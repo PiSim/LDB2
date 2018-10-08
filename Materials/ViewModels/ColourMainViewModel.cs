@@ -1,6 +1,7 @@
 ﻿using Controls.Views;
 using DataAccess;
 using Infrastructure;
+using Infrastructure.Commands;
 using Infrastructure.Events;
 using LabDbContext;
 using LabDbContext.EntityExtensions;
@@ -50,7 +51,7 @@ namespace Materials.ViewModels
                             Name = newColourDialog.InputString
                         };
 
-                        newColour.Create();
+                        _labDbData.Execute(new InsertEntityCommand(newColour));
 
                         _eventAggregator.GetEvent<ColorChanged>()
                                         .Publish(new EntityChangedToken(newColour,
@@ -62,7 +63,8 @@ namespace Materials.ViewModels
             DeleteColourCommand = new DelegateCommand(
                 () =>
                 {
-                    _selectedColour.Delete(); _eventAggregator.GetEvent<ColorChanged>()
+                    _labDbData.Execute(new DeleteEntityCommand(_selectedColour));
+                    _eventAggregator.GetEvent<ColorChanged>()
                                          .Publish(new EntityChangedToken(_selectedColour,
                                                                          EntityChangedToken.EntityChangedAction.Deleted));
 

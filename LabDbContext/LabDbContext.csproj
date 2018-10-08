@@ -390,6 +390,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>LabDB.edmx</DependentUpon>
     </Compile>
+    <Compile Include="LabDbData.cs" />
     <Compile Include="LabDBEntitiesModule.cs" />
     <Compile Include="LabDB.cs">
       <AutoGen>True</AutoGen>
@@ -402,7 +403,6 @@
       <DependentUpon>LabDB.edmx</DependentUpon>
     </Compile>
     <Compile Include="LabDBConfig.cs" />
-    <Compile Include="LabDbData.cs" />
     <Compile Include="Master.cs">
       <DependentUpon>LabDB.tt</DependentUpon>
     </Compile>
@@ -551,12 +551,6 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ClassLibrary1\DataAccess.csproj">
-      <Project>{d2cbb1e5-a945-4715-828c-e2ae2dafcd0a}</Project>
-      <Name>DataAccess</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="LabDB.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>LabDB.edmx</DependentUpon>
@@ -570,6 +564,12 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DataAccess\DataAccess.csproj">
+      <Project>{D2CBB1E5-A945-4715-828C-E2AE2DAFCD0A}</Project>
+      <Name>DataAccess</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

@@ -1,6 +1,7 @@
 ﻿using Controls.Views;
 using DataAccess;
 using Infrastructure;
+using Infrastructure.Commands;
 using Infrastructure.Events;
 using LabDbContext;
 using LabDbContext.EntityExtensions;
@@ -50,7 +51,7 @@ namespace Materials.ViewModels
                 () =>
                 {
                     EditMode = false;
-                    _aspectInstance.Update();
+                    _labDbData.Execute(new UpdateEntryCommand(_aspectInstance));
                 },
                 () => _editMode);
 

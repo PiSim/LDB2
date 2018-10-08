@@ -1,5 +1,6 @@
 ﻿using DataAccess;
 using Infrastructure;
+using Infrastructure.Commands;
 using Infrastructure.Events;
 using Infrastructure.Queries;
 using Infrastructure.Wrappers;
@@ -67,7 +68,7 @@ namespace Materials
 
             if (aspectCreationDialog.ShowDialog() == true)
             {
-                aspectCreationDialog.AspectInstance.Create();
+                _labDbData.Execute(new InsertEntityCommand(aspectCreationDialog.AspectInstance));
                 return aspectCreationDialog.AspectInstance;
             }
             else
@@ -114,7 +115,7 @@ namespace Materials
 
         public void DeleteSample(Sample smp)
         {
-            smp.Delete();
+            _labDbData.Execute(new DeleteEntityCommand(smp));
             SampleLogChoiceWrapper tempChoice = SampleLogActions.ActionList.First(scc => scc.Code == smp.Code);
             Batch tempBatch = _labDbData.RunQuery(new BatchQuery() { ID = smp.BatchID });
 

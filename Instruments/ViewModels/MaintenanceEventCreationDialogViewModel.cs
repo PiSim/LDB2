@@ -1,4 +1,6 @@
-﻿using Infrastructure;
+﻿using DataAccess;
+using Infrastructure;
+using Infrastructure.Commands;
 using LabDbContext;
 using LabDbContext.EntityExtensions;
 using LabDbContext.Services;
@@ -12,9 +14,11 @@ namespace Instruments.ViewModels
 {
     public class MaintenanceEventCreationDialogViewModel : BindableBase
     {
+        private IDataService<LabDbEntities> _labDbData;
+
         #region Constructors
 
-        public MaintenanceEventCreationDialogViewModel() : base()
+        public MaintenanceEventCreationDialogViewModel(IDataService<LabDbEntities> labDbData) : base()
         {
             Date = DateTime.Now.Date;
 
@@ -34,7 +38,7 @@ namespace Instruments.ViewModels
                     EventInstance.InstrumentID = InstrumentInstance.ID;
                     EventInstance.PersonID = (Thread.CurrentPrincipal as DBPrincipal).CurrentPerson.ID;
 
-                    EventInstance.Create();
+                    _labDbData.Execute(new InsertEntityCommand(EventInstance));
 
                     parentDialog.DialogResult = true;
                 });

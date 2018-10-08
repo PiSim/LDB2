@@ -298,16 +298,6 @@
     <Resource Include="Resources\vulca_logo.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ClassLibrary1\DataAccess.csproj">
-      <Project>{D2CBB1E5-A945-4715-828C-E2AE2DAFCD0A}</Project>
-      <Name>DataAccess</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\DBManager\LabDbContext.csproj">
-      <Project>{ab8b448c-dd74-4d60-a041-3e5d03a32180}</Project>
-      <Name>LabDbContext</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Page Include="Resources\CommonResourceDictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -325,7 +315,16 @@
   <ItemGroup>
     <Resource Include="Resources\pdf_icon_small.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\DataAccess\DataAccess.csproj">
+      <Project>{d2cbb1e5-a945-4715-828c-e2ae2dafcd0a}</Project>
+      <Name>DataAccess</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LabDbContext\LabDbContext.csproj">
+      <Project>{ab8b448c-dd74-4d60-a041-3e5d03a32180}</Project>
+      <Name>LabDbContext</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

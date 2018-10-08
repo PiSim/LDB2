@@ -1,6 +1,7 @@
 ﻿using Controls.Views;
 using DataAccess;
 using Infrastructure;
+using Infrastructure.Commands;
 using Infrastructure.Events;
 using LabDbContext;
 using LabDbContext.EntityExtensions;
@@ -54,7 +55,7 @@ namespace Materials.ViewModels
             RemoveAspectCommand = new DelegateCommand(
                 () =>
                 {
-                    _selectedAspect.Delete();
+                    _labDbData.Execute(new DeleteEntityCommand(_selectedAspect));
                     SelectedAspect = null;
                     RaisePropertyChanged("AspectList");
                 },

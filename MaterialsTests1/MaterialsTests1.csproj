@@ -83,10 +83,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DBManager\LabDbContext.csproj">
-      <Project>{AB8B448C-DD74-4D60-A041-3E5D03A32180}</Project>
-      <Name>LabDbContext</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Materials\Materials.csproj">
       <Project>{B6863F10-ADC1-4F0C-987B-8ACA2DB14B0F}</Project>
       <Name>Materials</Name>

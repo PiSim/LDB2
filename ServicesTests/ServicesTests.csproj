@@ -121,12 +121,6 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\DBManager\LabDbContext.csproj">
-      <Project>{ab8b448c-dd74-4d60-a041-3e5d03a32180}</Project>
-      <Name>LabDbContext</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

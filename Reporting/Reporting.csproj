@@ -201,13 +201,17 @@
     <Resource Include="Resources\vulca_logo.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DBManager\LabDbContext.csproj">
-      <Project>{ab8b448c-dd74-4d60-a041-3e5d03a32180}</Project>
-      <Name>LabDbContext</Name>
+    <ProjectReference Include="..\DataAccess\DataAccess.csproj">
+      <Project>{d2cbb1e5-a945-4715-828c-e2ae2dafcd0a}</Project>
+      <Name>DataAccess</Name>
     </ProjectReference>
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj">
       <Project>{c432c3be-1051-45f1-95a1-9397bbf35923}</Project>
       <Name>Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LabDbContext\LabDbContext.csproj">
+      <Project>{ab8b448c-dd74-4d60-a041-3e5d03a32180}</Project>
+      <Name>LabDbContext</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -1,4 +1,5 @@
 ﻿using DataAccess;
+using Infrastructure.Commands;
 using Infrastructure.Queries;
 using LabDbContext;
 using LabDbContext.EntityExtensions;
@@ -66,7 +67,7 @@ namespace Materials.ViewModels
                             Code = _aspectCode
                         };
 
-                        AspectInstance.Create();
+                        _labDbData.Execute(new InsertEntityCommand(AspectInstance));
                     };
 
                     if (LineInstance == null)
@@ -76,7 +77,7 @@ namespace Materials.ViewModels
                             Code = _lineCode
                         };
 
-                        LineInstance.Create();
+                        _labDbData.Execute(new InsertEntityCommand(LineInstance));
                     }
 
                     if (RecipeInstance == null)
@@ -89,7 +90,7 @@ namespace Materials.ViewModels
                         if (_selectedColour != null)
                             RecipeInstance.ColourID = _selectedColour.ID;
 
-                        RecipeInstance.Create();
+                        _labDbData.Execute(new InsertEntityCommand(RecipeInstance));
                     }
                     else if (_selectedColour != null && RecipeInstance.ColourID != _selectedColour.ID)
                     {
@@ -143,7 +144,7 @@ namespace Materials.ViewModels
                         if (_selectedProject != null)
                             tempMaterial.ProjectID = _selectedProject.ID;
 
-                        tempMaterial.Create();
+                        _labDbData.Execute(new InsertEntityCommand(tempMaterial));
                     }
 
                     BatchInstance = new Batch()
