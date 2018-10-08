@@ -85,6 +85,9 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Commands\DeleteEntityCommandTests.cs" />
+    <Compile Include="Commands\InsertEntityCommandTests.cs" />
+    <Compile Include="Commands\ReloadEntityCommandTests.cs" />
+    <Compile Include="Commands\UpdateEntityCommandTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

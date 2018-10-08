@@ -170,7 +170,7 @@
     <Compile Include="Commands\DeleteEntityCommand.cs" />
     <Compile Include="Commands\InsertEntityCommand.cs" />
     <Compile Include="Commands\ReloadEntityCommand.cs" />
-    <Compile Include="Commands\UpdateEntryCommand.cs" />
+    <Compile Include="Commands\UpdateEntityCommand.cs" />
     <Compile Include="Converters\BatchHasOrderToVisibilityConverter.cs" />
     <Compile Include="Converters\BooleanNegationConverter.cs" />
     <Compile Include="Converters\BooleanOrConverter.cs" />

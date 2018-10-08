@@ -8,14 +8,11 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Commands
 {
-    /// <summary>
-    /// Command object that reloads all values for a given Entry
-    /// </summary>
-    public class ReloadEntityCommand : ICommand<LabDbEntities>
+    public class UpdateEntityCommand : ICommand<LabDbEntities>
     {
         private object _entity;
 
-        public ReloadEntityCommand(object entity)
+        public UpdateEntityCommand(object entity)
         {
             _entity = entity;
         }
@@ -23,7 +20,8 @@ namespace Infrastructure.Commands
         public void Execute(LabDbEntities context)
         {
             context.Set(_entity.GetType()).Attach(_entity);
-            context.Entry(_entity).Reload();
+            context.Entry(_entity).State = System.Data.Entity.EntityState.Modified;
+            context.SaveChanges();
         }
     }
 }
