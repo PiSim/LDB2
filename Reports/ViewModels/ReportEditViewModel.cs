@@ -109,7 +109,7 @@ namespace Reports.ViewModels
             RemoveFileCommand = new DelegateCommand(
                 () =>
                 {
-                    _selectedFile.Delete();
+                    _labDbData.Execute(new DeleteEntityCommand(_selectedFile));
                     SelectedFile = null;
 
                     RaisePropertyChanged("FileList");

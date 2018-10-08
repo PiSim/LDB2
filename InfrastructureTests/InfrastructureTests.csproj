@@ -84,6 +84,8 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="Commands\BulkInsertEntitiesCommandTests.cs" />
+    <Compile Include="Commands\BulkUpdateEntitiesCommandTests.cs" />
     <Compile Include="Commands\DeleteEntityCommandTests.cs" />
     <Compile Include="Commands\InsertEntityCommandTests.cs" />
     <Compile Include="Commands\ReloadEntityCommandTests.cs" />

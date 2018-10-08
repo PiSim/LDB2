@@ -122,7 +122,7 @@ namespace Reports.ViewModels
             RemoveBatchCommand = new DelegateCommand(
                 () =>
                 {
-                    _selectedRecord.Delete();
+                    _labDbData.Execute(new DeleteEntityCommand(_selectedRecord));
                     SelectedRecord = null;
                     RefreshTestRecords();
                     ResultColumnCollection = _instance.GetResultPresentationColumns();
@@ -132,7 +132,7 @@ namespace Reports.ViewModels
             RemoveFileCommand = new DelegateCommand(
                 () =>
                 {
-                    _selectedFile.Delete();
+                    _labDbData.Execute(new DeleteEntityCommand(_selectedFile));
                     SelectedFile = null;
                 },
                 () => _selectedFile != null && EditMode);

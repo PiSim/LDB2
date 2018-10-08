@@ -1,5 +1,6 @@
 ﻿using DataAccess;
 using Infrastructure;
+using Infrastructure.Commands;
 using Infrastructure.Events;
 using Infrastructure.Queries;
 using LabDbContext;
@@ -45,7 +46,7 @@ namespace Admin.ViewModels
             _save = new DelegateCommand(
                 () =>
                 {
-                    _selectedPerson.Update();
+                    _labDbData.Execute(new UpdateEntityCommand(_selectedPerson));
                 });
         }
 
@@ -74,8 +75,7 @@ namespace Admin.ViewModels
             set
             {
                 _selectedPerson = value;
-                _selectedPerson.Load();
-
+                _labDbData.Execute(new ReloadEntityCommand(_selectedPerson));
                 RaisePropertyChanged("SelectedPerson");
                 RaisePropertyChanged("PersonRoleMappingList");
             }

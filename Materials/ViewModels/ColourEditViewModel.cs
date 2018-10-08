@@ -1,4 +1,6 @@
-﻿using Infrastructure;
+﻿using DataAccess;
+using Infrastructure;
+using Infrastructure.Commands;
 using Infrastructure.Events;
 using LabDbContext;
 using LabDbContext.EntityExtensions;
@@ -18,14 +20,17 @@ namespace Materials.ViewModels
         private IEventAggregator _eventAggregator;
         private Batch _selectedBatch;
         private Recipe _selectedRecipe;
+        IDataService<LabDbEntities> _labDbData;
 
         #endregion Fields
 
         #region Constructors
 
-        public ColourEditViewModel(IEventAggregator eventAggregator) : base()
+        public ColourEditViewModel(IEventAggregator eventAggregator,
+                                    IDataService<LabDbEntities> labDbData) : base()
         {
             _eventAggregator = eventAggregator;
+            _labDbData = labDbData;
 
             OpenBatchCommand = new DelegateCommand(
                 () =>
@@ -39,7 +44,7 @@ namespace Materials.ViewModels
             SaveCommand = new DelegateCommand(
                 () =>
                 {
-                    _colourInstance.Update();
+                    _labDbData.Execute(new UpdateEntityCommand(_colourInstance));
                     EditMode = false;
                 },
                 () => EditMode);

@@ -167,6 +167,8 @@
   <ItemGroup>
     <Compile Include="AdminViewNames.cs" />
     <Compile Include="CommandBinder.cs" />
+    <Compile Include="Commands\BulkInsertEntitiesCommand.cs" />
+    <Compile Include="Commands\BulkUpdateEntitiesCommand.cs" />
     <Compile Include="Commands\DeleteEntityCommand.cs" />
     <Compile Include="Commands\InsertEntityCommand.cs" />
     <Compile Include="Commands\ReloadEntityCommand.cs" />

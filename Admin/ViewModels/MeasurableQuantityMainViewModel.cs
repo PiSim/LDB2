@@ -1,5 +1,7 @@
 ﻿using Controls.Views;
+using DataAccess;
 using Infrastructure;
+using Infrastructure.Commands;
 using Infrastructure.Events;
 using LabDbContext;
 using LabDbContext.EntityExtensions;
@@ -20,6 +22,7 @@ namespace Admin.ViewModels
         private IAdminService _adminService;
         private IEventAggregator _eventAggregator;
         private MeasurableQuantity _selectedMeasurableQuantity;
+        private IDataService<LabDbEntities> _labDbData;
 
         #endregion Fields
 
@@ -27,16 +30,16 @@ namespace Admin.ViewModels
 
         public MeasurableQuantityMainViewModel(IEventAggregator eventAggregator,
                                                 IAdminService adminService,
-                                                IDataService dataService) : base()
+                                                IDataService<LabDbEntities> labDbData) : base()
         {
             _adminService = adminService;
-            _dataService = dataService;
+            _labDbData = labDbData;
             _eventAggregator = eventAggregator;
 
             DeleteQuantityCommand = new DelegateCommand(
                 () =>
                 {
-                    _selectedMeasurableQuantity.Delete();
+                    _labDbData.Execute(new DeleteEntityCommand(_selectedMeasurableQuantity));
                 });
 
             NewMeasurableQuantityCommand = new DelegateCommand(

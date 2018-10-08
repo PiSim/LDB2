@@ -95,7 +95,7 @@ namespace Materials.ViewModels
                     else if (_selectedColour != null && RecipeInstance.ColourID != _selectedColour.ID)
                     {
                         _recipeInstance.ColourID = _selectedColour.ID;
-                        _recipeInstance.Update();
+                        _labDbData.Execute(new UpdateEntityCommand(_recipeInstance));
                     }
 
                     Material tempMaterial = _labDbData.RunQuery(new MaterialQuery()
@@ -125,7 +125,7 @@ namespace Materials.ViewModels
                         }
 
                         if (requiresUpdate)
-                            tempMaterial.Update();
+                            _labDbData.Execute(new UpdateEntityCommand(tempMaterial));
                     }
 
                     if (tempMaterial == null)

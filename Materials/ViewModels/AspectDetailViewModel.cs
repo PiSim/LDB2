@@ -51,7 +51,7 @@ namespace Materials.ViewModels
                 () =>
                 {
                     EditMode = false;
-                    _labDbData.Execute(new UpdateEntryCommand(_aspectInstance));
+                    _labDbData.Execute(new UpdateEntityCommand(_aspectInstance));
                 },
                 () => _editMode);
 
