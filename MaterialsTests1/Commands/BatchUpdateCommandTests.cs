@@ -1,4 +1,5 @@
-﻿using LabDbContext;
+﻿using DataAccess;
+using LabDbContext;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Materials.Commands.Tests
@@ -8,7 +9,7 @@ namespace Materials.Commands.Tests
     {
         #region Fields
 
-        private LabDbEntities testContext;
+        string connectionString = "connection string=&quot;server=192.168.1.22;user id=LabDBClient;Pwd=910938356;persistsecurityinfo=True;database=labdb_dev;port=3306;SslMode=none&quot;";
 
         #endregion Fields
 
@@ -17,9 +18,6 @@ namespace Materials.Commands.Tests
         [TestMethod()]
         public void BatchUpdateCommandTest()
         {
-            testContext = new LabDbEntities()
-            {
-            };
         }
 
         [TestMethod()]

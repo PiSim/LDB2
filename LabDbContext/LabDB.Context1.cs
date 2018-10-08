@@ -10,16 +10,28 @@
 namespace LabDbContext
 {
     using System;
+    using System.Data.Common;
     using System.Data.Entity;
+    using System.Data.Entity.Core.EntityClient;
     using System.Data.Entity.Infrastructure;
-    
+
     public partial class LabDbEntities : DbContext
     {
         public LabDbEntities()
-            : base("name=LabDbEntities")
+               : base("name=LabDbEntities")
         {
         }
-    
+
+        public LabDbEntities(string v)
+            : base(v)
+        {
+        }
+
+        public LabDbEntities(DbConnection connection)
+            :base(connection, false)
+        {
+        }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             throw new UnintentionalCodeFirstException();
