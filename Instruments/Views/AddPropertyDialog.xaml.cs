@@ -1,5 +1,6 @@
 ﻿using LabDbContext;
 using Microsoft.Practices.Prism.Mvvm;
+using System;
 using System.Windows;
 
 namespace Instruments.Views
@@ -10,7 +11,7 @@ namespace Instruments.Views
     public partial class AddPropertyDialog : Window, IView
     {
         #region Constructors
-
+        [Obsolete]
         public AddPropertyDialog()
         {
             InitializeComponent();

@@ -1,4 +1,5 @@
-﻿using LabDbContext;
+﻿using DataAccess;
+using LabDbContext;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
@@ -10,7 +11,7 @@ namespace Admin.ViewModels
     {
         #region Fields
 
-        private IDataService _dataService;
+        private IDataService<LabDbEntities> _labDbData;
         private IEventAggregator _eventAggregator;
 
         #endregion Fields
@@ -18,10 +19,10 @@ namespace Admin.ViewModels
         #region Constructors
 
         public MeasurementUnitMainViewModel(IEventAggregator eventAggregator,
-                                            IDataService dataService)
+                                            IDataService<LabDbEntities> labDbData)
         {
             _eventAggregator = eventAggregator;
-            _dataService = dataService;
+            _labDbData = labDbData;
 
             NewUnitCommand = new DelegateCommand(
                 () =>
@@ -41,7 +42,7 @@ namespace Admin.ViewModels
 
         public MeasurementUnit SelectedUnit { get; set; }
 
-        public IEnumerable<MeasurementUnit> UnitOfMeasurementList => _dataService.GetMeasurementUnits();
+        //public IEnumerable<MeasurementUnit> UnitOfMeasurementList => _labDbData.RunQuery(new);
 
         #endregion Properties
     }

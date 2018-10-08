@@ -1,5 +1,8 @@
+using Admin.Queries;
 using Controls.Views;
+using DataAccess;
 using Infrastructure;
+using Infrastructure.Commands;
 using Infrastructure.Events;
 using LabDbContext;
 using LabDbContext.EntityExtensions;
@@ -13,10 +16,10 @@ namespace Admin
     public class AdminService : IAdminService
     {
         #region Fields
-
-        private IDataService _dataService;
+        
         private IDbContextFactory<LabDbEntities> _dbContextFactory;
         private IEventAggregator _eventAggregator;
+        private IDataService<LabDbEntities> _labDbData;
 
         #endregion Fields
 
@@ -24,11 +27,11 @@ namespace Admin
 
         public AdminService(IDbContextFactory<LabDbEntities> dbContextFactory,
                             IEventAggregator aggregator,
-                            IDataService dataService)
+                            IDataService<LabDbEntities> labDbData)
         {
             _eventAggregator = aggregator;
             _dbContextFactory = dbContextFactory;
-            _dataService = dataService;
+            _labDbData = labDbData;
         }
 
         #endregion Constructors
@@ -97,7 +100,7 @@ namespace Admin
                     Name = creationDialog.InputString
                 };
 
-                output.Create();
+                _labDbData.Execute(new InsertEntityCommand(output));
                 return output;
             }
 
@@ -118,7 +121,7 @@ namespace Admin
                     Category = "",
                     Name = creationDialog.InputString
                 };
-                foreach (OrganizationRole orr in _dataService.GetOrganizationRoles())
+                foreach (OrganizationRole orr in _labDbData.RunQuery(new OrganizationRolesQuery()))
                 {
                     OrganizationRoleMapping tempORM = new OrganizationRoleMapping
                     {
@@ -176,7 +179,7 @@ namespace Admin
                 Name = addPersonDialog.InputString
             };
 
-            foreach (PersonRole prr in _dataService.GetPersonRoles())
+            foreach (PersonRole prr in _labDbData.RunQuery(new PersonRolesQuery()))
             {
                 PersonRoleMapping tempPRM = new PersonRoleMapping();
                 tempPRM.roleID = prr.ID;
@@ -184,7 +187,7 @@ namespace Admin
                 newPerson.RoleMappings.Add(tempPRM);
             }
 
-            newPerson.Create();
+            _labDbData.Execute(new InsertEntityCommand(newPerson));
 
             return newPerson;
         }
@@ -233,7 +236,7 @@ namespace Admin
             {
                 Property output = new Property();
                 output.Name = creationDialog.InputString;
-                output.Create();
+                _labDbData.Execute(new InsertEntityCommand(output));
 
                 return output;
             }
@@ -268,9 +271,9 @@ namespace Admin
                 Description = ""
             };
 
-            newRole.Create();
+            _labDbData.Execute(new InsertEntityCommand(newRole));
 
-            foreach (User usr in _dataService.GetUsers())
+            foreach (User usr in _labDbData.RunQuery(new UsersQuery()))
             {
                 UserRoleMapping newMap = new UserRoleMapping
                 {

@@ -1,4 +1,5 @@
 ﻿using Controls.Views;
+using DataAccess;
 using Infrastructure;
 using LabDbContext;
 using Prism.Commands;
@@ -13,7 +14,6 @@ namespace Admin.ViewModels
         #region Fields
 
         private IAdminService _adminService;
-        private IDataService _dataService;
         private IEventAggregator _eventAggregator;
         private DelegateCommand _runMethod;
 
@@ -22,11 +22,9 @@ namespace Admin.ViewModels
         #region Constructors
 
         public AdminMainViewModel(IEventAggregator eventAggregator,
-                                    IAdminService adminService,
-                                    IDataService dataService) : base()
+                                    IAdminService adminService) : base()
         {
             _adminService = adminService;
-            _dataService = dataService;
             _eventAggregator = eventAggregator;
 
             ScriptList = new List<ScriptBase>()
@@ -86,7 +84,6 @@ namespace Admin.ViewModels
         public string OrganizationRoleManagementRegionName => RegionNames.OrganizationRoleManagementRegion;
 
         public string PeopleManagementRegionName => RegionNames.PeopleManagementRegion;
-        public IEnumerable<PersonRole> PersonRoleList => _dataService.GetPersonRoles();
         public string PropertyRegionName => RegionNames.PropertyManagementRegion;
 
         public DelegateCommand RunMethodCommand => _runMethod;

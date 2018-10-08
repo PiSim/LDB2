@@ -323,44 +323,27 @@
     </Compile>
     <Compile Include="DataAccessService.cs" />
     <Compile Include="LabDBContextFactory.cs" />
-    <Compile Include="EntityExtensions\AspectExtension.cs" />
     <Compile Include="EntityExtensions\BatchExtension.cs" />
-    <Compile Include="EntityExtensions\CalibrationFileExtension.cs" />
     <Compile Include="EntityExtensions\CalibrationReportExtension.cs" />
     <Compile Include="EntityExtensions\CalibrationReportInstrumentPropertyMappingExtension.cs" />
-    <Compile Include="EntityExtensions\ColourExtension.cs" />
     <Compile Include="EntityExtensions\ControlPlanExtension.cs" />
-    <Compile Include="EntityExtensions\ControlPlanItemExtension.cs" />
     <Compile Include="EntityExtensions\ExternalConstructionExtension.cs" />
     <Compile Include="EntityExtensions\ExternalReportExtension.cs" />
-    <Compile Include="EntityExtensions\ExternalReportFileExtension.cs" />
     <Compile Include="EntityExtensions\InstrumentExtension.cs" />
-    <Compile Include="EntityExtensions\InstrumentFileExtension.cs" />
-    <Compile Include="EntityExtensions\InstrumentMaintenanceEventExtension.cs" />
     <Compile Include="EntityExtensions\InstrumentMeasurablePropertyExtension.cs" />
     <Compile Include="EntityExtensions\InstrumentTypeExtension.cs" />
     <Compile Include="EntityExtensions\InstrumentUtilizationAreaExtension.cs" />
     <Compile Include="EntityExtensions\MaterialExtension.cs" />
-    <Compile Include="EntityExtensions\MaterialLineExtension.cs" />
-    <Compile Include="EntityExtensions\MeasurableQuantityExtension.cs" />
     <Compile Include="EntityExtensions\MeasurementUnitExtension.cs" />
     <Compile Include="EntityExtensions\MethodExtension.cs" />
     <Compile Include="EntityExtensions\MethodVariantExtension.cs" />
     <Compile Include="EntityExtensions\OrganizationExtension.cs" />
-    <Compile Include="EntityExtensions\OrganizationRoleExtension.cs" />
-    <Compile Include="EntityExtensions\PersonExtension.cs" />
     <Compile Include="EntityExtensions\ProjectExtension.cs" />
-    <Compile Include="EntityExtensions\PropertyExtension.cs" />
-    <Compile Include="EntityExtensions\RecipeExtension.cs" />
     <Compile Include="EntityExtensions\ReportExtension.cs" />
-    <Compile Include="EntityExtensions\ReportFileExtension.cs" />
     <Compile Include="EntityExtensions\RequirementExtension.cs" />
-    <Compile Include="EntityExtensions\SampleExtension.cs" />
     <Compile Include="EntityExtensions\SpecificationExtension.cs" />
     <Compile Include="EntityExtensions\SpecificationVersionExtension.cs" />
     <Compile Include="EntityExtensions\StandardExtension.cs" />
-    <Compile Include="EntityExtensions\StandardFileExtension.cs" />
-    <Compile Include="EntityExtensions\SubMethodExtension.cs" />
     <Compile Include="EntityExtensions\SubRequirementExtension.cs" />
     <Compile Include="EntityExtensions\SubTaskItemExtension.cs" />
     <Compile Include="EntityExtensions\TaskExtension.cs" />
@@ -369,7 +352,6 @@
     <Compile Include="EntityExtensions\TestRecordExtension.cs" />
     <Compile Include="EntityExtensions\UserExtension.cs" />
     <Compile Include="EntityExtensions\UserRoleExtension.cs" />
-    <Compile Include="EntityExtensions\UserRoleMappingExtension.cs" />
     <Compile Include="ExternalConstruction.cs">
       <DependentUpon>LabDB.tt</DependentUpon>
     </Compile>

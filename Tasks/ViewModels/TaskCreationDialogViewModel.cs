@@ -21,7 +21,6 @@ namespace Tasks.ViewModels
         #region Fields
 
         private string _batchNumber;
-        private IDataService _dataService;
         private IDataService<LabDbEntities> _labDbData;
         private IReportService _reportService;
         private Person _requester;
@@ -35,11 +34,9 @@ namespace Tasks.ViewModels
         #region Constructors
 
         public TaskCreationDialogViewModel(IDataService<LabDbEntities> labDbData,
-                                            IDataService dataService,
                                             IReportService reportService) : base()
         {
             _labDbData = labDbData;
-            _dataService = dataService;
             _reportService = reportService;
 
             LeaderList = _labDbData.RunQuery(new PeopleQuery() { Role = PeopleQuery.PersonRoles.CalibrationTech })

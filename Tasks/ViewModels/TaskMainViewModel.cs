@@ -17,8 +17,7 @@ namespace Tasks.ViewModels
     public class TaskMainViewModel : BindableBase
     {
         #region Fields
-
-        private IDataService _dataService;
+        
         private IEventAggregator _eventAggregator;
         private IReportingService _reportingService;
         private LabDbContext.Task _selectedTask;
@@ -30,12 +29,10 @@ namespace Tasks.ViewModels
         #region Constructors
 
         public TaskMainViewModel(IEventAggregator eventAggregator,
-                                IDataService dataService,
                                 IReportingService reportingService,
                                 ITaskService taskService)
             : base()
         {
-            _dataService = dataService;
             _eventAggregator = eventAggregator;
             _reportingService = reportingService;
             _showAssigned = false;
