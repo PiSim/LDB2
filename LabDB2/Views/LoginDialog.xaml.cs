@@ -1,4 +1,7 @@
-﻿using Infrastructure;
+﻿using DataAccess;
+using Infrastructure;
+using LabDB2.Commands;
+using LabDbContext;
 using System;
 using System.Windows;
 using System.Windows.Controls;
@@ -13,15 +16,18 @@ namespace LabDB2.Views
     {
         #region Fields
 
-        private AuthenticationService _authenticator;
+        private IAuthenticationService _authenticator;
+        private IDataService<LabDbEntities> _labDbData;
 
         #endregion Fields
 
         #region Constructors
 
-        public LoginDialog(AuthenticationService authenticator)
+        public LoginDialog(IAuthenticationService authenticator,
+                            IDataService<LabDbEntities> labDbData)
         {
             _authenticator = authenticator;
+            _labDbData = labDbData;
             InitializeComponent();
             UserNameTextBox.Text = Properties.Settings.Default.LastLogUser;
 
@@ -56,12 +62,12 @@ namespace LabDB2.Views
         {
             try
             {
-                AuthenticatedUser = _authenticator.AuthenticateUser
-                (UserNameTextBox.Text, PasswordBox.Password);
-
-                AuthenticatedPrincipal = new DBPrincipal();
-                AuthenticatedPrincipal.Identity = new DBIdentity(AuthenticatedUser);
-                DialogResult = true;
+                _labDbData.Execute(new AuthenticateUserCommand(new LabDbContext.User()
+                                                                    {
+                                                                        UserName = UserNameTextBox.Text,
+                                                                        HashedPassword = _authenticator.CalculateHash(PasswordBox.Password, UserNameTextBox.Text)
+                                                                    }, 
+                                                                    OnAuthenticationHandler));
             }
             catch (UnauthorizedAccessException)
             {
@@ -74,6 +80,15 @@ namespace LabDB2.Views
         {
             if (e.Key == Key.Enter)
                 Confirm_Click(sender, e);
+        }
+
+        public void OnAuthenticationHandler(LabDbContext.User authenticatedUser)
+        {
+            if (authenticatedUser == null)
+                throw new UnauthorizedAccessException();
+            AuthenticatedPrincipal = new DBPrincipal();
+            AuthenticatedPrincipal.Identity = new DBIdentity(authenticatedUser);
+            DialogResult = true;
         }
 
         #endregion Methods

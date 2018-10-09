@@ -1,4 +1,5 @@
 ﻿using DataAccess;
+using Infrastructure.Commands;
 using Infrastructure.Queries;
 using LabDbContext;
 using LabDbContext.EntityExtensions;
@@ -74,7 +75,7 @@ namespace Specifications.ViewModels
                         if (_selectedOem.ID != _standardInstance.OrganizationID)
                         {
                             _standardInstance.OrganizationID = _selectedOem.ID;
-                            _standardInstance.Update();
+                            _labDbData.Execute(new UpdateEntityCommand(_standardInstance));
                         }
 
                         MethodInstance.StandardID = _standardInstance.ID;

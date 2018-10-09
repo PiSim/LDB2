@@ -6,6 +6,9 @@ using System.Collections.Generic;
 
 namespace Admin.ViewModels
 {
+    /// <summary>
+    /// TODO : REMOVE AND REFACTOR
+    /// </summary>
     public class MeasurableQuantityEditViewModel : BindableBase
     {
         #region Fields
@@ -45,8 +48,6 @@ namespace Admin.ViewModels
                 RaisePropertyChanged("MeasurementUnitList");
             }
         }
-
-        public IEnumerable<MeasurementUnit> MeasurementUnitList => _measurableQuantityInstance.GetMeasurementUnits();
 
         #endregion Properties
     }

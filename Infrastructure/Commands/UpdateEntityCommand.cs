@@ -19,9 +19,10 @@ namespace Infrastructure.Commands
 
         public void Execute(LabDbEntities context)
         {
-            context.Set(_entity.GetType()).Attach(_entity);
+            context.Configuration.AutoDetectChangesEnabled = false;
             context.Entry(_entity).State = System.Data.Entity.EntityState.Modified;
             context.SaveChanges();
+            context.Dispose();
         }
     }
 }

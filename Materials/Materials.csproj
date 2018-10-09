@@ -292,6 +292,7 @@
     <Compile Include="Queries\MaterialTypeQuery.cs" />
     <Compile Include="Queries\QueryPresenter.cs" />
     <Compile Include="Queries\RecipeQuery.cs" />
+    <Compile Include="Queries\RecipesQuery.cs" />
     <Compile Include="Queries\SampleArchiveQuery.cs" />
     <Compile Include="Queries\SamplesQuery.cs" />
     <Compile Include="Queries\TrialAreasQuery.cs" />

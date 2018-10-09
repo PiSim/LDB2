@@ -11,7 +11,7 @@ namespace Instruments.Views
     {
         #region Constructors
 
-        public InstrumentMain(LabDbEntities entities)
+        public InstrumentMain()
         {
             InitializeComponent();
         }

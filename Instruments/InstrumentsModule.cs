@@ -43,6 +43,8 @@ namespace Instruments
             containerRegistry.Register<Object, Views.InstrumentEdit>(InstrumentViewNames.InstrumentEditView);
             containerRegistry.Register<Object, Views.InstrumentMain>(InstrumentViewNames.InstrumentsMainView);
 
+            containerRegistry.RegisterForNavigation(typeof(Views.InstrumentMain), InstrumentViewNames.InstrumentsMainView);
+
             containerRegistry.RegisterSingleton<InstrumentService, InstrumentService>();
         }
 

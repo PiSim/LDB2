@@ -12,9 +12,8 @@
         public static string SpecificationMain => "SpecificationMain";
         public static string SpecificationVersionEdit => "SpecificationVersionEdit";
         public static string SpecificationVersionList => "SpecificationVersionList";
-        public static string StandardEdit => "StandardEdit";
-        public static string StandardIssueEdit => "StandardIssueEdit";
         public static string StandardMain => "StandardMain";
+        public static string StandardIssueEdit => "StandardIssueEdit";
 
         #endregion Properties
     }

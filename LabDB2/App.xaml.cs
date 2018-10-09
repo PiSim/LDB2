@@ -1,5 +1,6 @@
 ﻿using Infrastructure;
 using LabDB2.Views;
+using LabDbContext;
 using Microsoft.Practices.Prism.Mvvm;
 using Prism.Ioc;
 using Prism.Modularity;
@@ -32,8 +33,7 @@ namespace LabDB2
                 new Prism.Modularity.ModuleInfo()
                 {
                     ModuleName = DBManagerModuleType.Name,
-                    ModuleType = DBManagerModuleType.AssemblyQualifiedName,
-                    InitializationMode = Prism.Modularity.InitializationMode.OnDemand
+                    ModuleType = DBManagerModuleType.AssemblyQualifiedName
                 });
 
             Type InfrastructureModuleType = typeof(Infrastructure.InfrastructureModule);
@@ -115,16 +115,7 @@ namespace LabDB2
                     ModuleType = SpecificationModuleType.AssemblyQualifiedName,
                     InitializationMode = Prism.Modularity.InitializationMode.OnDemand
                 });
-
-            Type TaskModuleType = typeof(Tasks.TasksModule);
-            moduleCatalog.AddModule(
-                new Prism.Modularity.ModuleInfo()
-                {
-                    ModuleName = TaskModuleType.Name,
-                    ModuleType = TaskModuleType.AssemblyQualifiedName,
-                    InitializationMode = Prism.Modularity.InitializationMode.OnDemand
-                });
-
+            
             Type UserModuleType = typeof(User.UserModule);
             moduleCatalog.AddModule(
                 new Prism.Modularity.ModuleInfo()
@@ -144,10 +135,10 @@ namespace LabDB2
         {
             IModuleManager moduleManager = Container.Resolve<IModuleManager>();
 
-            IPrincipal _currentPrincipal = Thread.CurrentPrincipal;
-
             moduleManager.LoadModule(typeof(LabDbContext.LabDbEntitiesModule).Name);
-
+            TryLogin();
+            IPrincipal _currentPrincipal = Thread.CurrentPrincipal;
+            
             if (_currentPrincipal.IsInRole(UserRoleNames.Admin))
                 moduleManager.LoadModule(typeof(Admin.AdminModule).Name);
 
@@ -158,16 +149,17 @@ namespace LabDB2
             moduleManager.LoadModule(typeof(Reporting.ReportingModule).Name);
             moduleManager.LoadModule(typeof(Specifications.SpecificationsModule).Name);
             moduleManager.LoadModule(typeof(User.UserModule).Name);
-
-            if (_currentPrincipal.IsInRole(UserRoleNames.TaskLoad))
-                moduleManager.LoadModule(typeof(Tasks.TasksModule).Name);
         }
 
         protected override void InitializeShell(Window shell)
         {
-            LoginDialog logger = Container.Resolve<LoginDialog>();
+            Current.MainWindow = shell;
+        }
 
-            LabDbContext.LabDbEntities entities = new LabDbContext.LabDbEntities();
+        private void TryLogin()
+        {
+            LabDbEntities entities = new LabDbEntities();
+            LoginDialog logger = Container.Resolve<LoginDialog>();
             if (!entities.Database.Exists())
             {
                 Application.Current.Shutdown();
@@ -176,13 +168,17 @@ namespace LabDB2
             if (logger.ShowDialog() == true)
             {
                 AppDomain.CurrentDomain.SetThreadPrincipal(logger.AuthenticatedPrincipal);
-                Application.Current.MainWindow = shell;
                 LabDB2.Properties.Settings.Default.LastLogUser = logger.UserName;
                 LabDB2.Properties.Settings.Default.Save();
-                Current.MainWindow.Show();
+                OpenShell();
             }
             else
                 Application.Current.Shutdown();
+        }
+
+        private void OpenShell()
+        {
+            Current.MainWindow.Show();
         }
 
         protected override void OnStartup(StartupEventArgs e)
@@ -193,7 +189,6 @@ namespace LabDB2
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
             containerRegistry.Register<IAuthenticationService, AuthenticationService>();
-
             containerRegistry.RegisterSingleton<NavigationService>();
             Container.Resolve<NavigationService>();
         }

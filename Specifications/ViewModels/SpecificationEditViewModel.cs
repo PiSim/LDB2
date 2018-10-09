@@ -1,6 +1,7 @@
 ﻿using Controls.Views;
 using DataAccess;
 using Infrastructure;
+using Infrastructure.Commands;
 using Infrastructure.Events;
 using Infrastructure.Queries;
 using LabDbContext;
@@ -74,7 +75,7 @@ namespace Specifications.ViewModels
                                 StandardID = _instance.StandardID
                             };
 
-                            temp.Create();
+                            _labDbData.Execute(new InsertEntityCommand(temp));
                         }
 
                         RaisePropertyChanged("FileList");
@@ -157,7 +158,7 @@ namespace Specifications.ViewModels
             RemoveFileCommand = new DelegateCommand(
                 () =>
                 {
-                    _selectedFile.Delete();
+                    _labDbData.Execute(new DeleteEntityCommand(_selectedFile));
                     SelectedFile = null;
                 },
                 () => Thread.CurrentPrincipal.IsInRole(UserRoleNames.SpecificationEdit) && _selectedFile != null);
@@ -165,8 +166,8 @@ namespace Specifications.ViewModels
             SaveCommand = new DelegateCommand(
                 () =>
                 {
-                    _instance.Update();
-                    _instance.Standard.Update();
+                    _labDbData.Execute(new UpdateEntityCommand(_instance));
+                    _labDbData.Execute(new UpdateEntityCommand(_instance.Standard));
                     EditMode = false;
                 },
                 () => _editMode && !HasErrors);

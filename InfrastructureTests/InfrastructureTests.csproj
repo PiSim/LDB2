@@ -97,6 +97,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DataAccess\DataAccess.csproj">
+      <Project>{D2CBB1E5-A945-4715-828C-E2AE2DAFCD0A}</Project>
+      <Name>DataAccess</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj">
       <Project>{C432C3BE-1051-45F1-95A1-9397BBF35923}</Project>
       <Name>Infrastructure</Name>

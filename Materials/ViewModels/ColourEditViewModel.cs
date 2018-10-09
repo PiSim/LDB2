@@ -4,10 +4,12 @@ using Infrastructure.Commands;
 using Infrastructure.Events;
 using LabDbContext;
 using LabDbContext.EntityExtensions;
+using Materials.Queries;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Materials.ViewModels
 {
@@ -61,7 +63,7 @@ namespace Materials.ViewModels
 
         #region Properties
 
-        public IEnumerable<Batch> BatchList => _colourInstance.GetBatches();
+        public IEnumerable<Batch> BatchList => (_colourInstance == null) ? null : _labDbData.RunQuery(new BatchesQuery()).Where(btc => btc.Material.Recipe.ColourID == _colourInstance.ID).ToList();
 
         public Colour ColourInstance
         {
@@ -116,7 +118,7 @@ namespace Materials.ViewModels
                 if (_colourInstance == null)
                     return new List<Recipe>();
                 else
-                    return _colourInstance.GetRecipes();
+                    return (_colourInstance == null) ? null : _labDbData.RunQuery(new RecipesQuery() { ColorID = _colourInstance.ID }).ToList();
             }
         }
 

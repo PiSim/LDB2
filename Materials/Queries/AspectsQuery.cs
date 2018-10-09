@@ -1,5 +1,6 @@
 ﻿using DataAccess;
 using LabDbContext;
+using System.Data.Entity;
 using System.Linq;
 
 namespace Materials.Queries
@@ -7,25 +8,20 @@ namespace Materials.Queries
     /// <summary>
     /// Query Object that returns all Aspect Entities
     /// </summary>
-    public class AspectsQuery : IQuery<Aspect, LabDbEntities>
+    public class AspectsQuery : QueryBase<Aspect, LabDbEntities>
     {
-        #region Properties
-
-        /// <summary>
-        /// If true the results are ordered by code descending
-        /// </summary>
-        public bool OrderResults { get; set; } = true;
-
-        #endregion Properties
-
         #region Methods
 
-        public IQueryable<Aspect> Execute(LabDbEntities context)
+        public override IQueryable<Aspect> Execute(LabDbEntities context)
         {
             IQueryable<Aspect> query = context.Aspects;
 
+            if (AsNoTracking)
+                query = query.AsNoTracking();
+
             if (OrderResults)
                 query = query.OrderByDescending(asp => asp.Code);
+
 
             return query;
         }

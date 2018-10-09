@@ -24,6 +24,7 @@ namespace Infrastructure.Commands
         {
             context.Set(_entity.GetType()).Attach(_entity);
             context.Entry(_entity).Reload();
+            context.Dispose();
         }
     }
 }

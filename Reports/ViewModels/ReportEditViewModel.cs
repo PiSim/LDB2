@@ -119,13 +119,7 @@ namespace Reports.ViewModels
             RemoveTestCommand = new DelegateCommand<Test>(
                 testItem =>
                 {
-                    TaskItem tempTaskItem = testItem.GetTaskItem();
                     _labDbData.Execute(new DeleteEntityCommand(testItem));
-
-                    if (tempTaskItem != null)
-                    {
-                        throw new NotImplementedException();
-                    }
 
                     TestList = new List<TestWrapper>(_instance.TestRecord.Tests.Select(tst => new TestWrapper(tst)));
                 },
@@ -135,8 +129,8 @@ namespace Reports.ViewModels
                 () =>
                 {
                     // Update the tests
-                    _testList.Select(tiw => tiw.TestInstance)
-                            .Update();
+
+                    _labDbData.Execute(new BulkUpdateEntitiesCommand(_testList));
 
                     // Update the report instance
 

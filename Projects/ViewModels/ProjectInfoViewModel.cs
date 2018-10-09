@@ -1,6 +1,7 @@
 using Controls.Views;
 using DataAccess;
 using Infrastructure;
+using Infrastructure.Commands;
 using Infrastructure.Events;
 using Infrastructure.Queries;
 using LabDbContext;
@@ -78,7 +79,7 @@ namespace Projects.ViewModels
                     if (mat != null)
                     {
                         mat.ProjectID = _projectInstance.ID;
-                        mat.Update();
+                        _labDbData.Execute(new UpdateEntityCommand(mat));
 
                         RaisePropertyChanged("AssignedMaterials");
                         RaisePropertyChanged("UnassignedMaterials");
@@ -117,7 +118,7 @@ namespace Projects.ViewModels
                     if (mat != null)
                     {
                         mat.ProjectID = null;
-                        mat.Update();
+                        _labDbData.Execute(new UpdateEntityCommand(mat));
 
                         RaisePropertyChanged("AssignedMaterials");
                         RaisePropertyChanged("UnassignedMaterials");

@@ -1,4 +1,6 @@
-﻿using Infrastructure;
+﻿using DataAccess;
+using Infrastructure;
+using Infrastructure.Commands;
 using Infrastructure.Events;
 using LabDbContext;
 using Prism.Events;
@@ -16,14 +18,17 @@ namespace Specifications
 
         private IDbContextFactory<LabDbEntities> _dbContextFactory;
         private IEventAggregator _eventAggregator;
+        private IDataService<LabDbEntities> _labDbData;
 
         #endregion Fields
 
         #region Constructors
 
-        public SpecificationService(IDbContextFactory<LabDbEntities> dbContextFactory,
-                            IEventAggregator eventAggregator)
+        public SpecificationService(IDataService<LabDbEntities> labDbData,
+                                    IDbContextFactory<LabDbEntities> dbContextFactory,
+                                    IEventAggregator eventAggregator)
         {
+            _labDbData = labDbData;
             _eventAggregator = eventAggregator;
             _dbContextFactory = dbContextFactory;
         }
@@ -50,7 +55,7 @@ namespace Specifications
 
                 // Retrieve method list, set new reference and update
 
-                foreach (Method mtd in currentStd.GetMethods())
+                foreach (Method mtd in currentStd.Methods)
                 {
                     mtd.StandardID = mainEntry.ID;
                     mtd.Update();
@@ -58,7 +63,7 @@ namespace Specifications
 
                 // Retrieve specification list, set new reference and update
 
-                foreach (Specification spc in currentStd.GetSpecifications())
+                foreach (Specification spc in currentStd.Specifications)
                 {
                     spc.StandardID = mainEntry.ID;
                     spc.Update();
@@ -108,7 +113,7 @@ namespace Specifications
         /// <param name="standardInstance">The Instance to delete</param>
         public void DeleteStandard(Std standardInstance)
         {
-            standardInstance.Delete();
+            _labDbData.Execute(new DeleteEntityCommand());
             _eventAggregator.GetEvent<StandardChanged>()
                             .Publish(new EntityChangedToken(standardInstance,
                                                             EntityChangedToken.EntityChangedAction.Deleted));

@@ -192,8 +192,6 @@
     <Compile Include="ViewModels\SpecificationEditViewModel.cs" />
     <Compile Include="ViewModels\SpecificationMainViewModel.cs" />
     <Compile Include="ViewModels\SpecificationVersionEditViewModel.cs" />
-    <Compile Include="ViewModels\StandardEditViewModel.cs" />
-    <Compile Include="ViewModels\StandardMainViewModel.cs" />
     <Compile Include="ViewModels\ModifyMethodSubMethodListDialogViewModel.cs" />
     <Compile Include="Views\AddMethod.xaml.cs">
       <DependentUpon>AddMethod.xaml</DependentUpon>
@@ -231,15 +229,10 @@
     <Compile Include="Views\SpecificationVersionList.xaml.cs">
       <DependentUpon>SpecificationVersionList.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\StandardEdit.xaml.cs">
-      <DependentUpon>StandardEdit.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\StandardMain.xaml.cs">
-      <DependentUpon>StandardMain.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\ModifyMethodSubMethodListDialog.xaml.cs">
       <DependentUpon>ModifyMethodSubMethodListDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\StandardMain.xaml.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -324,17 +317,13 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\StandardEdit.xaml">
+    <Page Include="Views\ModifyMethodSubMethodListDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\StandardMain.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\ModifyMethodSubMethodListDialog.xaml">
       <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -61,7 +61,6 @@ namespace Admin.ViewModels
         #region Properties
 
         public DelegateCommand DeleteQuantityCommand { get; }
-        public IEnumerable<MeasurableQuantity> MeasurableQuantityList => _dataService.GetMeasurableQuantities();
         public string MeasurableQuantityManagementEditRegionName => RegionNames.MeasurableQuantityManagementEditRegion;
         public DelegateCommand NewMeasurableQuantityCommand { get; }
 

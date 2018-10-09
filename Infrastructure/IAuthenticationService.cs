@@ -6,9 +6,9 @@ namespace Infrastructure
     {
         #region Methods
 
-        LabDbContext.User AuthenticateUser(string userName, string password);
-
+        string CalculateHash(string clearText, string salt);
         LabDbContext.User CreateNewUser(Person personInstance, string userName, string password);
+
 
         #endregion Methods
     }

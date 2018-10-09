@@ -16,8 +16,6 @@ namespace Infrastructure
 
         Report CreateReport();
 
-        Report CreateReport(Task parentTask);
-
         Requirement GenerateRequirement(MethodVariant mtd);
 
         IEnumerable<TaskItem> GenerateTaskItemList(IEnumerable<Requirement> requirementList);

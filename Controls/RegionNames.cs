@@ -37,7 +37,7 @@ namespace Controls.Views
         public static string MethodEditRegion => "MethodEditRegion";
         public static string MethodEditSpecificationListRegion => "MethodEditSpecificationListRegion";
         public static string MethodFileRegion => "MethodFileRegion";
-        public static string MethodMainRegion => "MethodIssueEditRegion";
+        public static string MethodMainRegion => "MethodMainRegion";
         public static string MethodReportListRegion => "MethodReportListRegion";
         public static string OrganizationEditRegion => "OrganizationEditRegion";
         public static string OrganizationRoleManagementRegion => "OrganizationRoleManagementRegion";
@@ -56,11 +56,7 @@ namespace Controls.Views
         public static string SpecificationReportListRegion => "SpecificationReportListRegion";
         public static string SpecificationVersionEditRegion => "SpecificationVersionEditRegion";
         public static string SpecificationVersionTestListEditRegion => "SpecificationVersionTestListEditRegion";
-        public static string StandardMainRegion => "StandardMainRegion";
         public static string StatusbarRegion => "StatusBarRegion";
-        public static string TaskEditProjectDetailsRegion => "TaskEditProjectDetailsRegion";
-        public static string TaskMainListRegion => "TaskMainListRegion";
-        public static string TaskViewRegion => "TaskViewRegion";
         public static string ToolbarRegion => "ToolbarRegion";
         public static string UnitOfMeasurementManagementRegion => "UnitOfMeasurementManagementRegion";
 

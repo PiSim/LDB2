@@ -18,12 +18,12 @@ namespace LabDbContext
     public partial class LabDbEntities : DbContext
     {
         public LabDbEntities()
-               : base("name=LabDbEntities")
+               : base("name=LabDb_PRD")
         {
         }
 
-        public LabDbEntities(string v)
-            : base(v)
+        public LabDbEntities(string ConnectionName)
+            : base(ConnectionName)
         {
         }
 

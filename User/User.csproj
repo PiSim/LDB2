@@ -200,10 +200,6 @@
       <Project>{dd1a1429-e1ac-4611-9971-f99988c4edba}</Project>
       <Name>Reports</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Tasks\Tasks.csproj">
-      <Project>{243da195-5ca0-4826-94e8-13b023bab8c6}</Project>
-      <Name>Tasks</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Page Include="Views\CurrentUserMain.xaml">

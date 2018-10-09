@@ -1,4 +1,5 @@
 ﻿using DataAccess;
+using Infrastructure.Commands;
 using Infrastructure.Queries;
 using LabDbContext;
 using LabDbContext.EntityExtensions;
@@ -33,7 +34,7 @@ namespace Admin.ViewModels
                 () =>
                 {
                     _userInstance.Update();
-                    _roleList.Update();
+                    _labDbData.Execute(new BulkUpdateEntitiesCommand(_roleList));
                     EditMode = false;
                 },
                 () => _editMode == true);

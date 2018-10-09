@@ -120,26 +120,15 @@ namespace Reports
                 return null;
         }
 
-        public Report CreateReport() => CreateReport(null);
 
         /// <summary>
         /// Starts the process of creating a new Report instance via the ReportCreationDialog
-        /// If a Task instance is given it will be used as template
         /// If creation is successful an event is raised and the new Report returned
         /// </summary>
-        /// <param name="parentTask">A Task entry to use as template</param>
         /// <returns>The newly created report instance</returns>
-        [Obsolete]
-        public Report CreateReport(Task parentTask)
+        public Report CreateReport()
         {
             Views.ReportCreationDialog creationDialog = new Views.ReportCreationDialog();
-
-            // If task is given sets the instance in the ReportCreationDialog
-            if (parentTask != null)
-            {
-                creationDialog.CreationMode = ViewModels.ReportCreationDialogViewModel.CreationModes.ReportFromTask;
-                creationDialog.TaskInstance = parentTask;
-            }
 
             // If creation is succesful raise event and return the instance, otherwise return null
             if (creationDialog.ShowDialog() == true)

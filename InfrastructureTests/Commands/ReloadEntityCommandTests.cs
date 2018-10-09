@@ -12,7 +12,7 @@ namespace Infrastructure.Commands.Tests
     [TestClass()]
     public class ReloadEntityCommandTests
     {
-        string connectionName = "name=LabDbTest";
+        string connectionName = "LabDb_DEV";
 
         [TestMethod()]
         public void SameContextTest()

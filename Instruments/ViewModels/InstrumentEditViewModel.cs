@@ -114,7 +114,7 @@ namespace Instruments.ViewModels
                             RangeUpperLimit = 0,
                             Resolution = 0,
                             TargetUncertainty = 0,
-                            UnitID = propertyDialog.QuantityInstance.GetMeasurementUnits().First().ID
+                            UnitID = propertyDialog.QuantityInstance.UnitsOfMeasurement.First().ID
                         };
 
                         newIMP.Create();
