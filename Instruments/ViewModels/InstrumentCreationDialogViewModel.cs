@@ -1,4 +1,5 @@
 ﻿using DataAccess;
+using Infrastructure.Commands;
 using Infrastructure.Queries;
 using Instruments.Queries;
 using LabDbContext;
@@ -72,8 +73,8 @@ namespace Instruments.ViewModels
 
                         InstrumentInstance.InstrumentMeasurableProperties.Add(tempIMP);
                     }
-
-                    InstrumentInstance.Create();
+                    
+                    _labDbData.Execute(new InsertEntityCommand(InstrumentInstance));
 
                     parent.DialogResult = true;
                 },

@@ -86,17 +86,6 @@ namespace LabDbContext
             }
         }
 
-        public void Create()
-        {
-            // Inserts the report in the DB
-
-            using (LabDbEntities entities = new LabDbEntities())
-            {
-                entities.ExternalReports.Add(this);
-                entities.SaveChanges();
-            }
-        }
-
         /// <summary>
         /// Returns a list of test for each methodVariant associated with the Report
         /// generated from the entity collections loaded in the instance
@@ -143,26 +132,7 @@ namespace LabDbContext
                 entities.SaveChanges();
             }
         }
-
-        /// <summary>
-        /// Pushes the current Instance to the database updating all the values
-        /// </summary>
-        /// <param name="updateTests">If true all the related SubTest entities are updated too</param>
-        public void Update(bool updateTests = false)
-        {
-            using (LabDbEntities entities = new LabDbEntities())
-            {
-                entities.ExternalReports.AddOrUpdate(this);
-
-                if (updateTests)
-                    foreach (SubTest sts in TestRecords.SelectMany(tsr => tsr.Tests)
-                                                       .SelectMany(tst => tst.SubTests)
-                                                       .ToList())
-                        entities.SubTests.AddOrUpdate(sts);
-
-                entities.SaveChanges();
-            }
-        }
+        
 
         #endregion Metodi
     }

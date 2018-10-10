@@ -169,9 +169,6 @@
     <Compile Include="ViewModels\InstrumentMainViewModel.cs" />
     <Compile Include="ViewModels\MaintenanceEventCreationDialogViewModel.cs" />
     <Compile Include="ViewModels\NewCalibrationDialogViewModel.cs" />
-    <Compile Include="Views\AddPropertyDialog.xaml.cs">
-      <DependentUpon>AddPropertyDialog.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\CalibrationReportEdit.xaml.cs">
       <DependentUpon>CalibrationReportEdit.xaml</DependentUpon>
     </Compile>
@@ -228,10 +225,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Views\AddPropertyDialog.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\CalibrationReportEdit.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

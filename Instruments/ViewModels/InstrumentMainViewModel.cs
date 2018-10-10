@@ -1,5 +1,6 @@
 ﻿using DataAccess;
 using Infrastructure;
+using Infrastructure.Commands;
 using Infrastructure.Events;
 using Instruments.Queries;
 using LabDbContext;
@@ -40,7 +41,7 @@ namespace Instruments.ViewModels
             DeleteInstrumentCommand = new DelegateCommand(
                 () =>
                 {
-                    _selectedInstrument.Delete();
+                    _labDbData.Execute(new DeleteEntityCommand(_selectedInstrument));
                     SelectedInstrument = null;
                 },
                 () => IsInstrumentAdmin && _selectedInstrument != null);

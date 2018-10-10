@@ -1,4 +1,6 @@
-﻿using Infrastructure;
+﻿using DataAccess;
+using Infrastructure;
+using Infrastructure.Commands;
 using LabDbContext;
 using Prism.Commands;
 using Prism.Mvvm;
@@ -12,6 +14,7 @@ namespace Specifications.ViewModels
         #region Fields
 
         private ControlPlan _controlPlanInstance;
+        private IDataService<LabDbEntities> _labDbData;
 
         private bool _editMode,
                             _hasCredentials;
@@ -20,15 +23,17 @@ namespace Specifications.ViewModels
 
         #region Constructors
 
-        public ControlPlanEditViewModel()
+        public ControlPlanEditViewModel(IDataService<LabDbEntities> labDbData)
         {
+            _labDbData = labDbData;
             _hasCredentials = Thread.CurrentPrincipal.IsInRole(UserRoleNames.SpecificationEdit);
 
             SaveCommand = new DelegateCommand(
                 () =>
                 {
                     _controlPlanInstance.control_plan_items_b = ControlPlanItemsList as ICollection<ControlPlanItem>;
-                    _controlPlanInstance.Update();
+                    
+                    _labDbData.Execute(new UpdateEntityCommand(_controlPlanInstance));
                     EditMode = false;
                 },
                 () => _hasCredentials && EditMode);

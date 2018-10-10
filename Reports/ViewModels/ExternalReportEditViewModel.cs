@@ -152,7 +152,8 @@ namespace Reports.ViewModels
             SaveCommand = new DelegateCommand(
                 () =>
                 {
-                    _instance.Update(true);
+                    _labDbData.Execute(new UpdateEntityCommand(_instance));
+                    _labDbData.Execute(new BulkUpdateEntitiesCommand(ResultCollection.SelectMany(erp => erp.SubTests)));
                     EditMode = false;
 
                     EntityChangedToken token = new EntityChangedToken(_instance,

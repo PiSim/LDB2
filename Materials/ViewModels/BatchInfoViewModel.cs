@@ -84,7 +84,7 @@ namespace Materials.ViewModels
             DeleteBatchCommand = new DelegateCommand(
                 () =>
                 {
-                    _instance.Delete();
+                    _labDbData.Execute(new DeleteEntityCommand(_instance));
 
                     BatchInstance = null;
 

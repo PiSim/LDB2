@@ -1,5 +1,6 @@
 ﻿using DataAccess;
 using Infrastructure;
+using Infrastructure.Commands;
 using Infrastructure.Queries;
 using LabDbContext;
 using Prism.Commands;
@@ -54,7 +55,8 @@ namespace Reports.ViewModels
                          ProjectID = SelectedProject.ID
                      };
 
-                     ExternalReportInstance.Create();
+
+                     _labDbData.Execute(new InsertEntityCommand(ExternalReportInstance));
 
                      parent.DialogResult = true;
                  });

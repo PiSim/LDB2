@@ -160,8 +160,8 @@ namespace Materials.ViewModels
 
                     if (SelectedTrialArea != null)
                         BatchInstance.TrialAreaID = SelectedTrialArea.ID;
-
-                    BatchInstance.Create();
+                    
+                    _labDbData.Execute(new InsertEntityCommand(BatchInstance));
 
                     parentDialog.DialogResult = true;
                 },

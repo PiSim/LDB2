@@ -106,7 +106,7 @@ namespace Instruments.ViewModels
             DeleteCommand = new DelegateCommand(
                 () =>
                 {
-                    _calibrationInstance.Delete();
+                    _labDbData.Execute(new DeleteEntityCommand(_calibrationInstance));
                 },
                 () => Thread.CurrentPrincipal.IsInRole(UserRoleNames.InstrumentAdmin));
 
@@ -147,7 +147,7 @@ namespace Instruments.ViewModels
             SaveCommand = new DelegateCommand(
                 () =>
                 {
-                    _calibrationInstance.Update();
+                    _labDbData.Execute(new UpdateEntityCommand(_calibrationInstance));
                     foreach (CalibrationReportInstrumentPropertyMapping cripmw in PropertyMappingList)
                         cripmw.Update();
 

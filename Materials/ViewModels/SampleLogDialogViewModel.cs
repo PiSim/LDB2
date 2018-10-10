@@ -71,7 +71,7 @@ namespace Materials.ViewModels
 
                     _batchInstance.ArchiveStock += SelectedChoice.ArchiveModifier;
                     _batchInstance.LongTermStock += SelectedChoice.LongTermModifier;
-                    _batchInstance.Update();
+                    _labDbData.Execute(new UpdateEntityCommand(_batchInstance));
 
                     BatchNumber = null;
 

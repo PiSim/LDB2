@@ -1,4 +1,6 @@
-﻿using Infrastructure.Events;
+﻿using DataAccess;
+using Infrastructure.Commands;
+using Infrastructure.Events;
 using LabDbContext;
 using LabDbContext.EntityExtensions;
 using Prism.Events;
@@ -15,13 +17,15 @@ namespace Instruments
 
         private IDbContextFactory<LabDbEntities> _dbContextFactory;
         private IEventAggregator _eventAggregator;
+        private IDataService<LabDbEntities> _labDbData;
 
         #endregion Fields
 
         #region Constructors
 
         public InstrumentService(IDbContextFactory<LabDbEntities> dbContextFactory,
-                            IEventAggregator aggregator)
+                            IEventAggregator aggregator,
+                            IDataService<LabDbEntities> labDbData)
         {
             _eventAggregator = aggregator;
             _dbContextFactory = dbContextFactory;
@@ -118,7 +122,7 @@ namespace Instruments
                 CalibrationReport output = calibrationDialog.ReportInstance;
 
                 output.Instrument.UpdateCalibrationDueDate();
-                output.Instrument.Update();
+                _labDbData.Execute(new UpdateEntityCommand(output));
 
                 _eventAggregator.GetEvent<CalibrationIssued>()
                                 .Publish(output);

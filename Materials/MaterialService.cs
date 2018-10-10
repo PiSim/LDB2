@@ -51,7 +51,7 @@ namespace Materials
                     if (targetBatch.BasicReportID == null)
                     {
                         targetBatch.BasicReportID = report.ID;
-                        targetBatch.Update();
+                        _labDbData.Execute(new UpdateEntityCommand(targetBatch));
                     }
                 });
 
@@ -121,7 +121,7 @@ namespace Materials
 
             tempBatch.ArchiveStock -= tempChoice.ArchiveModifier;
             tempBatch.LongTermStock -= tempChoice.LongTermModifier;
-            tempBatch.Update();
+            _labDbData.Execute(new UpdateEntityCommand(tempBatch));
         }
 
         public Dictionary<string, Batch> GetBatchIndex()

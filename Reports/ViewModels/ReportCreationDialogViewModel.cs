@@ -1,5 +1,6 @@
 using DataAccess;
 using Infrastructure;
+using Infrastructure.Commands;
 using Infrastructure.Queries;
 using Infrastructure.Wrappers;
 using LabDbContext;
@@ -89,7 +90,7 @@ namespace Reports.ViewModels
                             return;
 
                         _selectedBatch.DoNotTest = false;
-                        _selectedBatch.Update();
+                        _labDbData.Execute(new UpdateEntityCommand(_selectedBatch));
                     }
                     parent.DialogResult = true;
                 },

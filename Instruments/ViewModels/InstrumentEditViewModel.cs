@@ -96,32 +96,7 @@ namespace Instruments.ViewModels
                     RaisePropertyChanged("UnassociatedMethods");
                 },
                 () => IsInstrumentAdmin && _selectedUnassociated != null);
-
-            AddPropertyCommand = new DelegateCommand(
-                () =>
-                {
-                    Views.AddPropertyDialog propertyDialog = new Views.AddPropertyDialog();
-                    if (propertyDialog.ShowDialog() == true)
-                    {
-                        InstrumentMeasurableProperty newIMP = new InstrumentMeasurableProperty()
-                        {
-                            CalibrationRangeLowerLimit = 0,
-                            CalibrationRangeUpperLimit = 0,
-                            Description = "",
-                            InstrumentID = _instance.ID,
-                            MeasurableQuantityID = propertyDialog.QuantityInstance.ID,
-                            RangeLowerLimit = 0,
-                            RangeUpperLimit = 0,
-                            Resolution = 0,
-                            TargetUncertainty = 0,
-                            UnitID = propertyDialog.QuantityInstance.UnitsOfMeasurement.First().ID
-                        };
-
-                        newIMP.Create();
-                        RaisePropertyChanged("InstrumentMeasurablePropertyList");
-                    }
-                },
-                () => IsInstrumentAdmin);
+            
 
             OpenFileCommand = new DelegateCommand(
                 () =>
@@ -160,9 +135,10 @@ namespace Instruments.ViewModels
             SaveCommand = new DelegateCommand(
                 () =>
                 {
-                    _instance.Update();
-                    foreach (InstrumentMeasurablePropertyWrapper impw in InstrumentMeasurablePropertyList.Where(imp => imp.IsModified))
-                        impw.PropertyInstance.Update();
+                    _labDbData.Execute(new UpdateEntityCommand(_instance));
+                    _labDbData.Execute(new BulkUpdateEntitiesCommand(InstrumentMeasurablePropertyList.Where(imp => imp.IsModified)
+                                                                                                    .Select(impw => impw.PropertyInstance)));
+                    
 
                     EditMode = false;
                     _eventAggregator.GetEvent<InstrumentListUpdateRequested>()
@@ -336,7 +312,7 @@ namespace Instruments.ViewModels
             set
             {
                 _instance = value;
-                _instance.Load();
+                _labDbData.Execute(new ReloadEntityCommand(_instance));
 
                 _selectedArea = AreaList.FirstOrDefault(iua => iua.ID == _instance.UtilizationAreaID);
                 InstrumentMeasurablePropertyList = _instance.GetMeasurableProperties()

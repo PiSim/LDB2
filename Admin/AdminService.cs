@@ -78,8 +78,8 @@ namespace Admin
                 {
                     Name = creationDialog.InputString
                 };
-
-                output.Create();
+                
+                _labDbData.Execute(new InsertEntityCommand(output));
                 return output;
             }
 

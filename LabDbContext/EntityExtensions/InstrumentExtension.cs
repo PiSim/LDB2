@@ -48,34 +48,6 @@ namespace LabDbContext
             }
         }
 
-        public static void Create(this Instrument entry)
-        {
-            // Inserts a new Instrument entry
-
-            using (LabDbEntities entities = new LabDbEntities())
-            {
-                entities.Instruments.Add(entry);
-
-                entities.SaveChanges();
-            }
-        }
-
-        public static void Delete(this Instrument entry)
-        {
-            // Deletes an Instrument entry
-
-            using (LabDbEntities entities = new LabDbEntities())
-            {
-                entities.Entry(entities.Instruments
-                        .First(ins => ins.ID == entry.ID))
-                        .State = EntityState.Deleted;
-
-                entities.SaveChanges();
-
-                entry.ID = 0;
-            }
-        }
-
         public static IEnumerable<Method> GetAssociatedMethods(this Instrument entry)
         {
             // Returns all the methods not assigned to the instrument entry
@@ -175,51 +147,7 @@ namespace LabDbContext
                                         .ToList();
             }
         }
-
-        public static void Load(this Instrument entry)
-        {
-            // Loads the relevant Related entities into a given Instrument entry
-
-            if (entry == null)
-                return;
-
-            using (LabDbEntities entities = new LabDbEntities())
-            {
-                entities.Configuration.LazyLoadingEnabled = false;
-
-                Instrument tempEntry = entities.Instruments.Include(inst => inst.AssociatedMethods
-                                                            .Select(mtd => mtd.Standard.Organization))
-                                                            .Include(inst => inst.AssociatedMethods
-                                                            .Select(mtd => mtd.Property))
-                                                            .Include(inst => inst.CalibrationReports
-                                                            .Select(cal => cal.Laboratory))
-                                                            .Include(inst => inst.InstrumentType)
-                                                            .Include(inst => inst.Manufacturer)
-                                                            .Include(inst => inst.Supplier)
-                                                            .Include(inst => inst.Tests
-                                                            .Select(tst => tst.MethodVariant.Method.Property))
-                                                            .Include(inst => inst.Tests
-                                                            .Select(tst => tst.MethodVariant.Method.Standard))
-                                                            .First(inst => inst.ID == entry.ID);
-
-                entry.AssociatedMethods = tempEntry.AssociatedMethods;
-                entry.CalibrationReportAsReference = tempEntry.CalibrationReportAsReference;
-                entry.CalibrationReports = tempEntry.CalibrationReports;
-                entry.Code = tempEntry.Code;
-                entry.Description = tempEntry.Description;
-                entry.InstrumentType = tempEntry.InstrumentType;
-                entry.InstrumentTypeID = tempEntry.InstrumentTypeID;
-                entry.MaintenanceEvent = tempEntry.MaintenanceEvent;
-                entry.Manufacturer = tempEntry.Manufacturer;
-                entry.manufacturerID = tempEntry.manufacturerID;
-                entry.Model = tempEntry.Model;
-                entry.SerialNumber = tempEntry.SerialNumber;
-                entry.Supplier = tempEntry.Supplier;
-                entry.supplierID = tempEntry.supplierID;
-                entry.Tests = tempEntry.Tests;
-            }
-        }
-
+        
         public static void RemoveMethodAssociation(this Instrument entry,
                                                     Method methodEntity)
         {
@@ -231,18 +159,6 @@ namespace LabDbContext
                 Method tempMethod = tempInstrument.AssociatedMethods.First(mtd => mtd.ID == methodEntity.ID);
 
                 tempInstrument.AssociatedMethods.Remove(tempMethod);
-
-                entities.SaveChanges();
-            }
-        }
-
-        public static void Update(this Instrument entry)
-        {
-            // Updates a given Instrument entry
-
-            using (LabDbEntities entities = new LabDbEntities())
-            {
-                entities.Instruments.AddOrUpdate(entry);
 
                 entities.SaveChanges();
             }

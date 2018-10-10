@@ -26,34 +26,6 @@ namespace LabDbContext.EntityExtensions
                 entities.SaveChanges();
             }
         }
-
-        public static void Create(this CalibrationReport entry)
-        {
-            // Inserts a calibration entry in the DB
-
-            using (LabDbEntities entities = new LabDbEntities())
-            {
-                entities.CalibrationReports.Add(entry);
-                entities.SaveChanges();
-            }
-        }
-
-        public static void Delete(this CalibrationReport entry)
-        {
-            // Deletes a Calibration entry from the DB
-
-            using (LabDbEntities entities = new LabDbEntities())
-            {
-                entities.Entry(entities
-                        .CalibrationReports
-                        .First(crep => crep.ID == entry.ID))
-                        .State = System.Data.Entity.EntityState.Deleted;
-
-                entities.SaveChanges();
-                entry.ID = 0;
-            }
-        }
-
         public static IEnumerable<CalibrationFiles> GetFiles(this CalibrationReport entry)
         {
             // returns all CAlibrationfiles associated with a given CalibrationReport Entry
@@ -152,19 +124,6 @@ namespace LabDbContext.EntityExtensions
                 tempEntry.ReferenceInstruments
                         .Remove(tempEntry.ReferenceInstruments
                         .First(inst => inst.ID == referenceEntry.ID));
-
-                entities.SaveChanges();
-            }
-        }
-
-        public static void Update(this CalibrationReport entry)
-        {
-            // Updates a CAlibrationReport entry
-
-            using (LabDbEntities entities = new LabDbEntities())
-            {
-                entities.CalibrationReports
-                        .AddOrUpdate(entry);
 
                 entities.SaveChanges();
             }

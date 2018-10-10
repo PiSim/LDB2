@@ -147,7 +147,7 @@ namespace Specifications.ViewModels
             RemoveControlPlanCommand = new DelegateCommand(
                 () =>
                 {
-                    _selectedControlPlan.Delete();
+                    _labDbData.Execute(new DeleteEntityCommand(_selectedControlPlan));
                     RaisePropertyChanged("ControlPlanList");
                     SelectedControlPlan = null;
                 },

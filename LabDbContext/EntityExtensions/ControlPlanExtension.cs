@@ -8,31 +8,7 @@ namespace LabDbContext
     public partial class ControlPlan
     {
         #region Methods
-
-        public void Create()
-        {
-            using (LabDbEntities entities = new LabDbEntities())
-            {
-                entities.ControlPlans.Add(this);
-                entities.SaveChanges();
-            }
-        }
-
-        public void Delete()
-        {
-            using (LabDbEntities entities = new LabDbEntities())
-            {
-                ControlPlan tempEntry = entities.ControlPlans.FirstOrDefault(cp => cp.ID == ID);
-                if (tempEntry != null)
-                {
-                    entities.Entry(tempEntry)
-                            .State = System.Data.Entity.EntityState.Deleted;
-                    entities.SaveChanges();
-                }
-
-                ID = 0;
-            }
-        }
+        
 
         public IList<ControlPlanItem> GetControlPlanItems(bool includeRequirement = false)
         {
@@ -52,18 +28,6 @@ namespace LabDbContext
                     return entities.ControlPlanItems
                                     .Where(cpi => cpi.ControlPlanID == ID)
                                     .ToList();
-            }
-        }
-
-        public void Update()
-        {
-            using (LabDbEntities entities = new LabDbEntities())
-            {
-                entities.ControlPlans.AddOrUpdate(this);
-                foreach (ControlPlanItem cpi in control_plan_items_b)
-                    entities.ControlPlanItems.AddOrUpdate(cpi);
-
-                entities.SaveChanges();
             }
         }
 

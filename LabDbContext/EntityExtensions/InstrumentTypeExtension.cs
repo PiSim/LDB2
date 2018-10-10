@@ -25,18 +25,7 @@ namespace LabDbContext.EntityExtensions
                 entities.SaveChanges();
             }
         }
-
-        public static void Create(this InstrumentType entry)
-        {
-            // Inserts a new InstrumentType in the DB
-
-            using (LabDbEntities entities = new LabDbEntities())
-            {
-                entities.InstrumentTypes.Add(entry);
-                entities.SaveChanges();
-            }
-        }
-
+        
         public static IEnumerable<MeasurableQuantity> GetAssociatedMeasurableQuantities(this InstrumentType entry)
         {
             // Returns all MeasurableQuantity entities related to the instrument type
