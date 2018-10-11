@@ -1,6 +1,7 @@
 ﻿using DataAccess;
 using LabDbContext;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 
 namespace Infrastructure.Queries
@@ -8,7 +9,7 @@ namespace Infrastructure.Queries
     /// <summary>
     /// Query object that returns multiple Person Entities
     /// </summary>
-    public class PeopleQuery : IQuery<Person, LabDbEntities>
+    public class PeopleQuery : QueryBase<Person, LabDbEntities>
     {
         #region Fields
 
@@ -37,11 +38,6 @@ namespace Infrastructure.Queries
         #region Properties
 
         /// <summary>
-        /// If true the results are ordered alphabetically by name
-        /// </summary>
-        public bool OrderResults { get; set; } = true;
-
-        /// <summary>
         /// Gets/Sets the role used to filter the results.
         /// </summary>
         public PersonRoles? Role { get; set; }
@@ -50,7 +46,7 @@ namespace Infrastructure.Queries
 
         #region Methods
 
-        public IQueryable<Person> Execute(LabDbEntities context)
+        public override IQueryable<Person> Execute(LabDbEntities context)
         {
             IQueryable<Person> query = context.People;
 
@@ -60,6 +56,9 @@ namespace Infrastructure.Queries
 
                 query = query.Where(per => per.RoleMappings.FirstOrDefault(prm => prm.Role.Name == _roleName).IsSelected);
             }
+
+            if (AsNoTracking)
+                query = query.AsNoTracking();
 
             if (OrderResults)
                 query = query.OrderBy(per => per.Name);

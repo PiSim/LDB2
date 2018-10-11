@@ -75,24 +75,6 @@ namespace LabDbContext
             return lastCalibration.Date.AddMonths(entry.CalibrationInterval);
         }
 
-        public static IEnumerable<CalibrationReport> GetCalibrationReports(this Instrument entry)
-        {
-            // Returns all Calibration reports for an Instrument entry
-
-            if (entry == null)
-                return null;
-
-            using (LabDbEntities entities = new LabDbEntities())
-            {
-                entities.Configuration.LazyLoadingEnabled = false;
-
-                return entities.CalibrationReports.Include(cal => cal.Laboratory)
-                                                    .Include(cal => cal.Tech)
-                                                    .Where(cal => cal.instrumentID == entry.ID)
-                                                    .ToList();
-            }
-        }
-
         public static CalibrationReport GetLastCalibration(this Instrument entry)
         {
             //Returns the most recent calibration report for the instrument

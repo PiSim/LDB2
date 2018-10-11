@@ -188,8 +188,30 @@ namespace Materials.ViewModels
 
 
         #endregion Constructors
+        
+        #region Events
 
-        #region Service method for internal use
+        public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
+
+        #endregion Events
+
+        #region Methods
+
+        public IEnumerable GetErrors(string propertyName)
+        {
+            if (string.IsNullOrEmpty(propertyName)
+                || !_validationErrors.ContainsKey(propertyName))
+                return null;
+
+            return _validationErrors[propertyName];
+        }
+
+        private void RaiseErrorsChanged(string propertyName)
+        {
+            ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
+            RaisePropertyChanged("HasErrors");
+            SaveCommand.RaiseCanExecuteChanged();
+        }
 
         private void CheckMaterial()
         {
@@ -234,14 +256,6 @@ namespace Materials.ViewModels
         }
 
 
-        private void ReloadChildEntitiesInstances()
-        {
-            TypeCode = TypeCode;
-            LineCode = LineCode;
-            AspectCode = AspectCode;
-            RecipeCode = RecipeCode;
-        }
-
         /// <summary>
         /// Generates a template Material that will be passed to a BatchUpdateCommand instance to perform the Batch Update
         /// </summary>
@@ -277,42 +291,18 @@ namespace Materials.ViewModels
             };
         }
 
-        #endregion Service method for internal use
-
-        #region Events
-
-        public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
-
-        #endregion Events
-
-        #region Properties
-
-        public bool HasErrors => _validationErrors.Count > 0;
-
-        #endregion Properties
-
-        #region Methods
-
-        public IEnumerable GetErrors(string propertyName)
+        private void ReloadChildEntitiesInstances()
         {
-            if (string.IsNullOrEmpty(propertyName)
-                || !_validationErrors.ContainsKey(propertyName))
-                return null;
-
-            return _validationErrors[propertyName];
+            TypeCode = TypeCode;
+            LineCode = LineCode;
+            AspectCode = AspectCode;
+            RecipeCode = RecipeCode;
         }
-
-        private void RaiseErrorsChanged(string propertyName)
-        {
-            ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
-            RaisePropertyChanged("HasErrors");
-            SaveCommand.RaiseCanExecuteChanged();
-        }
-
         #endregion Methods
 
         #region Properties
 
+        public bool HasErrors => _validationErrors.Count > 0;
         public string AspectCode
         {
             get { return _aspectCode; }

@@ -143,6 +143,7 @@
   <ItemGroup>
     <Compile Include="Commands\SetReportsIsCompleteCommand.cs" />
     <Compile Include="ExternalResultPresenter.cs" />
+    <Compile Include="Queries\ExternalReportQuery.cs" />
     <Compile Include="Queries\ReportQuery.cs" />
     <Compile Include="ReportService.cs" />
     <Compile Include="ViewModels\AddTestDialogViewModel.cs" />

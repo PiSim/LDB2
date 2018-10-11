@@ -19,6 +19,12 @@ namespace DataAccess
         /// </summary>
         public bool EagerLoadingEnabled { get; set; } = true;
 
+
+        /// <summary>
+        /// If true Lazy loading will be disabled in the configuration
+        /// </summary>
+        public bool LazyLoadingDisabled { get; set; } = true;
+
         /// <summary>
         /// If true the results will be sorted
         /// </summary>

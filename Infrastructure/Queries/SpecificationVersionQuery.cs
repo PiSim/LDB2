@@ -15,8 +15,6 @@ namespace Infrastructure.Queries
 
         #endregion Properties
 
-
-
         #region Methods
 
         public SpecificationVersion Execute(LabDbEntities context)

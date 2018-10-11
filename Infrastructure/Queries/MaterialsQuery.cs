@@ -1,5 +1,6 @@
 ﻿using DataAccess;
 using LabDbContext;
+using System.Data.Entity;
 using System.Linq;
 
 namespace Infrastructure.Queries
@@ -7,22 +8,22 @@ namespace Infrastructure.Queries
     /// <summary>
     /// Query object that returns all Material enitites
     /// </summary>
-    public class MaterialsQuery : IQuery<Material, LabDbEntities>
+    public class MaterialsQuery : QueryBase<Material, LabDbEntities>
     {
-        #region Properties
-
-        /// <summary>
-        /// If True the results are ordered by TypeCode then by LineCode then by AspectCode then by RecipeCode
-        /// </summary>
-        public bool OrderResults { get; set; } = true;
-
-        #endregion Properties
-
         #region Methods
 
-        public IQueryable<Material> Execute(LabDbEntities context)
+        public override IQueryable<Material> Execute(LabDbEntities context)
         {
             IQueryable<Material> query = context.Materials;
+
+            if (AsNoTracking)
+                query = query.AsNoTracking();
+
+            if (EagerLoadingEnabled)
+                query = query.Include(mat => mat.Aspect)
+                            .Include(mat => mat.MaterialLine)
+                            .Include(mat => mat.MaterialType)
+                            .Include(mat => mat.Recipe.Colour);
 
             if (OrderResults)
                 query = query.OrderBy(mat => mat.MaterialType.Code)

@@ -1,5 +1,6 @@
 ﻿using DataAccess;
 using LabDbContext;
+using System.Data.Entity;
 using System.Linq;
 
 namespace Instruments.Queries
@@ -10,6 +11,8 @@ namespace Instruments.Queries
     public class InstrumentQuery : IScalar<Instrument, LabDbEntities>
     {
         #region Properties
+
+        public bool AsNoTracking { get; set; } = true;
 
         /// <summary>
         /// Gets or sets a Code that will be searched For
@@ -28,6 +31,11 @@ namespace Instruments.Queries
 
         public Instrument Execute(LabDbEntities context)
         {
+            IQueryable<Instrument> query = context.Instruments;
+
+            if (AsNoTracking)
+                query = query.AsNoTracking();
+
             if (ID != null)
                 return context.Instruments.FirstOrDefault(inst => inst.ID == ID);
 

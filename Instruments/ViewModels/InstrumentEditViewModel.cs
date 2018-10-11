@@ -5,6 +5,7 @@ using Infrastructure.Commands;
 using Infrastructure.Events;
 using Infrastructure.Queries;
 using Infrastructure.Wrappers;
+using Instruments.Queries;
 using LabDbContext;
 using LabDbContext.EntityExtensions;
 using LabDbContext.Services;
@@ -229,7 +230,8 @@ namespace Instruments.ViewModels
                 if (_instance == null)
                     return new List<CalibrationReport>();
 
-                return _instance.GetCalibrationReports();
+                return _labDbData.RunQuery(new CalibrationReportsQuery())
+                                .Where(crep => crep.instrumentID == _instance.ID).ToList();
             }
         }
 
@@ -368,7 +370,7 @@ namespace Instruments.ViewModels
             }
         }
 
-        public IEnumerable<InstrumentMeasurablePropertyWrapper> InstrumentMeasurablePropertyList { get; private set; }
+        public IList<InstrumentMeasurablePropertyWrapper> InstrumentMeasurablePropertyList { get; private set; }
 
         public string InstrumentModel
         {
@@ -391,13 +393,7 @@ namespace Instruments.ViewModels
 
         public string InstrumentSerialNumber
         {
-            get
-            {
-                if (_instance == null)
-                    return null;
-                else
-                    return _instance.SerialNumber;
-            }
+            get => _instance?.SerialNumber;
 
             set
             {
@@ -472,7 +468,7 @@ namespace Instruments.ViewModels
             }
         }
 
-        public IEnumerable<InstrumentMaintenanceEvent> MaintenanceEventList => _instance.GetMaintenanceEvents();
+        public IEnumerable<InstrumentMaintenanceEvent> MaintenanceEventList => _instance?.GetMaintenanceEvents();
 
         public IEnumerable<Organization> ManufacturerList { get; }
 

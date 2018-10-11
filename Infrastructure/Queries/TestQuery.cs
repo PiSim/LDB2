@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace Infrastructure.Queries
 {
-    public class TestQuery : IQuery<Test, LabDbEntities>
+    public class TestQuery : QueryBase<Test, LabDbEntities>
     {
         #region Constructors
 
@@ -41,17 +41,23 @@ namespace Infrastructure.Queries
 
         #region Methods
 
-        public IQueryable<Test> Execute(LabDbEntities entities)
+        public override IQueryable<Test> Execute(LabDbEntities entities)
         {
-            IQueryable<Test> query = entities.Tests.Include(tst => tst.TestRecord.Batch.Material.Aspect)
-                                                    .Include(tst => tst.TestRecord.Batch.Material.MaterialLine)
-                                                    .Include(tst => tst.TestRecord.Batch.Material.MaterialType)
-                                                    .Include(tst => tst.TestRecord.Batch.Material.Recipe)
-                                                    .Include(tst => tst.TestRecord.ExternalReports)
-                                                    .Include(tst => tst.TestRecord.Reports)
-                                                    .Include(tst => tst.MethodVariant.Method.Property)
-                                                    .Include(tst => tst.MethodVariant.Method.Standard)
-                                                    .Include(tst => tst.SubTests);
+            IQueryable<Test> query = entities.Tests;
+
+            if (AsNoTracking)
+                query.AsNoTracking();
+
+            if (EagerLoadingEnabled)
+                query = query.Include(tst => tst.TestRecord.Batch.Material.Aspect)
+                            .Include(tst => tst.TestRecord.Batch.Material.MaterialLine)
+                            .Include(tst => tst.TestRecord.Batch.Material.MaterialType)
+                            .Include(tst => tst.TestRecord.Batch.Material.Recipe)
+                            .Include(tst => tst.TestRecord.ExternalReports)
+                            .Include(tst => tst.TestRecord.Reports)
+                            .Include(tst => tst.MethodVariant.Method.Property)
+                            .Include(tst => tst.MethodVariant.Method.Standard)
+                            .Include(tst => tst.SubTests);
 
             if (!IncludeExternalReports)
                 query = query.Where(tst => tst.TestRecord.RecordTypeID != 2);
@@ -82,6 +88,9 @@ namespace Infrastructure.Queries
 
             if (!string.IsNullOrWhiteSpace(TestName))
                 query = query.Where(tst => tst.MethodVariant.Method.Property.Name.Contains(TestName));
+
+            if (OrderResults)
+                query = query.OrderBy(tst => tst.TestRecord.Batch.Number);
 
             return query;
         }

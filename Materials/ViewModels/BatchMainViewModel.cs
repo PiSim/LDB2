@@ -18,7 +18,6 @@ namespace Materials.ViewModels
     {
         #region Fields
 
-        private string _batchNumber;
         private IEventAggregator _eventAggregator;
         private bool _isPrintMenuOpen;
         private IDataService<LabDbEntities> _labDbData;
@@ -60,14 +59,7 @@ namespace Materials.ViewModels
                     _materialService.ShowSampleLogDialog();
                 },
                 () => Thread.CurrentPrincipal.IsInRole(UserRoleNames.SampleEdit));
-
-            QuickOpenCommand = new DelegateCommand(
-                () =>
-                {
-                    _eventAggregator.GetEvent<BatchVisualizationRequested>()
-                                    .Publish(_batchNumber);
-                });
-
+            
             PrintBatchQueryCommand = new DelegateCommand<IQueryPresenter<Batch, LabDbEntities>>(
                 query =>
                 {
@@ -169,7 +161,6 @@ namespace Materials.ViewModels
             new Latest25BatchesQueryPresenter()
         };
 
-        public DelegateCommand QuickOpenCommand { get; }
         public DelegateCommand RefreshCommand => _refresh;
 
         public string SampleArchiveRegionName => RegionNames.SampleArchiveRegion;

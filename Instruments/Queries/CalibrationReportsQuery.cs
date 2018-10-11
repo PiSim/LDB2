@@ -8,30 +8,12 @@ namespace Instruments.Queries
     /// <summary>
     /// Query object that returns multiple CalibrationReport entities
     /// </summary>
-    public class CalibrationReportsQuery : IQuery<CalibrationReport, LabDbEntities>
+    public class CalibrationReportsQuery : QueryBase<CalibrationReport, LabDbEntities>
     {
-        #region Properties
-
-        /// <summary>
-        /// If true the query is run AsNoTracking
-        /// </summary>
-        public bool AsNoTracking { get; set; } = true;
-
-        /// <summary>
-        /// If true the relevant subentities are eagerly loaded
-        /// </summary>
-        public bool EagerLoadingEnabled { get; set; } = true;
-
-        /// <summary>
-        /// If true the results are ordered by year descending then number descending
-        /// </summary>
-        public bool OrderResults { get; set; }
-
-        #endregion Properties
 
         #region Methods
 
-        public IQueryable<CalibrationReport> Execute(LabDbEntities context)
+        public override IQueryable<CalibrationReport> Execute(LabDbEntities context)
         {
             IQueryable<CalibrationReport> query = context.CalibrationReports;
 

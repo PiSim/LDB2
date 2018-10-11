@@ -178,7 +178,12 @@ namespace Instruments.ViewModels
             {
                 EditMode = false;
                 _calibrationInstance = value;
-                _calibrationInstance.Load();
+
+                LabList = _labDbData.RunQuery(new OrganizationsQuery() { Role = OrganizationsQuery.OrganizationRoles.CalibrationLab })
+                                .ToList();
+                CalibrationResultList = _instrumentService.GetCalibrationResults();
+                TechList = _labDbData.RunQuery(new PeopleQuery() { Role = PeopleQuery.PersonRoles.CalibrationTech })
+                                                                .ToList();
 
                 PropertyMappingList = _calibrationInstance?.GetPropertyMappings();
 
@@ -203,7 +208,7 @@ namespace Instruments.ViewModels
             }
         }
 
-        public IEnumerable<CalibrationResult> CalibrationResultList { get; }
+        public IEnumerable<CalibrationResult> CalibrationResultList { get; private set; }
         public DelegateCommand CancelEditCommand { get; }
         public DelegateCommand DeleteCommand { get; }
 
@@ -242,7 +247,7 @@ namespace Instruments.ViewModels
             }
         }
 
-        public IEnumerable<Organization> LabList { get; }
+        public IEnumerable<Organization> LabList { get; private set; }
 
         public DelegateCommand OpenFileCommand { get; }
 
@@ -306,6 +311,7 @@ namespace Instruments.ViewModels
             set
             {
                 _selectedLab = value;
+                _calibrationInstance.Laboratory = value;
                 _calibrationInstance.laboratoryID = _selectedLab.ID;
             }
         }
@@ -327,6 +333,7 @@ namespace Instruments.ViewModels
             set
             {
                 _selectedResult = value;
+                _calibrationInstance.CalibrationResult = value;
                 _calibrationInstance.ResultID = value.ID;
             }
         }
@@ -337,13 +344,14 @@ namespace Instruments.ViewModels
             set
             {
                 _selectedPerson = value;
+                _calibrationInstance.Tech = value;
                 _calibrationInstance.OperatorID = value.ID;
             }
         }
 
         public DelegateCommand StartEditCommand => _startEdit;
 
-        public IEnumerable<Person> TechList { get; }
+        public IEnumerable<Person> TechList { get; private set; }
 
         public bool TechSelectionEnabled => EditMode && _selectedLab.Name == "Vulcaflex";
 

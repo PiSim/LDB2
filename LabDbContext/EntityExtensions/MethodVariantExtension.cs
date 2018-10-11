@@ -79,14 +79,6 @@ namespace LabDbContext
             }
         }
 
-        /// <summary>
-        /// Retrieves the Method for this Variant and stores it in the current instance
-        /// </summary>
-        /// <param name="IncludeSubMethods">If true the query includes the SubMethods</param>
-        public void LoadMethod(bool IncludeSubMethods = false)
-        {
-            Method = GetMethod(IncludeSubMethods);
-        }
 
         /// <summary>
         /// Deletes the entry from the database if no Test or requirement is associated with it, otherwise sets it as obsolete

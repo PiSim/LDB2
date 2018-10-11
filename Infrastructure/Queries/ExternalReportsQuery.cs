@@ -1,5 +1,6 @@
 ﻿using DataAccess;
 using LabDbContext;
+using System.Data.Entity;
 using System.Linq;
 
 namespace Infrastructure.Queries
@@ -7,22 +8,22 @@ namespace Infrastructure.Queries
     /// <summary>
     /// Query object that returns multiple ExternalReport entities
     /// </summary>
-    public class ExternalReportsQuery : IQuery<ExternalReport, LabDbEntities>
+    public class ExternalReportsQuery : QueryBase<ExternalReport, LabDbEntities>
     {
-        #region Properties
-
-        /// <summary>
-        /// If true the results are ordered by Year descending then by Number descending
-        /// </summary>
-        public bool OrderResults { get; set; } = true;
-
-        #endregion Properties
-
         #region Methods
 
-        public IQueryable<ExternalReport> Execute(LabDbEntities context)
+        public override IQueryable<ExternalReport> Execute(LabDbEntities context)
         {
+            if (LazyLoadingDisabled)
+                context.Configuration.LazyLoadingEnabled = false;
+
             IQueryable<ExternalReport> query = context.ExternalReports;
+
+            if (AsNoTracking)
+                query = query.AsNoTracking();
+
+            if (EagerLoadingEnabled)
+                query.Include(exrep => exrep.ExternalLab);
 
             if (OrderResults)
                 query = query.OrderByDescending(exrep => exrep.Year)

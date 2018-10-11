@@ -71,40 +71,20 @@ namespace LabDbContext
             using (LabDbEntities entities = new LabDbEntities())
             {
                 ExternalReport attachedExternalReport = entities.ExternalReports.First(ext => ext.ID == ID);
-                MethodVariant attachedMethodVariant = entities.MethodVariants.First(mtd => mtd.ID == methodVariant.ID);
+                MethodVariant attachedMethodVariant = entities.MethodVariants.Include(mtdvar => mtdvar.Method.SubMethods)
+                                                                            .First(mtd => mtd.ID == methodVariant.ID);
 
                 attachedExternalReport.MethodVariants.Add(attachedMethodVariant);
 
                 IEnumerable<TestRecord> recordList = attachedExternalReport.TestRecords.ToList();
-
-                methodVariant.LoadMethod(true);
-
+                                
                 foreach (TestRecord tstr in attachedExternalReport.TestRecords)
-                    tstr.Tests.Add(methodVariant.GenerateTest());
+                    tstr.Tests.Add(attachedMethodVariant.GenerateTest());
 
                 entities.SaveChanges();
             }
         }
 
-        /// <summary>
-        /// Returns a list of test for each methodVariant associated with the Report
-        /// generated from the entity collections loaded in the instance
-        /// </summary>
-        /// <returns>An IEnumerable of Tuples where Value1 is a methodVAriant and
-        /// Value2 is an IEnumerable of tests</returns>
-        public IEnumerable<Tuple<MethodVariant, IEnumerable<Test>>> GetResultCollection()
-        {
-            List<Tuple<MethodVariant, IEnumerable<Test>>> output = new List<Tuple<MethodVariant, IEnumerable<Test>>>();
-            foreach (MethodVariant mtdvar in MethodVariants)
-            {
-                IEnumerable<Test> testList = TestRecords.SelectMany(tstr => tstr.Tests)
-                                                        .Where(tst => tst.MethodVariantID == mtdvar.ID);
-
-                output.Add(new Tuple<MethodVariant, IEnumerable<Test>>(mtdvar, testList));
-            }
-
-            return output;
-        }
 
         /// <summary>
         /// Removes a given methodVariant from the method associations and from every test record

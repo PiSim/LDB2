@@ -29,6 +29,7 @@ namespace Instruments
         {
             _eventAggregator = aggregator;
             _dbContextFactory = dbContextFactory;
+            _labDbData = labDbData;
         }
 
         #endregion Constructors
@@ -84,6 +85,7 @@ namespace Instruments
                 entities.Configuration.LazyLoadingEnabled = false;
 
                 return entities.CalibrationResults
+                                .AsNoTracking()
                                 .ToList();
             }
         }
@@ -121,8 +123,8 @@ namespace Instruments
             {
                 CalibrationReport output = calibrationDialog.ReportInstance;
 
-                output.Instrument.UpdateCalibrationDueDate();
-                _labDbData.Execute(new UpdateEntityCommand(output));
+                target.UpdateCalibrationDueDate();
+                _labDbData.Execute(new UpdateEntityCommand(target));
 
                 _eventAggregator.GetEvent<CalibrationIssued>()
                                 .Publish(output);

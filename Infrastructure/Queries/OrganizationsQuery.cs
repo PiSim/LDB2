@@ -1,6 +1,7 @@
 ﻿using DataAccess;
 using LabDbContext;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 
 namespace Infrastructure.Queries
@@ -8,7 +9,7 @@ namespace Infrastructure.Queries
     /// <summary>
     /// Query object that returns Organization entities
     /// </summary>
-    public class OrganizationsQuery : IQuery<Organization, LabDbEntities>
+    public class OrganizationsQuery : QueryBase<Organization, LabDbEntities>
     {
         #region Fields
 
@@ -43,11 +44,6 @@ namespace Infrastructure.Queries
         #region Properties
 
         /// <summary>
-        /// If true results are ordered by Name
-        /// </summary>
-        public bool OrderResults { get; set; } = true;
-
-        /// <summary>
         /// Gets or sets an OrganizationRole To filter for
         /// </summary>
         public OrganizationRoles? Role { get; set; }
@@ -56,7 +52,7 @@ namespace Infrastructure.Queries
 
         #region Methods
 
-        public IQueryable<Organization> Execute(LabDbEntities context)
+        public override IQueryable<Organization> Execute(LabDbEntities context)
         {
             IQueryable<Organization> query = context.Organizations;
 
@@ -65,6 +61,9 @@ namespace Infrastructure.Queries
                 string _roleName = _roleDictionary[Role];
                 query = query.Where(org => org.RoleMapping.FirstOrDefault(orm => orm.Role.Name == _roleName).IsSelected == true);
             }
+
+            if (AsNoTracking)
+                query = query.AsNoTracking();
 
             if (OrderResults)
                 query = query.OrderBy(org => org.Name);

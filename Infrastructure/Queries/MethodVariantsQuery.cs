@@ -10,32 +10,31 @@ namespace Infrastructure.Queries
     /// IncludeObsolete (default False) : If true the objects flagged as IsOld are included in the search
     /// SortResults (default True) : if True the results are sorted by Method Name then by Variant Name
     /// </summary>
-    public class MethodVariantsQuery : IQuery<MethodVariant, LabDbEntities>
+    public class MethodVariantsQuery : QueryBase<MethodVariant, LabDbEntities>
     {
         #region Properties
 
-        public bool AsNoTracking { get; set; } = true;
-
         public bool IncludeObsolete { get; set; } = false;
-
-        public bool OrderResults { get; set; } = true;
 
         #endregion Properties
 
         #region Methods
 
-        public IQueryable<MethodVariant> Execute(LabDbEntities context)
+        public override IQueryable<MethodVariant> Execute(LabDbEntities context)
         {
             context.Configuration.LazyLoadingEnabled = false;
 
-            IQueryable<MethodVariant> query = context.MethodVariants.Include(mtdvar => mtdvar.Method.Property)
-                                                                    .Include(mtdvar => mtdvar.Method.Standard.Organization);
+            IQueryable<MethodVariant> query = context.MethodVariants;
+            
+            if (EagerLoadingEnabled)
+                query = query.Include(mtdvar => mtdvar.Method.Property)
+                            .Include(mtdvar => mtdvar.Method.Standard.Organization);
 
             if (!IncludeObsolete)
                 query = query.Where(mtdvar => !mtdvar.IsOld);
 
             if (OrderResults)
-                query = query.OrderBy(mtdvar => mtdvar.Method.Name)
+                query = query.OrderBy(mtdvar => mtdvar.Method.Standard.Name)
                             .ThenBy(mtdvar => mtdvar.Name);
 
             if (AsNoTracking)

@@ -1,4 +1,6 @@
-﻿using Controls.Views;
+﻿using Admin.Queries;
+using Controls.Views;
+using DataAccess;
 using Infrastructure;
 using Infrastructure.Events;
 using LabDbContext;
@@ -8,6 +10,7 @@ using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Admin.ViewModels
 {
@@ -16,7 +19,7 @@ namespace Admin.ViewModels
         #region Fields
 
         private IAdminService _adminService;
-        private IDataService _dataService;
+        IDataService<LabDbEntities> _labDbData;
         private IEventAggregator _eventAggregator;
         private User _selectedUser;
         private IEnumerable<User> _userList;
@@ -27,20 +30,20 @@ namespace Admin.ViewModels
 
         public UserMainViewModel(IEventAggregator eventAggregator,
                                 IAdminService adminService,
-                                IDataService dataService) : base()
+                                IDataService<LabDbEntities> labDbData) : base()
         {
             _adminService = adminService;
             _eventAggregator = eventAggregator;
-            _dataService = dataService;
+            _labDbData = labDbData;
 
-            _userList = _dataService.GetUsers();
+            _userList = _labDbData.RunQuery(new UsersQuery()).ToList();
 
             CreateNewUserCommand = new DelegateCommand(
                 () =>
                 {
                     _adminService.CreateNewUser();
 
-                    UserList = _dataService.GetUsers();
+                    UserList = _labDbData.RunQuery(new UsersQuery()).ToList();
                 });
 
             DeleteUserCommand = new DelegateCommand(
@@ -48,7 +51,7 @@ namespace Admin.ViewModels
                 {
                     _selectedUser.Delete();
 
-                    UserList = _dataService.GetUsers();
+                    UserList = _labDbData.RunQuery(new UsersQuery()).ToList();
                 },
                 () => _selectedUser != null);
         }

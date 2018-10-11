@@ -16,7 +16,6 @@ namespace Reports.ViewModels
     {
         #region Fields
 
-        private DataAccessService _dataService;
         private IEventAggregator _eventAggregator;
         private IDataService<LabDbEntities> _labDbData;
 
@@ -25,11 +24,9 @@ namespace Reports.ViewModels
         #region Constructors
 
         public TestSearchMainViewModel(IDataService<LabDbEntities> labDbData,
-                                        DataAccessService dataService,
                                         IEventAggregator eventAggregator)
         {
             _labDbData = labDbData;
-            _dataService = dataService;
             _eventAggregator = eventAggregator;
 
             IncludeExternalReports = true;

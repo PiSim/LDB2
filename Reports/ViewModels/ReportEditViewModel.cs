@@ -130,7 +130,7 @@ namespace Reports.ViewModels
                 {
                     // Update the tests
 
-                    _labDbData.Execute(new BulkUpdateEntitiesCommand(_testList));
+                    _labDbData.Execute(new BulkUpdateEntitiesCommand(_testList.SelectMany(tstw => tstw.TestInstance.SubTests)));
 
                     // Update the report instance
 

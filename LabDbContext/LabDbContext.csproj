@@ -321,7 +321,6 @@
     <Compile Include="ControlPlanItem.cs">
       <DependentUpon>LabDB.tt</DependentUpon>
     </Compile>
-    <Compile Include="DataAccessService.cs" />
     <Compile Include="LabDBContextFactory.cs" />
     <Compile Include="EntityExtensions\BatchExtension.cs" />
     <Compile Include="EntityExtensions\CalibrationReportExtension.cs" />
@@ -361,7 +360,6 @@
     <Compile Include="ExternalReportFile.cs">
       <DependentUpon>LabDB.tt</DependentUpon>
     </Compile>
-    <Compile Include="IDataService.cs" />
     <Compile Include="Instrument.cs">
       <DependentUpon>LabDB.tt</DependentUpon>
     </Compile>

@@ -10,6 +10,7 @@ using LabDbContext.Services;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
+using Reports.Queries;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -199,6 +200,26 @@ namespace Reports.ViewModels
 
         #region Methods
 
+        /// <summary>
+        /// Returns a list of test for each methodVariant associated with the Report
+        /// generated from the entity collections loaded in the instance
+        /// </summary>
+        /// <returns>An IEnumerable of Tuples where Value1 is a methodVAriant and
+        /// Value2 is an IEnumerable of tests</returns>
+        private IEnumerable<Tuple<MethodVariant, IEnumerable<Test>>> GetResultCollection()
+        {
+            List<Tuple<MethodVariant, IEnumerable<Test>>> output = new List<Tuple<MethodVariant, IEnumerable<Test>>>();
+            foreach (MethodVariant mtdvar in MethodVariants)
+            {
+                IEnumerable<Test> testList = TestRecords.SelectMany(tstr => tstr.Tests)
+                                                        .Where(tst => tst.MethodVariantID == mtdvar.ID);
+
+                output.Add(new Tuple<MethodVariant, IEnumerable<Test>>(mtdvar, testList));
+            }
+
+            return output;
+        }
+
         private void RefreshTestRecords()
         {
             _resultList = new List<ExternalResultPresenter>();
@@ -274,7 +295,7 @@ namespace Reports.ViewModels
             {
                 EditMode = false;
 
-                _instance = value;
+                _instance = _labDbData.RunQuery(new ExternalReportQuery(value.ID));
 
                 if (_instance != null)
                     RefreshTestRecords();

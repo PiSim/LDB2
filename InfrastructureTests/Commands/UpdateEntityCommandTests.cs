@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using LabDbContext;
 using System.Data.Entity.Infrastructure;
 using DataAccess;
+using Infrastructure.Queries;
 
 namespace Infrastructure.Commands.Tests
 {
@@ -123,6 +124,15 @@ namespace Infrastructure.Commands.Tests
             {
                 Aspect tempEntry = testContext.Aspects.FirstOrDefault(asp => asp.Code == "999");
                 Assert.IsTrue(tempEntry.Name == "MODIFIED_NAME");
+            }
+        }
+
+        [TestMethod()]
+        public void UpdateQueriedEntriesWithNoModificationsTest()
+        {
+            foreach (ExternalReport exrep in _labDbData.RunQuery(new ExternalReportsQuery()).ToList())
+            {
+                _labDbData.Execute(new UpdateEntityCommand(exrep));
             }
         }
     }

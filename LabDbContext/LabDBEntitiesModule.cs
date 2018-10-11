@@ -28,7 +28,6 @@ namespace LabDbContext
             LabDBContextFactory LDbContextFactory = new LabDBContextFactory("LabDb_PRD");
             registry.RegisterInstance(typeof(IDbContextFactory<LabDbEntities>), LDbContextFactory);
             registry.Register<IDataService<LabDbEntities>, LabDbData>();
-            registry.Register<IDataService, DataAccessService>();
         }
 
         #endregion Methods

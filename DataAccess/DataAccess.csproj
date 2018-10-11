@@ -74,6 +74,7 @@
     <Compile Include="Interfaces\IScalar.cs" />
     <Compile Include="QueryBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ScalarBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

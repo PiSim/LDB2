@@ -1,5 +1,7 @@
 ﻿using DataAccess;
+using Infrastructure.Commands;
 using Infrastructure.Queries;
+using Instruments.Queries;
 using LabDbContext;
 using Prism.Commands;
 using Prism.Events;
@@ -16,7 +18,6 @@ namespace Instruments.ViewModels
     {
         #region Fields
 
-        private LabDbEntities _entities;
         private IEventAggregator _eventAggregator;
         private InstrumentService _instrumentService;
         private Instrument _instumentInstance, _selectedReference;
@@ -28,13 +29,11 @@ namespace Instruments.ViewModels
 
         #region Constructors
 
-        public NewCalibrationDialogViewModel(LabDbEntities entities,
-                                            IEventAggregator eventAggregator,
+        public NewCalibrationDialogViewModel(IEventAggregator eventAggregator,
                                             InstrumentService instrumentService,
                                             IDataService<LabDbEntities> labDbData) : base()
         {
             _labDbData = labDbData;
-            _entities = entities;
             _instrumentService = instrumentService;
             IsVerificationOnly = false;
             ReferenceList = new ObservableCollection<Instrument>();
@@ -47,7 +46,7 @@ namespace Instruments.ViewModels
             AddReferenceCommand = new DelegateCommand<string>(
                 code =>
                 {
-                    Instrument tempRef = _entities.Instruments.FirstOrDefault(inst => inst.Code == code);
+                    Instrument tempRef = _labDbData.RunQuery(new InstrumentQuery() { Code = code  } );
                     if (tempRef != null)
                     {
                         ReferenceList.Add(tempRef);
@@ -68,7 +67,7 @@ namespace Instruments.ViewModels
                     ReportInstance.Date = CalibrationDate;
                     ReportInstance.Year = DateTime.Now.Year - 2000;
                     ReportInstance.Number = _instrumentService.GetNextCalibrationNumber(ReportInstance.Year);
-                    ReportInstance.Instrument = _instumentInstance;
+                    ReportInstance.instrumentID = _instumentInstance.ID;
                     ReportInstance.IsVerification = IsVerificationOnly;
                     ReportInstance.laboratoryID = _selectedLab.ID;
                     ReportInstance.Notes = "";
@@ -96,8 +95,7 @@ namespace Instruments.ViewModels
                         ReportInstance.InstrumentMeasurablePropertyMappings.Add(cripm);
                     }
 
-                    _entities.CalibrationReports.Add(ReportInstance);
-                    _entities.SaveChanges();
+                    _labDbData.Execute(new InsertEntityCommand(ReportInstance));
 
                     parentDialog.DialogResult = true;
                 });
@@ -143,7 +141,7 @@ namespace Instruments.ViewModels
             get { return _instumentInstance; }
             set
             {
-                _instumentInstance = _entities.Instruments.First(ins => ins.ID == value.ID);
+                _instumentInstance = _labDbData.RunQuery(new InstrumentQuery() { ID = value.ID });
                 SelectedLab = LabList.FirstOrDefault(lab => lab.ID == _instumentInstance.CalibrationResponsibleID);
                 RaisePropertyChanged("InstrumentCode");
                 RaisePropertyChanged("PropertyList");

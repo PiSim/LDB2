@@ -1,5 +1,6 @@
 ﻿using DataAccess;
 using LabDbContext;
+using System.Data.Entity;
 using System.Linq;
 
 namespace Infrastructure.Queries
@@ -7,7 +8,7 @@ namespace Infrastructure.Queries
     /// <summary>
     /// Query object that returns multiple Method entities
     /// </summary>
-    public class MethodsQuery : IQuery<Method, LabDbEntities>
+    public class MethodsQuery : QueryBase<Method, LabDbEntities>
     {
         #region Properties
 
@@ -15,19 +16,20 @@ namespace Infrastructure.Queries
         /// If false only the entities not flagged as IsOld are returned
         /// </summary>
         public bool IncludeObsolete { get; set; } = false;
-
-        /// <summary>
-        /// If true the results are ordered by Std.Name
-        /// </summary>
-        public bool OrderResults { get; set; } = true;
-
         #endregion Properties
 
         #region Methods
 
-        public IQueryable<Method> Execute(LabDbEntities context)
+        public override IQueryable<Method> Execute(LabDbEntities context)
         {
             IQueryable<Method> query = context.Methods;
+
+            if (AsNoTracking)
+                query = query.AsNoTracking();
+
+            if (EagerLoadingEnabled)
+                query = query.Include(mtd => mtd.Property)
+                            .Include(mtd => mtd.Standard.Organization);
 
             if (!IncludeObsolete)
                 query = query.Where(mtd => !mtd.IsOld);
