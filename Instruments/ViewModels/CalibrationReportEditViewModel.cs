@@ -148,8 +148,7 @@ namespace Instruments.ViewModels
                 () =>
                 {
                     _labDbData.Execute(new UpdateEntityCommand(_calibrationInstance));
-                    foreach (CalibrationReportInstrumentPropertyMapping cripmw in PropertyMappingList)
-                        cripmw.Update();
+                    _labDbData.Execute(new BulkUpdateEntitiesCommand(PropertyMappingList));
 
                     EditMode = false;
                 },

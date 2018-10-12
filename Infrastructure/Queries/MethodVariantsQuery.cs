@@ -16,6 +16,11 @@ namespace Infrastructure.Queries
 
         public bool IncludeObsolete { get; set; } = false;
 
+        /// <summary>
+        /// If set only the methods associated with the ExternalReport with the given ID are returned
+        /// </summary>
+        public int? ExternalReportID { get; set; }
+
         #endregion Properties
 
         #region Methods
@@ -28,10 +33,14 @@ namespace Infrastructure.Queries
             
             if (EagerLoadingEnabled)
                 query = query.Include(mtdvar => mtdvar.Method.Property)
-                            .Include(mtdvar => mtdvar.Method.Standard.Organization);
+                            .Include(mtdvar => mtdvar.Method.Standard.Organization)
+                            .Include(mtdvar => mtdvar.Method.SubMethods);
 
             if (!IncludeObsolete)
                 query = query.Where(mtdvar => !mtdvar.IsOld);
+
+            if (ExternalReportID != null)
+                query = query.Where(mtdvar => mtdvar.ExternalReports.Any(exrep => exrep.ID == ExternalReportID));
 
             if (OrderResults)
                 query = query.OrderBy(mtdvar => mtdvar.Method.Standard.Name)

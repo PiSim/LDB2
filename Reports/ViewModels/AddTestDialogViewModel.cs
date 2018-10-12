@@ -59,7 +59,6 @@ namespace Reports.ViewModels
             set
             {
                 _reportInstance = value;
-                _reportInstance.SpecificationVersion.Load();
 
                 TestList = _reportInstance.SpecificationVersion.GenerateRequirementList()
                                                                 .Select(req => new ReportItemWrapper(req, this))

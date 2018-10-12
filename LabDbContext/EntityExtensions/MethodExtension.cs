@@ -9,25 +9,6 @@ namespace LabDbContext
     {
         #region Methods
 
-        public static void Create(this Method entry)
-        {
-            using (LabDbEntities entities = new LabDbEntities())
-            {
-                entities.Methods.Add(entry);
-                entities.SaveChanges();
-            }
-        }
-
-        public static void Delete(this Method entry)
-        {
-            using (LabDbEntities entities = new LabDbEntities())
-            {
-                entities.Methods.Attach(entry);
-                entities.Entry(entry).State = System.Data.Entity.EntityState.Deleted;
-                entities.SaveChanges();
-            }
-        }
-
         public static IEnumerable<StandardFile> GetFiles(this Method entry)
         {
             // Returns all standard Files for a method standard
@@ -84,20 +65,7 @@ namespace LabDbContext
                                             .ToList();
             }
         }
-
-        public void Update()
-        {
-            using (LabDbEntities entities = new LabDbEntities())
-            {
-                entities.Methods.AddOrUpdate(this);
-
-                foreach (SubMethod smtd in SubMethods)
-                    entities.SubMethods.AddOrUpdate(smtd);
-
-                entities.SaveChanges();
-            }
-        }
-
+        
         #endregion Methods
     }
 }

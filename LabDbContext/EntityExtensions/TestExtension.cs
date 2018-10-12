@@ -4,20 +4,6 @@ using System.Linq;
 
 namespace LabDbContext
 {
-    public static class TestExtension
-    {
-
-        public static void CreateTests(this IEnumerable<Test> testList)
-        {
-            using (LabDbEntities entities = new LabDbEntities())
-            {
-                entities.Tests.AddRange(testList);
-                entities.SaveChanges();
-            }
-        }
-        
-    }
-
     public partial class Test
     {
         #region Properties

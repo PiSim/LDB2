@@ -8,29 +8,7 @@ namespace LabDbContext
     public static class ReportExtension
     {
         #region Methods
-
-        public static void Create(this Report entry)
-        {
-            using (LabDbEntities entities = new LabDbEntities())
-            {
-                entities.Configuration.LazyLoadingEnabled = false;
-
-                entities.Reports.Add(entry);
-                entities.SaveChanges();
-            }
-        }
-
-        public static void Delete(this Report entry)
-        {
-            using (LabDbEntities entities = new LabDbEntities())
-            {
-                entities.Entry(entities.Reports.First(rep => rep.ID == entry.ID)).State = EntityState.Deleted;
-                entities.SaveChanges();
-
-                entry.ID = 0;
-            }
-        }
-
+        
         public static IEnumerable<ReportFile> GetReportFiles(this Report entry)
         {
             // Returns all ReportFiles for a report Entry
@@ -44,15 +22,6 @@ namespace LabDbContext
 
                 return entities.ReportFiles.Where(repf => repf.reportID == entry.ID)
                                             .ToList();
-            }
-        }
-
-        public static void Update(this Report entry)
-        {
-            using (LabDbEntities entities = new LabDbEntities())
-            {
-                entities.Reports.AddOrUpdate(entry);
-                entities.SaveChanges();
             }
         }
 
@@ -93,42 +62,6 @@ namespace LabDbContext
             }
         }
 
-        public void Load()
-        {
-            // Retrieves Header information for the Report
-
-            using (LabDbEntities entities = new LabDbEntities())
-            {
-                entities.Configuration.LazyLoadingEnabled = false;
-
-                Report tempEntry = entities.Reports
-                                            .AsNoTracking()
-                                            .Include(rep => rep.Author)
-                                            .Include(rep => rep.Batch.Material.Aspect)
-                                            .Include(rep => rep.Batch.Material.ExternalConstruction)
-                                            .Include(rep => rep.Batch.Material.MaterialLine)
-                                            .Include(rep => rep.Batch.Material.MaterialType)
-                                            .Include(rep => rep.Batch.Material.MaterialType)
-                                            .Include(rep => rep.Batch.Material.Recipe.Colour)
-                                            .Include(rep => rep.ParentTasks)
-                                            .Include(rep => rep.SpecificationVersion.Specification.Standard.Organization)
-                                            .First(rep => rep.ID == ID);
-
-                Author = tempEntry.Author;
-                AuthorID = tempEntry.AuthorID;
-                Batch = tempEntry.Batch;
-                BatchID = tempEntry.BatchID;
-                Category = tempEntry.Category;
-                Description = tempEntry.Description;
-                EndDate = tempEntry.EndDate;
-                IsComplete = tempEntry.IsComplete;
-                Number = tempEntry.Number;
-                ParentTasks = tempEntry.ParentTasks;
-                SpecificationVersion = tempEntry.SpecificationVersion;
-                SpecificationVersionID = tempEntry.SpecificationVersionID;
-                StartDate = tempEntry.StartDate;
-            }
-        }
 
         /// <summary>
         /// Sets the project for the material of this report to the one specified

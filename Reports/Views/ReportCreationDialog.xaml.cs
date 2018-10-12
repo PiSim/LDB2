@@ -26,18 +26,6 @@ namespace Reports.Views
             set { ViewModel.BatchNumber = value.Number; }
         }
 
-        public ViewModels.ReportCreationDialogViewModel.CreationModes CreationMode
-        {
-            get => ViewModel.CreationMode;
-            set => ViewModel.CreationMode = value;
-        }
-
-        public Task TaskInstance
-        {
-            get => ViewModel.TaskInstance;
-            set => ViewModel.TaskInstance = value;
-        }
-
         public ViewModels.ReportCreationDialogViewModel ViewModel => DataContext as ViewModels.ReportCreationDialogViewModel;
 
         #endregion Properties

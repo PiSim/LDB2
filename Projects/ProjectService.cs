@@ -1,5 +1,6 @@
 ﻿using DataAccess;
 using Infrastructure;
+using Infrastructure.Commands;
 using Infrastructure.Events;
 using Infrastructure.Queries;
 using LabDbContext;
@@ -69,7 +70,7 @@ namespace Projects
 
                 if (prj.TotalExternalCost != oldExternalValue
                     || prj.TotalReportDuration != oldInternalValue)
-                    prj.Update();
+                    _labDbData.Execute(new UpdateEntityCommand(prj));
             }
         }
 

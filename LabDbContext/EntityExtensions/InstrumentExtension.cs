@@ -9,7 +9,7 @@ namespace LabDbContext
     public static class InstrumentExtension
     {
         #region Methods
-
+        [Obsolete]
         public static void AddFiles(this Instrument entry,
                                     IEnumerable<string> paths)
         {
@@ -31,7 +31,7 @@ namespace LabDbContext
                 entities.SaveChanges();
             }
         }
-
+        [Obsolete]
         public static void AddMethodAssociation(this Instrument entry,
                                                 Method methodEntity)
         {
@@ -47,7 +47,7 @@ namespace LabDbContext
                 entities.SaveChanges();
             }
         }
-
+        [Obsolete]
         public static IEnumerable<Method> GetAssociatedMethods(this Instrument entry)
         {
             // Returns all the methods not assigned to the instrument entry
@@ -66,7 +66,7 @@ namespace LabDbContext
                                         .ToList();
             }
         }
-
+        [Obsolete]
         public static DateTime? GetCalibrationDueDateFrom(this Instrument entry,
                                                         DateTime lastCalibration)
         {
@@ -74,7 +74,7 @@ namespace LabDbContext
 
             return lastCalibration.Date.AddMonths(entry.CalibrationInterval);
         }
-
+        [Obsolete]
         public static CalibrationReport GetLastCalibration(this Instrument entry)
         {
             //Returns the most recent calibration report for the instrument
@@ -92,7 +92,7 @@ namespace LabDbContext
                                 .FirstOrDefault();
             }
         }
-
+        [Obsolete]
         public static IEnumerable<InstrumentMeasurableProperty> GetMeasurableProperties(this Instrument entry)
         {
             // Returns all MeasurableProperties for an Instrument
@@ -110,7 +110,7 @@ namespace LabDbContext
                                                                 .ToList();
             }
         }
-
+        [Obsolete]
         public static IEnumerable<Method> GetUnassociatedMethods(this Instrument entry)
         {
             // Returns all the methods not assigned to the instrument entry
@@ -129,7 +129,7 @@ namespace LabDbContext
                                         .ToList();
             }
         }
-        
+        [Obsolete]
         public static void RemoveMethodAssociation(this Instrument entry,
                                                     Method methodEntity)
         {
@@ -145,7 +145,7 @@ namespace LabDbContext
                 entities.SaveChanges();
             }
         }
-
+        [Obsolete]
         public static bool UpdateCalibrationDueDate(this Instrument entry)
         {
             // Updates the value for CalibrationDueDate using the latest calibration in the DB and the parameters set in the entry instance
@@ -174,7 +174,7 @@ namespace LabDbContext
     public partial class Instrument
     {
         #region Methods
-
+        [Obsolete]
         public IEnumerable<InstrumentMaintenanceEvent> GetMaintenanceEvents()
         {
             // Returns all InstrumentMaintenanceEvents for an Instrument

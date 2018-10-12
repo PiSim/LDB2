@@ -1,4 +1,6 @@
-﻿using LabDbContext;
+﻿using DataAccess;
+using Infrastructure.Commands;
+using LabDbContext;
 using LabDbContext.EntityExtensions;
 using LabDbContext.Services;
 using Prism.Commands;
@@ -14,20 +16,22 @@ namespace Admin.ViewModels
 
         private bool _editMode;
         private Organization _organizationInstance;
+        private IDataService<LabDbEntities> _labDbData;
 
         #endregion Fields
 
         #region Constructors
 
-        public OrganizationEditViewModel() : base()
+        public OrganizationEditViewModel(IDataService<LabDbEntities> labDbData) : base()
         {
             _editMode = false;
+            _labDbData = labDbData;
 
             SaveCommand = new DelegateCommand(
                 () =>
                 {
-                    _organizationInstance.Update();
-                    RoleList.Update();
+                    _labDbData.Execute(new UpdateEntityCommand(_organizationInstance));
+                    _labDbData.Execute(new BulkUpdateEntitiesCommand(RoleList));
 
                     EditMode = false;
                 },

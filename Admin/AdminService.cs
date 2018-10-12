@@ -132,7 +132,7 @@ namespace Admin
                     output.RoleMapping.Add(tempORM);
                 }
 
-                output.Create();
+                _labDbData.Execute(new InsertEntityCommand(output));
 
                 EntityChangedToken token = new EntityChangedToken(output,
                                                                     EntityChangedToken.EntityChangedAction.Created);

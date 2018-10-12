@@ -324,7 +324,6 @@
     <Compile Include="LabDBContextFactory.cs" />
     <Compile Include="EntityExtensions\BatchExtension.cs" />
     <Compile Include="EntityExtensions\CalibrationReportExtension.cs" />
-    <Compile Include="EntityExtensions\CalibrationReportInstrumentPropertyMappingExtension.cs" />
     <Compile Include="EntityExtensions\ControlPlanExtension.cs" />
     <Compile Include="EntityExtensions\ExternalConstructionExtension.cs" />
     <Compile Include="EntityExtensions\ExternalReportExtension.cs" />
@@ -344,13 +343,8 @@
     <Compile Include="EntityExtensions\SpecificationVersionExtension.cs" />
     <Compile Include="EntityExtensions\StandardExtension.cs" />
     <Compile Include="EntityExtensions\SubRequirementExtension.cs" />
-    <Compile Include="EntityExtensions\SubTaskItemExtension.cs" />
-    <Compile Include="EntityExtensions\TaskExtension.cs" />
-    <Compile Include="EntityExtensions\TaskItemExtension.cs" />
     <Compile Include="EntityExtensions\TestExtension.cs" />
-    <Compile Include="EntityExtensions\TestRecordExtension.cs" />
     <Compile Include="EntityExtensions\UserExtension.cs" />
-    <Compile Include="EntityExtensions\UserRoleExtension.cs" />
     <Compile Include="ExternalConstruction.cs">
       <DependentUpon>LabDB.tt</DependentUpon>
     </Compile>

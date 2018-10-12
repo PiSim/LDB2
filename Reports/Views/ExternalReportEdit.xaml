@@ -269,7 +269,7 @@
                             </Grid.RowDefinitions>
 
                             <Grid Grid.RowSpan="4">
-                                <ListView ItemsSource="{Binding RecordList}"
+                                <ListView ItemsSource="{Binding TestRecordList}"
                                           SelectedItem="{Binding SelectedRecord}">
                                     <ListView.View>
                                         <GridView>

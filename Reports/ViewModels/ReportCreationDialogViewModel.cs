@@ -30,7 +30,6 @@ namespace Reports.ViewModels
         private Person _author;
 
         private string _batchNumber, _description;
-        private CreationModes _creationMode;
 
         private IEventAggregator _eventAggregator;
         private bool _isCreatingFromTask;
@@ -64,7 +63,6 @@ namespace Reports.ViewModels
             _labDbData = labDbData;
             _eventAggregator = aggregator;
             _reportService = reportService;
-            _creationMode = CreationModes.Report;
             _isCreatingFromTask = false;
 
             _number = _reportService.GetNextReportNumber();
@@ -108,17 +106,6 @@ namespace Reports.ViewModels
 
         #endregion Constructors
 
-        #region Enums
-
-        public enum CreationModes
-        {
-            Report,
-            ReportFromTask,
-            Task
-        }
-
-        #endregion Enums
-
         #region Properties
 
         public Person Author
@@ -152,20 +139,7 @@ namespace Reports.ViewModels
         public DelegateCommand<Window> ConfirmCommand { get; }
 
         public IEnumerable<ControlPlan> ControlPlanList { get; private set; }
-
-        public bool ControlPlanSelectionEnabled => !IsCreatingFromTask;
-
-        public CreationModes CreationMode
-        {
-            get => _creationMode;
-            set
-            {
-                _creationMode = value;
-
-                IsCreatingFromTask = (_creationMode == CreationModes.Report);
-            }
-        }
-
+        
         public string Description
         {
             get { return _description; }
@@ -184,20 +158,6 @@ namespace Reports.ViewModels
                     return null;
 
                 return Material.ExternalConstruction.Name;
-            }
-        }
-
-        public bool IsCreatingFromTask
-        {
-            get => _isCreatingFromTask;
-            private set
-            {
-                _isCreatingFromTask = value;
-                RaisePropertyChanged();
-                RaisePropertyChanged("ControlPlanSelectionEnabled");
-                RaisePropertyChanged("TestSelectionColumnVisibility");
-                RaisePropertyChanged("SpecificationSelectionEnabled");
-                RaisePropertyChanged("VersionSelectionEnabled");
             }
         }
 
@@ -223,16 +183,7 @@ namespace Reports.ViewModels
             }
         }
 
-        public IEnumerable<ITestItem> RequirementList
-        {
-            get
-            {
-                if (!IsCreatingFromTask)
-                    return _requirementList;
-                else
-                    return _taskItemList;
-            }
-        }
+        public IEnumerable<ITestItem> RequirementList => _requirementList;
 
         public Batch SelectedBatch
         {
@@ -253,11 +204,6 @@ namespace Reports.ViewModels
                 Material = _selectedBatch?.Material;
                 RaisePropertyChanged("ExternalConstruction");
                 RaisePropertyChanged("Material");
-
-                // If Using a Task as Template no further action is required
-
-                if (IsCreatingFromTask)
-                    return;
 
                 // Otherwise sets the default selected values if the material and the external construction are not null
 
@@ -350,12 +296,7 @@ namespace Reports.ViewModels
             {
                 _selectedVersion = value;
                 RaisePropertyChanged("SelectedVersion");
-
-                // If Using Task as template no further action is required
-
-                if (IsCreatingFromTask)
-                    return;
-
+                
                 // If new value is null sets empty requirementList
 
                 if (_selectedVersion == null)
@@ -375,48 +316,15 @@ namespace Reports.ViewModels
         }
 
         public IEnumerable<Specification> SpecificationList { get; }
-
-        public bool SpecificationSelectionEnabled => !IsCreatingFromTask;
-
-        /// <summary>
-        /// Allows using a Task entity as basis for creating the report.
-        /// </summary>
-        public Task TaskInstance
-        {
-            get => _taskInstance;
-            set
-            {
-                // Sets value
-                _taskInstance = value;
-
-                // Sets the Batch instance
-                BatchNumber = _taskInstance.Batch.Number;
-
-                // Selects correct specification
-                SelectedSpecification = SpecificationList.First(spc => spc.ID == _taskInstance.SpecificationVersion.SpecificationID);
-                RaisePropertyChanged("SelectedSpecification");
-
-                // Selects correct Version
-                _selectedVersion = VersionList.First(spv => spv.ID == _taskInstance.SpecificationVersionID);
-                RaisePropertyChanged("SelectedVersion");
-
-                // Gets Test List from the task
-                _taskItemList = _taskInstance.GetTaskItems()
-                                            .Select(tski => new TaskItemWrapper(tski));
-                RaisePropertyChanged("RequirementList");
-            }
-        }
-
+                
         public IEnumerable<Person> TechList { get; }
-
-        public Visibility TestSelectionColumnVisibility => IsCreatingFromTask ? Visibility.Collapsed : Visibility.Visible;
 
         public double? TotalDuration => _requirementList.Where(req => req.IsSelected)
                                                         .Sum(req => req.WorkHours);
 
         public IEnumerable<SpecificationVersion> VersionList { get; private set; }
 
-        public bool VersionSelectionEnabled => (SelectedSpecification != null) && !IsCreatingFromTask;
+        public bool VersionSelectionEnabled => SelectedSpecification != null;
 
         #endregion Properties
 

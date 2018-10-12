@@ -1,4 +1,5 @@
 ﻿using DataAccess;
+using Infrastructure.Commands;
 using Infrastructure.Queries;
 using LabDbContext;
 using Prism.Commands;
@@ -46,7 +47,7 @@ namespace Projects.ViewModels
                     ProjectInstance.Name = _name;
                     ProjectInstance.OemID = _selectedOem.ID;
 
-                    ProjectInstance.Create();
+                    _labDbData.Execute(new InsertEntityCommand(ProjectInstance));
 
                     parent.DialogResult = true;
                 },

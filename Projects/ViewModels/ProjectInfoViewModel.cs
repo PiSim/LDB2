@@ -128,7 +128,7 @@ namespace Projects.ViewModels
             _save = new DelegateCommand(
                 () =>
                 {
-                    _projectInstance.Update();
+                    _labDbData.Execute(new UpdateEntityCommand(_projectInstance));
                     EditMode = false;
                 },
                 () => _editMode);
@@ -275,7 +275,6 @@ namespace Projects.ViewModels
             set
             {
                 _projectInstance = value;
-                _projectInstance?.Load();
 
                 SelectedBatch = null;
 
@@ -356,18 +355,7 @@ namespace Projects.ViewModels
         }
 
         public DelegateCommand StartEditCommand { get; }
-
-        public IEnumerable<LabDbContext.Task> TaskList
-        {
-            get
-            {
-                if (_projectInstance == null)
-                    return null;
-
-                return _projectInstance.GetTasks();
-            }
-        }
-
+        
         public IEnumerable<Material> UnassignedMaterials => _labDbData.RunQuery(new MaterialsQuery())
                                                                 .Where(mat => mat.ProjectID == null)
                                                                 .ToList();

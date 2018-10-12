@@ -134,7 +134,7 @@ namespace Reports.ViewModels
 
                     // Update the report instance
 
-                    _instance.Update();
+                    _labDbData.Execute(new UpdateEntityCommand(_instance));
 
                     // If the project was modified, update the material
 

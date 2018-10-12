@@ -1,5 +1,6 @@
 ﻿using DataAccess;
 using Infrastructure;
+using Infrastructure.Commands;
 using Infrastructure.Events;
 using Infrastructure.Queries;
 using Infrastructure.Wrappers;
@@ -64,8 +65,8 @@ namespace Reports
 
                 foreach (Test tst in testList)
                     tst.TestRecordID = entry.TestRecordID;
-                testList.CreateTests();
 
+                _labDbData.Execute(new BulkInsertEntitiesCommand(testList));
                 return true;
             }
             else
@@ -214,7 +215,8 @@ namespace Reports
 
             foreach (Requirement req in reqList)
             {
-                req.Load();
+
+                _labDbData.Execute(new ReloadEntityCommand(req));
 
                 Test tempTest = new Test()
                 {
@@ -320,12 +322,8 @@ namespace Reports
                 RecordTypeID = 1
             };
 
-            if (dialogViewModelInstance.IsCreatingFromTask)
-                foreach (Test tst in dialogViewModelInstance.TaskInstance.GenerateTests())
-                    output.TestRecord.Tests.Add(tst);
-            else
-                foreach (Test tst in GenerateTestList(dialogViewModelInstance.SelectedRequirements))
-                    output.TestRecord.Tests.Add(tst);
+            foreach (Test tst in GenerateTestList(dialogViewModelInstance.SelectedRequirements))
+                output.TestRecord.Tests.Add(tst);
 
             // Calculates total test duration
 
@@ -333,7 +331,7 @@ namespace Reports
 
             //Inserts new entry in the DB
 
-            output.Create();
+            _labDbData.Execute(new InsertEntityCommand(output));
 
             // If the tested Batch does not have a "basic" report, add reference to current instance
 
@@ -347,14 +345,6 @@ namespace Reports
 
                     entities.SaveChanges();
                 }
-            }
-
-            // If using Task as template, the parent is updated with the child Report ID
-
-            if (dialogViewModelInstance.CreationMode == ViewModels.ReportCreationDialogViewModel.CreationModes.ReportFromTask)
-            {
-                dialogViewModelInstance.TaskInstance.ReportID = output.ID;
-                dialogViewModelInstance.TaskInstance.Update();
             }
 
             return output;

@@ -20,6 +20,7 @@ namespace Instruments.ViewModels
 
         public MaintenanceEventCreationDialogViewModel(IDataService<LabDbEntities> labDbData) : base()
         {
+            _labDbData = labDbData;
             Date = DateTime.Now.Date;
 
             Description = "";

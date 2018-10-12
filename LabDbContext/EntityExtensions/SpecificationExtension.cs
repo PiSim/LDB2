@@ -9,26 +9,7 @@ namespace LabDbContext
     public static class SpecificationExtension
     {
         #region Methods
-
-        public static void Create(this Specification entry)
-        {
-            using (LabDbEntities entities = new LabDbEntities())
-            {
-                entities.Specifications.Add(entry);
-                entities.SaveChanges();
-            }
-        }
-
-        public static void Delete(this Specification entry)
-        {
-            using (LabDbEntities entities = new LabDbEntities())
-            {
-                entities.Entry(entities.Specifications.First(spec => spec.ID == entry.ID))
-                                                        .State = EntityState.Deleted;
-                entities.SaveChanges();
-            }
-        }
-
+        [Obsolete]
         public static IEnumerable<StandardFile> GetFiles(this Specification entry)
         {
             // Returns all standard files for specification standard
@@ -46,15 +27,6 @@ namespace LabDbContext
             }
         }
 
-        public static void Update(this Specification entry)
-        {
-            using (LabDbEntities entities = new LabDbEntities())
-            {
-                entities.Specifications.AddOrUpdate(entry);
-                entities.SaveChanges();
-            }
-        }
-
         #endregion Methods
     }
 
@@ -62,7 +34,7 @@ namespace LabDbContext
     {
 
         #region Methods
-
+        [Obsolete]
         public ControlPlan AddControlPlan(bool asDefault = false)
         {
             // Generates a new control plan for this specification

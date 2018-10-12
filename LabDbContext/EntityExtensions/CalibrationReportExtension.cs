@@ -43,13 +43,6 @@ namespace LabDbContext.EntityExtensions
             }
         }
 
-        public static string GetFormattedNumber(this CalibrationReport entry)
-        {
-            // Returns a string uniquely representing a Calibration report
-            // the string is generated from the report's number and year properties
-
-            return entry.Year.ToString() + entry.Number.ToString("D4");
-        }
 
         public static IEnumerable<CalibrationReportInstrumentPropertyMapping> GetPropertyMappings(this CalibrationReport entry)
         {
@@ -91,26 +84,6 @@ namespace LabDbContext.EntityExtensions
                                 .ToList();
             }
         }
-
-        public static void Load(this CalibrationReport entry)
-        {
-            // Loads relevant values in a CalibrationReport instance
-
-            if (entry == null)
-                return;
-
-            using (LabDbEntities entities = new LabDbEntities())
-            {
-                entities.Configuration.LazyLoadingEnabled = false;
-
-                CalibrationReport tempEntry = entities.CalibrationReports
-                                                        .Include(calr => calr.Instrument)
-                                                        .First(calr => calr.ID == entry.ID);
-
-                entry.Instrument = tempEntry.Instrument;
-            }
-        }
-
         public static void RemoveReference(this CalibrationReport entry,
                                             Instrument referenceEntry)
         {

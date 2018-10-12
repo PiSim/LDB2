@@ -50,9 +50,9 @@ namespace Specifications.ViewModels
             DeleteRequirementCommand = new DelegateCommand<Requirement>(
                 req =>
                 {
-                    req.Delete();
+                    _labDbData.Execute(new DeleteEntityCommand(req));
 
-                    _specificationVersionInstance.Load();
+                    _labDbData.Execute(new ReloadEntityCommand(_specificationVersionInstance));
 
                     GenerateRequirementList();
 
@@ -62,7 +62,7 @@ namespace Specifications.ViewModels
             SaveCommand = new DelegateCommand(
                 () =>
                 {
-                    _specificationVersionInstance.Update();
+                    _labDbData.Execute(new UpdateEntityCommand(_specificationVersionInstance));
 
                     if (_specificationVersionInstance == null)
                         return;

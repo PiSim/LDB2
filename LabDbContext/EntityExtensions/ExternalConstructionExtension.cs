@@ -31,22 +31,4 @@ namespace LabDbContext
         #endregion Methods
     }
 
-    public partial class ExternalConstruction
-    {
-        #region Methods
-
-        public IEnumerable<Batch> GetBatches(LabDbEntities entities)
-        {
-            entities.Configuration.LazyLoadingEnabled = false;
-
-            return entities.Batches.Include(btc => btc.Material.Aspect)
-                                    .Include(btc => btc.Material.MaterialLine)
-                                    .Include(btc => btc.Material.MaterialType)
-                                    .Include(btc => btc.Material.Recipe.Colour)
-                                    .Where(btc => btc.Material.ExternalConstructionID == ID)
-                                    .ToList();
-        }
-
-        #endregion Methods
-    }
 }

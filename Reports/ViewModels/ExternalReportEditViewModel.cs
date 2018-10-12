@@ -16,8 +16,9 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
+using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Forms;
+using System.Windows.Data;
 
 namespace Reports.ViewModels
 {
@@ -28,6 +29,8 @@ namespace Reports.ViewModels
         private string _batchNumber;
         private bool _editMode;
         private IEventAggregator _eventAggregator;
+        private IEnumerable<TestRecord> _testRecordList;
+        private IEnumerable<MethodVariant> _methodVariantList;
         private ExternalReport _instance;
         private IDataService<LabDbEntities> _labDbData;
         private IEnumerable<Project> _projectList;
@@ -61,7 +64,7 @@ namespace Reports.ViewModels
                         tempBatch = _labDbData.RunQuery(new BatchQuery() { Number = batchPicker.BatchNumber });
                         _instance.AddBatch(tempBatch);
                         RefreshTestRecords();
-                        ResultColumnCollection = _instance.GetResultPresentationColumns();
+                        ResultColumnCollection = GenerateResultPresentationColumns();
                     }
                 },
                 () => _instance != null && EditMode);
@@ -69,13 +72,13 @@ namespace Reports.ViewModels
             AddFileCommand = new DelegateCommand(
                 () =>
                 {
-                    OpenFileDialog fileDialog = new OpenFileDialog
+                    System.Windows.Forms.OpenFileDialog fileDialog = new System.Windows.Forms.OpenFileDialog
                     {
                         InitialDirectory = UserSettings.ExternalReportPath,
                         Multiselect = true
                     };
 
-                    if (fileDialog.ShowDialog() == DialogResult.OK)
+                    if (fileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                     {
                         foreach (string pth in fileDialog.FileNames)
                         {
@@ -96,10 +99,6 @@ namespace Reports.ViewModels
                 mtd =>
                 {
                     _instance.AddTestMethod(mtd);
-
-                    _instance.MethodVariants.Add(mtd);
-                    RaisePropertyChanged("MethodVariantList");
-
                     RefreshTestRecords();
                 },
                 mtd => EditMode);
@@ -126,7 +125,7 @@ namespace Reports.ViewModels
                     _labDbData.Execute(new DeleteEntityCommand(_selectedRecord));
                     SelectedRecord = null;
                     RefreshTestRecords();
-                    ResultColumnCollection = _instance.GetResultPresentationColumns();
+                    ResultColumnCollection = GenerateResultPresentationColumns();
                 },
                 () => _selectedRecord != null && EditMode);
 
@@ -142,10 +141,6 @@ namespace Reports.ViewModels
                 mtd =>
                 {
                     _instance.RemoveTestMethodVariant(mtd);
-
-                    _instance.MethodVariants.Remove(mtd);
-                    RaisePropertyChanged("MethodVariantList");
-
                     RefreshTestRecords();
                 },
                 mtd => EditMode);
@@ -199,19 +194,76 @@ namespace Reports.ViewModels
         #endregion Commands
 
         #region Methods
+        /// <summary>
+        /// Generates an ObservableCollection of DataGridColumns
+        /// that will be used to correctly visualize the results in a DataGrid.
+        /// TODO: Move method to the view. As Multicast converter maybe?
+        /// </summary>
+        /// <returns>An ObservableCollection of DataGridColumns</returns>
+        public ObservableCollection<DataGridColumn> GenerateResultPresentationColumns()
+        {
+            ObservableCollection<DataGridColumn> output = new ObservableCollection<DataGridColumn>();
+
+            output.Add(new DataGridTextColumn()
+            {
+                Header = "Metodo",
+                Binding = new Binding("MethodName"),
+                IsReadOnly = true,
+                Width = 100
+            });
+
+            output.Add(new DataGridTextColumn()
+            {
+                Header = "Variante",
+                Binding = new Binding("MethodVariantName"),
+                IsReadOnly = true,
+                Width = 150
+            });
+
+            output.Add(new DataGridTemplateColumn()
+            {
+                Header = "Prove",
+                CellTemplate = (DataTemplate)Application.Current.Resources[ResourceKeys.DataGridSubTestNameCellTemplate],
+                Width = 150
+            });
+
+            output.Add(new DataGridTemplateColumn()
+            {
+                Header = "UM",
+                CellTemplate = (DataTemplate)Application.Current.Resources[ResourceKeys.DataGridSubTestUMCellTemplate],
+                Width = 150
+            });
+
+            foreach (TestRecord tstr in TestRecordList)
+            {
+                DataGridColumn resultColumn = new DataGridTemplateColumn()
+                {
+                    Header = tstr.Batch.Number,
+                    CellTemplate = (DataTemplate)Application.Current.Resources[ResourceKeys.DataGridSubTestExternalResultCellTemplate],
+                    CellStyle = (Style)Application.Current.Resources[ResourceKeys.DataGridCellEnabledOnEditModeStyle],
+                    Width = 150
+                };
+
+                DataGridColumnTagExtension.SetTag(resultColumn, tstr.BatchID);
+
+                output.Add(resultColumn);
+            }
+
+            return output;
+        }
 
         /// <summary>
-        /// Returns a list of test for each methodVariant associated with the Report
-        /// generated from the entity collections loaded in the instance
+        /// Generates a list of test for each methodVariant associated with the Report
+        /// generated from the entity collections loaded in the ViewModel
         /// </summary>
         /// <returns>An IEnumerable of Tuples where Value1 is a methodVAriant and
         /// Value2 is an IEnumerable of tests</returns>
-        private IEnumerable<Tuple<MethodVariant, IEnumerable<Test>>> GetResultCollection()
+        private IEnumerable<Tuple<MethodVariant, IEnumerable<Test>>> GenerateResultCollection()
         {
             List<Tuple<MethodVariant, IEnumerable<Test>>> output = new List<Tuple<MethodVariant, IEnumerable<Test>>>();
-            foreach (MethodVariant mtdvar in MethodVariants)
+            foreach (MethodVariant mtdvar in MethodVariantList)
             {
-                IEnumerable<Test> testList = TestRecords.SelectMany(tstr => tstr.Tests)
+                IEnumerable<Test> testList = TestRecordList.SelectMany(tstr => tstr.Tests)
                                                         .Where(tst => tst.MethodVariantID == mtdvar.ID);
 
                 output.Add(new Tuple<MethodVariant, IEnumerable<Test>>(mtdvar, testList));
@@ -222,13 +274,17 @@ namespace Reports.ViewModels
 
         private void RefreshTestRecords()
         {
-            _resultList = new List<ExternalResultPresenter>();
+            //Retrieve up-to-date TestRecords
+            TestRecordList = (_instance == null) ? new List<TestRecord>() : _labDbData.RunQuery(new TestRecordsQuery() {ExternalReportID = _instance.ID }).ToList();
 
-            foreach (Tuple<MethodVariant, IEnumerable<Test>> resTuple in _instance.GetResultCollection())
-                _resultList.Add(new ExternalResultPresenter(resTuple.Item1, resTuple.Item2));
+            //Retrieve up-to-date Method Variante
+            MethodVariantList = (_instance == null) ? new List<MethodVariant>() : _labDbData.RunQuery(new MethodVariantsQuery() { ExternalReportID = _instance.ID, IncludeObsolete = true }).ToList();
+
+            //Generate new Result Collection
+            IEnumerable<Tuple<MethodVariant, IEnumerable<Test>>> resultCollection = GenerateResultCollection();
+            _resultList = new List<ExternalResultPresenter>(resultCollection.Select(tp => new ExternalResultPresenter(tp.Item1, tp.Item2)));
 
             RaisePropertyChanged("ResultCollection");
-            RaisePropertyChanged("RecordList");
         }
 
         #endregion Methods
@@ -297,15 +353,9 @@ namespace Reports.ViewModels
 
                 _instance = _labDbData.RunQuery(new ExternalReportQuery(value.ID));
 
-                if (_instance != null)
-                    RefreshTestRecords();
-                else
-                {
-                    ResultCollection = new List<ExternalResultPresenter>();
-                    RaisePropertyChanged("RecordList");
-                }
+                RefreshTestRecords();
 
-                ResultColumnCollection = _instance?.GetResultPresentationColumns();
+                ResultColumnCollection = GenerateResultPresentationColumns();
 
                 SelectedRecord = null;
                 SelectedFile = null;
@@ -320,7 +370,6 @@ namespace Reports.ViewModels
                 RaisePropertyChanged("ExternalLab");
                 RaisePropertyChanged("FormattedNumber");
                 RaisePropertyChanged("HasOrder");
-                RaisePropertyChanged("MethodVariantList");
                 RaisePropertyChanged("SamplesSent");
                 RaisePropertyChanged("SamplesSentDate");
                 RaisePropertyChanged("OrderNumber");
@@ -346,7 +395,15 @@ namespace Reports.ViewModels
             }
         }
 
-        public IEnumerable<MethodVariant> MethodVariantList => _instance?.MethodVariants;
+        public IEnumerable<MethodVariant> MethodVariantList
+        {
+            get => _methodVariantList;
+            private set
+            {
+                _methodVariantList = value;
+                RaisePropertyChanged("MethodVariantList");
+            }
+        }
 
         public string OrderNumber
         {
@@ -381,9 +438,7 @@ namespace Reports.ViewModels
                 return _projectList;
             }
         }
-
-        public IEnumerable<TestRecord> RecordList => _instance?.TestRecords;
-
+        
         public IEnumerable<ExternalReportFile> ReportFiles => _instance.GetExternalReportFiles();
 
         public bool ReportReceived
@@ -523,7 +578,15 @@ namespace Reports.ViewModels
             }
         }
 
-        public IEnumerable<TestRecord> TestRecordList => _instance.TestRecords;
+        public IEnumerable<TestRecord> TestRecordList
+        {
+            get => _testRecordList;
+            private set
+            {
+                _testRecordList = value;
+                RaisePropertyChanged("TestRecordList");
+            }
+        }
 
         #endregion Properties
     }

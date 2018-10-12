@@ -2,6 +2,7 @@
 using Controls.Views;
 using DataAccess;
 using Infrastructure;
+using Infrastructure.Commands;
 using Infrastructure.Events;
 using LabDbContext;
 using LabDbContext.EntityExtensions;
@@ -49,8 +50,7 @@ namespace Admin.ViewModels
             DeleteUserCommand = new DelegateCommand(
                 () =>
                 {
-                    _selectedUser.Delete();
-
+                    _labDbData.Execute(new DeleteEntityCommand(_selectedUser));
                     UserList = _labDbData.RunQuery(new UsersQuery()).ToList();
                 },
                 () => _selectedUser != null);

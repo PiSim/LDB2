@@ -124,7 +124,7 @@ namespace Specifications.ViewModels
             SaveCommand = new DelegateCommand(
                 () =>
                 {
-                    _methodInstance.Update();
+                    _labDbData.Execute(new UpdateEntityCommand(_methodInstance));
 
                     _specificationService.UpdateSubMethods(Measurements);
                     _specificationService.UpdateMethodVariantRange(_methodVariantList);

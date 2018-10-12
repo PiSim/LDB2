@@ -7,18 +7,7 @@ namespace LabDbContext.EntityExtensions
     public static class InstrumentMeasurablePropertyExtension
     {
         #region Methods
-
-        public static void Create(this InstrumentMeasurableProperty entry)
-        {
-            // Inserts a new InstrumentMeasurableProperty entry in the DB
-
-            using (LabDbEntities entities = new LabDbEntities())
-            {
-                entities.InstrumentMeasurableProperties.Add(entry);
-                entities.SaveChanges();
-            }
-        }
-
+        
         public static CalibrationReport GetLastCalibration(this InstrumentMeasurableProperty entry)
         {
             // Returns the most recent CalibrationReport for this entry, or null if none exist
@@ -53,18 +42,6 @@ namespace LabDbContext.EntityExtensions
                                 .FirstOrDefault(imp => imp.ID == entry.ID)
                                 .MeasurableQuantityID == um.MeasurableQuantityID)
                                 .ToList();
-            }
-        }
-
-        public static void Update(this InstrumentMeasurableProperty entry)
-        {
-            // Updates an InstrumentMeasurableProperty entry
-
-            using (LabDbEntities entities = new LabDbEntities())
-            {
-                entities.InstrumentMeasurableProperties.AddOrUpdate(entry);
-
-                entities.SaveChanges();
             }
         }
 

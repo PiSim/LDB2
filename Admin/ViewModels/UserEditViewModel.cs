@@ -33,7 +33,7 @@ namespace Admin.ViewModels
             SaveCommand = new DelegateCommand(
                 () =>
                 {
-                    _userInstance.Update();
+                    _labDbData.Execute(new UpdateEntityCommand(_userInstance));
                     _labDbData.Execute(new BulkUpdateEntitiesCommand(_roleList));
                     EditMode = false;
                 },

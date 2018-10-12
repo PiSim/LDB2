@@ -38,7 +38,7 @@ namespace LabDbContext
         #endregion Proprietà
 
         #region Metodi
-
+        [Obsolete]
         public void AddBatch(Batch batchEntity)
         {
             // Adds a Batch to an ExternalReport entry
@@ -66,6 +66,7 @@ namespace LabDbContext
         /// Adds a new method to an ExternalReport entry
         /// </summary>
         /// <param name="methodEntity">The MethodVariant to Add</param>
+        [Obsolete]
         public void AddTestMethod(MethodVariant methodVariant)
         {
             using (LabDbEntities entities = new LabDbEntities())
@@ -91,6 +92,7 @@ namespace LabDbContext
         /// in the report
         /// </summary>
         /// <param name="methodEntity">The methodVariant that will be removed</param>
+        [Obsolete]
         public void RemoveTestMethodVariant(MethodVariant methodVariantEntity)
         {
             using (LabDbEntities entities = new LabDbEntities())

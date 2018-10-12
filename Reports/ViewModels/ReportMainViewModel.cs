@@ -1,5 +1,6 @@
 ﻿using DataAccess;
 using Infrastructure;
+using Infrastructure.Commands;
 using Infrastructure.Events;
 using Infrastructure.Queries;
 using LabDbContext;
@@ -52,7 +53,7 @@ namespace Reports.ViewModels
             RemoveReportCommand = new DelegateCommand(
                 () =>
                 {
-                    _selectedReport.Delete();
+                    _labDbData.Execute(new DeleteEntityCommand(_selectedReport));
                     _eventAggregator.GetEvent<ReportDeleted>().Publish(_selectedReport);
                 },
                 () => CanRemoveReport && SelectedReport != null);

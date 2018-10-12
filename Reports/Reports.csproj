@@ -145,6 +145,7 @@
     <Compile Include="ExternalResultPresenter.cs" />
     <Compile Include="Queries\ExternalReportQuery.cs" />
     <Compile Include="Queries\ReportQuery.cs" />
+    <Compile Include="Queries\TestRecordsQuery.cs" />
     <Compile Include="ReportService.cs" />
     <Compile Include="ViewModels\AddTestDialogViewModel.cs" />
     <Compile Include="ViewModels\ExternalReportCreationDialogViewModel.cs" />

@@ -58,7 +58,7 @@ namespace Specifications
                 foreach (Method mtd in currentStd.Methods)
                 {
                     mtd.StandardID = mainEntry.ID;
-                    mtd.Update();
+                    _labDbData.Execute(new UpdateEntityCommand(mtd));
                 }
 
                 // Retrieve specification list, set new reference and update
@@ -66,7 +66,7 @@ namespace Specifications
                 foreach (Specification spc in currentStd.Specifications)
                 {
                     spc.StandardID = mainEntry.ID;
-                    spc.Update();
+                    _labDbData.Execute(new UpdateEntityCommand(spc));
                 }
 
                 // Call method to delete currentStd
@@ -83,7 +83,7 @@ namespace Specifications
             {
                 Method newInstance = creationDialog.MethodInstance;
 
-                newInstance.Create();
+                _labDbData.Execute(new InsertEntityCommand(newInstance));
 
                 _eventAggregator.GetEvent<MethodChanged>()
                                 .Publish(new EntityChangedToken(creationDialog.MethodInstance,
@@ -99,7 +99,7 @@ namespace Specifications
             {
                 Specification newInstance = creationDialog.SpecificationInstance;
 
-                newInstance.Create();
+                _labDbData.Execute(new InsertEntityCommand(newInstance));
 
                 _eventAggregator.GetEvent<SpecificationChanged>()
                                 .Publish(new EntityChangedToken(newInstance,

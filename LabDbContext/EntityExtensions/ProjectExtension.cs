@@ -42,24 +42,6 @@ namespace LabDbContext
             }
         }
 
-        public static IEnumerable<Test> GetTests(this Project entry)
-        {
-            // Returns all the tests for a project
-
-            using (LabDbEntities entities = new LabDbEntities())
-            {
-                entities.Configuration.LazyLoadingEnabled = false;
-
-                return entities.Tests
-                                .Where(tst => tst
-                                .TestRecord
-                                .Batch
-                                .Material
-                                .ProjectID == entry.ID)
-                                .ToList();
-            }
-        }
-
         #endregion Methods
     }
 
@@ -115,33 +97,6 @@ namespace LabDbContext
         #endregion Properties
 
         #region Methods
-
-        public void Create()
-        {
-            using (LabDbEntities entities = new LabDbEntities())
-            {
-                entities.Projects.Add(this);
-                entities.SaveChanges();
-            }
-        }
-
-        public void Delete()
-        {
-            using (LabDbEntities entities = new LabDbEntities())
-            {
-                Project tempEntry = entities.Projects.FirstOrDefault(prj => prj.ID == ID);
-
-                if (tempEntry != null)
-                {
-                    entities.Entry(tempEntry)
-                            .State = EntityState.Deleted;
-
-                    entities.SaveChanges();
-                }
-
-                entities.SaveChanges();
-            }
-        }
 
         public IEnumerable<Batch> GetBatches()
         {
@@ -216,64 +171,7 @@ namespace LabDbContext
                 return Reports;
             }
         }
-
-        public IEnumerable<Task> GetTasks()
-        {
-            // Returns all Task entities for the Project and stores the updated collection in the instance
-
-            using (LabDbEntities entities = new LabDbEntities())
-            {
-                entities.Configuration.LazyLoadingEnabled = false;
-
-                return entities.Tasks.Where(tsk => tsk.Batch.Material.ProjectID == ID)
-                                    .Include(tsk => tsk.Batch.Material.Aspect)
-                                    .Include(tsk => tsk.Batch.Material.MaterialLine)
-                                    .Include(tsk => tsk.Batch.Material.MaterialType)
-                                    .Include(tsk => tsk.Batch.Material.Recipe.Colour)
-                                    .Include(tsk => tsk.Requester)
-                                    .ToList();
-            }
-        }
-
-        public void Load()
-        {
-            // Explicitly loads a Project and all related entities
-
-            using (LabDbEntities entities = new LabDbEntities())
-            {
-                entities.Configuration.LazyLoadingEnabled = false;
-
-                Project tempEntry = entities.Projects.Include(prj => prj.ExternalReports
-                                                    .Select(extr => extr.ExternalLab))
-                                                    .Include(prj => prj.Leader)
-                                                    .Include(prj => prj.Oem)
-                                                    .First(prj => prj.ID == ID);
-
-                Description = tempEntry.Description;
-                ExternalReports = tempEntry.ExternalReports;
-                Leader = tempEntry.Leader;
-                Name = tempEntry.Name;
-                Oem = tempEntry.Oem;
-                OemID = tempEntry.OemID;
-                ProjectLeaderID = tempEntry.ProjectLeaderID;
-                TotalExternalCost = tempEntry.TotalExternalCost;
-                TotalReportDuration = tempEntry.TotalReportDuration;
-            }
-        }
-
-        public void Update()
-        {
-            // Updates the DBValues of the Project entry
-
-            using (LabDbEntities entities = new LabDbEntities())
-            {
-                entities.Projects
-                        .AddOrUpdate(this);
-
-                entities.SaveChanges();
-            }
-        }
-
+        
         #endregion Methods
     }
 }

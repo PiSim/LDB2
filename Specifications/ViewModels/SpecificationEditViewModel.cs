@@ -104,7 +104,7 @@ namespace Specifications.ViewModels
                         SpecificationID = _instance.ID
                     };
 
-                    temp.Create();
+                    _labDbData.Execute(new InsertEntityCommand(temp));
 
                     RaisePropertyChanged("VersionList");
                 },

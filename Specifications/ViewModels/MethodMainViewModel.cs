@@ -1,6 +1,7 @@
 ﻿using Controls.Views;
 using DataAccess;
 using Infrastructure;
+using Infrastructure.Commands;
 using Infrastructure.Events;
 using Infrastructure.Queries;
 using LabDbContext;
@@ -39,7 +40,7 @@ namespace Specifications.ViewModels
             DeleteMethodCommand = new DelegateCommand(
                 () =>
                 {
-                    _selectedMethod.Delete();
+                    _labDbData.Execute(new DeleteEntityCommand(_selectedMethod));
                 },
                 () => IsSpecAdmin && _selectedMethod != null);
 

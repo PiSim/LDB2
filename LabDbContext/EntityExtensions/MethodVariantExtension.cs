@@ -17,17 +17,6 @@ namespace LabDbContext
 
         #region Methods
 
-        /// <summary>
-        /// Inserts the entity in the database
-        /// </summary>
-        public void Create()
-        {
-            using (LabDbEntities entities = new LabDbEntities())
-            {
-                entities.MethodVariants.Add(this);
-                entities.SaveChanges();
-            }
-        }
 
         /// <summary>
         /// Generates a new Test entry from the MethodVariant.
