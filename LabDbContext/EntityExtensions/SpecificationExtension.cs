@@ -94,33 +94,6 @@ namespace LabDbContext
             }
         }
 
-        public IList<ControlPlan> GetControlPlans()
-        {
-            // Returns all existing control plans for a specification
-
-            using (LabDbEntities entities = new LabDbEntities())
-            {
-                entities.Configuration.LazyLoadingEnabled = false;
-
-                return entities.ControlPlans
-                                .Where(cp => cp.SpecificationID == ID)
-                                .ToList();
-            }
-        }
-
-        public IList<SpecificationVersion> GetVersions()
-        {
-            //Returns all version for a given specification entry
-
-            using (LabDbEntities entities = new LabDbEntities())
-            {
-                entities.Configuration.LazyLoadingEnabled = false;
-
-                return entities.SpecificationVersions.Where(specv => specv.SpecificationID == ID)
-                                                    .ToList();
-            }
-        }
-
         #endregion Methods
     }
 }

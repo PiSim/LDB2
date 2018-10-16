@@ -180,7 +180,7 @@ namespace Instruments.ViewModels
 
                 LabList = _labDbData.RunQuery(new OrganizationsQuery() { Role = OrganizationsQuery.OrganizationRoles.CalibrationLab })
                                 .ToList();
-                CalibrationResultList = _instrumentService.GetCalibrationResults();
+                CalibrationResultList = _labDbData.RunQuery(new CalibrationResultsQuery()).ToList();
                 TechList = _labDbData.RunQuery(new PeopleQuery() { Role = PeopleQuery.PersonRoles.CalibrationTech })
                                                                 .ToList();
 

@@ -98,36 +98,35 @@
                                 Margin="5" />
                     </StackPanel>
 
-                    <ListView ItemsSource="{Binding CalibrationsList}"
+                    <DataGrid ItemsSource="{Binding CalibrationsList}"
                                 SelectedItem="{Binding SelectedCalibration, Mode=TwoWay}"
                                 cmd:CommandBinder.DataGridDoubleClickCommand="{Binding OpenCalibrationCommand}"
-                                Grid.Row="1">
-                        <ListView.View>
-                            <GridView>
-                                <GridViewColumn Header="Numero">
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <TextBlock>
+                              Style="{StaticResource GenericDataGridStyle}"  
+                              Grid.Row="1">
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn Header="Numero">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock>
                                                 <Run Text="{Binding Year}" />
                                                 <Run Text="{Binding Number,
                                                                     StringFormat=d3}" />
-                                            </TextBlock>
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
-                                <GridViewColumn Header="Strumento"
-                                                    DisplayMemberBinding="{Binding Instrument.Code}" />
-                                <GridViewColumn Header="Data"
-                                                DisplayMemberBinding="{Binding Date,
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Header="Strumento"
+                                                Binding="{Binding Instrument.Code}" />
+                            <DataGridTextColumn Header="Data"
+                                                Binding="{Binding Date,
                                                                                 StringFormat=d,
                                                                                 ConverterCulture=it-IT}" />
-                                <GridViewColumn Header="Laboratorio"
-                                                DisplayMemberBinding="{Binding Laboratory.Name}" />
-                                <GridViewColumn Header="Risultato"
-                                                DisplayMemberBinding="{Binding CalibrationResult.Description}" />
-                            </GridView>
-                        </ListView.View>
-                    </ListView>
+                            <DataGridTextColumn Header="Laboratorio"
+                                                Binding="{Binding Laboratory.Name}" />
+                            <DataGridTextColumn Header="Risultato"
+                                                Binding="{Binding CalibrationResult.Description}" />
+                        </DataGrid.Columns>
+                    </DataGrid>
                 </Grid>
             </TabItem>
             <TabItem Header="Calendario Tarature">

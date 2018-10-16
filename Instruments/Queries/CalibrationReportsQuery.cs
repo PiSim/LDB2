@@ -17,6 +17,9 @@ namespace Instruments.Queries
         {
             IQueryable<CalibrationReport> query = context.CalibrationReports;
 
+            if (LazyLoadingDisabled)
+                context.Configuration.LazyLoadingEnabled = false;
+
             if (EagerLoadingEnabled)
                 query = query.Include(crep => crep.Instrument)
                             .Include(crep => crep.CalibrationResult)

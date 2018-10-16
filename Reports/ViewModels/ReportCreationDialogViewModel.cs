@@ -277,10 +277,10 @@ namespace Reports.ViewModels
                 // Otherwise retrieves children list and loads default selected values
                 else
                 {
-                    ControlPlanList = _selectedSpecification.GetControlPlans();
+                    ControlPlanList = (_selectedSpecification == null) ? null : _labDbData.RunQuery(new ControlPlansQuery() { SpecificationID = _selectedSpecification.ID }).ToList();
                     RaisePropertyChanged("ControlPlanList");
 
-                    VersionList = _selectedSpecification?.GetVersions();
+                    VersionList = (_selectedSpecification == null) ? null : _labDbData.RunQuery(new SpecificationVersionsQuery() { SpecificationID = _selectedSpecification.ID }).ToList();
                     RaisePropertyChanged("VersionList");
 
                     SelectedControlPlan = ControlPlanList.FirstOrDefault(cp => cp.IsDefault);

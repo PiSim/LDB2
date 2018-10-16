@@ -5,23 +5,13 @@ using System.Linq;
 
 namespace LabDbContext
 {
-
     public partial class Batch
     {
         #region Properties
 
         public string AspectCode => Material?.Aspect?.Code;
 
-        public bool HasTests
-        {
-            get
-            {
-                using (LabDbEntities entities = new LabDbEntities())
-                {
-                    return entities.TestRecords.Any(tstr => tstr.BatchID == ID);
-                }
-            }
-        }
+        public bool HasTests => TestRecords.Count != 0;
 
         public string MaterialFullCode => Material?.MaterialType?.Code
                                         + Material?.MaterialLine?.Code

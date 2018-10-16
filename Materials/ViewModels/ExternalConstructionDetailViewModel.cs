@@ -163,7 +163,7 @@ namespace Materials.ViewModels
                     if (_externalConstructionInstance.DefaultSpecVersion != null)
                     {
                         _selectedSpecification = SpecificationList.First(spec => spec.ID == _externalConstructionInstance.DefaultSpecVersion.Specification.ID);
-                        SpecificationVersionList = _selectedSpecification.GetVersions();
+                        SpecificationVersionList = (_selectedSpecification == null) ? null : _labDbData.RunQuery(new SpecificationVersionsQuery() { SpecificationID = _selectedSpecification.ID }).ToList();
                     }
                 }
 
@@ -261,7 +261,7 @@ namespace Materials.ViewModels
             {
                 _selectedSpecification = value;
 
-                SpecificationVersionList = _selectedSpecification.GetVersions();
+                SpecificationVersionList = (_selectedSpecification == null) ? null : _labDbData.RunQuery(new SpecificationVersionsQuery() { SpecificationID = _selectedSpecification.ID }).ToList();
                 ExternalConstructionSpecificationVersion = SpecificationVersionList.First(spcv => spcv.IsMain);
 
                 RaisePropertyChanged("EnableVersionSelection");

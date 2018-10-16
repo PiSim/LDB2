@@ -238,7 +238,7 @@ namespace Specifications.ViewModels
                 if (_instance == null)
                     return null;
 
-                return _instance.GetControlPlans();
+                return _labDbData.RunQuery(new ControlPlansQuery() { SpecificationID = _instance.ID }).ToList();
             }
         }
 
@@ -433,7 +433,7 @@ namespace Specifications.ViewModels
 
         public DelegateCommand StartEditCommand { get; }
 
-        public IEnumerable<SpecificationVersion> VersionList => _instance.GetVersions();
+        public IEnumerable<SpecificationVersion> VersionList => (_instance == null) ? null : _labDbData.RunQuery(new SpecificationVersionsQuery() { SpecificationID = _instance.ID }).ToList();
 
         private bool CanEdit => Thread.CurrentPrincipal.IsInRole(UserRoleNames.SpecificationEdit);
 

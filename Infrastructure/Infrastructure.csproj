@@ -247,6 +247,8 @@
     <Compile Include="Queries\RequirementsQuery.cs" />
     <Compile Include="Queries\SpecificationsQuery.cs" />
     <Compile Include="Queries\SpecificationVersionQuery.cs" />
+    <Compile Include="Queries\ControlPlansQuery.cs" />
+    <Compile Include="Queries\SpecificationVersionsQuery.cs" />
     <Compile Include="Queries\TestQuery.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
