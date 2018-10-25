@@ -14,6 +14,7 @@ namespace Reports
 
         private MethodVariant _methodVariant;
         private Dictionary<int, Test> _resultDictionary;
+        private IEnumerable<Test> _testList;
 
         #endregion Fields
 
@@ -23,8 +24,9 @@ namespace Reports
                                         IEnumerable<Test> testList)
         {
             _methodVariant = methodVariant;
+            _testList = testList;
             _resultDictionary = new Dictionary<int, Test>();
-            foreach (Test tst in testList)
+            foreach (Test tst in _testList)
                 _resultDictionary.Add(tst.TestRecord.BatchID,
                                     tst);
         }
@@ -40,6 +42,8 @@ namespace Reports
         /// Named "SubTests" for consistency among Datagrids used to display
         /// the test results
         public IEnumerable<SubMethod> SubTests => _methodVariant?.Method?.SubMethods.ToList();
+
+        public IEnumerable<Test> TestList => _testList;
 
         #endregion Properties
 

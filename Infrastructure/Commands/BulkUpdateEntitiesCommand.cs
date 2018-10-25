@@ -22,13 +22,15 @@ namespace Infrastructure.Commands
 
         public void Execute(LabDbEntities context)
         {
+            context.Configuration.AutoDetectChangesEnabled = false;
+
             foreach (object entity in _entities)
             {
-                context.Set(entity.GetType()).Attach(entity);
                 context.Entry(entity).State = System.Data.Entity.EntityState.Modified;
             }
 
             context.SaveChanges();
+            context.Dispose();
         }
     }
 }

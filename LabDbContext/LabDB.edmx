@@ -2946,16 +2946,16 @@
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Result" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" DefaultValue="" />
-          <Property Name="TestID" Type="Int32" Nullable="false" a:SetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+          <Property Name="TestID" Type="Int32" Nullable="false" a:SetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="Test" Relationship="Self.test1" FromRole="sub_tests" ToRole="tests" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
-          <Property Name="RequiredValue" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
-          <Property Name="UM" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
-          <Property Name="SubRequiremntID" Type="Int32" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" DefaultValue=" " />
+          <Property Name="RequiredValue" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" DefaultValue=" " />
+          <Property Name="UM" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" DefaultValue=" " />
+          <Property Name="SubRequiremntID" Type="Int32" Nullable="true" />
           <NavigationProperty Name="SubRequirement" Relationship="labdbModel.sub_requirement_to_sub_test" FromRole="SubTest" ToRole="SubRequirement" />
-          <Property Name="SubMethodID" Type="Int32" />
+          <Property Name="SubMethodID" Type="Int32" Nullable="true" />
           <NavigationProperty Name="SubMethod" Relationship="labdbModel.sub_method_to_sub_test" FromRole="SubTest" ToRole="SubMethod" />
-          <Property Name="Position" Type="Int32" />
+          <Property Name="Position" Type="Int32" DefaultValue="0" />
         </EntityType>
         <EntityType Name="Task">
           <Key>

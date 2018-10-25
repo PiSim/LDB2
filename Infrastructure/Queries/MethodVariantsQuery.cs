@@ -30,7 +30,10 @@ namespace Infrastructure.Queries
             context.Configuration.LazyLoadingEnabled = false;
 
             IQueryable<MethodVariant> query = context.MethodVariants;
-            
+
+            if (AsNoTracking)
+                query.AsNoTracking();
+
             if (EagerLoadingEnabled)
                 query = query.Include(mtdvar => mtdvar.Method.Property)
                             .Include(mtdvar => mtdvar.Method.Standard.Organization)
@@ -46,8 +49,6 @@ namespace Infrastructure.Queries
                 query = query.OrderBy(mtdvar => mtdvar.Method.Standard.Name)
                             .ThenBy(mtdvar => mtdvar.Name);
 
-            if (AsNoTracking)
-                query.AsNoTracking();
 
             return query;
         }

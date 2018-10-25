@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{F5A65426-9D99-4ABA-9006-D268474991D7}</ProjectGuid>
+    <ProjectGuid>{8AC2DA61-B3FE-4BD0-9A1C-B7CC39B09CC7}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>InfrastructureTests</RootNamespace>
-    <AssemblyName>InfrastructureTests</AssemblyName>
+    <RootNamespace>ReportsTests</RootNamespace>
+    <AssemblyName>ReportsTests</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -84,12 +84,7 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
-    <Compile Include="Commands\BulkInsertEntitiesCommandTests.cs" />
-    <Compile Include="Commands\BulkUpdateEntitiesCommandTests.cs" />
-    <Compile Include="Commands\DeleteEntityCommandTests.cs" />
-    <Compile Include="Commands\InsertEntityCommandTests.cs" />
-    <Compile Include="Commands\ReloadEntityCommandTests.cs" />
-    <Compile Include="Commands\UpdateEntityCommandTests.cs" />
+    <Compile Include="Commands\BulkUpdateSubTestResultsCommandTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -101,13 +96,13 @@
       <Project>{D2CBB1E5-A945-4715-828C-E2AE2DAFCD0A}</Project>
       <Name>DataAccess</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Infrastructure\Infrastructure.csproj">
-      <Project>{C432C3BE-1051-45F1-95A1-9397BBF35923}</Project>
-      <Name>Infrastructure</Name>
-    </ProjectReference>
     <ProjectReference Include="..\LabDbContext\LabDbContext.csproj">
       <Project>{AB8B448C-DD74-4D60-A041-3E5D03A32180}</Project>
       <Name>LabDbContext</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Reports\Reports.csproj">
+      <Project>{DD1A1429-E1AC-4611-9971-F99988C4EDBA}</Project>
+      <Name>Reports</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

@@ -141,6 +141,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\BulkUpdateSubTestResultsCommand.cs" />
     <Compile Include="Commands\SetReportsIsCompleteCommand.cs" />
     <Compile Include="ExternalResultPresenter.cs" />
     <Compile Include="Queries\ExternalReportQuery.cs" />

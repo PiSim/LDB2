@@ -10,6 +10,7 @@ using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
 using Reporting;
+using Reports.Commands;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -130,7 +131,7 @@ namespace Reports.ViewModels
                 {
                     // Update the tests
 
-                    _labDbData.Execute(new BulkUpdateEntitiesCommand(_testList.SelectMany(tstw => tstw.TestInstance.SubTests)));
+                    _labDbData.Execute(new BulkUpdateSubTestResultsCommand(_testList.SelectMany(tstw => tstw.TestInstance.SubTests)));
 
                     // Update the report instance
 

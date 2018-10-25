@@ -105,17 +105,16 @@ namespace Materials.Commands
             if (_connectedMaterial == null)
                 _connectedMaterial = CreateMaterial(template);
 
-            else
-            {
-                if (template.ExternalConstruction != null)
-                    _connectedMaterial.ExternalConstructionID = template.ExternalConstruction.ID;
+            // Update Construction, color and project if any are provided
 
-                if (template.Project != null)
-                    _connectedMaterial.ProjectID = template.Project.ID;
+            if (template.ExternalConstruction != null)
+                _connectedMaterial.ExternalConstructionID = template.ExternalConstruction.ID;
 
-                if (template.Recipe.Colour != null)
-                    _connectedMaterial.Recipe.ColourID = template.Recipe.Colour.ID;
-            }
+            if (template.Project != null)
+                _connectedMaterial.ProjectID = template.Project.ID;
+
+            if (template.Recipe.Colour != null)
+                _connectedMaterial.Recipe.ColourID = template.Recipe.Colour.ID;
 
             return _connectedMaterial;
         }

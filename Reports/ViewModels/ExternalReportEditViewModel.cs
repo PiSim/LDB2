@@ -10,6 +10,7 @@ using LabDbContext.Services;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
+using Reports.Commands;
 using Reports.Queries;
 using System;
 using System.Collections.Generic;
@@ -149,7 +150,7 @@ namespace Reports.ViewModels
                 () =>
                 {
                     _labDbData.Execute(new UpdateEntityCommand(_instance));
-                    _labDbData.Execute(new BulkUpdateEntitiesCommand(ResultCollection.SelectMany(erp => erp.SubTests)));
+                    _labDbData.Execute(new BulkUpdateSubTestResultsCommand(ResultCollection.SelectMany(erp => erp.TestList.SelectMany(tst => tst.SubTests))));
                     EditMode = false;
 
                     EntityChangedToken token = new EntityChangedToken(_instance,

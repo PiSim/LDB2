@@ -10,25 +10,18 @@
 namespace LabDbContext
 {
     using System;
-    using System.Data.Common;
     using System.Data.Entity;
-    using System.Data.Entity.Core.EntityClient;
     using System.Data.Entity.Infrastructure;
-
+    
     public partial class LabDbEntities : DbContext
     {
         public LabDbEntities()
-               : base("name=LabDb_PRD")
+            : base("LabDb_PRD")
         {
         }
 
-        public LabDbEntities(string ConnectionName)
-            : base(ConnectionName)
-        {
-        }
-
-        public LabDbEntities(DbConnection connection)
-            :base(connection, false)
+        public LabDbEntities(string connectionName)
+            : base(connectionName)
         {
         }
 

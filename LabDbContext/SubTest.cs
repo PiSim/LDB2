@@ -18,11 +18,15 @@ namespace LabDbContext
         public SubTest()
         {
             this.Result = "";
+            this.Name = " ";
+            this.RequiredValue = " ";
+            this.UM = " ";
+            this.Position = 0;
         }
     
         public int ID { get; set; }
         public string Result { get; set; }
-        public int TestID { get; private set; }
+        public int TestID { get; set; }
         public string Name { get; set; }
         public string RequiredValue { get; set; }
         public string UM { get; set; }
