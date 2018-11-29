@@ -60,10 +60,10 @@
     <ApplicationIcon>Vulca.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>6BDE3223E5C02EC16BD92D05200DF13F85C774FD</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>3A4B8C5D22C283A0D47D65A990C9BBFC48983F63</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>LabDB2_TemporaryKey.pfx</ManifestKeyFile>
+    <ManifestKeyFile>LabDB2_1_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <GenerateManifests>true</GenerateManifests>
@@ -336,6 +336,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="LabDB2_1_TemporaryKey.pfx" />
     <None Include="LabDB2_TemporaryKey.pfx" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -361,6 +362,10 @@
       <Project>{315cd8ab-0509-4d45-aba5-b2cbd0f10f69}</Project>
       <Name>Controls</Name>
     </ProjectReference>
+    <ProjectReference Include="..\DataAccessCore\DataAccessCore.csproj">
+      <Project>{1e90ed7a-d0fe-4e48-9348-a863b86ae092}</Project>
+      <Name>DataAccessCore</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DataAccess\DataAccess.csproj">
       <Project>{D2CBB1E5-A945-4715-828C-E2AE2DAFCD0A}</Project>
       <Name>DataAccess</Name>
@@ -376,6 +381,10 @@
     <ProjectReference Include="..\LabDbContext\LabDbContext.csproj">
       <Project>{ab8b448c-dd74-4d60-a041-3e5d03a32180}</Project>
       <Name>LabDbContext</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LInstContext\LInstContext.csproj">
+      <Project>{19743078-cd3f-4514-aa51-274d71d96382}</Project>
+      <Name>LInstContext</Name>
     </ProjectReference>
     <ProjectReference Include="..\Materials\Materials.csproj">
       <Project>{b6863f10-adc1-4f0c-987b-8aca2db14b0f}</Project>

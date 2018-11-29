@@ -54,11 +54,6 @@ namespace Instruments.ViewModels
 
             _eventAggregator = eventAggregator;
 
-            LabList = _labDbData.RunQuery(new OrganizationsQuery() { Role = OrganizationsQuery.OrganizationRoles.CalibrationLab })
-                                .ToList();
-            CalibrationResultList = _instrumentService.GetCalibrationResults();
-            TechList = _labDbData.RunQuery(new PeopleQuery() { Role = PeopleQuery.PersonRoles.CalibrationTech })
-                                                            .ToList();
 
             AddFileCommand = new DelegateCommand(
                 () =>
@@ -164,6 +159,23 @@ namespace Instruments.ViewModels
 
         #endregion Constructors
 
+        #region Methods
+
+        private void RefreshCollections()
+        {
+            LabList = _labDbData.RunQuery(new OrganizationsQuery() { Role = OrganizationsQuery.OrganizationRoles.CalibrationLab })
+                                .ToList();
+            CalibrationResultList = _labDbData.RunQuery(new CalibrationResultsQuery()).ToList();
+            TechList = _labDbData.RunQuery(new PeopleQuery() { Role = PeopleQuery.PersonRoles.CalibrationTech })
+                                                            .ToList();
+
+            RaisePropertyChanged("LabList");
+            RaisePropertyChanged("CalibrationResultList");
+            RaisePropertyChanged("TechList");
+        }
+
+        #endregion
+
         #region Properties
 
         public DelegateCommand AddFileCommand { get; }
@@ -178,11 +190,7 @@ namespace Instruments.ViewModels
                 EditMode = false;
                 _calibrationInstance = value;
 
-                LabList = _labDbData.RunQuery(new OrganizationsQuery() { Role = OrganizationsQuery.OrganizationRoles.CalibrationLab })
-                                .ToList();
-                CalibrationResultList = _labDbData.RunQuery(new CalibrationResultsQuery()).ToList();
-                TechList = _labDbData.RunQuery(new PeopleQuery() { Role = PeopleQuery.PersonRoles.CalibrationTech })
-                                                                .ToList();
+                RefreshCollections();
 
                 PropertyMappingList = _calibrationInstance?.GetPropertyMappings();
 
@@ -310,8 +318,11 @@ namespace Instruments.ViewModels
             set
             {
                 _selectedLab = value;
-                _calibrationInstance.Laboratory = value;
-                _calibrationInstance.laboratoryID = _selectedLab.ID;
+                if (_calibrationInstance != null)
+                {
+                    _calibrationInstance.Laboratory = value;
+                    _calibrationInstance.laboratoryID = _selectedLab.ID;
+                }
             }
         }
 
@@ -332,8 +343,12 @@ namespace Instruments.ViewModels
             set
             {
                 _selectedResult = value;
-                _calibrationInstance.CalibrationResult = value;
-                _calibrationInstance.ResultID = value.ID;
+                if (_calibrationInstance != null)
+                {
+                    _calibrationInstance.CalibrationResult = value;
+                    _calibrationInstance.ResultID = value.ID;
+
+                }
             }
         }
 
@@ -343,8 +358,12 @@ namespace Instruments.ViewModels
             set
             {
                 _selectedPerson = value;
-                _calibrationInstance.Tech = value;
-                _calibrationInstance.OperatorID = value.ID;
+                if (_calibrationInstance != null)
+                {
+                    _calibrationInstance.Tech = value;
+                    _calibrationInstance.OperatorID = value.ID;
+
+                }
             }
         }
 

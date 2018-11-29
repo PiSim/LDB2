@@ -15,16 +15,16 @@ namespace LabDbContext
     
     public partial class LabDbEntities : DbContext
     {
+        public LabDbEntities(string name) :base(name)
+        {
+
+        }
+
         public LabDbEntities()
-            : base("LabDb_PRD")
+            : base("name=LabDbEntities")
         {
         }
-
-        public LabDbEntities(string connectionName)
-            : base(connectionName)
-        {
-        }
-
+    
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             throw new UnintentionalCodeFirstException();

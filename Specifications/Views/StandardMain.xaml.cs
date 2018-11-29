@@ -13,13 +13,13 @@ namespace Specifications.Views
 
         public StandardMain(IRegionManager regionManager)
         {
-            InitializeComponent();
             regionManager.RegisterViewWithRegion(RegionNames.MethodMainRegion,
                                                 typeof(Views.MethodMain));
             regionManager.RegisterViewWithRegion(RegionNames.SpecificationMainRegion,
                                                 typeof(Views.SpecificationMain));
             regionManager.RegisterViewWithRegion(RegionNames.SpecificationMainListRegion,
                                                 typeof(Controls.Views.SpecificationList));
+            InitializeComponent();
         }
 
         #endregion Constructors

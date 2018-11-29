@@ -4046,7 +4046,7 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Path" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Path" Type="String" Nullable="false" FixedLength="false" Unicode="false" />
           <Property Name="Description" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
           <Property Name="ReportID" Type="Int32" Nullable="false" />
           <NavigationProperty Name="CalibrationReport" Relationship="labdbModel.calibration_report_to_files" FromRole="calibration_files" ToRole="calibration_reports" />

@@ -159,10 +159,12 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="Queries\CalibrationReportQuery.cs" />
     <Compile Include="Queries\CalibrationResultsQuery.cs" />
     <Compile Include="Queries\CalibrationReportsQuery.cs" />
     <Compile Include="Queries\InstrumentQuery.cs" />
     <Compile Include="Queries\InstrumentsQuery.cs" />
+    <Compile Include="Queries\MaintenanceEventsQuery.cs" />
     <Compile Include="ViewModels\AddPropertyDialogViewModel.cs" />
     <Compile Include="ViewModels\CalibrationReportEditViewModel.cs" />
     <Compile Include="ViewModels\InstrumentCreationDialogViewModel.cs" />

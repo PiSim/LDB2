@@ -42,7 +42,7 @@ namespace Specifications
             containerRegistry.Register<Object, Views.SpecificationEdit>(SpecificationViewNames.SpecificationEdit);
             containerRegistry.Register<Object, Views.SpecificationVersionEdit>(SpecificationViewNames.SpecificationVersionEdit);
             containerRegistry.Register<Object, Views.SpecificationVersionList>(SpecificationViewNames.SpecificationVersionList);
-            containerRegistry.RegisterForNavigation<Object, Views.StandardMain>(SpecificationViewNames.StandardMain);
+            containerRegistry.Register<Object, Views.StandardMain>(SpecificationViewNames.StandardMain);
 
             containerRegistry.Register<Views.MethodCreationDialog>();
             containerRegistry.Register<Views.SpecificationCreationDialog>();

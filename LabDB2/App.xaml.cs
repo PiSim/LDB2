@@ -36,6 +36,14 @@ namespace LabDB2
                     ModuleType = DBManagerModuleType.AssemblyQualifiedName
                 });
 
+            Type LInstModuleType = typeof(LInst.LInstModule);
+            moduleCatalog.AddModule(
+                new ModuleInfo()
+                {
+                    ModuleName = LInstModuleType.Name,
+                    ModuleType = LInstModuleType.AssemblyQualifiedName
+                });
+
             Type InfrastructureModuleType = typeof(Infrastructure.InfrastructureModule);
             moduleCatalog.AddModule(
                 new Prism.Modularity.ModuleInfo()

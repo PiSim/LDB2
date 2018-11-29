@@ -193,6 +193,7 @@
     <Compile Include="ViewModels\SpecificationMainViewModel.cs" />
     <Compile Include="ViewModels\SpecificationVersionEditViewModel.cs" />
     <Compile Include="ViewModels\ModifyMethodSubMethodListDialogViewModel.cs" />
+    <Compile Include="ViewModels\StandardMainViewModel.cs" />
     <Compile Include="Views\AddMethod.xaml.cs">
       <DependentUpon>AddMethod.xaml</DependentUpon>
     </Compile>

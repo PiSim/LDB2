@@ -1,11 +1,11 @@
 using Admin.Queries;
 using Controls.Views;
-using DataAccess;
+using DataAccessCore;
 using Infrastructure;
 using Infrastructure.Commands;
 using Infrastructure.Events;
-using LabDbContext;
-using LabDbContext.EntityExtensions;
+using LInst;
+using Microsoft.EntityFrameworkCore.Design;
 using Prism.Events;
 using System.Collections.Generic;
 using System.Data.Entity.Infrastructure;
@@ -17,21 +17,21 @@ namespace Admin
     {
         #region Fields
         
-        private IDbContextFactory<LabDbEntities> _dbContextFactory;
         private IEventAggregator _eventAggregator;
-        private IDataService<LabDbEntities> _labDbData;
+        private IDataService<LInstContext> _lInstData;
+        IDesignTimeDbContextFactory<LInstContext> _dbContextFactory;
 
         #endregion Fields
 
         #region Constructors
 
-        public AdminService(IDbContextFactory<LabDbEntities> dbContextFactory,
-                            IEventAggregator aggregator,
-                            IDataService<LabDbEntities> labDbData)
+        public AdminService(IEventAggregator aggregator,
+                            IDesignTimeDbContextFactory<LInstContext> dbContextFactory,
+                            IDataService<LInstContext> lInstData)
         {
             _eventAggregator = aggregator;
             _dbContextFactory = dbContextFactory;
-            _labDbData = labDbData;
+            _lInstData = lInstData;
         }
 
         #endregion Constructors
@@ -40,7 +40,7 @@ namespace Admin
 
         public void AddOrganizationRole(string name)
         {
-            using (LabDbEntities entities = _dbContextFactory.Create())
+            using (LInstContext entities = _dbContextFactory.CreateDbContext(new string[]{ }))
             {
                 OrganizationRole newRole = new OrganizationRole
                 {
@@ -54,7 +54,7 @@ namespace Admin
                 {
                     OrganizationRoleMapping newMapping = new OrganizationRoleMapping
                     {
-                        Role = newRole,
+                        OrganizationRole = newRole,
                         Organization = org,
                         IsSelected = false
                     };

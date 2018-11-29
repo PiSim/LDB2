@@ -255,7 +255,8 @@ namespace Instruments.ViewModels
             }
         }
 
-        public IEnumerable<InstrumentMaintenanceEvent> EventList => _instance.GetMaintenanceEvents();
+        public IEnumerable<InstrumentMaintenanceEvent> EventList => (_instance == null) ? new List<InstrumentMaintenanceEvent>() 
+                                                                                        : _labDbData.RunQuery(new MaintenanceEventsQuery() { InstrumentID = _instance.ID }).ToList();
 
         public Property FilterProperty
         {

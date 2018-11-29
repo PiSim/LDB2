@@ -1,5 +1,5 @@
-﻿using DataAccess;
-using LabDbContext;
+﻿using DataAccessCore;
+using LInst;
 
 using System;
 using System.Collections.Generic;
@@ -13,9 +13,9 @@ namespace Admin.Queries
     /// <summary>
     /// Query Object that returns multiple OrganizationRoles entities
     /// </summary>
-    public class OrganizationRolesQuery : QueryBase<OrganizationRole, LabDbEntities>
+    public class OrganizationRolesQuery : QueryBase<OrganizationRole, LInstContext>
     {
-        public override IQueryable<OrganizationRole> Execute(LabDbEntities context)
+        public override IQueryable<OrganizationRole> Execute(LInstContext context)
         {
             IQueryable<OrganizationRole> query = context.OrganizationRoles;
 
