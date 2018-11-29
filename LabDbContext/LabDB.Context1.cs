@@ -15,14 +15,14 @@ namespace LabDbContext
     
     public partial class LabDbEntities : DbContext
     {
-        public LabDbEntities(string name) :base(name)
-        {
-
-        }
-
         public LabDbEntities()
             : base("name=LabDbEntities")
         {
+        }
+
+        public LabDbEntities(string name) : base(name)
+        {
+
         }
     
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
@@ -36,11 +36,11 @@ namespace LabDbContext
         public virtual DbSet<ExternalConstruction> ExternalConstructions { get; set; }
         public virtual DbSet<ExternalReportFile> ExternalReportFiles { get; set; }
         public virtual DbSet<ExternalReport> ExternalReports { get; set; }
-        public virtual DbSet<Master> Masters1 { get; set; }
+        public virtual DbSet<MasterD> MasterDs { get; set; }
         public virtual DbSet<Material> Materials { get; set; }
         public virtual DbSet<Method> Methods { get; set; }
-        public virtual DbSet<Organization> Organizations { get; set; }
-        public virtual DbSet<Person> People { get; set; }
+        public virtual DbSet<OrganizationD> OrganizationDs { get; set; }
+        public virtual DbSet<PersonD> PersonDs { get; set; }
         public virtual DbSet<Project> Projects { get; set; }
         public virtual DbSet<Property> Properties { get; set; }
         public virtual DbSet<Recipe> Recipes { get; set; }
@@ -56,22 +56,22 @@ namespace LabDbContext
         public virtual DbSet<SubTest> SubTests { get; set; }
         public virtual DbSet<Task> Tasks { get; set; }
         public virtual DbSet<Test> Tests { get; set; }
-        public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<UserD> UserDs { get; set; }
         public virtual DbSet<MaterialType> MaterialTypes { get; set; }
         public virtual DbSet<TaskItem> TaskItems { get; set; }
-        public virtual DbSet<UserRoleMapping> UserRoleMappings { get; set; }
-        public virtual DbSet<UserRole> UserRoles { get; set; }
+        public virtual DbSet<UserRoleMappingD> UserRoleMappingDs { get; set; }
+        public virtual DbSet<UserRoleD> UserRoleDs { get; set; }
         public virtual DbSet<ControlPlan> ControlPlans { get; set; }
         public virtual DbSet<CalibrationFiles> CalibrationFiles { get; set; }
         public virtual DbSet<CalibrationReport> CalibrationReports { get; set; }
         public virtual DbSet<InstrumentType> InstrumentTypes { get; set; }
         public virtual DbSet<Instrument> Instruments { get; set; }
-        public virtual DbSet<OrganizationRoleMapping> OrganizationRoleMappings { get; set; }
-        public virtual DbSet<OrganizationRole> OrganizationRoles { get; set; }
+        public virtual DbSet<OrganizationRoleMappingD> OrganizationRoleMappingDs { get; set; }
+        public virtual DbSet<OrganizationRoleD> OrganizationRoleDs { get; set; }
         public virtual DbSet<InstrumentMaintenanceEvent> InstrumentMaintenanceEvents { get; set; }
         public virtual DbSet<SubMethod> SubMethods { get; set; }
-        public virtual DbSet<PersonRoleMapping> PersonRoleMappings { get; set; }
-        public virtual DbSet<PersonRole> PersonRoles { get; set; }
+        public virtual DbSet<PersonRoleMappingD> PersonRoleMappingDs { get; set; }
+        public virtual DbSet<PersonRoleD> PersonRoleDs { get; set; }
         public virtual DbSet<SubTaskItem> SubTaskItems { get; set; }
         public virtual DbSet<MaterialLine> MaterialLines { get; set; }
         public virtual DbSet<TrialArea> TrialAreas { get; set; }

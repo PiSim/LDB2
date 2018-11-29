@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LInst.Migrations
 {
     [DbContext(typeof(LInstContext))]
-    [Migration("20181128153623_CreateLInstDb_2")]
-    partial class CreateLInstDb_2
+    [Migration("20181129145440_CreateLInstDb")]
+    partial class CreateLInstDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -41,6 +41,8 @@ namespace LInst.Migrations
 
                     b.Property<int>("CalibrationResultID");
 
+                    b.Property<DateTime>("Date");
+
                     b.Property<int>("InstrumentID");
 
                     b.Property<int>("LaboratoryID");
@@ -64,6 +66,19 @@ namespace LInst.Migrations
                     b.HasIndex("TechID");
 
                     b.ToTable("CalibrationReports");
+                });
+
+            modelBuilder.Entity("LInst.CalibrationReportReference", b =>
+                {
+                    b.Property<int>("CalibrationReportID");
+
+                    b.Property<int>("InstrumentID");
+
+                    b.HasKey("CalibrationReportID", "InstrumentID");
+
+                    b.HasIndex("InstrumentID");
+
+                    b.ToTable("CalibrationReportReference");
                 });
 
             modelBuilder.Entity("LInst.CalibrationResult", b =>
@@ -95,9 +110,13 @@ namespace LInst.Migrations
 
                     b.Property<int>("InstrumentTypeID");
 
-                    b.Property<bool>("IsInService");
+                    b.Property<bool>("IsInService")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(true);
 
-                    b.Property<bool>("IsUnderControl");
+                    b.Property<bool>("IsUnderControl")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(false);
 
                     b.Property<int?>("ManufacturerID");
 
@@ -113,9 +132,13 @@ namespace LInst.Migrations
 
                     b.HasIndex("CalibrationResponsibleID");
 
+                    b.HasIndex("InstrumentTypeID");
+
                     b.HasIndex("ManufacturerID");
 
                     b.HasIndex("SupplierID");
+
+                    b.HasIndex("UtilizationAreaID");
 
                     b.ToTable("Instruments");
                 });
@@ -165,11 +188,15 @@ namespace LInst.Migrations
 
                     b.Property<int>("InstrumentID");
 
-                    b.Property<bool>("IsCalibrationProperty");
+                    b.Property<bool>("IsCalibrationProperty")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(false);
 
                     b.Property<string>("Name");
 
-                    b.Property<int>("Value");
+                    b.Property<int>("Value")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(0);
 
                     b.HasKey("ID");
 
@@ -296,6 +323,60 @@ namespace LInst.Migrations
                     b.ToTable("PersonRoleMappings");
                 });
 
+            modelBuilder.Entity("LInst.User", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("FullName");
+
+                    b.Property<string>("HashedPassword");
+
+                    b.Property<int>("PersonID");
+
+                    b.Property<string>("UserName");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("PersonID");
+
+                    b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("LInst.UserRole", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Description");
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("UserRoles");
+                });
+
+            modelBuilder.Entity("LInst.UserRoleMapping", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<bool>("IsSelected");
+
+                    b.Property<int>("UserID");
+
+                    b.Property<int>("UserRoleID");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("UserID");
+
+                    b.HasIndex("UserRoleID");
+
+                    b.ToTable("UserRoleMappings");
+                });
+
             modelBuilder.Entity("LInst.CalibrationFile", b =>
                 {
                     b.HasOne("LInst.CalibrationReport", "CalibrationReport")
@@ -326,11 +407,30 @@ namespace LInst.Migrations
                         .HasForeignKey("TechID");
                 });
 
+            modelBuilder.Entity("LInst.CalibrationReportReference", b =>
+                {
+                    b.HasOne("LInst.CalibrationReport", "CalibrationReport")
+                        .WithMany("CalibrationReportReferences")
+                        .HasForeignKey("CalibrationReportID")
+                        .HasConstraintName("FK_CalibrationReportReference_CalRep_CalRepID")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("LInst.Instrument", "Instrument")
+                        .WithMany("CalibrationsAsReference")
+                        .HasForeignKey("InstrumentID")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("LInst.Instrument", b =>
                 {
                     b.HasOne("LInst.Organization", "CalibrationResponsible")
                         .WithMany()
                         .HasForeignKey("CalibrationResponsibleID");
+
+                    b.HasOne("LInst.InstrumentType", "InstrumentType")
+                        .WithMany()
+                        .HasForeignKey("InstrumentTypeID")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("LInst.Organization", "Manufacturer")
                         .WithMany()
@@ -339,6 +439,11 @@ namespace LInst.Migrations
                     b.HasOne("LInst.Organization", "Supplier")
                         .WithMany()
                         .HasForeignKey("SupplierID");
+
+                    b.HasOne("LInst.InstrumentUtilizationArea", "UtilizationArea")
+                        .WithMany()
+                        .HasForeignKey("UtilizationAreaID")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("LInst.InstrumentFile", b =>
@@ -372,7 +477,7 @@ namespace LInst.Migrations
             modelBuilder.Entity("LInst.OrganizationRoleMapping", b =>
                 {
                     b.HasOne("LInst.Organization", "Organization")
-                        .WithMany()
+                        .WithMany("RoleMappings")
                         .HasForeignKey("OrganizationID")
                         .OnDelete(DeleteBehavior.Cascade);
 
@@ -385,13 +490,34 @@ namespace LInst.Migrations
             modelBuilder.Entity("LInst.PersonRoleMapping", b =>
                 {
                     b.HasOne("LInst.Person", "Person")
-                        .WithMany()
+                        .WithMany("RoleMappings")
                         .HasForeignKey("PersonID")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("LInst.PersonRole", "Role")
-                        .WithMany()
+                        .WithMany("RoleMappings")
                         .HasForeignKey("RoleID")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("LInst.User", b =>
+                {
+                    b.HasOne("LInst.Person", "Person")
+                        .WithMany()
+                        .HasForeignKey("PersonID")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("LInst.UserRoleMapping", b =>
+                {
+                    b.HasOne("LInst.User", "User")
+                        .WithMany("RoleMappings")
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("LInst.UserRole", "UserRole")
+                        .WithMany("UserMappings")
+                        .HasForeignKey("UserRoleID")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

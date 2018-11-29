@@ -1,11 +1,13 @@
 ﻿using Controls.Views;
 using DataAccess;
+using DataAccessCore;
 using Infrastructure;
 using Infrastructure.Events;
 using Infrastructure.Queries;
 using LabDbContext;
 using LabDbContext.EntityExtensions;
 using LabDbContext.Services;
+using LInst;
 using Materials.Queries;
 using Prism.Commands;
 using Prism.Events;
@@ -24,7 +26,8 @@ namespace Materials.ViewModels
         private bool _editMode;
         private IEventAggregator _eventAggregator;
         private ExternalConstruction _externalConstructionInstance;
-        private IDataService<LabDbEntities> _labDbData;
+        private DataAccess.IDataService<LabDbEntities> _labDbData;
+        DataAccessCore.IDataService<LInstContext> _lInstData;
         private IReportService _reportService;
         private Material _selectedAssignedMaterial, _selectedUnassignedMaterial;
         private Specification _selectedSpecification;
@@ -34,16 +37,18 @@ namespace Materials.ViewModels
 
         #region Constructors
 
-        public ExternalConstructionDetailViewModel(IDataService<LabDbEntities> labDbdata,
+        public ExternalConstructionDetailViewModel(DataAccess.IDataService<LabDbEntities> labDbData,
+                                                    DataAccessCore.IDataService<LInstContext> lInstData,
                                                     IEventAggregator eventAggregator,
                                                     IReportService reportService) : base()
         {
-            _labDbData = labDbdata;
+            _lInstData = lInstData;
+            _labDbData = labDbData;
             _reportService = reportService;
             _eventAggregator = eventAggregator;
             _editMode = false;
 
-            OEMList = _labDbData.RunQuery(new OrganizationsQuery() { Role = OrganizationsQuery.OrganizationRoles.OEM }).ToList(); ;
+            OEMList = _lInstData.RunQuery(new OrganizationsQuery() { Role = OrganizationsQuery.OrganizationRoles.OEM }).ToList(); ;
             SpecificationList = _labDbData.RunQuery(new SpecificationsQuery()).ToList();
 
             AssignMaterialToExternalCommand = new DelegateCommand(
@@ -216,7 +221,7 @@ namespace Materials.ViewModels
             }
         }
 
-        public IEnumerable<Organization> OEMList { get; }
+        public IEnumerable<LInst.Organization> OEMList { get; }
 
         public DelegateCommand SaveCommand { get; }
 
@@ -231,7 +236,7 @@ namespace Materials.ViewModels
             }
         }
 
-        public Organization SelectedOEM
+        public LInst.Organization SelectedOEM
         {
             get
             {

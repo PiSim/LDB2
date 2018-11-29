@@ -1,6 +1,7 @@
-﻿using DataAccess;
+﻿using DataAccessCore;
 using Infrastructure.Queries;
 using LabDbContext;
+using LInst;
 using Prism.Commands;
 using Prism.Mvvm;
 using Specifications.Queries;
@@ -18,7 +19,8 @@ namespace Specifications.ViewModels
         #region Fields
 
         private readonly Dictionary<string, ICollection<string>> _validationErrors = new Dictionary<string, ICollection<string>>();
-        private IDataService<LabDbEntities> _labDbData;
+        private DataAccess.IDataService<LabDbEntities> _labDbData;
+        DataAccessCore.IDataService<LInstContext> _lInstData;
 
         private string _name;
 
@@ -28,7 +30,8 @@ namespace Specifications.ViewModels
 
         #region Constructors
 
-        public SpecificationCreationDialogViewModel(IDataService<LabDbEntities> labDbData) : base()
+        public SpecificationCreationDialogViewModel(DataAccess.IDataService<LabDbEntities> labDbData,
+                                                    DataAccessCore.IDataService<LInstContext> lInstData) : base()
         {
             _labDbData = labDbData;
             CurrentIssue = "";
@@ -161,7 +164,7 @@ namespace Specifications.ViewModels
             }
         }
 
-        public IEnumerable<Organization> OemList => _labDbData.RunQuery(new OrganizationsQuery() { Role = OrganizationsQuery.OrganizationRoles.StandardPublisher })
+        public IEnumerable<Organization> OemList => _lInstData.RunQuery(new OrganizationsQuery() { Role = OrganizationsQuery.OrganizationRoles.StandardPublisher })
                                                                         .ToList();
 
         public Specification SpecificationInstance { get; private set; }

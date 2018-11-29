@@ -1,9 +1,9 @@
 ﻿using Controls.Views;
-using DataAccess;
+using DataAccessCore;
 using Infrastructure;
 using Infrastructure.Events;
 using Infrastructure.Queries;
-using LabDbContext;
+using LInst;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
@@ -18,18 +18,18 @@ namespace Admin.ViewModels
 
         private IAdminService _adminService;
         private IEventAggregator _eventAggregator;
-        private IDataService<LabDbEntities> _labDbData;
+        private IDataService<LInstContext> _lInstData;
         private Organization _selectedOrganization;
 
         #endregion Fields
 
         #region Constructors
 
-        public OrganizationsMainViewModel(IDataService<LabDbEntities> labDbData,
+        public OrganizationsMainViewModel(IDataService<LInstContext> lInstData,
                                             IEventAggregator aggregator,
                                             IAdminService adminService) : base()
         {
-            _labDbData = labDbData;
+            _lInstData = lInstData;
             _adminService = adminService;
             _eventAggregator = aggregator;
 
@@ -66,7 +66,7 @@ namespace Admin.ViewModels
 
         public string OrganizationEditRegionName => RegionNames.OrganizationEditRegion;
 
-        public IEnumerable<Organization> OrganizationList => _labDbData.RunQuery(new OrganizationsQuery())
+        public IEnumerable<Organization> OrganizationList => _lInstData.RunQuery(new OrganizationsQuery())
                                                                         .ToList();
 
         public IEnumerable<OrganizationRoleMapping> RoleList
@@ -76,7 +76,7 @@ namespace Admin.ViewModels
                 if (_selectedOrganization == null)
                     return new List<OrganizationRoleMapping>();
                 else
-                    return _selectedOrganization.RoleMapping;
+                    return _selectedOrganization.RoleMappings;
             }
         }
 

@@ -26,7 +26,7 @@ namespace LabDbContext
         public Nullable<int> masterID { get; set; }
     
         public virtual Colour Colour { get; set; }
-        public virtual Master Master { get; set; }
+        public virtual MasterD Master { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Material> Materials { get; set; }
     }

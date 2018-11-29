@@ -18,7 +18,7 @@ namespace LabDbContext
         public Batch()
         {
             this.Notes = "";
-            this.Masters = new HashSet<Master>();
+            this.Masters = new HashSet<MasterD>();
             this.Reports = new HashSet<Report>();
             this.Samples = new HashSet<Sample>();
             this.Tasks = new HashSet<Task>();
@@ -41,7 +41,7 @@ namespace LabDbContext
     
         public virtual Material Material { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Master> Masters { get; set; }
+        public virtual ICollection<MasterD> Masters { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Report> Reports { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

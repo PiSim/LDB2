@@ -1,4 +1,4 @@
-using LabDbContext;
+using LInst;
 using Prism.Events;
 
 namespace Infrastructure.Events

@@ -1,5 +1,5 @@
-﻿using DataAccess;
-using LabDbContext;
+﻿using DataAccessCore;
+using LInst;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
@@ -9,7 +9,7 @@ namespace Infrastructure.Queries
     /// <summary>
     /// Query object that returns multiple Person Entities
     /// </summary>
-    public class PeopleQuery : QueryBase<Person, LabDbEntities>
+    public class PeopleQuery : QueryBase<Person, LInstContext>
     {
         #region Fields
 
@@ -46,7 +46,7 @@ namespace Infrastructure.Queries
 
         #region Methods
 
-        public override IQueryable<Person> Execute(LabDbEntities context)
+        public override IQueryable<Person> Execute(LInstContext context)
         {
             IQueryable<Person> query = context.People;
 

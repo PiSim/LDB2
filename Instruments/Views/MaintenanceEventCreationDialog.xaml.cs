@@ -1,4 +1,4 @@
-﻿using LabDbContext;
+﻿using LInst;
 using System.Windows;
 
 namespace Instruments.Views

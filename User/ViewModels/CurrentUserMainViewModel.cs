@@ -1,5 +1,5 @@
 ﻿using Infrastructure;
-using LabDbContext;
+
 using Prism.Mvvm;
 using System.Collections.Generic;
 using System.Threading;
@@ -25,8 +25,6 @@ namespace User.ViewModels
 
         #region Properties
 
-        public List<Report> ReportList => new List<Report>(_identity.User.Person.Reports);
-        private string Name => _identity.User.Person.Name;
 
         #endregion Properties
     }

@@ -1,5 +1,5 @@
-﻿using DataAccess;
-using LabDbContext;
+﻿using DataAccessCore;
+using LInst;
 using System.Data.Entity;
 using System.Linq;
 
@@ -8,7 +8,7 @@ namespace Infrastructure.Queries
     /// <summary>
     /// Query object that returns multiple InstrumentUtilizationArea entities
     /// </summary>
-    public class InstrumentUtilizationAreasQuery : IQuery<InstrumentUtilizationArea, LabDbEntities>
+    public class InstrumentUtilizationAreasQuery : IQuery<InstrumentUtilizationArea, LInstContext>
     {
         #region Properties
 
@@ -26,7 +26,7 @@ namespace Infrastructure.Queries
 
         #region Methods
 
-        public IQueryable<InstrumentUtilizationArea> Execute(LabDbEntities context)
+        public IQueryable<InstrumentUtilizationArea> Execute(LInstContext context)
         {
             IQueryable<InstrumentUtilizationArea> query = context.InstrumentUtilizationAreas;
 

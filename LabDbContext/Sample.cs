@@ -21,6 +21,6 @@ namespace LabDbContext
         public int personID { get; set; }
     
         public virtual Batch Batch { get; set; }
-        public virtual Person LogAuthor { get; set; }
+        public virtual PersonD LogAuthor { get; set; }
     }
 }

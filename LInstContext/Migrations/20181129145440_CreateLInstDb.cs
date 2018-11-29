@@ -102,6 +102,20 @@ namespace LInst.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "UserRoles",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("MySQL:AutoIncrement", true),
+                    Name = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserRoles", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Instruments",
                 columns: table => new
                 {
@@ -116,8 +130,8 @@ namespace LInst.Migrations
                     SerialNumber = table.Column<string>(nullable: true),
                     Model = table.Column<string>(nullable: true),
                     UtilizationAreaID = table.Column<int>(nullable: false),
-                    IsInService = table.Column<short>(nullable: false),
-                    IsUnderControl = table.Column<short>(nullable: false),
+                    IsInService = table.Column<short>(nullable: false, defaultValue: true),
+                    IsUnderControl = table.Column<short>(nullable: false, defaultValue: false),
                     CalibrationDueDate = table.Column<DateTime>(nullable: true),
                     CalibrationInterval = table.Column<int>(nullable: true)
                 },
@@ -131,6 +145,12 @@ namespace LInst.Migrations
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
+                        name: "FK_Instruments_InstrumentTypes_InstrumentTypeID",
+                        column: x => x.InstrumentTypeID,
+                        principalTable: "InstrumentTypes",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
                         name: "FK_Instruments_Organizations_ManufacturerID",
                         column: x => x.ManufacturerID,
                         principalTable: "Organizations",
@@ -142,6 +162,12 @@ namespace LInst.Migrations
                         principalTable: "Organizations",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Instruments_InstrumentUtilizationAreas_UtilizationAreaID",
+                        column: x => x.UtilizationAreaID,
+                        principalTable: "InstrumentUtilizationAreas",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -167,6 +193,28 @@ namespace LInst.Migrations
                         name: "FK_OrganizationRoleMappings_OrganizationRoles_OrganizationRoleID",
                         column: x => x.OrganizationRoleID,
                         principalTable: "OrganizationRoles",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("MySQL:AutoIncrement", true),
+                    FullName = table.Column<string>(nullable: true),
+                    UserName = table.Column<string>(nullable: true),
+                    PersonID = table.Column<int>(nullable: false),
+                    HashedPassword = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_Users_People_PersonID",
+                        column: x => x.PersonID,
+                        principalTable: "People",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -208,6 +256,7 @@ namespace LInst.Migrations
                     LaboratoryID = table.Column<int>(nullable: false),
                     InstrumentID = table.Column<int>(nullable: false),
                     TechID = table.Column<int>(nullable: true),
+                    Date = table.Column<DateTime>(nullable: false),
                     Year = table.Column<int>(nullable: false),
                     Number = table.Column<int>(nullable: false),
                     Notes = table.Column<string>(nullable: true)
@@ -297,8 +346,8 @@ namespace LInst.Migrations
                         .Annotation("MySQL:AutoIncrement", true),
                     InstrumentID = table.Column<int>(nullable: false),
                     Name = table.Column<string>(nullable: true),
-                    Value = table.Column<string>(nullable: true),
-                    IsCalibrationProperty = table.Column<short>(nullable: false)
+                    Value = table.Column<int>(nullable: false, defaultValue: 0),
+                    IsCalibrationProperty = table.Column<short>(nullable: false, defaultValue: false)
                 },
                 constraints: table =>
                 {
@@ -307,6 +356,33 @@ namespace LInst.Migrations
                         name: "FK_InstrumentProperties_Instruments_InstrumentID",
                         column: x => x.InstrumentID,
                         principalTable: "Instruments",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserRoleMappings",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("MySQL:AutoIncrement", true),
+                    UserID = table.Column<int>(nullable: false),
+                    UserRoleID = table.Column<int>(nullable: false),
+                    IsSelected = table.Column<short>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserRoleMappings", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_UserRoleMappings_Users_UserID",
+                        column: x => x.UserID,
+                        principalTable: "Users",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserRoleMappings_UserRoles_UserRoleID",
+                        column: x => x.UserRoleID,
+                        principalTable: "UserRoles",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -331,10 +407,39 @@ namespace LInst.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "CalibrationReportReference",
+                columns: table => new
+                {
+                    CalibrationReportID = table.Column<int>(nullable: false),
+                    InstrumentID = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CalibrationReportReference", x => new { x.CalibrationReportID, x.InstrumentID });
+                    table.ForeignKey(
+                        name: "FK_CalibrationReportReference_CalRep_CalRepID",
+                        column: x => x.CalibrationReportID,
+                        principalTable: "CalibrationReports",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CalibrationReportReference_Instruments_InstrumentID",
+                        column: x => x.InstrumentID,
+                        principalTable: "Instruments",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_CalibrationFiles_CalibrationReportID",
                 table: "CalibrationFiles",
                 column: "CalibrationReportID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CalibrationReportReference_InstrumentID",
+                table: "CalibrationReportReference",
+                column: "InstrumentID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CalibrationReports_CalibrationResultID",
@@ -382,6 +487,11 @@ namespace LInst.Migrations
                 column: "CalibrationResponsibleID");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Instruments_InstrumentTypeID",
+                table: "Instruments",
+                column: "InstrumentTypeID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Instruments_ManufacturerID",
                 table: "Instruments",
                 column: "ManufacturerID");
@@ -390,6 +500,11 @@ namespace LInst.Migrations
                 name: "IX_Instruments_SupplierID",
                 table: "Instruments",
                 column: "SupplierID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Instruments_UtilizationAreaID",
+                table: "Instruments",
+                column: "UtilizationAreaID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_OrganizationRoleMappings_OrganizationID",
@@ -410,12 +525,30 @@ namespace LInst.Migrations
                 name: "IX_PersonRoleMappings_RoleID",
                 table: "PersonRoleMappings",
                 column: "RoleID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserRoleMappings_UserID",
+                table: "UserRoleMappings",
+                column: "UserID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserRoleMappings_UserRoleID",
+                table: "UserRoleMappings",
+                column: "UserRoleID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_PersonID",
+                table: "Users",
+                column: "PersonID");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
                 name: "CalibrationFiles");
+
+            migrationBuilder.DropTable(
+                name: "CalibrationReportReference");
 
             migrationBuilder.DropTable(
                 name: "InstrumentFiles");
@@ -427,16 +560,13 @@ namespace LInst.Migrations
                 name: "InstrumentProperties");
 
             migrationBuilder.DropTable(
-                name: "InstrumentTypes");
-
-            migrationBuilder.DropTable(
-                name: "InstrumentUtilizationAreas");
-
-            migrationBuilder.DropTable(
                 name: "OrganizationRoleMappings");
 
             migrationBuilder.DropTable(
                 name: "PersonRoleMappings");
+
+            migrationBuilder.DropTable(
+                name: "UserRoleMappings");
 
             migrationBuilder.DropTable(
                 name: "CalibrationReports");
@@ -446,6 +576,12 @@ namespace LInst.Migrations
 
             migrationBuilder.DropTable(
                 name: "PersonRoles");
+
+            migrationBuilder.DropTable(
+                name: "Users");
+
+            migrationBuilder.DropTable(
+                name: "UserRoles");
 
             migrationBuilder.DropTable(
                 name: "CalibrationResults");
@@ -458,6 +594,12 @@ namespace LInst.Migrations
 
             migrationBuilder.DropTable(
                 name: "Organizations");
+
+            migrationBuilder.DropTable(
+                name: "InstrumentTypes");
+
+            migrationBuilder.DropTable(
+                name: "InstrumentUtilizationAreas");
         }
     }
 }

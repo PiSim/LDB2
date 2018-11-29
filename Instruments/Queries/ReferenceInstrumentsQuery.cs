@@ -6,10 +6,16 @@ using System.Linq;
 namespace Instruments.Queries
 {
     /// <summary>
-    /// Query object that returns multiple Instrument entities
+    /// Query object that returns all the Instrument instances marked as reference for a given CalibrationReport
     /// </summary>
-    public class InstrumentsQuery : QueryBase<Instrument, LInstContext>
+    public class ReferenceInstrumentsQuery : QueryBase<Instrument, LInstContext>
     {
+        private CalibrationReport _reportInstance;
+
+        public ReferenceInstrumentsQuery(CalibrationReport reportInstance)
+        {
+            _reportInstance = reportInstance;
+        }
 
         #region Methods
 
@@ -28,7 +34,8 @@ namespace Instruments.Queries
             if (OrderResults)
                 query = query.OrderBy(inst => inst.Code);
 
-            return query;
+            return query.Where(ins => ins.CalibrationsAsReference
+                        .Any(crr => crr.CalibrationReportID == _reportInstance.ID));
         }
 
         #endregion Methods

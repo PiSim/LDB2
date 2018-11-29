@@ -1,4 +1,5 @@
 ﻿using DataAccess;
+using LInst;
 using Infrastructure.Commands;
 using Infrastructure.Queries;
 using LabDbContext;
@@ -19,6 +20,7 @@ namespace Projects.ViewModels
 
         private readonly Dictionary<string, ICollection<string>> _validationErrors = new Dictionary<string, ICollection<string>>();
         private IDataService<LabDbEntities> _labDbData;
+        private DataAccessCore.IDataService<LInstContext> _lInstData;
         private string _name;
         private Person _selectedLeader;
         private Organization _selectedOem;
@@ -27,9 +29,10 @@ namespace Projects.ViewModels
 
         #region Constructors
 
-        public ProjectCreationDialogViewModel(IDataService<LabDbEntities> labDbData) : base()
+        public ProjectCreationDialogViewModel(IDataService<LabDbEntities> labDbData, DataAccessCore.IDataService<LInstContext> lInstData) : base()
         {
             _labDbData = labDbData;
+            _lInstData = lInstData;
             ProjectDescription = "";
 
             CancelCommand = new DelegateCommand<Window>(
@@ -89,10 +92,10 @@ namespace Projects.ViewModels
 
         public DelegateCommand<Window> ConfirmCommand { get; }
 
-        public IEnumerable<Person> LeaderList => _labDbData.RunQuery(new PeopleQuery() { Role = PeopleQuery.PersonRoles.ProjectLeader })
+        public IEnumerable<LInst.Person> LeaderList => _lInstData.RunQuery(new PeopleQuery() { Role = PeopleQuery.PersonRoles.ProjectLeader })
                                                             .ToList();
 
-        public IEnumerable<Organization> OemList => _labDbData.RunQuery(new OrganizationsQuery() { Role = OrganizationsQuery.OrganizationRoles.OEM })
+        public IEnumerable<LInst.Organization> OemList => _lInstData.RunQuery(new OrganizationsQuery() { Role = OrganizationsQuery.OrganizationRoles.OEM })
                                                                         .ToList();
 
         public string ProjectDescription { get; set; }
@@ -121,7 +124,7 @@ namespace Projects.ViewModels
             }
         }
 
-        public Person SelectedLeader
+        public LInst.Person SelectedLeader
         {
             get { return _selectedLeader; }
             set
@@ -143,7 +146,7 @@ namespace Projects.ViewModels
             }
         }
 
-        public Organization SelectedOem
+        public LInst.Organization SelectedOem
         {
             get { return _selectedOem; }
             set

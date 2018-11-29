@@ -1,7 +1,7 @@
 ﻿using Infrastructure;
-using LabDbContext;
+using LInst;
+using Microsoft.EntityFrameworkCore.Design;
 using System;
-using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -12,13 +12,13 @@ namespace LabDB2
     {
         #region Fields
 
-        private IDbContextFactory<LabDbEntities> _contextFactory;
+        private IDesignTimeDbContextFactory<LInstContext> _contextFactory;
 
         #endregion Fields
 
         #region Constructors
 
-        public AuthenticationService(IDbContextFactory<LabDbEntities> contextFactory)
+        public AuthenticationService(IDesignTimeDbContextFactory<LInstContext> contextFactory)
         {
             _contextFactory = contextFactory;
         }
@@ -27,15 +27,15 @@ namespace LabDB2
 
         #region Methods
         
-        public LabDbContext.User CreateNewUser(Person personInstance,
+        public LInst.User CreateNewUser(Person personInstance,
                                 string userName,
                                 string password)
         {
-            LabDbContext.User output = new LabDbContext.User();
+            LInst.User output = new LInst.User();
             output.FullName = "";
             output.UserName = userName;
             output.HashedPassword = CalculateHash(password, userName);
-            using (LabDbEntities context = _contextFactory.Create())
+            using (LInstContext context = _contextFactory.CreateDbContext(new string[] { }))
             {
                 output.Person = context.People.First(per => per.ID == personInstance.ID);
                 foreach (UserRole role in context.UserRoles)

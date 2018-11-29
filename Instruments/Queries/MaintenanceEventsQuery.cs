@@ -1,5 +1,5 @@
-﻿using DataAccess;
-using LabDbContext;
+﻿using DataAccessCore;
+using LInst;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -12,7 +12,7 @@ namespace Instruments.Queries
     /// <summary>
     /// Query object that returns multiple InstrumentMaintenanceEvents allowing filter by InstrumentID
     /// </summary>
-    public class MaintenanceEventsQuery : QueryBase<InstrumentMaintenanceEvent, LabDbEntities>
+    public class MaintenanceEventsQuery : QueryBase<InstrumentMaintenanceEvent, LInstContext>
     {
         /// <summary>
         /// InstrumentID to use as filter in the query
@@ -20,12 +20,9 @@ namespace Instruments.Queries
         public int? InstrumentID { get; set; }
         
 
-        public override IQueryable<InstrumentMaintenanceEvent> Execute(LabDbEntities context)
+        public override IQueryable<InstrumentMaintenanceEvent> Execute(LInstContext context)
         {
             IQueryable<InstrumentMaintenanceEvent> query = context.InstrumentMaintenanceEvents;
-
-            if (LazyLoadingDisabled)
-                context.Configuration.LazyLoadingEnabled = false;
 
             if (AsNoTracking)
                 query = query.AsNoTracking();

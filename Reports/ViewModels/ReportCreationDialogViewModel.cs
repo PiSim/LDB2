@@ -6,6 +6,7 @@ using Infrastructure.Wrappers;
 using LabDbContext;
 using LabDbContext.EntityExtensions;
 using LabDbContext.Services;
+using LInst;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
@@ -27,13 +28,13 @@ namespace Reports.ViewModels
 
         private readonly Dictionary<string, ICollection<string>> _validationErrors = new Dictionary<string, ICollection<string>>();
 
-        private Person _author;
+        private LInst.Person _author;
 
         private string _batchNumber, _description;
 
         private IEventAggregator _eventAggregator;
-        private bool _isCreatingFromTask;
         private IDataService<LabDbEntities> _labDbData;
+        DataAccessCore.IDataService<LInstContext> _lInstData;
         private Int32 _number;
 
         private IReportService _reportService;
@@ -48,25 +49,21 @@ namespace Reports.ViewModels
 
         private SpecificationVersion _selectedVersion;
 
-        private Task _taskInstance;
-
-        private IEnumerable<ITestItem> _taskItemList;
-
         #endregion Fields
 
         #region Constructors
 
         public ReportCreationDialogViewModel(IDataService<LabDbEntities> labDbData,
                                             IEventAggregator aggregator,
-                                            IReportService reportService) : base()
+                                            IReportService reportService, DataAccessCore.IDataService<LInstContext> lInstData) : base()
         {
             _labDbData = labDbData;
             _eventAggregator = aggregator;
             _reportService = reportService;
-            _isCreatingFromTask = false;
+            _lInstData = lInstData;
 
             _number = _reportService.GetNextReportNumber();
-            TechList = _labDbData.RunQuery(new PeopleQuery() { Role = PeopleQuery.PersonRoles.MaterialTestingTech })
+            TechList = _lInstData.RunQuery(new PeopleQuery() { Role = PeopleQuery.PersonRoles.MaterialTestingTech })
                                                             .ToList();
             _author = TechList.First(prs => prs.ID == (Thread.CurrentPrincipal as DBPrincipal).CurrentPerson.ID);
             _requirementList = new List<ISelectableRequirement>();

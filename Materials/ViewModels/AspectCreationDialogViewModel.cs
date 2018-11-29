@@ -22,9 +22,9 @@ namespace Materials.ViewModels
 
         #region Constructors
 
-        public AspectCreationDialogViewModel(IDataService<LabDbEntities> labDbdata)
+        public AspectCreationDialogViewModel(IDataService<LabDbEntities> labDbData)
         {
-            _labDbData = labDbdata;
+            _labDbData = labDbData;
             AspectInstance = new Aspect();
 
             CancelCommand = new DelegateCommand<Window>(

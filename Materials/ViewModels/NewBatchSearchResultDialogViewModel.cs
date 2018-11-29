@@ -17,17 +17,18 @@ namespace Materials.ViewModels
     public class NewBatchSearchResultDialogViewModel : BindableBase
     {
         private bool _areAllBatchesSelected = true;
+        IDataService<LabDbEntities> _labDbData;
 
         #region Constructors
 
         public NewBatchSearchResultDialogViewModel(IDataService<LabDbEntities> labDbData)
         {
+            _labDbData = labDbData;
             ParsedBatches = new List<NewBatchWrapper>();
-            LabDbData = labDbData;
-            ColorList = LabDbData.RunQuery(new ColorsQuery()).ToList();
-            ConstructionList = LabDbData.RunQuery(new ExternalConstructionsQuery()).ToList();
-            ProjectList = LabDbData.RunQuery(new ProjectsQuery()).ToList();
-            TrialAreaList = LabDbData.RunQuery(new TrialAreasQuery()).ToList();
+            ColorList = _labDbData.RunQuery(new ColorsQuery()).ToList();
+            ConstructionList = _labDbData.RunQuery(new ExternalConstructionsQuery()).ToList();
+            ProjectList = _labDbData.RunQuery(new ProjectsQuery()).ToList();
+            TrialAreaList = _labDbData.RunQuery(new TrialAreasQuery()).ToList();
 
             CancelCommand = new DelegateCommand<Window>(
                 dialog =>
@@ -44,31 +45,31 @@ namespace Materials.ViewModels
                         ///Check if all Aspects required to create the new Batches exist in the database
                         ///If not, create a new entry and insert it
                         IEnumerable<Aspect> uniqueAspects = _toCreate.GroupBy(btc => btc.Material.Aspect.Code).Select(aspg => aspg.FirstOrDefault().Material.Aspect);
-                        LabDbData.Execute(new CreateAspectsIfMissingCommand(uniqueAspects));
+                        _labDbData.Execute(new CreateAspectsIfMissingCommand(uniqueAspects));
 
                         ///Check if all MaterialLine required to create the new Batches exist in the database
                         ///If not, create a new entry and insert it
                         IEnumerable<MaterialLine> uniqueLines = _toCreate.GroupBy(btc => btc.Material.MaterialLine.Code).Select(aspg => aspg.FirstOrDefault().Material.MaterialLine);
-                        LabDbData.Execute(new CreateMaterialLinesIfMissingCommand(uniqueLines));
+                        _labDbData.Execute(new CreateMaterialLinesIfMissingCommand(uniqueLines));
 
                         ///Check if all MaterialType required to create the new Batches exist in the database
                         ///If not, create a new entry and insert it
                         IEnumerable<MaterialType> uniqueTypes = _toCreate.GroupBy(btc => btc.Material.MaterialType.Code).Select(aspg => aspg.FirstOrDefault().Material.MaterialType);
-                        LabDbData.Execute(new CreateMaterialTypesIfMissingCommand(uniqueTypes));
+                        _labDbData.Execute(new CreateMaterialTypesIfMissingCommand(uniqueTypes));
 
                         ///Check if all Recipes required to create the new Batches exist in the database
                         ///If not, create a new entry and insert it
                         IEnumerable<Recipe> uniqueRecipes = _toCreate.GroupBy(btc => btc.Material.Recipe.Code).Select(aspg => aspg.FirstOrDefault().Material.Recipe);
-                        LabDbData.Execute(new CreateRecipesIfMissingCommand(uniqueRecipes));
+                        _labDbData.Execute(new CreateRecipesIfMissingCommand(uniqueRecipes));
 
                         ///Iterate through the required material and check if a corresponding entry exists
                         ///If not, create a new entry and insert it
                         IEnumerable<Material> materials = _toCreate.Select(btc => btc.Material);
                         foreach (Material mat in materials)
-                            LabDbData.Execute(new CreateMaterialIfMissingCommand(mat));
+                            _labDbData.Execute(new CreateMaterialIfMissingCommand(mat));
 
                         BulkNewBatchInsertCommand insertCommand = new BulkNewBatchInsertCommand(_toCreate);
-                        LabDbData.Execute(insertCommand);
+                        _labDbData.Execute(insertCommand);
 
                         if (insertCommand.FailedBatches.Count() != 0)
                         {
@@ -128,9 +129,7 @@ namespace Materials.ViewModels
         public IEnumerable<Project> ProjectList { get; }
 
         public IEnumerable<TrialArea> TrialAreaList { get; set; }
-
-        private IDataService<LabDbEntities> LabDbData { get; }
-
+        
         private bool AreSelectedBatchesValid => ParsedBatches.Where(nbw => nbw.IsSelected).All(nbw => !nbw.HasErrors);
 
         #endregion Properties
@@ -204,7 +203,7 @@ namespace Materials.ViewModels
 
         private void CheckMaterial(NewBatchWrapper newBatch)
         {
-            Material dbMaterial = LabDbData.RunQuery(new MaterialsQuery() {OrderResults = false })
+            Material dbMaterial = _labDbData.RunQuery(new MaterialsQuery() {OrderResults = false })
                                             .FirstOrDefault(mat => mat.Aspect.Code == newBatch.AspectCode
                                                                     && mat.MaterialLine.Code == newBatch.MaterialLineCode
                                                                     && mat.MaterialType.Code == newBatch.MaterialTypeCode
@@ -222,7 +221,7 @@ namespace Materials.ViewModels
 
         private void CheckRecipe(NewBatchWrapper newBatch)
         {
-            Recipe dbRecipe = LabDbData.RunQuery(new RecipeQuery() { RecipeCode = newBatch.RecipeCode });
+            Recipe dbRecipe = _labDbData.RunQuery(new RecipeQuery() { RecipeCode = newBatch.RecipeCode });
             if (dbRecipe?.Colour != null)
                 newBatch.ColorInstance = ColorList.FirstOrDefault(col => col.ID == dbRecipe.ColourID);
         }

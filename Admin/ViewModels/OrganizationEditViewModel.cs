@@ -1,8 +1,7 @@
-﻿using DataAccess;
+﻿using DataAccessCore;
+using DataAccessCore.Commands;
 using Infrastructure.Commands;
-using LabDbContext;
-using LabDbContext.EntityExtensions;
-using LabDbContext.Services;
+using LInst;
 using Prism.Commands;
 using Prism.Mvvm;
 using System.Collections.Generic;
@@ -16,22 +15,22 @@ namespace Admin.ViewModels
 
         private bool _editMode;
         private Organization _organizationInstance;
-        private IDataService<LabDbEntities> _labDbData;
+        private IDataService<LInstContext> _lInstData;
 
         #endregion Fields
 
         #region Constructors
 
-        public OrganizationEditViewModel(IDataService<LabDbEntities> labDbData) : base()
+        public OrganizationEditViewModel(IDataService<LInstContext> lInstData) : base()
         {
             _editMode = false;
-            _labDbData = labDbData;
+            _lInstData = lInstData;
 
             SaveCommand = new DelegateCommand(
                 () =>
                 {
-                    _labDbData.Execute(new UpdateEntityCommand(_organizationInstance));
-                    _labDbData.Execute(new BulkUpdateEntitiesCommand(RoleList));
+                    _lInstData.Execute(new UpdateEntityCommand<LInstContext>(_organizationInstance));
+                    _lInstData.Execute(new BulkUpdateEntitiesCommand<LInstContext>(RoleList));
 
                     EditMode = false;
                 },
@@ -79,7 +78,7 @@ namespace Admin.ViewModels
             set
             {
                 _organizationInstance = value;
-                RoleList = _organizationInstance.GetRoles();
+                RoleList = _organizationInstance.RoleMappings;
 
                 RaisePropertyChanged("RoleList");
                 RaisePropertyChanged("OrganizationEditViewVisibility");

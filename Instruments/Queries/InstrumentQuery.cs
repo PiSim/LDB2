@@ -1,5 +1,5 @@
-﻿using DataAccess;
-using LabDbContext;
+﻿using DataAccessCore;
+using LInst;
 using System.Data.Entity;
 using System.Linq;
 
@@ -8,7 +8,7 @@ namespace Instruments.Queries
     /// <summary>
     /// Query Object that returns an Instrument
     /// </summary>
-    public class InstrumentQuery : IScalar<Instrument, LabDbEntities>
+    public class InstrumentQuery : IScalar<Instrument, LInstContext>
     {
         #region Properties
 
@@ -29,7 +29,7 @@ namespace Instruments.Queries
 
         #region Methods
 
-        public Instrument Execute(LabDbEntities context)
+        public Instrument Execute(LInstContext context)
         {
             IQueryable<Instrument> query = context.Instruments;
 

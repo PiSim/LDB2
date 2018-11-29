@@ -55,7 +55,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InfrastructureTests", "Infr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReportsTests", "ReportsTests\ReportsTests.csproj", "{8AC2DA61-B3FE-4BD0-9A1C-B7CC39B09CC7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LInstContext", "LInstContext\LInstContext.csproj", "{19743078-CD3F-4514-AA51-274D71D96382}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LInst", "LInstContext\LInst.csproj", "{19743078-CD3F-4514-AA51-274D71D96382}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccessCore", "DataAccessCore\DataAccessCore.csproj", "{1E90ED7A-D0FE-4E48-9348-A863B86AE092}"
 EndProject

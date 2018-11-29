@@ -46,8 +46,8 @@ namespace LabDbContext
         public virtual InstrumentType InstrumentType { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Test> Tests { get; set; }
-        public virtual Organization Manufacturer { get; set; }
-        public virtual Organization Supplier { get; set; }
+        public virtual OrganizationD Manufacturer { get; set; }
+        public virtual OrganizationD Supplier { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<InstrumentMaintenanceEvent> MaintenanceEvent { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -59,6 +59,6 @@ namespace LabDbContext
         public virtual ICollection<InstrumentMeasurableProperty> InstrumentMeasurableProperties { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<InstrumentFiles> InstrumentFiles { get; set; }
-        public virtual Organization CalibrationResponsible { get; set; }
+        public virtual OrganizationD CalibrationResponsible { get; set; }
     }
 }

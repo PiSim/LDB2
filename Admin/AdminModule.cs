@@ -37,7 +37,6 @@ namespace Admin
 
             containerRegistry.Register<Object, Views.AdminMain>(AdminViewNames.AdminMainView);
             containerRegistry.Register<Object, Views.InstrumentTypeEdit>(AdminViewNames.InstrumentTypeEditView);
-            containerRegistry.Register<Object, Views.MeasurableQuantityEdit>(AdminViewNames.MeasurableQuantityEdit);
             containerRegistry.Register<Object, Views.OrganizationEdit>(OrganizationViewNames.OrganizationEditView);
             containerRegistry.Register<Object, Views.OrganizationsMain>(OrganizationViewNames.OrganizationMainView);
             containerRegistry.Register<Object, Views.UserEdit>(AdminViewNames.UserEditView);

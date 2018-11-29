@@ -1,9 +1,10 @@
-﻿using DataAccess;
+﻿using DataAccessCore;
+using DataAccessCore.Commands;
 using Infrastructure;
 using Infrastructure.Commands;
 using Infrastructure.Events;
 using Infrastructure.Queries;
-using LabDbContext;
+using LInst;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
@@ -18,7 +19,7 @@ namespace Admin.ViewModels
 
         private IAdminService _adminService;
         private IEventAggregator _eventAggregator;
-        private IDataService<LabDbEntities> _labDbData;
+        private IDataService<LInstContext> _lInstData;
         private DelegateCommand _save;
         private Person _selectedPerson;
 
@@ -28,10 +29,10 @@ namespace Admin.ViewModels
 
         public PeopleMainViewModel(IEventAggregator eventAggregator,
                                     IAdminService adminService,
-                                    IDataService<LabDbEntities> labDbData) : base()
+                                    IDataService<LInstContext> lInstData) : base()
         {
             _adminService = adminService;
-            _labDbData = labDbData;
+            _lInstData = lInstData;
             _eventAggregator = eventAggregator;
 
             _eventAggregator.GetEvent<PersonChanged>()
@@ -46,7 +47,7 @@ namespace Admin.ViewModels
             _save = new DelegateCommand(
                 () =>
                 {
-                    _labDbData.Execute(new UpdateEntityCommand(_selectedPerson));
+                    _lInstData.Execute(new UpdateEntityCommand<LInstContext>(_selectedPerson));
                 });
         }
 
@@ -56,7 +57,7 @@ namespace Admin.ViewModels
 
         public DelegateCommand CreateNewPersonCommand { get; }
 
-        public IEnumerable<Person> PeopleList => _labDbData.RunQuery(new PeopleQuery()).ToList();
+        public IEnumerable<Person> PeopleList => _lInstData.RunQuery(new PeopleQuery()).ToList();
 
         public IEnumerable<PersonRoleMapping> PersonRoleMappingList
         {
@@ -75,7 +76,7 @@ namespace Admin.ViewModels
             set
             {
                 _selectedPerson = value;
-                _labDbData.Execute(new ReloadEntityCommand(_selectedPerson));
+                _lInstData.Execute(new ReloadEntityCommand<LInstContext>(_selectedPerson));
                 RaisePropertyChanged("SelectedPerson");
                 RaisePropertyChanged("PersonRoleMappingList");
             }

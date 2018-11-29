@@ -1,8 +1,10 @@
 ﻿using DataAccess;
+using DataAccessCore;
 using Infrastructure;
 using Infrastructure.Commands;
 using Infrastructure.Queries;
 using LabDbContext;
+using LInst;
 using Prism.Commands;
 using Prism.Mvvm;
 using System;
@@ -16,16 +18,19 @@ namespace Reports.ViewModels
     {
         #region Fields
 
-        private IDataService<LabDbEntities> _labDbData;
+        private DataAccess.IDataService<LabDbEntities> _labDbData;
+        DataAccessCore.IDataService<LInstContext> _lInstData;
         private IReportService _reportService;
 
         #endregion Fields
 
         #region Constructors
 
-        public ExternalReportCreationDialogViewModel(IDataService<LabDbEntities> labDbData,
+        public ExternalReportCreationDialogViewModel(DataAccess.IDataService<LabDbEntities> labDbData,
+                                                    DataAccessCore.IDataService<LInstContext> lInstData,
                                                     IReportService reportService) : base()
         {
+            _lInstData = lInstData;
             _labDbData = labDbData;
             _reportService = reportService;
             SampleDescription = "";
@@ -70,7 +75,7 @@ namespace Reports.ViewModels
         public DelegateCommand<Window> ConfirmCommand { get; }
         public ExternalReport ExternalReportInstance { get; private set; }
 
-        public IEnumerable<Organization> LaboratoriesList => _labDbData.RunQuery(new OrganizationsQuery() { Role = OrganizationsQuery.OrganizationRoles.TestLab })
+        public IEnumerable<Organization> LaboratoriesList => _lInstData.RunQuery(new OrganizationsQuery() { Role = OrganizationsQuery.OrganizationRoles.TestLab })
                                                                         .ToList();
 
         public IEnumerable<Project> ProjectList => _labDbData.RunQuery(new ProjectsQuery()).ToList();

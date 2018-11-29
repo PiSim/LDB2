@@ -34,7 +34,7 @@ namespace LabDbContext
         public int TestRecordID { get; set; }
         public Nullable<int> MethodVariantID { get; set; }
     
-        public virtual Person TBD6 { get; set; }
+        public virtual PersonD TBD6 { get; set; }
         public virtual Report TBD2 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SubTest> SubTests { get; set; }

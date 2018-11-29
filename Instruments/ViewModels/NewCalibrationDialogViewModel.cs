@@ -1,8 +1,9 @@
-﻿using DataAccess;
+﻿using DataAccessCore;
+using DataAccessCore.Commands;
 using Infrastructure.Commands;
 using Infrastructure.Queries;
 using Instruments.Queries;
-using LabDbContext;
+using LInst;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
@@ -21,7 +22,7 @@ namespace Instruments.ViewModels
         private IEventAggregator _eventAggregator;
         private InstrumentService _instrumentService;
         private Instrument _instumentInstance, _selectedReference;
-        private IDataService<LabDbEntities> _labDbData;
+        private IDataService<LInstContext> _lInstData;
         private string _referenceCode;
         private Organization _selectedLab;
 
@@ -31,28 +32,17 @@ namespace Instruments.ViewModels
 
         public NewCalibrationDialogViewModel(IEventAggregator eventAggregator,
                                             InstrumentService instrumentService,
-                                            IDataService<LabDbEntities> labDbData) : base()
+                                            IDataService<LInstContext> lInstData) : base()
         {
-            _labDbData = labDbData;
+            _lInstData = lInstData;
             _instrumentService = instrumentService;
             IsVerificationOnly = false;
-            ReferenceList = new ObservableCollection<Instrument>();
-            LabList = _labDbData.RunQuery(new OrganizationsQuery() { Role = OrganizationsQuery.OrganizationRoles.CalibrationLab })
+            LabList = _lInstData.RunQuery(new OrganizationsQuery() { Role = OrganizationsQuery.OrganizationRoles.CalibrationLab })
                                                                         .ToList();
             _eventAggregator = eventAggregator;
 
             CalibrationDate = DateTime.Now.Date;
 
-            AddReferenceCommand = new DelegateCommand<string>(
-                code =>
-                {
-                    Instrument tempRef = _labDbData.RunQuery(new InstrumentQuery() { Code = code  } );
-                    if (tempRef != null)
-                    {
-                        ReferenceList.Add(tempRef);
-                        ReferenceCode = "";
-                    }
-                });
 
             CancelCommand = new DelegateCommand<Window>(
                 parentDialog =>
@@ -67,53 +57,26 @@ namespace Instruments.ViewModels
                     ReportInstance.Date = CalibrationDate;
                     ReportInstance.Year = DateTime.Now.Year - 2000;
                     ReportInstance.Number = _instrumentService.GetNextCalibrationNumber(ReportInstance.Year);
-                    ReportInstance.instrumentID = _instumentInstance.ID;
-                    ReportInstance.IsVerification = IsVerificationOnly;
-                    ReportInstance.laboratoryID = _selectedLab.ID;
+                    ReportInstance.InstrumentID = _instumentInstance.ID;
+                    ReportInstance.LaboratoryID = _selectedLab.ID;
                     ReportInstance.Notes = "";
-                    ReportInstance.ResultID = 1;
+                    ReportInstance.CalibrationResultID = 1;
 
                     if (IsNotExternalLab)
                     {
-                        ReportInstance.OperatorID = SelectedTech.ID;
+                        ReportInstance.TechID = SelectedTech.ID;
 
-                        foreach (Instrument refInstrument in ReferenceList)
-                            ReportInstance.ReferenceInstruments.Add(refInstrument);
                     }
 
-                    foreach (InstrumentMeasurableProperty imp in _instumentInstance.GetMeasurableProperties())
-                    {
-                        CalibrationReportInstrumentPropertyMapping cripm = new CalibrationReportInstrumentPropertyMapping()
-                        {
-                            ExtendedUncertainty = 0,
-                            LowerRangeValue = imp.RangeLowerLimit,
-                            MeasurablePropertyID = imp.ID,
-                            MeasurementUnitID = imp.UnitID,
-                            UpperRangeValue = imp.RangeUpperLimit
-                        };
-
-                        ReportInstance.InstrumentMeasurablePropertyMappings.Add(cripm);
-                    }
-
-                    _labDbData.Execute(new InsertEntityCommand(ReportInstance));
+                    _lInstData.Execute(new InsertEntityCommand<LInstContext>(ReportInstance));
 
                     parentDialog.DialogResult = true;
                 });
-
-            RemoveReference = new DelegateCommand(
-                () =>
-                {
-                    ReferenceList.Remove(_selectedReference);
-                    SelectedReference = null;
-                },
-                () => _selectedReference != null);
         }
 
         #endregion Constructors
 
         #region Properties
-
-        public DelegateCommand<string> AddReferenceCommand { get; }
 
         public DateTime CalibrationDate { get; set; }
 
@@ -141,7 +104,7 @@ namespace Instruments.ViewModels
             get { return _instumentInstance; }
             set
             {
-                _instumentInstance = _labDbData.RunQuery(new InstrumentQuery() { ID = value.ID });
+                _instumentInstance = _lInstData.RunQuery(new InstrumentQuery() { ID = value.ID });
                 SelectedLab = LabList.FirstOrDefault(lab => lab.ID == _instumentInstance.CalibrationResponsibleID);
                 RaisePropertyChanged("InstrumentCode");
                 RaisePropertyChanged("PropertyList");
@@ -162,21 +125,7 @@ namespace Instruments.ViewModels
 
         public bool IsVerificationOnly { get; set; }
         public IEnumerable<Organization> LabList { get; }
-
-        public string ReferenceCode
-        {
-            get { return _referenceCode; }
-            set
-            {
-                _referenceCode = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public ObservableCollection<Instrument> ReferenceList { get; }
-
-        public DelegateCommand RemoveReference { get; }
-
+        
         public CalibrationReport ReportInstance { get; private set; }
 
         public Organization SelectedLab
@@ -189,25 +138,9 @@ namespace Instruments.ViewModels
                 RaisePropertyChanged("IsNotExternalLab");
             }
         }
-
-        public Instrument SelectedReference
-        {
-            get
-            {
-                return _selectedReference;
-            }
-
-            set
-            {
-                _selectedReference = value;
-                RemoveReference.RaiseCanExecuteChanged();
-                RaisePropertyChanged();
-            }
-        }
-
         public Person SelectedTech { get; set; }
 
-        public List<Person> TechList => _labDbData.RunQuery(new PeopleQuery() { Role = PeopleQuery.PersonRoles.CalibrationTech })
+        public List<Person> TechList => _lInstData.RunQuery(new PeopleQuery() { Role = PeopleQuery.PersonRoles.CalibrationTech })
                                                             .ToList();
 
         #endregion Properties

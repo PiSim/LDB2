@@ -12,18 +12,18 @@ namespace LabDbContext
     using System;
     using System.Collections.Generic;
     
-    public partial class Person
+    public partial class PersonD
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Person()
+        public PersonD()
         {
             this.Reports = new HashSet<Report>();
             this.Projects = new HashSet<Project>();
             this.Tests = new HashSet<Test>();
             this.Tasks = new HashSet<Task>();
-            this.Users = new HashSet<User>();
+            this.Users = new HashSet<UserD>();
             this.CalibrationReports = new HashSet<CalibrationReport>();
-            this.RoleMappings = new HashSet<PersonRoleMapping>();
+            this.RoleMappings = new HashSet<PersonRoleMappingD>();
             this.SamplesLogged = new HashSet<Sample>();
             this.instrument_maintenance_events = new HashSet<InstrumentMaintenanceEvent>();
         }
@@ -40,11 +40,11 @@ namespace LabDbContext
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Task> Tasks { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<User> Users { get; set; }
+        public virtual ICollection<UserD> Users { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CalibrationReport> CalibrationReports { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PersonRoleMapping> RoleMappings { get; set; }
+        public virtual ICollection<PersonRoleMappingD> RoleMappings { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Sample> SamplesLogged { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

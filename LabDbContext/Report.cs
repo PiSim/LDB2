@@ -38,7 +38,7 @@ namespace LabDbContext
         public Nullable<int> ParentTaskID { get; set; }
     
         public virtual Batch Batch { get; set; }
-        public virtual Person Author { get; set; }
+        public virtual PersonD Author { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ReportFile> ReportFiles { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

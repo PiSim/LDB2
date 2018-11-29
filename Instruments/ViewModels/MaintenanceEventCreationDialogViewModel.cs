@@ -1,9 +1,8 @@
-﻿using DataAccess;
+﻿using DataAccessCore;
+using DataAccessCore.Commands;
 using Infrastructure;
 using Infrastructure.Commands;
-using LabDbContext;
-using LabDbContext.EntityExtensions;
-using LabDbContext.Services;
+using LInst;
 using Prism.Commands;
 using Prism.Mvvm;
 using System;
@@ -14,13 +13,13 @@ namespace Instruments.ViewModels
 {
     public class MaintenanceEventCreationDialogViewModel : BindableBase
     {
-        private IDataService<LabDbEntities> _labDbData;
+        private IDataService<LInstContext> _lInstData;
 
         #region Constructors
 
-        public MaintenanceEventCreationDialogViewModel(IDataService<LabDbEntities> labDbData) : base()
+        public MaintenanceEventCreationDialogViewModel(IDataService<LInstContext> lInstData) : base()
         {
-            _labDbData = labDbData;
+            _lInstData = lInstData;
             Date = DateTime.Now.Date;
 
             Description = "";
@@ -37,9 +36,9 @@ namespace Instruments.ViewModels
                     EventInstance.Date = Date;
                     EventInstance.Description = Description;
                     EventInstance.InstrumentID = InstrumentInstance.ID;
-                    EventInstance.PersonID = (Thread.CurrentPrincipal as DBPrincipal).CurrentPerson.ID;
+                    EventInstance.TechID = (Thread.CurrentPrincipal as DBPrincipal).CurrentPerson.ID;
 
-                    _labDbData.Execute(new InsertEntityCommand(EventInstance));
+                    _lInstData.Execute(new InsertEntityCommand<LInstContext>(EventInstance));
 
                     parentDialog.DialogResult = true;
                 });

@@ -2677,7 +2677,7 @@
           <NavigationProperty Name="TestRecords" Relationship="labdbModel.external_report_test_record_mappings" FromRole="ExternalReport" ToRole="TestRecord" />
           <NavigationProperty Name="MethodVariants" Relationship="labdbModel.external_report_method_variant_mappings" FromRole="ExternalReport" ToRole="MethodVariant" />
         </EntityType>
-        <EntityType Name="Master">
+        <EntityType Name="MasterD">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
@@ -2733,7 +2733,7 @@
           <NavigationProperty Name="OldVersion" Relationship="labdbModel.method_old_version_to_current" FromRole="Method1" ToRole="Method" />
           <NavigationProperty Name="MethodVariants" Relationship="labdbModel.method_variant_to_method" FromRole="Method" ToRole="method_variants" />
         </EntityType>
-        <EntityType Name="Organization">
+        <EntityType Name="OrganizationD">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
@@ -2750,7 +2750,7 @@
           <NavigationProperty Name="SuppliedInstruments" Relationship="labdbModel.supplier_to_instrument" FromRole="Organization" ToRole="instrument" />
           <NavigationProperty Name="instruments" Relationship="labdbModel.calibration_responsible_to_instrument" FromRole="Organization" ToRole="Instrument" />
         </EntityType>
-        <EntityType Name="Person">
+        <EntityType Name="PersonD">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
@@ -3008,7 +3008,7 @@
           <Property Name="MethodVariantID" Type="Int32" />
           <NavigationProperty Name="MethodVariant" Relationship="labdbModel.method_variant_to_test" FromRole="Test" ToRole="MethodVariant" />
         </EntityType>
-        <EntityType Name="User">
+        <EntityType Name="UserD">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
@@ -3034,7 +3034,7 @@
         </Association>
         <Association Name="batch_to_master">
           <End Role="batches" Type="labdbModel.Batch" Multiplicity="0..1" />
-          <End Role="masters" Type="labdbModel.Master" Multiplicity="*" />
+          <End Role="masters" Type="labdbModel.MasterD" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="batches">
               <PropertyRef Name="ID" />
@@ -3083,7 +3083,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="oemID">
-          <End Role="organizations" Type="labdbModel.Organization" Multiplicity="0..1">
+          <End Role="organizations" Type="labdbModel.OrganizationD" Multiplicity="0..1">
             <OnDelete Action="Cascade" />
           </End>
           <End Role="external_constructions" Type="labdbModel.ExternalConstruction" Multiplicity="*" />
@@ -3111,7 +3111,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="external_lab">
-          <End Role="organizations" Type="labdbModel.Organization" Multiplicity="1" />
+          <End Role="organizations" Type="labdbModel.OrganizationD" Multiplicity="1" />
           <End Role="external_reports" Type="labdbModel.ExternalReport" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="organizations">
@@ -3135,7 +3135,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="master_to_recipe">
-          <End Role="masters" Type="labdbModel.Master" Multiplicity="0..1" />
+          <End Role="masters" Type="labdbModel.MasterD" Multiplicity="0..1" />
           <End Role="recipes" Type="labdbModel.Recipe" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="masters">
@@ -3195,7 +3195,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="oem1">
-          <End Role="organizations" Type="labdbModel.Organization" Multiplicity="0..1" />
+          <End Role="organizations" Type="labdbModel.OrganizationD" Multiplicity="0..1" />
           <End Role="projects" Type="labdbModel.Project" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="organizations">
@@ -3207,7 +3207,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="organization_to_standard">
-          <End Role="organizations" Type="labdbModel.Organization" Multiplicity="1" />
+          <End Role="organizations" Type="labdbModel.OrganizationD" Multiplicity="1" />
           <End Role="standards" Type="labdbModel.Std" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="organizations">
@@ -3219,7 +3219,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="author_to_report">
-          <End Role="people" Type="labdbModel.Person" Multiplicity="1" />
+          <End Role="people" Type="labdbModel.PersonD" Multiplicity="1" />
           <End Role="reports" Type="labdbModel.Report" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="people">
@@ -3231,7 +3231,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="leader">
-          <End Role="people" Type="labdbModel.Person" Multiplicity="0..1" />
+          <End Role="people" Type="labdbModel.PersonD" Multiplicity="0..1" />
           <End Role="projects" Type="labdbModel.Project" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="people">
@@ -3243,7 +3243,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="operatorID">
-          <End Role="people" Type="labdbModel.Person" Multiplicity="0..1" />
+          <End Role="people" Type="labdbModel.PersonD" Multiplicity="0..1" />
           <End Role="tests" Type="labdbModel.Test" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="people">
@@ -3255,7 +3255,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="requester_to_task">
-          <End Role="people" Type="labdbModel.Person" Multiplicity="1" />
+          <End Role="people" Type="labdbModel.PersonD" Multiplicity="1" />
           <End Role="tasks" Type="labdbModel.Task" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="people">
@@ -3391,11 +3391,11 @@
           <EntitySet Name="ExternalConstructions" EntityType="labdbModel.ExternalConstruction" />
           <EntitySet Name="ExternalReportFiles" EntityType="labdbModel.ExternalReportFile" />
           <EntitySet Name="ExternalReports" EntityType="labdbModel.ExternalReport" />
-          <EntitySet Name="Masters1" EntityType="labdbModel.Master" />
+          <EntitySet Name="MasterDs" EntityType="labdbModel.MasterD" />
           <EntitySet Name="Materials" EntityType="labdbModel.Material" />
           <EntitySet Name="Methods" EntityType="labdbModel.Method" />
-          <EntitySet Name="Organizations" EntityType="labdbModel.Organization" />
-          <EntitySet Name="People" EntityType="labdbModel.Person" />
+          <EntitySet Name="OrganizationDs" EntityType="labdbModel.OrganizationD" />
+          <EntitySet Name="PersonDs" EntityType="labdbModel.PersonD" />
           <EntitySet Name="Projects" EntityType="labdbModel.Project" />
           <EntitySet Name="Properties" EntityType="labdbModel.Property" />
           <EntitySet Name="Recipes" EntityType="labdbModel.Recipe" />
@@ -3411,14 +3411,14 @@
           <EntitySet Name="SubTests" EntityType="labdbModel.SubTest" />
           <EntitySet Name="Tasks" EntityType="labdbModel.Task" />
           <EntitySet Name="Tests" EntityType="labdbModel.Test" />
-          <EntitySet Name="Users" EntityType="labdbModel.User" />
+          <EntitySet Name="UserDs" EntityType="labdbModel.UserD" />
           <AssociationSet Name="batch_by_material" Association="Self.batch_by_material">
             <End Role="materials" EntitySet="Materials" />
             <End Role="batches" EntitySet="Batches" />
           </AssociationSet>
           <AssociationSet Name="batch_to_master" Association="Self.batch_to_master">
             <End Role="batches" EntitySet="Batches" />
-            <End Role="masters" EntitySet="Masters1" />
+            <End Role="masters" EntitySet="MasterDs" />
           </AssociationSet>
           <AssociationSet Name="batch_to_report" Association="Self.batch_to_report">
             <End Role="batches" EntitySet="Batches" />
@@ -3433,7 +3433,7 @@
             <End Role="recipes" EntitySet="Recipes" />
           </AssociationSet>
           <AssociationSet Name="oemID" Association="Self.oemID">
-            <End Role="organizations" EntitySet="Organizations" />
+            <End Role="organizations" EntitySet="OrganizationDs" />
             <End Role="external_constructions" EntitySet="ExternalConstructions" />
           </AssociationSet>
           <AssociationSet Name="external_report" Association="Self.external_report">
@@ -3441,7 +3441,7 @@
             <End Role="external_report_files" EntitySet="ExternalReportFiles" />
           </AssociationSet>
           <AssociationSet Name="external_lab" Association="Self.external_lab">
-            <End Role="organizations" EntitySet="Organizations" />
+            <End Role="organizations" EntitySet="OrganizationDs" />
             <End Role="external_reports" EntitySet="ExternalReports" />
           </AssociationSet>
           <AssociationSet Name="project_to_report" Association="Self.project_to_report">
@@ -3449,7 +3449,7 @@
             <End Role="external_reports" EntitySet="ExternalReports" />
           </AssociationSet>
           <AssociationSet Name="master_to_recipe" Association="Self.master_to_recipe">
-            <End Role="masters" EntitySet="Masters1" />
+            <End Role="masters" EntitySet="MasterDs" />
             <End Role="recipes" EntitySet="Recipes" />
           </AssociationSet>
           <AssociationSet Name="recipe_to_material" Association="Self.recipe_to_material">
@@ -3469,27 +3469,27 @@
             <End Role="methods" EntitySet="Methods" />
           </AssociationSet>
           <AssociationSet Name="oem" Association="Self.oem1">
-            <End Role="organizations" EntitySet="Organizations" />
+            <End Role="organizations" EntitySet="OrganizationDs" />
             <End Role="projects" EntitySet="Projects" />
           </AssociationSet>
           <AssociationSet Name="organization_to_standard" Association="Self.organization_to_standard">
-            <End Role="organizations" EntitySet="Organizations" />
+            <End Role="organizations" EntitySet="OrganizationDs" />
             <End Role="standards" EntitySet="Stds" />
           </AssociationSet>
           <AssociationSet Name="author_to_report" Association="Self.author_to_report">
-            <End Role="people" EntitySet="People" />
+            <End Role="people" EntitySet="PersonDs" />
             <End Role="reports" EntitySet="Reports" />
           </AssociationSet>
           <AssociationSet Name="leader" Association="Self.leader">
-            <End Role="people" EntitySet="People" />
+            <End Role="people" EntitySet="PersonDs" />
             <End Role="projects" EntitySet="Projects" />
           </AssociationSet>
           <AssociationSet Name="operatorID" Association="Self.operatorID">
-            <End Role="people" EntitySet="People" />
+            <End Role="people" EntitySet="PersonDs" />
             <End Role="tests" EntitySet="Tests" />
           </AssociationSet>
           <AssociationSet Name="requester_to_task" Association="Self.requester_to_task">
-            <End Role="people" EntitySet="People" />
+            <End Role="people" EntitySet="PersonDs" />
             <End Role="tasks" EntitySet="Tasks" />
           </AssociationSet>
           <AssociationSet Name="report_to_reportfile" Association="Self.report_to_reportfile">
@@ -3538,8 +3538,8 @@
           </AssociationSet>
           <EntitySet Name="MaterialTypes" EntityType="labdbModel.MaterialType" />
           <AssociationSet Name="person_to_user" Association="labdbModel.person_to_user">
-            <End Role="Person" EntitySet="People" />
-            <End Role="User" EntitySet="Users" />
+            <End Role="Person" EntitySet="PersonDs" />
+            <End Role="User" EntitySet="UserDs" />
           </AssociationSet>
           <EntitySet Name="TaskItems" EntityType="labdbModel.TaskItem" />
           <AssociationSet Name="requirement_to_task_item" Association="labdbModel.requirement_to_task_item">
@@ -3554,15 +3554,15 @@
             <End Role="Batch" EntitySet="Batches" />
             <End Role="Task" EntitySet="Tasks" />
           </AssociationSet>
-          <EntitySet Name="UserRoleMappings" EntityType="labdbModel.UserRoleMapping" />
-          <EntitySet Name="UserRoles" EntityType="labdbModel.UserRole" />
+          <EntitySet Name="UserRoleMappingDs" EntityType="labdbModel.UserRoleMappingD" />
+          <EntitySet Name="UserRoleDs" EntityType="labdbModel.UserRoleD" />
           <AssociationSet Name="role_to_role_mapping" Association="labdbModel.role_to_role_mapping">
-            <End Role="user_roles" EntitySet="UserRoles" />
-            <End Role="user_role_mappings" EntitySet="UserRoleMappings" />
+            <End Role="user_roles" EntitySet="UserRoleDs" />
+            <End Role="user_role_mappings" EntitySet="UserRoleMappingDs" />
           </AssociationSet>
           <AssociationSet Name="user_to_role_mapping" Association="labdbModel.user_to_role_mapping">
-            <End Role="User" EntitySet="Users" />
-            <End Role="user_role_mappings" EntitySet="UserRoleMappings" />
+            <End Role="User" EntitySet="UserDs" />
+            <End Role="user_role_mappings" EntitySet="UserRoleMappingDs" />
           </AssociationSet>
           <EntitySet Name="ControlPlans" EntityType="labdbModel.ControlPlan" />
           <AssociationSet Name="specification_to_control_plan" Association="labdbModel.specification_to_control_plan">
@@ -3578,11 +3578,11 @@
             <End Role="calibration_reports" EntitySet="CalibrationReports" />
           </AssociationSet>
           <AssociationSet Name="laboratory_to_calibration_report" Association="labdbModel.laboratory_to_calibration_report">
-            <End Role="Organization" EntitySet="Organizations" />
+            <End Role="Organization" EntitySet="OrganizationDs" />
             <End Role="calibration_reports" EntitySet="CalibrationReports" />
           </AssociationSet>
           <AssociationSet Name="operator_to_calibration_report" Association="labdbModel.operator_to_calibration_report">
-            <End Role="Person" EntitySet="People" />
+            <End Role="Person" EntitySet="PersonDs" />
             <End Role="calibration_reports" EntitySet="CalibrationReports" />
           </AssociationSet>
           <AssociationSet Name="type_to_instrument" Association="labdbModel.type_to_instrument">
@@ -3593,26 +3593,26 @@
             <End Role="calibration_reports" EntitySet="CalibrationReports" />
             <End Role="calibration_files" EntitySet="CalibrationFiles" />
           </AssociationSet>
-          <EntitySet Name="OrganizationRoleMappings" EntityType="labdbModel.OrganizationRoleMapping" />
-          <EntitySet Name="OrganizationRoles" EntityType="labdbModel.OrganizationRole" />
+          <EntitySet Name="OrganizationRoleMappingDs" EntityType="labdbModel.OrganizationRoleMappingD" />
+          <EntitySet Name="OrganizationRoleDs" EntityType="labdbModel.OrganizationRoleD" />
           <AssociationSet Name="organization_to_role_mapping" Association="labdbModel.organization_to_role_mapping">
-            <End Role="Organization" EntitySet="Organizations" />
-            <End Role="organization_role_mappings" EntitySet="OrganizationRoleMappings" />
+            <End Role="Organization" EntitySet="OrganizationDs" />
+            <End Role="organization_role_mappings" EntitySet="OrganizationRoleMappingDs" />
           </AssociationSet>
           <AssociationSet Name="role_to_organization_mapping" Association="labdbModel.role_to_organization_mapping">
-            <End Role="organization_roles" EntitySet="OrganizationRoles" />
-            <End Role="organization_role_mappings" EntitySet="OrganizationRoleMappings" />
+            <End Role="organization_roles" EntitySet="OrganizationRoleDs" />
+            <End Role="organization_role_mappings" EntitySet="OrganizationRoleMappingDs" />
           </AssociationSet>
           <AssociationSet Name="instrument_to_test" Association="labdbModel.instrument_to_test">
             <End Role="instrument" EntitySet="Instruments" />
             <End Role="Test" EntitySet="Tests" />
           </AssociationSet>
           <AssociationSet Name="manufacturer_to_instrument" Association="labdbModel.manufacturer_to_instrument">
-            <End Role="Organization" EntitySet="Organizations" />
+            <End Role="Organization" EntitySet="OrganizationDs" />
             <End Role="instrument" EntitySet="Instruments" />
           </AssociationSet>
           <AssociationSet Name="supplier_to_instrument" Association="labdbModel.supplier_to_instrument">
-            <End Role="Organization" EntitySet="Organizations" />
+            <End Role="Organization" EntitySet="OrganizationDs" />
             <End Role="instrument" EntitySet="Instruments" />
           </AssociationSet>
           <EntitySet Name="InstrumentMaintenanceEvents" EntityType="labdbModel.InstrumentMaintenanceEvent" />
@@ -3629,22 +3629,22 @@
             <End Role="sub_methods" EntitySet="SubMethods" />
             <End Role="SubRequirement" EntitySet="SubRequirements" />
           </AssociationSet>
-          <EntitySet Name="PersonRoleMappings" EntityType="labdbModel.PersonRoleMapping" />
-          <EntitySet Name="PersonRoles" EntityType="labdbModel.PersonRole" />
+          <EntitySet Name="PersonRoleMappingDs" EntityType="labdbModel.PersonRoleMappingD" />
+          <EntitySet Name="PersonRoleDs" EntityType="labdbModel.PersonRoleD" />
           <AssociationSet Name="person_to_role_mapping" Association="labdbModel.person_to_role_mapping">
-            <End Role="Person" EntitySet="People" />
-            <End Role="person_role_mappings" EntitySet="PersonRoleMappings" />
+            <End Role="Person" EntitySet="PersonDs" />
+            <End Role="person_role_mappings" EntitySet="PersonRoleMappingDs" />
           </AssociationSet>
           <AssociationSet Name="person_role_to_role_mapping" Association="labdbModel.person_role_to_role_mapping">
-            <End Role="person_roles" EntitySet="PersonRoles" />
-            <End Role="person_role_mappings" EntitySet="PersonRoleMappings" />
+            <End Role="person_roles" EntitySet="PersonRoleDs" />
+            <End Role="person_role_mappings" EntitySet="PersonRoleMappingDs" />
           </AssociationSet>
           <AssociationSet Name="calibration_reference_mappings" Association="labdbModel.calibration_reference_mappings">
             <End Role="CalibrationReport" EntitySet="CalibrationReports" />
             <End Role="Instrument" EntitySet="Instruments" />
           </AssociationSet>
           <AssociationSet Name="person_to_sample_log" Association="labdbModel.person_to_sample_log">
-            <End Role="Person" EntitySet="People" />
+            <End Role="Person" EntitySet="PersonDs" />
             <End Role="Sample" EntitySet="Samples" />
           </AssociationSet>
           <AssociationSet Name="instrument_method_mappings" Association="labdbModel.instrument_method_mappings">
@@ -3786,7 +3786,7 @@
             <End Role="Batch" EntitySet="Batches" />
           </AssociationSet>
           <AssociationSet Name="calibration_responsible_to_instrument" Association="labdbModel.calibration_responsible_to_instrument">
-            <End Role="Organization" EntitySet="Organizations" />
+            <End Role="Organization" EntitySet="OrganizationDs" />
             <End Role="Instrument" EntitySet="Instruments" />
           </AssociationSet>
           <EntitySet Name="ControlPlanItems" EntityType="labdbModel.ControlPlanItem" />
@@ -3803,7 +3803,7 @@
             <End Role="Task" EntitySet="Tasks" />
           </AssociationSet>
           <AssociationSet Name="person_to_maintenance_event" Association="labdbModel.person_to_maintenance_event">
-            <End Role="Person" EntitySet="People" />
+            <End Role="Person" EntitySet="PersonDs" />
             <End Role="InstrumentMaintenanceEvent" EntitySet="InstrumentMaintenanceEvents" />
           </AssociationSet>
           <EntitySet Name="TestRecords" EntityType="labdbModel.TestRecord" />
@@ -3898,8 +3898,8 @@
           <NavigationProperty Name="materials" Relationship="labdbModel.type_to_material" FromRole="MaterialType" ToRole="Material" />
         </EntityType>
         <Association Name="person_to_user">
-          <End Type="labdbModel.Person" Role="Person" Multiplicity="0..1" />
-          <End Type="labdbModel.User" Role="User" Multiplicity="*" />
+          <End Type="labdbModel.PersonD" Role="Person" Multiplicity="0..1" />
+          <End Type="labdbModel.UserD" Role="User" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Person">
               <PropertyRef Name="ID" />
@@ -3968,7 +3968,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="UserRoleMapping">
+        <EntityType Name="UserRoleMappingD">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
@@ -3979,7 +3979,7 @@
           <NavigationProperty Name="User" Relationship="labdbModel.user_to_role_mapping" FromRole="user_role_mappings" ToRole="User" />
           <Property Name="IsSelected" Type="Boolean" Nullable="false" />
         </EntityType>
-        <EntityType Name="UserRole">
+        <EntityType Name="UserRoleD">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
@@ -3989,10 +3989,10 @@
           <Property Name="Description" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
         </EntityType>
         <Association Name="role_to_role_mapping">
-          <End Type="labdbModel.UserRole" Role="user_roles" Multiplicity="1">
+          <End Type="labdbModel.UserRoleD" Role="user_roles" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Type="labdbModel.UserRoleMapping" Role="user_role_mappings" Multiplicity="*" />
+          <End Type="labdbModel.UserRoleMappingD" Role="user_role_mappings" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="user_roles">
               <PropertyRef Name="ID" />
@@ -4003,10 +4003,10 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="user_to_role_mapping">
-          <End Type="labdbModel.User" Role="User" Multiplicity="1">
+          <End Type="labdbModel.UserD" Role="User" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Type="labdbModel.UserRoleMapping" Role="user_role_mappings" Multiplicity="*" />
+          <End Type="labdbModel.UserRoleMappingD" Role="user_role_mappings" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="User">
               <PropertyRef Name="ID" />
@@ -4126,7 +4126,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="laboratory_to_calibration_report">
-          <End Type="labdbModel.Organization" Role="Organization" Multiplicity="1" />
+          <End Type="labdbModel.OrganizationD" Role="Organization" Multiplicity="1" />
           <End Type="labdbModel.CalibrationReport" Role="calibration_reports" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Organization">
@@ -4138,7 +4138,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="operator_to_calibration_report">
-          <End Type="labdbModel.Person" Role="Person" Multiplicity="0..1" />
+          <End Type="labdbModel.PersonD" Role="Person" Multiplicity="0..1" />
           <End Type="labdbModel.CalibrationReport" Role="calibration_reports" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Person">
@@ -4175,7 +4175,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="OrganizationRoleMapping">
+        <EntityType Name="OrganizationRoleMappingD">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
@@ -4186,7 +4186,7 @@
           <NavigationProperty Name="Role" Relationship="labdbModel.role_to_organization_mapping" FromRole="organization_role_mappings" ToRole="organization_roles" />
           <Property Name="IsSelected" Type="Boolean" Nullable="false" />
         </EntityType>
-        <EntityType Name="OrganizationRole">
+        <EntityType Name="OrganizationRoleD">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
@@ -4196,10 +4196,10 @@
           <Property Name="Description" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
         </EntityType>
         <Association Name="organization_to_role_mapping">
-          <End Type="labdbModel.Organization" Role="Organization" Multiplicity="1">
+          <End Type="labdbModel.OrganizationD" Role="Organization" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Type="labdbModel.OrganizationRoleMapping" Role="organization_role_mappings" Multiplicity="*" />
+          <End Type="labdbModel.OrganizationRoleMappingD" Role="organization_role_mappings" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Organization">
               <PropertyRef Name="ID" />
@@ -4210,10 +4210,10 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="role_to_organization_mapping">
-          <End Type="labdbModel.OrganizationRole" Role="organization_roles" Multiplicity="1">
+          <End Type="labdbModel.OrganizationRoleD" Role="organization_roles" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Type="labdbModel.OrganizationRoleMapping" Role="organization_role_mappings" Multiplicity="*" />
+          <End Type="labdbModel.OrganizationRoleMappingD" Role="organization_role_mappings" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="organization_roles">
               <PropertyRef Name="ID" />
@@ -4236,7 +4236,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="manufacturer_to_instrument">
-          <End Type="labdbModel.Organization" Role="Organization" Multiplicity="0..1" />
+          <End Type="labdbModel.OrganizationD" Role="Organization" Multiplicity="0..1" />
           <End Type="labdbModel.Instrument" Role="instrument" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Organization">
@@ -4248,7 +4248,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="supplier_to_instrument">
-          <End Type="labdbModel.Organization" Role="Organization" Multiplicity="0..1" />
+          <End Type="labdbModel.OrganizationD" Role="Organization" Multiplicity="0..1" />
           <End Type="labdbModel.Instrument" Role="instrument" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Organization">
@@ -4330,7 +4330,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="PersonRoleMapping">
+        <EntityType Name="PersonRoleMappingD">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
@@ -4341,7 +4341,7 @@
           <NavigationProperty Name="Person" Relationship="labdbModel.person_to_role_mapping" FromRole="person_role_mappings" ToRole="Person" />
           <NavigationProperty Name="Role" Relationship="labdbModel.person_role_to_role_mapping" FromRole="person_role_mappings" ToRole="person_roles" />
         </EntityType>
-        <EntityType Name="PersonRole">
+        <EntityType Name="PersonRoleD">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
@@ -4351,10 +4351,10 @@
           <NavigationProperty Name="RoleMappings" Relationship="labdbModel.person_role_to_role_mapping" FromRole="person_roles" ToRole="person_role_mappings" />
         </EntityType>
         <Association Name="person_to_role_mapping">
-          <End Type="labdbModel.Person" Role="Person" Multiplicity="1">
+          <End Type="labdbModel.PersonD" Role="Person" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Type="labdbModel.PersonRoleMapping" Role="person_role_mappings" Multiplicity="*" />
+          <End Type="labdbModel.PersonRoleMappingD" Role="person_role_mappings" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Person">
               <PropertyRef Name="ID" />
@@ -4365,10 +4365,10 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="person_role_to_role_mapping">
-          <End Type="labdbModel.PersonRole" Role="person_roles" Multiplicity="1">
+          <End Type="labdbModel.PersonRoleD" Role="person_roles" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Type="labdbModel.PersonRoleMapping" Role="person_role_mappings" Multiplicity="*" />
+          <End Type="labdbModel.PersonRoleMappingD" Role="person_role_mappings" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="person_roles">
               <PropertyRef Name="ID" />
@@ -4383,7 +4383,7 @@
           <End Type="labdbModel.Instrument" Role="Instrument" Multiplicity="*" />
         </Association>
         <Association Name="person_to_sample_log">
-          <End Type="labdbModel.Person" Role="Person" Multiplicity="1" />
+          <End Type="labdbModel.PersonD" Role="Person" Multiplicity="1" />
           <End Type="labdbModel.Sample" Role="Sample" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Person">
@@ -4880,7 +4880,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="calibration_responsible_to_instrument">
-          <End Type="labdbModel.Organization" Role="Organization" Multiplicity="0..1" />
+          <End Type="labdbModel.OrganizationD" Role="Organization" Multiplicity="0..1" />
           <End Type="labdbModel.Instrument" Role="Instrument" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Organization">
@@ -4943,7 +4943,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="person_to_maintenance_event">
-          <End Type="labdbModel.Person" Role="Person" Multiplicity="0..1" />
+          <End Type="labdbModel.PersonD" Role="Person" Multiplicity="0..1" />
           <End Type="labdbModel.InstrumentMaintenanceEvent" Role="InstrumentMaintenanceEvent" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Person">
@@ -5226,8 +5226,8 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Masters1">
-            <EntityTypeMapping TypeName="labdbModel.Master">
+          <EntitySetMapping Name="MasterDs">
+            <EntityTypeMapping TypeName="labdbModel.MasterD">
               <MappingFragment StoreEntitySet="masters">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Number" ColumnName="number" />
@@ -5252,8 +5252,8 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Organizations">
-            <EntityTypeMapping TypeName="labdbModel.Organization">
+          <EntitySetMapping Name="OrganizationDs">
+            <EntityTypeMapping TypeName="labdbModel.OrganizationD">
               <MappingFragment StoreEntitySet="organizations">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Name" ColumnName="name" />
@@ -5261,8 +5261,8 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="People">
-            <EntityTypeMapping TypeName="labdbModel.Person">
+          <EntitySetMapping Name="PersonDs">
+            <EntityTypeMapping TypeName="labdbModel.PersonD">
               <MappingFragment StoreEntitySet="people">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Name" ColumnName="name" />
@@ -5464,8 +5464,8 @@
                 </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Users">
-            <EntityTypeMapping TypeName="labdbModel.User">
+          <EntitySetMapping Name="UserDs">
+            <EntityTypeMapping TypeName="labdbModel.UserD">
               <MappingFragment StoreEntitySet="users">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="FullName" ColumnName="full_name" />
@@ -5500,8 +5500,8 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="UserRoleMappings">
-            <EntityTypeMapping TypeName="labdbModel.UserRoleMapping">
+          <EntitySetMapping Name="UserRoleMappingDs">
+            <EntityTypeMapping TypeName="labdbModel.UserRoleMappingD">
               <MappingFragment StoreEntitySet="user_role_mappings">
                 <ScalarProperty Name="IsSelected" ColumnName="is_selected" />
                 <ScalarProperty Name="RoleID" ColumnName="roleID" />
@@ -5510,8 +5510,8 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="UserRoles">
-            <EntityTypeMapping TypeName="labdbModel.UserRole">
+          <EntitySetMapping Name="UserRoleDs">
+            <EntityTypeMapping TypeName="labdbModel.UserRoleD">
               <MappingFragment StoreEntitySet="user_roles">
                 <ScalarProperty Name="Description" ColumnName="description" />
                 <ScalarProperty Name="Name" ColumnName="name" />
@@ -5583,8 +5583,8 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="OrganizationRoleMappings">
-            <EntityTypeMapping TypeName="labdbModel.OrganizationRoleMapping">
+          <EntitySetMapping Name="OrganizationRoleMappingDs">
+            <EntityTypeMapping TypeName="labdbModel.OrganizationRoleMappingD">
               <MappingFragment StoreEntitySet="organization_role_mappings">
                 <ScalarProperty Name="IsSelected" ColumnName="is_selected" />
                 <ScalarProperty Name="RoleID" ColumnName="roleID" />
@@ -5593,8 +5593,8 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="OrganizationRoles">
-            <EntityTypeMapping TypeName="labdbModel.OrganizationRole">
+          <EntitySetMapping Name="OrganizationRoleDs">
+            <EntityTypeMapping TypeName="labdbModel.OrganizationRoleD">
               <MappingFragment StoreEntitySet="organization_roles">
                 <ScalarProperty Name="Description" ColumnName="description" />
                 <ScalarProperty Name="Name" ColumnName="name" />
@@ -5625,8 +5625,8 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="PersonRoleMappings">
-            <EntityTypeMapping TypeName="labdbModel.PersonRoleMapping">
+          <EntitySetMapping Name="PersonRoleMappingDs">
+            <EntityTypeMapping TypeName="labdbModel.PersonRoleMappingD">
               <MappingFragment StoreEntitySet="person_role_mappings">
                 <ScalarProperty Name="IsSelected" ColumnName="is_selected" />
                 <ScalarProperty Name="roleID" ColumnName="roleID" />
@@ -5635,8 +5635,8 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="PersonRoles">
-            <EntityTypeMapping TypeName="labdbModel.PersonRole">
+          <EntitySetMapping Name="PersonRoleDs">
+            <EntityTypeMapping TypeName="labdbModel.PersonRoleD">
               <MappingFragment StoreEntitySet="person_roles">
                 <ScalarProperty Name="Description" ColumnName="description" />
                 <ScalarProperty Name="Name" ColumnName="name" />

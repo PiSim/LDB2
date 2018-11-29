@@ -1,8 +1,7 @@
-﻿using DataAccess;
+﻿using DataAccessCore;
+using DataAccessCore.Commands;
 using Infrastructure.Queries;
-using LabDbContext;
-using LabDbContext.EntityExtensions;
-using LabDbContext.Services;
+using LInst;
 using Prism.Commands;
 using Prism.Mvvm;
 using System.Collections.Generic;
@@ -14,16 +13,16 @@ namespace Admin.ViewModels
     {
         #region Fields
 
-        private IDataService<LabDbEntities> _labDbData;
+        private IDataService<LInstContext> _lInstData;
         private InstrumentUtilizationArea _selectedArea;
 
         #endregion Fields
 
         #region Constructors
 
-        public InstrumentUtilizationAreaMainViewModel(IDataService<LabDbEntities> labDbData)
+        public InstrumentUtilizationAreaMainViewModel(IDataService<LInstContext> lInstData)
         {
-            _labDbData = labDbData;
+            _lInstData = lInstData;
 
             CreateAreaCommand = new DelegateCommand(
                 () =>
@@ -39,7 +38,7 @@ namespace Admin.ViewModels
                             Plant = "1"
                         };
 
-                        newArea.Create();
+                        _lInstData.Execute(new InsertEntityCommand<LInstContext>(newArea));
 
                         RaisePropertyChanged("UtilizationAreaList");
                     }
@@ -48,7 +47,7 @@ namespace Admin.ViewModels
             DeleteAreaCommand = new DelegateCommand(
                 () =>
                 {
-                    _selectedArea.Delete();
+                    _lInstData.Execute(new DeleteEntityCommand<LInstContext>(_selectedArea));
                     SelectedArea = null;
                 },
                 () => _selectedArea != null);
@@ -72,7 +71,7 @@ namespace Admin.ViewModels
             }
         }
 
-        public IEnumerable<InstrumentUtilizationArea> UtilizationAreaList => _labDbData.RunQuery(new InstrumentUtilizationAreasQuery()).ToList();
+        public IEnumerable<InstrumentUtilizationArea> UtilizationAreaList => _lInstData.RunQuery(new InstrumentUtilizationAreasQuery()).ToList();
 
         #endregion Properties
     }

@@ -21,6 +21,6 @@ namespace LabDbContext
         public Nullable<int> PersonID { get; set; }
     
         public virtual Instrument Instrument { get; set; }
-        public virtual Person Person { get; set; }
+        public virtual PersonD Person { get; set; }
     }
 }

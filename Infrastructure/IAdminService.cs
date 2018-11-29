@@ -1,4 +1,4 @@
-﻿using LabDbContext;
+﻿using LInst;
 
 namespace Infrastructure
 {
@@ -7,9 +7,7 @@ namespace Infrastructure
         #region Methods
 
         InstrumentType CreateNewInstrumentType();
-
-        MeasurableQuantity CreateNewMeasurableQuantity();
-
+        
         Organization CreateNewOrganization();
 
         OrganizationRole CreateNewOrganizationRole();
@@ -17,9 +15,7 @@ namespace Infrastructure
         Person CreateNewPerson();
 
         PersonRole CreateNewPersonRole();
-
-        Property CreateNewProperty();
-
+        
         User CreateNewUser();
 
         UserRole CreateNewUserRole();

@@ -12,22 +12,21 @@ namespace LabDbContext
     using System;
     using System.Collections.Generic;
     
-    public partial class ExternalConstruction
+    public partial class MasterD
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public ExternalConstruction()
+        public MasterD()
         {
-            this.Materials = new HashSet<Material>();
+            this.Recipes = new HashSet<Recipe>();
         }
     
         public int ID { get; set; }
-        public string Name { get; set; }
-        public Nullable<int> OemID { get; set; }
-        public Nullable<int> DefaultSpecVersionID { get; set; }
+        public int Number { get; set; }
+        public string Date { get; set; }
+        public Nullable<int> BatchID { get; private set; }
     
-        public virtual OrganizationD Oem { get; set; }
-        public virtual SpecificationVersion DefaultSpecVersion { get; set; }
+        public virtual Batch Batch { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Material> Materials { get; set; }
+        public virtual ICollection<Recipe> Recipes { get; set; }
     }
 }

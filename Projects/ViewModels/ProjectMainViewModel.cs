@@ -26,12 +26,12 @@ namespace Projects.ViewModels
 
         #region Constructors
 
-        public ProjectMainViewModel(IDataService<LabDbEntities> labDbdata,
+        public ProjectMainViewModel(IDataService<LabDbEntities> labDbData,
                                     IEventAggregator aggregator,
                                     IProjectService projectService)
             : base()
         {
-            _labDbData = labDbdata;
+            _labDbData = labDbData;
             _projectService = projectService;
             _eventAggregator = aggregator;
 

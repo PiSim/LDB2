@@ -143,7 +143,7 @@ namespace LabDB2
         {
             IModuleManager moduleManager = Container.Resolve<IModuleManager>();
 
-            moduleManager.LoadModule(typeof(LabDbContext.LabDbEntitiesModule).Name);
+            moduleManager.LoadModule(typeof(LInst.LInstModule).Name);
             TryLogin();
             IPrincipal _currentPrincipal = Thread.CurrentPrincipal;
             
@@ -166,13 +166,9 @@ namespace LabDB2
 
         private void TryLogin()
         {
-            LabDbEntities entities = new LabDbEntities();
+            LInst.LInstContext entities = new LInst.LInstContext();
             LoginDialog logger = Container.Resolve<LoginDialog>();
-            if (!entities.Database.Exists())
-            {
-                Application.Current.Shutdown();
-            }
-
+            
             if (logger.ShowDialog() == true)
             {
                 AppDomain.CurrentDomain.SetThreadPrincipal(logger.AuthenticatedPrincipal);

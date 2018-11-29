@@ -1,10 +1,9 @@
-﻿using DataAccess;
+﻿using DataAccessCore;
+using DataAccessCore.Commands;
 using Infrastructure.Commands;
 using Infrastructure.Queries;
 using Instruments.Queries;
-using LabDbContext;
-using LabDbContext.EntityExtensions;
-using LabDbContext.Services;
+using LInst;
 using Prism.Commands;
 using Prism.Mvvm;
 using System;
@@ -23,21 +22,21 @@ namespace Instruments.ViewModels
         private readonly Dictionary<string, ICollection<string>> _validationErrors = new Dictionary<string, ICollection<string>>();
         private string _code;
         private bool _isUnderControl;
-        private IDataService<LabDbEntities> _labDbData;
+        private IDataService<LInstContext> _lInstData;
         private Organization _selectedCalibrationLab;
 
         #endregion Fields
 
         #region Constructors
 
-        public InstrumentCreationDialogViewModel(IDataService<LabDbEntities> labDbData) : base()
+        public InstrumentCreationDialogViewModel(IDataService<LInstContext> lInstData) : base()
         {
-            _labDbData = labDbData;
+            _lInstData = lInstData;
             ControlPeriod = 12;
             Notes = "";
             Model = "";
             SerialNumber = "";
-            CalibrationLabList = _labDbData.RunQuery(new OrganizationsQuery() { Role = OrganizationsQuery.OrganizationRoles.CalibrationLab })
+            CalibrationLabList = _lInstData.RunQuery(new OrganizationsQuery() { Role = OrganizationsQuery.OrganizationRoles.CalibrationLab })
                                             .ToList();
 
             CancelCommand = new DelegateCommand<Window>(
@@ -59,22 +58,11 @@ namespace Instruments.ViewModels
                     InstrumentInstance.UtilizationAreaID = SelectedArea.ID;
                     InstrumentInstance.CalibrationDueDate = (_isUnderControl) ? DateTime.Now : (DateTime?)null;
                     InstrumentInstance.CalibrationResponsibleID = _selectedCalibrationLab?.ID;
-                    InstrumentInstance.manufacturerID = SelectedManufacturer.ID;
+                    InstrumentInstance.ManufacturerID = SelectedManufacturer.ID;
                     InstrumentInstance.Model = Model;
                     InstrumentInstance.SerialNumber = SerialNumber;
-
-                    foreach (MeasurableQuantity meq in SelectedType.GetAssociatedMeasurableQuantities())
-                    {
-                        InstrumentMeasurableProperty tempIMP = new InstrumentMeasurableProperty()
-                        {
-                            MeasurableQuantityID = meq.ID,
-                            UnitID = meq.UnitsOfMeasurement.First().ID
-                        };
-
-                        InstrumentInstance.InstrumentMeasurableProperties.Add(tempIMP);
-                    }
-                    
-                    _labDbData.Execute(new InsertEntityCommand(InstrumentInstance));
+                                        
+                    _lInstData.Execute(new InsertEntityCommand<LInstContext>(InstrumentInstance));
 
                     parent.DialogResult = true;
                 },
@@ -110,7 +98,7 @@ namespace Instruments.ViewModels
 
         #region Properties
 
-        public IEnumerable<InstrumentUtilizationArea> AreaList => _labDbData.RunQuery(new InstrumentUtilizationAreasQuery()).ToList();
+        public IEnumerable<InstrumentUtilizationArea> AreaList => _lInstData.RunQuery(new InstrumentUtilizationAreasQuery()).ToList();
         public IEnumerable<Organization> CalibrationLabList { get; }
         public DelegateCommand<Window> CancelCommand { get; }
 
@@ -124,7 +112,7 @@ namespace Instruments.ViewModels
                 if (string.IsNullOrEmpty(_code))
                     InstrumentInstance = null;
                 else
-                    _labDbData.RunQuery(new InstrumentQuery() { Code = _code });
+                    _lInstData.RunQuery(new InstrumentQuery() { Code = _code });
 
                 if (InstrumentInstance == null &&
                     _validationErrors.ContainsKey("Code"))
@@ -160,7 +148,7 @@ namespace Instruments.ViewModels
             }
         }
 
-        public IEnumerable<Organization> ManufacturerList => _labDbData.RunQuery(new OrganizationsQuery() { Role = OrganizationsQuery.OrganizationRoles.Manufacturer })
+        public IEnumerable<Organization> ManufacturerList => _lInstData.RunQuery(new OrganizationsQuery() { Role = OrganizationsQuery.OrganizationRoles.Manufacturer })
                                                                         .ToList();
 
         public string Model { get; set; }
@@ -192,7 +180,7 @@ namespace Instruments.ViewModels
         public Organization SelectedManufacturer { get; set; }
         public InstrumentType SelectedType { get; set; }
         public string SerialNumber { get; set; }
-        public IEnumerable<InstrumentType> TypeList => _labDbData.RunQuery(new InstrumentTypesQuery()).ToList();
+        public IEnumerable<InstrumentType> TypeList => _lInstData.RunQuery(new InstrumentTypesQuery()).ToList();
         private bool IsValidInput => true;
 
         #endregion Properties

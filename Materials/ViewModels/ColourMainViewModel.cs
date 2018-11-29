@@ -29,9 +29,9 @@ namespace Materials.ViewModels
         #region Constructors
 
         public ColourMainViewModel(IEventAggregator eventAggregator,
-                                    IDataService<LabDbEntities> labDbdata) : base()
+                                    IDataService<LabDbEntities> labDbData) : base()
         {
-            _labDbData = labDbdata;
+            _labDbData = labDbData;
             _eventAggregator = eventAggregator;
 
             CreateColourCommand = new DelegateCommand(

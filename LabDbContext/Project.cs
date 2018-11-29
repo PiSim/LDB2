@@ -32,8 +32,8 @@ namespace LabDbContext
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ExternalReport> ExternalReports { get; set; }
-        public virtual Organization Oem { get; set; }
-        public virtual Person Leader { get; set; }
+        public virtual OrganizationD Oem { get; set; }
+        public virtual PersonD Leader { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Material> Materials { get; set; }
     }

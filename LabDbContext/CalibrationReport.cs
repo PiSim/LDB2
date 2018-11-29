@@ -34,8 +34,8 @@ namespace LabDbContext
         public int ResultID { get; set; }
     
         public virtual Instrument Instrument { get; set; }
-        public virtual Organization Laboratory { get; set; }
-        public virtual Person Tech { get; set; }
+        public virtual OrganizationD Laboratory { get; set; }
+        public virtual PersonD Tech { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CalibrationFiles> CalibrationFiles { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

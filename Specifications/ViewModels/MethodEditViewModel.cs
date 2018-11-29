@@ -1,9 +1,11 @@
 ﻿using Controls.Views;
 using DataAccess;
+using DataAccessCore;
 using Infrastructure;
 using Infrastructure.Commands;
 using Infrastructure.Events;
 using Infrastructure.Queries;
+using LInst;
 using LabDbContext;
 using LabDbContext.EntityExtensions;
 using LabDbContext.Services;
@@ -26,7 +28,8 @@ namespace Specifications.ViewModels
 
         private bool _editMode;
         private IEventAggregator _eventAggregator;
-        private IDataService<LabDbEntities> _labDbData;
+        private DataAccess.IDataService<LabDbEntities> _labDbData;
+        DataAccessCore.IDataService<LInstContext> _lInstData;
         private Method _methodInstance;
         private ObservableCollection<MethodVariant> _methodVariantList;
         private StandardFile _selectedFile;
@@ -40,15 +43,17 @@ namespace Specifications.ViewModels
         #region Constructors
 
         public MethodEditViewModel(IEventAggregator aggregator,
-                                    IDataService<LabDbEntities> labDbData,
+                                    DataAccess.IDataService<LabDbEntities> labDbData,
+                                    DataAccessCore.IDataService<LInstContext> lInstData,
                                     ISpecificationService specificationService) : base()
         {
             _labDbData = labDbData;
+            _lInstData = lInstData;
             _editMode = false;
             _eventAggregator = aggregator;
             _specificationService = specificationService;
 
-            OrganizationList = _labDbData.RunQuery(new OrganizationsQuery() { Role = OrganizationsQuery.OrganizationRoles.StandardPublisher })
+            OrganizationList = _lInstData.RunQuery(new OrganizationsQuery() { Role = OrganizationsQuery.OrganizationRoles.StandardPublisher })
                                                                         .ToList(); ;
             PropertyList = _labDbData.RunQuery(new PropertiesQuery()).ToList();
 

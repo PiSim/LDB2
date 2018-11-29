@@ -12,19 +12,19 @@ namespace LabDbContext
     using System;
     using System.Collections.Generic;
     
-    public partial class OrganizationRole
+    public partial class UserRoleD
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public OrganizationRole()
+        public UserRoleD()
         {
-            this.OrganizationMappings = new HashSet<OrganizationRoleMapping>();
+            this.UserRoleMappings = new HashSet<UserRoleMappingD>();
         }
     
-        public int ID { get; set; }
+        public int ID { get; private set; }
         public string Name { get; set; }
         public string Description { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<OrganizationRoleMapping> OrganizationMappings { get; set; }
+        public virtual ICollection<UserRoleMappingD> UserRoleMappings { get; set; }
     }
 }

@@ -1,13 +1,13 @@
-﻿using DataAccess;
+﻿using DataAccessCore;
 using Infrastructure.Commands;
 using Infrastructure.Queries;
-using LabDbContext;
-using LabDbContext.EntityExtensions;
+using LInst;
 using LabDbContext.Services;
 using Prism.Commands;
 using Prism.Mvvm;
 using System.Collections.Generic;
 using System.Linq;
+using DataAccessCore.Commands;
 
 namespace Admin.ViewModels
 {
@@ -16,7 +16,7 @@ namespace Admin.ViewModels
         #region Fields
 
         private bool _editMode;
-        private IDataService<LabDbEntities> _labDbData;
+        private IDataService<LInstContext> _lInstData;
         private IEnumerable<UserRoleMapping> _roleList;
         private User _userInstance;
 
@@ -24,17 +24,17 @@ namespace Admin.ViewModels
 
         #region Constructors
 
-        public UserEditViewModel(IDataService<LabDbEntities> labDbData) : base()
+        public UserEditViewModel(IDataService<LInstContext> lInstData) : base()
         {
-            _labDbData = labDbData;
+            _lInstData = lInstData;
             _editMode = false;
-            PeopleList = _labDbData.RunQuery(new PeopleQuery()).ToList();
+            PeopleList = _lInstData.RunQuery(new PeopleQuery()).ToList();
 
             SaveCommand = new DelegateCommand(
                 () =>
                 {
-                    _labDbData.Execute(new UpdateEntityCommand(_userInstance));
-                    _labDbData.Execute(new BulkUpdateEntitiesCommand(_roleList));
+                    _lInstData.Execute(new UpdateEntityCommand<LInstContext>(_userInstance));
+                    _lInstData.Execute(new BulkUpdateEntitiesCommand<LInstContext>(_roleList));
                     EditMode = false;
                 },
                 () => _editMode == true);
@@ -87,7 +87,7 @@ namespace Admin.ViewModels
             set
             {
                 _userInstance = value;
-                RoleList = _userInstance.GetRoles();
+                RoleList = _userInstance.RoleMappings;
                 EditMode = false;
             }
         }

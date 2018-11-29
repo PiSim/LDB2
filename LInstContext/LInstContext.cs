@@ -29,14 +29,28 @@ namespace LInst
         public DbSet<Person> People { get; set; }
         public DbSet<PersonRole> PersonRoles { get; set; }
         public DbSet<PersonRoleMapping> PersonRoleMappings { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<UserRole> UserRoles { get; set; }
+        public DbSet<UserRoleMapping> UserRoleMappings { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseMySQL("server=192.168.1.22;user id=root;Pwd=dicembre19;persistsecurityinfo=True;database=linstdb_dev;port=3306;SslMode=none");
+            optionsBuilder.UseMySql("server=192.168.1.22;user id=root;Pwd=dicembre19;persistsecurityinfo=True;database=linstdb_dev;port=3306;SslMode=none");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<CalibrationReportReference>()
+                .HasKey(crr => new { crr.CalibrationReportID, crr.InstrumentID });
+
+            modelBuilder.Entity<CalibrationReportReference>()
+                .HasOne(crr => crr.CalibrationReport)
+                .WithMany(cr => cr.CalibrationReportReferences)
+                .HasConstraintName("FK_CalibrationReportReference_CalRep_CalRepID");
+
+            modelBuilder.Entity<CalibrationReportReference>()
+                .HasOne(crr => crr.Instrument)
+                .WithMany(ins => ins.CalibrationsAsReference);
 
             modelBuilder.Entity<Instrument>()
                 .Property(ip => ip.IsInService)
@@ -53,6 +67,14 @@ namespace LInst
             modelBuilder.Entity<InstrumentProperty>()
                 .Property(ip => ip.IsCalibrationProperty)
                 .HasDefaultValue(false);
+
+            modelBuilder.Entity<UserRoleMapping>()
+                .HasOne(urm => urm.User)
+                .WithMany(usr => usr.RoleMappings);
+
+            modelBuilder.Entity<UserRoleMapping>()
+                .HasOne(urm => urm.UserRole)
+                .WithMany(ur => ur.UserMappings);
         }
     }
 }

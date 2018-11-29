@@ -26,10 +26,13 @@ namespace LInst
         public Instrument Instrument { get; set; }
         public Person Tech { get; set; }
         
+        public DateTime Date { get; set; }
+
         public int Year { get; set; }
         public int Number { get; set; }
 
         public string Notes { get; set; }
 
+        public ICollection<CalibrationReportReference> CalibrationReportReferences { get; }
     }
 }

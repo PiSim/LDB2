@@ -1,5 +1,5 @@
-﻿using DataAccess;
-using LabDbContext;
+﻿using DataAccessCore;
+using LInst;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
@@ -9,7 +9,7 @@ namespace Infrastructure.Queries
     /// <summary>
     /// Query object that returns Organization entities
     /// </summary>
-    public class OrganizationsQuery : QueryBase<Organization, LabDbEntities>
+    public class OrganizationsQuery : QueryBase<Organization, LInstContext>
     {
         #region Fields
 
@@ -52,14 +52,14 @@ namespace Infrastructure.Queries
 
         #region Methods
 
-        public override IQueryable<Organization> Execute(LabDbEntities context)
+        public override IQueryable<Organization> Execute(LInstContext context)
         {
             IQueryable<Organization> query = context.Organizations;
 
             if (Role != null)
             {
                 string _roleName = _roleDictionary[Role];
-                query = query.Where(org => org.RoleMapping.FirstOrDefault(orm => orm.Role.Name == _roleName).IsSelected == true);
+                query = query.Where(org => org.RoleMappings.FirstOrDefault(orm => orm.OrganizationRole.Name == _roleName).IsSelected == true);
             }
 
             if (AsNoTracking)

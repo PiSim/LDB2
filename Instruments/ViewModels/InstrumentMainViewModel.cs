@@ -1,11 +1,10 @@
-﻿using DataAccess;
+﻿using DataAccessCore;
+using DataAccessCore.Commands;
 using Infrastructure;
 using Infrastructure.Commands;
 using Infrastructure.Events;
 using Instruments.Queries;
-using LabDbContext;
-using LabDbContext.EntityExtensions;
-using LabDbContext.Services;
+using LInst;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
@@ -21,7 +20,7 @@ namespace Instruments.ViewModels
 
         private IEventAggregator _eventAggregator;
         private InstrumentService _instrumentService;
-        private IDataService<LabDbEntities> _labDbData;
+        private IDataService<LInstContext> _lInstData;
 
         private Instrument _selectedInstrument,
                             _selectedPending;
@@ -30,18 +29,18 @@ namespace Instruments.ViewModels
 
         #region Constructors
 
-        public InstrumentMainViewModel(IDataService<LabDbEntities> labDbData,
+        public InstrumentMainViewModel(IDataService<LInstContext> lInstData,
                                         IEventAggregator eventAggregator,
                                         InstrumentService instrumentService) : base()
         {
             _eventAggregator = eventAggregator;
-            _labDbData = labDbData;
+            _lInstData = lInstData;
             _instrumentService = instrumentService;
 
             DeleteInstrumentCommand = new DelegateCommand(
                 () =>
                 {
-                    _labDbData.Execute(new DeleteEntityCommand(_selectedInstrument));
+                    _lInstData.Execute(new DeleteEntityCommand<LInstContext>(_selectedInstrument));
                     SelectedInstrument = null;
                 },
                 () => IsInstrumentAdmin && _selectedInstrument != null);
@@ -89,11 +88,11 @@ namespace Instruments.ViewModels
 
         #region Properties
 
-        public IEnumerable<CalibrationReport> CalibrationsList => _labDbData.RunQuery(new CalibrationReportsQuery()).ToList();
+        public IEnumerable<CalibrationReport> CalibrationsList => _lInstData.RunQuery(new CalibrationReportsQuery()).ToList();
 
         public DelegateCommand DeleteInstrumentCommand { get; }
 
-        public IEnumerable<Instrument> InstrumentList => _labDbData.RunQuery(new InstrumentsQuery()).ToList();
+        public IEnumerable<Instrument> InstrumentList => _lInstData.RunQuery(new InstrumentsQuery()).ToList();
 
         public DelegateCommand NewInstrumentCommand { get; }
         public DelegateCommand OpenInstrumentCommand { get; }

@@ -16,7 +16,7 @@ namespace LInst
         public void RegisterTypes(IContainerRegistry containerRegistry)
         {
             containerRegistry.RegisterSingleton(typeof(IDesignTimeDbContextFactory<LInstContext>), typeof(LInstContextFactory));
-            containerRegistry.RegisterSingleton(typeof(DataServiceBase<LInstContext>), typeof(LInstData));            
+            containerRegistry.RegisterSingleton(typeof(IDataService<LInstContext>), typeof(LInstData));            
         }
     }
 }

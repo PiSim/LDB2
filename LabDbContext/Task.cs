@@ -36,7 +36,7 @@ namespace LabDbContext
         public bool TP2_NONUSARE { get; set; }
         public bool TP3_NONUSARE { get; set; }
     
-        public virtual Person Requester { get; set; }
+        public virtual PersonD Requester { get; set; }
         public virtual SpecificationVersion SpecificationVersion { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<TaskItem> TaskItems { get; set; }

@@ -1,7 +1,7 @@
-﻿using DataAccess;
+﻿using DataAccessCore;
 using Infrastructure;
 using Infrastructure.Queries;
-using LabDbContext;
+using LInst;
 using Prism.Commands;
 using Prism.Mvvm;
 using System.Collections.Generic;
@@ -15,7 +15,7 @@ namespace Admin.ViewModels
         #region Fields
 
         private IAuthenticationService _authenticator;
-        private IDataService<LabDbEntities> _labDbData;
+        private IDataService<LInstContext> _lInstData;
         private Person _selectedPerson;
         private string _userName;
 
@@ -24,10 +24,10 @@ namespace Admin.ViewModels
         #region Constructors
 
         public NewUserDialogViewModel(IAuthenticationService authenticator,
-                                        IDataService<LabDbEntities> labDbData) : base()
+                                        IDataService<LInstContext> lInstData) : base()
         {
             _authenticator = authenticator;
-            _labDbData = labDbData;
+            _lInstData = lInstData;
 
             CancelCommand = new DelegateCommand<Window>(
                 parentDialog =>
@@ -66,7 +66,7 @@ namespace Admin.ViewModels
         public bool IsValidInput => _userName != null &&
                         _selectedPerson != null;
 
-        public IEnumerable<Person> PeopleList => _labDbData.RunQuery(new PeopleQuery()).ToList();
+        public IEnumerable<Person> PeopleList => _lInstData.RunQuery(new PeopleQuery()).ToList();
 
         public Person SelectedPerson
         {

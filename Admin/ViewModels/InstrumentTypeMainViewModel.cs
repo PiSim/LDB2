@@ -1,9 +1,9 @@
 ﻿using Controls.Views;
-using DataAccess;
+using DataAccessCore;
 using Infrastructure;
 using Infrastructure.Events;
 using Infrastructure.Queries;
-using LabDbContext;
+using LInst;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
@@ -18,7 +18,7 @@ namespace Admin.ViewModels
 
         private IAdminService _adminService;
         private IEventAggregator _eventAggregator;
-        private IDataService<LabDbEntities> _labDbData;
+        private IDataService<LInstContext> _lInstData;
         private InstrumentType _selectedInstrumentType;
 
         #endregion Fields
@@ -27,10 +27,10 @@ namespace Admin.ViewModels
 
         public InstrumentTypeMainViewModel(IEventAggregator eventAggregator,
                                             IAdminService adminService,
-                                            IDataService<LabDbEntities> labDbData)
+                                            IDataService<LInstContext> lInstData)
         {
             _adminService = adminService;
-            _labDbData = labDbData;
+            _lInstData = lInstData;
             _eventAggregator = eventAggregator;
 
             NewInstrumentTypeCommand = new DelegateCommand(
@@ -51,7 +51,7 @@ namespace Admin.ViewModels
 
         #region Properties
 
-        public IEnumerable<InstrumentType> InstrumentTypeList => _labDbData.RunQuery(new InstrumentTypesQuery()).ToList();
+        public IEnumerable<InstrumentType> InstrumentTypeList => _lInstData.RunQuery(new InstrumentTypesQuery()).ToList();
 
         public string InstrumentTypeManagementEditRegionName => RegionNames.InstrumentTypeManagementEditRegion;
 

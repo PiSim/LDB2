@@ -1,4 +1,4 @@
-using LabDbContext;
+using LInst;
 using System.Security.Principal;
 
 namespace Infrastructure

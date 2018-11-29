@@ -12,17 +12,17 @@ namespace LabDbContext
     using System;
     using System.Collections.Generic;
     
-    public partial class Organization
+    public partial class OrganizationD
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Organization()
+        public OrganizationD()
         {
             this.ExternalConstructions = new HashSet<ExternalConstruction>();
             this.ExternalReports = new HashSet<ExternalReport>();
             this.Projects = new HashSet<Project>();
             this.Standards = new HashSet<Std>();
             this.CalibrationReports = new HashSet<CalibrationReport>();
-            this.RoleMapping = new HashSet<OrganizationRoleMapping>();
+            this.RoleMapping = new HashSet<OrganizationRoleMappingD>();
             this.ManufacturedInstruments = new HashSet<Instrument>();
             this.SuppliedInstruments = new HashSet<Instrument>();
             this.instruments = new HashSet<Instrument>();
@@ -43,7 +43,7 @@ namespace LabDbContext
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CalibrationReport> CalibrationReports { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<OrganizationRoleMapping> RoleMapping { get; set; }
+        public virtual ICollection<OrganizationRoleMappingD> RoleMapping { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Instrument> ManufacturedInstruments { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

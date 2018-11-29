@@ -22,16 +22,12 @@ namespace Admin.Views
                                                     typeof(Views.InstrumentTypeMain));
             regionManager.RegisterViewWithRegion(RegionNames.InstrumentUtilizationAreasRegion,
                                                     typeof(Views.InstrumentUtilizationAreaMain));
-            regionManager.RegisterViewWithRegion(RegionNames.MeasurableQuantityManagementRegion,
-                                                    typeof(Views.MeasurableQuantityMain));
             regionManager.RegisterViewWithRegion(RegionNames.UnitOfMeasurementManagementRegion,
                                                     typeof(Views.MeasurementUnitMain));
             regionManager.RegisterViewWithRegion(RegionNames.OrganizationRoleManagementRegion,
                                                     typeof(Views.OrganizationsMain));
             regionManager.RegisterViewWithRegion(RegionNames.PeopleManagementRegion,
                                                     typeof(Views.PeopleMain));
-            regionManager.RegisterViewWithRegion(RegionNames.PropertyManagementRegion,
-                                                    typeof(Views.PropertyMain));
         }
 
         #endregion Constructors

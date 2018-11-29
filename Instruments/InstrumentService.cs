@@ -1,12 +1,13 @@
-﻿using DataAccess;
+﻿using DataAccessCore;
+using DataAccessCore.Commands;
 using Infrastructure.Commands;
 using Infrastructure.Events;
-using LabDbContext;
-using LabDbContext.EntityExtensions;
+using LInst;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
 using Prism.Events;
+using System;
 using System.Collections.Generic;
-using System.Data.Entity;
-using System.Data.Entity.Infrastructure;
 using System.Linq;
 
 namespace Instruments
@@ -15,32 +16,32 @@ namespace Instruments
     {
         #region Fields
 
-        private IDbContextFactory<LabDbEntities> _dbContextFactory;
+        private IDesignTimeDbContextFactory<LInstContext> _dbContextFactory;
         private IEventAggregator _eventAggregator;
-        private IDataService<LabDbEntities> _labDbData;
+        private IDataService<LInstContext> _lInstData;
 
         #endregion Fields
 
         #region Constructors
 
-        public InstrumentService(IDbContextFactory<LabDbEntities> dbContextFactory,
+        public InstrumentService(IDesignTimeDbContextFactory<LInstContext> dbContextFactory,
                             IEventAggregator aggregator,
-                            IDataService<LabDbEntities> labDbData)
+                            IDataService<LInstContext> lInstData)
         {
             _eventAggregator = aggregator;
             _dbContextFactory = dbContextFactory;
-            _labDbData = labDbData;
+            _lInstData = lInstData;
         }
 
         #endregion Constructors
 
         #region Methods
 
-        public void AddCalibrationFiles(IEnumerable<CalibrationFiles> fileList)
+        public void AddCalibrationFile(IEnumerable<CalibrationFile> fileList)
         {
-            // inserts a set of CalibrationFiles entries in the DB
+            // inserts a set of CalibrationFile entries in the DB
 
-            using (LabDbEntities entities = _dbContextFactory.Create())
+            using (LInstContext entities = _dbContextFactory.CreateDbContext(new string[] { }))
             {
                 entities.CalibrationFiles.AddRange(fileList);
                 entities.SaveChanges();
@@ -63,30 +64,14 @@ namespace Instruments
         {
             // Returns a list of the instruments under control, ordered by due calibration date
 
-            using (LabDbEntities entities = _dbContextFactory.Create())
+            using (LInstContext entities = _dbContextFactory.CreateDbContext(new string[] { }))
             {
-                entities.Configuration.LazyLoadingEnabled = false;
-
                 return entities.Instruments.Include(ins => ins.InstrumentType)
-                                            .Include(ins => ins.InstrumentUtilizationArea)
+                                            .Include(ins => ins.UtilizationArea)
                                             .Include(ins => ins.CalibrationResponsible)
                                             .Where(ins => ins.IsUnderControl == true)
                                             .OrderBy(ins => ins.CalibrationDueDate)
                                             .ToList();
-            }
-        }
-
-        public IEnumerable<CalibrationResult> GetCalibrationResults()
-        {
-            // Returns all CalibrationResult entities
-
-            using (LabDbEntities entities = _dbContextFactory.Create())
-            {
-                entities.Configuration.LazyLoadingEnabled = false;
-
-                return entities.CalibrationResults
-                                .AsNoTracking()
-                                .ToList();
             }
         }
 
@@ -97,7 +82,7 @@ namespace Instruments
         /// <returns>The first unused calibration number</returns>
         public int GetNextCalibrationNumber(int year)
         {
-            using (LabDbEntities entities = _dbContextFactory.Create())
+            using (LInstContext entities = _dbContextFactory.CreateDbContext(new string[] { }))
             {
                 try
                 {
@@ -123,8 +108,7 @@ namespace Instruments
             {
                 CalibrationReport output = calibrationDialog.ReportInstance;
 
-                target.UpdateCalibrationDueDate();
-                _labDbData.Execute(new UpdateEntityCommand(target));
+                _lInstData.Execute(new UpdateEntityCommand<LInstContext>(target));
 
                 _eventAggregator.GetEvent<CalibrationIssued>()
                                 .Publish(output);

@@ -1,8 +1,8 @@
 using Admin.Queries;
 using Controls.Views;
 using DataAccessCore;
+using DataAccessCore.Commands;
 using Infrastructure;
-using Infrastructure.Commands;
 using Infrastructure.Events;
 using LInst;
 using Microsoft.EntityFrameworkCore.Design;
@@ -79,28 +79,7 @@ namespace Admin
                     Name = creationDialog.InputString
                 };
                 
-                _labDbData.Execute(new InsertEntityCommand(output));
-                return output;
-            }
-
-            return null;
-        }
-
-        public MeasurableQuantity CreateNewMeasurableQuantity()
-        {
-            StringInputDialog creationDialog = new StringInputDialog
-            {
-                Title = "Crea nuova quantità misurabile"
-            };
-
-            if (creationDialog.ShowDialog() == true)
-            {
-                MeasurableQuantity output = new MeasurableQuantity()
-                {
-                    Name = creationDialog.InputString
-                };
-
-                _labDbData.Execute(new InsertEntityCommand(output));
+                _lInstData.Execute(new InsertEntityCommand<LInstContext>(output));
                 return output;
             }
 
@@ -118,21 +97,20 @@ namespace Admin
             {
                 Organization output = new Organization
                 {
-                    Category = "",
                     Name = creationDialog.InputString
                 };
-                foreach (OrganizationRole orr in _labDbData.RunQuery(new OrganizationRolesQuery()))
+                foreach (OrganizationRole orr in _lInstData.RunQuery(new OrganizationRolesQuery()))
                 {
                     OrganizationRoleMapping tempORM = new OrganizationRoleMapping
                     {
                         IsSelected = false,
-                        RoleID = orr.ID
+                        OrganizationRoleID = orr.ID
                     };
 
-                    output.RoleMapping.Add(tempORM);
+                    output.RoleMappings.Add(tempORM);
                 }
 
-                _labDbData.Execute(new InsertEntityCommand(output));
+                _lInstData.Execute(new InsertEntityCommand<LInstContext>(output));
 
                 EntityChangedToken token = new EntityChangedToken(output,
                                                                     EntityChangedToken.EntityChangedAction.Created);
@@ -154,7 +132,7 @@ namespace Admin
                 OrganizationRole output = new OrganizationRole();
                 output.Description = "";
                 output.Name = creationDialog.InputString;
-                _labDbData.Execute(new InsertEntityCommand(output));
+                _lInstData.Execute(new InsertEntityCommand<LInstContext>(output));
 
                 CreateMappingsForNewRole(output);
                 return output;
@@ -179,15 +157,15 @@ namespace Admin
                 Name = addPersonDialog.InputString
             };
 
-            foreach (PersonRole prr in _labDbData.RunQuery(new PersonRolesQuery()))
+            foreach (PersonRole prr in _lInstData.RunQuery(new PersonRolesQuery()))
             {
                 PersonRoleMapping tempPRM = new PersonRoleMapping();
-                tempPRM.roleID = prr.ID;
+                tempPRM.RoleID = prr.ID;
                 tempPRM.IsSelected = false;
                 newPerson.RoleMappings.Add(tempPRM);
             }
 
-            _labDbData.Execute(new InsertEntityCommand(newPerson));
+            _lInstData.Execute(new InsertEntityCommand<LInstContext>(newPerson));
 
             return newPerson;
         }
@@ -207,7 +185,7 @@ namespace Admin
                 Description = ""
             };
 
-            using (LabDbEntities entities = _dbContextFactory.Create())
+            using (LInstContext entities = _dbContextFactory.CreateDbContext(new string[] { }))
             {
                 entities.PersonRoles.Add(newRole);
 
@@ -225,23 +203,6 @@ namespace Admin
             }
 
             return newRole;
-        }
-
-        public Property CreateNewProperty()
-        {
-            StringInputDialog creationDialog = new StringInputDialog();
-            creationDialog.Title = "Crea nuova Proprietà";
-
-            if (creationDialog.ShowDialog() == true)
-            {
-                Property output = new Property();
-                output.Name = creationDialog.InputString;
-                _labDbData.Execute(new InsertEntityCommand(output));
-
-                return output;
-            }
-
-            return null;
         }
 
         public User CreateNewUser()
@@ -271,18 +232,18 @@ namespace Admin
                 Description = ""
             };
 
-            _labDbData.Execute(new InsertEntityCommand(newRole));
+            _lInstData.Execute(new InsertEntityCommand<LInstContext>(newRole));
 
-            foreach (User usr in _labDbData.RunQuery(new UsersQuery()))
+            foreach (User usr in _lInstData.RunQuery(new UsersQuery()))
             {
                 UserRoleMapping newMap = new UserRoleMapping
                 {
                     IsSelected = false,
-                    RoleID = newRole.ID,
+                    UserRoleID = newRole.ID,
                     UserID = usr.ID
                 };
 
-                _labDbData.Execute(new InsertEntityCommand(newMap));
+                _lInstData.Execute(new InsertEntityCommand<LInstContext>(newMap));
             }
 
             return newRole;
@@ -295,7 +256,7 @@ namespace Admin
         /// <param name="newRole">The role for which will be built the mappings</param>
         internal void CreateMappingsForNewRole(OrganizationRole newRole)
         {
-            using (LabDbEntities entities = _dbContextFactory.Create())
+            using (LInstContext entities = _dbContextFactory.CreateDbContext(new string[] { }))
             {
                 IEnumerable<Organization> _orgList = entities.Organizations.ToList();
 
@@ -304,10 +265,10 @@ namespace Admin
                     OrganizationRoleMapping tempMap = new OrganizationRoleMapping()
                     {
                         IsSelected = false,
-                        RoleID = newRole.ID
+                        OrganizationRoleID = newRole.ID
                     };
 
-                    org.RoleMapping.Add(tempMap);
+                    org.RoleMappings.Add(tempMap);
                 }
 
                 entities.SaveChanges();

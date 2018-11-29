@@ -5,6 +5,7 @@ using Infrastructure.Commands;
 using Infrastructure.Events;
 using Infrastructure.Queries;
 using LabDbContext;
+using LInst;
 using LabDbContext.EntityExtensions;
 using LabDbContext.Services;
 using Prism.Commands;
@@ -23,6 +24,7 @@ namespace Projects.ViewModels
         private bool _editMode;
         private IEventAggregator _eventAggregator;
         private IDataService<LabDbEntities> _labDbData;
+        DataAccessCore.IDataService<LInstContext> _lInstData;
         private IEnumerable<Person> _leaderList;
         private IEnumerable<Organization> _oemList;
         private Project _projectInstance;
@@ -36,10 +38,12 @@ namespace Projects.ViewModels
         #region Constructors
 
         public ProjectInfoViewModel(IDataService<LabDbEntities> labDbData,
+                                    DataAccessCore.IDataService<LInstContext> lInstData,
                                     IEventAggregator aggregator)
             : base()
         {
             _labDbData = labDbData;
+            _lInstData = lInstData;
             _editMode = false;
             _eventAggregator = aggregator;
 
@@ -216,7 +220,7 @@ namespace Projects.ViewModels
             get
             {
                 if (_leaderList == null)
-                    _leaderList = _labDbData.RunQuery(new PeopleQuery() { Role = PeopleQuery.PersonRoles.ProjectLeader })
+                    _leaderList = _lInstData.RunQuery(new PeopleQuery() { Role = PeopleQuery.PersonRoles.ProjectLeader })
                                                             .ToList();
 
                 return _leaderList;
@@ -254,7 +258,7 @@ namespace Projects.ViewModels
             get
             {
                 if (_oemList == null)
-                    _oemList = _labDbData.RunQuery(new OrganizationsQuery() { Role = OrganizationsQuery.OrganizationRoles.OEM })
+                    _oemList = _lInstData.RunQuery(new OrganizationsQuery() { Role = OrganizationsQuery.OrganizationRoles.OEM })
                                                                         .ToList(); ;
 
                 return _oemList;

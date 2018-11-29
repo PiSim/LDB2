@@ -31,41 +31,7 @@ namespace LabDbContext
                 entities.SaveChanges();
             }
         }
-        [Obsolete]
-        public static void AddMethodAssociation(this Instrument entry,
-                                                Method methodEntity)
-        {
-            // Creates a new Instrument/method association
 
-            using (LabDbEntities entities = new LabDbEntities())
-            {
-                entities.Instruments.First(inst => inst.ID == entry.ID)
-                                    .AssociatedMethods
-                                    .Add(entities.Methods
-                                    .First(mtd => mtd.ID == methodEntity.ID));
-
-                entities.SaveChanges();
-            }
-        }
-        [Obsolete]
-        public static IEnumerable<Method> GetAssociatedMethods(this Instrument entry)
-        {
-            // Returns all the methods not assigned to the instrument entry
-
-            if (entry == null)
-                return null;
-
-            using (LabDbEntities entities = new LabDbEntities())
-            {
-                entities.Configuration.LazyLoadingEnabled = false;
-
-                return entities.Methods.Include(mtd => mtd.Property)
-                                        .Include(mtd => mtd.Standard.Organization)
-                                        .Where(mtd => mtd.AssociatedInstruments
-                                        .Any(instr => instr.ID == entry.ID))
-                                        .ToList();
-            }
-        }
         [Obsolete]
         public static DateTime? GetCalibrationDueDateFrom(this Instrument entry,
                                                         DateTime lastCalibration)
@@ -92,81 +58,7 @@ namespace LabDbContext
                                 .FirstOrDefault();
             }
         }
-        [Obsolete]
-        public static IEnumerable<InstrumentMeasurableProperty> GetMeasurableProperties(this Instrument entry)
-        {
-            // Returns all MeasurableProperties for an Instrument
-
-            if (entry == null)
-                return null;
-
-            using (LabDbEntities entities = new LabDbEntities())
-            {
-                entities.Configuration.LazyLoadingEnabled = false;
-
-                return entities.InstrumentMeasurableProperties.Include(imp => imp.MeasurableQuantity)
-                                                                .Include(imp => imp.UnitOfMeasurement)
-                                                                .Where(imp => imp.InstrumentID == entry.ID)
-                                                                .ToList();
-            }
-        }
-        [Obsolete]
-        public static IEnumerable<Method> GetUnassociatedMethods(this Instrument entry)
-        {
-            // Returns all the methods not assigned to the instrument entry
-
-            if (entry == null)
-                return null;
-
-            using (LabDbEntities entities = new LabDbEntities())
-            {
-                entities.Configuration.LazyLoadingEnabled = false;
-
-                return entities.Methods.Include(mtd => mtd.Property)
-                                        .Include(mtd => mtd.Standard.Organization)
-                                        .Where(mtd => !mtd.AssociatedInstruments
-                                        .Any(instr => instr.ID == entry.ID))
-                                        .ToList();
-            }
-        }
-        [Obsolete]
-        public static void RemoveMethodAssociation(this Instrument entry,
-                                                    Method methodEntity)
-        {
-            // Creates a new Instrument/method association
-
-            using (LabDbEntities entities = new LabDbEntities())
-            {
-                Instrument tempInstrument = entities.Instruments.First(inst => inst.ID == entry.ID);
-                Method tempMethod = tempInstrument.AssociatedMethods.First(mtd => mtd.ID == methodEntity.ID);
-
-                tempInstrument.AssociatedMethods.Remove(tempMethod);
-
-                entities.SaveChanges();
-            }
-        }
-        [Obsolete]
-        public static bool UpdateCalibrationDueDate(this Instrument entry)
-        {
-            // Updates the value for CalibrationDueDate using the latest calibration in the DB and the parameters set in the entry instance
-            // Returns true if the new value differs from the old one
-
-            DateTime? oldvalue = (entry.CalibrationDueDate == null) ? (DateTime?)null : entry.CalibrationDueDate.Value;
-
-            if (!entry.IsUnderControl)
-                entry.CalibrationDueDate = null;
-            else
-            {
-                CalibrationReport lastCalibration = entry.GetLastCalibration();
-
-                if (lastCalibration == null || lastCalibration.Date == null)
-                    entry.CalibrationDueDate = DateTime.Now.Date;
-                else
-                    entry.CalibrationDueDate = entry.GetCalibrationDueDateFrom(lastCalibration.Date);
-            }
-
-            return entry.CalibrationDueDate != oldvalue;
-        }
+        
 
         #endregion Methods
     }

@@ -1,9 +1,9 @@
 ﻿using DataAccess;
+using DataAccessCore;
 using Infrastructure.Commands;
 using Infrastructure.Queries;
 using LabDbContext;
-using LabDbContext.EntityExtensions;
-using LabDbContext.Services;
+using LInst;
 using Prism.Commands;
 using Prism.Mvvm;
 using Specifications.Queries;
@@ -23,7 +23,8 @@ namespace Specifications.ViewModels
         #region Fields
 
         private readonly Dictionary<string, ICollection<string>> _validationErrors = new Dictionary<string, ICollection<string>>();
-        private IDataService<LabDbEntities> _labDbData;
+        private DataAccess.IDataService<LabDbEntities> _labDbData;
+        DataAccessCore.IDataService<LInstContext> _lInstContext;
         private string _name;
         private Organization _selectedOem;
         private Property _selectedProperty;
@@ -33,10 +34,12 @@ namespace Specifications.ViewModels
 
         #region Constructors
 
-        public MethodCreationDialogViewModel(IDataService<LabDbEntities> labDbdata) : base()
+        public MethodCreationDialogViewModel(DataAccess.IDataService<LabDbEntities> labDbData,
+                                            DataAccessCore.IDataService<LInstContext> lInstContext) : base()
         {
-            _labDbData = labDbdata;
-            OemList = _labDbData.RunQuery(new OrganizationsQuery() { Role = OrganizationsQuery.OrganizationRoles.StandardPublisher })
+            _lInstContext = lInstContext;
+            _labDbData = labDbData;
+            OemList = _lInstContext.RunQuery(new OrganizationsQuery() { Role = OrganizationsQuery.OrganizationRoles.StandardPublisher })
                                                                         .ToList(); ;
             PropertiesList = _labDbData.RunQuery(new PropertiesQuery()).ToList();
 

@@ -1,5 +1,5 @@
-﻿using DataAccess;
-using LabDbContext;
+﻿using DataAccessCore;
+using LInst;
 using Prism.Commands;
 using Prism.Mvvm;
 using System.Collections.Generic;
@@ -11,16 +11,15 @@ namespace Instruments.ViewModels
     {
         #region Fields
 
-        private IDataService<LabDbEntities> _labDbData;
-        private MeasurableQuantity _selectedQuantity;
+        private IDataService<LInstContext> _lInstData;
 
         #endregion Fields
 
         #region Constructors
 
-        public AddPropertyDialogViewModel(IDataService<LabDbEntities> labDbData)
+        public AddPropertyDialogViewModel(IDataService<LInstContext> lInstData)
         {
-            _labDbData = labDbData;
+            _lInstData = lInstData;
 
             CancelCommand = new DelegateCommand<Window>(
                 dialog =>
@@ -32,8 +31,7 @@ namespace Instruments.ViewModels
                 dialog =>
                 {
                     dialog.DialogResult = true;
-                },
-                dialog => _selectedQuantity != null);
+                });
         }
 
         #endregion Constructors
@@ -43,19 +41,7 @@ namespace Instruments.ViewModels
         public DelegateCommand<Window> CancelCommand { get; }
 
         public DelegateCommand<Window> ConfirmCommand { get; }
-
-        //public IEnumerable<MeasurableQuantity> QuantityList => _labDbData.RunQuery(new MeasurableQuantity;
-
-        public MeasurableQuantity SelectedQuantity
-        {
-            get { return _selectedQuantity; }
-            set
-            {
-                _selectedQuantity = value;
-                ConfirmCommand.RaiseCanExecuteChanged();
-            }
-        }
-
+        
         #endregion Properties
     }
 }

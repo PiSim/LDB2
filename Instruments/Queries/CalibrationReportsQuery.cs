@@ -1,5 +1,5 @@
-﻿using DataAccess;
-using LabDbContext;
+﻿using DataAccessCore;
+using LInst;
 using System.Data.Entity;
 using System.Linq;
 
@@ -8,17 +8,14 @@ namespace Instruments.Queries
     /// <summary>
     /// Query object that returns multiple CalibrationReport entities
     /// </summary>
-    public class CalibrationReportsQuery : QueryBase<CalibrationReport, LabDbEntities>
+    public class CalibrationReportsQuery : QueryBase<CalibrationReport, LInstContext>
     {
 
         #region Methods
 
-        public override IQueryable<CalibrationReport> Execute(LabDbEntities context)
+        public override IQueryable<CalibrationReport> Execute(LInstContext context)
         {
             IQueryable<CalibrationReport> query = context.CalibrationReports;
-
-            if (LazyLoadingDisabled)
-                context.Configuration.LazyLoadingEnabled = false;
 
             if (EagerLoadingEnabled)
                 query = query.Include(crep => crep.Instrument)

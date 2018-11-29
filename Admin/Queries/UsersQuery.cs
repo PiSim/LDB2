@@ -1,5 +1,5 @@
-﻿using DataAccess;
-using LabDbContext;
+﻿using DataAccessCore;
+using LInst;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -12,9 +12,9 @@ namespace Admin.Queries
     /// <summary>
     /// Query object that returns multiple User Entities
     /// </summary>
-    public class UsersQuery : QueryBase<User, LabDbEntities>
+    public class UsersQuery : QueryBase<User, LInstContext>
     {
-        public override IQueryable<User> Execute(LabDbEntities context)
+        public override IQueryable<User> Execute(LInstContext context)
         {
             IQueryable<User> query = context.Users;
 

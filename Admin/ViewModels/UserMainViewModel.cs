@@ -1,12 +1,11 @@
 ﻿using Admin.Queries;
 using Controls.Views;
-using DataAccess;
+using DataAccessCore;
+using DataAccessCore.Commands;
 using Infrastructure;
 using Infrastructure.Commands;
 using Infrastructure.Events;
-using LabDbContext;
-using LabDbContext.EntityExtensions;
-using LabDbContext.Services;
+using LInst;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
@@ -20,7 +19,7 @@ namespace Admin.ViewModels
         #region Fields
 
         private IAdminService _adminService;
-        IDataService<LabDbEntities> _labDbData;
+        private IDataService<LInstContext> _lInstData;
         private IEventAggregator _eventAggregator;
         private User _selectedUser;
         private IEnumerable<User> _userList;
@@ -31,27 +30,27 @@ namespace Admin.ViewModels
 
         public UserMainViewModel(IEventAggregator eventAggregator,
                                 IAdminService adminService,
-                                IDataService<LabDbEntities> labDbData) : base()
+                                IDataService<LInstContext> lInstData) : base()
         {
             _adminService = adminService;
             _eventAggregator = eventAggregator;
-            _labDbData = labDbData;
+            _lInstData = lInstData;
 
-            _userList = _labDbData.RunQuery(new UsersQuery()).ToList();
+            _userList = _lInstData.RunQuery(new UsersQuery()).ToList();
 
             CreateNewUserCommand = new DelegateCommand(
                 () =>
                 {
                     _adminService.CreateNewUser();
 
-                    UserList = _labDbData.RunQuery(new UsersQuery()).ToList();
+                    UserList = _lInstData.RunQuery(new UsersQuery()).ToList();
                 });
 
             DeleteUserCommand = new DelegateCommand(
                 () =>
                 {
-                    _labDbData.Execute(new DeleteEntityCommand(_selectedUser));
-                    UserList = _labDbData.RunQuery(new UsersQuery()).ToList();
+                    _lInstData.Execute(new DeleteEntityCommand<LInstContext>(_selectedUser));
+                    UserList = _lInstData.RunQuery(new UsersQuery()).ToList();
                 },
                 () => _selectedUser != null);
         }

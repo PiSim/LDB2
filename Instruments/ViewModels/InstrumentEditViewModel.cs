@@ -1,14 +1,13 @@
 ﻿using Controls.Views;
-using DataAccess;
+using DataAccessCore;
+using DataAccessCore.Commands;
 using Infrastructure;
 using Infrastructure.Commands;
 using Infrastructure.Events;
 using Infrastructure.Queries;
 using Infrastructure.Wrappers;
 using Instruments.Queries;
-using LabDbContext;
-using LabDbContext.EntityExtensions;
-using LabDbContext.Services;
+using LInst;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
@@ -26,34 +25,32 @@ namespace Instruments.ViewModels
 
         private bool _editMode;
         private IEventAggregator _eventAggregator;
-        private Property _filterProperty;
         private Instrument _instance;
         private InstrumentService _instrumentService;
-        private IDataService<LabDbEntities> _labDbData;
+        private IDataService<LInstContext> _lInstData;
         private InstrumentUtilizationArea _selectedArea;
-        private Method _selectedAssociated, _selectedUnassociated;
         private CalibrationReport _selectedCalibration;
         private InstrumentMaintenanceEvent _selectedEvent;
-        private InstrumentFiles _selectedFile;
+        private InstrumentFile _selectedFile;
 
         #endregion Fields
 
         #region Constructors
 
-        public InstrumentEditViewModel(IDataService<LabDbEntities> labDbdata,
+        public InstrumentEditViewModel(IDataService<LInstContext> lInstData,
                                         IEventAggregator aggregator,
                                         InstrumentService instrumentService) : base()
         {
-            _labDbData = labDbdata;
+            _lInstData = lInstData;
             _editMode = false;
             _eventAggregator = aggregator;
             _instrumentService = instrumentService;
 
-            AreaList = _labDbData.RunQuery(new InstrumentUtilizationAreasQuery()).ToList();
-            InstrumentTypeList = _labDbData.RunQuery(new InstrumentTypesQuery()).ToList();
-            ManufacturerList = _labDbData.RunQuery(new OrganizationsQuery() { Role = OrganizationsQuery.OrganizationRoles.Manufacturer })
+            AreaList = _lInstData.RunQuery(new InstrumentUtilizationAreasQuery()).ToList();
+            InstrumentTypeList = _lInstData.RunQuery(new InstrumentTypesQuery()).ToList();
+            ManufacturerList = _lInstData.RunQuery(new OrganizationsQuery() { Role = OrganizationsQuery.OrganizationRoles.Manufacturer })
                                                                         .ToList();
-            CalibrationLabList = _labDbData.RunQuery(new OrganizationsQuery() { Role = OrganizationsQuery.OrganizationRoles.CalibrationLab })
+            CalibrationLabList = _lInstData.RunQuery(new OrganizationsQuery() { Role = OrganizationsQuery.OrganizationRoles.CalibrationLab })
                                                                         .ToList();
 
             AddCalibrationCommand = new DelegateCommand(
@@ -73,9 +70,10 @@ namespace Instruments.ViewModels
 
                     if (fileDialog.ShowDialog() == DialogResult.OK)
                     {
-                        IEnumerable<string> fileList = fileDialog.FileNames;
+                        IEnumerable<InstrumentFile> fileList = fileDialog.FileNames.Select(pt => new InstrumentFile() { Path = pt});
 
-                        _instance.AddFiles(fileList);
+                        _lInstData.Execute(new BulkInsertEntitiesCommand<LInstContext>(fileList));
+
                         RaisePropertyChanged("FileList");
                     }
                 });
@@ -87,17 +85,6 @@ namespace Instruments.ViewModels
                     RaisePropertyChanged("MaintenanceEventList");
                 },
                 () => IsInstrumentAdmin);
-
-            AddMethodAssociationCommand = new DelegateCommand(
-                () =>
-                {
-                    _instance.AddMethodAssociation(_selectedUnassociated);
-                    SelectedUnassociatedMethod = null;
-                    RaisePropertyChanged("AssociatedMethods");
-                    RaisePropertyChanged("UnassociatedMethods");
-                },
-                () => IsInstrumentAdmin && _selectedUnassociated != null);
-            
 
             OpenFileCommand = new DelegateCommand(
                 () =>
@@ -116,30 +103,17 @@ namespace Instruments.ViewModels
             RemoveFileCommand = new DelegateCommand(
                 () =>
                 {
-                    _labDbData.Execute(new DeleteEntityCommand(_selectedFile));
+                    _lInstData.Execute(new DeleteEntityCommand<LInstContext>(_selectedFile));
 
                     RaisePropertyChanged("FileList");
                     SelectedFile = null;
                 },
                 () => _selectedFile != null);
-
-            RemoveMethodAssociationCommand = new DelegateCommand(
-                () =>
-                {
-                    _instance.RemoveMethodAssociation(_selectedAssociated);
-                    SelectedAssociatedMethod = null;
-                    RaisePropertyChanged("AssociatedMethods");
-                    RaisePropertyChanged("UnassociatedMethods");
-                },
-                () => IsInstrumentAdmin && _selectedAssociated != null);
-
+            
             SaveCommand = new DelegateCommand(
                 () =>
                 {
-                    _labDbData.Execute(new UpdateEntityCommand(_instance));
-                    _labDbData.Execute(new BulkUpdateEntitiesCommand(InstrumentMeasurablePropertyList.Where(imp => imp.IsModified)
-                                                                                                    .Select(impw => impw.PropertyInstance)));
-                    
+                    _lInstData.Execute(new UpdateEntityCommand<LInstContext>(_instance));                 
 
                     EditMode = false;
                     _eventAggregator.GetEvent<InstrumentListUpdateRequested>()
@@ -168,7 +142,7 @@ namespace Instruments.ViewModels
                             .Subscribe(
                             report =>
                             {
-                                if (report.instrumentID == _instance?.ID)
+                                if (report.InstrumentID == _instance?.ID)
                                     RaisePropertyChanged("CalibrationReportList");
                             });
 
@@ -190,9 +164,7 @@ namespace Instruments.ViewModels
         public DelegateCommand AddPropertyCommand { get; }
 
         public IEnumerable<InstrumentUtilizationArea> AreaList { get; }
-
-        public IEnumerable<Method> AssociatedMethods => _instance.GetAssociatedMethods();
-
+        
         public string CalibrationDueDate
         {
             get
@@ -204,7 +176,7 @@ namespace Instruments.ViewModels
             }
         }
 
-        public int CalibrationInterval
+        public int? CalibrationInterval
         {
             get
             {
@@ -216,7 +188,7 @@ namespace Instruments.ViewModels
             set
             {
                 _instance.CalibrationInterval = value;
-                if (_instance.UpdateCalibrationDueDate())
+                ///TODO
                     RaisePropertyChanged("CalibrationDueDate");
             }
         }
@@ -230,8 +202,8 @@ namespace Instruments.ViewModels
                 if (_instance == null)
                     return new List<CalibrationReport>();
 
-                return _labDbData.RunQuery(new CalibrationReportsQuery())
-                                .Where(crep => crep.instrumentID == _instance.ID).ToList();
+                return _lInstData.RunQuery(new CalibrationReportsQuery())
+                                .Where(crep => crep.InstrumentID == _instance.ID).ToList();
             }
         }
 
@@ -256,18 +228,9 @@ namespace Instruments.ViewModels
         }
 
         public IEnumerable<InstrumentMaintenanceEvent> EventList => (_instance == null) ? new List<InstrumentMaintenanceEvent>() 
-                                                                                        : _labDbData.RunQuery(new MaintenanceEventsQuery() { InstrumentID = _instance.ID }).ToList();
+                                                                                        : _lInstData.RunQuery(new MaintenanceEventsQuery() { InstrumentID = _instance.ID }).ToList();
 
-        public Property FilterProperty
-        {
-            get { return _filterProperty; }
-            set
-            {
-                _filterProperty = value;
-                RaisePropertyChanged("FilterProperty");
-            }
-        }
-
+        
         public string InstrumentCode
         {
             get
@@ -315,22 +278,15 @@ namespace Instruments.ViewModels
             set
             {
                 _instance = value;
-                _labDbData.Execute(new ReloadEntityCommand(_instance));
+                _lInstData.Execute(new ReloadEntityCommand<LInstContext>(_instance));
 
                 _selectedArea = AreaList.FirstOrDefault(iua => iua.ID == _instance.UtilizationAreaID);
-                InstrumentMeasurablePropertyList = _instance.GetMeasurableProperties()
-                                        .Select(imp => new InstrumentMeasurablePropertyWrapper(imp))
-                                        .ToList();
 
                 EditMode = false;
-                SelectedAssociatedMethod = null;
                 SelectedCalibration = null;
                 SelectedEvent = null;
                 SelectedFile = null;
-                SelectedInstrumentMeasurableProperty = null;
-                SelectedUnassociatedMethod = null;
 
-                RaisePropertyChanged("AssociatedMethods");
                 RaisePropertyChanged("CalibrationDueDate");
                 RaisePropertyChanged("CalibrationInterval");
                 RaisePropertyChanged("CalibrationReportList");
@@ -339,7 +295,6 @@ namespace Instruments.ViewModels
                 RaisePropertyChanged("InstrumentCode");
                 RaisePropertyChanged("InstrumentDescription");
                 RaisePropertyChanged("InstrumentManufacturer");
-                RaisePropertyChanged("InstrumentMeasurablePropertyList");
                 RaisePropertyChanged("InstrumentModel");
                 RaisePropertyChanged("InstrumentSerialNumber");
                 RaisePropertyChanged("InstrumentType");
@@ -348,7 +303,6 @@ namespace Instruments.ViewModels
                 RaisePropertyChanged("LastCalibrationDate");
                 RaisePropertyChanged("SelectedCalibrationLab");
                 RaisePropertyChanged("SelectedArea");
-                RaisePropertyChanged("UnassociatedMethods");
             }
         }
 
@@ -359,7 +313,7 @@ namespace Instruments.ViewModels
                 if (_instance == null)
                     return null;
                 else
-                    return ManufacturerList.FirstOrDefault(manuf => manuf.ID == _instance.manufacturerID);
+                    return ManufacturerList.FirstOrDefault(manuf => manuf.ID == _instance.ManufacturerID);
             }
 
             set
@@ -367,11 +321,9 @@ namespace Instruments.ViewModels
                 if (_instance == null)
                     return;
                 else
-                    _instance.manufacturerID = value.ID;
+                    _instance.ManufacturerID = value.ID;
             }
         }
-
-        public IList<InstrumentMeasurablePropertyWrapper> InstrumentMeasurablePropertyList { get; private set; }
 
         public string InstrumentModel
         {
@@ -453,7 +405,7 @@ namespace Instruments.ViewModels
             set
             {
                 _instance.IsUnderControl = value;
-                _instance.UpdateCalibrationDueDate();
+                ///TODO 
                 RaisePropertyChanged("CalibrationDueDate");
                 RaisePropertyChanged("IsUnderControl");
             }
@@ -463,23 +415,20 @@ namespace Instruments.ViewModels
         {
             get
             {
-                DateTime? lastCal = _instance?.GetLastCalibration()?.Date;
-
-                return (lastCal != null) ? lastCal.Value.ToShortDateString() : "Mai";
+                //TODO
+                //DateTime? lastCal = _instance?.GetLastCalibration()?.Date;
+                // (lastCal != null) ? lastCal.Value.ToShortDateString() :
+                return "Mai";
             }
         }
 
-        public IEnumerable<InstrumentMaintenanceEvent> MaintenanceEventList => _instance?.GetMaintenanceEvents();
+        public IEnumerable<InstrumentMaintenanceEvent> MaintenanceEventList => _lInstData.RunQuery(new MaintenanceEventsQuery() {InstrumentID = _instance?.ID }).ToList();
 
         public IEnumerable<Organization> ManufacturerList { get; }
 
         public DelegateCommand OpenFileCommand { get; }
 
-        public IEnumerable<Property> PropertyList => _labDbData.RunQuery(new PropertiesQuery()).ToList();
-
         public DelegateCommand RemoveFileCommand { get; }
-
-        public DelegateCommand RemoveMethodAssociationCommand { get; }
 
         public DelegateCommand SaveCommand { get; }
 
@@ -493,18 +442,7 @@ namespace Instruments.ViewModels
                     _instance.UtilizationAreaID = value.ID;
             }
         }
-
-        public Method SelectedAssociatedMethod
-        {
-            get { return _selectedAssociated; }
-            set
-            {
-                _selectedAssociated = value;
-                RaisePropertyChanged("SelectedAssociatedMethod");
-                RemoveMethodAssociationCommand.RaiseCanExecuteChanged();
-            }
-        }
-
+        
         public CalibrationReport SelectedCalibration
         {
             get { return _selectedCalibration; }
@@ -551,7 +489,7 @@ namespace Instruments.ViewModels
             }
         }
 
-        public InstrumentFiles SelectedFile
+        public InstrumentFile SelectedFile
         {
             get { return _selectedFile; }
             set
@@ -564,23 +502,8 @@ namespace Instruments.ViewModels
             }
         }
 
-        public InstrumentMeasurablePropertyWrapper SelectedInstrumentMeasurableProperty { get; set; }
-
-        public Method SelectedUnassociatedMethod
-        {
-            get { return _selectedUnassociated; }
-            set
-            {
-                _selectedUnassociated = value;
-                RaisePropertyChanged("SelectedUnassociatedMethod");
-                AddMethodAssociationCommand.RaiseCanExecuteChanged();
-            }
-        }
-
         public DelegateCommand StartEditCommand { get; }
-
-        public IEnumerable<Method> UnassociatedMethods => _instance.GetUnassociatedMethods();
-
+        
         private bool IsInstrumentAdmin => Thread.CurrentPrincipal.IsInRole(UserRoleNames.InstrumentAdmin);
 
         #endregion Properties

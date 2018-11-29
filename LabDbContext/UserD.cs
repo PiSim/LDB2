@@ -12,21 +12,22 @@ namespace LabDbContext
     using System;
     using System.Collections.Generic;
     
-    public partial class Master
+    public partial class UserD
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Master()
+        public UserD()
         {
-            this.Recipes = new HashSet<Recipe>();
+            this.RoleMappings = new HashSet<UserRoleMappingD>();
         }
     
         public int ID { get; set; }
-        public int Number { get; set; }
-        public string Date { get; set; }
-        public Nullable<int> BatchID { get; private set; }
+        public string FullName { get; set; }
+        public string HashedPassword { get; set; }
+        public string UserName { get; set; }
+        public Nullable<int> PersonID { get; set; }
     
-        public virtual Batch Batch { get; set; }
+        public virtual PersonD Person { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Recipe> Recipes { get; set; }
+        public virtual ICollection<UserRoleMappingD> RoleMappings { get; set; }
     }
 }

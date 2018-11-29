@@ -44,25 +44,6 @@ namespace LabDbContext.EntityExtensions
         }
 
 
-        public static IEnumerable<CalibrationReportInstrumentPropertyMapping> GetPropertyMappings(this CalibrationReport entry)
-        {
-            // Returns all associated CalibrationReportPropertyMapping entities
-
-            if (entry == null)
-                return null;
-
-            using (LabDbEntities entities = new LabDbEntities())
-            {
-                entities.Configuration.LazyLoadingEnabled = false;
-
-                return entities.CalibrationReportInstrumentPropertyMappings
-                                .Include(cripm => cripm.InstrumentMeasurableProperty.MeasurableQuantity)
-                                .Include(cripm => cripm.InstrumentMeasurableProperty.UnitOfMeasurement)
-                                .Where(cripm => cripm.CalibrationReportID == entry.ID)
-                                .ToList();
-            }
-        }
-
         public static IEnumerable<Instrument> GetReferenceInstruments(this CalibrationReport entry)
         {
             // Returns all Reference instruments for a given CalibrationReport entry

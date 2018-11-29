@@ -1,7 +1,7 @@
-﻿using DataAccess;
+﻿using DataAccessCore;
 using Infrastructure;
 using LabDB2.Commands;
-using LabDbContext;
+using LInst;
 using System;
 using System.Windows;
 using System.Windows.Controls;
@@ -17,17 +17,17 @@ namespace LabDB2.Views
         #region Fields
 
         private IAuthenticationService _authenticator;
-        private IDataService<LabDbEntities> _labDbData;
+        private IDataService<LInstContext> _lInstData;
 
         #endregion Fields
 
         #region Constructors
 
         public LoginDialog(IAuthenticationService authenticator,
-                            IDataService<LabDbEntities> labDbData)
+                            IDataService<LInstContext> lInstData)
         {
             _authenticator = authenticator;
-            _labDbData = labDbData;
+            _lInstData = lInstData;
             InitializeComponent();
             UserNameTextBox.Text = Properties.Settings.Default.LastLogUser;
 
@@ -41,7 +41,7 @@ namespace LabDB2.Views
 
         public DBPrincipal AuthenticatedPrincipal { get; private set; }
 
-        public LabDbContext.User AuthenticatedUser { get; private set; }
+        public LInst.User AuthenticatedUser { get; private set; }
 
         public string UserName
         {
@@ -62,7 +62,7 @@ namespace LabDB2.Views
         {
             try
             {
-                _labDbData.Execute(new AuthenticateUserCommand(new LabDbContext.User()
+                _lInstData.Execute(new AuthenticateUserCommand(new LInst.User()
                                                                     {
                                                                         UserName = UserNameTextBox.Text,
                                                                         HashedPassword = _authenticator.CalculateHash(PasswordBox.Password, UserNameTextBox.Text)
@@ -82,7 +82,7 @@ namespace LabDB2.Views
                 Confirm_Click(sender, e);
         }
 
-        public void OnAuthenticationHandler(LabDbContext.User authenticatedUser)
+        public void OnAuthenticationHandler(LInst.User authenticatedUser)
         {
             if (authenticatedUser == null)
                 throw new UnauthorizedAccessException();
