@@ -1,5 +1,5 @@
 ﻿using LabDbContext;
-using Microsoft.Practices.Prism.Mvvm;
+using Prism.Mvvm;
 using Prism.Regions;
 using System.Windows.Controls;
 
@@ -8,7 +8,7 @@ namespace Materials.Views
     /// <summary>
     /// Logica di interazione per AspectDetail.xaml
     /// </summary>
-    public partial class AspectDetail : UserControl, IView, INavigationAware
+    public partial class AspectDetail : UserControl, INavigationAware
     {
         #region Constructors
 

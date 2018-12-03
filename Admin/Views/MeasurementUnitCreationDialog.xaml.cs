@@ -1,5 +1,5 @@
 ﻿using LabDbContext;
-using Microsoft.Practices.Prism.Mvvm;
+using Prism.Mvvm;
 using System.Windows;
 
 namespace Admin.Views
@@ -7,7 +7,7 @@ namespace Admin.Views
     /// <summary>
     /// Logica di interazione per MeasurementUnitCreationDialog.xaml
     /// </summary>
-    public partial class MeasurementUnitCreationDialog : Window, IView
+    public partial class MeasurementUnitCreationDialog : Window
     {
         #region Constructors
 

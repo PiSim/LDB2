@@ -1,5 +1,5 @@
 ﻿using LabDbContext;
-using Microsoft.Practices.Prism.Mvvm;
+using Prism.Mvvm;
 using System.Windows.Controls;
 
 namespace Instruments.Views
@@ -7,7 +7,7 @@ namespace Instruments.Views
     /// <summary>
     /// Interaction logic for InstrumentsMainView.xaml
     /// </summary>
-    public partial class InstrumentMain : UserControl, IView
+    public partial class InstrumentMain : UserControl
     {
         #region Constructors
 

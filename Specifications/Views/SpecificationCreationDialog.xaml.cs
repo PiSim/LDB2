@@ -1,5 +1,5 @@
 ﻿using LabDbContext;
-using Microsoft.Practices.Prism.Mvvm;
+using Prism.Mvvm;
 using System.Windows;
 
 namespace Specifications.Views
@@ -7,7 +7,7 @@ namespace Specifications.Views
     /// <summary>
     /// Interaction logic for SpecificationCreationDialog.xaml
     /// </summary>
-    public partial class SpecificationCreationDialog : Window, IView
+    public partial class SpecificationCreationDialog : Window
     {
         #region Constructors
 

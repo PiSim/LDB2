@@ -234,7 +234,7 @@ namespace Instruments.ViewModels
             }
         }
 
-        public IEnumerable<CalibrationFile> FileList => _lInstData.RunQuery(new CalibrationFilesQuery() { CalibrationReportID = _calibrationInstance.ID });
+        public IEnumerable<CalibrationFile> FileList => (_calibrationInstance == null) ? new List<CalibrationFile>() : _lInstData.RunQuery(new CalibrationFilesQuery() { CalibrationReportID = _calibrationInstance.ID }).ToList();
 
         public string FileListRegionName => RegionNames.CalibrationEditFileListRegion;
 
@@ -262,7 +262,7 @@ namespace Instruments.ViewModels
             }
         }
 
-        public IEnumerable<Instrument> ReferenceList => _lInstData.RunQuery(new ReferenceInstrumentsQuery(_calibrationInstance)).ToList();
+        public IEnumerable<Instrument> ReferenceList => (_calibrationInstance == null) ? new List<Instrument>() : _lInstData.RunQuery(new ReferenceInstrumentsQuery(_calibrationInstance)).ToList();
 
         public DelegateCommand RemoveFileCommand { get; }
 
@@ -300,7 +300,7 @@ namespace Instruments.ViewModels
             set
             {
                 _selectedLab = value;
-                if (_calibrationInstance != null)
+                if (_calibrationInstance != null && value != null)
                 {
                     _calibrationInstance.Laboratory = value;
                     _calibrationInstance.LaboratoryID = _selectedLab.ID;
@@ -325,7 +325,7 @@ namespace Instruments.ViewModels
             set
             {
                 _selectedResult = value;
-                if (_calibrationInstance != null)
+                if (_calibrationInstance != null && value != null)
                 {
                     _calibrationInstance.CalibrationResult = value;
                     _calibrationInstance.CalibrationResultID = value.ID;
@@ -340,7 +340,7 @@ namespace Instruments.ViewModels
             set
             {
                 _selectedPerson = value;
-                if (_calibrationInstance != null)
+                if (_calibrationInstance != null && value != null)
                 {
                     _calibrationInstance.Tech = value;
                     _calibrationInstance.TechID = value.ID;

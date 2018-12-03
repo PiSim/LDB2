@@ -1,5 +1,5 @@
 ﻿using LabDbContext;
-using Microsoft.Practices.Prism.Mvvm;
+using Prism.Mvvm;
 using Prism.Regions;
 using System.Windows.Controls;
 
@@ -8,7 +8,7 @@ namespace Admin.Views
     /// <summary>
     /// Logica di interazione per InstrumentTypeEdit.xaml
     /// </summary>
-    public partial class InstrumentTypeEdit : UserControl, IView, INavigationAware
+    public partial class InstrumentTypeEdit : UserControl, INavigationAware
     {
         #region Constructors
 

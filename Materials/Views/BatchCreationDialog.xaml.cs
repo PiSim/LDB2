@@ -1,5 +1,5 @@
 ﻿using LabDbContext;
-using Microsoft.Practices.Prism.Mvvm;
+using Prism.Mvvm;
 using System.Windows;
 
 namespace Materials.Views
@@ -7,7 +7,7 @@ namespace Materials.Views
     /// <summary>
     /// Logica di interazione per BatchCreationDialog.xaml
     /// </summary>
-    public partial class BatchCreationDialog : Window, IView
+    public partial class BatchCreationDialog : Window
     {
         #region Constructors
 

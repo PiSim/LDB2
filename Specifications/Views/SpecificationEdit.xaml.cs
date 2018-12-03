@@ -1,6 +1,6 @@
 ﻿using Controls.Views;
 using LabDbContext;
-using Microsoft.Practices.Prism.Mvvm;
+using Prism.Mvvm;
 using Prism.Regions;
 using System.Windows.Controls;
 
@@ -9,7 +9,7 @@ namespace Specifications.Views
     /// <summary>
     /// Interaction logic for SpecificationEditView.xaml
     /// </summary>
-    public partial class SpecificationEdit : UserControl, INavigationAware, IView
+    public partial class SpecificationEdit : UserControl, INavigationAware
     {
         #region Constructors
 

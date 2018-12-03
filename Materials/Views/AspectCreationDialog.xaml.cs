@@ -1,5 +1,5 @@
 ﻿using LabDbContext;
-using Microsoft.Practices.Prism.Mvvm;
+using Prism.Mvvm;
 using System.Windows;
 
 namespace Materials.Views
@@ -7,7 +7,7 @@ namespace Materials.Views
     /// <summary>
     /// Logica di interazione per AspectCreationDialog.xaml
     /// </summary>
-    public partial class AspectCreationDialog : Window, IView
+    public partial class AspectCreationDialog : Window
     {
         #region Constructors
 

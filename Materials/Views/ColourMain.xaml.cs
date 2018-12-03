@@ -1,4 +1,4 @@
-﻿using Microsoft.Practices.Prism.Mvvm;
+﻿using Prism.Mvvm;
 using System.Windows.Controls;
 
 namespace Materials.Views
@@ -6,7 +6,7 @@ namespace Materials.Views
     /// <summary>
     /// Interaction logic for ColourMain.xaml
     /// </summary>
-    public partial class ColourMain : UserControl, IView
+    public partial class ColourMain : UserControl
     {
         #region Constructors
 

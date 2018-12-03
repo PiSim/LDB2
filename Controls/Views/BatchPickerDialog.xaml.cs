@@ -1,4 +1,4 @@
-﻿using Microsoft.Practices.Prism.Mvvm;
+﻿using Prism.Mvvm;
 using System.Windows;
 
 namespace Controls.Views
@@ -6,7 +6,7 @@ namespace Controls.Views
     /// <summary>
     /// Interaction logic for BatchPickerDialog.xaml
     /// </summary>
-    public partial class BatchPickerDialog : Window, IView
+    public partial class BatchPickerDialog : Window
     {
         #region Constructors
 

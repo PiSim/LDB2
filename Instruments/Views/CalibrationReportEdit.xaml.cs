@@ -1,6 +1,6 @@
 ﻿using Controls.Views;
 using LInst;
-using Microsoft.Practices.Prism.Mvvm;
+using Prism.Mvvm;
 using Prism.Regions;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -10,7 +10,7 @@ namespace Instruments.Views
     /// <summary>
     /// Logica di interazione per CalibrationReportEdit.xaml
     /// </summary>
-    public partial class CalibrationReportEdit : UserControl, INavigationAware, IView
+    public partial class CalibrationReportEdit : UserControl, INavigationAware
     {
         #region Constructors
 

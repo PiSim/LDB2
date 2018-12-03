@@ -1,5 +1,5 @@
 ﻿using Controls.Views;
-using Microsoft.Practices.Prism.Mvvm;
+using Prism.Mvvm;
 using Prism.Regions;
 using System.Windows.Controls;
 
@@ -8,7 +8,7 @@ namespace Materials.Views
     /// <summary>
     /// Interaction logic for BatchesView.xaml
     /// </summary>
-    public partial class BatchMain : UserControl, IView
+    public partial class BatchMain : UserControl
     {
         #region Constructors
 

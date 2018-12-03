@@ -1,6 +1,6 @@
 ﻿using LInst;
 using DataAccessCore;
-using System.Data.Entity;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 
 namespace Instruments.Queries

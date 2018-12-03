@@ -1,5 +1,5 @@
 ﻿using Controls.Views;
-using Microsoft.Practices.Prism.Mvvm;
+using Prism.Mvvm;
 using Prism.Regions;
 using System.Windows.Controls;
 
@@ -8,7 +8,7 @@ namespace Admin.Views
     /// <summary>
     /// Interaction logic for AdminMainView.xaml
     /// </summary>
-    public partial class AdminMain : UserControl, IView
+    public partial class AdminMain : UserControl
     {
         #region Constructors
 

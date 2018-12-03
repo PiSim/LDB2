@@ -1,4 +1,4 @@
-﻿using Microsoft.Practices.Prism.Mvvm;
+﻿using Prism.Mvvm;
 using System.Windows.Controls;
 
 namespace User.Views
@@ -6,7 +6,7 @@ namespace User.Views
     /// <summary>
     /// Interaction logic for UserMainView.xaml
     /// </summary>
-    public partial class CurrentUserMain : UserControl, IView
+    public partial class CurrentUserMain : UserControl
     {
         #region Constructors
 

@@ -1,4 +1,4 @@
-﻿using Microsoft.Practices.Prism.Mvvm;
+﻿using Prism.Mvvm;
 using System.Windows.Controls;
 
 namespace Admin.Views
@@ -6,7 +6,7 @@ namespace Admin.Views
     /// <summary>
     /// Interaction logic for PersonRoleSelector.xaml
     /// </summary>
-    public partial class PeopleMain : UserControl, IView
+    public partial class PeopleMain : UserControl
     {
         #region Constructors
 

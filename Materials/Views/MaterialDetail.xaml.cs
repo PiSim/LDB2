@@ -1,6 +1,6 @@
 ﻿using Controls.Views;
 using LabDbContext;
-using Microsoft.Practices.Prism.Mvvm;
+using Prism.Mvvm;
 using Prism.Regions;
 using System.Windows.Controls;
 
@@ -9,7 +9,7 @@ namespace Materials.Views
     /// <summary>
     /// Logica di interazione per ConstructionDetail.xaml
     /// </summary>
-    public partial class MaterialDetail : UserControl, IView, INavigationAware
+    public partial class MaterialDetail : UserControl, INavigationAware
     {
         #region Constructors
 

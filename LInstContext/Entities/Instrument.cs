@@ -13,7 +13,11 @@ namespace LInst
             Description = "";
             IsInService = true;
             IsUnderControl = false;
-        }
+            MaintenanceEvents = new HashSet<InstrumentMaintenanceEvent>();
+            InstrumentFiles = new HashSet<InstrumentFile>();
+            CalibrationReports = new HashSet<CalibrationReport>();
+            CalibrationsAsReference = new HashSet<CalibrationReportReference>();
+    }
 
         public int ID { get; set; }
 
@@ -44,9 +48,9 @@ namespace LInst
         public DateTime? CalibrationDueDate { get; set; }
         public int? CalibrationInterval { get; set; }
                
-        public ICollection<InstrumentMaintenanceEvent> MaintenanceEvents { get; }
-        public ICollection<InstrumentFile> InstrumentFiles { get; }
-        public ICollection<CalibrationReport> CalibrationReports { get; }
-        public ICollection<CalibrationReportReference> CalibrationsAsReference { get; }
+        public ICollection<InstrumentMaintenanceEvent> MaintenanceEvents { get; set; }
+        public ICollection<InstrumentFile> InstrumentFiles { get; set; }
+        public ICollection<CalibrationReport> CalibrationReports { get; set; }
+        public ICollection<CalibrationReportReference> CalibrationsAsReference { get; set; }
     }
 }

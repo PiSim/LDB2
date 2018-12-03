@@ -2,8 +2,8 @@
 using Infrastructure;
 using Infrastructure.Wrappers;
 using LabDbContext;
-using Microsoft.Practices.Prism.Commands;
-using Microsoft.Practices.Prism.Mvvm;
+using Prism.Commands;
+using Prism.Mvvm;
 using Specifications.Queries;
 using System.Collections.Generic;
 using System.Linq;
@@ -64,8 +64,8 @@ namespace Specifications.ViewModels
                 StandardList = _labDbData.RunQuery(new StandardsQuery())
                                         .Select(std => new GenericItemWrapper<Std>(std))
                                         .ToList();
-                OnPropertyChanged("StandardList");
-                OnPropertyChanged("ParentName");
+                RaisePropertyChanged("StandardList");
+                RaisePropertyChanged("ParentName");
                 ConfirmCommand.RaiseCanExecuteChanged();
             }
         }

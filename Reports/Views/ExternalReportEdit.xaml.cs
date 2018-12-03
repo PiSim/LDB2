@@ -1,5 +1,5 @@
 ﻿using LabDbContext;
-using Microsoft.Practices.Prism.Mvvm;
+using Prism.Mvvm;
 using Prism.Regions;
 using System.Windows.Controls;
 
@@ -8,7 +8,7 @@ namespace Reports.Views
     /// <summary>
     /// Interaction logic for ReportEditView.xaml
     /// </summary>
-    public partial class ExternalReportEdit : UserControl, INavigationAware, IView
+    public partial class ExternalReportEdit : UserControl, INavigationAware
     {
         #region Constructors
 

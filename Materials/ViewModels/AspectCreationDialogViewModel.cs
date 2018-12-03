@@ -1,12 +1,13 @@
 ﻿using DataAccess;
 using LabDbContext;
 using Materials.Queries;
-using Microsoft.Practices.Prism.Commands;
+using Prism.Commands;
 using Prism.Mvvm;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data.Entity;
 using System.Windows;
 
 namespace Materials.ViewModels

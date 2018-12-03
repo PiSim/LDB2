@@ -1,7 +1,7 @@
 ﻿using Infrastructure;
 using LabDB2.Views;
 using LabDbContext;
-using Microsoft.Practices.Prism.Mvvm;
+using Prism.Mvvm;
 using Prism.Ioc;
 using Prism.Modularity;
 using Prism.Unity;
@@ -146,7 +146,8 @@ namespace LabDB2
             moduleManager.LoadModule(typeof(LInst.LInstModule).Name);
             TryLogin();
             IPrincipal _currentPrincipal = Thread.CurrentPrincipal;
-            
+
+            moduleManager.LoadModule(typeof(LabDbContext.LabDbEntitiesModule).Name);
             if (_currentPrincipal.IsInRole(UserRoleNames.Admin))
                 moduleManager.LoadModule(typeof(Admin.AdminModule).Name);
 

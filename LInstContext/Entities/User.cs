@@ -13,6 +13,8 @@ namespace LInst
             FullName = "";
             UserName = "";
             HashedPassword = "";
+
+            RoleMappings = new HashSet<UserRoleMapping>();
         }
 
 
@@ -24,7 +26,7 @@ namespace LInst
 
         public string HashedPassword { get; set; }
 
-        public ICollection<UserRoleMapping> RoleMappings { get; }
+        public ICollection<UserRoleMapping> RoleMappings { get; set; }
 
         public Person Person { get; set; }
 

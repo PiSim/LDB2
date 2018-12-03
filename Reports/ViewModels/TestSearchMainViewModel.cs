@@ -2,7 +2,7 @@
 using Infrastructure.Events;
 using Infrastructure.Queries;
 using LabDbContext;
-using Microsoft.Practices.Prism.Mvvm;
+using Prism.Mvvm;
 using Prism.Commands;
 using Prism.Events;
 using Reports.Queries;
@@ -50,7 +50,7 @@ namespace Reports.ViewModels
                     };
 
                     ResultList = _labDbData.RunQuery(testQuery).ToList();
-                    OnPropertyChanged("ResultList");
+                    RaisePropertyChanged("ResultList");
                 });
 
             RowDoubleClickCommand = new DelegateCommand<Test>(

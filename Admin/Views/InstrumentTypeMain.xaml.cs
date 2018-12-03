@@ -1,4 +1,4 @@
-﻿using Microsoft.Practices.Prism.Mvvm;
+﻿using Prism.Mvvm;
 using System.Windows.Controls;
 
 namespace Admin.Views
@@ -6,7 +6,7 @@ namespace Admin.Views
     /// <summary>
     /// Logica di interazione per InstrumentTypeMain.xaml
     /// </summary>
-    public partial class InstrumentTypeMain : UserControl, IView
+    public partial class InstrumentTypeMain : UserControl
     {
         #region Constructors
 

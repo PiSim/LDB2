@@ -1,6 +1,6 @@
 ﻿using Infrastructure.Wrappers;
 using LabDbContext;
-using Microsoft.Practices.Prism.Mvvm;
+using Prism.Mvvm;
 using System.Collections.Generic;
 using System.Windows;
 
@@ -9,7 +9,7 @@ namespace Reports.Views
     /// <summary>
     /// Interaction logic for AddTestDialog.xaml
     /// </summary>
-    public partial class AddTestDialog : Window, IView
+    public partial class AddTestDialog : Window
     {
         #region Constructors
 

@@ -1,5 +1,5 @@
 ﻿using LInst;
-using Microsoft.Practices.Prism.Mvvm;
+using Prism.Mvvm;
 using System.Windows;
 
 namespace Admin.Views
@@ -7,7 +7,7 @@ namespace Admin.Views
     /// <summary>
     /// Interaction logic for NewUserDialog.xaml
     /// </summary>
-    public partial class NewUserDialog : Window, IView
+    public partial class NewUserDialog : Window
     {
         #region Constructors
 

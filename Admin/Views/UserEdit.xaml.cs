@@ -1,5 +1,5 @@
 ﻿using LInst;
-using Microsoft.Practices.Prism.Mvvm;
+using Prism.Mvvm;
 using Prism.Regions;
 using System.Windows.Controls;
 
@@ -8,7 +8,7 @@ namespace Admin.Views
     /// <summary>
     /// Interaction logic for UserEdit.xaml
     /// </summary>
-    public partial class UserEdit : UserControl, IView, INavigationAware
+    public partial class UserEdit : UserControl, INavigationAware
     {
         #region Constructors
 

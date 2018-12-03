@@ -1,6 +1,6 @@
 ﻿using Controls.Views;
 using LInst;
-using Microsoft.Practices.Prism.Mvvm;
+using Prism.Mvvm;
 using Prism.Regions;
 using System.Windows.Controls;
 
@@ -9,7 +9,7 @@ namespace Instruments.Views
     /// <summary>
     /// Interaction logic for InstrumentEdit.xaml
     /// </summary>
-    public partial class InstrumentEdit : UserControl, IView, INavigationAware
+    public partial class InstrumentEdit : UserControl, INavigationAware
     {
         #region Constructors
 

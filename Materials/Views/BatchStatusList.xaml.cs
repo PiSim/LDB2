@@ -1,4 +1,4 @@
-﻿using Microsoft.Practices.Prism.Mvvm;
+﻿using Prism.Mvvm;
 using System.Windows.Controls;
 
 namespace Materials.Views
@@ -6,7 +6,7 @@ namespace Materials.Views
     /// <summary>
     /// Interaction logic for BatchStatusList.xaml
     /// </summary>
-    public partial class BatchStatusList : UserControl, IView
+    public partial class BatchStatusList : UserControl
     {
         #region Constructors
 

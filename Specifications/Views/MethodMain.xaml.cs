@@ -1,4 +1,4 @@
-﻿using Microsoft.Practices.Prism.Mvvm;
+﻿using Prism.Mvvm;
 using System.Windows.Controls;
 
 namespace Specifications.Views
@@ -6,7 +6,7 @@ namespace Specifications.Views
     /// <summary>
     /// Interaction logic for MethodMainView.xaml
     /// </summary>
-    public partial class MethodMain : UserControl, IView
+    public partial class MethodMain : UserControl
     {
         #region Constructors
 

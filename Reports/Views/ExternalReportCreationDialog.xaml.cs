@@ -1,5 +1,5 @@
 ﻿using LabDbContext;
-using Microsoft.Practices.Prism.Mvvm;
+using Prism.Mvvm;
 using System.Windows;
 
 namespace Reports.Views
@@ -7,7 +7,7 @@ namespace Reports.Views
     /// <summary>
     /// Interaction logic for ExternalReportCreationDialog.xaml
     /// </summary>
-    public partial class ExternalReportCreationDialog : Window, IView
+    public partial class ExternalReportCreationDialog : Window
     {
         #region Constructors
 

@@ -1,4 +1,4 @@
-﻿using Microsoft.Practices.Prism.Mvvm;
+﻿using Prism.Mvvm;
 using System.Windows.Controls;
 
 namespace Materials.Views
@@ -6,7 +6,7 @@ namespace Materials.Views
     /// <summary>
     /// Logica di interazione per SampleLongTermStorage.xaml
     /// </summary>
-    public partial class SampleLongTermStorage : UserControl, IView
+    public partial class SampleLongTermStorage : UserControl
     {
         #region Constructors
 

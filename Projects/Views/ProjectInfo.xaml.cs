@@ -1,12 +1,12 @@
 ﻿using Controls.Views;
 using LabDbContext;
-using Microsoft.Practices.Prism.Mvvm;
+using Prism.Mvvm;
 using Prism.Regions;
 using System.Windows.Controls;
 
 namespace Projects.Views
 {
-    public partial class ProjectInfo : UserControl, INavigationAware, IView
+    public partial class ProjectInfo : UserControl, INavigationAware
     {
         #region Constructors
 

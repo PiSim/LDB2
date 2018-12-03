@@ -1,5 +1,5 @@
 ﻿using LInst;
-using Microsoft.Practices.Prism.Mvvm;
+using Prism.Mvvm;
 using System.Windows;
 
 namespace Instruments.Views
@@ -7,7 +7,7 @@ namespace Instruments.Views
     /// <summary>
     /// Interaction logic for NewCalibrationDialog.xaml
     /// </summary>
-    public partial class NewCalibrationDialog : Window, IView
+    public partial class NewCalibrationDialog : Window
     {
         #region Constructors
 

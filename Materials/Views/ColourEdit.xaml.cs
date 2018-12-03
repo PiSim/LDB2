@@ -1,6 +1,6 @@
 ﻿using Controls.Views;
 using LabDbContext;
-using Microsoft.Practices.Prism.Mvvm;
+using Prism.Mvvm;
 using Prism.Regions;
 using System.Windows.Controls;
 
@@ -9,7 +9,7 @@ namespace Materials.Views
     /// <summary>
     /// Interaction logic for ColourEdit.xaml
     /// </summary>
-    public partial class ColourEdit : UserControl, IView, INavigationAware
+    public partial class ColourEdit : UserControl, INavigationAware
     {
         #region Constructors
 

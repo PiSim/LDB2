@@ -11,7 +11,7 @@ namespace LInst
     {
         public CalibrationReport()
         {
-
+            CalibrationReportReferences = new HashSet<CalibrationReportReference>();
         }
 
         public int ID { get; set; }
@@ -33,6 +33,6 @@ namespace LInst
 
         public string Notes { get; set; }
 
-        public ICollection<CalibrationReportReference> CalibrationReportReferences { get; }
+        public ICollection<CalibrationReportReference> CalibrationReportReferences { get; set; }
     }
 }

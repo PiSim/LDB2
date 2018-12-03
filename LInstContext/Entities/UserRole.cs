@@ -12,6 +12,8 @@ namespace LInst
         {
             Name = "";
             Description = "";
+
+            UserMappings = new HashSet<UserRoleMapping>();
         }
 
         public int ID { get; set; }
@@ -20,6 +22,6 @@ namespace LInst
 
         public string Description { get; set; }
 
-        public ICollection<UserRoleMapping> UserMappings { get; }
+        public ICollection<UserRoleMapping> UserMappings { get; set; }
     }
 }
