@@ -104,11 +104,6 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="System.Threading.Tasks.Extensions">
-      <Version>4.5.1</Version>
-    </PackageReference>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\DataAccessCore\DataAccessCore.csproj">
       <Project>{1e90ed7a-d0fe-4e48-9348-a863b86ae092}</Project>
       <Name>DataAccessCore</Name>
