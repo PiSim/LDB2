@@ -4,13 +4,11 @@ using Infrastructure;
 using Infrastructure.Commands;
 using Infrastructure.Events;
 using LabDbContext;
-using LabDbContext.EntityExtensions;
 using Materials.Queries;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
 
 namespace Materials.ViewModels
@@ -115,7 +113,7 @@ namespace Materials.ViewModels
             }
         }
 
-        public IEnumerable<Batch> BatchList => (_aspectInstance == null ) ? null : _labDbData.RunQuery(new BatchesQuery()).Where(btc => btc.Material.Aspect.ID == _aspectInstance.ID).ToList();
+        public IEnumerable<Batch> BatchList => (_aspectInstance == null) ? null : _labDbData.RunQuery(new BatchesQuery()).Where(btc => btc.Material.Aspect.ID == _aspectInstance.ID).ToList();
 
         public bool CanSetModify => true;
 

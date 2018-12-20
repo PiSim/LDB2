@@ -1,7 +1,6 @@
 ﻿using Infrastructure;
 using Infrastructure.Wrappers;
 using LabDbContext;
-using LabDbContext.EntityExtensions;
 using Prism.Commands;
 using Prism.Mvvm;
 using System.Collections.Generic;

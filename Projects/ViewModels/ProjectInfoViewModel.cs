@@ -6,8 +6,6 @@ using Infrastructure.Events;
 using Infrastructure.Queries;
 using LabDbContext;
 using LInst;
-using LabDbContext.EntityExtensions;
-using LabDbContext.Services;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
@@ -24,8 +22,8 @@ namespace Projects.ViewModels
         private bool _editMode;
         private IEventAggregator _eventAggregator;
         private IDataService<LabDbEntities> _labDbData;
-        DataAccessCore.IDataService<LInstContext> _lInstData;
         private IEnumerable<Person> _leaderList;
+        private DataAccessCore.IDataService<LInstContext> _lInstData;
         private IEnumerable<Organization> _oemList;
         private Project _projectInstance;
         private DelegateCommand _save;
@@ -359,7 +357,7 @@ namespace Projects.ViewModels
         }
 
         public DelegateCommand StartEditCommand { get; }
-        
+
         public IEnumerable<Material> UnassignedMaterials => _labDbData.RunQuery(new MaterialsQuery())
                                                                 .Where(mat => mat.ProjectID == null)
                                                                 .ToList();

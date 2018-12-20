@@ -2,11 +2,10 @@
 using Infrastructure.Events;
 using Infrastructure.Queries;
 using LabDbContext;
-using Prism.Mvvm;
 using Prism.Commands;
 using Prism.Events;
+using Prism.Mvvm;
 using Reports.Queries;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -56,7 +55,7 @@ namespace Reports.ViewModels
             RowDoubleClickCommand = new DelegateCommand<Test>(
                 tst =>
                 {
-                    object rpt;                    
+                    object rpt;
                     string viewName;
 
                     if (tst.TestRecord.RecordTypeID == 1)
@@ -66,7 +65,7 @@ namespace Reports.ViewModels
                     }
                     else if (tst.TestRecord.RecordTypeID == 2)
                     {
-                        rpt = _labDbData.RunQuery(new ExternalReportsQuery()).FirstOrDefault(exrep => exrep.TestRecords.Any(trec => trec.ID == tst.TestRecord.ID ));
+                        rpt = _labDbData.RunQuery(new ExternalReportsQuery()).FirstOrDefault(exrep => exrep.TestRecords.Any(trec => trec.ID == tst.TestRecord.ID));
                         viewName = ViewNames.ExternalReportEditView;
                     }
                     else

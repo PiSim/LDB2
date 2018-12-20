@@ -1,5 +1,4 @@
 ﻿using LInst;
-using Prism.Mvvm;
 using System.Windows;
 
 namespace Admin.Views

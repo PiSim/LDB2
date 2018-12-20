@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Data.Entity;
-using System.Data.Entity.Migrations;
 using System.Linq;
 
 namespace LabDbContext
@@ -8,7 +7,7 @@ namespace LabDbContext
     public static class ReportExtension
     {
         #region Methods
-        
+
         public static IEnumerable<ReportFile> GetReportFiles(this Report entry)
         {
             // Returns all ReportFiles for a report Entry
@@ -61,7 +60,6 @@ namespace LabDbContext
                                         .Project;
             }
         }
-
 
         /// <summary>
         /// Sets the project for the material of this report to the one specified

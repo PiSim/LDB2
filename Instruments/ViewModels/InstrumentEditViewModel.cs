@@ -2,10 +2,8 @@
 using DataAccessCore;
 using DataAccessCore.Commands;
 using Infrastructure;
-using Infrastructure.Commands;
 using Infrastructure.Events;
 using Infrastructure.Queries;
-using Infrastructure.Wrappers;
 using Instruments.Queries;
 using LInst;
 using Prism.Commands;
@@ -13,6 +11,8 @@ using Prism.Events;
 using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
@@ -53,6 +53,10 @@ namespace Instruments.ViewModels
             CalibrationLabList = _lInstData.RunQuery(new OrganizationsQuery() { Role = OrganizationsQuery.OrganizationRoles.CalibrationLab })
                                                                         .ToList();
 
+            PropertiesToAdd = new List<InstrumentProperty>();
+            PropertiesToRemove = new List<InstrumentProperty>();
+            PropertyList = new ObservableCollection<InstrumentProperty>();
+
             AddCalibrationCommand = new DelegateCommand(
                 () =>
                 {
@@ -70,7 +74,7 @@ namespace Instruments.ViewModels
 
                     if (fileDialog.ShowDialog() == DialogResult.OK)
                     {
-                        IEnumerable<InstrumentFile> fileList = fileDialog.FileNames.Select(pt => new InstrumentFile() { Path = pt});
+                        IEnumerable<InstrumentFile> fileList = fileDialog.FileNames.Select(pt => new InstrumentFile() { Path = pt });
 
                         _lInstData.Execute(new BulkInsertEntitiesCommand<LInstContext>(fileList));
 
@@ -82,9 +86,17 @@ namespace Instruments.ViewModels
                 () =>
                 {
                     _instrumentService.ShowNewMaintenanceDialog(_instance);
-                    RaisePropertyChanged("MaintenanceEventList");
+                    RefreshMaintenanceEventList();
                 },
                 () => IsInstrumentAdmin);
+
+
+            DeleteCalibrationCommand = new DelegateCommand(
+                () =>
+                {
+                    _lInstData.Execute(new DeleteEntityCommand<LInstContext>(_selectedCalibration));
+                },
+                () => Thread.CurrentPrincipal.IsInRole(UserRoleNames.InstrumentAdmin) && _selectedCalibration != null);
 
             OpenFileCommand = new DelegateCommand(
                 () =>
@@ -109,11 +121,15 @@ namespace Instruments.ViewModels
                     SelectedFile = null;
                 },
                 () => _selectedFile != null);
-            
+
             SaveCommand = new DelegateCommand(
                 () =>
                 {
-                    _lInstData.Execute(new UpdateEntityCommand<LInstContext>(_instance));                 
+                    _lInstData.Execute(new UpdateEntityCommand<LInstContext>(_instance));
+                    _lInstData.Execute(new BulkInsertEntitiesCommand<LInstContext>(PropertiesToAdd));
+                    _lInstData.Execute(new BulkDeleteEntitiesCommand<LInstContext>(PropertiesToRemove));
+                    _lInstData.Execute(new BulkUpdateEntitiesCommand<LInstContext>(PropertyList));
+                    ClearPropertyPendingUpdates();
 
                     EditMode = false;
                     _eventAggregator.GetEvent<InstrumentListUpdateRequested>()
@@ -130,14 +146,6 @@ namespace Instruments.ViewModels
 
             #region Event Subscriptions
 
-            _eventAggregator.GetEvent<MaintenanceEventCreated>()
-                            .Subscribe(
-                            maint =>
-                            {
-                                if (maint.InstrumentID == _instance?.ID)
-                                    RaisePropertyChanged("MaintenanceEventList");
-                            });
-
             _eventAggregator.GetEvent<CalibrationIssued>()
                             .Subscribe(
                             report =>
@@ -151,6 +159,85 @@ namespace Instruments.ViewModels
 
         #endregion Constructors
 
+        #region Methods
+
+        /// <summary>
+        /// Clears the lists for pending Insert/Remove operation on InstrumentProperties
+        /// </summary>
+        private void ClearPropertyPendingUpdates()
+        {
+            PropertiesToAdd.Clear();
+            PropertiesToRemove.Clear();
+        }
+
+        private void OnPropertiesListChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (e.NewItems != null)
+                foreach (InstrumentProperty ip in e.NewItems.OfType<InstrumentProperty>())
+                {
+                    ip.InstrumentID = _instance.ID;
+                    PropertiesToAdd.Add(ip);
+                }
+
+            if (e.OldItems != null)
+                PropertiesToRemove.AddRange(e.OldItems.OfType<InstrumentProperty>());
+        }
+
+        /// <summary>
+        /// Queries the database for the list of CalibrationReport entries associated with the current Instrument instance 
+        /// and sets the value of CalibrationReportList, then raises RaisePropertyChanged
+        /// </summary>
+        private void RefreshCalibrations()
+        {
+            SelectedCalibration = null;
+
+            if (_instance == null)
+                CalibrationReportList = new List<CalibrationReport>();
+
+            CalibrationReportList = _lInstData.RunQuery(new CalibrationReportsQuery())
+                            .Where(crep => crep.InstrumentID == _instance.ID).ToList();
+
+            RaisePropertyChanged("CalibrationReportList");
+        }
+
+        private void RefreshMaintenanceEventList()
+        {
+            MaintenanceEventList = _lInstData.RunQuery(new MaintenanceEventsQuery() { InstrumentID = _instance?.ID }).ToList();
+            RaisePropertyChanged("MaintenanceEventList");
+        }
+
+        private void RefreshPropertyList()
+        {
+            PropertyList = (_instance == null) ? new ObservableCollection<InstrumentProperty>() : new ObservableCollection<InstrumentProperty>(_lInstData.RunQuery(new InstrumentPropertiesQuery(_instance.ID)));
+
+            PropertyList.CollectionChanged += OnPropertiesListChanged;
+
+            ClearPropertyPendingUpdates();
+            RaisePropertyChanged("PropertyList");
+        }
+
+        /// <summary>
+        /// Calculates the new CalibrationDueDate using the provided parameters and sets the value in the current instance
+        /// Finally Calls RaisePropertyChanged on CalibrationDueDate
+        /// </summary>
+        private void UpdateCalibrationDueDate()
+        {
+            if (!_instance.IsUnderControl)
+                _instance.CalibrationDueDate = null;
+            else
+            {
+                DateTime? lastCalibration = LastCalibrationDate;
+                if (lastCalibration != null)
+                    _instance.CalibrationDueDate = lastCalibration.Value.AddMonths((int)CalibrationInterval);
+                else
+                    _instance.CalibrationDueDate = DateTime.Today;
+            }
+
+            RaisePropertyChanged("CalibrationDueDate");
+        }
+
+        #endregion Methods
+
         #region Properties
 
         public DelegateCommand AddCalibrationCommand { get; }
@@ -158,23 +245,14 @@ namespace Instruments.ViewModels
         public DelegateCommand AddFileCommand { get; }
 
         public DelegateCommand AddMaintenanceEventCommand { get; }
-
+        public DelegateCommand DeleteCalibrationCommand { get; }
         public DelegateCommand AddMethodAssociationCommand { get; }
 
         public DelegateCommand AddPropertyCommand { get; }
 
         public IEnumerable<InstrumentUtilizationArea> AreaList { get; }
-        
-        public string CalibrationDueDate
-        {
-            get
-            {
-                if (_instance == null || _instance.CalibrationDueDate == null)
-                    return "//";
 
-                return _instance?.CalibrationDueDate.Value.ToShortDateString();
-            }
-        }
+        public DateTime? CalibrationDueDate => _instance?.CalibrationDueDate;
 
         public int? CalibrationInterval
         {
@@ -188,24 +266,13 @@ namespace Instruments.ViewModels
             set
             {
                 _instance.CalibrationInterval = value;
-                ///TODO
-                    RaisePropertyChanged("CalibrationDueDate");
+                UpdateCalibrationDueDate();
             }
         }
 
         public IEnumerable<Organization> CalibrationLabList { get; }
 
-        public IEnumerable<CalibrationReport> CalibrationReportList
-        {
-            get
-            {
-                if (_instance == null)
-                    return new List<CalibrationReport>();
-
-                return _lInstData.RunQuery(new CalibrationReportsQuery())
-                                .Where(crep => crep.InstrumentID == _instance.ID).ToList();
-            }
-        }
+        public IEnumerable<CalibrationReport> CalibrationReportList { get; private set; }
 
         public bool CanEditCalibrationParam => EditMode && IsUnderControl;
 
@@ -227,10 +294,9 @@ namespace Instruments.ViewModels
             }
         }
 
-        public IEnumerable<InstrumentMaintenanceEvent> EventList => (_instance == null) ? new List<InstrumentMaintenanceEvent>() 
+        public IEnumerable<InstrumentMaintenanceEvent> EventList => (_instance == null) ? new List<InstrumentMaintenanceEvent>()
                                                                                         : _lInstData.RunQuery(new MaintenanceEventsQuery() { InstrumentID = _instance.ID }).ToList();
 
-        
         public string InstrumentCode
         {
             get
@@ -270,8 +336,6 @@ namespace Instruments.ViewModels
 
         public string InstrumentEditCalibrationEditRegionName => RegionNames.InstrumentEditCalibrationEditRegion;
 
-        public string InstrumentEditMetrologyRegionName => RegionNames.InstrumentEditMetrologyRegion;
-
         public Instrument InstrumentInstance
         {
             get { return _instance; }
@@ -287,11 +351,12 @@ namespace Instruments.ViewModels
                 SelectedEvent = null;
                 SelectedFile = null;
 
+                RefreshPropertyList();
+                RefreshMaintenanceEventList();
+                RefreshCalibrations();
+
                 RaisePropertyChanged("CalibrationDueDate");
                 RaisePropertyChanged("CalibrationInterval");
-                RaisePropertyChanged("CalibrationReportList");
-                RaisePropertyChanged("CalibrationTabVisible");
-                RaisePropertyChanged("EventList");
                 RaisePropertyChanged("InstrumentCode");
                 RaisePropertyChanged("InstrumentDescription");
                 RaisePropertyChanged("InstrumentManufacturer");
@@ -405,31 +470,22 @@ namespace Instruments.ViewModels
             set
             {
                 _instance.IsUnderControl = value;
-                ///TODO 
-                RaisePropertyChanged("CalibrationDueDate");
+                UpdateCalibrationDueDate();
                 RaisePropertyChanged("IsUnderControl");
             }
         }
 
-        public string LastCalibrationDate
-        {
-            get
-            {
-                //TODO
-                //DateTime? lastCal = _instance?.GetLastCalibration()?.Date;
-                // (lastCal != null) ? lastCal.Value.ToShortDateString() :
-                return "Mai";
-            }
-        }
+        public DateTime? LastCalibrationDate => (_instance == null) ? null : _lInstData.RunQuery(new LastCalibrationDateQuery(_instance.ID));
 
-        public IEnumerable<InstrumentMaintenanceEvent> MaintenanceEventList => _lInstData.RunQuery(new MaintenanceEventsQuery() {InstrumentID = _instance?.ID }).ToList();
+        public IEnumerable<InstrumentMaintenanceEvent> MaintenanceEventList { get; set; }
 
         public IEnumerable<Organization> ManufacturerList { get; }
 
         public DelegateCommand OpenFileCommand { get; }
 
-        public DelegateCommand RemoveFileCommand { get; }
+        public ObservableCollection<InstrumentProperty> PropertyList { get; set; }
 
+        public DelegateCommand RemoveFileCommand { get; }
         public DelegateCommand SaveCommand { get; }
 
         public InstrumentUtilizationArea SelectedArea
@@ -442,13 +498,15 @@ namespace Instruments.ViewModels
                     _instance.UtilizationAreaID = value.ID;
             }
         }
-        
+
         public CalibrationReport SelectedCalibration
         {
             get { return _selectedCalibration; }
             set
             {
                 _selectedCalibration = value;
+                DeleteCalibrationCommand.RaiseCanExecuteChanged();
+
                 RaisePropertyChanged("SelectedCalibration");
 
                 NavigationToken token = new NavigationToken(InstrumentViewNames.CalibrationReportEditView,
@@ -503,8 +561,10 @@ namespace Instruments.ViewModels
         }
 
         public DelegateCommand StartEditCommand { get; }
-        
         private bool IsInstrumentAdmin => Thread.CurrentPrincipal.IsInRole(UserRoleNames.InstrumentAdmin);
+        private List<InstrumentProperty> PropertiesToAdd { get; set; }
+
+        private List<InstrumentProperty> PropertiesToRemove { get; set; }
 
         #endregion Properties
     }

@@ -1,22 +1,25 @@
 ﻿using DataAccess;
 using LabDbContext;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Materials.Commands
 {
     public class BatchInsertUpdateBase : ICommand<LabDbEntities>
     {
+        #region Fields
+
         internal LabDbEntities _context;
-        
+
+        #endregion Fields
+
+        #region Methods
+
         public virtual void Execute(LabDbEntities context)
         {
             throw new NotImplementedException();
         }
-               
+
         /// <summary>
         /// Creates a new Material with the type, line, aspect and recipe codes stored in the Command Instance in the given context
         /// Looks for existing Entities and creates new ones if they don't exist
@@ -58,34 +61,11 @@ namespace Materials.Commands
 
             newMaterial.Recipe = connectedrecipe ?? throw new InvalidOperationException("Recipe with code " + template.Recipe.Code + " does not exist.");
 
-
             newMaterial.ExternalConstructionID = template.ExternalConstruction?.ID;
             newMaterial.ProjectID = template.Project?.ID;
             newMaterial.Recipe.ColourID = template.Recipe?.Colour?.ID;
 
             return newMaterial;
-        }
-
-        /// <summary>
-        /// Checks the required fields of the template instance for inconsistencies and throws an exception if any is found
-        /// </summary>
-        /// <param name="templateInstance"></param>
-        internal virtual void ValidateMaterialTemplate(Material templateInstance)
-        {
-            if (templateInstance == null)
-                throw new InvalidOperationException("A Material Template instance is required");
-
-            if (templateInstance.Aspect == null)
-                throw new InvalidOperationException("Invalid Material Template: Aspect is a required Field");
-
-            if (templateInstance.MaterialLine == null)
-                throw new InvalidOperationException("Invalid Material Template: MaterialLine is a required Field");
-
-            if (templateInstance.MaterialType == null)
-                throw new InvalidOperationException("Invalid Material Template: MaterialType is a required Field");
-
-            if (templateInstance.Recipe == null)
-                throw new InvalidOperationException("Invalid Material Template: Recipe is a required Field");
         }
 
         /// <summary>
@@ -118,5 +98,29 @@ namespace Materials.Commands
 
             return _connectedMaterial;
         }
+
+        /// <summary>
+        /// Checks the required fields of the template instance for inconsistencies and throws an exception if any is found
+        /// </summary>
+        /// <param name="templateInstance"></param>
+        internal virtual void ValidateMaterialTemplate(Material templateInstance)
+        {
+            if (templateInstance == null)
+                throw new InvalidOperationException("A Material Template instance is required");
+
+            if (templateInstance.Aspect == null)
+                throw new InvalidOperationException("Invalid Material Template: Aspect is a required Field");
+
+            if (templateInstance.MaterialLine == null)
+                throw new InvalidOperationException("Invalid Material Template: MaterialLine is a required Field");
+
+            if (templateInstance.MaterialType == null)
+                throw new InvalidOperationException("Invalid Material Template: MaterialType is a required Field");
+
+            if (templateInstance.Recipe == null)
+                throw new InvalidOperationException("Invalid Material Template: Recipe is a required Field");
+        }
+
+        #endregion Methods
     }
 }

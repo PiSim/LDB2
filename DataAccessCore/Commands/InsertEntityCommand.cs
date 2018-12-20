@@ -1,5 +1,4 @@
-﻿
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace DataAccessCore.Commands
 {
@@ -8,12 +7,22 @@ namespace DataAccessCore.Commands
     /// </summary>
     public class InsertEntityCommand<T> : ICommand<T> where T : DbContext
     {
+        #region Fields
+
         private object _entity;
+
+        #endregion Fields
+
+        #region Constructors
 
         public InsertEntityCommand(object entity)
         {
             _entity = entity;
         }
+
+        #endregion Constructors
+
+        #region Methods
 
         public void Execute(T context)
         {
@@ -21,5 +30,7 @@ namespace DataAccessCore.Commands
             context.SaveChanges();
             context.Dispose();
         }
+
+        #endregion Methods
     }
 }

@@ -1,21 +1,25 @@
 ﻿using DataAccessCore;
-using LabDbContext;
-using System;
 using LInst;
-using System.Linq;
-using System.Text;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Linq;
 
 namespace LabDB2.Commands
 {
     /// <summary>
     /// Command object for user authentication. Checks if a given username/hashedpassword combination exists in the database
-    /// 
+    ///
     /// </summary>
     public class AuthenticateUserCommand : ICommand<LInstContext>
     {
-        private LInst.User _toAuthenticate;
+        #region Fields
+
         private Action<LInst.User> _callBack;
+        private LInst.User _toAuthenticate;
+
+        #endregion Fields
+
+        #region Constructors
 
         /// <summary>
         /// Base Constructor for the command
@@ -30,6 +34,10 @@ namespace LabDB2.Commands
             _callBack = callBack;
         }
 
+        #endregion Constructors
+
+        #region Methods
+
         public void Execute(LInstContext context)
         {
             LInst.User authenticated = context.Users.Include(usr => usr.RoleMappings).ThenInclude(urm => urm.UserRole)
@@ -38,5 +46,7 @@ namespace LabDB2.Commands
                                                                                 && usr.HashedPassword == _toAuthenticate.HashedPassword);
             _callBack(authenticated);
         }
+
+        #endregion Methods
     }
 }

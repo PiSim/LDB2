@@ -6,8 +6,6 @@ using Infrastructure.Events;
 using Infrastructure.Queries;
 using Infrastructure.Wrappers;
 using LabDbContext;
-using LabDbContext.EntityExtensions;
-using LabDbContext.Services;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
@@ -28,8 +26,8 @@ namespace Specifications.ViewModels
         private readonly ISpecificationService _specificationService;
         private readonly Dictionary<string, ICollection<string>> _validationErrors = new Dictionary<string, ICollection<string>>();
         private bool _editMode;
-        private IDataService<LabDbEntities> _labDbData;
         private IEventAggregator _eventAggregator;
+        private IDataService<LabDbEntities> _labDbData;
         private List<RequirementWrapper> _requirementList;
         private SpecificationVersion _specificationVersionInstance;
 
@@ -45,7 +43,6 @@ namespace Specifications.ViewModels
             _editMode = false;
             _eventAggregator = eventAggregator;
             _labDbData = labDbData;
-
 
             DeleteRequirementCommand = new DelegateCommand<Requirement>(
                 req =>
@@ -237,35 +234,6 @@ namespace Specifications.ViewModels
 
         #region Methods
 
-        private void GenerateRequirementList()
-        {
-            if (_specificationVersionInstance == null)
-                _requirementList = new List<RequirementWrapper>();
-            else
-                _requirementList = new List<RequirementWrapper>(_specificationVersionInstance.GenerateRequirementList()
-                                                                                            .Select(req => new RequirementWrapper(req))
-                                                                                            .ToList());
-            SetRequirementListOnIsOverrideChanged();
-        }
-
-        private void SetRequirementListOnIsOverrideChanged()
-        {
-            if (_requirementList == null)
-                return;
-
-            foreach (RequirementWrapper rwr in _requirementList)
-                rwr.IsOverrideChanged += OnIsOverrideChanged;
-        }
-
-        private void OnIsOverrideChanged(object sender, IsOverrideChangedEventArgs e)
-        {
-            if (e.IsOverride)
-                AddOverride(sender as RequirementWrapper);
-
-            else
-                RemoveOverride(sender as RequirementWrapper);
-        }
-
         public void AddOverride(RequirementWrapper wrapper)
         {
             Requirement newOverride = new Requirement
@@ -292,13 +260,42 @@ namespace Specifications.ViewModels
             wrapper.RequirementInstance = newOverride;
         }
 
+        private void GenerateRequirementList()
+        {
+            if (_specificationVersionInstance == null)
+                _requirementList = new List<RequirementWrapper>();
+            else
+                _requirementList = new List<RequirementWrapper>(_specificationVersionInstance.GenerateRequirementList()
+                                                                                            .Select(req => new RequirementWrapper(req))
+                                                                                            .ToList());
+            SetRequirementListOnIsOverrideChanged();
+        }
+
+        private void OnIsOverrideChanged(object sender, IsOverrideChangedEventArgs e)
+        {
+            if (e.IsOverride)
+                AddOverride(sender as RequirementWrapper);
+            else
+                RemoveOverride(sender as RequirementWrapper);
+        }
+
         private void RemoveOverride(RequirementWrapper wrapper)
         {
             int overrID = (int)wrapper.RequirementInstance.OverriddenID;
             _labDbData.Execute(new DeleteEntityCommand(wrapper.RequirementInstance));
-            wrapper.RequirementInstance = _labDbData.RunQuery(new RequirementsQuery() { OrderResults = false, EagerLoadingEnabled = false } )
+            wrapper.RequirementInstance = _labDbData.RunQuery(new RequirementsQuery() { OrderResults = false, EagerLoadingEnabled = false })
                                                     .FirstOrDefault(req => req.ID == overrID);
         }
+
+        private void SetRequirementListOnIsOverrideChanged()
+        {
+            if (_requirementList == null)
+                return;
+
+            foreach (RequirementWrapper rwr in _requirementList)
+                rwr.IsOverrideChanged += OnIsOverrideChanged;
+        }
+
         #endregion Methods
     }
 }

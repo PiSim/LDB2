@@ -1,7 +1,6 @@
 ﻿using DataAccessCore;
 using DataAccessCore.Commands;
 using Infrastructure;
-using Infrastructure.Commands;
 using Infrastructure.Events;
 using Infrastructure.Queries;
 using LInst;

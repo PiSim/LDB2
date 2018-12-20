@@ -5,7 +5,6 @@ namespace LabDbContext.Services
 {
     public static class MaterialService
     {
-
         #region Operations for ExternalConstruction entities
 
         public static void AddMaterial(this ExternalConstruction entry,

@@ -42,6 +42,10 @@
                         <Button Content="Elimina"
                                 Command="{Binding DeleteInstrumentCommand}"
                                 Margin="5" />
+
+                        <Button Content="Aggiorna Scadenze"
+                                Command="{Binding UpdateAllCalibrationStatusesCommand}"
+                                Margin="5" />
                     </StackPanel>
 
                     <DataGrid ItemsSource="{Binding InstrumentList}"
@@ -65,9 +69,9 @@
                             <DataGridTextColumn Header="Modello"
                                                 Binding="{Binding Model}" />
                             <DataGridTextColumn Header="Area"
-                                                Binding="{Binding InstrumentUtilizationArea.Name}" />
+                                                Binding="{Binding UtilizationArea.Name}" />
                             <DataGridTextColumn Header="Stabilimento"
-                                                Binding="{Binding InstrumentUtilizationArea.Plant}" />
+                                                Binding="{Binding UtilizationArea.Plant}" />
                             <DataGridCheckBoxColumn Header="In Servizio"
                                                     Binding="{Binding IsInService}" />
                             <DataGridCheckBoxColumn Header="Sotto Controllo"
@@ -101,8 +105,9 @@
                     <DataGrid ItemsSource="{Binding CalibrationsList}"
                                 SelectedItem="{Binding SelectedCalibration, Mode=TwoWay}"
                                 cmd:CommandBinder.DataGridDoubleClickCommand="{Binding OpenCalibrationCommand}"
-                              Style="{StaticResource GenericDataGridStyle}"  
-                              Grid.Row="1">
+                              Style="{StaticResource GenericDataGridStyle}"
+                              Grid.Row="1"
+                              IsReadOnly="True">
                         <DataGrid.Columns>
                             <DataGridTemplateColumn Header="Numero">
                                 <DataGridTemplateColumn.CellTemplate>
@@ -176,9 +181,9 @@
                                                 Binding="{Binding InstrumentType.Name}" />
 
                             <DataGridTextColumn Header="Area"
-                                                Binding="{Binding InstrumentUtilizationArea.Name}" />
+                                                Binding="{Binding UtilizationArea.Name}" />
                             <DataGridTextColumn Header="Stabilimento"
-                                                Binding="{Binding InstrumentUtilizationArea.Plant}" />
+                                                Binding="{Binding UtilizationArea.Plant}" />
                             <DataGridTemplateColumn Header="Periodo controllo"
                                                     SortMemberPath="CalibrationInterval">
                                 <DataGridTemplateColumn.CellTemplate>

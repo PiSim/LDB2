@@ -1,7 +1,6 @@
 ﻿using DataAccessCore;
 using DataAccessCore.Commands;
 using Infrastructure;
-using Infrastructure.Commands;
 using LInst;
 using Prism.Commands;
 using Prism.Mvvm;
@@ -13,7 +12,11 @@ namespace Instruments.ViewModels
 {
     public class MaintenanceEventCreationDialogViewModel : BindableBase
     {
+        #region Fields
+
         private IDataService<LInstContext> _lInstData;
+
+        #endregion Fields
 
         #region Constructors
 
@@ -36,7 +39,7 @@ namespace Instruments.ViewModels
                     EventInstance.Date = Date;
                     EventInstance.Description = Description;
                     EventInstance.InstrumentID = InstrumentInstance.ID;
-                    EventInstance.TechID = (Thread.CurrentPrincipal as DBPrincipal).CurrentPerson.ID;
+                    EventInstance.TechID = (Thread.CurrentPrincipal as DBPrincipal).CurrentUser.PersonID;
 
                     _lInstData.Execute(new InsertEntityCommand<LInstContext>(EventInstance));
 

@@ -1,8 +1,8 @@
 ﻿using DataAccessCore;
 using DataAccessCore.Commands;
 using Infrastructure;
-using Infrastructure.Commands;
 using Infrastructure.Events;
+using Instruments.Commands;
 using Instruments.Queries;
 using LInst;
 using Prism.Commands;
@@ -37,6 +37,8 @@ namespace Instruments.ViewModels
             _lInstData = lInstData;
             _instrumentService = instrumentService;
 
+            InstrumentList = _lInstData.RunQuery(new InstrumentsQuery()).ToList();
+
             DeleteInstrumentCommand = new DelegateCommand(
                 () =>
                 {
@@ -56,7 +58,7 @@ namespace Instruments.ViewModels
                 () =>
                 {
                     NavigationToken token = new NavigationToken(InstrumentViewNames.InstrumentEditView,
-                                                                SelectedInstrument);
+                                                                _lInstData.RunQuery(new InstrumentQuery() { ID = SelectedInstrument.ID }));
                     _eventAggregator.GetEvent<NavigationRequested>().Publish(token);
                 },
                 () => SelectedInstrument != null);
@@ -69,6 +71,13 @@ namespace Instruments.ViewModels
                     _eventAggregator.GetEvent<NavigationRequested>().Publish(token);
                 });
 
+            UpdateAllCalibrationStatusesCommand = new DelegateCommand(
+                () =>
+                {
+                    _lInstData.Execute(new BulkUpdateInstrumentCalibrationStatusCommand(InstrumentList));
+                    RefreshList();
+                });
+
             _eventAggregator.GetEvent<CalibrationIssued>().Subscribe(
                 calRep =>
                 {
@@ -79,12 +88,22 @@ namespace Instruments.ViewModels
             _eventAggregator.GetEvent<InstrumentListUpdateRequested>().Subscribe(
                 () =>
                 {
-                    RaisePropertyChanged("InstrumentList");
+                    RefreshList();
                     RaisePropertyChanged("PendingCalibrationsList");
                 });
         }
 
         #endregion Constructors
+
+        #region Methods
+
+        private void RefreshList()
+        {
+            InstrumentList = _lInstData.RunQuery(new InstrumentsQuery()).ToList();
+            RaisePropertyChanged("InstrumentList");
+        }
+
+        #endregion Methods
 
         #region Properties
 
@@ -92,7 +111,7 @@ namespace Instruments.ViewModels
 
         public DelegateCommand DeleteInstrumentCommand { get; }
 
-        public IEnumerable<Instrument> InstrumentList => _lInstData.RunQuery(new InstrumentsQuery()).ToList();
+        public IEnumerable<Instrument> InstrumentList { get; private set; }
 
         public DelegateCommand NewInstrumentCommand { get; }
         public DelegateCommand OpenInstrumentCommand { get; }
@@ -122,6 +141,8 @@ namespace Instruments.ViewModels
                 RaisePropertyChanged("SelectedPending");
             }
         }
+
+        public DelegateCommand UpdateAllCalibrationStatusesCommand { get; set; }
 
         private bool IsInstrumentAdmin => Thread.CurrentPrincipal.IsInRole(UserRoleNames.InstrumentAdmin);
 

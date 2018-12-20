@@ -1,6 +1,4 @@
-﻿using DataAccess;
-using DataAccessCore;
-using Infrastructure;
+﻿using Infrastructure;
 using Infrastructure.Commands;
 using Infrastructure.Queries;
 using LabDbContext;
@@ -19,7 +17,7 @@ namespace Reports.ViewModels
         #region Fields
 
         private DataAccess.IDataService<LabDbEntities> _labDbData;
-        DataAccessCore.IDataService<LInstContext> _lInstData;
+        private DataAccessCore.IDataService<LInstContext> _lInstData;
         private IReportService _reportService;
 
         #endregion Fields
@@ -59,7 +57,6 @@ namespace Reports.ViewModels
                          ExternalLabID = SelectedLab.ID,
                          ProjectID = SelectedProject.ID
                      };
-
 
                      _labDbData.Execute(new InsertEntityCommand(ExternalReportInstance));
 

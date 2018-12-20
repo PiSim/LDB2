@@ -4,12 +4,20 @@ namespace LabDbContext
 {
     public class LabDBContextFactory : IDbContextFactory<LabDbEntities>
     {
+        #region Fields
+
         private string _connectionName;
-        
+
+        #endregion Fields
+
+        #region Constructors
+
         public LabDBContextFactory(string connectionName)
         {
             _connectionName = connectionName;
         }
+
+        #endregion Constructors
 
         #region Methods
 

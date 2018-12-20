@@ -5,9 +5,14 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:Instruments.Views"
              xmlns:prism="http://prismlibrary.com/"
+             xmlns:con="clr-namespace:Infrastructure.Converters;assembly=Infrastructure"
+             xmlns:bhv="clr-namespace:Controls.Behaviours;assembly=Controls"
              prism:ViewModelLocator.AutoWireViewModel="True"
              mc:Ignorable="d"
              d:DesignHeight="600" d:DesignWidth="700">
+    <UserControl.Resources>
+        <con:BooleanNegationConverter x:Key="BooleanNegationConverter" />
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="35" />
@@ -167,7 +172,12 @@
                                     Grid.Row="0">
                             <Button Content="Nuova"
                                     Command="{Binding AddCalibrationCommand}"
-                                    Margin="5" />
+                                    Margin="5" 
+                                    Width="50"/>
+                            <Button Content="Elimina"
+                                    Command="{Binding DeleteCalibrationCommand}"
+                                    Margin="5"
+                                    Width="50"/>
                         </StackPanel>
 
                         <ListView ItemsSource="{Binding CalibrationReportList}"
@@ -206,7 +216,7 @@
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
 
-                    <ListView ItemsSource="{Binding EventList}"
+                    <ListView ItemsSource="{Binding MaintenanceEventList}"
                               SelectedItem="{Binding SelectedEvent}">
                         <ListView.View>
                             <GridView>
@@ -260,97 +270,6 @@
                 </Grid>
             </TabItem>
 
-            <TabItem Header="Metodi">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition />
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition />
-                    </Grid.ColumnDefinitions>
-                    <GroupBox Header="Metodi disponibili"
-                              Grid.Column="0">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition />
-                                <ColumnDefinition />
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition />
-                            </Grid.RowDefinitions>
-                            <Label Content="Filtra per proprietà:"
-                                   Grid.Column="0"
-                                   Grid.Row="0"
-                                   Height="Auto" />
-                            <ComboBox ItemsSource="{Binding Path=PropertyList}"
-                                      SelectedItem="{Binding Path=FilterProperty, Mode=TwoWay}"
-                                      DisplayMemberPath="Name"
-                                      Grid.Column="1"
-                                      Grid.Row="0" />
-
-                            <ListView ItemsSource="{Binding Path=UnassociatedMethods}"
-                                      SelectedItem="{Binding Path=SelectedUnassociatedMethod, Mode=TwoWay}"
-                                      Grid.Column="0"
-                                      Grid.ColumnSpan="2"
-                                      Grid.Row="1">
-                                <ListView.View>
-                                    <GridView>
-                                        <GridViewColumn Header="Proprietà"
-                                                        DisplayMemberBinding="{Binding Path=Property.Name}" />
-                                        <GridViewColumn Header="OEM"
-                                                        DisplayMemberBinding="{Binding Path=Standard.Organization.Name}" />
-                                        <GridViewColumn Header="Standard"
-                                                        DisplayMemberBinding="{Binding Path=Standard.Name}" />
-                                        <GridViewColumn Header="Descrizione"
-                                                        DisplayMemberBinding="{Binding Path=Description}" />
-                                    </GridView>
-                                </ListView.View>
-                            </ListView>
-                        </Grid>
-                    </GroupBox>
-
-                    <Grid Grid.Column="1">
-                        <Grid.RowDefinitions>
-                            <RowDefinition />
-                            <RowDefinition />
-                            <RowDefinition />
-                            <RowDefinition />
-                            <RowDefinition />
-                        </Grid.RowDefinitions>
-                        <Button Content="►"
-                                Command="{Binding Path=AddMethodAssociationCommand}"
-                                Grid.Row="1"
-                                Height="30"
-                                Width="30"
-                                FontSize="20"
-                                Margin="5,0,5,0" />
-                        <Button Content="◄"
-                                Command="{Binding Path=RemoveMethodAssociationCommand}"
-                                Grid.Row="3"
-                                Height="30"
-                                Width="30"
-                                FontSize="20"
-                                Margin="5,0,5,0" />
-                    </Grid>
-
-                    <GroupBox Header="Metodi Associati"
-                              Grid.Column="2">
-                        <ListView ItemsSource="{Binding AssociatedMethods}"
-                                  SelectedItem="{Binding SelectedAssociatedMethod, Mode=TwoWay}">
-                            <ListView.View>
-                                <GridView>
-                                    <GridViewColumn Header="Proprietà"
-                                                    DisplayMemberBinding="{Binding Property.Name}" />
-                                    <GridViewColumn Header="OEM"
-                                                    DisplayMemberBinding="{Binding Standard.Organization.Name}" />
-                                    <GridViewColumn Header="Standard"
-                                                    DisplayMemberBinding="{Binding Standard.Name}" />
-                                </GridView>
-                            </ListView.View>
-                        </ListView>
-                    </GroupBox>
-                </Grid>
-            </TabItem>
             <TabItem Header="Caratteristiche">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -418,7 +337,8 @@
                         <TextBlock Text="{Binding LastCalibrationDate,
                                                   Mode=OneWay,
                                                   StringFormat=d,
-                                                  ConverterCulture=it-IT}"
+                                                  ConverterCulture=it-IT,
+                                                  FallbackValue=Mai}"
                                    Margin="5" />
                     </StackPanel>
 
@@ -428,16 +348,39 @@
                         <TextBlock Text="Prossimo controllo:"
                                    Margin="5" />
                         <TextBlock Text="{Binding CalibrationDueDate,
-                                                  Mode=OneWay}"
+                                                  Mode=OneWay,
+                                                  StringFormat=d,
+                                                  ConverterCulture=it-IT,
+                                                  FallbackValue=Non Previsto}"
                                    Margin="5" />
                     </StackPanel>
 
-                    <GroupBox Header="Grandezze Associate"
+                    <GroupBox Header="Proprietà"
                               Grid.Column="0"
                               Grid.ColumnSpan="4"
                               Grid.Row="3">
-                        <ContentControl prism:RegionManager.RegionName="{Binding InstrumentEditMetrologyRegionName}"
-                                        Grid.Row="1" />
+                        <DataGrid ItemsSource="{Binding PropertyList}"
+                                  IsReadOnly="{Binding EditMode, Converter={StaticResource BooleanNegationConverter}}"
+                                  AutoGenerateColumns="False"
+                                  Background="White"
+                                  VerticalGridLinesBrush="Transparent">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Nome"
+                                                    Binding="{Binding Name}" />
+                                <DataGridTextColumn Header="Valore"
+                                                    Binding="{Binding Value}" />
+                                <DataGridTextColumn Header="Valore Teorico"
+                                                    Binding="{Binding TargetValue}" />
+                                <DataGridTextColumn Header="Limite Superiore"
+                                                    Binding="{Binding UpperLimit}" />
+                                <DataGridTextColumn Header="Limite Inferiore"
+                                                    Binding="{Binding LowerLimit}" />
+                                <DataGridTextColumn Header="UM"
+                                                    Binding="{Binding UM}" />
+                                <DataGridCheckBoxColumn Header="Soggetta a controllo"
+                                                        Binding="{Binding IsCalibrationProperty}" />
+                            </DataGrid.Columns>
+                        </DataGrid>
                     </GroupBox>
                 </Grid>
             </TabItem>

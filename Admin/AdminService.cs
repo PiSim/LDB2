@@ -8,7 +8,6 @@ using LInst;
 using Microsoft.EntityFrameworkCore.Design;
 using Prism.Events;
 using System.Collections.Generic;
-using System.Data.Entity.Infrastructure;
 using System.Linq;
 
 namespace Admin
@@ -16,10 +15,10 @@ namespace Admin
     public class AdminService : IAdminService
     {
         #region Fields
-        
+
+        private IDesignTimeDbContextFactory<LInstContext> _dbContextFactory;
         private IEventAggregator _eventAggregator;
         private IDataService<LInstContext> _lInstData;
-        IDesignTimeDbContextFactory<LInstContext> _dbContextFactory;
 
         #endregion Fields
 
@@ -40,7 +39,7 @@ namespace Admin
 
         public void AddOrganizationRole(string name)
         {
-            using (LInstContext entities = _dbContextFactory.CreateDbContext(new string[]{ }))
+            using (LInstContext entities = _dbContextFactory.CreateDbContext(new string[] { }))
             {
                 OrganizationRole newRole = new OrganizationRole
                 {
@@ -78,7 +77,7 @@ namespace Admin
                 {
                     Name = creationDialog.InputString
                 };
-                
+
                 _lInstData.Execute(new InsertEntityCommand<LInstContext>(output));
                 return output;
             }

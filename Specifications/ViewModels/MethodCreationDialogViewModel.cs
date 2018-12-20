@@ -1,6 +1,4 @@
-﻿using DataAccess;
-using DataAccessCore;
-using Infrastructure.Commands;
+﻿using Infrastructure.Commands;
 using Infrastructure.Queries;
 using LabDbContext;
 using LInst;
@@ -24,7 +22,7 @@ namespace Specifications.ViewModels
 
         private readonly Dictionary<string, ICollection<string>> _validationErrors = new Dictionary<string, ICollection<string>>();
         private DataAccess.IDataService<LabDbEntities> _labDbData;
-        DataAccessCore.IDataService<LInstContext> _lInstContext;
+        private DataAccessCore.IDataService<LInstContext> _lInstContext;
         private string _name;
         private Organization _selectedOem;
         private Property _selectedProperty;

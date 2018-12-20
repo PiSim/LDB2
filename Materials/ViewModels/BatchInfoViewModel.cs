@@ -4,8 +4,6 @@ using Infrastructure.Commands;
 using Infrastructure.Events;
 using Infrastructure.Queries;
 using LabDbContext;
-using LabDbContext.EntityExtensions;
-using LabDbContext.Services;
 using Materials.Commands;
 using Materials.Queries;
 using Prism.Commands;
@@ -186,9 +184,8 @@ namespace Materials.ViewModels
             #endregion EventSubscriptions
         }
 
-
         #endregion Constructors
-        
+
         #region Events
 
         public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
@@ -204,13 +201,6 @@ namespace Materials.ViewModels
                 return null;
 
             return _validationErrors[propertyName];
-        }
-
-        private void RaiseErrorsChanged(string propertyName)
-        {
-            ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
-            RaisePropertyChanged("HasErrors");
-            SaveCommand.RaiseCanExecuteChanged();
         }
 
         private void CheckMaterial()
@@ -255,7 +245,6 @@ namespace Materials.ViewModels
             SelectedExternalConstruction = ExternalConstructionList.FirstOrDefault(exc => exc.ID == _instance?.Material?.ExternalConstructionID);
         }
 
-
         /// <summary>
         /// Generates a template Material that will be passed to a BatchUpdateCommand instance to perform the Batch Update
         /// </summary>
@@ -291,6 +280,13 @@ namespace Materials.ViewModels
             };
         }
 
+        private void RaiseErrorsChanged(string propertyName)
+        {
+            ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
+            RaisePropertyChanged("HasErrors");
+            SaveCommand.RaiseCanExecuteChanged();
+        }
+
         private void ReloadChildEntitiesInstances()
         {
             TypeCode = TypeCode;
@@ -298,11 +294,11 @@ namespace Materials.ViewModels
             AspectCode = AspectCode;
             RecipeCode = RecipeCode;
         }
+
         #endregion Methods
 
         #region Properties
 
-        public bool HasErrors => _validationErrors.Count > 0;
         public string AspectCode
         {
             get { return _aspectCode; }
@@ -409,7 +405,6 @@ namespace Materials.ViewModels
         }
 
         public DelegateCommand DeleteBatchCommand { get; }
-
         public DelegateCommand<Sample> DeleteSampleCommand { get; }
 
         public bool DoNotTest
@@ -455,7 +450,9 @@ namespace Materials.ViewModels
                                                                                                         .Where(exrep => exrep.TestRecords
                                                                                                         .Any(tstrec => tstrec.BatchID == _instance.ID))
                                                                                                         .ToList();
-        
+
+        public bool HasErrors => _validationErrors.Count > 0;
+
         public string LineCode
         {
             get { return _lineCode; }

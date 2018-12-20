@@ -1,5 +1,4 @@
-﻿using Prism.Mvvm;
-using System.Windows;
+﻿using System.Windows;
 
 namespace Controls.Views
 {

@@ -1,7 +1,6 @@
 ﻿using Controls.Views;
 using DataAccess;
 using LabDbContext;
-using LabDbContext.EntityExtensions;
 using Materials.Queries;
 using Prism.Events;
 using Prism.Mvvm;
@@ -14,8 +13,8 @@ namespace Materials.ViewModels
     {
         #region Fields
 
-        private IDataService<LabDbEntities> _labDbData;
         private IEventAggregator _eventAggregator;
+        private IDataService<LabDbEntities> _labDbData;
         private Material _materialInstance;
 
         #endregion Fields

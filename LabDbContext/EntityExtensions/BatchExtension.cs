@@ -1,9 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Data.Entity;
-using System.Data.Entity.Migrations;
-using System.Linq;
-
-namespace LabDbContext
+﻿namespace LabDbContext
 {
     public partial class Batch
     {
@@ -23,6 +18,5 @@ namespace LabDbContext
         public string RecipeCode => Material?.Recipe?.Code;
 
         #endregion Properties
-
     }
 }

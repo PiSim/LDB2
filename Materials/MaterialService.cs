@@ -54,13 +54,11 @@ namespace Materials
                         _labDbData.Execute(new UpdateEntityCommand(targetBatch));
                     }
                 });
-
         }
 
         #endregion Constructors
 
         #region Methods
-
 
         public Aspect CreateAspect()
         {

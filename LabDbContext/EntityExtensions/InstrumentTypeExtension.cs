@@ -25,7 +25,7 @@ namespace LabDbContext.EntityExtensions
                 entities.SaveChanges();
             }
         }
-        
+
         public static IEnumerable<MeasurableQuantity> GetAssociatedMeasurableQuantities(this InstrumentType entry)
         {
             // Returns all MeasurableQuantity entities related to the instrument type

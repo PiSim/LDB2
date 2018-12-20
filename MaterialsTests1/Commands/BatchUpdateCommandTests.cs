@@ -1,6 +1,4 @@
-﻿using DataAccess;
-using LabDbContext;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Materials.Commands.Tests
 {
@@ -9,7 +7,7 @@ namespace Materials.Commands.Tests
     {
         #region Fields
 
-        string connectionString = "connection string=&quot;server=192.168.1.22;user id=LabDBClient;Pwd=910938356;persistsecurityinfo=True;database=labdb_dev;port=3306;SslMode=none&quot;";
+        private string connectionString = "connection string=&quot;server=192.168.1.22;user id=LabDBClient;Pwd=910938356;persistsecurityinfo=True;database=labdb_dev;port=3306;SslMode=none&quot;";
 
         #endregion Fields
 

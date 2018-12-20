@@ -11,27 +11,27 @@
         <Style x:Key="ThreeCharMaterialDataTextBoxStyle"
                TargetType="TextBox">
             <Setter Property="CharacterCasing"
-                    Value="Upper"/>
+                    Value="Upper" />
             <Setter Property="MaxLength"
-                    Value="3"/>
+                    Value="3" />
             <Setter Property="MaxLines"
-                    Value="1"/>
+                    Value="1" />
             <Setter Property="TextWrapping"
-                    Value="NoWrap"/>
+                    Value="NoWrap" />
         </Style>
         <Style x:Key="FourCharMaterialDataTextBoxStyle"
                TargetType="TextBox">
             <Setter Property="CharacterCasing"
-                    Value="Upper"/>
+                    Value="Upper" />
             <Setter Property="MaxLength"
-                    Value="4"/>
+                    Value="4" />
             <Setter Property="MaxLines"
-                    Value="1"/>
+                    Value="1" />
             <Setter Property="TextWrapping"
-                    Value="NoWrap"/>
+                    Value="NoWrap" />
         </Style>
     </Window.Resources>
-    
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="35" />
@@ -56,20 +56,20 @@
                         <DataTemplate>
                             <CheckBox IsChecked="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged}"
                                       HorizontalAlignment="Center"
-                                      VerticalAlignment="Center"/>
+                                      VerticalAlignment="Center" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                     <DataGridTemplateColumn.HeaderTemplate>
                         <DataTemplate>
                             <CheckBox IsChecked="{Binding DataContext.AreAllBatchesSelected, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DataGrid}, UpdateSourceTrigger=PropertyChanged}"
                                       HorizontalAlignment="Center"
-                                      VerticalAlignment="Center"/>
+                                      VerticalAlignment="Center" />
                         </DataTemplate>
                     </DataGridTemplateColumn.HeaderTemplate>
                 </DataGridTemplateColumn>
-                
+
                 <DataGridTextColumn Header="Numero"
-                                    Binding="{Binding Number, Mode=OneWay}"/>
+                                    Binding="{Binding Number, Mode=OneWay}" />
                 <DataGridTextColumn Header="Materiale"
                                     Binding="{Binding MaterialTypeCode, UpdateSourceTrigger=PropertyChanged}"
                                     EditingElementStyle="{StaticResource FourCharMaterialDataTextBoxStyle}" />
@@ -77,8 +77,8 @@
                                     Binding="{Binding MaterialLineCode, UpdateSourceTrigger=PropertyChanged}"
                                     EditingElementStyle="{StaticResource ThreeCharMaterialDataTextBoxStyle}" />
                 <DataGridTextColumn Header="Aspetto"
-                                    Binding="{Binding AspectCode, UpdateSourceTrigger=PropertyChanged}" 
-                                    EditingElementStyle="{StaticResource ThreeCharMaterialDataTextBoxStyle}"/>
+                                    Binding="{Binding AspectCode, UpdateSourceTrigger=PropertyChanged}"
+                                    EditingElementStyle="{StaticResource ThreeCharMaterialDataTextBoxStyle}" />
                 <DataGridTextColumn Header="Ricetta"
                                     Binding="{Binding RecipeCode, UpdateSourceTrigger=PropertyChanged}"
                                     EditingElementStyle="{StaticResource FourCharMaterialDataTextBoxStyle}" />
@@ -99,7 +99,7 @@
                         <DataTemplate>
                             <CheckBox IsChecked="{Binding DoNotTest, UpdateSourceTrigger=PropertyChanged}"
                                       HorizontalAlignment="Center"
-                                      VerticalAlignment="Center"/>
+                                      VerticalAlignment="Center" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -151,7 +151,7 @@
                         <DataTemplate>
                             <ComboBox ItemsSource="{Binding DataContext.TrialAreaList, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DataGrid}}"
                                     SelectedItem="{Binding TrialAreaInstance, UpdateSourceTrigger=PropertyChanged}"
-                                      DisplayMemberPath="Name"/>
+                                      DisplayMemberPath="Name" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

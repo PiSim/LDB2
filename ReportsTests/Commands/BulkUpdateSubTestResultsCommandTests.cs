@@ -1,31 +1,34 @@
 ﻿using DataAccess;
 using LabDbContext;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Reports.Commands;
-using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Data.Entity.Infrastructure;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Reports.Commands.Tests
 {
     [TestClass()]
     public class BulkUpdateSubTestResultsCommandTests
     {
-        string _connectionName = "LabDb_DEV";
-        List<SubTest> _testList;
-        IDataService<LabDbEntities> _labDbData;
-        IDbContextFactory<LabDbEntities> factory;
+        #region Fields
+
+        private string _connectionName = "LabDb_DEV";
+        private IDataService<LabDbEntities> _labDbData;
+        private List<SubTest> _testList;
+        private IDbContextFactory<LabDbEntities> factory;
+
+        #endregion Fields
+
+        #region Constructors
 
         public BulkUpdateSubTestResultsCommandTests()
         {
-
             factory = new LabDBContextFactory(_connectionName);
             _labDbData = new LabDbData(factory);
         }
+
+        #endregion Constructors
+
+        #region Methods
 
         [TestMethod()]
         public void BulkUpdateSubTestResultsCommandTest()
@@ -66,5 +69,6 @@ namespace Reports.Commands.Tests
             }
         }
 
+        #endregion Methods
     }
 }

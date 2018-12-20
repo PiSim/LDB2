@@ -5,8 +5,6 @@ using Infrastructure.Commands;
 using Infrastructure.Events;
 using Infrastructure.Queries;
 using LabDbContext;
-using LabDbContext.EntityExtensions;
-using LabDbContext.Services;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
@@ -30,16 +28,16 @@ namespace Reports.ViewModels
         private string _batchNumber;
         private bool _editMode;
         private IEventAggregator _eventAggregator;
-        private IEnumerable<TestRecord> _testRecordList;
-        private IEnumerable<MethodVariant> _methodVariantList;
         private ExternalReport _instance;
         private IDataService<LabDbEntities> _labDbData;
+        private IEnumerable<MethodVariant> _methodVariantList;
         private IEnumerable<Project> _projectList;
         private IReportService _reportService;
         private ObservableCollection<DataGridColumn> _resultColumnCollection;
         private List<ExternalResultPresenter> _resultList;
         private ExternalReportFile _selectedFile;
         private TestRecord _selectedRecord;
+        private IEnumerable<TestRecord> _testRecordList;
 
         #endregion Fields
 
@@ -195,6 +193,7 @@ namespace Reports.ViewModels
         #endregion Commands
 
         #region Methods
+
         /// <summary>
         /// Generates an ObservableCollection of DataGridColumns
         /// that will be used to correctly visualize the results in a DataGrid.
@@ -276,7 +275,7 @@ namespace Reports.ViewModels
         private void RefreshTestRecords()
         {
             //Retrieve up-to-date TestRecords
-            TestRecordList = (_instance == null) ? new List<TestRecord>() : _labDbData.RunQuery(new TestRecordsQuery() {ExternalReportID = _instance.ID }).ToList();
+            TestRecordList = (_instance == null) ? new List<TestRecord>() : _labDbData.RunQuery(new TestRecordsQuery() { ExternalReportID = _instance.ID }).ToList();
 
             //Retrieve up-to-date Method Variante
             MethodVariantList = (_instance == null) ? new List<MethodVariant>() : _labDbData.RunQuery(new MethodVariantsQuery() { ExternalReportID = _instance.ID, IncludeObsolete = true }).ToList();
@@ -439,7 +438,7 @@ namespace Reports.ViewModels
                 return _projectList;
             }
         }
-        
+
         public IEnumerable<ExternalReportFile> ReportFiles => _instance.GetExternalReportFiles();
 
         public bool ReportReceived

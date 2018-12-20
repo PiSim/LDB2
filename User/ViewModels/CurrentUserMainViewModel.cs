@@ -1,7 +1,6 @@
 ﻿using Infrastructure;
 
 using Prism.Mvvm;
-using System.Collections.Generic;
 using System.Threading;
 
 namespace User.ViewModels
@@ -22,10 +21,5 @@ namespace User.ViewModels
         }
 
         #endregion Constructors
-
-        #region Properties
-
-
-        #endregion Properties
     }
 }

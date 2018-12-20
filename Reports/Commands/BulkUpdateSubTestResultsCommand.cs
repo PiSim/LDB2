@@ -1,11 +1,7 @@
 ﻿using DataAccess;
 using LabDbContext;
-using System;
 using System.Collections.Generic;
 using System.Data.Entity;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Reports.Commands
 {
@@ -14,12 +10,22 @@ namespace Reports.Commands
     /// </summary>
     public class BulkUpdateSubTestResultsCommand : ICommand<LabDbEntities>
     {
+        #region Fields
+
         private IEnumerable<SubTest> _entities;
+
+        #endregion Fields
+
+        #region Constructors
 
         public BulkUpdateSubTestResultsCommand(IEnumerable<SubTest> entities)
         {
             _entities = entities;
         }
+
+        #endregion Constructors
+
+        #region Methods
 
         public void Execute(LabDbEntities context)
         {
@@ -37,5 +43,7 @@ namespace Reports.Commands
             context.SaveChanges();
             context.Dispose();
         }
+
+        #endregion Methods
     }
 }

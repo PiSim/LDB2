@@ -22,7 +22,7 @@
                     <Setter Property="bhv:CommandBehavior.Command"
                             Value="{Binding DataContext.OpenReportCommand,
                                             RelativeSource={RelativeSource Mode=FindAncestor,
-                                                                           AncestorType=DataGrid}}"/>
+                                                                           AncestorType=DataGrid}}" />
                 </Style>
             </DataGrid.RowStyle>
 

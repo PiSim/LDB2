@@ -4,8 +4,6 @@ using Infrastructure.Commands;
 using Infrastructure.Events;
 using Infrastructure.Queries;
 using LabDbContext;
-using LabDbContext.EntityExtensions;
-using LabDbContext.Services;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
@@ -83,7 +81,7 @@ namespace Reports.ViewModels
                 () =>
                 {
                     if (_reportService.AddTestsToReport(_instance))
-                        TestList = new List<TestWrapper>(  _instance.TestRecord.Tests.Select(tst => new TestWrapper(tst)));
+                        TestList = new List<TestWrapper>(_instance.TestRecord.Tests.Select(tst => new TestWrapper(tst)));
                 },
                 () => CanModify);
 

@@ -1,11 +1,7 @@
 ﻿using DataAccess;
 using LabDbContext;
-using System;
-using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Reports.Queries
 {
@@ -14,10 +10,16 @@ namespace Reports.Queries
     /// </summary>
     public class TestRecordsQuery : QueryBase<TestRecord, LabDbEntities>
     {
+        #region Properties
+
         /// <summary>
         /// If set only the records for the ExternalReport with the given ID are returned
         /// </summary>
         public int? ExternalReportID { get; set; }
+
+        #endregion Properties
+
+        #region Methods
 
         public override IQueryable<TestRecord> Execute(LabDbEntities context)
         {
@@ -46,5 +48,7 @@ namespace Reports.Queries
 
             return query;
         }
+
+        #endregion Methods
     }
 }

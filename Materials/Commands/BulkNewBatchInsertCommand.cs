@@ -1,6 +1,5 @@
 ﻿using LabDbContext;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
 
 namespace Materials.Commands
@@ -39,7 +38,7 @@ namespace Materials.Commands
                 using (var transaction = _context.Database.BeginTransaction())
                 {
                     Batch newBatch = new Batch();
-                    
+
                     context.Batches.Add(newBatch);
 
                     context.Entry(newBatch).CurrentValues.SetValues(batchTemplate);
@@ -48,7 +47,6 @@ namespace Materials.Commands
                                                                         mat.MaterialLine.Code == batchTemplate.Material.MaterialLine.Code &&
                                                                         mat.Recipe.Code == batchTemplate.Material.Recipe.Code &&
                                                                         mat.MaterialType.Code == batchTemplate.Material.MaterialType.Code);
-
 
                     if (batchTemplate.Material.ExternalConstruction != null)
                         newBatch.Material.ExternalConstructionID = batchTemplate.Material.ExternalConstruction.ID;

@@ -14,12 +14,12 @@ namespace Infrastructure.Queries
     {
         #region Properties
 
-        public bool IncludeObsolete { get; set; } = false;
-
         /// <summary>
         /// If set only the methods associated with the ExternalReport with the given ID are returned
         /// </summary>
         public int? ExternalReportID { get; set; }
+
+        public bool IncludeObsolete { get; set; } = false;
 
         #endregion Properties
 
@@ -48,7 +48,6 @@ namespace Infrastructure.Queries
             if (OrderResults)
                 query = query.OrderBy(mtdvar => mtdvar.Method.Standard.Name)
                             .ThenBy(mtdvar => mtdvar.Name);
-
 
             return query;
         }

@@ -1,11 +1,7 @@
 ﻿using DataAccess;
 using LabDbContext;
-using System;
-using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Infrastructure.Queries
 {
@@ -14,6 +10,8 @@ namespace Infrastructure.Queries
     /// </summary>
     public class RequirementsQuery : QueryBase<Requirement, LabDbEntities>
     {
+        #region Methods
+
         public override IQueryable<Requirement> Execute(LabDbEntities context)
         {
             IQueryable<Requirement> query = context.Requirements;
@@ -28,7 +26,9 @@ namespace Infrastructure.Queries
             if (OrderResults)
                 query = query.OrderBy(req => req.Position);
 
-            return query;            
+            return query;
         }
+
+        #endregion Methods
     }
 }

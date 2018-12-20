@@ -1,13 +1,9 @@
-﻿using Infrastructure.Queries;
-using LabDbContext;
-using Materials.Queries;
-using Materials.ViewModels;
+﻿using LabDbContext;
 using Prism.Mvvm;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 
 namespace Materials
 {
@@ -15,8 +11,8 @@ namespace Materials
     {
         #region Fields
 
-        private bool _isSelected = true;
         private readonly Dictionary<string, ICollection<string>> _validationErrors = new Dictionary<string, ICollection<string>>();
+        private bool _isSelected = true;
 
         #endregion Fields
 
@@ -33,7 +29,8 @@ namespace Materials
         #region Events
 
         public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
-        public event EventHandler<EventArgs> HasErrorsChanged, IsSelectedChanged, MaterialDataChanged , RecipeDataChanged;
+
+        public event EventHandler<EventArgs> HasErrorsChanged, IsSelectedChanged, MaterialDataChanged, RecipeDataChanged;
 
         #endregion Events
 
@@ -74,11 +71,17 @@ namespace Materials
             }
         }
 
+        public bool DoNotTest
+        {
+            get => BatchInstance.DoNotTest;
+            set => BatchInstance.DoNotTest = value;
+        }
+
         public bool HasErrors => _validationErrors.Count > 0;
 
         public bool IsSelected
         {
-            get => _isSelected ;
+            get => _isSelected;
             set
             {
                 _isSelected = value;
@@ -97,12 +100,6 @@ namespace Materials
                     RaiseMaterialDataChanged();
                 RaiseHasErrorsChanged();
             }
-        }
-
-        public bool DoNotTest
-        {
-            get => BatchInstance.DoNotTest;
-            set => BatchInstance.DoNotTest = value;
         }
 
         public string MaterialTypeCode
@@ -127,7 +124,7 @@ namespace Materials
             {
                 BatchInstance.Material.Project = value;
                 RaisePropertyChanged("ProjectInstance");
-            } 
+            }
         }
 
         public string RecipeCode
@@ -153,12 +150,21 @@ namespace Materials
             {
                 BatchInstance.TrialAreaID = value.ID;
                 BatchInstance.TrialArea = value;
-            } 
+            }
         }
 
         #endregion Properties
 
         #region Methods
+
+        public IEnumerable GetErrors(string propertyName)
+        {
+            if (string.IsNullOrEmpty(propertyName)
+                || !_validationErrors.ContainsKey(propertyName))
+                return null;
+
+            return _validationErrors[propertyName];
+        }
 
         /// <summary>
         /// Sets the IsSelectedProperty without raising OnBatchErrorsChanged in the Parent View Model
@@ -168,15 +174,6 @@ namespace Materials
         {
             _isSelected = value;
             RaisePropertyChanged("IsSelected");
-        }
-
-        public IEnumerable GetErrors(string propertyName)
-        {
-            if (string.IsNullOrEmpty(propertyName)
-                || !_validationErrors.ContainsKey(propertyName))
-                return null;
-
-            return _validationErrors[propertyName];
         }
 
         private void RaiseErrorsChanged(string propertyName)

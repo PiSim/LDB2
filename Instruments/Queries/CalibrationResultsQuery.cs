@@ -15,7 +15,7 @@ namespace Instruments.Queries
         public override IQueryable<CalibrationResult> Execute(LInstContext context)
         {
             IQueryable<CalibrationResult> query = context.CalibrationResults;
-                        
+
             if (OrderResults)
                 query = query.OrderBy(cres => cres.Description);
 

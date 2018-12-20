@@ -5,7 +5,6 @@ using Infrastructure.Events;
 using Infrastructure.Queries;
 using Infrastructure.Wrappers;
 using LabDbContext;
-using LabDbContext.EntityExtensions;
 using Prism.Events;
 using Reports.Views;
 using System;
@@ -18,7 +17,7 @@ namespace Reports
     public class ReportService : IReportService
     {
         #region Fields
-        
+
         private IDbContextFactory<LabDbEntities> _dbContextFactory;
         private IEventAggregator _eventAggregator;
         private IDataService<LabDbEntities> _labDbData;
@@ -121,7 +120,6 @@ namespace Reports
                 return null;
         }
 
-
         /// <summary>
         /// Starts the process of creating a new Report instance via the ReportCreationDialog
         /// If creation is successful an event is raised and the new Report returned
@@ -215,7 +213,6 @@ namespace Reports
 
             foreach (Requirement req in reqList)
             {
-
                 _labDbData.Execute(new ReloadEntityCommand(req));
 
                 Test tempTest = new Test()

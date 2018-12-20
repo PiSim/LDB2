@@ -1,5 +1,4 @@
 ﻿using LabDbContext;
-using Prism.Mvvm;
 using Prism.Regions;
 using System.Windows.Controls;
 

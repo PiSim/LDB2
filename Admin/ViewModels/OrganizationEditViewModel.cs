@@ -1,10 +1,11 @@
-﻿using DataAccessCore;
+﻿using Admin.Queries;
+using DataAccessCore;
 using DataAccessCore.Commands;
-using Infrastructure.Commands;
 using LInst;
 using Prism.Commands;
 using Prism.Mvvm;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 
 namespace Admin.ViewModels
@@ -14,8 +15,8 @@ namespace Admin.ViewModels
         #region Fields
 
         private bool _editMode;
-        private Organization _organizationInstance;
         private IDataService<LInstContext> _lInstData;
+        private Organization _organizationInstance;
 
         #endregion Fields
 
@@ -25,6 +26,8 @@ namespace Admin.ViewModels
         {
             _editMode = false;
             _lInstData = lInstData;
+
+            RoleList = new List<OrganizationRoleMapping>();
 
             SaveCommand = new DelegateCommand(
                 () =>
@@ -78,7 +81,8 @@ namespace Admin.ViewModels
             set
             {
                 _organizationInstance = value;
-                RoleList = _organizationInstance.RoleMappings;
+                if (_organizationInstance != null)
+                    RoleList = _lInstData.RunQuery(new OrganizationRoleMappingsQuery(_organizationInstance.ID)).ToList();
 
                 RaisePropertyChanged("RoleList");
                 RaisePropertyChanged("OrganizationEditViewVisibility");

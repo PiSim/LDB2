@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity;
-using System.Data.Entity.Migrations;
 using System.Linq;
 
 namespace LabDbContext
@@ -9,6 +7,7 @@ namespace LabDbContext
     public static class SpecificationExtension
     {
         #region Methods
+
         [Obsolete]
         public static IEnumerable<StandardFile> GetFiles(this Specification entry)
         {
@@ -32,8 +31,8 @@ namespace LabDbContext
 
     public partial class Specification
     {
-
         #region Methods
+
         [Obsolete]
         public ControlPlan AddControlPlan(bool asDefault = false)
         {

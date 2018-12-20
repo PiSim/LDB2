@@ -1,7 +1,5 @@
-﻿using DataAccess;
-using LabDbContext;
+﻿using LabDbContext;
 using System;
-using System.Linq;
 
 namespace Materials.Commands
 {
@@ -57,7 +55,6 @@ namespace Materials.Commands
             _context.SaveChanges();
         }
 
-
-    #endregion Methods
+        #endregion Methods
     }
 }

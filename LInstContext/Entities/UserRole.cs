@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace LInst
 {
     public class UserRole
     {
+        #region Constructors
+
         public UserRole()
         {
             Name = "";
@@ -16,12 +14,16 @@ namespace LInst
             UserMappings = new HashSet<UserRoleMapping>();
         }
 
+        #endregion Constructors
+
+        #region Properties
+
+        public string Description { get; set; }
         public int ID { get; set; }
 
         public string Name { get; set; }
-
-        public string Description { get; set; }
-
         public ICollection<UserRoleMapping> UserMappings { get; set; }
+
+        #endregion Properties
     }
 }

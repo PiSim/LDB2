@@ -1,5 +1,5 @@
-﻿using LInst;
-using DataAccessCore;
+﻿using DataAccessCore;
+using LInst;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 
@@ -10,7 +10,6 @@ namespace Instruments.Queries
     /// </summary>
     public class InstrumentsQuery : QueryBase<Instrument, LInstContext>
     {
-
         #region Methods
 
         public override IQueryable<Instrument> Execute(LInstContext context)

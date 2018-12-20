@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Data.Entity;
-using System.Data.Entity.Migrations;
 using System.Linq;
 
 namespace LabDbContext
@@ -8,7 +7,6 @@ namespace LabDbContext
     public partial class ControlPlan
     {
         #region Methods
-        
 
         public IList<ControlPlanItem> GetControlPlanItems(bool includeRequirement = false)
         {

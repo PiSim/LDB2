@@ -1,11 +1,7 @@
 ﻿using DataAccessCore;
 using LInst;
-using System;
-using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Admin.Queries
 {
@@ -14,6 +10,8 @@ namespace Admin.Queries
     /// </summary>
     public class PersonRolesQuery : QueryBase<PersonRole, LInstContext>
     {
+        #region Methods
+
         public override IQueryable<PersonRole> Execute(LInstContext context)
         {
             IQueryable<PersonRole> query = context.PersonRoles;
@@ -26,5 +24,7 @@ namespace Admin.Queries
 
             return query;
         }
+
+        #endregion Methods
     }
 }

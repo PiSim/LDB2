@@ -266,7 +266,7 @@
                                     Width="20"
                                     Height="20"
                                     Visibility="{Binding Converter={StaticResource BatchHasOrderToVisibilityConverter}}">
-                                <Image Source="{StaticResource PdfIconSmall}"/>
+                                <Image Source="{StaticResource PdfIconSmall}" />
                             </Button>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>

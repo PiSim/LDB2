@@ -1,6 +1,4 @@
-﻿using Controls.Views;
-using LInst;
-using Prism.Mvvm;
+﻿using LInst;
 using Prism.Regions;
 using System.Windows.Controls;
 
@@ -16,8 +14,6 @@ namespace Instruments.Views
         public InstrumentEdit(IRegionManager regionManager)
         {
             InitializeComponent();
-            regionManager.RegisterViewWithRegion(RegionNames.InstrumentEditMetrologyRegion,
-                                                    typeof(Views.Metrology));
         }
 
         #endregion Constructors

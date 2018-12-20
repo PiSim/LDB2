@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
-using System.Data.Entity.Migrations;
 using System.Linq;
 
 namespace LabDbContext
@@ -38,6 +37,7 @@ namespace LabDbContext
         #endregion Proprietà
 
         #region Metodi
+
         [Obsolete]
         public void AddBatch(Batch batchEntity)
         {
@@ -78,14 +78,13 @@ namespace LabDbContext
                 attachedExternalReport.MethodVariants.Add(attachedMethodVariant);
 
                 IEnumerable<TestRecord> recordList = attachedExternalReport.TestRecords.ToList();
-                                
+
                 foreach (TestRecord tstr in attachedExternalReport.TestRecords)
                     tstr.Tests.Add(attachedMethodVariant.GenerateTest());
 
                 entities.SaveChanges();
             }
         }
-
 
         /// <summary>
         /// Removes a given methodVariant from the method associations and from every test record
@@ -114,7 +113,6 @@ namespace LabDbContext
                 entities.SaveChanges();
             }
         }
-        
 
         #endregion Metodi
     }

@@ -17,7 +17,6 @@ namespace LabDbContext
 
         #region Methods
 
-
         /// <summary>
         /// Generates a new Test entry from the MethodVariant.
         /// </summary>
@@ -67,7 +66,6 @@ namespace LabDbContext
                 return query.FirstOrDefault(mtd => mtd.ID == MethodID);
             }
         }
-
 
         /// <summary>
         /// Deletes the entry from the database if no Test or requirement is associated with it, otherwise sets it as obsolete

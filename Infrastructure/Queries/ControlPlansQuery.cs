@@ -1,11 +1,7 @@
 ﻿using DataAccess;
 using LabDbContext;
-using System;
-using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Infrastructure.Queries
 {
@@ -14,10 +10,16 @@ namespace Infrastructure.Queries
     /// </summary>
     public class ControlPlansQuery : QueryBase<ControlPlan, LabDbEntities>
     {
+        #region Properties
+
         /// <summary>
         /// Get or set a SpecificationID to filter by
         /// </summary>
         public int? SpecificationID { get; set; }
+
+        #endregion Properties
+
+        #region Methods
 
         public override IQueryable<ControlPlan> Execute(LabDbEntities context)
         {
@@ -37,5 +39,7 @@ namespace Infrastructure.Queries
 
             return query;
         }
+
+        #endregion Methods
     }
 }

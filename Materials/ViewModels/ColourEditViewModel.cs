@@ -3,7 +3,6 @@ using Infrastructure;
 using Infrastructure.Commands;
 using Infrastructure.Events;
 using LabDbContext;
-using LabDbContext.EntityExtensions;
 using Materials.Queries;
 using Prism.Commands;
 using Prism.Events;
@@ -20,9 +19,9 @@ namespace Materials.ViewModels
         private Colour _colourInstance;
         private bool _editMode;
         private IEventAggregator _eventAggregator;
+        private IDataService<LabDbEntities> _labDbData;
         private Batch _selectedBatch;
         private Recipe _selectedRecipe;
-        IDataService<LabDbEntities> _labDbData;
 
         #endregion Fields
 

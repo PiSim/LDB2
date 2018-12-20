@@ -1,12 +1,10 @@
 ﻿using DataAccessCore;
-using DataAccessCore.Commands;
-using Infrastructure.Commands;
 using Infrastructure.Events;
+using Instruments.Commands;
 using LInst;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Prism.Events;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -108,7 +106,7 @@ namespace Instruments
             {
                 CalibrationReport output = calibrationDialog.ReportInstance;
 
-                _lInstData.Execute(new UpdateEntityCommand<LInstContext>(target));
+                _lInstData.Execute(new UpdateInstrumentCalibrationStatusCommand(target));
 
                 _eventAggregator.GetEvent<CalibrationIssued>()
                                 .Publish(output);

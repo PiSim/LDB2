@@ -1,11 +1,7 @@
 ﻿using DataAccess;
 using LabDbContext;
-using System;
-using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Materials.Queries
 {
@@ -14,10 +10,16 @@ namespace Materials.Queries
     /// </summary>
     public class RecipesQuery : QueryBase<Recipe, LabDbEntities>
     {
+        #region Properties
+
         /// <summary>
         /// Gets or Sets a ColorID to use as filter
         /// </summary>
         public int? ColorID { get; set; }
+
+        #endregion Properties
+
+        #region Methods
 
         public override IQueryable<Recipe> Execute(LabDbEntities context)
         {
@@ -34,5 +36,7 @@ namespace Materials.Queries
 
             return query;
         }
+
+        #endregion Methods
     }
 }

@@ -19,7 +19,6 @@ namespace Controls.Views
         public static string ExternalConstructionDetailRegion => "ExternalConstructionDetailRegion";
         public static string ExternalReportAddMethodRegion => "ExternalReportAddMethodRegion";
         public static string InstrumentEditCalibrationEditRegion => "InstrumentEditCalibrationEditRegion";
-        public static string InstrumentEditMetrologyRegion => "InstrumentEditMetrologyRegion";
         public static string InstrumentTypeManagementEditRegion => "InstrumentTypeManagementEditRegion";
         public static string InstrumentTypeManagementRegion => "InstrumentTypeManagementRegion";
         public static string InstrumentUtilizationAreasRegion => "InstrumentUtilizationAreasRegion";
@@ -58,7 +57,6 @@ namespace Controls.Views
         public static string SpecificationVersionTestListEditRegion => "SpecificationVersionTestListEditRegion";
         public static string StatusbarRegion => "StatusBarRegion";
         public static string ToolbarRegion => "ToolbarRegion";
-        public static string UnitOfMeasurementManagementRegion => "UnitOfMeasurementManagementRegion";
 
         #endregion Properties
     }

@@ -1,8 +1,8 @@
 ﻿using DataAccess;
-using LInst;
 using Infrastructure.Commands;
 using Infrastructure.Queries;
 using LabDbContext;
+using LInst;
 using Prism.Commands;
 using Prism.Mvvm;
 using System;

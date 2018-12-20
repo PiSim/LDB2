@@ -28,7 +28,6 @@
                             Value="{Binding }" />
                     <Setter Property="bhv:CommandBehavior.Event"
                             Value="MouseDoubleClick" />
-                    
                 </Style>
             </DataGrid.RowStyle>
             <DataGrid.Columns>

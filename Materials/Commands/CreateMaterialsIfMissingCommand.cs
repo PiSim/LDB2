@@ -1,10 +1,6 @@
 ﻿using DataAccess;
 using LabDbContext;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Materials.Commands
 {
@@ -14,15 +10,21 @@ namespace Materials.Commands
     /// </summary>
     public class CreateMaterialIfMissingCommand : ICommand<LabDbEntities>
     {
+        #region Fields
+
         private string _aspectCode,
                     _lineCode,
                     _recipeCode,
                     _typeCode;
 
+        #endregion Fields
+
+        #region Constructors
+
         /// <summary>
         /// Base Constructor for the command
         /// </summary>
-        /// <param name="material">A mocked Material instance containing instances of Aspect, Line, Type and Recipe entries 
+        /// <param name="material">A mocked Material instance containing instances of Aspect, Line, Type and Recipe entries
         /// with codes existing in the database</param>
         public CreateMaterialIfMissingCommand(Material material)
         {
@@ -31,6 +33,10 @@ namespace Materials.Commands
             _typeCode = material.MaterialType.Code;
             _recipeCode = material.Recipe.Code;
         }
+
+        #endregion Constructors
+
+        #region Methods
 
         public void Execute(LabDbEntities context)
         {
@@ -44,13 +50,18 @@ namespace Materials.Commands
                 MaterialType typeInstance = context.MaterialTypes.First(typ => typ.Code == _typeCode);
                 Recipe recipeInstance = context.Recipes.First(rec => rec.Code == _recipeCode);
 
-                context.Materials.Add(new Material() { Aspect = aspectInstance,
-                                                        MaterialLine = lineInstance,
-                                                        MaterialType = typeInstance,
-                                                        Recipe = recipeInstance});
+                context.Materials.Add(new Material()
+                {
+                    Aspect = aspectInstance,
+                    MaterialLine = lineInstance,
+                    MaterialType = typeInstance,
+                    Recipe = recipeInstance
+                });
 
                 context.SaveChanges();
             }
         }
+
+        #endregion Methods
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Data.Entity;
-using System.Data.Entity.Migrations;
 using System.Linq;
 
 namespace LabDbContext.EntityExtensions
@@ -26,6 +25,7 @@ namespace LabDbContext.EntityExtensions
                 entities.SaveChanges();
             }
         }
+
         public static IEnumerable<CalibrationFiles> GetFiles(this CalibrationReport entry)
         {
             // returns all CAlibrationfiles associated with a given CalibrationReport Entry
@@ -42,7 +42,6 @@ namespace LabDbContext.EntityExtensions
                                 .ToList();
             }
         }
-
 
         public static IEnumerable<Instrument> GetReferenceInstruments(this CalibrationReport entry)
         {
@@ -65,6 +64,7 @@ namespace LabDbContext.EntityExtensions
                                 .ToList();
             }
         }
+
         public static void RemoveReference(this CalibrationReport entry,
                                             Instrument referenceEntry)
         {

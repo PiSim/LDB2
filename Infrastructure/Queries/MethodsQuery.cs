@@ -16,6 +16,7 @@ namespace Infrastructure.Queries
         /// If false only the entities not flagged as IsOld are returned
         /// </summary>
         public bool IncludeObsolete { get; set; } = false;
+
         #endregion Properties
 
         #region Methods

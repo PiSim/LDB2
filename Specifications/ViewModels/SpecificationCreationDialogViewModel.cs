@@ -1,5 +1,4 @@
-﻿using DataAccessCore;
-using Infrastructure.Queries;
+﻿using Infrastructure.Queries;
 using LabDbContext;
 using LInst;
 using Prism.Commands;
@@ -20,7 +19,7 @@ namespace Specifications.ViewModels
 
         private readonly Dictionary<string, ICollection<string>> _validationErrors = new Dictionary<string, ICollection<string>>();
         private DataAccess.IDataService<LabDbEntities> _labDbData;
-        DataAccessCore.IDataService<LInstContext> _lInstData;
+        private DataAccessCore.IDataService<LInstContext> _lInstData;
 
         private string _name;
 
@@ -34,6 +33,7 @@ namespace Specifications.ViewModels
                                                     DataAccessCore.IDataService<LInstContext> lInstData) : base()
         {
             _labDbData = labDbData;
+            _lInstData = lInstData;
             CurrentIssue = "";
             Description = "";
 

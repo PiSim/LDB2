@@ -7,17 +7,19 @@ using Prism.Commands;
 using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
 
 namespace Materials.ViewModels
 {
     public class NewBatchSearchResultDialogViewModel : BindableBase
     {
+        #region Fields
+
         private bool _areAllBatchesSelected = true;
-        IDataService<LabDbEntities> _labDbData;
+        private IDataService<LabDbEntities> _labDbData;
+
+        #endregion Fields
 
         #region Constructors
 
@@ -80,7 +82,6 @@ namespace Materials.ViewModels
 
                         dialog.DialogResult = true;
                     }
-
                 },
                 dialog => AreSelectedBatchesValid);
 
@@ -95,24 +96,11 @@ namespace Materials.ViewModels
                     {
                     }
                 });
-
         }
 
         #endregion Constructors
 
         #region Properties
-
-        public DelegateCommand<Window> CancelCommand { get; set; }
-
-        public IEnumerable<Colour> ColorList { get; }
-
-        public DelegateCommand<Window> ConfirmCommand { get; set; }
-        
-        public IEnumerable<ExternalConstruction> ConstructionList { get; }
-
-        public DelegateCommand<NewBatchWrapper> OpenOrderFileCommand { get; set; }
-
-        public ICollection<NewBatchWrapper> ParsedBatches { get; private set; }
 
         public bool AreAllBatchesSelected
         {
@@ -126,10 +114,21 @@ namespace Materials.ViewModels
             }
         }
 
+        public DelegateCommand<Window> CancelCommand { get; set; }
+
+        public IEnumerable<Colour> ColorList { get; }
+
+        public DelegateCommand<Window> ConfirmCommand { get; set; }
+
+        public IEnumerable<ExternalConstruction> ConstructionList { get; }
+
+        public DelegateCommand<NewBatchWrapper> OpenOrderFileCommand { get; set; }
+
+        public ICollection<NewBatchWrapper> ParsedBatches { get; private set; }
         public IEnumerable<Project> ProjectList { get; }
 
         public IEnumerable<TrialArea> TrialAreaList { get; set; }
-        
+
         private bool AreSelectedBatchesValid => ParsedBatches.Where(nbw => nbw.IsSelected).All(nbw => !nbw.HasErrors);
 
         #endregion Properties
@@ -153,6 +152,24 @@ namespace Materials.ViewModels
             OnBatchHasErrorsChanged(sender, e);
         }
 
+        public void SetParsedBatches(ICollection<Batch> parsedBatchList)
+        {
+            ParsedBatches = new List<NewBatchWrapper>(parsedBatchList.Count());
+            foreach (Batch btc in parsedBatchList)
+            {
+                NewBatchWrapper newBatch = new NewBatchWrapper(btc);
+                newBatch.HasErrorsChanged += OnBatchHasErrorsChanged;
+                newBatch.IsSelectedChanged += OnBatchSelectionChanged;
+                newBatch.MaterialDataChanged += OnBatchMaterialDataChanged;
+                newBatch.RecipeDataChanged += OnBatchRecipeDataChanged;
+                CheckRecipe(newBatch);
+                CheckMaterial(newBatch);
+                ParsedBatches.Add(newBatch);
+            }
+            RaisePropertyChanged("ParsedBatches");
+            ConfirmCommand.RaiseCanExecuteChanged();
+        }
+
         private void CheckAllBatchesSelected()
         {
             bool hasSelected = false, hasNotSelected = false;
@@ -173,37 +190,9 @@ namespace Materials.ViewModels
             RaisePropertyChanged("AreAllBatchesSelected");
         }
 
-        public void SetParsedBatches(ICollection<Batch> parsedBatchList)
-        {
-            ParsedBatches = new List<NewBatchWrapper>(parsedBatchList.Count());
-            foreach (Batch btc in parsedBatchList)
-            {
-                NewBatchWrapper newBatch = new NewBatchWrapper(btc);
-                newBatch.HasErrorsChanged += OnBatchHasErrorsChanged;
-                newBatch.IsSelectedChanged += OnBatchSelectionChanged;
-                newBatch.MaterialDataChanged += OnBatchMaterialDataChanged;
-                newBatch.RecipeDataChanged += OnBatchRecipeDataChanged;
-                CheckRecipe(newBatch);
-                CheckMaterial(newBatch);
-                ParsedBatches.Add(newBatch);
-            }
-            RaisePropertyChanged("ParsedBatches");
-            ConfirmCommand.RaiseCanExecuteChanged();
-        }
-
-        private void OnBatchMaterialDataChanged(object sender, EventArgs e)
-        {
-            CheckMaterial(sender as NewBatchWrapper);
-        }
-
-        private void OnBatchRecipeDataChanged(object sender, EventArgs e)
-        {
-            CheckRecipe(sender as NewBatchWrapper);
-        }
-
         private void CheckMaterial(NewBatchWrapper newBatch)
         {
-            Material dbMaterial = _labDbData.RunQuery(new MaterialsQuery() {OrderResults = false })
+            Material dbMaterial = _labDbData.RunQuery(new MaterialsQuery() { OrderResults = false })
                                             .FirstOrDefault(mat => mat.Aspect.Code == newBatch.AspectCode
                                                                     && mat.MaterialLine.Code == newBatch.MaterialLineCode
                                                                     && mat.MaterialType.Code == newBatch.MaterialTypeCode
@@ -224,6 +213,16 @@ namespace Materials.ViewModels
             Recipe dbRecipe = _labDbData.RunQuery(new RecipeQuery() { RecipeCode = newBatch.RecipeCode });
             if (dbRecipe?.Colour != null)
                 newBatch.ColorInstance = ColorList.FirstOrDefault(col => col.ID == dbRecipe.ColourID);
+        }
+
+        private void OnBatchMaterialDataChanged(object sender, EventArgs e)
+        {
+            CheckMaterial(sender as NewBatchWrapper);
+        }
+
+        private void OnBatchRecipeDataChanged(object sender, EventArgs e)
+        {
+            CheckRecipe(sender as NewBatchWrapper);
         }
 
         #endregion Methods

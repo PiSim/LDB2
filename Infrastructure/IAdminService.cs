@@ -7,7 +7,7 @@ namespace Infrastructure
         #region Methods
 
         InstrumentType CreateNewInstrumentType();
-        
+
         Organization CreateNewOrganization();
 
         OrganizationRole CreateNewOrganizationRole();
@@ -15,7 +15,7 @@ namespace Infrastructure
         Person CreateNewPerson();
 
         PersonRole CreateNewPersonRole();
-        
+
         User CreateNewUser();
 
         UserRole CreateNewUserRole();

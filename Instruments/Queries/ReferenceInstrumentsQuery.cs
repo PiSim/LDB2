@@ -1,5 +1,5 @@
-﻿using LInst;
-using DataAccessCore;
+﻿using DataAccessCore;
+using LInst;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 
@@ -10,12 +10,20 @@ namespace Instruments.Queries
     /// </summary>
     public class ReferenceInstrumentsQuery : QueryBase<Instrument, LInstContext>
     {
+        #region Fields
+
         private CalibrationReport _reportInstance;
+
+        #endregion Fields
+
+        #region Constructors
 
         public ReferenceInstrumentsQuery(CalibrationReport reportInstance)
         {
             _reportInstance = reportInstance;
         }
+
+        #endregion Constructors
 
         #region Methods
 

@@ -3,7 +3,6 @@ using Controls.Views;
 using DataAccessCore;
 using DataAccessCore.Commands;
 using Infrastructure;
-using Infrastructure.Commands;
 using Infrastructure.Events;
 using LInst;
 using Prism.Commands;
@@ -19,8 +18,8 @@ namespace Admin.ViewModels
         #region Fields
 
         private IAdminService _adminService;
-        private IDataService<LInstContext> _lInstData;
         private IEventAggregator _eventAggregator;
+        private IDataService<LInstContext> _lInstData;
         private User _selectedUser;
         private IEnumerable<User> _userList;
 

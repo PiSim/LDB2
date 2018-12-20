@@ -1,7 +1,5 @@
 ﻿using Controls.Views;
-using DataAccess;
 using Infrastructure;
-using LabDbContext;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
@@ -91,8 +89,6 @@ namespace Admin.ViewModels
         public IEnumerable<ScriptBase> ScriptList { get; }
 
         public ScriptBase SelectedScript { get; set; }
-
-        public string UnitOfMeasurementManagementRegionName => RegionNames.UnitOfMeasurementManagementRegion;
 
         #endregion Properties
     }

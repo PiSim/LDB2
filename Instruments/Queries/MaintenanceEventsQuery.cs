@@ -1,11 +1,7 @@
 ﻿using DataAccessCore;
 using LInst;
-using System;
-using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Instruments.Queries
 {
@@ -14,11 +10,16 @@ namespace Instruments.Queries
     /// </summary>
     public class MaintenanceEventsQuery : QueryBase<InstrumentMaintenanceEvent, LInstContext>
     {
+        #region Properties
+
         /// <summary>
         /// InstrumentID to use as filter in the query
         /// </summary>
         public int? InstrumentID { get; set; }
-        
+
+        #endregion Properties
+
+        #region Methods
 
         public override IQueryable<InstrumentMaintenanceEvent> Execute(LInstContext context)
         {
@@ -32,5 +33,7 @@ namespace Instruments.Queries
 
             return query;
         }
+
+        #endregion Methods
     }
 }

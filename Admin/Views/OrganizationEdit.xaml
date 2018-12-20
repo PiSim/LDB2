@@ -38,7 +38,7 @@
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
                     <GridViewColumn Header="Ruolo"
-                                        DisplayMemberBinding="{Binding Role.Name}" />
+                                        DisplayMemberBinding="{Binding OrganizationRole.Name}" />
                 </GridView>
             </ListView.View>
         </ListView>

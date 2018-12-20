@@ -1,6 +1,4 @@
 ﻿using LabDbContext;
-using LabDbContext.EntityExtensions;
-using LabDbContext.Services;
 using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
@@ -10,13 +8,21 @@ namespace Infrastructure.Wrappers
 {
     public class IsOverrideChangedEventArgs : EventArgs
     {
-        public Requirement RequirementInstance { get; set; }
+        #region Properties
+
         public bool IsOverride { get; set; }
+        public Requirement RequirementInstance { get; set; }
+
+        #endregion Properties
     }
-    
+
     public class RequirementWrapper : BindableBase
     {
+        #region Events
+
         public event EventHandler<IsOverrideChangedEventArgs> IsOverrideChanged;
+
+        #endregion Events
 
         #region Constructors
 
@@ -28,7 +34,7 @@ namespace Infrastructure.Wrappers
         #endregion Constructors
 
         #region Properties
-        
+
         public bool IsOverride
         {
             get { return RequirementInstance.IsOverride; }
@@ -52,7 +58,6 @@ namespace Infrastructure.Wrappers
 
         public string Property => RequirementInstance.MethodVariant.Method.Property.Name;
 
-
         public Requirement RequirementInstance
         {
             get; set;
@@ -68,7 +73,6 @@ namespace Infrastructure.Wrappers
         // Method definitions
 
         #region Methods
-
 
         private void RaiseIsOverrideChanged()
         {

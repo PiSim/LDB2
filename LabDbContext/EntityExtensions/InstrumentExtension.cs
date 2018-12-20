@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
-using System.Data.Entity.Migrations;
 using System.Linq;
 
 namespace LabDbContext
@@ -9,6 +8,7 @@ namespace LabDbContext
     public static class InstrumentExtension
     {
         #region Methods
+
         [Obsolete]
         public static void AddFiles(this Instrument entry,
                                     IEnumerable<string> paths)
@@ -40,6 +40,7 @@ namespace LabDbContext
 
             return lastCalibration.Date.AddMonths(entry.CalibrationInterval);
         }
+
         [Obsolete]
         public static CalibrationReport GetLastCalibration(this Instrument entry)
         {
@@ -58,7 +59,6 @@ namespace LabDbContext
                                 .FirstOrDefault();
             }
         }
-        
 
         #endregion Methods
     }
@@ -66,6 +66,7 @@ namespace LabDbContext
     public partial class Instrument
     {
         #region Methods
+
         [Obsolete]
         public IEnumerable<InstrumentMaintenanceEvent> GetMaintenanceEvents()
         {

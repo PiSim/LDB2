@@ -1,6 +1,5 @@
 ﻿using DataAccessCore;
 using DataAccessCore.Commands;
-using Infrastructure.Commands;
 using Infrastructure.Queries;
 using Instruments.Queries;
 using LInst;
@@ -61,7 +60,7 @@ namespace Instruments.ViewModels
                     InstrumentInstance.ManufacturerID = SelectedManufacturer.ID;
                     InstrumentInstance.Model = Model;
                     InstrumentInstance.SerialNumber = SerialNumber;
-                                        
+
                     _lInstData.Execute(new InsertEntityCommand<LInstContext>(InstrumentInstance));
 
                     parent.DialogResult = true;

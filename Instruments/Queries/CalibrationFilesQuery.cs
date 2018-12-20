@@ -10,14 +10,18 @@ namespace Instruments.Queries
     /// </summary>
     public class CalibrationFilesQuery : QueryBase<CalibrationFile, LInstContext>
     {
+        #region Properties
+
         public int? CalibrationReportID { get; set; }
+
+        #endregion Properties
 
         #region Methods
 
         public override IQueryable<CalibrationFile> Execute(LInstContext context)
         {
             IQueryable<CalibrationFile> query = context.CalibrationFiles;
-            
+
             if (AsNoTracking)
                 query = query.AsNoTracking();
 

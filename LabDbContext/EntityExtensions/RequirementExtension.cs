@@ -1,7 +1,4 @@
-﻿using System.Data.Entity;
-using System.Linq;
-
-namespace LabDbContext
+﻿namespace LabDbContext
 {
     public partial class Requirement
     {

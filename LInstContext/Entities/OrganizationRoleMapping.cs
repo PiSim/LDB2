@@ -1,21 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace LInst
+﻿namespace LInst
 {
     public class OrganizationRoleMapping
     {
+        #region Properties
+
         public int ID { get; set; }
 
+        public bool IsSelected { get; set; }
+        public Organization Organization { get; set; }
         public int OrganizationID { get; set; }
+        public OrganizationRole OrganizationRole { get; set; }
         public int OrganizationRoleID { get; set; }
 
-        public Organization Organization { get; set; }
-        public OrganizationRole OrganizationRole { get; set; }
-
-        public bool IsSelected { get; set; }
+        #endregion Properties
     }
 }

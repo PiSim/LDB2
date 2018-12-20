@@ -1,5 +1,4 @@
 ﻿using Controls.Views;
-using Prism.Mvvm;
 using Prism.Regions;
 using System.Windows.Controls;
 
@@ -22,8 +21,6 @@ namespace Admin.Views
                                                     typeof(Views.InstrumentTypeMain));
             regionManager.RegisterViewWithRegion(RegionNames.InstrumentUtilizationAreasRegion,
                                                     typeof(Views.InstrumentUtilizationAreaMain));
-            regionManager.RegisterViewWithRegion(RegionNames.UnitOfMeasurementManagementRegion,
-                                                    typeof(Views.MeasurementUnitMain));
             regionManager.RegisterViewWithRegion(RegionNames.OrganizationRoleManagementRegion,
                                                     typeof(Views.OrganizationsMain));
             regionManager.RegisterViewWithRegion(RegionNames.PeopleManagementRegion,

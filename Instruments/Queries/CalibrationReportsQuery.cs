@@ -10,7 +10,6 @@ namespace Instruments.Queries
     /// </summary>
     public class CalibrationReportsQuery : QueryBase<CalibrationReport, LInstContext>
     {
-
         #region Methods
 
         public override IQueryable<CalibrationReport> Execute(LInstContext context)

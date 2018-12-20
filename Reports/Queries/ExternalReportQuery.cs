@@ -1,22 +1,28 @@
 ﻿using DataAccess;
 using LabDbContext;
-using System;
-using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Reports.Queries
 {
     public class ExternalReportQuery : ScalarBase<ExternalReport, LabDbEntities>
     {
-        int? _ID;
+        #region Fields
+
+        private int? _ID;
+
+        #endregion Fields
+
+        #region Constructors
 
         public ExternalReportQuery(int ID)
         {
             _ID = ID;
         }
+
+        #endregion Constructors
+
+        #region Methods
 
         public override ExternalReport Execute(LabDbEntities context)
         {
@@ -33,5 +39,7 @@ namespace Reports.Queries
 
             return query.FirstOrDefault(exrep => exrep.ID == _ID);
         }
+
+        #endregion Methods
     }
 }

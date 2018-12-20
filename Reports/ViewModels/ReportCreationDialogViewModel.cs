@@ -4,8 +4,6 @@ using Infrastructure.Commands;
 using Infrastructure.Queries;
 using Infrastructure.Wrappers;
 using LabDbContext;
-using LabDbContext.EntityExtensions;
-using LabDbContext.Services;
 using LInst;
 using Prism.Commands;
 using Prism.Events;
@@ -34,7 +32,7 @@ namespace Reports.ViewModels
 
         private IEventAggregator _eventAggregator;
         private IDataService<LabDbEntities> _labDbData;
-        DataAccessCore.IDataService<LInstContext> _lInstData;
+        private DataAccessCore.IDataService<LInstContext> _lInstData;
         private Int32 _number;
 
         private IReportService _reportService;
@@ -136,7 +134,7 @@ namespace Reports.ViewModels
         public DelegateCommand<Window> ConfirmCommand { get; }
 
         public IEnumerable<ControlPlan> ControlPlanList { get; private set; }
-        
+
         public string Description
         {
             get { return _description; }
@@ -293,7 +291,7 @@ namespace Reports.ViewModels
             {
                 _selectedVersion = value;
                 RaisePropertyChanged("SelectedVersion");
-                
+
                 // If new value is null sets empty requirementList
 
                 if (_selectedVersion == null)
@@ -313,7 +311,7 @@ namespace Reports.ViewModels
         }
 
         public IEnumerable<Specification> SpecificationList { get; }
-                
+
         public IEnumerable<Person> TechList { get; }
 
         public double? TotalDuration => _requirementList.Where(req => req.IsSelected)

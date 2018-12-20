@@ -59,7 +59,7 @@ namespace Materials.ViewModels
                     _materialService.ShowSampleLogDialog();
                 },
                 () => Thread.CurrentPrincipal.IsInRole(UserRoleNames.SampleEdit));
-            
+
             PrintBatchQueryCommand = new DelegateCommand<IQueryPresenter<Batch, LabDbEntities>>(
                 query =>
                 {

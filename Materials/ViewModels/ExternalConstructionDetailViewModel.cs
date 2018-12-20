@@ -1,11 +1,8 @@
 ﻿using Controls.Views;
-using DataAccess;
-using DataAccessCore;
 using Infrastructure;
 using Infrastructure.Events;
 using Infrastructure.Queries;
 using LabDbContext;
-using LabDbContext.EntityExtensions;
 using LabDbContext.Services;
 using LInst;
 using Materials.Queries;
@@ -27,7 +24,7 @@ namespace Materials.ViewModels
         private IEventAggregator _eventAggregator;
         private ExternalConstruction _externalConstructionInstance;
         private DataAccess.IDataService<LabDbEntities> _labDbData;
-        DataAccessCore.IDataService<LInstContext> _lInstData;
+        private DataAccessCore.IDataService<LInstContext> _lInstData;
         private IReportService _reportService;
         private Material _selectedAssignedMaterial, _selectedUnassignedMaterial;
         private Specification _selectedSpecification;

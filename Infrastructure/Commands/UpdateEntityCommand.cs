@@ -1,21 +1,26 @@
 ﻿using DataAccess;
 using LabDbContext;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Infrastructure.Commands
 {
     public class UpdateEntityCommand : ICommand<LabDbEntities>
     {
+        #region Fields
+
         private object _entity;
+
+        #endregion Fields
+
+        #region Constructors
 
         public UpdateEntityCommand(object entity)
         {
             _entity = entity;
         }
+
+        #endregion Constructors
+
+        #region Methods
 
         public void Execute(LabDbEntities context)
         {
@@ -25,5 +30,7 @@ namespace Infrastructure.Commands
             context.SaveChanges();
             context.Dispose();
         }
+
+        #endregion Methods
     }
 }

@@ -1,10 +1,7 @@
 ﻿using DataAccess;
 using LabDbContext;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Materials.Commands
 {
@@ -14,12 +11,22 @@ namespace Materials.Commands
     /// </summary>
     public class CreateRecipesIfMissingCommand : ICommand<LabDbEntities>
     {
+        #region Fields
+
         private IEnumerable<Recipe> _recipeList;
+
+        #endregion Fields
+
+        #region Constructors
 
         public CreateRecipesIfMissingCommand(IEnumerable<Recipe> recipeList)
         {
             _recipeList = recipeList;
         }
+
+        #endregion Constructors
+
+        #region Methods
 
         public void Execute(LabDbEntities context)
         {
@@ -29,5 +36,7 @@ namespace Materials.Commands
 
             context.SaveChanges();
         }
+
+        #endregion Methods
     }
 }

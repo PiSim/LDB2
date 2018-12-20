@@ -1,6 +1,5 @@
 ﻿using DataAccessCore;
 using DataAccessCore.Commands;
-using Infrastructure.Commands;
 using Infrastructure.Queries;
 using Instruments.Queries;
 using LInst;
@@ -9,7 +8,6 @@ using Prism.Events;
 using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 
@@ -21,9 +19,8 @@ namespace Instruments.ViewModels
 
         private IEventAggregator _eventAggregator;
         private InstrumentService _instrumentService;
-        private Instrument _instumentInstance, _selectedReference;
+        private Instrument _instumentInstance;
         private IDataService<LInstContext> _lInstData;
-        private string _referenceCode;
         private Organization _selectedLab;
 
         #endregion Fields
@@ -36,13 +33,11 @@ namespace Instruments.ViewModels
         {
             _lInstData = lInstData;
             _instrumentService = instrumentService;
-            IsVerificationOnly = false;
             LabList = _lInstData.RunQuery(new OrganizationsQuery() { Role = OrganizationsQuery.OrganizationRoles.CalibrationLab })
                                                                         .ToList();
             _eventAggregator = eventAggregator;
 
             CalibrationDate = DateTime.Now.Date;
-
 
             CancelCommand = new DelegateCommand<Window>(
                 parentDialog =>
@@ -65,8 +60,18 @@ namespace Instruments.ViewModels
                     if (IsNotExternalLab)
                     {
                         ReportInstance.TechID = SelectedTech.ID;
-
                     }
+
+                    foreach (InstrumentProperty iProperty in _lInstData.RunQuery(new InstrumentPropertiesQuery(ReportInstance.InstrumentID) { ExcludeNonCalibrationProperties = true }))
+                        ReportInstance.CalibrationReportProperties.Add(new CalibrationReportProperty()
+                        {
+                            Name = iProperty.Name,
+                            TargetValue = iProperty.TargetValue,
+                            UpperLimit = iProperty.UpperLimit,
+                            LowerLimit = iProperty.LowerLimit,
+                            ParentPropertyID = iProperty.ID,
+                            UM = iProperty.UM
+                        });
 
                     _lInstData.Execute(new InsertEntityCommand<LInstContext>(ReportInstance));
 
@@ -79,10 +84,6 @@ namespace Instruments.ViewModels
         #region Properties
 
         public DateTime CalibrationDate { get; set; }
-
-        public string CalibrationNotes { get; set; }
-
-        public string CalibrationResult { get; set; }
 
         public DelegateCommand<Window> CancelCommand { get; }
 
@@ -123,9 +124,8 @@ namespace Instruments.ViewModels
             }
         }
 
-        public bool IsVerificationOnly { get; set; }
         public IEnumerable<Organization> LabList { get; }
-        
+
         public CalibrationReport ReportInstance { get; private set; }
 
         public Organization SelectedLab
@@ -138,6 +138,7 @@ namespace Instruments.ViewModels
                 RaisePropertyChanged("IsNotExternalLab");
             }
         }
+
         public Person SelectedTech { get; set; }
 
         public List<Person> TechList => _lInstData.RunQuery(new PeopleQuery() { Role = PeopleQuery.PersonRoles.CalibrationTech })

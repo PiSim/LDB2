@@ -6,7 +6,6 @@ using Infrastructure.Events;
 using Infrastructure.Queries;
 using LabDbContext;
 using LabDbContext.EntityExtensions;
-using LabDbContext.Services;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;

@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Data.Entity;
-using System.Data.Entity.Migrations;
 using System.Linq;
 
 namespace LabDbContext
@@ -33,7 +32,6 @@ namespace LabDbContext
     {
         #region Methods
 
-
         /// <summary>
         /// Queries the database for related MethodVariants and returns them as ICollection
         /// </summary>
@@ -65,7 +63,7 @@ namespace LabDbContext
                                             .ToList();
             }
         }
-        
+
         #endregion Methods
     }
 }

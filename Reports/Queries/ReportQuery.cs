@@ -29,7 +29,6 @@ namespace Reports.Queries
         {
             if (Number != null)
                 return context.Reports.FirstOrDefault(rep => rep.Number == Number);
-
             else
                 return context.Reports.FirstOrDefault(rep => rep.TestRecordID == TestRecordID);
         }

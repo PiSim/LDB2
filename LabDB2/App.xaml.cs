@@ -1,9 +1,8 @@
 ﻿using Infrastructure;
 using LabDB2.Views;
-using LabDbContext;
-using Prism.Mvvm;
 using Prism.Ioc;
 using Prism.Modularity;
+using Prism.Mvvm;
 using Prism.Unity;
 using System;
 using System.Security.Principal;
@@ -123,7 +122,7 @@ namespace LabDB2
                     ModuleType = SpecificationModuleType.AssemblyQualifiedName,
                     InitializationMode = Prism.Modularity.InitializationMode.OnDemand
                 });
-            
+
             Type UserModuleType = typeof(User.UserModule);
             moduleCatalog.AddModule(
                 new Prism.Modularity.ModuleInfo()
@@ -165,27 +164,6 @@ namespace LabDB2
             Current.MainWindow = shell;
         }
 
-        private void TryLogin()
-        {
-            LInst.LInstContext entities = new LInst.LInstContext();
-            LoginDialog logger = Container.Resolve<LoginDialog>();
-            
-            if (logger.ShowDialog() == true)
-            {
-                AppDomain.CurrentDomain.SetThreadPrincipal(logger.AuthenticatedPrincipal);
-                LabDB2.Properties.Settings.Default.LastLogUser = logger.UserName;
-                LabDB2.Properties.Settings.Default.Save();
-                OpenShell();
-            }
-            else
-                Application.Current.Shutdown();
-        }
-
-        private void OpenShell()
-        {
-            Current.MainWindow.Show();
-        }
-
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
@@ -196,6 +174,27 @@ namespace LabDB2
             containerRegistry.Register<IAuthenticationService, AuthenticationService>();
             containerRegistry.RegisterSingleton<NavigationService>();
             Container.Resolve<NavigationService>();
+        }
+
+        private void OpenShell()
+        {
+            Current.MainWindow.Show();
+        }
+
+        private void TryLogin()
+        {
+            LInst.LInstContext entities = new LInst.LInstContext();
+            LoginDialog logger = Container.Resolve<LoginDialog>();
+
+            if (logger.ShowDialog() == true)
+            {
+                AppDomain.CurrentDomain.SetThreadPrincipal(logger.AuthenticatedPrincipal);
+                LabDB2.Properties.Settings.Default.LastLogUser = logger.UserName;
+                LabDB2.Properties.Settings.Default.Save();
+                OpenShell();
+            }
+            else
+                Application.Current.Shutdown();
         }
 
         #endregion Methods

@@ -34,7 +34,6 @@ namespace Instruments
         {
             containerRegistry.Register<Views.InstrumentCreationDialog>();
 
-            containerRegistry.Register<ViewModels.AddPropertyDialogViewModel>();
             containerRegistry.Register<ViewModels.InstrumentCreationDialogViewModel>();
             containerRegistry.Register<ViewModels.InstrumentEditViewModel>();
             containerRegistry.Register<ViewModels.InstrumentMainViewModel>();

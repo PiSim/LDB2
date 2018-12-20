@@ -30,5 +30,4 @@ namespace LabDbContext
 
         #endregion Methods
     }
-
 }

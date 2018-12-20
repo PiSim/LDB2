@@ -1,10 +1,7 @@
 ﻿using DataAccess;
 using LabDbContext;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Materials.Commands
 {
@@ -14,12 +11,22 @@ namespace Materials.Commands
     /// </summary>
     public class CreateMaterialTypesIfMissingCommand : ICommand<LabDbEntities>
     {
+        #region Fields
+
         private IEnumerable<MaterialType> _typeList;
+
+        #endregion Fields
+
+        #region Constructors
 
         public CreateMaterialTypesIfMissingCommand(IEnumerable<MaterialType> typeList)
         {
             _typeList = typeList;
         }
+
+        #endregion Constructors
+
+        #region Methods
 
         public void Execute(LabDbEntities context)
         {
@@ -31,5 +38,7 @@ namespace Materials.Commands
 
             context.SaveChanges();
         }
+
+        #endregion Methods
     }
 }

@@ -1,23 +1,19 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Infrastructure.Commands;
-using System;
-using System.Collections.Generic;
+﻿using LabDbContext;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using LabDbContext;
 
 namespace Infrastructure.Commands.Tests
 {
     [TestClass()]
     public class InsertEntityCommandTests
     {
-        string connectionName = "name=LabDbTest";
+        #region Fields
 
-        public void InsertEntityCommandTest()
-        {
+        private string connectionName = "name=LabDbTest";
 
-        }
+        #endregion Fields
+
+        #region Methods
 
         [TestMethod()]
         public void ExecuteTest()
@@ -32,7 +28,6 @@ namespace Infrastructure.Commands.Tests
                     testContext.Entry(existingEntry).State = System.Data.Entity.EntityState.Deleted;
                     testContext.SaveChanges();
                 }
-               
             }
 
             new InsertEntityCommand(testEntry).Execute(new LabDbEntities(connectionName));
@@ -42,5 +37,11 @@ namespace Infrastructure.Commands.Tests
                 Assert.IsNotNull(testContext.Aspects.FirstOrDefault(asp => asp.Code == "999"));
             }
         }
+
+        public void InsertEntityCommandTest()
+        {
+        }
+
+        #endregion Methods
     }
 }

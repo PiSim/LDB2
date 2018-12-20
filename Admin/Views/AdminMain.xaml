@@ -42,12 +42,6 @@
                         Grid.Row="2"
                         Margin="5" />
 
-                    <Button Content="Nuovo Ruolo Ente"
-                            Command="{Binding NewOrganizationRoleCommand}"
-                            Grid.Column="0"
-                            Grid.Row="3"
-                            Margin="5" />
-
                     <Button Content="Esegui"
                             Command="{Binding RunMethodCommand}"
                             Grid.Column="0"
@@ -99,22 +93,12 @@
                 <ContentControl prism:RegionManager.RegionName="{Binding PeopleManagementRegionName}" />
             </TabItem>
 
-            <TabItem Header="Grandezze Misurabili">
-                <ContentControl prism:RegionManager.RegionName="{Binding MeasurableQuantityManagementRegionName}" />
-            </TabItem>
-
             <TabItem Header="Tipi Strumenti">
                 <ContentControl prism:RegionManager.RegionName="{Binding InstrumentTypeManagementRegionName}" />
             </TabItem>
 
-            <TabItem Header="Unità di misura">
-                <ContentControl prism:RegionManager.RegionName="{Binding UnitOfMeasurementManagementRegionName}" />
-            </TabItem>
             <TabItem Header="Aree Utilizzo strumenti">
                 <ContentControl prism:RegionManager.RegionName="{Binding InstrumentUtilizationAreasRegionName}" />
-            </TabItem>
-            <TabItem Header="Gestione Proprietà materiali">
-                <ContentControl prism:RegionManager.RegionName="{Binding PropertyRegionName}" />
             </TabItem>
         </TabControl>
     </Grid>

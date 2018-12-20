@@ -1,18 +1,20 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Infrastructure.Commands;
-using System;
+﻿using LabDbContext;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using LabDbContext;
 
 namespace Infrastructure.Commands.Tests
 {
     [TestClass()]
     public class BulkInsertEntitiesCommandTests
     {
-        string connectionName = "name=LabDbTest";
+        #region Fields
+
+        private string connectionName = "name=LabDbTest";
+
+        #endregion Fields
+
+        #region Methods
 
         [TestMethod()]
         public void BulkInsertTest()
@@ -55,5 +57,7 @@ namespace Infrastructure.Commands.Tests
                 }
             }
         }
+
+        #endregion Methods
     }
 }

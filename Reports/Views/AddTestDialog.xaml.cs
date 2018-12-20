@@ -1,6 +1,5 @@
 ﻿using Infrastructure.Wrappers;
 using LabDbContext;
-using Prism.Mvvm;
 using System.Collections.Generic;
 using System.Windows;
 

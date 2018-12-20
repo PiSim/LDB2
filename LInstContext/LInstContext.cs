@@ -1,37 +1,42 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LInst
 {
     public class LInstContext : DbContext
     {
+        #region Constructors
+
         public LInstContext()
         {
-
         }
 
+        #endregion Constructors
+
+        #region Properties
+
         public DbSet<CalibrationFile> CalibrationFiles { get; set; }
+        public DbSet<CalibrationReportProperty> CalibrationReportProperties { get; set; }
         public DbSet<CalibrationReport> CalibrationReports { get; set; }
         public DbSet<CalibrationResult> CalibrationResults { get; set; }
-        public DbSet<Instrument> Instruments { get; set; }
         public DbSet<InstrumentFile> InstrumentFiles { get; set; }
-        public DbSet<InstrumentProperty> InstrumentProperties { get; set; }
         public DbSet<InstrumentMaintenanceEvent> InstrumentMaintenanceEvents { get; set; }
+        public DbSet<InstrumentProperty> InstrumentProperties { get; set; }
+        public DbSet<Instrument> Instruments { get; set; }
         public DbSet<InstrumentType> InstrumentTypes { get; set; }
         public DbSet<InstrumentUtilizationArea> InstrumentUtilizationAreas { get; set; }
-        public DbSet<Organization> Organizations { get; set; }
-        public DbSet<OrganizationRole> OrganizationRoles { get; set; }
         public DbSet<OrganizationRoleMapping> OrganizationRoleMappings { get; set; }
+        public DbSet<OrganizationRole> OrganizationRoles { get; set; }
+        public DbSet<Organization> Organizations { get; set; }
         public DbSet<Person> People { get; set; }
-        public DbSet<PersonRole> PersonRoles { get; set; }
         public DbSet<PersonRoleMapping> PersonRoleMappings { get; set; }
-        public DbSet<User> Users { get; set; }
-        public DbSet<UserRole> UserRoles { get; set; }
+        public DbSet<PersonRole> PersonRoles { get; set; }
         public DbSet<UserRoleMapping> UserRoleMappings { get; set; }
+        public DbSet<UserRole> UserRoles { get; set; }
+        public DbSet<User> Users { get; set; }
+
+        #endregion Properties
+
+        #region Methods
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -68,13 +73,37 @@ namespace LInst
                 .Property(ip => ip.IsCalibrationProperty)
                 .HasDefaultValue(false);
 
+            modelBuilder.Entity<OrganizationRoleMapping>()
+                .HasOne(orm => orm.Organization)
+                .WithMany(org => org.RoleMappings)
+                .HasForeignKey(orm => orm.OrganizationID);
+
+            modelBuilder.Entity<OrganizationRoleMapping>()
+                .HasOne(orm => orm.OrganizationRole)
+                .WithMany(orr => orr.OrganizationRoleMappings)
+                .HasForeignKey(orm => orm.OrganizationRoleID);
+
+            modelBuilder.Entity<PersonRoleMapping>()
+                .HasOne(prm => prm.Person)
+                .WithMany(per => per.RoleMappings)
+                .HasForeignKey(prm => prm.PersonID);
+
+            modelBuilder.Entity<PersonRoleMapping>()
+                .HasOne(prm => prm.Role)
+                .WithMany(prr => prr.RoleMappings)
+                .HasForeignKey(prm => prm.RoleID);
+
             modelBuilder.Entity<UserRoleMapping>()
                 .HasOne(urm => urm.User)
-                .WithMany(usr => usr.RoleMappings);
+                .WithMany(usr => usr.RoleMappings)
+                .HasForeignKey(urm => urm.UserID);
 
             modelBuilder.Entity<UserRoleMapping>()
                 .HasOne(urm => urm.UserRole)
-                .WithMany(ur => ur.UserMappings);
+                .WithMany(ur => ur.UserMappings)
+                .HasForeignKey(urm => urm.UserRoleID);
         }
+
+        #endregion Methods
     }
 }

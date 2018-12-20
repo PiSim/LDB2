@@ -1,11 +1,7 @@
 ﻿using DataAccess;
 using LabDbContext;
-using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Materials.Commands
 {
@@ -15,7 +11,13 @@ namespace Materials.Commands
     /// </summary>
     public class CreateAspectsIfMissingCommand : ICommand<LabDbEntities>
     {
+        #region Fields
+
         private IEnumerable<Aspect> _aspectList;
+
+        #endregion Fields
+
+        #region Constructors
 
         /// <summary>
         /// Base Constructor For CreateAspectsIfMissingCommand
@@ -26,6 +28,10 @@ namespace Materials.Commands
             _aspectList = aspectList;
         }
 
+        #endregion Constructors
+
+        #region Methods
+
         public void Execute(LabDbEntities context)
         {
             foreach (Aspect newAsp in _aspectList)
@@ -34,5 +40,7 @@ namespace Materials.Commands
 
             context.SaveChanges();
         }
+
+        #endregion Methods
     }
 }

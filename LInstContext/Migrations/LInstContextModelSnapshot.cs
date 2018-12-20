@@ -14,7 +14,8 @@ namespace LInst.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.4-rtm-31024");
+                .HasAnnotation("ProductVersion", "2.2.0-rtm-35687")
+                .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("LInst.CalibrationFile", b =>
                 {
@@ -64,6 +65,36 @@ namespace LInst.Migrations
                     b.HasIndex("TechID");
 
                     b.ToTable("CalibrationReports");
+                });
+
+            modelBuilder.Entity("LInst.CalibrationReportProperty", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("CalibrationReportID");
+
+                    b.Property<double>("LowerLimit");
+
+                    b.Property<string>("Name");
+
+                    b.Property<int?>("ParentPropertyID");
+
+                    b.Property<double>("TargetValue");
+
+                    b.Property<string>("UM");
+
+                    b.Property<double>("UpperLimit");
+
+                    b.Property<double>("Value");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("CalibrationReportID");
+
+                    b.HasIndex("ParentPropertyID");
+
+                    b.ToTable("CalibrationReportProperties");
                 });
 
             modelBuilder.Entity("LInst.CalibrationReportReference", b =>
@@ -190,11 +221,19 @@ namespace LInst.Migrations
                         .ValueGeneratedOnAdd()
                         .HasDefaultValue(false);
 
+                    b.Property<double>("LowerLimit");
+
                     b.Property<string>("Name");
 
-                    b.Property<int>("Value")
+                    b.Property<double>("TargetValue");
+
+                    b.Property<string>("UM");
+
+                    b.Property<double>("UpperLimit");
+
+                    b.Property<double>("Value")
                         .ValueGeneratedOnAdd()
-                        .HasDefaultValue(0);
+                        .HasDefaultValue(0.0);
 
                     b.HasKey("ID");
 
@@ -405,6 +444,18 @@ namespace LInst.Migrations
                         .HasForeignKey("TechID");
                 });
 
+            modelBuilder.Entity("LInst.CalibrationReportProperty", b =>
+                {
+                    b.HasOne("LInst.CalibrationReport", "CalibrationReport")
+                        .WithMany("CalibrationReportProperties")
+                        .HasForeignKey("CalibrationReportID")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("LInst.InstrumentProperty", "ParentProperty")
+                        .WithMany()
+                        .HasForeignKey("ParentPropertyID");
+                });
+
             modelBuilder.Entity("LInst.CalibrationReportReference", b =>
                 {
                     b.HasOne("LInst.CalibrationReport", "CalibrationReport")
@@ -467,7 +518,7 @@ namespace LInst.Migrations
             modelBuilder.Entity("LInst.InstrumentProperty", b =>
                 {
                     b.HasOne("LInst.Instrument", "Instrument")
-                        .WithMany()
+                        .WithMany("InstrumentProperties")
                         .HasForeignKey("InstrumentID")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
@@ -480,7 +531,7 @@ namespace LInst.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("LInst.OrganizationRole", "OrganizationRole")
-                        .WithMany()
+                        .WithMany("OrganizationRoleMappings")
                         .HasForeignKey("OrganizationRoleID")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

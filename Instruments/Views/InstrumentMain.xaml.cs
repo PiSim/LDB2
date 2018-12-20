@@ -1,6 +1,4 @@
-﻿using LabDbContext;
-using Prism.Mvvm;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 
 namespace Instruments.Views
 {

@@ -10,8 +10,8 @@
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
-        <con:BooleanNegationConverter x:Key="BooleanNegationConverter"/>
-        <con:BooleanOrConverter x:Key="BooleanOrConverter"/>
+        <con:BooleanNegationConverter x:Key="BooleanNegationConverter" />
+        <con:BooleanOrConverter x:Key="BooleanOrConverter" />
     </UserControl.Resources>
 
     <Grid Visibility="{Binding SpecificationVersionEditViewVisibility}">
@@ -133,12 +133,12 @@
                                                 <Setter Property="IsReadOnly">
                                                     <Setter.Value>
                                                         <MultiBinding Converter="{StaticResource BooleanOrConverter}">
-                                                            <Binding Path="Binding IsOverride" 
-                                                                     FallbackValue="false"/>
-                                                            <Binding Path="DataContext.IsMain" 
+                                                            <Binding Path="Binding IsOverride"
+                                                                     FallbackValue="false" />
+                                                            <Binding Path="DataContext.IsMain"
                                                                      FallbackValue="false"
                                                                      RelativeSource="{RelativeSource Mode=FindAncestor,
-                                                                     AncestorType=DataGrid}"/>
+                                                                     AncestorType=DataGrid}" />
                                                         </MultiBinding>
                                                     </Setter.Value>
                                                 </Setter>
@@ -180,12 +180,12 @@
                                     Width="100">
                     <DataGridTextColumn.IsReadOnly>
                         <MultiBinding Converter="{StaticResource BooleanOrConverter}">
-                            <Binding Path="IsOverride" 
-                                     FallbackValue="false"/>
-                            <Binding Path="DataContext.IsMain"  
+                            <Binding Path="IsOverride"
+                                     FallbackValue="false" />
+                            <Binding Path="DataContext.IsMain"
                                      FallbackValue="false"
                                      RelativeSource="{RelativeSource Mode=FindAncestor,
-                                     AncestorType=DataGrid}"/>
+                                     AncestorType=DataGrid}" />
                         </MultiBinding>
                     </DataGridTextColumn.IsReadOnly>
                     <DataGridTextColumn.CellStyle>

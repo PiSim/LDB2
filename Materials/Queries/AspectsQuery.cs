@@ -22,7 +22,6 @@ namespace Materials.Queries
             if (OrderResults)
                 query = query.OrderByDescending(asp => asp.Code);
 
-
             return query;
         }
 

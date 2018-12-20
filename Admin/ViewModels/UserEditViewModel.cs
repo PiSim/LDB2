@@ -1,13 +1,11 @@
 ﻿using DataAccessCore;
-using Infrastructure.Commands;
+using DataAccessCore.Commands;
 using Infrastructure.Queries;
 using LInst;
-using LabDbContext.Services;
 using Prism.Commands;
 using Prism.Mvvm;
 using System.Collections.Generic;
 using System.Linq;
-using DataAccessCore.Commands;
 
 namespace Admin.ViewModels
 {

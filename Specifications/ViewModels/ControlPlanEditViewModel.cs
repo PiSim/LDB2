@@ -14,10 +14,11 @@ namespace Specifications.ViewModels
         #region Fields
 
         private ControlPlan _controlPlanInstance;
-        private IDataService<LabDbEntities> _labDbData;
 
         private bool _editMode,
                             _hasCredentials;
+
+        private IDataService<LabDbEntities> _labDbData;
 
         #endregion Fields
 
@@ -32,7 +33,7 @@ namespace Specifications.ViewModels
                 () =>
                 {
                     _controlPlanInstance.control_plan_items_b = ControlPlanItemsList as ICollection<ControlPlanItem>;
-                    
+
                     _labDbData.Execute(new UpdateEntityCommand(_controlPlanInstance));
                     EditMode = false;
                 },

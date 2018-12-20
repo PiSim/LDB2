@@ -1,5 +1,4 @@
 ﻿using LabDbContext;
-using Prism.Mvvm;
 using System.Windows;
 
 namespace Specifications.Views

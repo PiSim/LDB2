@@ -9,6 +9,9 @@
              prism:ViewModelLocator.AutoWireViewModel="True"
              mc:Ignorable="d"
              d:DesignHeight="500" d:DesignWidth="300">
+    <UserControl.Resources>
+        <con:BooleanNegationConverter x:Key="BooleanNegationConverter" />
+    </UserControl.Resources>
 
     <Grid Visibility="{Binding ReportViewVisibility}">
         <Grid.RowDefinitions>
@@ -129,43 +132,39 @@
             <TabItem Header="Risultati">
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="35" />
                         <RowDefinition />
-                        <RowDefinition MinHeight="70" />
+                        <RowDefinition Height="150" />
                     </Grid.RowDefinitions>
-                    <CheckBox Content="Solo Verifica"
-                              IsChecked="{Binding IsVerification}"
-                              IsEnabled="{Binding EditMode}"
-                              ToolTip="Se spuntato indica che il report non rappresenta una taratura completa ma solo una verifica dei parametri metrologici noti"
-                              Grid.Row="0"
-                              Margin="5"
-                              VerticalAlignment="Center" />
 
-                    <DataGrid ItemsSource="{Binding PropertyMappingList}"
+                    <DataGrid ItemsSource="{Binding CalibrationReportProperties}"
                               AutoGenerateColumns="False"
                               CanUserAddRows="False"
                               CanUserDeleteRows="False"
                               Margin="2"
-                              IsReadOnly="{Binding ReadOnlyMode}"
-                              Grid.Row="1">
+                              IsReadOnly="{Binding EditMode, Converter={StaticResource BooleanNegationConverter}}"
+                              Grid.Row="0">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Quantità"
-                                                Binding="{Binding InstrumentMeasurableProperty.MeasurableQuantity.Name}"
+                                                Binding="{Binding Name}"
                                                 IsReadOnly="True" />
                             <DataGridTextColumn Header="UM"
-                                                Binding="{Binding MeasurementUnit.Symbol}"
+                                                Binding="{Binding UM}"
                                                 IsReadOnly="True" />
-                            <DataGridTextColumn Header="Limite Sup. Taratura"
-                                                Binding="{Binding UpperRangeValue}" />
-                            <DataGridTextColumn Header="Limite Inf. Taratura"
-                                                Binding="{Binding LowerRangeValue}" />
-                            <DataGridTextColumn Header="{Binding DataContext.UncertaintyHeader,
-                                                                 Source={x:Reference dummyElement}}"
-                                                Binding="{Binding ExtendedUncertainty}" />
+                            <DataGridTextColumn Header="Valore"
+                                                Binding="{Binding Value}" />
+                            <DataGridTextColumn Header="Valore Teorico"
+                                                Binding="{Binding TargetValue}"
+                                                IsReadOnly="True" />
+                            <DataGridTextColumn Header="Limite Superiore"
+                                                Binding="{Binding UpperLimit}"
+                                                IsReadOnly="True" />
+                            <DataGridTextColumn Header="Limite Inferiore"
+                                                Binding="{Binding LowerLimit}"
+                                                IsReadOnly="True" />
                         </DataGrid.Columns>
                     </DataGrid>
 
-                    <Grid Grid.Row="2">
+                    <Grid Grid.Row="1">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition MinWidth="100"

@@ -1,11 +1,7 @@
-﻿using LInst;
-using DataAccessCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using DataAccessCore;
+using LInst;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace Instruments.Queries
 {
@@ -14,7 +10,13 @@ namespace Instruments.Queries
     /// </summary>
     public class CalibrationReportQuery : ScalarBase<CalibrationReport, LInstContext>
     {
+        #region Properties
+
         public int? ID { get; set; }
+
+        #endregion Properties
+
+        #region Methods
 
         public override CalibrationReport Execute(LInstContext context)
         {
@@ -31,5 +33,7 @@ namespace Instruments.Queries
 
             return query.FirstOrDefault(calrep => calrep.ID == ID);
         }
+
+        #endregion Methods
     }
 }

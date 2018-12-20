@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Data.Entity.Migrations;
 using System.Linq;
 
 namespace LabDbContext.EntityExtensions
@@ -7,7 +6,7 @@ namespace LabDbContext.EntityExtensions
     public static class InstrumentMeasurablePropertyExtension
     {
         #region Methods
-        
+
         public static CalibrationReport GetLastCalibration(this InstrumentMeasurableProperty entry)
         {
             // Returns the most recent CalibrationReport for this entry, or null if none exist

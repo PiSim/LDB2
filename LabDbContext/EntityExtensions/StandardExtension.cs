@@ -1,14 +1,12 @@
-﻿using System.Collections.Generic;
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace LabDbContext
 {
-
     public partial class Std
     {
         #region Methods
-
 
         /// <summary>
         /// Returns all the StandardFiles related to this standard

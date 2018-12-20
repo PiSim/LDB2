@@ -26,9 +26,18 @@ namespace LabDB2
         #endregion Constructors
 
         #region Methods
-        
+
+        public string CalculateHash(string clearText, string salt)
+        {
+            byte[] saltedHashBytes = Encoding.UTF8.GetBytes(clearText + salt);
+            HashAlgorithm hash = new SHA256Managed();
+            byte[] hashedBytes = hash.ComputeHash(saltedHashBytes);
+
+            return Convert.ToBase64String(hashedBytes);
+        }
+
         public LInst.User CreateNewUser(Person personInstance,
-                                string userName,
+                                        string userName,
                                 string password)
         {
             LInst.User output = new LInst.User();
@@ -51,18 +60,6 @@ namespace LabDB2
             }
 
             return output;
-            
-
-            
-        }
-
-        public string CalculateHash(string clearText, string salt)
-        {
-            byte[] saltedHashBytes = Encoding.UTF8.GetBytes(clearText + salt);
-            HashAlgorithm hash = new SHA256Managed();
-            byte[] hashedBytes = hash.ComputeHash(saltedHashBytes);
-
-            return Convert.ToBase64String(hashedBytes);
         }
 
         #endregion Methods

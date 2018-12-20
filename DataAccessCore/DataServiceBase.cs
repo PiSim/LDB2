@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
-using Microsoft.EntityFrameworkCore.Infrastructure;
 using System.Linq;
 
 namespace DataAccessCore
@@ -26,7 +25,7 @@ namespace DataAccessCore
 
         public void Execute(ICommand<T> commandObject)
         {
-            commandObject.Execute(_contextFactory.CreateDbContext(new string[]{ }));
+            commandObject.Execute(_contextFactory.CreateDbContext(new string[] { }));
         }
 
         public T2 RunQuery<T2>(IScalar<T2, T> queryObject)

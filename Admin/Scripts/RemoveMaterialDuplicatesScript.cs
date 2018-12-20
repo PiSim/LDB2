@@ -1,18 +1,21 @@
 ﻿using LabDbContext;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Admin.Scripts
 {
     public class RemoveMaterialDuplicatesScript : ScriptBase
     {
+        #region Constructors
+
         public RemoveMaterialDuplicatesScript() : base()
         {
             _name = "RemoveMaterialDuplicates";
         }
+
+        #endregion Constructors
+
+        #region Methods
 
         public override void Run()
         {
@@ -52,7 +55,7 @@ namespace Admin.Scripts
                     foreach (List<Material> duplicateGroup in duplicates)
                     {
                         Material parent = duplicateGroup[0];
-                        foreach(Material toSubstitute in duplicateGroup.Skip(1))
+                        foreach (Material toSubstitute in duplicateGroup.Skip(1))
                         {
                             foreach (Batch btc in toSubstitute.Batches)
                                 btc.MaterialID = parent.ID;
@@ -65,5 +68,7 @@ namespace Admin.Scripts
                 }
             }
         }
+
+        #endregion Methods
     }
 }

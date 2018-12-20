@@ -53,6 +53,15 @@ namespace LabDB2.Views
 
         #region Methods
 
+        public void OnAuthenticationHandler(LInst.User authenticatedUser)
+        {
+            if (authenticatedUser == null)
+                throw new UnauthorizedAccessException();
+            AuthenticatedPrincipal = new DBPrincipal();
+            AuthenticatedPrincipal.Identity = new DBIdentity(authenticatedUser);
+            DialogResult = true;
+        }
+
         private void Abort_Click(object sender, RoutedEventArgs e)
         {
             DialogResult = false;
@@ -63,10 +72,10 @@ namespace LabDB2.Views
             try
             {
                 _lInstData.Execute(new AuthenticateUserCommand(new LInst.User()
-                                                                    {
-                                                                        UserName = UserNameTextBox.Text,
-                                                                        HashedPassword = _authenticator.CalculateHash(PasswordBox.Password, UserNameTextBox.Text)
-                                                                    }, 
+                {
+                    UserName = UserNameTextBox.Text,
+                    HashedPassword = _authenticator.CalculateHash(PasswordBox.Password, UserNameTextBox.Text)
+                },
                                                                     OnAuthenticationHandler));
             }
             catch (UnauthorizedAccessException)
@@ -80,15 +89,6 @@ namespace LabDB2.Views
         {
             if (e.Key == Key.Enter)
                 Confirm_Click(sender, e);
-        }
-
-        public void OnAuthenticationHandler(LInst.User authenticatedUser)
-        {
-            if (authenticatedUser == null)
-                throw new UnauthorizedAccessException();
-            AuthenticatedPrincipal = new DBPrincipal();
-            AuthenticatedPrincipal.Identity = new DBIdentity(authenticatedUser);
-            DialogResult = true;
         }
 
         #endregion Methods

@@ -2,8 +2,6 @@
 using Infrastructure.Commands;
 using Infrastructure.Queries;
 using LabDbContext;
-using LabDbContext.EntityExtensions;
-using LabDbContext.Services;
 using Materials.Queries;
 using Prism.Commands;
 using Prism.Mvvm;
@@ -160,7 +158,7 @@ namespace Materials.ViewModels
 
                     if (SelectedTrialArea != null)
                         BatchInstance.TrialAreaID = SelectedTrialArea.ID;
-                    
+
                     _labDbData.Execute(new InsertEntityCommand(BatchInstance));
 
                     parentDialog.DialogResult = true;
