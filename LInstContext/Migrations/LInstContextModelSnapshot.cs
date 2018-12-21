@@ -107,7 +107,7 @@ namespace LInst.Migrations
 
                     b.HasIndex("InstrumentID");
 
-                    b.ToTable("CalibrationReportReference");
+                    b.ToTable("CalibrationReportReferences");
                 });
 
             modelBuilder.Entity("LInst.CalibrationResult", b =>
@@ -160,6 +160,8 @@ namespace LInst.Migrations
                     b.HasKey("ID");
 
                     b.HasIndex("CalibrationResponsibleID");
+
+                    b.HasIndex("Code");
 
                     b.HasIndex("InstrumentTypeID");
 

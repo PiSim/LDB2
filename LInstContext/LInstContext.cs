@@ -16,6 +16,7 @@ namespace LInst
 
         public DbSet<CalibrationFile> CalibrationFiles { get; set; }
         public DbSet<CalibrationReportProperty> CalibrationReportProperties { get; set; }
+        public DbSet<CalibrationReportReference> CalibrationReportReferences { get; set; }
         public DbSet<CalibrationReport> CalibrationReports { get; set; }
         public DbSet<CalibrationResult> CalibrationResults { get; set; }
         public DbSet<InstrumentFile> InstrumentFiles { get; set; }
@@ -51,11 +52,16 @@ namespace LInst
             modelBuilder.Entity<CalibrationReportReference>()
                 .HasOne(crr => crr.CalibrationReport)
                 .WithMany(cr => cr.CalibrationReportReferences)
+                .HasForeignKey(cr => cr.CalibrationReportID)
                 .HasConstraintName("FK_CalibrationReportReference_CalRep_CalRepID");
 
             modelBuilder.Entity<CalibrationReportReference>()
                 .HasOne(crr => crr.Instrument)
-                .WithMany(ins => ins.CalibrationsAsReference);
+                .WithMany(ins => ins.CalibrationsAsReference)
+                .HasForeignKey(crr => crr.InstrumentID);
+
+            modelBuilder.Entity<Instrument>()
+                .HasIndex(ins => ins.Code);
 
             modelBuilder.Entity<Instrument>()
                 .Property(ip => ip.IsInService)

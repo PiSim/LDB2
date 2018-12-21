@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LInst.Migrations
 {
     [DbContext(typeof(LInstContext))]
-    [Migration("20181219095948_rebuild")]
-    partial class rebuild
+    [Migration("20181221093641_calref_idx")]
+    partial class calref_idx
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -109,7 +109,7 @@ namespace LInst.Migrations
 
                     b.HasIndex("InstrumentID");
 
-                    b.ToTable("CalibrationReportReference");
+                    b.ToTable("CalibrationReportReferences");
                 });
 
             modelBuilder.Entity("LInst.CalibrationResult", b =>
@@ -162,6 +162,8 @@ namespace LInst.Migrations
                     b.HasKey("ID");
 
                     b.HasIndex("CalibrationResponsibleID");
+
+                    b.HasIndex("Code");
 
                     b.HasIndex("InstrumentTypeID");
 

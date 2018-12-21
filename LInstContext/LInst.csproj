@@ -73,9 +73,9 @@
     <Compile Include="LInstContextFactory.cs" />
     <Compile Include="LInstContextModule.cs" />
     <Compile Include="LInstData.cs" />
-    <Compile Include="Migrations\20181219095948_rebuild.cs" />
-    <Compile Include="Migrations\20181219095948_rebuild.designer.cs">
-      <DependentUpon>20181219095948_rebuild.cs</DependentUpon>
+    <Compile Include="Migrations\20181221093641_calref_idx.cs" />
+    <Compile Include="Migrations\20181221093641_calref_idx.designer.cs">
+      <DependentUpon>20181221093641_calref_idx.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\LInstContextModelSnapshot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">

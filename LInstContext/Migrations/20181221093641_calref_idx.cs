@@ -1,76 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
-using System;
 
 namespace LInst.Migrations
 {
-    public partial class rebuild : Migration
+    public partial class calref_idx : Migration
     {
-        #region Methods
-
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.DropTable(
-                name: "CalibrationFiles");
-
-            migrationBuilder.DropTable(
-                name: "CalibrationReportProperties");
-
-            migrationBuilder.DropTable(
-                name: "CalibrationReportReference");
-
-            migrationBuilder.DropTable(
-                name: "InstrumentFiles");
-
-            migrationBuilder.DropTable(
-                name: "InstrumentMaintenanceEvents");
-
-            migrationBuilder.DropTable(
-                name: "OrganizationRoleMappings");
-
-            migrationBuilder.DropTable(
-                name: "PersonRoleMappings");
-
-            migrationBuilder.DropTable(
-                name: "UserRoleMappings");
-
-            migrationBuilder.DropTable(
-                name: "InstrumentProperties");
-
-            migrationBuilder.DropTable(
-                name: "CalibrationReports");
-
-            migrationBuilder.DropTable(
-                name: "OrganizationRoles");
-
-            migrationBuilder.DropTable(
-                name: "PersonRoles");
-
-            migrationBuilder.DropTable(
-                name: "Users");
-
-            migrationBuilder.DropTable(
-                name: "UserRoles");
-
-            migrationBuilder.DropTable(
-                name: "CalibrationResults");
-
-            migrationBuilder.DropTable(
-                name: "Instruments");
-
-            migrationBuilder.DropTable(
-                name: "People");
-
-            migrationBuilder.DropTable(
-                name: "Organizations");
-
-            migrationBuilder.DropTable(
-                name: "InstrumentTypes");
-
-            migrationBuilder.DropTable(
-                name: "InstrumentUtilizationAreas");
-        }
-
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
@@ -119,8 +54,8 @@ namespace LInst.Migrations
                 {
                     ID = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(nullable: true),
-                    Description = table.Column<string>(nullable: true)
+                    Description = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -159,8 +94,8 @@ namespace LInst.Migrations
                 {
                     ID = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(nullable: true),
-                    Description = table.Column<string>(nullable: true)
+                    Description = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -173,8 +108,8 @@ namespace LInst.Migrations
                 {
                     ID = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(nullable: true),
-                    Description = table.Column<string>(nullable: true)
+                    Description = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -187,19 +122,19 @@ namespace LInst.Migrations
                 {
                     ID = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    CalibrationDueDate = table.Column<DateTime>(nullable: true),
+                    CalibrationInterval = table.Column<int>(nullable: true),
+                    CalibrationResponsibleID = table.Column<int>(nullable: true),
                     Code = table.Column<string>(nullable: true),
                     Description = table.Column<string>(nullable: true),
                     InstrumentTypeID = table.Column<int>(nullable: false),
-                    SupplierID = table.Column<int>(nullable: true),
-                    ManufacturerID = table.Column<int>(nullable: true),
-                    CalibrationResponsibleID = table.Column<int>(nullable: true),
-                    SerialNumber = table.Column<string>(nullable: true),
-                    Model = table.Column<string>(nullable: true),
-                    UtilizationAreaID = table.Column<int>(nullable: false),
                     IsInService = table.Column<bool>(nullable: false, defaultValue: true),
                     IsUnderControl = table.Column<bool>(nullable: false, defaultValue: false),
-                    CalibrationDueDate = table.Column<DateTime>(nullable: true),
-                    CalibrationInterval = table.Column<int>(nullable: true)
+                    ManufacturerID = table.Column<int>(nullable: true),
+                    Model = table.Column<string>(nullable: true),
+                    SerialNumber = table.Column<string>(nullable: true),
+                    SupplierID = table.Column<int>(nullable: true),
+                    UtilizationAreaID = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -242,9 +177,9 @@ namespace LInst.Migrations
                 {
                     ID = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    IsSelected = table.Column<bool>(nullable: false),
                     OrganizationID = table.Column<int>(nullable: false),
-                    OrganizationRoleID = table.Column<int>(nullable: false),
-                    IsSelected = table.Column<bool>(nullable: false)
+                    OrganizationRoleID = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -270,9 +205,9 @@ namespace LInst.Migrations
                     ID = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     FullName = table.Column<string>(nullable: true),
-                    UserName = table.Column<string>(nullable: true),
+                    HashedPassword = table.Column<string>(nullable: true),
                     PersonID = table.Column<int>(nullable: false),
-                    HashedPassword = table.Column<string>(nullable: true)
+                    UserName = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -291,9 +226,9 @@ namespace LInst.Migrations
                 {
                     ID = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    IsSelected = table.Column<bool>(nullable: false),
                     PersonID = table.Column<int>(nullable: false),
-                    RoleID = table.Column<int>(nullable: false),
-                    IsSelected = table.Column<bool>(nullable: false)
+                    RoleID = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -319,13 +254,13 @@ namespace LInst.Migrations
                     ID = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     CalibrationResultID = table.Column<int>(nullable: false),
-                    LaboratoryID = table.Column<int>(nullable: false),
-                    InstrumentID = table.Column<int>(nullable: false),
-                    TechID = table.Column<int>(nullable: true),
                     Date = table.Column<DateTime>(nullable: false),
-                    Year = table.Column<int>(nullable: false),
+                    InstrumentID = table.Column<int>(nullable: false),
+                    LaboratoryID = table.Column<int>(nullable: false),
+                    Notes = table.Column<string>(nullable: true),
                     Number = table.Column<int>(nullable: false),
-                    Notes = table.Column<string>(nullable: true)
+                    TechID = table.Column<int>(nullable: true),
+                    Year = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -382,10 +317,10 @@ namespace LInst.Migrations
                 {
                     ID = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    InstrumentID = table.Column<int>(nullable: false),
-                    TechID = table.Column<int>(nullable: true),
                     Date = table.Column<DateTime>(nullable: false),
-                    Description = table.Column<string>(nullable: true)
+                    Description = table.Column<string>(nullable: true),
+                    InstrumentID = table.Column<int>(nullable: false),
+                    TechID = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -411,13 +346,13 @@ namespace LInst.Migrations
                     ID = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     InstrumentID = table.Column<int>(nullable: false),
-                    Name = table.Column<string>(nullable: true),
-                    Value = table.Column<double>(nullable: false, defaultValue: 0.0),
-                    TargetValue = table.Column<double>(nullable: false),
-                    UpperLimit = table.Column<double>(nullable: false),
+                    IsCalibrationProperty = table.Column<bool>(nullable: false, defaultValue: false),
                     LowerLimit = table.Column<double>(nullable: false),
+                    Name = table.Column<string>(nullable: true),
+                    TargetValue = table.Column<double>(nullable: false),
                     UM = table.Column<string>(nullable: true),
-                    IsCalibrationProperty = table.Column<bool>(nullable: false, defaultValue: false)
+                    UpperLimit = table.Column<double>(nullable: false),
+                    Value = table.Column<double>(nullable: false, defaultValue: 0.0)
                 },
                 constraints: table =>
                 {
@@ -436,9 +371,9 @@ namespace LInst.Migrations
                 {
                     ID = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    IsSelected = table.Column<bool>(nullable: false),
                     UserID = table.Column<int>(nullable: false),
-                    UserRoleID = table.Column<int>(nullable: false),
-                    IsSelected = table.Column<bool>(nullable: false)
+                    UserRoleID = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -463,8 +398,8 @@ namespace LInst.Migrations
                 {
                     ID = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Path = table.Column<string>(nullable: true),
-                    CalibrationReportID = table.Column<int>(nullable: false)
+                    CalibrationReportID = table.Column<int>(nullable: false),
+                    Path = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -478,7 +413,7 @@ namespace LInst.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CalibrationReportReference",
+                name: "CalibrationReportReferences",
                 columns: table => new
                 {
                     CalibrationReportID = table.Column<int>(nullable: false),
@@ -486,7 +421,7 @@ namespace LInst.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CalibrationReportReference", x => new { x.CalibrationReportID, x.InstrumentID });
+                    table.PrimaryKey("PK_CalibrationReportReferences", x => new { x.CalibrationReportID, x.InstrumentID });
                     table.ForeignKey(
                         name: "FK_CalibrationReportReference_CalRep_CalRepID",
                         column: x => x.CalibrationReportID,
@@ -494,7 +429,7 @@ namespace LInst.Migrations
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_CalibrationReportReference_Instruments_InstrumentID",
+                        name: "FK_CalibrationReportReferences_Instruments_InstrumentID",
                         column: x => x.InstrumentID,
                         principalTable: "Instruments",
                         principalColumn: "ID",
@@ -507,14 +442,14 @@ namespace LInst.Migrations
                 {
                     ID = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(nullable: true),
-                    TargetValue = table.Column<double>(nullable: false),
-                    UpperLimit = table.Column<double>(nullable: false),
-                    LowerLimit = table.Column<double>(nullable: false),
-                    Value = table.Column<double>(nullable: false),
-                    UM = table.Column<string>(nullable: true),
                     CalibrationReportID = table.Column<int>(nullable: false),
-                    ParentPropertyID = table.Column<int>(nullable: true)
+                    LowerLimit = table.Column<double>(nullable: false),
+                    Name = table.Column<string>(nullable: true),
+                    ParentPropertyID = table.Column<int>(nullable: true),
+                    TargetValue = table.Column<double>(nullable: false),
+                    UM = table.Column<string>(nullable: true),
+                    UpperLimit = table.Column<double>(nullable: false),
+                    Value = table.Column<double>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -549,8 +484,8 @@ namespace LInst.Migrations
                 column: "ParentPropertyID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CalibrationReportReference_InstrumentID",
-                table: "CalibrationReportReference",
+                name: "IX_CalibrationReportReferences_InstrumentID",
+                table: "CalibrationReportReferences",
                 column: "InstrumentID");
 
             migrationBuilder.CreateIndex(
@@ -597,6 +532,11 @@ namespace LInst.Migrations
                 name: "IX_Instruments_CalibrationResponsibleID",
                 table: "Instruments",
                 column: "CalibrationResponsibleID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Instruments_Code",
+                table: "Instruments",
+                column: "Code");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Instruments_InstrumentTypeID",
@@ -654,6 +594,67 @@ namespace LInst.Migrations
                 column: "PersonID");
         }
 
-        #endregion Methods
+        protected override void Down(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.DropTable(
+                name: "CalibrationFiles");
+
+            migrationBuilder.DropTable(
+                name: "CalibrationReportProperties");
+
+            migrationBuilder.DropTable(
+                name: "CalibrationReportReferences");
+
+            migrationBuilder.DropTable(
+                name: "InstrumentFiles");
+
+            migrationBuilder.DropTable(
+                name: "InstrumentMaintenanceEvents");
+
+            migrationBuilder.DropTable(
+                name: "OrganizationRoleMappings");
+
+            migrationBuilder.DropTable(
+                name: "PersonRoleMappings");
+
+            migrationBuilder.DropTable(
+                name: "UserRoleMappings");
+
+            migrationBuilder.DropTable(
+                name: "InstrumentProperties");
+
+            migrationBuilder.DropTable(
+                name: "CalibrationReports");
+
+            migrationBuilder.DropTable(
+                name: "OrganizationRoles");
+
+            migrationBuilder.DropTable(
+                name: "PersonRoles");
+
+            migrationBuilder.DropTable(
+                name: "Users");
+
+            migrationBuilder.DropTable(
+                name: "UserRoles");
+
+            migrationBuilder.DropTable(
+                name: "CalibrationResults");
+
+            migrationBuilder.DropTable(
+                name: "Instruments");
+
+            migrationBuilder.DropTable(
+                name: "People");
+
+            migrationBuilder.DropTable(
+                name: "Organizations");
+
+            migrationBuilder.DropTable(
+                name: "InstrumentTypes");
+
+            migrationBuilder.DropTable(
+                name: "InstrumentUtilizationAreas");
+        }
     }
 }

@@ -4,6 +4,7 @@ using DataAccessCore.Commands;
 using Infrastructure;
 using Infrastructure.Events;
 using Infrastructure.Queries;
+using Instruments.Commands;
 using Instruments.Queries;
 using LInst;
 using Prism.Commands;
@@ -29,7 +30,6 @@ namespace Instruments.ViewModels
         private IEventAggregator _eventAggregator;
         private InstrumentService _instrumentService;
         private IDataService<LInstContext> _lInstData;
-        private string _referenceCode;
         private CalibrationFile _selectedFile;
         private Organization _selectedLab;
         private Person _selectedPerson;
@@ -88,6 +88,7 @@ namespace Instruments.ViewModels
                                 InstrumentID = tempRef.ID
                             }));
                         ReferenceCode = "";
+                        RaisePropertyChanged("ReferenceCode");
                         RaisePropertyChanged("ReferenceList");
                     }
                 });
@@ -128,9 +129,9 @@ namespace Instruments.ViewModels
             RemoveReferenceCommand = new DelegateCommand(
                 () =>
                 {
+                    _lInstData.Execute(new RemoveCalibrationReferenceCommand(_calibrationInstance.ID, SelectedReference.ID));
                     SelectedReference = null;
                     RaisePropertyChanged("ReferenceList");
-                    throw new NotImplementedException();
                 },
                 () => SelectedReference != null);
 
@@ -236,15 +237,7 @@ namespace Instruments.ViewModels
 
         public DelegateCommand OpenFileCommand { get; }
 
-        public string ReferenceCode
-        {
-            get { return _referenceCode; }
-            set
-            {
-                _referenceCode = value;
-                RaisePropertyChanged("ReferenceCode");
-            }
-        }
+        public string ReferenceCode { get; set; }
 
         public IEnumerable<Instrument> ReferenceList => (_calibrationInstance == null) ? new List<Instrument>() : _lInstData.RunQuery(new ReferenceInstrumentsQuery(_calibrationInstance)).ToList();
 

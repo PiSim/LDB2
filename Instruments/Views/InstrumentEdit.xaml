@@ -7,6 +7,7 @@
              xmlns:prism="http://prismlibrary.com/"
              xmlns:con="clr-namespace:Infrastructure.Converters;assembly=Infrastructure"
              xmlns:bhv="clr-namespace:Controls.Behaviours;assembly=Controls"
+             xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
              prism:ViewModelLocator.AutoWireViewModel="True"
              mc:Ignorable="d"
              d:DesignHeight="600" d:DesignWidth="700">
@@ -359,28 +360,36 @@
                               Grid.Column="0"
                               Grid.ColumnSpan="4"
                               Grid.Row="3">
-                        <DataGrid ItemsSource="{Binding PropertyList}"
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <DataGrid ItemsSource="{Binding PropertyList}"
                                   IsReadOnly="{Binding EditMode, Converter={StaticResource BooleanNegationConverter}}"
                                   AutoGenerateColumns="False"
                                   Background="White"
-                                  VerticalGridLinesBrush="Transparent">
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Header="Nome"
+                                  VerticalGridLinesBrush="Transparent"
+                                      Margin="2">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Nome"
                                                     Binding="{Binding Name}" />
-                                <DataGridTextColumn Header="Valore"
+                                    <DataGridTextColumn Header="Valore"
                                                     Binding="{Binding Value}" />
-                                <DataGridTextColumn Header="Valore Teorico"
+                                    <DataGridTextColumn Header="Valore Teorico"
                                                     Binding="{Binding TargetValue}" />
-                                <DataGridTextColumn Header="Limite Superiore"
+                                    <DataGridTextColumn Header="Limite Superiore"
                                                     Binding="{Binding UpperLimit}" />
-                                <DataGridTextColumn Header="Limite Inferiore"
+                                    <DataGridTextColumn Header="Limite Inferiore"
                                                     Binding="{Binding LowerLimit}" />
-                                <DataGridTextColumn Header="UM"
+                                    <DataGridTextColumn Header="UM"
                                                     Binding="{Binding UM}" />
-                                <DataGridCheckBoxColumn Header="Soggetta a controllo"
+                                    <DataGridCheckBoxColumn Header="Soggetta a controllo"
                                                         Binding="{Binding IsCalibrationProperty}" />
-                            </DataGrid.Columns>
-                        </DataGrid>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <lvc:CartesianChart Grid.Column="1"/>
+                        </Grid>
                     </GroupBox>
                 </Grid>
             </TabItem>

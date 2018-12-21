@@ -60,7 +60,8 @@ namespace Instruments.ViewModels
             AddCalibrationCommand = new DelegateCommand(
                 () =>
                 {
-                    _instrumentService.ShowNewCalibrationDialog(_instance);
+                    if (_instrumentService.ShowNewCalibrationDialog(_instance) != null)
+                        RefreshCalibrations();
                 },
                 () => IsInstrumentAdmin);
 
@@ -94,7 +95,14 @@ namespace Instruments.ViewModels
             DeleteCalibrationCommand = new DelegateCommand(
                 () =>
                 {
-                    _lInstData.Execute(new DeleteEntityCommand<LInstContext>(_selectedCalibration));
+                    DialogResult confirmation = MessageBox.Show("Il Report selezionato verrà eliminato, continuare?",
+                                                            "Conferma Eliminazione",
+                                                            MessageBoxButtons.YesNo);
+                    if (confirmation == DialogResult.Yes)
+                    {
+                        _lInstData.Execute(new DeleteEntityCommand<LInstContext>(_selectedCalibration));
+                        RefreshCalibrations();
+                    }
                 },
                 () => Thread.CurrentPrincipal.IsInRole(UserRoleNames.InstrumentAdmin) && _selectedCalibration != null);
 

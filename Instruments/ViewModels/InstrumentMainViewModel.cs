@@ -11,6 +11,7 @@ using Prism.Mvvm;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Windows.Forms;
 
 namespace Instruments.ViewModels
 {
@@ -42,8 +43,14 @@ namespace Instruments.ViewModels
             DeleteInstrumentCommand = new DelegateCommand(
                 () =>
                 {
-                    _lInstData.Execute(new DeleteEntityCommand<LInstContext>(_selectedInstrument));
-                    SelectedInstrument = null;
+                    DialogResult confirmation = MessageBox.Show("Lo strumento selezionato verrà eliminato, continuare?",
+                                                            "Conferma Eliminazione",
+                                                            MessageBoxButtons.YesNo);
+                    if (confirmation == DialogResult.Yes)
+                    {
+                        _lInstData.Execute(new DeleteEntityCommand<LInstContext>(_selectedInstrument));
+                        SelectedInstrument = null;
+                    }
                 },
                 () => IsInstrumentAdmin && _selectedInstrument != null);
 
